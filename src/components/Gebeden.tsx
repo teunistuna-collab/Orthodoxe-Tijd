@@ -175,14 +175,14 @@ export default function Gebeden() {
                     key={cat.id}
                     type="button"
                     onClick={() => setActieveCat(cat.id)}
-                    className="prayer-category-card group flex min-h-[260px] flex-col items-center px-6 py-7 text-center"
+                    className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
                   >
-                    <img src={cat.iconSrc} alt="" className="prayer-category-icon" />
-                    <h3 className="font-display mt-3 text-xl font-semibold text-gold-light uppercase">{cat.label}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-[#f0dfbf]">{cat.omschrijving}</p>
-                    <div className="btn-pill mt-4">
-                      <span>Bekijk gebeden →</span>
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
+                      <img src={cat.iconSrc} alt="" className="provided-card-icon" />
                     </div>
+                    <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{cat.label}</h3>
+                    <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{cat.omschrijving}</p>
+                    <span className="btn-pill mt-4">Bekijk gebeden →</span>
                   </button>
                 );
               })}

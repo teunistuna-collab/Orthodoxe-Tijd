@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import Cross from './Cross';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { WEEK_INFO } from '../lib/cyclusTeksten';
 
 type DayKey = 'zondag' | 'maandag' | 'dinsdag' | 'woensdag' | 'donderdag' | 'vrijdag' | 'zaterdag';
 type InfoKey = 'wat' | 'dagen' | 'betekenis' | 'praktisch';
@@ -94,46 +95,6 @@ const DAYS: Array<{ key: DayKey; label: string; short: string; iconSrc: string }
   { key: 'zaterdag', label: 'Zaterdag', short: 'De heiligen en ontslapenen', iconSrc: '/images/ui/menu/04-Week-10-Zaterdag.png' },
 ];
 
-const INFO_POPUPS: Record<InfoKey, PopupContent> = {
-  wat: {
-    title: 'Wat is de weekcyclus?',
-    subtitle: 'De heiliging van de week',
-    paragraphs: [
-      'Zoals het etmaal door de getijden wordt geheiligd, zo draagt ook iedere dag van de week een eigen kerkelijke gedachtenis. De week begint met de Dag des Heren, de zondag, en ontvouwt zich vanuit de Verrijzenis van Christus. De vaste thema’s van de week worden bezongen in de Octoechos (Oktoëchos) en worden telkens verweven met de heiligen en feesten van de kalender, de toon van de week en de beweeglijke Paschale cyclus.',
-    ],
-  },
-  dagen: {
-    title: 'De dagen van de week',
-    subtitle: 'Zeven dagen, één ritme',
-    paragraphs: [
-      'Zondag — de Verrijzenis van Christus: Verrijzenis · Pascha · Eucharistie · vreugde · overwinning op de dood.',
-      'Maandag — de heilige engelen en hemelse machten: Engelen · hemelse eredienst · gehoorzaamheid · waakzaamheid · lofprijzing.',
-      'Dinsdag — de heilige Johannes de Voorloper: Johannes de Doper · profeten · bekering · voorbereiding · waakzaamheid.',
-      'Woensdag — het verraad en het heilige Kruis: Verraad · Kruis · berouw · vasten · Moeder Gods.',
-      'Donderdag — de heilige apostelen en de heilige Nicolaas: Apostelen · Evangelie · Kerk · herderschap · heilige Nicolaas.',
-      'Vrijdag — de Kruisiging van onze Heer: Kruisiging · Golgotha · offer · berouw · vasten.',
-      'Zaterdag — de heiligen en de ontslapenen: Heiligen · martelaren · ontslapenen · rust · verwachting · verrijzenis.',
-    ],
-  },
-  betekenis: {
-    title: 'De geestelijke betekenis',
-    subtitle: 'De acht tonen van de Octoechos',
-    highlight: 'Toon 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → Toon 1',
-    paragraphs: [
-      'Door deze zevendaagse cyclus heen klinkt tevens de cyclus van de acht tonen (echoi). Achtereenvolgens worden toon 1 tot en met toon 8 gebruikt, waarna de reeks opnieuw begint. De Octoechos bevat hymnografie voor de Verrijzenis op zondag en voor de vaste gedachtenissen van de overige weekdagen. Daardoor keert het thema van een dag terug, maar telkens binnen de eigen hymnografische kleur van de toon van die week.',
-      'De orthodoxe week is geen loutere opeenvolging van dagen. Zij begint in de vreugde van de Verrijzenis, voert de gelovige langs de hemelse machten, de Voorloper, het Kruis, de apostolische verkondiging en de gedachtenis van hen die in Christus ontslapen zijn, en opent zich vervolgens opnieuw naar de Dag des Heren. Zo wordt de tijd zelf opgenomen in het gebed van de Kerk.',
-    ],
-  },
-  praktisch: {
-    title: 'Praktisch',
-    subtitle: 'Vasten en het ritme van de week',
-    paragraphs: [
-      'Woensdag draagt een boetvaardig karakter, gewijd aan het verraad van de Heer en het heilige Kruis: buiten de vastenvrije perioden en bijzondere liturgische uitzonderingen is woensdag een wekelijkse vastendag.',
-      'Vrijdag staat in het teken van de Kruisiging en het offer van Christus op Golgotha: behoudens liturgische uitzonderingen is ook vrijdag een wekelijkse vastendag.',
-      'Zo krijgt iedere week, naast de zondag als klein Pascha, een eigen ritme van herdenking, gebed en onthouding — een weg die iedere zeven dagen opnieuw naar de Verrijzenis voert.',
-    ],
-  },
-};
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
   { key: 'wat', title: 'Wat is de weekcyclus?', intro: 'De week is de ademhaling van het kerkelijk leven, geworteld in de Verrijzenis van Christus.', iconSrc: '/images/ui/menu/04-Week-01-Wat-is-de-weekcyclus.png' },
@@ -326,7 +287,7 @@ export default function Weekcyclus() {
       <TimeSanctificationTimeline current="week" />
 
       <LiturgicalPopup open={dayOpen !== null} onClose={() => setDayOpen(null)} content={dayOpen ? DAY_POPUPS[dayOpen] : null} />
-      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? INFO_POPUPS[infoOpen] : null} />
+      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? WEEK_INFO[infoOpen] : null} />
     </>
   );
 }

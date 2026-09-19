@@ -6,6 +6,7 @@ import { telVastendagen, vastenPeriodes } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
 import { VastenBadge } from './ui';
 import Modal from './Modal';
+import Cross from './Cross';
 import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
@@ -287,20 +288,34 @@ export default function Vasten() {
                 </div>
                 <p className="text-xs text-ink-mute">Tik een dag voor het volledige dagdetail.</p>
               </div>
-              <div className="mt-4 grid grid-cols-7 gap-1.5 sm:gap-2">
+              <div className="week-dagen">
                 {week.map((d) => {
                   const n = NIVEAUS[d.vasten.niveau];
+                  const vast = d.vasten.niveau !== 'vrij' && d.vasten.niveau !== 'geen';
                   return (
                     <button
                       key={d.ymd}
                       type="button"
                       onClick={() => setGeselecteerdeDag(d.ymd)}
-                      className={`v15-week-day border p-2 text-center transition sm:p-3 ${d.vasten.niveau !== 'vrij' && d.vasten.niveau !== 'geen' ? 'is-fast' : ''} ${d.isVandaag ? 'is-today' : ''}`}
+                      className={`week-dag ${vast ? 'is-fast' : ''} ${d.isVandaag ? 'is-today' : ''}`}
+                      style={{ ['--niveau' as string]: n.kleur }}
                     >
-                      <div className="text-[11px] font-bold tracking-wider uppercase">{WEEKDAGEN_KORT[d.weekdag]}</div>
-                      <div className="font-display text-xl font-bold sm:text-2xl">{d.dag}</div>
-                      <div className="mx-auto mt-1 h-1.5 w-8 rounded-full" style={{ background: n.kleur }} />
-                      <div className="mt-1 hidden text-[11px] leading-tight font-bold sm:block">{n.kort}</div>
+                      <span className="week-dag-naam">{WEEKDAGEN_KORT[d.weekdag]}</span>
+                      <span className="week-dag-nummer">{d.dag}</span>
+                      <span className="week-dag-medaillon" aria-hidden="true">
+                        {vast ? (
+                          <Cross className="h-9 w-9" />
+                        ) : (
+                          <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                            <path d="M8 33h32" />
+                            <path d="M15 33a9 9 0 0 1 18 0" />
+                            <path d="M24 13v6M12.5 19l4 4M35.5 19l-4 4M7 27h5M36 27h5" />
+                            <path d="M14 38h20" opacity=".55" />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="week-dag-balk" />
+                      <span className="week-dag-label">{n.kort}</span>
                     </button>
                   );
                 })}

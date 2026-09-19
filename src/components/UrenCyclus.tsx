@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Bird, BookOpen, ChevronDown, ChevronLeft, ChevronRight, Church, Clock3, Compass, HelpCircle, Heart, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
+import { Bird, ChevronDown, ChevronLeft, ChevronRight, Church, Clock3, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
 import Modal from './Modal';
 import Cross from './Cross';
 import { vergrendelScroll } from '../lib/scrollLock';
-import { CycleTransition, TimeSanctificationTimeline } from './CycleSections';
+import { OPEN_DIENST_EVENT } from '../lib/events';
+import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { ETMAAL_INFO } from '../lib/cyclusTeksten';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
@@ -148,47 +150,12 @@ type InfoContent = {
 };
 
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe etmaalcyclus.docx".
-const INFO_POPUPS: Record<InfoKey, InfoContent> = {
-  wat: {
-    title: 'Wat is het etmaal?',
-    subtitle: 'De dag geheiligd door gebed',
-    paragraphs: [
-      'De Orthodoxe Kerk omringt het gehele etmaal met gebed. Van de avond tot de volgende avond worden de uren van duisternis en licht, rust en arbeid, waken en slapen opgenomen in de lofprijzing van God.',
-      'Deze dagelijkse orde wordt gevormd door de Vespers, Completen, Middernachtdienst, Metten en de Eerste, Derde, Zesde en Negende Uren. Samen vormen zij de dagelijkse of etmaalcyclus van de goddelijke diensten.',
-      "Liturgisch opent de nieuwe dag in de avond. Daarom staat de Vespers aan het begin van de etmaalcyclus. Dit weerspiegelt het bijbelse patroon: 'En het was avond geweest en het was morgen geweest: de eerste dag.'",
-    ],
-  },
-  diensten: {
-    title: 'De liturgische diensten',
-    subtitle: 'De acht getijden van dag en nacht',
-    paragraphs: [
-      'De namen van de Uren verwijzen naar de oude wijze waarop de dag vanaf zonsopgang werd geteld. In een schematische moderne weergave worden zij vaak verbonden met ongeveer 06.00, 09.00, 12.00 en 15.00 uur.',
-      'Ook Vespers, Completen, Middernachtdienst en Metten kunnen voor uitleg aan bepaalde momenten van het etmaal worden gekoppeld. Dit zijn echter oriëntatiepunten: de feitelijke tijden waarop een klooster of parochie de diensten viert, kunnen verschillen.',
-    ],
-  },
-  betekenis: {
-    title: 'De betekenis in ons leven',
-    subtitle: 'Niet acht afzonderlijke momenten, maar één gebed',
-    paragraphs: [
-      'Hoewel de diensten verschillende namen en tijden hebben, vormen zij samen één doorgaande beweging van gebed. De avond opent de dag, de nacht roept tot waakzaamheid, de morgen tot lofprijzing en de uren van het daglicht brengen de gelovige telkens terug tot het heilswerk van Christus. Zo wordt het gehele etmaal opgenomen in de gedachtenis aan God.',
-      'De etmaalcyclus leert de gelovige dat geen uur buiten het gebed hoeft te vallen. De Kerk bidt bij het dalen van de avond, in de stilte van de nacht, bij het eerste morgenlicht en midden in de arbeid van de dag. Zo wordt de tijd niet slechts doorgebracht, maar geheiligd: van Vespers tot Vespers, van avond tot avond, in de gedachtenis aan God.',
-    ],
-  },
-  praktisch: {
-    title: 'Praktisch',
-    subtitle: 'In parochie, klooster en persoonlijk gebed',
-    paragraphs: [
-      'In de kloosterlijke traditie kan de dagelijkse cyclus veel vollediger worden gevierd dan in een gewone parochie. Diensten worden bovendien vaak samengevoegd: zo kunnen Vespers en Metten deel uitmaken van een nachtwake, en worden de Uren dikwijls in samenhang met andere diensten gelezen. De liturgische structuur blijft echter dezelfde, ook wanneer niet iedere dienst afzonderlijk op het schematische uur wordt gevierd.',
-      'De Goddelijke Liturgie is het eucharistische middelpunt van het kerkelijke leven, maar zij is niet eenvoudig één van de acht getijdediensten. Zij wordt binnen het grotere liturgische ritme van de dag gevierd en wordt in de praktijk vaak voorafgegaan door bepaalde Uren.',
-    ],
-  },
-};
 
-const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; Icon: typeof HelpCircle }> = [
-  { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.', Icon: HelpCircle },
-  { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.', Icon: BookOpen },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.', Icon: Heart },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.', Icon: Compass },
+const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
+  { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.', iconSrc: '/images/ui/medaillons/Etmaal.png' },
+  { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.', iconSrc: '/images/ui/menu/03-Etmaal-03-Metten.png' },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.', iconSrc: '/images/ui/menu/02-Gebed-05-De-betekenis-in-ons-leven.png' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.', iconSrc: '/images/ui/menu/02-Gebed-06-Praktisch.png' },
 ];
 
 const TIMELINE_ITEMS = [
@@ -343,6 +310,20 @@ export default function UrenCyclus() {
     setModalState({ serviceIndex });
   };
 
+  // De Vandaag-pagina kan het venster van de huidige dienst openen (bijv. Completen).
+  useEffect(() => {
+    const opDienst = (event: Event) => {
+      const titel = (event as CustomEvent<string>).detail;
+      const index = serviceConfig.findIndex((service) => service.title === titel);
+      if (index >= 0) {
+        setOpen(index);
+        setModalState({ serviceIndex: index });
+      }
+    };
+    window.addEventListener(OPEN_DIENST_EVENT, opDienst);
+    return () => window.removeEventListener(OPEN_DIENST_EVENT, opDienst);
+  }, []);
+
   const openPsalm = (serviceIndex: number, psalm: PsalmMapping) => {
     setOpen(serviceIndex);
     setModalState({ serviceIndex, selectedPsalm: psalm });
@@ -380,7 +361,7 @@ export default function UrenCyclus() {
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
         <div className={CONTENT}>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {INFO_CARDS.map(({ key, title, intro, Icon }) => (
+            {INFO_CARDS.map(({ key, title, intro, iconSrc }) => (
               <button
                 key={key}
                 type="button"
@@ -388,7 +369,7 @@ export default function UrenCyclus() {
                 className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <Icon className="h-8 w-8" strokeWidth={1.2} />
+                  <img src={iconSrc} alt="" className="provided-card-icon" />
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
@@ -539,6 +520,8 @@ export default function UrenCyclus() {
       />
 
       <TimeSanctificationTimeline current="etmaal" />
+
+      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? ETMAAL_INFO[infoOpen] : null} />
 
       {open !== null && currentService && (
         <Modal

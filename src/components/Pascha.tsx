@@ -6,65 +6,11 @@ import { PAASCYCLUS } from '../lib/feesten';
 import { addDays, daysBetween, formatDatum, formatKort, formatLang, orthodoxPascha, volgendePascha, westersPasen, ymd } from '../lib/kalender';
 import { FeestTag } from './ui';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { PASCHA_INFO } from '../lib/cyclusTeksten';
 
 type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
 
-type PopupContent = {
-  title: string;
-  subtitle?: string;
-  paragraphs: string[];
-  highlight?: string;
-};
-
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe Paschale cyclus.docx".
-const INFO_POPUPS: Record<InfoKey, PopupContent> = {
-  wat: {
-    title: 'Wat is Pascha?',
-    subtitle: 'Het Feest der Feesten',
-    highlight: 'Christus is opgestaan! — Hij is waarlijk opgestaan!',
-    paragraphs: [
-      'De Paschale cyclus is het beweeglijke deel van het orthodoxe kerkelijk jaar dat zijn ordening ontvangt vanuit de datum van het heilige Pascha, de Verrijzenis van Christus. Omdat de datum van Pascha van jaar tot jaar verschuift, bewegen ook de perioden en gedachtenissen die ermee verbonden zijn mee.',
-      'De cyclus omvat niet alleen de Paasnacht zelf. Zij begint reeds in de voorbereiding op de Grote Vasten, voert door de veertigdagentijd en de Grote en Heilige Week, bereikt haar hoogtepunt in Pascha en gaat daarna verder door de veertig dagen tot Hemelvaart en de vijftig dagen tot Pinksteren. De eerste zondag na Pinksteren, Allerheiligen, vormt een belangrijke overgang naar het verdere kerkelijke jaar.',
-      'Daarom is Pascha niet eenvoudig één feest tussen andere feesten. In de orthodoxe eredienst is de Verrijzenis van Christus het centrum waarnaar de voorbereiding wijst en vanwaar de vreugde van de daaropvolgende periode uitgaat.',
-      'Christus is opgestaan uit de doden, door Zijn dood heeft Hij de dood vertreden, en aan hen in de graven heeft Hij het leven geschonken. Pascha is het Feest der Feesten: de viering van de Verrijzenis van onze Heer Jezus Christus. Het graf is leeg en de dood heeft niet het laatste woord. De paasvreugde is daarom niet alleen de herinnering aan een gebeurtenis, maar de verkondiging van het nieuwe leven dat in Christus is aangebroken.',
-      'De Paschanacht vormt het stralende middelpunt van deze cyclus. De Kerk gaat vanuit de duisternis naar het licht en verkondigt de Verrijzenis. De begroeting ‘Christus is opgestaan!’ en het antwoord ‘Hij is waarlijk opgestaan!’ geven stem aan de vreugde van deze periode.',
-      'De week die op Pascha volgt heet de Lichte Week. Zij wordt als één grote feestdag beleefd en heeft een bijzonder vreugdevol liturgisch karakter.',
-      'Pascha behoort tot de beweeglijke feesten. De kerkelijke berekening van de Paschadatum — het Paschalion — verbindt de viering met de zondag en met de traditionele kerkelijke berekening rond de lente en de maan. Daardoor valt Orthodox Pascha niet ieder jaar op dezelfde burgerlijke datum.',
-    ],
-  },
-  cyclus: {
-    title: 'De Paschale cyclus',
-    subtitle: 'Van voorbereiding, door Kruis en graf, naar Verrijzenis en Pinksteren',
-    paragraphs: [
-      'De Kerk gaat niet plotseling de Grote Vasten binnen. De Triodion-periode opent een geleidelijke geestelijke voorbereiding waarin de gelovige wordt geroepen tot verlangen naar Christus, nederigheid, bekering, barmhartigheid en vergeving: de zondag van Zacheüs — het verlangen om Christus te zien; de zondag van de Tollenaar en de Farizeeër — nederigheid in het gebed; de zondag van de Verloren Zoon — terugkeer naar de Vader; de zondag van het Laatste Oordeel (Vleesverlatingszondag) — liefde tot de naaste; en Vergevingszondag (Kaasverlatingszondag) — wederzijdse vergeving en de ingang in de Grote Vasten.',
-      'De Grote Vasten is de veertigdaagse voorbereiding op de viering van de Verrijzenis. Gebed, vasten en aalmoezen vormen samen een weg van bekering. De zondagen van de Grote Vasten zijn: de Zondag van de Orthodoxie (herstelling van de heilige iconen), de Heilige Gregorius Palamas, de Verering van het kostbare en levenschenkende Kruis, de Heilige Johannes Climacus en de Heilige Maria van Egypte. In de vastentijd kent de Kerk onder meer de Liturgie van de Voorafgewijde Gaven, het gebed van de heilige Efrem de Syriër en de Grote Canon van de heilige Andreas van Kreta.',
-      'Na de veertig dagen van de Grote Vasten voert de Kerk ons naar Lazaruszaterdag: de opwekking van Lazarus verkondigt reeds Christus’ overwinning op de dood. De volgende dag vieren wij Palmzondag, de intocht van de Heer in Jeruzalem. Deze twee dagen vormen de overgang van de vastentijd naar de Grote en Heilige Week.',
-      'In de Grote en Heilige Week volgt de Kerk Christus stap voor stap op Zijn weg naar het Kruis en het graf: Grote en Heilige Maandag (waakzaamheid, de Bruidegom komt), Dinsdag (waakzaam en gereed zijn), Woensdag (bekering en de nadering van het verraad), Donderdag (het Mystieke Avondmaal en de instelling van de Eucharistie), Vrijdag (de Kruisiging, dood en graflegging van Christus) en Zaterdag (Christus rust in het graf en daalt af in het rijk van de dood; de stilte draagt reeds de verwachting van de Verrijzenis).',
-      'De paasvreugde wordt gedurende veertig dagen gevierd. De zondagen na Pascha belichten telkens een eigen aspect van de ontmoeting met de verrezen Christus: Thomaszondag, de zondag van de Myrrhedraagsters, de zondag van de Verlamde, Midden-Pinksteren, de zondag van de Samaritaanse vrouw, de zondag van de Blindgeborene, en het Afscheid van Pascha — de voltooiing van de veertigdaagse paasviering.',
-      'Veertig dagen na Pascha viert de Kerk de Hemelvaart van Christus: de verrezen Heer stijgt op in heerlijkheid — geen afwezigheid, maar de verheerlijking van de menselijke natuur in Hem en de voorbereiding op de gave van de Heilige Geest. Vijftig dagen na Pascha viert de Kerk het heilige Pinksteren: de nederdaling van de Heilige Geest over de apostelen, de vervulling van de Paschale beweging. De maandag na Pinksteren is in de orthodoxe traditie bijzonder gewijd aan de Heilige Geest.',
-      'De eerste zondag na Pinksteren is de Zondag van Allerheiligen: de heiligen zijn de vruchten van Pascha en Pinksteren in het leven van de Kerk. Na Allerheiligen begint de Apostelvasten; de begindatum daarvan beweegt mee met Pascha, terwijl het einde aan een vaste kalenderdatum verbonden is — zo ontmoeten de Paschale en de vaste jaarcyclus elkaar.',
-      'Vanuit Pascha worden veel beweeglijke onderdelen van het kerkelijk jaar geordend: de voorbereidende zondagen, het begin van de Grote Vasten, Lazaruszaterdag, Palmzondag, de Grote en Heilige Week, de Lichte Week, Hemelvaart en Pinksteren. Ook de Apostelvasten wordt hierdoor beïnvloed: het begin hangt samen met Pinksteren en Allerheiligen, terwijl het einde aan de vaste gedachtenis van de heilige apostelen Petrus en Paulus verbonden is.',
-      'Het Triodion begeleidt de Kerk door de voorbereidende weken, de Grote Vasten en de Grote en Heilige Week. Met Pascha begint het Pentecostarion, dat de periode van de Verrijzenis tot en met Pinksteren begeleidt. Waar het Triodion ons naar het lege graf voert, ontvouwt het Pentecostarion de vreugde en de vruchten van de Verrijzenis.',
-    ],
-  },
-  betekenis: {
-    title: 'De betekenis in ons leven',
-    subtitle: 'De geestelijke beweging van de Paschale cyclus',
-    paragraphs: [
-      'De Paschale cyclus kan worden gezien als één geestelijke beweging: verlangen — Christus willen zien; nederigheid — de eigen afhankelijkheid van Gods barmhartigheid erkennen; bekering — terugkeren naar de Vader; vergeving — vrede zoeken met God en de naaste; vasten en gebed — het hart zuiveren en opnieuw richten; het Kruis — met Christus de weg van zelfgave en liefde gaan; het graf — stilte, verwachting en vertrouwen; Verrijzenis — het nieuwe leven ontvangen; Hemelvaart — de verheerlijking van Christus aanschouwen; Pinksteren — leven en getuigen in de kracht van de Heilige Geest; heiligheid — de vrucht van dit nieuwe leven zichtbaar laten worden.',
-      'Zo is Pascha niet slechts het eindpunt van de vasten. De hele cyclus vormt een weg waarop de Kerk telkens opnieuw leert sterven aan wat van God verwijdert en leven vanuit de Verrijzenis van Christus.',
-    ],
-  },
-  tradities: {
-    title: 'Tradities en viering',
-    subtitle: 'Pascha thuis en in het dagelijks gebedsleven',
-    paragraphs: [
-      'De Paschale cyclus wordt allereerst in de liturgie van de Kerk beleefd, maar kan ook het dagelijkse gebedsleven thuis vormen. Niet door de volledige liturgische diensten zelfstandig na te bootsen, maar door het ritme van de Kerk bewust mee te leven.',
-      'Volg de zondagen en belangrijke dagen van de Paschale cyclus. Lees de aangewezen Schriftlezingen en korte uitleg bij de dag. Laat het vasten samengaan met gebed, vergeving en concrete liefde tot de naaste. Neem waar mogelijk deel aan de diensten van de Grote Vasten, de Grote Week en Pascha. Gebruik de paasgroet en paasgezangen in de periode waarin de Kerk de Verrijzenis viert. Laat de vreugde van Pascha doorwerken naar Hemelvaart, Pinksteren en het gewone leven daarna.',
-      'Het doel is niet om zoveel mogelijk kalenderinformatie te kennen, maar om de tijd zelf als een weg met Christus te ontvangen.',
-    ],
-  },
-};
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
   { key: 'wat', title: 'Wat is Pascha?', intro: 'De Verrijzenis van Christus als het hart van het kerkelijk jaar en van ons leven.', iconSrc: '/images/ui/menu/06-Pascha-01-Wat-is-Pascha.png' },
@@ -307,7 +253,7 @@ export default function Pascha() {
 
       <TimeSanctificationTimeline current="pascha" />
 
-      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? INFO_POPUPS[infoOpen] : null} />
+      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? PASCHA_INFO[infoOpen] : null} />
     </>
   );
 }

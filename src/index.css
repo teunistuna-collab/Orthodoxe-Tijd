@@ -818,7 +818,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 .prayer-category-icon{width:82px;height:82px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
 .prayer-choice-card{border:1px solid #b88628;background:linear-gradient(145deg,#351a11,#1a0c08);box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.35),0 10px 24px rgba(55,31,15,.15);color:#f5e6c8}
 .prayer-choice-card:hover{border-color:#d7ad4d;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.55),0 14px 28px rgba(55,31,15,.22)}
-@media(min-width:1024px){.prayer-category-grid>button:last-child:nth-child(4n+1){grid-column:2/4;max-width:430px;justify-self:center;width:100%}}
+@media(min-width:1180px){.prayer-category-grid>button:last-child:nth-child(4n+1){grid-column:2/4;max-width:430px;justify-self:center;width:100%}}
 
 /* Bouw 21 — vasten: definitieve afbeeldingen en negen treden zonder horizontale desktop-scroll */
 .v17-fasting-today .fasting-food-icon{width:78px!important;height:78px!important;border:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
@@ -1038,3 +1038,125 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 #top#top .etmaal-pdf-pagina p{margin:0;font-size:15.5px;line-height:1.65;color:#3b2518}
 #top#top .etmaal-pdf-pagina p.etmaal-pdf-alinea{margin-top:14px}
 #top#top .etmaal-pdf{width:fit-content;max-width:100%;margin:14px auto 0}
+
+/* Bouw 33 — Vandaag (web): drie kolommen × twee rijen, kleinere kaarten; Vaders & moeders over de volle breedte */
+@media(min-width:980px){
+  #top#top .vandaag-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px!important}
+  #top#top .vandaag-list>:nth-child(7){grid-column:1/-1}
+  #top#top .vandaag-item{min-height:0!important;padding:20px 22px!important;column-gap:18px}
+  #top#top .vandaag-list>:nth-child(-n+2){min-height:0!important}
+  #top#top .vandaag-item>.provided-menu-icon:first-child,
+  #top#top .vandaag-list>:nth-child(-n+2)>.provided-menu-icon:first-child{width:76px!important;height:76px!important}
+  #top#top .vandaag-item b,#top#top .vandaag-list>:nth-child(-n+2) b{font-size:20px!important}
+  #top#top .vandaag-item em{font-size:15px!important;margin-top:6px}
+  #top#top .vandaag-item span:not(.btn-pill){font-size:14px!important;margin-top:5px}
+  #top#top .vandaag-item small{font-size:12px!important;margin-top:4px}
+  #top#top .vandaag-item .vandaag-cta{margin-top:12px}
+  #top#top .vandaag-item:before,#top#top .vandaag-item:after{font-size:20px}
+  #top#top .vandaag-item>div:after{width:170px;height:170px;right:-50px}
+  #top#top .vandaag-readings-item button,#top#top .vandaag-readings-item button span{font-size:14px!important}
+  #top#top .vandaag-list>:nth-child(7)>div{column-gap:24px}
+}
+
+/* Bouw 34 — "De heiliging van de tijd" op mobiel: geen horizontale scrollbalk meer, zonder subtekst */
+@media(max-width:700px){
+  #top#top .v15-cycle-timeline{overflow-x:visible!important;padding:24px 12px!important}
+  #top#top .v15-cycle-timeline .timeline-track{min-width:0!important;width:100%}
+  #top#top .v15-cycle-timeline .timeline-node{min-width:0}
+  #top#top .v15-cycle-timeline .timeline-core{min-width:0}
+  #top#top .v15-cycle-timeline .timeline-medallion{width:48px!important;height:48px!important;min-width:48px}
+  #top#top .v15-cycle-timeline .timeline-line{margin-top:24px!important;min-width:6px}
+  #top#top .v15-cycle-timeline .timeline-label{font-size:9px!important;letter-spacing:.1em!important;margin-top:7px!important}
+  #top#top .v15-cycle-timeline .timeline-title{display:none!important}
+}
+@media(max-width:700px){
+  #top#top .v15-cycle-timeline .timeline-node:not(:last-child){flex:1 1 0}
+  #top#top .v15-cycle-timeline .timeline-node:last-child{flex:0 0 auto}
+  #top#top .v15-cycle-timeline .timeline-core{flex:0 0 auto;min-width:48px}
+  #top#top .v15-cycle-timeline .timeline-track{padding:0 4px}
+}
+
+/* Bouw 35 — Gebeden: met twee kolommen staat de laatste (oneven) kaart gecentreerd over beide kolommen */
+@media(min-width:701px) and (max-width:1179px){
+  .prayer-category-grid>.ornate-card:last-child:nth-child(odd){grid-column:1/-1;max-width:calc(50% - 10px);justify-self:center;width:100%}
+}
+
+/* Bouw 36 — Vasten, "Deze week": dagkaarten met rond medaillon, gekleurde balk en label (naar het aangeleverde voorbeeld) */
+.week-dagen{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-top:16px}
+.week-dag{position:relative;display:flex;flex-direction:column;align-items:center;padding:16px 8px 14px;text-align:center;cursor:pointer;
+  background:linear-gradient(180deg,#fcf6e6,#f3e7cd);border:1px solid rgba(176,126,37,.6);border-radius:2px;color:#3b2518;
+  box-shadow:inset 0 0 0 4px #f8efd9,inset 0 0 0 5px rgba(169,119,32,.28),0 5px 12px rgba(58,33,16,.07);transition:transform .18s,box-shadow .18s}
+.week-dag:before,.week-dag:after{content:"⌜";position:absolute;font-size:16px;line-height:1;color:#b98429}
+.week-dag:before{left:6px;top:4px}.week-dag:after{right:6px;bottom:4px;transform:rotate(180deg)}
+.week-dag:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 4px #f8efd9,inset 0 0 0 5px rgba(169,119,32,.5),0 10px 20px rgba(58,33,16,.13)}
+.week-dag.is-today{background:linear-gradient(180deg,#f7e8b8,#eed79b);border-color:#b88628;box-shadow:inset 0 0 0 4px #f8efd9,inset 0 0 0 5px rgba(184,134,40,.75),0 8px 18px rgba(58,33,16,.14)}
+.week-dag-naam{font-family:var(--font-display);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5b402e}
+.week-dag-nummer{font-family:var(--font-display);font-size:28px;line-height:1.1;font-weight:600;color:#2b1d12;margin-top:2px}
+.week-dag-medaillon{display:grid;place-items:center;width:70px;height:70px;margin-top:10px;border-radius:50%;color:#e8b94a;
+  background:radial-gradient(circle at 50% 35%,#1f4552,#0a161a 78%);border:2px solid #b88628;
+  box-shadow:inset 0 0 0 3px #1a0d09,inset 0 0 0 4px rgba(201,162,39,.55),0 4px 8px rgba(0,0,0,.22)}
+.week-dag.is-fast .week-dag-medaillon{background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--niveau) 62%,#2a0808),color-mix(in srgb,var(--niveau) 25%,#0c0303) 80%)}
+.week-dag-balk{width:46px;height:7px;border-radius:999px;margin-top:12px;background:var(--niveau);opacity:.9}
+.week-dag-label{font-family:var(--font-display);font-size:16px;font-weight:600;color:#2b1d12;margin-top:6px;line-height:1.2}
+@media(max-width:640px){
+  .week-dagen{grid-template-columns:1fr;gap:8px}
+  .week-dag{display:grid;grid-template-columns:56px 52px minmax(0,1fr);grid-template-areas:"naam medaillon label" "nummer medaillon balk";column-gap:14px;align-items:center;text-align:left;padding:10px 14px}
+  .week-dag-naam{grid-area:naam;align-self:end;font-size:12px}
+  .week-dag-nummer{grid-area:nummer;align-self:start;margin:0;font-size:24px}
+  .week-dag-medaillon{grid-area:medaillon;width:48px;height:48px;margin:0}
+  .week-dag-medaillon svg{width:30px;height:30px}
+  .week-dag-label{grid-area:label;margin:0;font-size:16px;align-self:end}
+  .week-dag-balk{grid-area:balk;margin:6px 0 0;width:44px;align-self:start}
+}
+
+/* Bouw 37 — de negen vastentreden hebben overal dezelfde afmeting (alle rijen even hoog als de hoogste) */
+#top#top div.grid:has(> .fasting-step){grid-auto-rows:1fr;align-items:stretch!important}
+#top#top .fasting-step{height:auto!important;align-self:stretch}
+
+/* Bouw 38 — pop-ups van de cyclus-pagina's: kopjes, opsommingen en tabellen uit de docx-teksten */
+#top#top .exact-popup-sectie{margin-top:26px;text-align:left}
+#top#top .exact-popup-sectie:first-of-type{margin-top:8px}
+#top#top .exact-popup-sectie h3{font-family:var(--font-display);font-size:21px;font-weight:600;line-height:1.25;color:#2b1d12;margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(169,119,32,.35)}
+#top#top .exact-popup-sectie p{margin:0 0 12px;font-size:16px;line-height:1.7;color:#3b2518}
+#top#top .exact-popup-sectie ul{list-style:none;margin:6px 0 14px;padding:0}
+#top#top .exact-popup-sectie li{position:relative;padding:5px 0 5px 22px;font-size:15.5px;line-height:1.6;color:#3b2518}
+#top#top .exact-popup-sectie li:before{content:"✣";position:absolute;left:0;top:7px;font-size:11px;color:#b88628}
+#top#top .exact-popup-sectie p.exact-popup-note{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a5a1e;margin-top:-2px}
+#top#top .exact-popup-tabel-wrap{overflow-x:auto;margin:6px 0 12px}
+#top#top .exact-popup-tabel{width:100%;border-collapse:collapse;font-size:15px}
+#top#top .exact-popup-tabel th{text-align:left;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e;padding:8px 10px;border-bottom:2px solid rgba(169,119,32,.5)}
+#top#top .exact-popup-tabel td{padding:9px 10px;border-bottom:1px solid rgba(169,119,32,.25);color:#3b2518;vertical-align:top;line-height:1.45}
+#top#top .exact-popup-tabel tr:nth-child(even) td{background:rgba(201,162,39,.07)}
+#top#top .exact-popup-tabel td:first-child{font-family:var(--font-display);font-weight:600;color:#2b1d12}
+@media(max-width:640px){
+  #top#top .exact-popup-tabel{font-size:13px}
+  #top#top .exact-popup-tabel th{font-size:9px;letter-spacing:.06em;padding:6px 4px}
+  #top#top .exact-popup-tabel td{padding:7px 4px;line-height:1.35}
+  #top#top .exact-popup-tabel td:first-child{font-size:14px}
+}
+
+/* Bouw 39 — lichtere pagina: perkament-zijbanen naast het leesgebied en een tweetonige koptekstbalk
+   (donkere merkstrook met logo/datum, lichte menubalk). Terugdraaien: dit blok verwijderen. */
+
+/* 1. Zijbanen: warm perkament i.p.v. donkerbruin; het kader wordt afgebakend met een gouden lijn en schaduw */
+.exact-design-page,.vandaag-design-page{
+  background:radial-gradient(ellipse at 50% 0,rgba(255,251,238,.75),transparent 62%),linear-gradient(180deg,#efe4ca 0,#e5d7b6 100%)!important;
+}
+.exact-frame,.vandaag-frame{border-color:rgba(184,134,40,.75)!important;box-shadow:0 24px 60px rgba(70,42,18,.2)!important}
+
+/* 2. Menubalk: licht perkament met donkerbruine tekst; actief = goudbruin met gouden streep */
+header nav{background:linear-gradient(180deg,#f8efdb,#f0e3c5)!important;border-top:1px solid rgba(184,134,40,.3)!important;border-bottom:1px solid rgba(184,134,40,.5)!important;color:#4a2b1d!important}
+header nav a,header nav button{color:#5b402e!important}
+header nav a:hover,header nav button:hover{color:#2b1d12!important}
+header nav [class*="text-gold-light"]{color:#8a5a1e!important}
+header nav svg{color:inherit}
+/* uitklapmenu's (Cycli) */
+header nav [class*="bg-[#1b110d]"]{background:#fbf3e3!important;border-color:rgba(184,134,40,.6)!important;box-shadow:0 18px 36px rgba(70,42,18,.22)!important}
+header nav [class*="bg-[#2a1d16]"]{background:#f2e4c2!important;border-color:rgba(184,134,40,.6)!important}
+header nav [class*="hover:bg-[#241813]"]:hover{background:#f6ebd0!important;border-color:rgba(184,134,40,.45)!important}
+header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important}
+
+/* Bouw 40 — Vandaag-kaarten: bij zweven verspringt de tekst niet meer (zelfde opvulling, geen optillen) */
+#top#top .vandaag-item{transition:background .18s,box-shadow .18s!important}
+#top#top .vandaag-item:hover{padding-left:18px!important;transform:none!important}
+@media(min-width:980px){#top#top .vandaag-item:hover{padding-left:22px!important}}

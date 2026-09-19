@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { JAAR_INFO } from '../lib/cyclusTeksten';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
 type InfoKey = 'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch';
@@ -92,42 +93,6 @@ const PERIODS: Array<{ key: PeriodKey; label: string; short: string; iconSrc: st
   { key: 'pinkstertijd', label: 'Pinkstertijd', short: 'De gave van de Heilige Geest', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-08-Pinkstertijd.png', movable: true },
 ];
 
-const INFO_POPUPS: Record<InfoKey, PopupContent> = {
-  wat: {
-    title: 'Wat is het kerkelijk jaar?',
-    subtitle: 'De heiliging van de tijd',
-    paragraphs: [
-      'De Orthodoxe Kerk ontvangt de tijd niet als een lege opeenvolging van dagen, maar als tijd die aan God kan worden toegewijd. Het kerkelijk jaar begint op 1 september, de dag van de Indictie. Door het jaar heen gedenkt de Kerk het heilswerk van Christus, eert zij de allerheiligste Moeder Gods en viert zij de gedachtenis van de heiligen. Iedere kalenderdag krijgt zo een plaats binnen het gebed van de Kerk.',
-      'Het liturgische jaar bestaat uit twee nauw verweven bewegingen. De vaste jaarcyclus volgt kalenderdata die ieder jaar terugkeren. Daarnaast staat de beweeglijke Paschale cyclus, waarvan de data verschuiven met de datum van het heilige Pascha. Op iedere concrete dag kunnen beide cycli elkaar ontmoeten.',
-      'Vaste jaarcyclus: vaste feesten, heiligen en gedachtenissen op kalenderdata, liturgisch vooral gedragen door het Menaion. Paschale cyclus: beweeglijke feesten en perioden rond Pascha, onder meer Triodion en Pentecostarion.',
-    ],
-  },
-  jaarcyclus: {
-    title: 'De jaarcyclus',
-    subtitle: 'Het Menaion en de Twaalf Grote Feesten',
-    paragraphs: [
-      'Voor iedere maand bestaat een Menaion met de eigen teksten voor de vaste feesten en heiligen van die maand. Zo wordt geen dag slechts een nummer op de kalender: zij kan de gedachtenis dragen van martelaren, hiërarchen, monniken, rechtvaardigen en andere heiligen, of van een heilsgebeurtenis die de Kerk jaarlijks viert. Lokale Orthodoxe Kerken kunnen daarbij bepaalde heiligen met bijzondere plechtigheid gedenken.',
-      'Een bijzondere plaats binnen het kerkelijk jaar wordt ingenomen door de Twaalf Grote Feesten. Sommige behoren tot de vaste kalender, terwijl Palmzondag, Hemelvaart en Pinksteren door Pascha worden bepaald. Het heilige Pascha zelf staat boven deze twaalf als het Feest der feesten.',
-      VOORFEEST_NOOT,
-    ],
-  },
-  betekenis: {
-    title: 'De betekenis in ons leven',
-    subtitle: 'De tijd als gave aan God',
-    paragraphs: [
-      'Zo leert het kerkelijk jaar de gelovige niet slechts welke datum het is, maar in welk heilig mysterie de Kerk op die dag leeft. De tijd wordt een weg van gedachtenis: van feest naar vasten, van heilige naar heilige, en steeds opnieuw naar Christus, Wiens Verrijzenis het middelpunt en de vervulling van het gehele liturgische jaar is.',
-    ],
-  },
-  praktisch: {
-    title: 'Praktisch',
-    subtitle: 'Vasten, heiligen en de kalender',
-    paragraphs: [
-      'Ook het vasten ordent het jaar. De Orthodoxe Kerk kent vier grote vastenperioden: de Grote Vasten, de Apostelvasten, de vasten vóór de Geboorte van Christus en de vasten vóór de Ontslapenis van de Moeder Gods. Niet al deze perioden behoren uitsluitend tot de vaste jaarcyclus: de Grote Vasten en het begin van de Apostelvasten zijn afhankelijk van de Paschale cyclus. Daarnaast kent de Kerk vaste vastendagen en gewoonlijk de wekelijkse vasten op woensdag en vrijdag, met liturgische uitzonderingen en plaatselijke verschillen.',
-      'Door het gehele jaar heen gedenkt de Kerk haar heiligen. Hun feesten staan niet los van Christus: in de heiligen aanschouwt de Kerk de vrucht van Zijn genade in concrete menselijke levens. De universele kalender wordt bovendien aangevuld door de levende gedachtenis van plaatselijke Kerken. Zo kunnen ook heiligen die voor de Lage Landen van bijzondere betekenis zijn een eigen plaats in de kalender en het gebed van de lokale Kerk innemen.',
-      'Wanneer een parochie of kalender de Juliaanse of Oude Kalender volgt, blijven de kerkelijke feestdata in de liturgische boeken dezelfde traditionele data, maar vallen zij op een andere burgerlijke datum dan in kerken die de herziene of burgerlijke kalender gebruiken. Voor een digitale kalender is het daarom belangrijk steeds onderscheid te maken tussen de kerkelijke datum en de burgerlijke datum waarop die viering tegenwoordig valt.',
-    ],
-  },
-};
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
   { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-01-Wat-is-het-kerkelijk-jaar.png' },
@@ -324,7 +289,7 @@ export default function Jaarcyclus() {
       <TimeSanctificationTimeline current="jaar" />
 
       <LiturgicalPopup open={periodOpen !== null} onClose={() => setPeriodOpen(null)} content={periodOpen ? PERIOD_POPUPS[periodOpen] : null} />
-      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? INFO_POPUPS[infoOpen] : null} />
+      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? JAAR_INFO[infoOpen] : null} />
     </>
   );
 }

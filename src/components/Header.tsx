@@ -38,6 +38,23 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cyclusOpen, setCyclusOpen] = useState(false);
   const cyclusRef = useRef<HTMLDivElement | null>(null);
+  const cyclusSluitTimer = useRef<number | null>(null);
+
+  // Het Cycli-menu sluit pas kort nadat de muis het verlaat en blijft open als je terugkeert.
+  const annuleerSluiten = () => {
+    if (cyclusSluitTimer.current !== null) {
+      window.clearTimeout(cyclusSluitTimer.current);
+      cyclusSluitTimer.current = null;
+    }
+  };
+  const openCyclus = () => {
+    annuleerSluiten();
+    setCyclusOpen(true);
+  };
+  const planCyclusSluiten = () => {
+    annuleerSluiten();
+    cyclusSluitTimer.current = window.setTimeout(() => setCyclusOpen(false), 400);
+  };
 
   useEffect(() => {
     const els = [...SECTIES, { id: 'adem', label: 'Adem', icon: Clock3 }, { id: 'etmaal', label: 'Etmaal', icon: Clock3 }, { id: 'week', label: 'Week', icon: Clock3 }, { id: 'jaar', label: 'Jaar', icon: Clock3 }]
@@ -61,8 +78,15 @@ export default function Header() {
         setCyclusOpen(false);
       }
     };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setCyclusOpen(false);
+    };
     document.addEventListener('mousedown', onPointerDown);
-    return () => document.removeEventListener('mousedown', onPointerDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('keydown', onKey);
+    };
   }, []);
 
   const kerk = kerkDatum(vandaag, mode);
@@ -135,14 +159,12 @@ export default function Header() {
           <div
             ref={cyclusRef}
             className="relative hidden sm:block"
-            onMouseEnter={() => setCyclusOpen(true)}
-            onMouseLeave={() => {
-              window.setTimeout(() => setCyclusOpen(false), 180);
-            }}
+            onMouseEnter={openCyclus}
+            onMouseLeave={planCyclusSluiten}
           >
             <button
               type="button"
-              onClick={() => setCyclusOpen((open) => !open)}
+              onClick={openCyclus}
               className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:min-h-0 sm:px-4 ${
                 cyclusActief ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
               }`}
@@ -154,25 +176,28 @@ export default function Header() {
             </button>
 
             {cyclusOpen && (
-              <div className="absolute left-0 top-[calc(100%+14px)] z-[200] w-[320px] rounded-lg border border-[#c9a227]/55 bg-[#1b110d] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
-                {CYCLUS_ITEMS.map((item) => {
-                  const itemActive = ['adem', 'etmaal', 'week', 'jaar'].includes(item.id) ? cyclusActief : false;
-                  return (
-                    <a
-                      key={`${item.id}-${item.label}`}
-                      href={item.href}
-                      onClick={() => {
-                        setActief(item.id);
-                        setCyclusOpen(false);
-                        setMenuOpen(false);
-                      }}
-                      className={`block rounded-md border px-3 py-2.5 transition ${itemActive ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
-                    >
-                      <div className="text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">{item.label}</div>
-                      <p className="mt-1 text-[11px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
-                    </a>
-                  );
-                })}
+              <div className="absolute left-0 top-full z-[200] pt-3">
+                <div className="w-[320px] rounded-lg border border-[#c9a227]/55 bg-[#1b110d] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
+                  {CYCLUS_ITEMS.map((item) => {
+                    const itemActive = ['adem', 'etmaal', 'week', 'jaar'].includes(item.id) ? cyclusActief : false;
+                    return (
+                      <a
+                        key={`${item.id}-${item.label}`}
+                        href={item.href}
+                        onClick={() => {
+                          setActief(item.id);
+                          annuleerSluiten();
+                          setCyclusOpen(false);
+                          setMenuOpen(false);
+                        }}
+                        className={`block rounded-md border px-3 py-2.5 transition ${itemActive ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
+                      >
+                        <div className="text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">{item.label}</div>
+                        <p className="mt-1 text-[11px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>

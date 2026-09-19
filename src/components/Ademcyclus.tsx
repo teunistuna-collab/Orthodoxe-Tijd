@@ -1,55 +1,12 @@
 import { useState } from 'react';
 import Cross from './Cross';
 import Modal from './Modal';
-import { CycleTransition, TimeSanctificationTimeline } from './CycleSections';
+import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { ADEM_POPUPS } from '../lib/cyclusTeksten';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
-type PopupContent = {
-  title: string;
-  subtitle?: string;
-  paragraphs: string[];
-  highlight?: string;
-};
-
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe ademcyclus.docx".
-const POPUPS: Record<PopupKey, PopupContent> = {
-  wat: {
-    title: 'Wat is de ademcyclus?',
-    subtitle: 'Een klein ritme binnen het leven van gebed',
-    paragraphs: [
-      "Met de naam ‘ademcyclus’ wordt hier geen officiële liturgische cyclus van de Orthodoxe Kerk bedoeld. De term wordt gebruikt als een ordenende naam voor het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus, die zelfs de ademhaling kan begeleiden.",
-      'Anders dan de etmaal-, week-, Paschale en jaarcyclus is dit dus geen onderdeel van het kerkelijk Typikon, maar een manier om het orthodoxe ideaal van het onophoudelijke gebed zichtbaar te maken.',
-    ],
-  },
-  jezusgebed: {
-    title: 'Het Jezusgebed',
-    subtitle: 'Het hart van de ademcyclus',
-    highlight: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar.',
-    paragraphs: [
-      'In de orthodoxe geestelijke traditie is het Jezusgebed de meest kenmerkende vorm van het onophoudelijke gebed. Door de Naam van de Heer telkens opnieuw aan te roepen, keert het verstand terug tot Christus en wordt het hart geoefend in nederigheid, berouw en de voortdurende gedachtenis aan God.',
-      'De woorden belijden tegelijk wie Christus is en wie de mens voor Hem is: Jezus is Heer, Christus en Zoon van God; de bidder vraagt niet om een techniek of een bijzondere ervaring, maar om ontferming. Het doel is de gemeenschap met God en een leven dat steeds opnieuw naar Hem wordt gekeerd.',
-      'Binnen de hesychastische traditie is het Jezusgebed soms met de lichamelijke ademhaling verbonden: de ademhaling dient het gebed, het gebed dient niet de ademhaling. Iedere gelovige kan het eenvoudig en aandachtig bidden, ook tijdens de gewone bezigheden van de dag, zonder bijzondere lichaamshouding of ademtechniek. De specifieke hesychastische methoden, waarin ademhaling, houding en het ‘neerdalen van het verstand in het hart’ bewust worden geoefend, behoren traditioneel onder geestelijke begeleiding te worden beoefend. De techniek is nooit het doel; Christus is het middelpunt.',
-    ],
-  },
-  gebedskoord: {
-    title: 'Het gebedskoord',
-    subtitle: 'Chotki en komboskini',
-    paragraphs: [
-      'Een chotki of komboskini kan helpen om het Jezusgebed aandachtig en regelmatig te herhalen. De knopen zijn geen doel op zichzelf en de ademhaling is geen teller.',
-      'Het gebedskoord ondersteunt de gebedsregel en helpt de aandacht terug te brengen wanneer de gedachten afdwalen. De uiterlijke herhaling is gericht op een innerlijke werkelijkheid: de Naam van Jezus in gedachtenis bewaren.',
-    ],
-  },
-  hart: {
-    title: 'Gebed van het hart',
-    subtitle: 'Van de lippen naar het hart',
-    paragraphs: [
-      'Het onophoudelijke gebed begint eenvoudig. Het gebed wordt uitgesproken met de lippen, vervolgens stiller en aandachtiger in het verstand, en de orthodoxe geestelijke schrijvers spreken uiteindelijk over het ‘gebed van het hart’: een toestand waarin de gedachtenis aan God het innerlijke leven steeds dieper doordringt. Dit is geen prestatie die door een ademritme kan worden afgedwongen, maar een gave die wordt gezocht in nederigheid, bekering en het sacramentele en liturgische leven van de Kerk.',
-      'Naast het volledige Jezusgebed kent het orthodoxe leven korte aanroepingen en schietgebeden. Zij kunnen opkomen tijdens arbeid, reizen, wachten, vreugde, angst of verzoeking. Hun betekenis ligt niet in een vast ademschema, maar in het telkens terugkeren van hart en verstand tot God. Het Jezusgebed blijft daarbij de centrale en meest karakteristieke korte aanroeping.',
-      'Onophoudelijk gebed vervangt de vaste gebeden van de Kerk niet. De orthodoxe traditie houdt beide samen: de gelovige heeft vaste tijden van gebed en neemt de gedachtenis aan God mee in de uren daartussen. Zolang er adem is, kan de Naam van de Heer worden aangeroepen. Zo wordt het kleinste ritme van het lichamelijke leven verbonden met de roeping van de apostel: ‘Bidt zonder ophouden.’',
-    ],
-  },
-};
 
 const CARDS: Array<{ key: PopupKey; title: string; intro: string; iconSrc: string }> = [
   {
@@ -234,6 +191,7 @@ export default function Ademcyclus() {
 
       <TimeSanctificationTimeline current="adem" />
 
+      <LiturgicalPopup open={popup !== null} onClose={() => setPopup(null)} content={popup ? ADEM_POPUPS[popup] : null} />
     </>
   );
 }

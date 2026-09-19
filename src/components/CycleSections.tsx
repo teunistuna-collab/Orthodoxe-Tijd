@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import Modal from './Modal';
+import type { PopupInhoud } from '../lib/cyclusTeksten';
 
 type CycleCard = {
   title: string;
@@ -147,12 +148,7 @@ export function LiturgicalCard({ title, intro, body, meta, onReadMore }: CycleCa
   );
 }
 
-type PopupContent = {
-  title: string;
-  subtitle?: string;
-  paragraphs: string[];
-  highlight?: string;
-};
+type PopupContent = PopupInhoud;
 
 export function LiturgicalPopup({ open, onClose, content }: { open: boolean; onClose: () => void; content: PopupContent | null }) {
   if (!open || !content) return null;
@@ -162,11 +158,40 @@ export function LiturgicalPopup({ open, onClose, content }: { open: boolean; onC
       <div className="exact-popup-reading">
         {content.subtitle && <p className="exact-popup-subtitle">{content.subtitle}</p>}
         {content.highlight && <blockquote className="exact-popup-highlight">{content.highlight}</blockquote>}
-        <div className="exact-popup-prose">
-          {content.paragraphs.map((paragraph, index) => (
-            <p key={`${content.title}-${index}`}>{paragraph}</p>
-          ))}
-        </div>
+        {content.paragraphs.length > 0 && (
+          <div className="exact-popup-prose">
+            {content.paragraphs.map((paragraph, index) => (
+              <p key={`${content.title}-${index}`}>{paragraph}</p>
+            ))}
+          </div>
+        )}
+        {content.sections?.map((sectie, sectieIndex) => (
+          <section key={`${content.title}-s${sectieIndex}`} className="exact-popup-sectie">
+            {sectie.heading && <h3>{sectie.heading}</h3>}
+            {sectie.paragraphs?.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+            {sectie.items && (
+              <ul>
+                {sectie.items.map((item, index) => <li key={index}>{item}</li>)}
+              </ul>
+            )}
+            {sectie.after?.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+            {sectie.note && <p className="exact-popup-note">{sectie.note}</p>}
+            {sectie.table && (
+              <div className="exact-popup-tabel-wrap">
+                <table className="exact-popup-tabel">
+                  <thead>
+                    <tr>{sectie.table.head.map((kolom) => <th key={kolom}>{kolom}</th>)}</tr>
+                  </thead>
+                  <tbody>
+                    {sectie.table.rows.map((rij, rijIndex) => (
+                      <tr key={rijIndex}>{rij.map((cel, celIndex) => <td key={celIndex}>{cel}</td>)}</tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        ))}
       </div>
     </Modal>
   );

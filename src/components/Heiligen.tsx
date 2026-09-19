@@ -9,11 +9,11 @@ import { LiturgicalPopup } from './CycleSections';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-type Resultaat = { md: string; naam: string; titel?: string; kort?: string; nl?: boolean; bron: 'nl' | 'htc'; rang?: number };
+type Resultaat = { md: string; naam: string; ruwNaam?: string; titel?: string; kort?: string; nl?: boolean; bron: 'nl' | 'htc'; rang?: number };
 
 function popupContent(h: Resultaat | null) {
   if (!h) return null;
-  const extra = getSaintEnrichment(h.naam);
+  const extra = getSaintEnrichment(h.ruwNaam ?? h.naam);
   const meta = extra ? [extra.rang, extra.regio, extra.eeuw].filter(Boolean).join(' · ') : '';
   const paragraphs = extra?.leven ? [extra.leven] : (h.kort ? [h.kort] : ['Voor deze heilige is nog geen betrouwbare uitgebreide Nederlandse levensbeschrijving beschikbaar.']);
   return { title:h.naam, subtitle:`${formatMd(h.md)}${h.titel?` · ${h.titel}`:''}${meta?` · ${meta}`:''}`, paragraphs };
@@ -35,7 +35,7 @@ export default function Heiligen() {
 
   const heiligenVandaag = useMemo<Resultaat[]>(() => {
     const curated: Resultaat[] = (HEILIGEN[dagVandaag.kerkKey] ?? []).map(h => ({ ...h, md: dagVandaag.kerkKey, bron: 'nl' }));
-    const gezien = new Set(curated.map(h => normaliseer(h.naam)));
+    const gezien = new Set(curated.map(h => normaliseer(h.ruwNaam ?? h.naam)));
     const extra: Resultaat[] = (htc?.[dagVandaag.kerkKey]?.l ?? []).map(([icon, tekst]) => ({ md: dagVandaag.kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang })).filter(h => ![...gezien].some(g => normaliseer(h.naam).includes(g) || g.includes(normaliseer(h.naam))));
     return [...curated, ...extra];
   }, [dagVandaag.kerkKey, htc]);
@@ -58,7 +58,7 @@ export default function Heiligen() {
     const centraal: Resultaat[] = ALLE_HEILIGEN.filter(h => past(h.md, `${h.naam} ${h.titel} ${h.kort}`) && (!alleenNl || h.nl)).map(h => ({ ...h, bron: 'nl' }));
     const basis = [...centraal];
     if (htc && !alleenNl) {
-      const gezien = new Set(centraal.map(h => `${h.md}|${normaliseer(h.naam)}`));
+      const gezien = new Set(centraal.map(h => `${h.md}|${normaliseer(h.ruwNaam ?? h.naam)}`));
       for (const [md, d] of Object.entries(htc)) {
         if (!past(md, '')) continue;
         for (const [icon, tekst] of d.l) {
