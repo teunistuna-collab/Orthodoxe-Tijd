@@ -153,7 +153,7 @@ export default function Vasten() {
                   <span className="fasting-food-icon">
                     <img src={iconSrc} alt="" className="h-full w-full object-contain" />
                   </span>
-                  <span className="fasting-food-status text-base leading-none font-semibold" style={{ color: toegestaan ? '#8fd39f' : '#e08a8a' }}>
+                  <span className="fasting-food-status text-base leading-none font-semibold" style={{ color: toegestaan ? '#2f7a44' : '#a33a3a' }}>
                     {toegestaan ? '✓' : '×'}
                   </span>
                   <span className="text-[10px] leading-tight text-[#d9c6a3] sm:text-xs">{label}</span>
@@ -163,7 +163,7 @@ export default function Vasten() {
             <div className="mt-6 flex justify-center">
               <a
                 href="#kalender"
-                className="inline-flex items-center gap-2 rounded-full border border-gold/60 px-6 py-3 text-xs font-bold tracking-[0.16em] text-gold-light uppercase transition hover:bg-gold hover:text-bark"
+                className="btn-pill"
               >
                 Bekijk vastendagen in de kalender →
               </a>
@@ -201,7 +201,7 @@ export default function Vasten() {
                 </div>
                 <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
-                <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold tracking-[0.16em] text-gold-light uppercase underline-offset-4 group-hover:text-gold group-hover:underline">
+                <span className="btn-pill mt-4">
                   Lees meer →
                 </span>
               </button>
@@ -246,11 +246,11 @@ export default function Vasten() {
                     </div>
                     <p className="mt-4 pl-3 text-sm leading-relaxed text-ink-soft">{p.omschrijving}</p>
                     <div className="major-actions">
-                      <button type="button" onClick={() => setPeriodeOpen(p.id)} className="text-xs font-bold tracking-[0.14em] text-gold-deep uppercase underline-offset-4 hover:underline">
+                      <button type="button" onClick={() => setPeriodeOpen(p.id)} className="btn-pill">
                         Lees meer →
                       </button>
                       {info && (
-                        <a href={info.href} className="text-xs font-bold tracking-[0.14em] text-gold-deep uppercase underline-offset-4 hover:underline">
+                        <a href={info.href} className="btn-pill">
                           {info.linkLabel} →
                         </a>
                       )}
@@ -272,7 +272,7 @@ export default function Vasten() {
               eerste eeuwen gevast — het staat al in de Didachè. Vastenvrij zijn alleen de Lichte Week, de week na
               Pinksteren, de Kersttijd en de week na Tollenaar en Farizeeër.
             </p>
-            <a href="#week" className="mt-3 inline-block text-xs font-bold tracking-[0.14em] text-gold-deep uppercase underline-offset-4 hover:underline">
+            <a href="#week" className="btn-pill mt-3">
               Ontdek de weekcyclus →
             </a>
 

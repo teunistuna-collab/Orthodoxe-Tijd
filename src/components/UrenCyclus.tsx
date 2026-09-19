@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Bird, BookOpen, ChevronDown, Church, Clock3, Compass, HelpCircle, Heart, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
+import { Bird, BookOpen, ChevronDown, ChevronLeft, ChevronRight, Church, Clock3, Compass, HelpCircle, Heart, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
 import Modal from './Modal';
 import Cross from './Cross';
+import { vergrendelScroll } from '../lib/scrollLock';
 import { CycleTransition, TimeSanctificationTimeline } from './CycleSections';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
@@ -216,6 +217,9 @@ const SERVICE_IMAGE_ICONS: Record<string, string | undefined> = {
   Middernachtdienst: '/images/ui/menu/03-Etmaal-04-Middernachtdienst.png',
   Metten: '/images/ui/menu/03-Etmaal-03-Metten.png',
   'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.png',
+  'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.png',
+  'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.png',
+  'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.png',
 };
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het perkamentpaneel.
@@ -327,10 +331,10 @@ export default function UrenCyclus() {
       if (event.key === 'Escape') setOpen(null);
     };
     window.addEventListener('keydown', sluitMetEscape);
-    document.body.style.overflow = 'hidden';
+    const ontgrendel = vergrendelScroll();
     return () => {
       window.removeEventListener('keydown', sluitMetEscape);
-      document.body.style.overflow = '';
+      ontgrendel();
     };
   }, [open]);
 
@@ -388,7 +392,7 @@ export default function UrenCyclus() {
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-                <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold tracking-[0.16em] text-gold-light uppercase underline-offset-4 group-hover:text-gold group-hover:underline">
+                <span className="btn-pill mt-6">
                   Lees meer →
                 </span>
               </button>
@@ -536,6 +540,98 @@ export default function UrenCyclus() {
 
       <TimeSanctificationTimeline current="etmaal" />
 
+      {open !== null && currentService && (
+        <Modal
+          open
+          onClose={closeModal}
+          eyebrow={`${currentService.time} uur`}
+          title={currentTitle}
+          centerTitle
+          maxWidth="max-w-3xl"
+          labelledBy="etmaal-dienst-titel"
+          leadingActions={
+            <button type="button" onClick={previousService} className="exact-modal-close" aria-label="Vorige dienst">
+              <ChevronLeft />
+            </button>
+          }
+          actions={
+            <button type="button" onClick={nextService} className="exact-modal-close" aria-label="Volgende dienst">
+              <ChevronRight />
+            </button>
+          }
+        >
+          <div className="exact-popup-reading">
+            <p className="exact-popup-subtitle">{currentService.hoofdgedachtenis}</p>
+            {!modalState?.selectedPsalm && (
+              <blockquote className="exact-popup-highlight">
+                <span className="block text-[11px] font-bold tracking-[0.18em] uppercase">{currentService.kernvers.reference}</span>
+                {currentService.kernvers.verses.map((vers) => (
+                  <span key={vers} className="block">{vers}</span>
+                ))}
+              </blockquote>
+            )}
+
+            <div className="etmaal-popup-keuze">
+              <button type="button" onClick={() => goToService(open)} className={`btn-pill${modalState?.selectedPsalm ? '' : ' is-actief'}`}>
+                De dienst
+              </button>
+              {currentService.psalms.map((psalm) => (
+                <button
+                  key={psalm.pdf}
+                  type="button"
+                  onClick={() => openPsalm(open, psalm)}
+                  className={`btn-pill${modalState?.selectedPsalm?.pdf === psalm.pdf ? ' is-actief' : ''}`}
+                >
+                  {psalm.title}
+                </button>
+              ))}
+            </div>
+
+            {(pdfStatus === 'loading' || pdfStatus === 'idle') && <p className="etmaal-pdf-melding">De tekst wordt geladen…</p>}
+            {pdfStatus === 'error' && (
+              <p className="etmaal-pdf-melding">
+                De tekst kon niet worden geladen.{' '}
+                <a href={currentPdfUrl} target="_blank" rel="noreferrer" className="underline">
+                  Open de PDF
+                </a>
+              </p>
+            )}
+            {pdfStatus === 'done' && (
+              <div className="etmaal-pdf">
+                {pdfPages.map((paginaRegels, pageIndex) => {
+                  // Het kernvers staat al in het kader hierboven: laat de herhaling bovenaan de dienst weg.
+                  const kernversRegels = 1 + currentService.kernvers.verses.length;
+                  const lines =
+                    pageIndex === 0 && !modalState?.selectedPsalm && paginaRegels[0]?.text.startsWith('Psalm Kernvers')
+                      ? paginaRegels.slice(kernversRegels)
+                      : paginaRegels;
+                  if (lines.length === 0) return null;
+                  const minX = Math.min(...lines.map((line) => line.x));
+                  const langste = Math.max(...lines.map((line) => line.text.length));
+                  return (
+                    <div key={`${currentPdfUrl}-${pageIndex}`} className="etmaal-pdf-pagina">
+                      {lines.map((line, lineIndex) => {
+                        // Een korte regel die met een leesteken eindigt sluit meestal een alinea af.
+                        const vorige = lines[lineIndex - 1];
+                        const nieuweAlinea = !!vorige && vorige.text.length < langste * 0.7 && /[.!?:”"’)]$/.test(vorige.text);
+                        return (
+                          <p
+                            key={lineIndex}
+                            className={nieuweAlinea ? 'etmaal-pdf-alinea' : undefined}
+                            style={{ paddingLeft: `${Math.min(48, Math.max(0, (line.x - minX) / 2))}px` }}
+                          >
+                            {line.text}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

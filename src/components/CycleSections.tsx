@@ -54,7 +54,7 @@ export function CycleTransition({
             <p className="mt-4 max-w-2xl text-sm leading-relaxed break-words text-[#d9c6a3] min-[900px]:text-lg">{text}</p>
             <a
               href={buttonHref}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/60 px-6 py-3 text-[11px] font-bold tracking-[0.2em] text-gold-light uppercase transition hover:bg-gold hover:text-bark min-[900px]:w-auto min-[900px]:justify-start"
+              className="btn-pill mt-6"
             >
               {buttonLabel} →
             </a>

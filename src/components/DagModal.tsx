@@ -7,6 +7,7 @@ import { LEZINGEN_JAAR, lezingSoort, rangLabel, vertaalLeven, vertaalRef, vertaa
 import { NIVEAUS } from '../lib/vasten';
 import { FeestTag, VastenBadge } from './ui';
 import Modal from './Modal';
+import { vergrendelScroll } from '../lib/scrollLock';
 
 interface Props {
   ymd: string | null;
@@ -28,10 +29,10 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
       if (e.key === 'ArrowRight' && dag) onNavigate(ymd(addDays(dag.civil, 1)));
     };
     window.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
+    const ontgrendel = vergrendelScroll();
     return () => {
       window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
+      ontgrendel();
     };
   }, [geselecteerd, dag, onClose, onNavigate]);
 

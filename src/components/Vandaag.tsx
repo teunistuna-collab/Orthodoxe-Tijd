@@ -26,6 +26,17 @@ const UURMOMENTEN: Array<{ vanaf: number; tot: number; moment: UurMoment }> = [
   { vanaf: 21, tot: 24, moment: { naam: 'Completen', psalm: 'Psalm 50:3', vers: 'kernvers voor de nacht', tekst: 'Ontferm U over mij, o God, volgens uw grote ontferming.' } },
 ];
 
+const UUR_ICONEN: Record<string, string> = {
+  Middernachtdienst: '/images/ui/menu/03-Etmaal-04-Middernachtdienst.png',
+  Metten: '/images/ui/menu/03-Etmaal-03-Metten.png',
+  'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.png',
+  'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.png',
+  'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.png',
+  'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.png',
+  Vespers: '/images/ui/menu/03-Etmaal-02-Avondgebeden.png',
+  Completen: '/images/ui/menu/03-Etmaal-05-Completen.png',
+};
+
 const WEEKTHEMAS: Record<number, { titel: string; uitleg: string }> = {
   0: { titel: 'De Verrijzenis van Christus', uitleg: 'De zondag is de Dag des Heren, een wekelijkse gedachtenis van de Verrijzenis.' },
   1: { titel: 'De heilige Engelen', uitleg: 'Maandag gedenkt de Kerk de hemelse, onlichamelijke machten.' },
@@ -69,13 +80,13 @@ export default function Vandaag() {
         <div className="vandaag-paper">
           <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true">☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
           <div className="vandaag-list">
-            <a className="vandaag-item" href="#adem"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.png" alt=""/><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#etmaal"><img className="provided-menu-icon" src="/images/ui/menu/03-Etmaal-05-Completen.png" alt=""/><div><b>{uurMoment.naam}</b><em>“{uurMoment.tekst}”</em><small>{uurMoment.psalm} · Septuaginta</small></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#week"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.png" alt=""/><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#vasten"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.png" alt=""/><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}</div><ChevronRight/></a>
-            <a className="vandaag-item" href="#pascha"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.png" alt=""/><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span></div><ChevronRight/></a>
-            <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; window.location.hash='kalender'; }} onKeyDown={(e)=>{ if(e.key==='Enter') window.location.hash='kalender'; }}><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.png" alt=""/><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>Leesrooster {LEZINGEN_JAAR}</span>}</div><a href="#kalender"><ChevronRight/></a></article>
-            <a className="vandaag-item" href="#gebeden"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-05-Woestijnvaders-en-moeders.png" alt=""/><div><b>Vaders &amp; moeders</b><span>Spreuk uit de woestijn</span><small>De verzameling wordt later toegevoegd.</small></div><ChevronRight className="vandaag-muted-chevron"/></a>
+            <a className="vandaag-item" href="#adem"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.png" alt=""/><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Ga naar pijlgebed →</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#etmaal"><img className="provided-menu-icon" src={UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.png'} alt=""/><div><b>{uurMoment.naam}</b><em>“{uurMoment.tekst}”</em><small>{uurMoment.psalm} · Septuaginta</small><span className="btn-pill vandaag-cta">Ga naar {uurMoment.naam.toLowerCase()} →</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#week"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.png" alt=""/><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week →</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#vasten"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.png" alt=""/><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten →</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#pascha"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.png" alt=""/><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk de cyclus →</span></div><ChevronRight/></a>
+            <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; window.location.hash='kalender'; }} onKeyDown={(e)=>{ if(e.key==='Enter') window.location.hash='kalender'; }}><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.png" alt=""/><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>Leesrooster {LEZINGEN_JAAR}</span>}<span className="btn-pill vandaag-cta">Lees de lezingen →</span></div><a href="#kalender"><ChevronRight/></a></article>
+            <a className="vandaag-item" href="#gebeden"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-05-Woestijnvaders-en-moeders.png" alt=""/><div><b>Vaders &amp; moeders</b><span>Spreuk uit de woestijn</span><small>De verzameling wordt later toegevoegd.</small><span className="btn-pill vandaag-cta">Ga naar gebeden →</span></div><ChevronRight className="vandaag-muted-chevron"/></a>
           </div>
           <button type="button" onClick={()=>openDag(dag.ymd)} className="vandaag-main-button"><Sparkles/> Bekijk de volledige dag <ChevronRight/></button>
         </div>

@@ -57,7 +57,7 @@ function PrayerCard({ g, onOpen }: { g: Gebed; onOpen: () => void }) {
     >
       <p className="text-[10px] font-bold tracking-[0.2em] text-gold-deep uppercase">{g.wanneer}</p>
       <h4 className="font-display mt-1 text-lg font-semibold text-[#fbf3df]">{g.titel}</h4>
-      <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold tracking-[0.14em] text-gold-deep uppercase underline-offset-4 group-hover:underline">
+      <span className="btn-pill mt-3">
         Open gebed →
       </span>
     </button>
@@ -147,7 +147,7 @@ export default function Gebeden() {
               <button
                 type="button"
                 onClick={() => setActieveCat(null)}
-                className="mb-6 inline-flex items-center gap-1 text-xs font-bold tracking-[0.14em] text-gold-deep uppercase underline-offset-4 hover:underline"
+                className="btn-pill mb-6"
               >
                 ← Terug naar categorieën
               </button>
@@ -161,7 +161,7 @@ export default function Gebeden() {
               {huidigeCat.id === 'jezusgebed' && (
                 <a
                   href="#adem"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full border border-gold/50 px-5 py-2.5 text-xs font-bold tracking-[0.16em] text-gold-deep uppercase transition hover:bg-gold hover:text-bark"
+                  className="btn-pill mt-6"
                 >
                   Ontdek de ademcyclus →
                 </a>
@@ -180,8 +180,8 @@ export default function Gebeden() {
                     <img src={cat.iconSrc} alt="" className="prayer-category-icon" />
                     <h3 className="font-display mt-3 text-xl font-semibold text-gold-light uppercase">{cat.label}</h3>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-[#f0dfbf]">{cat.omschrijving}</p>
-                    <div className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 px-4 py-2 text-xs font-bold tracking-[0.14em] text-gold-light uppercase transition group-hover:bg-gold group-hover:text-bark">
-                      <span>{cat.items.length} gebed{cat.items.length === 1 ? '' : 'en'}</span><span>·</span><span>Bekijk gebeden →</span>
+                    <div className="btn-pill mt-4">
+                      <span>Bekijk gebeden →</span>
                     </div>
                   </button>
                 );
