@@ -1,0 +1,410 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Import Holy Trinity heiligen",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/import-holy-trinity.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Import Holy Trinity heiligen opnieuw",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/import-holy-trinity.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Valideer heiligen import",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"const fs=require('fs'); const s=fs.readFileSync('src/lib/heiligen.ts','utf8'); const b=fs.existsSync('src/lib/heiligen.backup.ts'); const keys=[...s.matchAll(/^  '(\\d+)-(\\d+)':/gm)].map(m=>m[1]+'-'+m[2]); const expected=[]; for(let m=1;m<=12;m++){const d=new Date(Date.UTC(2026,m,0)).getUTCDate();for(let x=1;x<=d;x++)expected.push(m+'-'+x)}; const missing=expected.filter(k=>!keys.includes(k)); const names=['Servatius van Maastricht','Bonifatius','Odulfus van Utrecht','Adalbert van Egmond','Jeroen van Noordwijk','Willibrord','Lebuinus van Deventer','Radboud van Utrecht']; const nl=names.filter(n=>new RegExp('naam: \\'?'+n.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&')+'[\\\\s\\\\S]*?nl: true').test(s)); console.log(JSON.stringify({bytes:s.length,backup:b,dateKeys:keys.length,missing,duplicates:'checked by generated merge',nl},null,2));"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Valideer en bouw heiligen",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Controleer heiligenstructuur",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/validate-heiligen.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Bouw project via npm cmd",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Vertaal en regenereer heiligen",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/import-holy-trinity.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Valideer definitieve heiligen",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/validate-heiligen.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Bouw definitieve kalender",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Genereer schone heiligenkalender",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/import-holy-trinity.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Valideer schone heiligenkalender",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/validate-heiligen.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Bouw schone heiligenkalender",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Laatste kalendercontrole",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/validate-heiligen.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Controleer heiligenpopup",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Controleer heiligen per maand",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"const fs=require('fs');const s=fs.readFileSync('src/lib/heiligen.ts','utf8');const lines=s.split(/\\r?\\n/);const out={};for(const line of lines){const m=line.match(/^\\s*'(\\d+)-(\\d+)':\\s*\\[(.*)\\],?$/);if(m){const month=Number(m[1]);const day=Number(m[2]);const count=(m[3].match(/naam:/g)||[]).length;(out[month]??=[]).push({day,count})}}console.log(JSON.stringify(Object.fromEntries(Object.entries(out).map(([m,v])=>[m,{days:v.length,lastDay:Math.max(...v.map(x=>x.day)),total:v.reduce((n,x)=>n+x.count,0),empty:v.filter(x=>x.count===0).map(x=>x.day)}])),null,2));"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Meet heiligen per maand",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/check-months.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Bouw volledige heiligenlijst",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Voeg Lage-Landen-heiligen toe",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/add-low-countries-saints.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Controleer Lage-Landen-heiligen",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/check-low-countries.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Bouw heiligenpagina",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Markeer Dymphna als Lage-Landen-heilige",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/fix-dymphna.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Hercontroleer Lage-Landen-heiligen",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/check-low-countries.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Herbouw heiligenpagina",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Backup heiligendatabase",
+			"type": "shell",
+			"command": "Copy-Item",
+			"args": [
+				"src/lib/heiligen.ts",
+				"src/lib/heiligen.oca-backup.ts",
+				"-Force"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Vul OCA-heiligen aan",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/supplement-oca.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Voeg OCA Filaret toe",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/fix-oca-filaret.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Bouw OCA-uitbreiding",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Controleer OCA-records exact",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"const fs=require('fs');const s=fs.readFileSync('src/lib/heiligen.ts','utf8');for(const n of ['Eerbiedwaardige Alexei (Kabalyuk)','Filaret (Drozdov) van Moskou'])console.log(n,s.includes(n));"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Herstel OCA Filaret-record",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/fix-oca-filaret.mjs"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Eindbouw database",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Controleer GitHub repository",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"status",
+				"--short"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Controleer Git branch",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"branch",
+				"--show-current"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Controleer GitHub remote",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"remote",
+				"-v"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Commit en push website",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"add",
+				".",
+				";",
+				"git",
+				"commit",
+				"-m",
+				"Maak website responsive en vernieuw modals"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Werk commit bij en push",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"add",
+				".",
+				";",
+				"git",
+				"commit",
+				"--amend",
+				"--no-edit",
+				";",
+				"git",
+				"push",
+				"origin",
+				"main"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

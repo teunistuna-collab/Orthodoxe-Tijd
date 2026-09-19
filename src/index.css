@@ -1,0 +1,855 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "Alegreya Sans", "Gill Sans", "Segoe UI", sans-serif;
+
+  --color-parchment: #faf6ec;
+  --color-parchment-2: #f3eada;
+  --color-parchment-3: #e9dcc0;
+  --color-parchment-4: #d8c49c;
+  --color-paper: #fffdf6;
+  --color-ink: #2b1d12;
+  --color-ink-soft: #6b5b45;
+  --color-ink-mute: #9b8b70;
+  --color-gold: #c9a227;
+  --color-gold-light: #e8cf7a;
+  --color-gold-pale: #f6ebc6;
+  --color-gold-deep: #8a5a1e;
+  --color-wine: #5a2424;
+  --color-wine-deep: #3b1515;
+  --color-bark: #160b08;
+  --color-bark-2: #24130d;
+  --color-cream: #f4ecda;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+section[id] {
+  scroll-margin-top: 7.25rem;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.orthodox-pattern {
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(201, 162, 39, 0.16), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(201, 162, 39, 0.05) 0 2px, transparent 2px 10px);
+}
+
+.parchment-pattern {
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(201, 162, 39, 0.1), transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(90, 36, 36, 0.06), transparent 45%);
+}
+
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a227 20%, #e8cf7a 50%, #c9a227 80%, transparent);
+}
+
+.card-shadow {
+  box-shadow:
+    0 1px 2px rgba(43, 29, 18, 0.06),
+    0 8px 28px -12px rgba(90, 36, 36, 0.22);
+}
+
+.paper {
+  background: linear-gradient(180deg, #fffdf7 0%, #fbf6ea 100%);
+}
+
+.gold-frame {
+  position: relative;
+}
+.gold-frame::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+::selection {
+  background: #c9a227;
+  color: #221210;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.thin-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: #d8c49c;
+  border-radius: 999px;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scale(0.96) translateY(1px);
+  }
+}
+.flame {
+  animation: flicker 2.4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(232, 207, 122, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(232, 207, 122, 0);
+  }
+}
+.today-glow {
+  animation: glow 2.6s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (max-width: 1023px) {
+  .grid > * {
+    min-width: 0;
+  }
+
+  img,
+  svg {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  button,
+  a,
+  select,
+  input {
+    touch-action: manipulation;
+  }
+}
+
+/* Vandaag — één doorlopende liturgische compositie */
+.today-page {
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(201, 162, 39, 0.12), transparent 34%),
+    linear-gradient(180deg, #160b08 0%, #24130d 52%, #160b08 100%);
+}
+.today-overview {
+  background-image:
+    radial-gradient(circle at 12% 12%, rgba(201, 162, 39, .08), transparent 28%),
+    radial-gradient(circle at 88% 78%, rgba(90, 36, 36, .045), transparent 32%);
+}
+.today-kicker {
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: #8a5a1e;
+}
+.today-link {
+  font-size: 10px;
+  line-height: 1.4;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: #8a5a1e;
+  transition: color .18s ease, transform .18s ease;
+}
+.today-link:hover { color: #5a2424; transform: translateX(2px); }
+
+/* Heiligen & Feesten — één rustig digitaal menologion/feestboek */
+.saints-page,.feasts-page{background-image:radial-gradient(circle at 50% 0%,rgba(201,162,39,.10),transparent 32%),linear-gradient(180deg,#f5ecdb 0%,#faf6ec 48%,#efe3cb 100%)}
+.saints-book{background-image:radial-gradient(circle at 10% 10%,rgba(201,162,39,.07),transparent 28%),radial-gradient(circle at 90% 88%,rgba(90,36,36,.04),transparent 30%)}
+
+
+/* Orthodoxe Tijd — sitebrede editorial polish */
+:root { color-scheme: light; }
+main > section[id] > img {
+  width:100%;
+  max-height:560px;
+  object-fit:cover;
+  object-position:center;
+  border-bottom:1px solid rgba(201,162,39,.42);
+}
+@media (min-width:1280px){
+  main > section[id] > img { max-height:620px; }
+}
+@media (max-width:767px){
+  main > section[id] > img { max-height:360px; min-height:210px; }
+}
+.today-overview, .saints-book, .feasts-page > div > div {
+  position:relative;
+}
+.today-overview::before, .saints-book::before {
+  content:""; position:absolute; inset:10px; pointer-events:none;
+  border:1px solid rgba(201,162,39,.20);
+}
+.today-overview article { position:relative; z-index:1; }
+.today-overview article:not(:last-child) { transition:background-color .2s ease; }
+.today-overview article:not(:last-child):hover { background-color:rgba(255,250,240,.38); }
+.saints-book input, .feasts-page input { border-radius:0; box-shadow:inset 0 0 0 4px rgba(201,162,39,.035); }
+@media (prefers-reduced-motion: reduce){ * { scroll-behavior:auto !important; animation:none !important; transition:none !important; } }
+
+/* Vandaag v4 — rustige, gelaagde liturgische startpagina */
+.today-hero{background:#160b08;border-bottom:1px solid rgba(201,162,39,.45)}
+.today-hero img{display:block;width:100%;max-height:610px;object-fit:cover;object-position:center}
+.today-page{background:radial-gradient(circle at 50% 0%,rgba(201,162,39,.11),transparent 31%),linear-gradient(180deg,#160b08 0%,#24130d 48%,#160b08 100%);padding:54px 20px 72px}
+.today-shell{width:min(1320px,100%);margin:0 auto}.today-heading{text-align:center;margin:0 auto 28px;max-width:900px}.today-heading p{font-size:10px;font-weight:800;letter-spacing:.34em;color:#e8cf7a}.today-heading h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.8rem);font-weight:500;line-height:1.04;margin:10px 0 18px;color:#f4ecda}.today-heading span,.today-desert span{display:block;width:105px;height:1px;margin:auto;background:linear-gradient(90deg,transparent,#c9a227,transparent)}
+.today-book{overflow:hidden;border:1px solid rgba(201,162,39,.58);border-radius:10px;background:#f5ecd9;color:#2b1d12;box-shadow:0 34px 80px rgba(0,0,0,.38),inset 0 0 0 6px rgba(255,253,246,.35);background-image:radial-gradient(circle at 8% 8%,rgba(201,162,39,.08),transparent 25%),radial-gradient(circle at 92% 85%,rgba(90,36,36,.05),transparent 30%)}
+.today-book>section{border-bottom:1px solid rgba(138,90,30,.28)}.today-book>section:last-child{border-bottom:0}.today-opening{display:grid;grid-template-columns:1fr 1fr}.today-opening>article{padding:48px 52px}.today-arrow-prayer{border-right:1px solid rgba(138,90,30,.28)}.today-arrow-prayer blockquote{font-family:var(--font-display);font-size:clamp(2.25rem,4vw,4rem);font-weight:500;line-height:1.02;color:#3b1515;margin:20px 0}.today-copy{font-size:15px;line-height:1.7;color:#6b5b45;max-width:650px}.today-kicker{font-size:10px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:.25em!important;text-transform:uppercase!important;color:#8a5a1e!important;margin:0!important}.today-link{display:inline-block;margin-top:18px;border:0;background:none;padding:0;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e;cursor:pointer;text-decoration:none}.today-link:hover{color:#5a2424}
+.today-hour{background:rgba(239,227,203,.55)}.today-hour-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.today-hour-head h2,.today-week-theme h2,.today-fast-row h2,.today-date-row h2,.today-pascha h2{font-family:var(--font-display);font-weight:500}.today-hour-head h2{font-size:2.35rem;margin:7px 0 0}.today-hour-head>span{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8a5a1e;border:1px solid rgba(138,90,30,.35);padding:7px 11px;border-radius:999px;background:#fffaf0}.today-hour blockquote{font-family:var(--font-display);font-size:clamp(1.65rem,2.6vw,2.6rem);font-style:italic;line-height:1.15;color:#5a2424;border-left:2px solid #c9a227;padding-left:22px;margin:28px 0 12px}.today-source{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#9b8b70}
+.today-week-row,.today-date-row{display:grid;grid-template-columns:220px 1fr auto;align-items:stretch}.today-day-name{background:#24130d;color:#f4ecda;padding:32px 36px;display:flex;flex-direction:column;justify-content:center}.today-day-name p{font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#e8cf7a}.today-day-name strong{font-family:var(--font-display);font-size:2.2rem;font-weight:500;color:#e8cf7a;margin-top:4px}.today-week-theme{padding:30px 42px}.today-week-theme h2{font-size:2rem;margin:6px 0}.today-week-theme>p:last-child{font-size:14px;color:#6b5b45;line-height:1.55}.today-week-row>.today-link,.today-date-row>.today-link{align-self:center;margin:0 36px}
+.today-fast-row{display:grid;grid-template-columns:minmax(270px,.8fr) minmax(300px,1.4fr) auto;gap:34px;align-items:center;padding:30px 42px;background:linear-gradient(90deg,rgba(90,36,36,.08),rgba(201,162,39,.06))}.today-fast-row h2{font-size:2rem;color:#5a2424;margin:6px 0 0}.today-fast-period{font-size:11px;color:#8a5a1e;margin-top:4px}.today-fast-row>.today-link{margin:0}
+.today-date-row{padding:0}.today-date-block{padding:32px 36px;background:#efe3cb}.today-date-block h2{font-size:1.8rem;color:#5a2424;margin:7px 0 3px}.today-date-block>p:last-child{font-size:11px;color:#9b8b70}.today-saint-block{padding:30px 42px}.today-saint-block h2{font-size:2rem;margin:0 0 4px}.today-saint-block p{font-size:14px;color:#8a5a1e}.today-saint-block small{display:block;color:#9b8b70;margin-top:7px}
+.today-pascha{display:grid;grid-template-columns:.85fr 1.15fr}.today-pascha>article{padding:42px 48px}.today-pascha>article:first-child{background:rgba(239,227,203,.55);border-right:1px solid rgba(138,90,30,.28)}.today-pascha h2{font-size:2.4rem;color:#5a2424;line-height:1.08;margin:10px 0}.today-readings>div{margin-top:13px;border-top:1px solid rgba(138,90,30,.24)}.today-readings button{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;border:0;border-bottom:1px solid rgba(138,90,30,.2);background:transparent;padding:12px 0;cursor:pointer;color:#2b1d12}.today-readings button small{display:block;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#8a5a1e}.today-readings button strong{display:block;font-family:var(--font-display);font-size:1.35rem;font-weight:500;margin-top:2px}.today-readings button b{color:#8a5a1e}
+.today-desert{text-align:center;padding:42px 28px!important;background:#24130d;color:#f4ecda}.today-desert>p:first-child{font-size:10px;font-weight:800;letter-spacing:.3em;color:#e8cf7a}.today-desert h2{font-family:var(--font-display);font-size:2.5rem;font-weight:500;color:#e8cf7a;margin:8px 0 15px}.today-desert>p:last-child{max-width:720px;margin:17px auto 0;color:#d9c6a3;font-size:14px;line-height:1.65}
+@media(max-width:900px){.today-page{padding:36px 14px 50px}.today-opening,.today-pascha{grid-template-columns:1fr}.today-arrow-prayer,.today-pascha>article:first-child{border-right:0;border-bottom:1px solid rgba(138,90,30,.28)}.today-opening>article,.today-pascha>article{padding:32px 26px}.today-week-row,.today-date-row,.today-fast-row{grid-template-columns:1fr}.today-week-theme,.today-saint-block,.today-fast-row{padding:26px}.today-week-row>.today-link,.today-date-row>.today-link{margin:0 26px 26px}.today-fast-row{gap:8px}.today-fast-row>.today-link{margin-top:10px}.today-date-block{padding:26px}.today-hour-head{flex-direction:column}.today-hero img{max-height:430px}}
+
+/* Vandaag — vaste visuele specificatie, 17-09-2026 */
+.vandaag-design-page{background:radial-gradient(circle at 50% 0%,#392314 0,#1b0e09 44%,#110806 100%);padding:28px 18px 64px;color:#2b1b12}
+.vandaag-frame{width:min(760px,100%);margin:0 auto;border:1px solid rgba(213,169,72,.8);background:#1a0e09;box-shadow:0 24px 65px rgba(0,0,0,.48)}
+.vandaag-titlebar{height:58px;display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid rgba(213,169,72,.72);color:#f2dfaa;text-align:center;background:linear-gradient(180deg,#25150d,#180c08)}
+.vandaag-titlebar p{margin:0;font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:#b9964f}.vandaag-titlebar h1{margin:1px 0 0;font-family:var(--font-display);font-weight:500;font-size:25px;letter-spacing:.08em;text-transform:uppercase}.vandaag-title-ornament{font-size:20px;color:#d7ae4c}
+.vandaag-cover{height:260px;position:relative;overflow:hidden}.vandaag-cover img{width:100%;height:100%;object-fit:cover;object-position:center 48%;display:block}.vandaag-cover-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,7,4,.05) 30%,rgba(16,7,4,.88) 100%)}
+.vandaag-cover-copy{position:absolute;inset:auto 0 20px;text-align:center;color:#fff4da;text-shadow:0 2px 10px #000}.vandaag-cover-copy span{display:block;font-family:var(--font-display);font-size:25px}.vandaag-cover-copy strong{display:block;margin-top:4px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#e7c76f}
+.vandaag-paper{position:relative;padding:0 22px 24px;background-color:#f5ecd8;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.09),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.07),transparent 30%);box-shadow:inset 0 0 35px rgba(103,66,27,.08)}
+.vandaag-paper:before,.vandaag-paper:after{content:'❦';position:absolute;color:rgba(164,118,41,.3);font-size:40px}.vandaag-paper:before{left:10px;top:15px}.vandaag-paper:after{right:10px;bottom:14px;transform:rotate(180deg)}
+.vandaag-dayhead{text-align:center;padding:22px 20px 19px;border-bottom:1px solid rgba(138,91,35,.25)}.vandaag-dayhead p{font-family:var(--font-display);font-size:17px;margin:0;color:#3b2518}.vandaag-dayhead h2{font-family:var(--font-display);font-size:23px;font-weight:500;margin:1px 0;color:#321b13}.vandaag-dayhead>span{font-size:10px;color:#7e674f}.vandaag-dayhead i{display:block;font-style:normal;color:#b58226;font-size:22px;margin:9px 0 3px}.vandaag-dayhead h3{font-family:var(--font-display);font-size:21px;font-weight:500;margin:0;color:#3a1d16}.vandaag-dayhead small{display:block;margin-top:3px;color:#72533b;font-size:11px}
+.vandaag-list{position:relative;z-index:1}.vandaag-item{display:grid;grid-template-columns:31px 1fr 20px;gap:12px;align-items:center;min-height:67px;padding:11px 6px;border-bottom:1px solid rgba(138,91,35,.2)}.vandaag-item>svg:first-child{width:21px;height:21px;color:#a87825;stroke-width:1.5}.vandaag-item>div{min-width:0}.vandaag-item b{display:block;font-family:var(--font-display);font-size:15px;font-weight:600;color:#352117}.vandaag-item span,.vandaag-item em,.vandaag-item small{display:block;margin-top:2px;line-height:1.32;color:#5e4938}.vandaag-item span{font-size:12px}.vandaag-item em{font-family:var(--font-display);font-size:14px}.vandaag-item small{font-size:9px;color:#8a725b}.vandaag-item>a{display:flex;color:#a87825}.vandaag-item>a svg,.vandaag-muted-chevron{width:16px;height:16px;stroke-width:1.5}.vandaag-readings-item button{border:0;background:none;padding:1px 0;display:block;cursor:pointer;text-align:left;color:#5e4938;font-family:inherit}.vandaag-readings-item button:hover span{color:#8b5e18}.vandaag-muted-chevron{color:#b9a88f}
+.vandaag-main-button{position:relative;z-index:1;margin:19px auto 0;display:flex;align-items:center;justify-content:center;gap:9px;min-width:290px;border:1px solid #a77c2d;border-radius:3px;background:linear-gradient(180deg,#4a2b12,#261309);box-shadow:inset 0 1px rgba(255,235,175,.2),0 4px 10px rgba(48,25,11,.2);padding:12px 20px;color:#f3dda0;font-family:var(--font-display);font-size:12px;letter-spacing:.13em;text-transform:uppercase;cursor:pointer}.vandaag-main-button svg{width:14px;height:14px}.vandaag-main-button:hover{filter:brightness(1.12)}
+@media(min-width:980px){.vandaag-design-page{padding-top:38px}.vandaag-frame{width:min(820px,100%)}.vandaag-cover{height:290px}.vandaag-paper{padding-left:38px;padding-right:38px}.vandaag-item{min-height:70px}}
+@media(max-width:560px){.vandaag-design-page{padding:14px 8px 40px}.vandaag-titlebar{height:52px}.vandaag-cover{height:205px}.vandaag-cover-copy span{font-size:21px}.vandaag-paper{padding:0 15px 20px}.vandaag-dayhead{padding-left:10px;padding-right:10px}.vandaag-item{grid-template-columns:28px 1fr 17px;gap:8px}.vandaag-main-button{min-width:0;width:100%;font-size:10px}}
+
+/* Exacte designbasis: alle hoofdpagina's gebruiken dezelfde boekvorm als Vandaag. */
+.exact-design-page{background:radial-gradient(circle at 50% 0%,#392314 0,#1b0e09 44%,#110806 100%);padding:38px 18px 64px;color:#2b1b12}
+.exact-frame{width:min(820px,100%);margin:0 auto;border:1px solid rgba(213,169,72,.8);background:#1a0e09;box-shadow:0 24px 65px rgba(0,0,0,.48);overflow:hidden}
+.exact-titlebar{height:58px;display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid rgba(213,169,72,.72);color:#f2dfaa;text-align:center;background:linear-gradient(180deg,#25150d,#180c08)}
+.exact-titlebar p{margin:0;font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:#b9964f}.exact-titlebar h1{margin:1px 0 0;font-family:var(--font-display);font-weight:500;font-size:25px;letter-spacing:.08em;text-transform:uppercase}.exact-title-ornament{font-size:20px;color:#d7ae4c}
+.exact-content{background:#f5ecd8}.exact-content>section{margin:0!important}.exact-content>section:first-child{height:260px!important;overflow:hidden!important;background:#160b08!important;border-bottom:1px solid rgba(213,169,72,.55)!important}.exact-content>section:first-child img{display:block!important;width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important;object-position:center!important}
+.exact-content>section:not(:first-child){width:100%!important;max-width:none!important;padding-top:34px!important;padding-bottom:34px!important;background-color:#f5ecd8!important;color:#2b1b12!important;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.07),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.05),transparent 30%)!important;border-bottom:1px solid rgba(138,91,35,.22)!important}
+.exact-content>section:not(:first-child)>div{width:100%!important;max-width:none!important;padding-left:38px!important;padding-right:38px!important;margin-left:0!important;margin-right:0!important}
+.exact-content .rounded-2xl,.exact-content .rounded-xl,.exact-content .rounded-lg,.exact-content .rounded-md{border-radius:2px!important}
+.exact-content [class*="shadow-"]{box-shadow:none!important}.exact-content [class*="max-w-"]{max-width:100%!important}
+.exact-content h1,.exact-content h2,.exact-content h3{font-family:var(--font-display);font-weight:500}.exact-content h2{color:#3a1d16}.exact-content h3{color:#4a2b1d}
+.exact-content button,.exact-content a{transition:filter .15s ease,color .15s ease}.exact-content button:hover,.exact-content a:hover{filter:brightness(1.08)}
+.exact-content .bg-bark,.exact-content .bg-bark-soft,.exact-content .bg-wine-deep{border-color:rgba(213,169,72,.45)!important}
+.exact-content svg{stroke-width:1.5}.exact-content [class*="text-gold"] svg,.exact-content svg[class*="text-gold"]{color:#a87825}
+@media(max-width:560px){.exact-design-page{padding:14px 8px 40px}.exact-titlebar{height:52px}.exact-content>section:first-child{height:205px!important}.exact-content>section:not(:first-child)>div{padding-left:15px!important;padding-right:15px!important}.exact-content>section:not(:first-child){padding-top:26px!important;padding-bottom:26px!important}}
+
+/* Exact popup system — dezelfde visuele grammatica als de goedgekeurde Vandaag-pagina */
+.exact-modal-backdrop{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(17,8,6,.88);backdrop-filter:blur(5px)}
+.exact-modal-frame{width:min(820px,calc(100vw - 28px));max-width:820px!important;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(213,169,72,.82);border-radius:0;background:#1a0e09;box-shadow:0 28px 80px rgba(0,0,0,.58)}
+.exact-modal-titlebar{position:relative;flex:0 0 auto;min-height:78px;display:grid;grid-template-columns:minmax(72px,1fr) minmax(0,2.4fr) minmax(72px,1fr);align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid rgba(213,169,72,.72);background:linear-gradient(180deg,#25150d,#180c08);color:#f2dfaa}
+.exact-modal-heading{text-align:center;min-width:0}.exact-modal-heading-line{display:flex;align-items:center;justify-content:center;gap:8px;color:#d7ae4c}.exact-modal-heading-line span{width:26px;height:1px;background:rgba(213,169,72,.65)}.exact-modal-heading-line b{font-size:13px;font-weight:400}.exact-modal-heading p{margin:2px 0 0;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:#b9964f}.exact-modal-heading h2{margin:2px 0 0;font-family:var(--font-display);font-size:clamp(20px,3vw,27px);font-weight:500;line-height:1.05;letter-spacing:.045em;color:#f2dfaa}
+.exact-modal-nav{display:flex;align-items:center;gap:5px}.exact-modal-nav-left{justify-content:flex-start}.exact-modal-nav-right{justify-content:flex-end}.exact-modal-nav button,.exact-modal-nav a{border:0!important;background:transparent!important;color:#d7ae4c!important;border-radius:0!important;box-shadow:none!important}.exact-modal-nav button:hover,.exact-modal-nav a:hover{color:#fff0bf!important;background:transparent!important}.exact-modal-close{display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:7px;cursor:pointer}.exact-modal-close svg{width:18px;height:18px;stroke-width:1.4}
+.exact-modal-paper{position:relative;min-height:0;overflow-y:auto;padding:32px 38px 38px;background-color:#f5ecd8;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.09),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.07),transparent 30%);box-shadow:inset 0 0 35px rgba(103,66,27,.08);color:#352117}.exact-modal-paper:before,.exact-modal-paper:after{content:'❦';position:absolute;pointer-events:none;color:rgba(164,118,41,.24);font-size:34px}.exact-modal-paper:before{left:10px;top:9px}.exact-modal-paper:after{right:10px;bottom:8px;transform:rotate(180deg)}
+.exact-modal-paper h1,.exact-modal-paper h2,.exact-modal-paper h3,.exact-modal-paper h4{font-family:var(--font-display);font-weight:500;color:#3a1d16}.exact-modal-paper p{line-height:1.65}.exact-modal-paper svg{stroke-width:1.5}.exact-modal-paper .rounded-2xl,.exact-modal-paper .rounded-xl,.exact-modal-paper .rounded-lg,.exact-modal-paper .rounded-md{border-radius:2px!important}.exact-modal-paper [class*="shadow-"]{box-shadow:none!important}.exact-modal-paper [class*="bg-white"]{background:rgba(255,250,240,.42)!important}.exact-modal-paper [class*="bg-parchment"]{background:rgba(239,227,203,.48)!important}.exact-modal-paper button:not(.exact-modal-close),.exact-modal-paper a{border-radius:2px!important}
+.exact-modal-paper .gold-rule{height:1px!important;background:linear-gradient(90deg,transparent,rgba(168,120,37,.62),transparent)!important}.exact-modal-paper blockquote{font-family:var(--font-display);color:#5a2424}
+.exact-popup-reading{position:relative;z-index:1;max-width:660px;margin:0 auto}.exact-popup-subtitle{text-align:center;margin:0 0 20px!important;font-size:9px!important;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#8a5a1e}.exact-popup-highlight{margin:0 0 24px;padding:16px 20px;border-top:1px solid rgba(138,91,35,.28);border-bottom:1px solid rgba(138,91,35,.28);text-align:center;font-size:20px;line-height:1.35;font-style:italic;background:rgba(239,227,203,.42)}.exact-popup-prose{font-size:15px;line-height:1.75;color:#5e4938}.exact-popup-prose p{margin:0 0 16px}.exact-popup-prose p:last-child{margin-bottom:0}
+@media(max-width:640px){.exact-modal-backdrop{padding:7px;align-items:stretch}.exact-modal-frame{width:100%;max-height:calc(100vh - 14px);margin:auto}.exact-modal-titlebar{min-height:70px;grid-template-columns:55px minmax(0,1fr) 55px;padding:8px 8px}.exact-modal-heading h2{font-size:20px}.exact-modal-heading-line span{width:18px}.exact-modal-nav{gap:0}.exact-modal-nav button,.exact-modal-nav a{font-size:0!important}.exact-modal-nav button svg,.exact-modal-nav a svg{width:18px;height:18px}.exact-modal-paper{padding:27px 18px 30px}.exact-modal-paper:before,.exact-modal-paper:after{font-size:26px}.exact-popup-highlight{font-size:18px;padding:14px 10px}}
+
+/* Designronde 10 — goedgekeurde Orthodoxe Tijd kaarttaal */
+.ornate-card{position:relative;overflow:hidden;border-radius:2px!important;border:1px solid #b88628!important;background:radial-gradient(circle at 50% 0,rgba(201,162,39,.10),transparent 42%),linear-gradient(145deg,#2b180f,#1a0d09)!important;color:#f5ead1!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.48),0 12px 28px rgba(25,11,6,.25)!important}
+.ornate-card:before{content:"";position:absolute;inset:9px;border:1px solid rgba(211,165,62,.38);pointer-events:none}
+.ornate-card:after{content:"✣";position:absolute;right:14px;top:10px;color:#b88628;font-size:13px;opacity:.75}
+.ornate-card h3{color:#f3dfb4!important;letter-spacing:.04em}.ornate-card p{color:#eadcc1!important}.ornate-card>div:first-child,.ornate-medallion{background:#1a0d09!important;border:1px solid #b88628!important;color:#d3a53e!important;box-shadow:inset 0 0 0 3px #24130d,0 0 0 1px rgba(211,165,62,.2)}
+.ornate-card:hover{border-color:#e0b955!important;transform:translateY(-2px)}
+
+/* De paginatitel blijft staan onder de hoofdnavigatie. */
+.exact-titlebar{position:sticky;top:104px;z-index:38;box-shadow:0 8px 18px rgba(18,8,5,.18)}
+@media(max-width:767px){.exact-titlebar{top:64px}}
+
+/* Leesbaarheid van lichte cyclus-overgangen en tijdlijn. */
+.exact-content .text-ink-soft{color:#5d4935}.exact-content .text-ink-mute{color:#756147}
+.exact-content .text-\[\#d9c6a3\]{color:#f0dfbf!important}.exact-content .text-\[\#e8dcc0\]{color:#f7e8ca!important}
+
+/* Etmaal: dienstknoppen in dezelfde medaillonstijl. */
+#etmaal button span.rounded-full{background:#1a0d09!important;border-color:#b88628!important;color:#d3a53e!important}
+
+/* Vasten: geen pastel-informatiebakken meer. */
+#vasten .bg-\[\#e3efe4\],#vasten .bg-\[\#f1d6d6\]{background:#24130d!important;border-color:rgba(201,162,39,.55)!important;color:#f4ecda!important}
+#vasten .bg-\[\#e3efe4\] *,#vasten .bg-\[\#f1d6d6\] *{color:#eadcc1!important}
+.fasting-step{background:linear-gradient(180deg,#2a1710,#180c08)!important;color:#f0dfbf!important;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.35)}
+.fasting-step:nth-child(n+6){background:linear-gradient(180deg,#3b1b17,#190b08)!important}.fasting-step>div:first-of-type span:first-child{color:#d8ad4d}
+.saint-day-grid{grid-template-columns:repeat(10,minmax(0,1fr))}@media(max-width:700px){.saint-day-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
+/* Navigatie optisch op dezelfde as als de 760px pagina's. */
+header nav>div{justify-content:center}
+
+/* Ontwerpronde 11 — definitieve kaartreferentie en leesbaarheid */
+.exact-frame{overflow:visible}.exact-content{overflow:hidden}
+.exact-design-page{padding-top:18px}
+.exact-titlebar{position:sticky;top:104px;z-index:45;margin:0;background:linear-gradient(180deg,#25150d,#180c08);box-shadow:0 5px 14px rgba(18,8,5,.18)}
+@media(max-width:767px){.exact-titlebar{top:64px}}
+
+/* Definitieve brede 2x2 kaarttaal: exact één gedeeld systeem. */
+.exact-content div.grid:has(> .ornate-card){grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:28px!important}
+.ornate-card{min-height:330px!important;padding:34px 38px 30px!important;align-items:center!important;text-align:center!important;justify-content:flex-start!important;border:2px solid #a97720!important;background:radial-gradient(circle at 50% 18%,rgba(157,99,30,.14),transparent 40%),linear-gradient(145deg,#321d12,#1b0d09)!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.72),0 13px 28px rgba(25,11,6,.22)!important}
+.ornate-card:before{inset:12px;border-color:rgba(222,179,78,.62)}
+.ornate-card:after{content:"❦";right:18px;top:15px;font-size:18px;color:#c59635;opacity:.9}
+.ornate-card>div:first-child,.ornate-medallion{width:108px!important;height:108px!important;min-width:108px!important;border-radius:999px!important;border:2px solid #b9872c!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:4px auto 18px!important;background:#1b0e09!important;box-shadow:inset 0 0 0 5px #25130d,inset 0 0 0 6px rgba(210,161,56,.52),0 0 0 1px rgba(210,161,56,.28)!important}
+.ornate-card>div:first-child svg,.ornate-medallion svg{width:45px!important;height:45px!important;stroke-width:1.25!important;color:#c99635!important}
+.ornate-card h3{margin-top:8px!important;font-size:clamp(20px,2.2vw,28px)!important;line-height:1.25!important;text-align:center!important;text-transform:uppercase!important;letter-spacing:.08em!important;color:#f2dfb7!important}
+.ornate-card h3:after{content:"✣";display:block;width:72%;margin:18px auto 0;padding-top:0;border-top:1px solid rgba(204,154,52,.65);font-size:16px;line-height:0;color:#c59635}
+.ornate-card p{margin-top:20px!important;max-width:460px!important;font-size:15px!important;line-height:1.7!important;text-align:center!important;color:#f1e4cc!important}
+.ornate-card>span:last-child,.ornate-card a:last-child{margin-top:auto!important;padding-top:22px!important;font-size:12px!important;letter-spacing:.24em!important;color:#e0b454!important}
+@media(max-width:700px){.exact-content div.grid:has(> .ornate-card){grid-template-columns:1fr!important}.ornate-card{min-height:300px!important;padding:30px 26px!important}}
+
+/* Perkament: leesbare tekst sitebreed. */
+.exact-content section:not(.bg-bark):not([class*="bg-bark"]) p:not([class*="text-gold"]),.exact-content section:not(.bg-bark):not([class*="bg-bark"]) li,.exact-content section:not(.bg-bark):not([class*="bg-bark"]) span.text-ink-soft{color:#5b402e!important;opacity:1!important}
+.exact-content section:not(.bg-bark):not([class*="bg-bark"]) blockquote{color:#6a2c24!important;opacity:1!important}
+.exact-content .text-ink-mute{color:#72533b!important;opacity:1!important}
+
+/* Vandaag: medailloniconen en volledig klikbare regels. */
+.vandaag-item{position:relative;text-decoration:none;color:inherit;cursor:pointer;transition:background-color .18s ease,transform .18s ease}
+.vandaag-item:hover{background:rgba(201,162,39,.09)}
+.vandaag-item>svg:first-child{width:38px!important;height:38px!important;padding:9px;border-radius:999px;border:1px solid #b88628;background:#211109;color:#c99735;box-shadow:inset 0 0 0 2px #2a1710;stroke-width:1.35!important}
+.vandaag-item{grid-template-columns:42px 1fr 20px!important}
+.vandaag-item>svg:last-child{color:#a87825;width:16px;height:16px}
+.vandaag-readings-item{cursor:pointer}
+
+/* Vasten: weekstrip en informatievlakken zonder pastel. */
+#vasten .bg-\[\#e3efe4\],#vasten .bg-\[\#f1d6d6\]{background:linear-gradient(145deg,#2d190f,#1b0d09)!important;border:1px solid #b88628!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.45)!important;padding:28px!important;border-radius:2px!important}
+#vasten .bg-\[\#e3efe4\] *,#vasten .bg-\[\#f1d6d6\] *{color:#f0dfbf!important}
+#vasten .grid-cols-7>button{border-radius:2px!important;background:#f8f0df!important;color:#4a2b1d!important;border-color:rgba(168,120,37,.36)!important}
+#vasten .grid-cols-7>button.ring-2{box-shadow:inset 0 0 0 2px #b88628!important}
+
+/* Vastenladder: evenredig, leesbaar, responsive. */
+#vasten .fasting-step{transform:none!important;min-height:220px!important;padding:18px 14px!important;display:flex;flex-direction:column;justify-content:flex-start;background:linear-gradient(180deg,#321a12,#1b0d09)!important;border:1px solid #b88628!important;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.45)!important;color:#f3e4c9!important}
+#vasten .fasting-step .font-display{color:#e0b454!important}
+#vasten .fasting-step>div:nth-child(2){font-size:13px!important;line-height:1.35!important;color:#fff0d0!important}
+#vasten .fasting-step>div:nth-child(3){font-size:12px!important;line-height:1.45!important;color:#e8d8bb!important}
+@media(min-width:1024px){#vasten .fasting-step:nth-child(1){margin-top:64px}#vasten .fasting-step:nth-child(2){margin-top:56px}#vasten .fasting-step:nth-child(3){margin-top:48px}#vasten .fasting-step:nth-child(4){margin-top:40px}#vasten .fasting-step:nth-child(5){margin-top:32px}#vasten .fasting-step:nth-child(6){margin-top:24px}#vasten .fasting-step:nth-child(7){margin-top:16px}#vasten .fasting-step:nth-child(8){margin-top:8px}#vasten .fasting-step:nth-child(9){margin-top:0}}
+#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important;gap:14px!important;border-left:0!important;padding-left:0!important}
+#vasten .fasting-step{margin-top:0!important}
+@media(max-width:620px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}}
+
+/* ================= VERSION 12 — unified Orthodoxe Tijd design ================= */
+:root{--ot-bark:#1b0d09;--ot-bark2:#2c180f;--ot-gold:#c49332;--ot-gold2:#e0b95a;--ot-ivory:#f4e6c8;--ot-ink:#4b2d20;}
+
+/* Page frame: no artificial blank band; titlebar sits naturally then becomes sticky. */
+.exact-design-page{padding-top:0!important}
+.exact-titlebar{top:104px!important}
+@media(max-width:767px){.exact-titlebar{top:64px!important}}
+
+/* Header + navigation share the same centered visual axis. */
+header>div.bg-bark>div, header nav>div{width:min(1500px,100%);margin-inline:auto}
+header nav>div{justify-content:space-evenly!important}
+header>div.bg-bark{background:radial-gradient(circle at 50% 120%,rgba(178,119,38,.12),transparent 45%),linear-gradient(180deg,#1d0f0a,#130806)}
+header>div.bg-bark>div{position:relative}
+header>div.bg-bark>div:after{content:"✣";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:rgba(207,161,62,.45);font-size:18px;pointer-events:none}
+
+/* Readability: important copy on parchment is always dark enough. */
+.exact-content .text-ink-soft,.exact-content .text-ink-mute,.exact-content [class*="text-[#d9c6a3]"],.exact-content [class*="text-[#e8dcc0]"]{color:#62442f!important;opacity:1!important}
+.exact-content blockquote,.exact-content .font-display.italic{opacity:1!important}
+.exact-content section:not([class*="bg-bark"]) p{opacity:1}
+
+/* Canonical card family: equal size, four corner ornaments, double frame, double medallion, side ornaments, title rule and fixed action. */
+.exact-content div.grid:has(> .ornate-card){align-items:stretch!important}
+.ornate-card{height:390px!important;min-height:390px!important;max-height:390px!important;box-sizing:border-box!important;position:relative!important;overflow:hidden!important;padding:32px 34px 28px!important;border:2px solid #a97720!important;background:radial-gradient(circle at 50% 16%,rgba(157,99,30,.15),transparent 40%),linear-gradient(145deg,#321d12,#190c08)!important;color:var(--ot-ivory)!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.75),0 13px 28px rgba(25,11,6,.22)!important;display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important}
+.ornate-card:before{content:""!important;position:absolute!important;inset:12px!important;border:1px solid rgba(222,179,78,.66)!important;pointer-events:none!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg transform='translate(44 0) scale(-1 1)'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg transform='translate(0 44) scale(1 -1)'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg transform='translate(44 44) scale(-1 -1)'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/g%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:left top,right top,left bottom,right bottom!important}
+.ornate-card:after{display:none!important}
+.ornate-card>div:first-child,.ornate-medallion{width:104px!important;height:104px!important;min-width:104px!important;min-height:104px!important;border-radius:50%!important;border:2px solid var(--ot-gold)!important;background:#1a0d09!important;color:#d4a43d!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px!important;box-shadow:inset 0 0 0 5px #25130d,inset 0 0 0 6px rgba(210,161,56,.58),0 0 0 1px rgba(210,161,56,.35)!important;font-size:34px!important}
+.ornate-card>div:first-child svg,.ornate-medallion svg{width:44px!important;height:44px!important;stroke-width:1.25!important;color:#d1a03b!important}
+.ornate-side-ornaments{display:block!important;height:20px;margin:0 0 5px;color:#b9852d!important;font-size:17px;letter-spacing:18px;white-space:nowrap}.ornate-side-ornaments b{font-weight:400;font-size:12px}
+.ornate-card h3{width:100%;margin:4px 0 0!important;padding-bottom:17px!important;position:relative;font-size:clamp(19px,2vw,25px)!important;line-height:1.22!important;text-transform:uppercase!important;letter-spacing:.065em!important;color:#f2dfb7!important}
+.ornate-card h3:after{content:"✣"!important;display:block!important;width:70%!important;margin:15px auto 0!important;border-top:1px solid rgba(204,154,52,.68)!important;font-size:14px!important;line-height:0!important;color:#c59635!important}
+.ornate-card p{margin:13px auto 0!important;max-width:480px!important;font-size:14px!important;line-height:1.55!important;color:#f1e4cc!important;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.ornate-card .ornate-action,.ornate-card>span:last-child,.ornate-card>a:last-child{margin-top:auto!important;padding-top:14px!important;color:#e0b454!important;font-size:11px!important;font-weight:800!important;letter-spacing:.22em!important;text-transform:uppercase!important}
+@media(max-width:700px){.ornate-card{height:370px!important;min-height:370px!important;max-height:370px!important;padding:28px 24px 25px!important}.ornate-card>div:first-child,.ornate-medallion{width:92px!important;height:92px!important;min-width:92px!important;min-height:92px!important}}
+
+/* Pascha: countdown has room; information blocks use canonical cards. */
+.pascha-countdown{min-height:300px!important;padding:32px!important;border-radius:2px!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(213,169,72,.5)!important}
+.pascha-countdown p{max-width:100%!important;overflow-wrap:anywhere!important;font-size:17px!important;line-height:1.5!important}
+.pascha-info-card{width:100%!important}
+
+/* Feasts: no database-table look for the great feasts. */
+.feasts-page .grid.gap-px:has(> .feast-tile){gap:22px!important;background:transparent!important;border:0!important;overflow:visible!important}
+.feast-tile{height:390px!important}.feast-meta{font-size:9px!important;font-weight:800!important;letter-spacing:.17em!important;text-transform:uppercase!important;color:#d5aa4d!important}.feast-medallion{margin-bottom:4px!important}
+
+/* Dark introductory panels: decorated instead of flat brown slabs. */
+.feasts-page section.grid>div.bg-bark,.saint-date-panel{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 15%,rgba(169,105,32,.13),transparent 42%),linear-gradient(145deg,#2b170f,#180b08)!important;box-shadow:inset 0 0 0 7px #211109,inset 0 0 0 8px rgba(210,161,56,.58)!important}
+.feasts-page section.grid>div.bg-bark:before,.saint-date-panel:before{content:"";position:absolute;inset:14px;border:1px solid rgba(218,173,68,.55);pointer-events:none}
+.feasts-page section.grid>div.bg-bark:after,.saint-date-panel:after{content:"✣";position:absolute;right:23px;top:19px;color:#c59635;font-size:18px}
+
+/* Saints date: day number becomes a double outlined medallion. */
+.saint-date-panel{text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;min-height:300px}
+.saint-date-medallion{width:112px;height:112px;margin:18px auto 10px;border:2px solid #bd8c2d;border-radius:50%;display:grid;place-items:center;background:#190c08;box-shadow:inset 0 0 0 6px #25130d,inset 0 0 0 7px rgba(211,163,59,.55)}
+.saint-date-medallion span{font-family:var(--font-display);font-size:52px;color:#edcf7a;line-height:1}.saint-date-month{font-size:20px!important;letter-spacing:.12em;text-transform:uppercase;color:#e3bd5e!important}
+
+/* Vasten: remove pastel/dashboard styling entirely. */
+#vasten .bg-\[\#e3efe4\],#vasten .bg-\[\#f1d6d6\]{background:radial-gradient(circle at 50% 12%,rgba(160,98,29,.13),transparent 44%),linear-gradient(145deg,#2d190f,#190c08)!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.62)!important;color:#f1e4cc!important;min-height:300px!important}
+#vasten .bg-\[\#e3efe4\] h4,#vasten .bg-\[\#f1d6d6\] h4{color:#f2dfb7!important;text-align:center!important;text-transform:uppercase!important;letter-spacing:.06em!important}
+#vasten .grid-cols-7>button{background:#f7ecd7!important;border:1px solid rgba(166,117,36,.42)!important;color:#4c2e20!important;min-height:118px!important;box-shadow:inset 0 -3px 0 rgba(167,119,37,.12)!important}
+#vasten .grid-cols-7>button[class*="bg-[#f5dddd]"]{background:#ead8d0!important;color:#6b241f!important}
+#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+#vasten .fasting-step{height:235px!important;min-height:235px!important;max-height:235px!important;padding:22px 18px!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(213,169,72,.55)!important;overflow:hidden!important}
+#vasten .fasting-step>div:nth-child(2){font-size:14px!important;line-height:1.4!important}#vasten .fasting-step>div:nth-child(3){font-size:12px!important;line-height:1.5!important}
+@media(max-width:620px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}}
+
+/* Food permissions: large double-ring medallions. */
+#vasten .grid.grid-cols-3.sm\:grid-cols-6>div>svg{width:54px!important;height:54px!important;padding:13px!important;border-radius:50%!important;border:2px solid #b9872c!important;background:#190c08!important;color:#d1a03b!important;box-shadow:inset 0 0 0 4px #25130d,inset 0 0 0 5px rgba(210,161,56,.5)!important;stroke-width:1.25!important}
+
+/* Cyclic diagrams: never clip their labels; nodes sit centered on connecting geometry. */
+#etmaal [class*="overflow-hidden"],#week [class*="overflow-hidden"],#jaar [class*="overflow-hidden"]{overflow:visible!important}
+#etmaal svg,#week svg,#jaar svg{overflow:visible}
+#etmaal .rounded-full,#week .rounded-full,#jaar .rounded-full{flex-shrink:0}
+
+/* ================= VERSION 13 — spacing, readability & calm hierarchy ================= */
+/* One desktop reading axis. The page is wider, while prose can still keep its own readable measure. */
+@media(min-width:980px){
+  .exact-frame,.vandaag-frame{width:min(1240px,calc(100% - 36px))!important}
+  header>div.bg-bark>div,header nav>div{width:min(1240px,calc(100% - 36px))!important;max-width:1240px!important}
+  .today-shell{width:min(1240px,100%)!important}
+}
+.exact-content{overflow:hidden!important}
+.exact-content *{min-width:0}
+.exact-content p,.exact-content h1,.exact-content h2,.exact-content h3,.exact-content blockquote{overflow-wrap:break-word}
+
+/* Header: same axis as the book, richer but restrained. */
+header>div.bg-bark{border-bottom:1px solid rgba(201,162,39,.38)!important;background:radial-gradient(ellipse at 50% 120%,rgba(184,126,39,.18),transparent 48%),linear-gradient(180deg,#24140d 0%,#150906 100%)!important}
+header>div.bg-bark>div:before{content:"";position:absolute;left:34%;right:34%;bottom:7px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,162,39,.45),transparent);pointer-events:none}
+header nav{border-bottom:1px solid rgba(201,162,39,.28)!important}
+header nav>div{justify-content:space-between!important}
+
+/* Canonical information cards: compact, equal and inviting rather than full-screen panels. */
+.ornate-card{height:330px!important;min-height:330px!important;max-height:330px!important;padding:25px 30px 23px!important}
+.ornate-card>div:first-child,.ornate-medallion{width:82px!important;height:82px!important;min-width:82px!important;min-height:82px!important;margin:0 auto 4px!important}
+.ornate-card>div:first-child svg,.ornate-medallion svg{width:34px!important;height:34px!important}
+.ornate-side-ornaments{height:15px!important;margin:0 0 2px!important;font-size:14px!important;letter-spacing:14px!important}
+.ornate-card h3{min-height:58px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;margin:0!important;padding-bottom:12px!important;font-size:clamp(17px,1.55vw,22px)!important;line-height:1.18!important}
+.ornate-card h3:after{width:62%!important;margin:11px auto 0!important}
+.ornate-card p{margin:8px auto 0!important;font-size:13px!important;line-height:1.48!important;-webkit-line-clamp:2!important}
+.ornate-card .ornate-action,.ornate-card>span:last-child,.ornate-card>a:last-child{padding-top:9px!important;font-size:10px!important}
+.feast-tile{height:330px!important;min-height:330px!important;max-height:330px!important}
+.feast-tile h3{font-size:clamp(16px,1.35vw,20px)!important;letter-spacing:.045em!important}
+@media(max-width:700px){.ornate-card,.feast-tile{height:320px!important;min-height:320px!important;max-height:320px!important}}
+
+/* Prayer-card footer: count — gold rule — action; never collide. */
+#gebeden .ornate-card{overflow:hidden!important}
+#gebeden .ornate-card [class*="justify-between"]{width:100%!important;gap:14px!important;align-items:center!important}
+#gebeden .ornate-card [class*="justify-between"]:before{content:"";order:2;height:1px;flex:1;background:linear-gradient(90deg,rgba(201,162,39,.25),rgba(201,162,39,.8),rgba(201,162,39,.25))}
+#gebeden .ornate-card [class*="justify-between"]>*:first-child{order:1;white-space:nowrap}
+#gebeden .ornate-card [class*="justify-between"]>*:last-child{order:3;white-space:nowrap}
+
+/* Fasting ladder: a calm 3x3 set of nine equal steps. Number is the medallion; no staircase jumps. */
+#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important;align-items:stretch!important;border-left:0!important;padding-left:0!important}
+#vasten .fasting-step{height:250px!important;min-height:250px!important;max-height:250px!important;margin:0!important;transform:none!important;padding:20px 18px 18px!important;align-items:center!important;text-align:center!important;justify-content:flex-start!important}
+#vasten .fasting-step-number{width:64px;height:64px;min-height:64px;border:2px solid #c49332;border-radius:50%;display:grid;place-items:center;margin:0 auto 10px;background:#190c08;box-shadow:inset 0 0 0 4px #25130d,inset 0 0 0 5px rgba(210,161,56,.55)}
+#vasten .fasting-step-number span{font-family:var(--font-display);font-size:28px;line-height:1;color:#edc969}
+#vasten .fasting-step-title{font-family:var(--font-display);font-size:17px;line-height:1.25;font-weight:600;color:#f3dfb5!important;min-height:42px;display:flex;align-items:center;justify-content:center}
+#vasten .fasting-step-rule{width:58%;margin:8px auto 7px;border-top:1px solid rgba(201,162,39,.58);font-size:11px;line-height:0;color:#c49332}
+#vasten .fasting-step-copy{font-size:12px!important;line-height:1.45!important;color:#eadbc0!important;max-width:230px;margin:auto}
+@media(max-width:760px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}#vasten .fasting-step{height:auto!important;min-height:220px!important;max-height:none!important}}
+
+/* Fasting week & exception panels: remove pastel dashboard language. */
+#vasten .grid-cols-7>button{background:#f3e5c9!important;border-color:rgba(157,108,34,.5)!important;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2)!important}
+#vasten .grid-cols-7>button.ring-2{background:#2a150e!important;color:#f1dfb8!important;box-shadow:inset 0 0 0 2px #c49332!important}
+#vasten .grid-cols-7>button.ring-2 *{color:#f1dfb8!important}
+
+/* Food permissions: medallions should read as intentional controls. */
+#vasten .grid.grid-cols-3.sm\:grid-cols-6>div{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
+#vasten .grid.grid-cols-3.sm\:grid-cols-6>div>svg{width:68px!important;height:68px!important;padding:16px!important;margin-bottom:4px!important}
+
+/* Cycle diagrams: give labels a safe ring inside the frame. */
+#etmaal .aspect-square,#week .aspect-square,#jaar .aspect-square{max-width:900px!important}
+#etmaal .aspect-square>button,#week .aspect-square>button,#jaar .aspect-square>button{width:210px!important}
+#etmaal .aspect-square>button span:last-child,#week .aspect-square>button span:last-child,#jaar .aspect-square>button span:last-child{overflow:visible!important}
+
+/* Transition/read-more parchment sections: content text must never behave like a watermark. */
+.exact-content section:not([class*="bg-bark"]) .font-display.italic,
+.exact-content section:not([class*="bg-bark"]) blockquote{color:#6d3528!important;opacity:1!important}
+.exact-content section:not([class*="bg-bark"]) p{color:#583b2b!important;opacity:1!important}
+.exact-content section:not([class*="bg-bark"]) [class*="text-gold-light"]{color:#9b681d!important;opacity:1!important}
+
+/* Pascha countdown: horizontal hierarchy, protected wrapping. */
+.pascha-countdown{min-height:0!important;padding:28px 30px!important}
+.pascha-countdown .font-display.text-6xl{font-size:4.2rem!important;line-height:.95!important}
+.pascha-countdown p{font-size:15px!important;line-height:1.5!important;max-width:620px!important;white-space:normal!important;overflow:visible!important}
+
+/* Saints date block: the date is the ornament, not a flat brown slab. */
+.saint-date-panel{min-height:270px!important;padding:28px!important}
+.saint-date-panel:after{content:"✣  ·  ✣"!important;right:auto!important;left:50%!important;top:auto!important;bottom:24px!important;transform:translateX(-50%);letter-spacing:10px!important}
+
+/* Feasts: dark introduction gets more gold structure; final quote stays readable on parchment. */
+.feasts-page section.grid>div.bg-bark{padding-top:44px!important;padding-bottom:44px!important;text-align:center}
+.feasts-page section.grid>div.bg-bark h1{color:#efd27d!important}
+.feasts-page section.grid>div.bg-bark p{color:#eadcc0!important}
+#feesten~section:last-of-type .font-display,.feasts-page+section .font-display{color:#6d3528!important;opacity:1!important}
+
+/* v14 — Heiligen rebuilt to the approved editorial reference */
+.saints-hero{background:#1b0d08}.saints-hero img{display:block;width:100%;height:auto;max-height:470px;object-fit:cover}
+.saints-refined{background:radial-gradient(circle at 50% 0%,rgba(199,145,35,.08),transparent 35%),linear-gradient(#241108,#32190b);padding:0 0 34px;color:#f4ead5}
+.saints-today-panel{transform:translateY(-2px);display:grid;grid-template-columns:1.05fr 1.35fr .42fr;background:#f6eedf;color:#35180f;border:1px solid #c89a3a;border-radius:12px;overflow:hidden;box-shadow:0 18px 45px rgba(0,0,0,.25);position:relative}
+.saints-today-panel:before{content:"";position:absolute;inset:8px;border:1px solid rgba(183,130,34,.2);border-radius:8px;pointer-events:none}
+.saints-today-intro,.saints-today-feature{padding:34px 40px}.saints-today-intro{border-right:1px solid rgba(159,109,27,.32);background:radial-gradient(circle at 0 50%,rgba(190,139,41,.12),transparent 45%)}
+.saints-kicker{font-size:10px!important;letter-spacing:.23em;text-transform:uppercase;font-weight:800;color:#85500e!important}.saints-today-intro h1,.saints-section-head h2,.saints-rule-title h2,.saints-lowlands h2,.saints-ending h2{font-family:var(--font-display);letter-spacing:.04em}.saints-today-intro h1{font-size:31px;margin:6px 0}.saints-date-line{font-family:var(--font-display);font-size:18px!important}.saints-date-line span{font-family:inherit;font-size:12px;color:#8d765c}.saints-today-intro>p:last-of-type,.saints-today-feature>p{font-size:14px;line-height:1.7;color:#5a4433;margin-top:18px}.saints-gold-button{display:inline-flex;margin-top:18px;background:linear-gradient(#5b310d,#351a08);color:#efd17b!important;border:1px solid #b98223;padding:12px 18px;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;border-radius:3px}.saints-feature-name{font-family:var(--font-display);font-size:27px;text-align:left;color:#32170f;margin-top:5px}.saints-feature-title{margin:2px 0!important;font-family:var(--font-display);font-size:16px!important;color:#56331d!important}.saints-feature-date{margin:0!important;font-size:13px!important;color:#6e4b31!important}.saints-feature-actions{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.saints-text-link{margin-top:18px;color:#8a560f;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.saints-side-quote{margin:20px 18px 20px 0;border:1px solid rgba(173,121,28,.25);border-radius:8px;padding:26px 16px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-family:var(--font-display);font-style:italic;color:#604a38;line-height:1.6}.saints-side-quote span{color:#bd8121;font-style:normal;font-size:24px;margin-top:18px}
+.saints-discover,.saints-browser,.saints-categories{padding:30px 22px 0}.saints-section-head h2,.saints-rule-title h2{font-size:24px;text-transform:uppercase;color:#f1e5cf}.saints-section-head p{font-size:14px;color:#d8c5a8;margin-top:4px}.saints-search-row{display:grid;grid-template-columns:1fr 190px 220px 140px;gap:10px;margin-top:18px}.saints-search-row label,.saints-select{height:48px;border:1px solid rgba(211,164,71,.55);background:rgba(20,8,4,.28);display:flex;align-items:center}.saints-search-row label svg{width:22px;margin:0 14px;color:#e0ad42}.saints-search-row input,.saints-select select{width:100%;background:transparent;color:#f3e7d0;border:0;outline:0;font-family:var(--font-display);font-size:16px}.saints-select{position:relative;padding:0 14px}.saints-select select{appearance:none}.saints-select svg{position:absolute;right:12px;width:15px;color:#d5a13a;pointer-events:none}.saints-select option{background:#2a140a;color:#f3e7d0}.saints-search-button{background:#d7a33e;color:#311707;text-transform:uppercase;font-size:10px;font-weight:900;letter-spacing:.12em;border-radius:5px}.saints-rule-title{display:flex;align-items:center;gap:18px;margin-bottom:15px}.saints-rule-title:after{content:"✣";color:#c8902d;flex:1;border-bottom:1px solid rgba(211,164,71,.5);text-align:center;line-height:1px}.saints-rule-title span{order:3;font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:#e1b75c;white-space:nowrap}.saints-month-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.saints-month-grid button{height:66px;background:#f6eedf;color:#4a2817;border:1px solid #d5b16c;border-radius:5px;font-family:var(--font-display);font-size:13px;text-transform:uppercase;box-shadow:0 4px 12px rgba(0,0,0,.16)}.saints-month-grid button span{display:block;color:#a56b17;margin-top:3px}.saints-month-grid button.active{background:#3a1c0b;color:#f1d17b;box-shadow:inset 0 0 0 2px #c58e2c}.saints-days-panel{margin-top:12px;padding:15px 18px;border:1px solid rgba(211,164,71,.38);background:rgba(20,8,4,.2);display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:center}.saints-days-panel>div:first-child button{margin-top:7px;color:#e9c46d;font-size:11px}.saints-days-grid{display:grid;grid-template-columns:repeat(16,1fr);gap:5px}.saints-days-grid button{height:30px;border:1px solid rgba(211,164,71,.35);color:#ead8b8;font-size:11px}.saints-days-grid button.active{background:#d4a13d;color:#2b1307;border-color:#e4bd69}.saints-category-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:7px}.saints-category-grid button{min-height:135px;background:#f6eedf;color:#402114;border:1px solid #d4b06b;border-radius:5px;padding:22px 10px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.saints-category-grid strong{font-family:var(--font-display);font-size:16px;font-weight:500}.saints-category-grid span{font-family:var(--font-display);font-size:11px;color:#6e5743;line-height:1.35;margin-top:8px}.saints-category-grid i{font-style:normal;color:#c18724;margin-top:auto;padding-top:12px}.saints-category-grid button.active{box-shadow:inset 0 0 0 3px #c08a2a;background:#fff7e7}.saints-lowlands{margin:22px 4px 0;display:grid;grid-template-columns:260px 1fr 260px;min-height:190px;border:1px solid rgba(206,153,51,.6);border-radius:8px;overflow:hidden;background:linear-gradient(90deg,#2a1308,#3a1c0c 65%,#241006);box-shadow:0 10px 28px rgba(0,0,0,.2)}.saints-lowlands-map{overflow:hidden}.saints-lowlands-map img{width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;opacity:.9}.saints-lowlands>div:nth-child(2){padding:28px 30px}.saints-lowlands h2{font-size:24px;text-transform:uppercase}.saints-lowlands p{font-family:var(--font-display);color:#e0ceb0;font-size:14px;line-height:1.5;margin-top:7px}.saints-outline-button{margin-top:16px;border:1px solid #b67b21;color:#edc96b;padding:10px 15px;font-size:9px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.saints-lowlands blockquote{margin:18px;border:1px solid rgba(206,153,51,.28);padding:20px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-family:var(--font-display);font-style:italic;color:#ead9bd}.saints-lowlands blockquote span{color:#d19a32;font-style:normal;margin-top:16px;font-size:22px}.saints-results{margin:26px 22px 0;padding:22px;border-top:1px solid rgba(211,164,71,.4)}.saints-results-list>div{display:grid;grid-template-columns:150px 1fr;border-top:1px solid rgba(211,164,71,.25);padding:12px 0}.saints-results-list time{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#e0ad42}.saints-results-list>div>div button{width:100%;display:flex;justify-content:space-between;text-align:left;padding:8px 0;color:#f1e5cf}.saints-results-list strong{display:block;font-family:var(--font-display);font-size:17px;font-weight:500}.saints-results-list small{display:block;color:#bda98a;margin-top:2px}.saints-results-list b{color:#d7a13b}.saints-empty{text-align:center;color:#d7c3a4;padding:30px}.saints-ending{background:linear-gradient(rgba(25,11,5,.65),rgba(25,11,5,.85)),url('/images/heroes/hero-heiligen.png') center 72%/cover;padding:32px 0 40px;color:#f3e6ce;text-align:center}.saints-ending h2{font-size:25px;text-transform:uppercase}.saints-ending p{font-family:var(--font-display);font-style:italic;margin-top:7px}.saints-ending span{display:block;color:#d6a13b;font-size:10px;text-transform:uppercase;letter-spacing:.13em;margin-top:7px}
+@media(max-width:1000px){.saints-today-panel{grid-template-columns:1fr 1.2fr}.saints-side-quote{display:none}.saints-search-row{grid-template-columns:1fr 1fr}.saints-search-button{min-height:46px}.saints-month-grid{grid-template-columns:repeat(4,1fr)}.saints-category-grid{grid-template-columns:repeat(4,1fr)}.saints-lowlands{grid-template-columns:210px 1fr}.saints-lowlands blockquote{display:none}.saints-days-grid{grid-template-columns:repeat(10,1fr)}}
+@media(max-width:700px){.saints-refined{padding-bottom:20px}.saints-today-panel{grid-template-columns:1fr}.saints-today-intro{border-right:0;border-bottom:1px solid rgba(159,109,27,.3)}.saints-today-intro,.saints-today-feature{padding:26px 24px}.saints-search-row{grid-template-columns:1fr}.saints-month-grid{grid-template-columns:repeat(3,1fr)}.saints-category-grid{grid-template-columns:repeat(2,1fr)}.saints-days-panel{grid-template-columns:1fr}.saints-days-grid{grid-template-columns:repeat(7,1fr)}.saints-lowlands{grid-template-columns:1fr}.saints-lowlands-map{height:190px}.saints-results-list>div{grid-template-columns:1fr}.saints-results-list time{margin-bottom:5px}}
+
+/* v14.1 — Heiligen fixes */
+.saints-refined{padding-top:24px!important}
+.saints-today-panel{transform:none!important;margin-top:0!important}
+.saints-results{scroll-margin-top:150px}
+.saints-outline-button.active{background:#d2a13e!important;color:#2d1508!important;border-color:#e4c06e!important;box-shadow:0 0 0 2px rgba(210,161,62,.18)}
+
+/* ================= VERSION 15 — verified visual refinement ================= */
+/* Page title is decorative, not a second sticky header. */
+.exact-titlebar{position:relative!important;top:auto!important;z-index:2!important;box-shadow:none!important}
+
+/* Wider reading popup on desktop; one generous reading column. */
+.exact-modal-frame{width:min(1180px,calc(100vw - 40px))!important;max-width:1180px!important}
+.exact-popup-reading{max-width:980px!important}
+@media(max-width:640px){.exact-modal-frame{width:100%!important}.exact-popup-reading{max-width:none!important}}
+
+/* All four-card editorial groups: one compact row on wide desktop. */
+@media(min-width:1180px){
+ .exact-content div.grid:has(> .ornate-card),
+ #vasten div.grid:has(> .ornate-card){grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important}
+ .ornate-card{height:310px!important;min-height:310px!important;max-height:310px!important;padding:24px 22px 22px!important}
+ .ornate-card>div:first-child,.ornate-medallion{width:76px!important;height:76px!important;min-width:76px!important;min-height:76px!important;margin:0 auto 12px!important}
+ .ornate-card>div:first-child svg,.ornate-medallion svg{width:34px!important;height:34px!important}
+ .ornate-card h3{font-size:19px!important;margin-top:4px!important}
+ .ornate-card h3:after{margin-top:12px!important}
+ .ornate-card p{font-size:13px!important;line-height:1.5!important;margin-top:12px!important}
+ .ornate-card>span:last-child,.ornate-card a:last-child{padding-top:14px!important}
+}
+
+/* Vasten: equal nine steps, no staircase offsets. */
+#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:9px!important;align-items:stretch!important}
+#vasten .fasting-step{height:260px!important;min-height:260px!important;max-height:260px!important;margin:0!important;transform:none!important;padding:16px 11px!important;overflow:hidden!important}
+#vasten .fasting-step-number{width:44px;height:44px;border-radius:50%;border:1px solid #c49332;box-shadow:inset 0 0 0 3px #211109,inset 0 0 0 4px rgba(196,147,50,.5);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:#e0b95a;font-family:var(--font-display);font-size:20px;flex:none}
+#vasten .fasting-step-title{font-size:13px!important;line-height:1.35!important;font-weight:700;text-align:center;color:#f4e6c8!important}
+#vasten .fasting-step-rule{text-align:center;color:#c49332;margin:8px 0 6px}
+#vasten .fasting-step-copy{font-size:11px!important;line-height:1.45!important;text-align:center;color:#e6d4b5!important;overflow-wrap:anywhere}
+@media(max-width:1179px){#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important}#vasten .fasting-step{height:220px!important;min-height:220px!important}}
+@media(max-width:620px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}#vasten .fasting-step{height:auto!important;min-height:190px!important;max-height:none!important}}
+
+/* Food-rule symbols: large, double-ring medallions. */
+.fasting-food-grid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:18px!important}
+.fasting-food-item{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:7px!important}
+.fasting-food-icon{width:66px!important;height:66px!important;border-radius:50%!important;border:2px solid #b9872c!important;background:#1b0e09!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#d6a83f!important;box-shadow:inset 0 0 0 4px #25130d,inset 0 0 0 5px rgba(210,161,56,.55)!important}
+.fasting-food-icon svg{width:29px!important;height:29px!important;stroke-width:1.35!important}
+@media(max-width:640px){.fasting-food-grid{grid-template-columns:repeat(3,1fr)!important}.fasting-food-icon{width:56px!important;height:56px!important}}
+
+/* Weekly fasting area: remove pastel dashboard language. */
+#vasten .v15-fasting-panel{background:linear-gradient(145deg,#2d190f,#1b0d09)!important;border:1px solid #b88628!important;color:#f0dfbf!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.42)!important;border-radius:2px!important}
+#vasten .v15-fasting-panel *{color:#f0dfbf!important}
+#vasten .v15-week-day{background:#f8f0df!important;border:1px solid rgba(168,120,37,.45)!important;border-radius:2px!important;color:#4a2b1d!important}
+#vasten .v15-week-day.is-fast{background:#2b160f!important;color:#f0dfbf!important;border-color:#b88628!important}
+#vasten .v15-week-day.is-today{box-shadow:inset 0 0 0 2px #d0a23a!important}
+
+/* Four major fasts become a compact 1x4 dark editorial row. */
+.v15-major-fasts{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important}
+.v15-major-fast{min-height:310px;padding:26px 22px 22px;background:radial-gradient(circle at 50% 10%,rgba(175,111,31,.16),transparent 38%),linear-gradient(145deg,#321d12,#190c08);border:2px solid #a97720;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.72);color:#f2dfb7;display:flex;flex-direction:column;text-align:center;position:relative}
+.v15-major-fast:before{content:"";position:absolute;inset:11px;border:1px solid rgba(222,179,78,.58);pointer-events:none}
+.v15-major-fast h4{font-family:var(--font-display);font-size:21px;color:#f2dfb7!important;margin-top:8px}
+.v15-major-fast p{color:#e8d8bb!important;font-size:13px;line-height:1.55}
+.v15-major-fast .major-meta{color:#d9ad4d!important;font-size:11px;font-weight:700;letter-spacing:.04em}
+.v15-major-fast .major-badge{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#d9ad4d;margin-top:7px}
+.v15-major-fast .major-actions{margin-top:auto;padding-top:15px;border-top:1px solid rgba(201,162,57,.45);display:flex;flex-direction:column;gap:7px}
+.v15-major-fast .major-actions button,.v15-major-fast .major-actions a{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e0b454!important}
+@media(max-width:1100px){.v15-major-fasts{grid-template-columns:repeat(2,1fr)!important}}@media(max-width:620px){.v15-major-fasts{grid-template-columns:1fr!important}}
+
+/* Calendar day-detail CTAs. */
+.v15-action,.exact-content a.v15-action,.exact-content button.v15-action{display:inline-flex!important;align-items:center!important;justify-content:center!important;border:1px solid #b88628!important;padding:10px 15px!important;background:rgba(255,250,240,.72)!important;color:#85561c!important;font-size:10px!important;font-weight:800!important;letter-spacing:.14em!important;text-transform:uppercase!important;transition:.18s!important;text-decoration:none!important}
+.v15-action:hover{background:#24120c!important;color:#f2dfb7!important}
+
+/* Dark compact cycle timeline, matching the approved Jaar concept. */
+.v15-cycle-timeline{background:radial-gradient(circle at 50% 0,rgba(158,99,29,.16),transparent 45%),linear-gradient(180deg,#25140d,#160a07)!important;border-top:1px solid rgba(196,147,50,.48);border-bottom:1px solid rgba(196,147,50,.34);padding:28px 24px!important;color:#f4e6c8!important}
+.v15-cycle-timeline .timeline-track{max-width:1180px;margin:0 auto;display:flex;align-items:flex-start}
+.v15-cycle-timeline .timeline-node{flex:1;display:flex;align-items:flex-start}
+.v15-cycle-timeline .timeline-core{flex:1;text-align:center;display:flex;flex-direction:column;align-items:center}
+.v15-cycle-timeline .timeline-medallion{width:66px;height:66px;border-radius:50%;border:1px solid #c49332;background:#1a0d09;color:#d8aa45;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:21px;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(196,147,50,.45)}
+.v15-cycle-timeline .timeline-core.active .timeline-medallion{box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(196,147,50,.75),0 0 22px rgba(218,172,70,.35)}
+.v15-cycle-timeline .timeline-label{margin-top:9px;color:#d9ad4d;font-size:10px;font-weight:800;letter-spacing:.2em}
+.v15-cycle-timeline .timeline-title{margin-top:5px;max-width:150px;color:#e7d8ba;font-size:11px;line-height:1.35}
+.v15-cycle-timeline .timeline-line{height:1px;flex:1;background:#b98a31;margin-top:33px;opacity:.65}
+@media(max-width:700px){.v15-cycle-timeline{overflow-x:auto}.v15-cycle-timeline .timeline-track{min-width:680px}}
+.feast-month-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.feast-month-grid button,.feast-day-grid button{border:1px solid rgba(180,133,43,.38);background:#fff8e9;color:#65452f;padding:14px 10px;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.feast-month-grid button.active,.feast-day-grid button.active{background:#211009;color:#e0b454;border-color:#c49332}.feast-day-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:8px}.feast-day-grid button{padding:11px 6px;font-family:var(--font-display);font-size:14px}.feast-discover .saints-rule-title{display:flex;align-items:center;gap:18px}.feast-discover .saints-rule-title h2{font-family:var(--font-display);font-size:22px;letter-spacing:.06em;text-transform:uppercase}.feast-discover .saints-rule-title:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,#b88628,transparent)}.feast-discover .saints-rule-title span{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8b5d20}@media(max-width:900px){.feast-month-grid{grid-template-columns:repeat(3,1fr)}.feast-day-grid{grid-template-columns:repeat(7,1fr)}}
+
+/* v16 — refinement round: warmer, calmer, more editorial */
+/* 1. Weekly fasting overview: warm Orthodoxe Tijd treatment */
+#vasten .v15-week-day{border:1px solid rgba(176,126,37,.52)!important;background:linear-gradient(145deg,#fbf2df,#f0e1c5)!important;color:#4a2a19!important;box-shadow:inset 0 0 0 3px rgba(255,250,238,.65),0 5px 14px rgba(72,40,15,.06)!important}
+#vasten .v15-week-day.is-fast{background:linear-gradient(145deg,#f4e4d7,#ead1c7)!important;border-color:#a95a4d!important;color:#6b211d!important}
+#vasten .v15-week-day.is-today{box-shadow:inset 0 0 0 2px #c89a35,0 5px 14px rgba(72,40,15,.08)!important}
+#vasten .v15-fasting-panel{position:relative;background:radial-gradient(circle at 50% 0,rgba(209,165,72,.08),transparent 45%),linear-gradient(145deg,#2d180f,#1a0c08)!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.48),0 10px 24px rgba(55,29,11,.14)!important;padding:28px!important}
+#vasten .v15-fasting-panel:before,#vasten .v15-fasting-panel:after{position:absolute;color:#c49332;font-size:20px;line-height:1}#vasten .v15-fasting-panel:before{content:"⌜";left:10px;top:9px}#vasten .v15-fasting-panel:after{content:"⌟";right:10px;bottom:9px}
+#vasten .v15-fasting-panel h4{color:#efcf82!important;font-size:22px!important}.v15-fasting-panel .rounded-full{background:#381612!important;border-color:#a55b4f!important}
+
+/* 2. Nine fasting levels: one calm, equal row */
+#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
+#vasten .fasting-step{height:250px!important;min-height:250px!important;max-height:250px!important;margin:0!important;transform:none!important;padding:15px 10px!important}
+#vasten .fasting-step-number{width:48px!important;height:48px!important;min-height:48px!important;border:2px solid #c49332!important}
+#vasten .fasting-step-title{font-size:12.5px!important;min-height:48px!important}.fasting-step-copy{font-size:10.5px!important}
+@media(max-width:1180px){#vasten div.grid:has(> .fasting-step){display:flex!important;overflow-x:auto!important;padding-bottom:12px!important}#vasten .fasting-step{min-width:170px!important}}
+
+/* 3. Fasting food bar becomes one ornate wide card */
+#vasten .orthodox-pattern.rounded-2xl:has(.fasting-food-grid){position:relative;border:2px solid #a97720!important;border-radius:3px!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(205,158,55,.5),0 15px 34px rgba(43,20,7,.2)!important;background:radial-gradient(circle at 50% 0,rgba(190,128,34,.12),transparent 38%),linear-gradient(145deg,#30190f,#160a07)!important}
+#vasten .orthodox-pattern.rounded-2xl:has(.fasting-food-grid):before,#vasten .orthodox-pattern.rounded-2xl:has(.fasting-food-grid):after{position:absolute;color:#d1a03d;font-size:24px}.orthodox-pattern.rounded-2xl:has(.fasting-food-grid):before{content:"❧";left:15px;top:12px}.orthodox-pattern.rounded-2xl:has(.fasting-food-grid):after{content:"❧";right:15px;bottom:12px;transform:rotate(180deg)}
+
+/* 4. Cycle captions on light backgrounds must remain readable */
+.bg-parchment .timeline-title,.parchment-pattern .timeline-title{color:#5a3523!important;opacity:1!important;font-size:12px!important;font-weight:500!important}
+.bg-parchment .timeline-label,.parchment-pattern .timeline-label{color:#a56f18!important;opacity:1!important}
+.v15-cycle-timeline .timeline-title{color:#eadcc2!important}
+
+/* 5. Feasts discovery follows the richer Saints browser */
+.feast-discover{margin:0!important;background:linear-gradient(180deg,#2a140b,#1a0c08)!important;color:#f2e5ce!important;border-top:1px solid rgba(201,154,57,.5)!important}
+.feast-discover>div:first-child p,.feast-discover>div:first-child h2{color:#f1e5cf!important}.feast-discover>div:first-child p:first-child{color:#d6a33d!important}
+.feast-discover input,.feast-discover select{height:52px!important;background:rgba(12,5,3,.34)!important;border:1px solid rgba(211,164,71,.58)!important;color:#f1e5cf!important;border-radius:3px!important}.feast-discover input::placeholder{color:#bda98a!important}.feast-discover select option{background:#261208;color:#f1e5cf}
+.feast-discover .saints-rule-title h2{color:#f1e5cf!important}.feast-discover .saints-rule-title:after{content:"✣"!important;color:#c8902d!important;background:none!important;border-bottom:1px solid rgba(211,164,71,.48)!important;text-align:center!important;line-height:1px!important}.feast-discover .saints-rule-title span{color:#e1b75c!important}
+.feast-month-grid button{min-height:62px;background:linear-gradient(145deg,#fbf3e3,#eee0c7)!important;border:1px solid #cda95f!important;color:#4a2817!important;box-shadow:0 4px 12px rgba(0,0,0,.15)}.feast-month-grid button.active{background:#32170c!important;color:#efc969!important;box-shadow:inset 0 0 0 2px #c49332!important}
+.feast-day-grid{display:flex!important;flex-wrap:wrap!important;gap:12px!important}.feast-day-grid button{width:52px!important;height:52px!important;padding:0!important;border-radius:50%!important;background:#1d0e09!important;border:2px solid #a97720!important;color:#e8c467!important;box-shadow:inset 0 0 0 3px #28140d,inset 0 0 0 4px rgba(196,147,50,.38)}.feast-day-grid button.active{background:#c49332!important;color:#241108!important}
+.feast-discover .group.grid{padding:16px 12px!important;border-color:rgba(211,164,71,.3)!important;color:#eadbc1!important;transition:.18s}.feast-discover .group.grid:hover{background:rgba(196,147,50,.08)!important;padding-left:18px!important}.feast-discover .group.grid .font-display{color:#f1e5cf!important}.feast-discover .group.grid .text-ink-mute{color:#bca98a!important}
+
+/* 6. Today: preserve the calm list, add book-like richness */
+.vandaag-paper{background:radial-gradient(circle at 50% 0,rgba(202,154,57,.11),transparent 24%),linear-gradient(180deg,#f8efdd,#f3e6cf)!important;position:relative}.vandaag-paper:before,.vandaag-paper:after{content:"❦";position:absolute;top:24px;color:rgba(176,126,37,.38);font-size:28px}.vandaag-paper:before{left:18px}.vandaag-paper:after{right:18px;transform:scaleX(-1)}
+.vandaag-dayhead{border-bottom:1px solid rgba(170,119,34,.42)!important;padding-bottom:26px!important}.vandaag-dayhead:after{content:"✣";display:block;width:90px;margin:18px auto -31px;color:#b78328;background:#f6ead5;text-align:center}
+.vandaag-list{margin-top:14px}.vandaag-item{min-height:78px!important;padding:13px 10px!important;border-bottom:1px solid rgba(157,105,36,.25)!important;transition:background .18s,padding .18s!important}.vandaag-item:hover{background:linear-gradient(90deg,rgba(201,162,39,.12),rgba(201,162,39,.04))!important;padding-left:15px!important}.vandaag-item>svg:first-child{width:44px!important;height:44px!important;padding:10px!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 3px #211109,inset 0 0 0 4px rgba(201,162,39,.5)!important}.vandaag-item b{font-size:17px!important}.vandaag-item span{font-size:13px!important}.vandaag-item em{font-size:15px!important}.vandaag-item small{font-size:10px!important;color:#775c45!important}
+
+/* 7. Annual wheel: compact, less empty parchment */
+#jaar .parchment-pattern:has(.aspect-square){padding-top:32px!important;padding-bottom:32px!important}
+#jaar .parchment-pattern:has(.aspect-square) .aspect-square{margin-top:26px!important}
+
+/* ================= ORTHODOXE TIJD — VERSIE 17 ================= */
+/* Remove duplicate page-identification bar: hero is the page title. */
+.exact-titlebar{display:none!important}.exact-content{padding-top:0!important}
+
+/* Etmaal: medallion centre is mathematically anchored to the ring point. */
+.etmaal-ring-node{width:0;height:0;transform:translate(-50%,-50%);z-index:3;overflow:visible!important}
+.etmaal-ring-badge{position:absolute;left:0;top:0;transform:translate(-50%,-50%);display:block}
+.etmaal-ring-text{position:absolute;top:0;width:250px;transform:translateY(-50%)}
+.etmaal-ring-node.is-right .etmaal-ring-text{left:42px;text-align:left}
+.etmaal-ring-node.is-left .etmaal-ring-text{right:42px;text-align:right}
+
+/* Kalender quick routes: same ornate family as the approved information buttons. */
+#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a{position:relative;min-height:270px!important;padding:30px 18px 24px!important;border:2px solid #a97720!important;background:linear-gradient(180deg,#321a10,#190b08)!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(205,158,55,.55),0 12px 25px rgba(48,24,8,.2)!important;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden}
+#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a:before,#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a:after{content:'❦';position:absolute;color:#c89532;font-size:22px;top:8px}#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a:before{left:10px}#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a:after{right:10px;transform:scaleX(-1)}
+#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a>span:first-child{width:72px;height:72px;border-radius:50%;border:2px solid #bd8a2c;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.5);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a>span:nth-child(2){font-size:16px!important;line-height:1.25}
+#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a>span:nth-child(3){color:#ead9ba!important;opacity:1!important;min-height:58px}
+#kalender .mt-4.grid.sm\\:grid-cols-2.lg\\:grid-cols-5>a>span:last-child{margin-top:auto!important;border-top:1px solid rgba(201,162,39,.55);width:75%;padding-top:12px}
+
+/* Vasten vandaag: ornate wide card + legible practical status. */
+.v17-fasting-today{position:relative;border:2px solid #a97720!important;border-radius:3px!important;background:radial-gradient(circle at 50% 0,rgba(183,123,33,.13),transparent 42%),linear-gradient(145deg,#30180f,#160a07)!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(205,158,55,.52),0 16px 36px rgba(42,19,7,.2)!important}
+.v17-fasting-today:before,.v17-fasting-today:after{content:'❦';position:absolute;color:#d1a03d;font-size:25px;top:12px}.v17-fasting-today:before{left:16px}.v17-fasting-today:after{right:16px;transform:scaleX(-1)}
+.v17-fasting-today .fasting-food-grid{gap:18px!important}.v17-fasting-today .fasting-food-icon{width:72px!important;height:72px!important;border:2px solid #b88628!important;border-radius:50%!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(201,162,39,.48)!important}
+.v17-fasting-today .fasting-food-icon svg{width:29px!important;height:29px!important}.v17-fasting-today .fasting-food-item>span:nth-child(2){font-size:19px!important}.v17-fasting-today .fasting-food-item>span:last-child{font-size:13px!important;color:#f0dfbf!important;font-weight:700!important}
+.v17-fasting-today .fasting-food-item>span:nth-child(2):after{display:block;font-size:8px;letter-spacing:.11em;margin-top:4px;text-transform:uppercase;color:#d9c6a3}
+
+/* Year selector: stronger liturgical control. */
+#vasten .v17-year-selector{border:1px solid #b88628!important;background:#211109!important;padding:4px!important;box-shadow:inset 0 0 0 2px rgba(201,162,39,.22)}#vasten .v17-year-selector button{min-width:72px;padding:9px 14px!important;font-family:var(--font-display);font-size:14px!important;color:#e9d8b5!important}#vasten .v17-year-selector button.bg-wine{background:#6b2926!important;color:#f5e5bd!important;box-shadow:inset 0 0 0 1px #c99a38}
+
+/* Weekly fasting information: warmer, framed, no pastel/dashboard feel. */
+#vasten .v15-week-day{border:1px solid #b98a36!important;background:linear-gradient(145deg,#fbf2df,#efe0c3)!important;box-shadow:inset 0 0 0 3px rgba(255,250,238,.7),0 5px 12px rgba(69,37,13,.07)!important}
+#vasten .v15-week-day.is-fast{background:linear-gradient(145deg,#ead8c5,#dec3ad)!important;border-color:#8c493d!important;color:#64261f!important}
+#vasten .v15-fasting-panel{border:2px solid #a97720!important;background:linear-gradient(145deg,#2d180f,#190b08)!important;color:#f0dfbf!important}.v15-fasting-panel *{opacity:1!important}.v15-fasting-panel li span{color:#eadcc2!important}.v15-fasting-panel h4{color:#efcf82!important}
+
+/* Fasting ladder: ALL nine cards use the dimensions of the former largest card. */
+#vasten div.grid:has(> .fasting-step){align-items:stretch!important}
+#vasten .fasting-step{height:280px!important;min-height:280px!important;max-height:280px!important;width:100%!important;margin:0!important;align-self:stretch!important;overflow:hidden!important}
+#vasten .fasting-step-title{min-height:62px!important;font-size:13px!important;line-height:1.35!important}.fasting-step-copy{font-size:10px!important;line-height:1.45!important}
+
+/* Feasts discovery: rich browser like Saints. */
+.feast-discover{margin:0!important;background:radial-gradient(circle at 50% 0,rgba(201,162,39,.13),transparent 38%),linear-gradient(180deg,#2b170f,#1a0c08)!important;color:#f1e4cc!important;border-top:1px solid rgba(201,162,39,.5)!important}
+.feast-discover>div:first-child h2{color:#f4e8cf!important}.feast-discover>div:first-child p{color:#d8c6a5!important}.feast-discover input,.feast-discover select{background:#211109!important;color:#f0dfbf!important;border:1px solid #9d7027!important;min-height:54px}.feast-discover input::placeholder{color:#bba889!important}.feast-month-grid button,.feast-day-grid button{background:linear-gradient(145deg,#f9efd9,#ead8b7)!important;color:#5b3925!important;border-color:#a97b2e!important;box-shadow:inset 0 0 0 2px rgba(255,250,238,.5)}.feast-month-grid button.active,.feast-day-grid button.active{background:#28130c!important;color:#e4b958!important;border-color:#d0a03b!important}.feast-discover .mt-4.space-y-1 button{border-color:rgba(201,162,39,.35)!important}.feast-discover .mt-4.space-y-1 button>span:first-child{color:#e2b75a!important;font-size:12px!important;letter-spacing:.13em!important;opacity:1!important}
+
+/* Low Countries: preserve composition, fix contrast. */
+.saints-lowlands h2{color:#e8bd61!important;opacity:1!important}.saints-lowlands p{color:#eadcc3!important;opacity:1!important}.saints-lowlands blockquote,.saints-lowlands .saints-side-quote{color:#f1dfbd!important;opacity:1!important}.saints-lowlands .saints-outline-button{color:#f0c96e!important;border-color:#c18c2f!important}
+
+/* Today: approved book-like row design, richer without turning into huge cards. */
+.vandaag-paper{padding:18px 34px 30px!important}.vandaag-list{display:grid;gap:8px;margin-top:18px!important}.vandaag-item{min-height:88px!important;border:1px solid rgba(176,126,37,.48)!important;background:linear-gradient(90deg,rgba(255,250,239,.72),rgba(240,223,190,.5))!important;padding:12px 18px!important;grid-template-columns:62px minmax(280px,.8fr) minmax(320px,1.2fr) 22px!important;box-shadow:inset 0 0 0 3px rgba(255,251,240,.45);position:relative}.vandaag-item:before,.vandaag-item:after{content:'⌜';position:absolute;color:#b98429;font-size:14px}.vandaag-item:before{left:5px;top:4px}.vandaag-item:after{right:5px;bottom:4px;transform:rotate(180deg)}.vandaag-item>svg:first-child{width:54px!important;height:54px!important;padding:13px!important}.vandaag-item>div{display:grid;grid-template-columns:minmax(240px,.85fr) minmax(280px,1.15fr);align-items:center;column-gap:34px}.vandaag-item b{font-size:19px!important}.vandaag-item em,.vandaag-item span{font-size:13px!important}.vandaag-item small{font-size:10px!important}.vandaag-item>svg:last-child,.vandaag-item>a{grid-column:4}.vandaag-readings-item>div button{display:block}.vandaag-main-button{margin-top:22px!important}
+@media(max-width:900px){.vandaag-item{grid-template-columns:54px 1fr 18px!important}.vandaag-item>div{display:block}.vandaag-item>svg:last-child,.vandaag-item>a{grid-column:auto}.vandaag-paper{padding:12px 18px 24px!important}}
+
+/* Cycle timeline: less generic icon-pack, more manuscript/Orthodox ornament. */
+.v15-cycle-timeline .timeline-medallion{border-radius:8px!important;transform:rotate(45deg);width:62px!important;height:62px!important;border:2px solid #b88628!important;background:linear-gradient(145deg,#2c160e,#160a07)!important;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(196,147,50,.5)!important}.v15-cycle-timeline .timeline-medallion svg{transform:rotate(-45deg);stroke:#d8aa45}.v15-cycle-timeline .timeline-line{position:relative;background:linear-gradient(90deg,transparent,#b98a31 12%,#b98a31 88%,transparent)!important}.v15-cycle-timeline .timeline-line:after{content:'✣';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#c99a38;background:#211109;padding:0 5px;font-size:10px}
+.v17-fasting-today .fasting-food-status{font-size:9px!important;line-height:1.2!important;letter-spacing:.08em!important;text-transform:uppercase!important;font-weight:800!important;white-space:nowrap}
+/* Feast dates: high-contrast scan column. */
+.feast-discover .mt-4.space-y-1 button>span:first-child{font-family:var(--font-display)!important;font-size:14px!important;font-weight:700!important;color:#efc96e!important;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+
+/* v17.1 — Calendar quick actions now use the same ornate card language as the rest of Orthodoxe Tijd. */
+.calendar-action-grid{align-items:stretch!important}
+.calendar-action-card{height:300px!important;min-height:300px!important;max-height:300px!important;padding:25px 20px 22px!important;text-decoration:none!important}
+.calendar-action-card .calendar-action-medallion{width:70px!important;height:70px!important;min-width:70px!important;min-height:70px!important;font-size:25px!important;margin-bottom:3px!important}
+.calendar-action-card .ornate-side-ornaments{height:15px!important;margin-bottom:1px!important;font-size:13px!important;letter-spacing:12px!important}
+.calendar-action-card h3{font-size:17px!important;letter-spacing:.075em!important;padding-bottom:10px!important}
+.calendar-action-card h3:after{margin-top:10px!important;width:58%!important}
+.calendar-action-card p{font-size:12px!important;line-height:1.45!important;margin-top:8px!important;-webkit-line-clamp:3!important}
+.calendar-action-card .ornate-action{padding-top:9px!important;font-size:9px!important}
+.calendar-action-card:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(226,183,83,.86),0 17px 34px rgba(25,11,6,.28)!important}
+@media(max-width:700px){.calendar-action-card{height:280px!important;min-height:280px!important;max-height:280px!important}}
+
+/* ================= ORTHODOXE TIJD — VERSIE 18 / HARD FIXES ================= */
+/* Food status: symbol only, deliberately large. */
+#vasten .fasting-food-status,.v17-fasting-today .fasting-food-status{font-size:30px!important;line-height:1!important;letter-spacing:0!important;text-transform:none!important;font-weight:700!important;white-space:normal!important;margin-top:3px!important}
+
+/* Fasting ladder: hard equal dimensions. Never content-sized on desktop. */
+#vasten div.grid:has(> .fasting-step){display:grid!important;grid-template-columns:repeat(9,minmax(118px,1fr))!important;align-items:stretch!important;gap:10px!important}
+#vasten .fasting-step{box-sizing:border-box!important;width:100%!important;height:280px!important;min-height:280px!important;max-height:280px!important;margin:0!important;transform:none!important;align-self:stretch!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;padding:14px 10px!important}
+#vasten .fasting-step-number{flex:0 0 46px!important;width:46px!important;height:46px!important;min-height:46px!important;margin-bottom:10px!important}
+#vasten .fasting-step-title{flex:0 0 60px!important;min-height:60px!important;margin:0!important;font-size:13px!important;line-height:1.35!important}
+#vasten .fasting-step-rule{flex:0 0 22px!important;margin:3px 0!important}
+#vasten .fasting-step-copy{flex:1 1 auto!important;font-size:10px!important;line-height:1.4!important;overflow:hidden!important}
+@media(max-width:1250px){#vasten div.grid:has(> .fasting-step){display:flex!important;align-items:stretch!important;overflow-x:auto!important}#vasten .fasting-step{flex:0 0 150px!important;width:150px!important}}
+
+/* Weekly fasting: one warm framed composition, with two rich lower panels. */
+#vasten .v15-week-day{min-height:128px!important;border:1px solid #b68731!important;background:radial-gradient(circle at 50% 0,rgba(208,166,76,.14),transparent 55%),linear-gradient(145deg,#fbf1dd,#ead8b7)!important;box-shadow:inset 0 0 0 3px rgba(255,250,238,.72),0 7px 18px rgba(66,35,12,.09)!important}
+#vasten .v15-week-day.is-fast{background:radial-gradient(circle at 50% 0,rgba(135,52,45,.12),transparent 55%),linear-gradient(145deg,#f1dfcf,#e4c9b8)!important;border-color:#8d4b40!important}
+#vasten .v15-fasting-panel{min-height:290px!important;border:2px solid #a97720!important;background:radial-gradient(circle at 50% 0,rgba(201,162,57,.11),transparent 45%),linear-gradient(145deg,#32190f,#180b07)!important;color:#f2e2c5!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(201,162,57,.45),0 12px 26px rgba(45,20,7,.16)!important}
+#vasten .v15-fasting-panel h4{color:#efc96e!important;font-size:23px!important}.v15-fasting-panel li button{color:#f3e5cb!important}.v15-fasting-panel li span{color:#d9c6a4!important}.v15-fasting-panel .rounded-full{color:#f0d8b2!important}
+
+/* Low Countries: force readable typography even if a parent has muted opacity. */
+.saints-lowlands,.saints-lowlands *{opacity:1!important}.saints-lowlands h2{color:#e9bd61!important;text-shadow:0 1px 0 #140805!important}.saints-lowlands p{color:#f1dfc1!important;font-size:16px!important;line-height:1.65!important}.saints-lowlands blockquote{color:#f5e5c9!important;font-size:16px!important;line-height:1.6!important}
+
+/* Year navigation: not a modern pill; works indefinitely backward/forward. */
+#vasten .v17-year-selector{border:2px solid #a97720!important;border-radius:3px!important;background:linear-gradient(145deg,#2b160e,#160a07)!important;padding:4px 6px!important;box-shadow:inset 0 0 0 3px #211109,inset 0 0 0 4px rgba(201,162,57,.45)!important;color:#f1dfbd!important;gap:4px!important}
+#vasten .v17-year-selector .v17-year-arrow{min-width:34px!important;padding:5px!important;color:#e4b750!important;background:transparent!important;font-size:25px!important;line-height:1!important}
+#vasten .v17-year-current{padding:7px 12px;background:#6a2925;color:#f6e5bc;font-weight:800;letter-spacing:.08em}.v17-year-next{padding:7px 10px;color:#d9c6a5}.v17-year-divider{color:#b9862d;font-size:10px}
+
+/* Cycle bar: restore round medallions. No diamonds or boxed connector glyphs. */
+.v15-cycle-timeline .timeline-medallion{border-radius:50%!important;transform:none!important;width:66px!important;height:66px!important;border:2px solid #b88628!important;background:radial-gradient(circle at 50% 38%,#321a10,#160a07 72%)!important;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(196,147,50,.5)!important}
+.v15-cycle-timeline .timeline-medallion svg{transform:none!important;stroke:#d8aa45!important}.v15-cycle-timeline .timeline-line:after{display:none!important}.v15-cycle-timeline .timeline-title{color:#eadcc2!important;opacity:1!important}
+.bg-parchment .v15-cycle-timeline .timeline-title,.parchment-pattern .v15-cycle-timeline .timeline-title{color:#eadcc2!important}
+
+/* Light cycle-page closing quotations: readable dark ink on parchment. */
+#adem blockquote,#etmaal blockquote,#week blockquote,#jaar blockquote,#pascha blockquote{opacity:1!important}
+#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote{color:#572d20!important}
+#adem .bg-parchment blockquote+*,#etmaal .bg-parchment blockquote+*,#week .bg-parchment blockquote+*,#jaar .bg-parchment blockquote+*,#pascha .bg-parchment blockquote+*{opacity:1!important}
+/* Navigation marks: typographic/manuscript marks instead of modern icon-pack glyphs. */
+.orthodox-nav-mark{display:inline-flex;min-width:17px;align-items:center;justify-content:center;color:#d5a13a;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1;text-shadow:0 0 10px rgba(201,154,57,.12)}
+nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969}
+
+/* ===== BOUW 19 — harde herstelpunten ===== */
+/* Hero's: nooit meer door een max-height/object-fit cover afsnijden. */
+#adem>img,#etmaal>img,#week>img,#jaar>img,#pascha>img,#gebeden>img,#vasten>img,#kalender>img,#feesten>img,
+.saints-hero img{width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important;display:block!important}
+.saints-hero{height:auto!important;min-height:0!important;overflow:visible!important}
+
+/* Traditionelere, typografische liturgische tekens i.p.v. generieke app-iconen. */
+.liturgical-card-mark,.liturgical-timeline-mark{font-family:Georgia,'Times New Roman',serif;color:#d7a43d;letter-spacing:.03em;line-height:1;text-align:center}
+.liturgical-card-mark{font-size:20px}.liturgical-timeline-mark{font-size:19px;font-weight:600}
+
+/* Cyclusmedaillons blijven rond. Geen ruiten en geen connector-ornamenten. */
+.v15-cycle-timeline .timeline-medallion{border-radius:50%!important;transform:none!important}
+.v15-cycle-timeline .timeline-line:after{content:none!important;display:none!important}
+
+/* Vasten: de 9 treden zijn één strakke rij met exact dezelfde vaste afmetingen. */
+#vasten div.grid:has(> .fasting-step){display:flex!important;align-items:stretch!important;gap:10px!important;overflow-x:auto!important;border-left:0!important;padding-left:0!important;padding-bottom:12px!important}
+#vasten .fasting-step{box-sizing:border-box!important;flex:0 0 150px!important;width:150px!important;height:280px!important;min-width:150px!important;max-width:150px!important;min-height:280px!important;max-height:280px!important;margin:0!important;transform:none!important;align-self:stretch!important;overflow:hidden!important;padding:14px 10px!important}
+#vasten .fasting-step-number{flex:0 0 46px!important;width:46px!important;height:46px!important;min-height:46px!important;margin:0 auto 10px!important}
+#vasten .fasting-step-title{flex:0 0 60px!important;min-height:60px!important;max-height:60px!important;overflow:hidden!important;font-size:13px!important;line-height:1.35!important}
+#vasten .fasting-step-rule{flex:0 0 22px!important;margin:3px auto!important}
+#vasten .fasting-step-copy{flex:1 1 auto!important;overflow:hidden!important;font-size:10px!important;line-height:1.4!important}
+
+/* Vasten: onderste twee blokken zijn volwaardige donkere liturgische panelen. */
+#vasten .v15-fasting-panel{min-width:0!important;min-height:0!important;padding:30px 32px!important;border:2px solid #ad7c25!important;background:radial-gradient(circle at 50% 0,rgba(213,169,72,.12),transparent 48%),linear-gradient(145deg,#351b11,#170a07)!important;color:#f4e6cc!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(210,164,61,.48),0 12px 26px rgba(45,20,7,.18)!important;overflow:hidden!important}
+#vasten .v15-fasting-panel h4{color:#f0c96e!important;font-size:23px!important;line-height:1.2!important}
+#vasten .v15-fasting-panel ul{width:100%!important}
+#vasten .v15-fasting-panel li{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:18px!important;border-bottom:1px solid rgba(201,162,39,.18)!important;padding:7px 0!important;align-items:start!important}
+#vasten .v15-fasting-panel li:last-child{border-bottom:0!important}
+#vasten .v15-fasting-panel li button,#vasten .v15-fasting-panel li>span:first-child{min-width:0!important;color:#f5e7cf!important;font-weight:600!important;overflow-wrap:anywhere!important}
+#vasten .v15-fasting-panel li>span:last-child{color:#e3cda8!important;text-align:right!important;white-space:normal!important;max-width:190px!important}
+#vasten .fasting-weekly-note{margin-top:18px!important;border-top:1px solid rgba(201,162,39,.35)!important;padding-top:14px!important;color:#efdcb9!important;font-family:var(--font-display)!important;font-size:14px!important;line-height:1.55!important}
+@media(max-width:720px){#vasten .v15-fasting-panel li{grid-template-columns:1fr!important}#vasten .v15-fasting-panel li>span:last-child{text-align:left!important;max-width:none!important}}
+
+/* Heiligen Lage Landen: harde contrastwaarden, zonder transparantie op tekst. */
+.saints-lowlands,.saints-lowlands>div,.saints-lowlands blockquote{opacity:1!important;mix-blend-mode:normal!important}
+.saints-lowlands h2{color:#e3b956!important;opacity:1!important;text-shadow:0 1px 1px #120705!important}
+.saints-lowlands p{color:#f1e3c4!important;opacity:1!important;font-size:17px!important;line-height:1.65!important;font-weight:400!important;text-shadow:0 1px 1px rgba(0,0,0,.3)!important}
+.saints-lowlands blockquote{color:#f1e3c4!important;opacity:1!important;font-size:16px!important;line-height:1.65!important;text-shadow:0 1px 1px rgba(0,0,0,.3)!important}
+
+/* Heiligen: dagcirkels krijgen donkere, grotere cijfers op ivoor; geselecteerd omgekeerd. */
+.saints-days-grid{display:flex!important;flex-wrap:wrap!important;gap:12px!important}
+.saints-days-grid button{width:52px!important;height:52px!important;flex:0 0 52px!important;border-radius:50%!important;border:2px solid #c49332!important;background:#f6edda!important;color:#4a2115!important;font-family:var(--font-display)!important;font-size:16px!important;font-weight:700!important;opacity:1!important;box-shadow:inset 0 0 0 3px #fff8e8,inset 0 0 0 4px rgba(196,147,50,.42)!important}
+.saints-days-grid button:hover,.saints-days-grid button.active{background:#35180e!important;color:#f3d27a!important;border-color:#d2a244!important}
+
+/* Cycli: citeerregels op lichte ondergronden leesbaar. */
+#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote{color:#5a2a22!important;opacity:1!important}
+#adem .bg-parchment cite,#etmaal .bg-parchment cite,#week .bg-parchment cite,#jaar .bg-parchment cite,#pascha .bg-parchment cite{color:#8a5b20!important;opacity:1!important}
+
+/* Bouw 21 — definitieve gebedskaarten */
+.prayer-category-card{position:relative;overflow:hidden;border:1px solid #c49332;background:linear-gradient(155deg,#351a11 0%,#1a0c08 100%);box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.48),0 12px 28px rgba(55,31,15,.16);color:#f5e6c8}
+.prayer-category-card:before,.prayer-category-card:after{content:"";position:absolute;width:26px;height:26px;border-color:#d2a23e;opacity:.85}.prayer-category-card:before{left:9px;top:9px;border-left:1px solid;border-top:1px solid}.prayer-category-card:after{right:9px;bottom:9px;border-right:1px solid;border-bottom:1px solid}
+.prayer-category-icon{width:82px;height:82px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
+.prayer-choice-card{border:1px solid #b88628;background:linear-gradient(145deg,#351a11,#1a0c08);box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.35),0 10px 24px rgba(55,31,15,.15);color:#f5e6c8}
+.prayer-choice-card:hover{border-color:#d7ad4d;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.55),0 14px 28px rgba(55,31,15,.22)}
+@media(min-width:1024px){.prayer-category-grid>button:last-child:nth-child(4n+1){grid-column:2/4;max-width:430px;justify-self:center;width:100%}}
+
+/* Bouw 21 — vasten: definitieve afbeeldingen en negen treden zonder horizontale desktop-scroll */
+.v17-fasting-today .fasting-food-icon{width:78px!important;height:78px!important;border:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
+.v17-fasting-today .fasting-food-icon img{display:block;width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 4px 8px rgba(0,0,0,.22))}
+#vasten div.grid:has(> .fasting-step){display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important;padding-bottom:0!important;align-items:stretch!important}
+#vasten .fasting-step{min-width:0!important;max-width:none!important;width:100%!important;height:310px!important;min-height:310px!important;max-height:310px!important;padding:9px 7px 12px!important;background:linear-gradient(180deg,#351a11,#1a0c08)!important}
+#vasten .fasting-step-symbol{width:70px;height:70px;object-fit:contain;margin:-2px auto 2px;display:block;filter:drop-shadow(0 4px 7px rgba(0,0,0,.28))}
+#vasten .fasting-step-index{font-family:var(--font-display);font-size:18px;line-height:1;color:#e7c16a;text-align:center;margin:0 0 7px}
+#vasten .fasting-step-title{font-size:11.5px!important;line-height:1.25!important;min-height:56px!important;max-height:56px!important;padding:0 2px}
+#vasten .fasting-step-copy{font-size:9.5px!important;line-height:1.35!important;padding:0 2px;overflow:visible!important}
+@media(max-width:1100px){#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important}#vasten .fasting-step{height:260px!important;min-height:260px!important;max-height:260px!important}#vasten .fasting-step-title{font-size:13px!important}}
+@media(max-width:620px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}#vasten .fasting-step{height:auto!important;min-height:230px!important;max-height:none!important}}
+
+/* Bouw 21 — Heiligen: lichte zoekvelden, sterke Lage-Landen- en dagcontrast */
+.saints-search-row label,.saints-select{background:#f7edda!important;border:1px solid #c69a43!important;box-shadow:inset 0 0 0 2px rgba(255,250,238,.55)!important}
+.saints-search-row input,.saints-select select{color:#3b2014!important}.saints-search-row input::placeholder{color:#806d56!important}.saints-select option{background:#f7edda!important;color:#3b2014!important}
+.saints-days-grid button{background:#f4ead6!important;color:#3b2014!important;border-color:#c69a43!important;font-size:13px!important;font-weight:700!important}.saints-days-grid button.active{background:#351a11!important;color:#f3d67f!important;border-color:#d6aa48!important}
+.saints-lowlands h2{color:#d9aa45!important;opacity:1!important}.saints-lowlands p,.saints-lowlands blockquote{color:#f1e3c4!important;opacity:1!important}.saints-lowlands>div:nth-child(2){opacity:1!important}
+
+/* Bouw 22 — definitive supplied asset integration */
+.provided-menu-icon{width:58px;height:58px;object-fit:contain;display:block;filter:drop-shadow(0 3px 6px rgba(48,24,10,.18))}
+.vandaag-item>.provided-menu-icon:first-child{width:58px!important;height:58px!important;object-fit:contain;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
+.provided-card-icon,.provided-cycle-icon{width:100%;height:100%;object-fit:contain;display:block}
+.ornate-medallion .provided-card-icon{width:82px!important;height:82px!important;max-width:none!important}
+.provided-inline-icons{display:flex;justify-content:center;gap:18px;margin:0 auto 16px}.provided-inline-icons img{width:74px;height:74px;object-fit:contain}
+.vasten-vandaag-status-icon{width:104px;height:104px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 5px 10px rgba(0,0,0,.3))}
+.provided-wide-frame{background-image:linear-gradient(rgba(28,19,13,.88),rgba(28,19,13,.88)),url('/images/ui/vasten-vandaag/10-Leeg-breed-kader.png')!important;background-size:100% 100%!important;background-position:center!important}
+.provided-ladder-frame{background-image:linear-gradient(rgba(30,14,9,.82),rgba(30,14,9,.82)),url('/images/ui/vasten-ladder/10-Leeg-kader.png')!important;background-size:100% 100%!important;background-position:center!important;border:0!important}
+.provided-prayer-frame{background-image:linear-gradient(rgba(31,15,10,.88),rgba(31,15,10,.88)),url('/images/ui/gebeden/10-Leeg-kaartkader.png')!important;background-size:100% 100%!important;background-position:center!important;border:0!important}
+/* definitive ladder: no horizontal scrolling; 9 narrow equal steps on desktop, responsive grid below */
+#vasten div.grid:has(> .fasting-step){display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important;padding:0!important;border-left:0!important}
+#vasten .fasting-step{min-width:0!important;max-width:none!important;width:100%!important;height:310px!important;min-height:310px!important;max-height:310px!important;flex:none!important;margin:0!important;overflow:hidden!important}
+@media(max-width:1100px){#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important}#vasten .fasting-step{height:270px!important;min-height:270px!important;max-height:270px!important}}
+@media(max-width:620px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}#vasten .fasting-step{height:auto!important;min-height:230px!important;max-height:none!important}}
