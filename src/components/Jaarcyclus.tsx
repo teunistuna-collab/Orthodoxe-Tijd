@@ -137,7 +137,7 @@ export default function Jaarcyclus() {
   return (
     <>
       <section id="jaar" className="bg-bark">
-        <img src="/images/heroes/hero-jaar.png" alt="Jaarcyclus — het kerkelijk jaar" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-jaar.png" width={2103} height={748} alt="Jaarcyclus — het kerkelijk jaar" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}

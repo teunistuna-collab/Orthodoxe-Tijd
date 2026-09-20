@@ -354,7 +354,7 @@ export default function UrenCyclus() {
   return (
     <>
       <section id="etmaal" className="bg-bark">
-        <img src="/images/heroes/hero-etmaal.png" alt="Etmaal — een dag in Gods tegenwoordigheid" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-etmaal.png" width={2103} height={748} alt="Etmaal — een dag in Gods tegenwoordigheid" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}
@@ -447,12 +447,11 @@ export default function UrenCyclus() {
                 );
 
                 const text = (
-                  <span className={`min-w-0 ${leftSide ? 'text-right' : 'text-left'}`}>
-                    <span className="flex flex-wrap items-baseline gap-x-2" style={{ justifyContent: leftSide ? 'flex-end' : 'flex-start' }}>
-                      <span className="font-display text-base font-semibold text-ink">{service.title}</span>
-                      <span className="text-[10px] font-bold tracking-[0.14em] text-gold-deep uppercase">{service.time}</span>
-                    </span>
-                    <span className="mt-1 block text-[12px] leading-snug text-ink-soft">{service.hoofdgedachtenis}</span>
+                  <span className="dienst-kaart">
+                    <span className="dienst-kaart-titel font-display">{service.title}</span>
+                    <span className="dienst-kaart-tijd">{service.time}</span>
+                    <span className="dienst-kaart-tekst">{service.hoofdgedachtenis}</span>
+                    <span className="btn-pill dienst-kaart-cta">Open dienst →</span>
                   </span>
                 );
 
@@ -488,19 +487,17 @@ export default function UrenCyclus() {
                     key={`${service.title}-mobile-${index}`}
                     type="button"
                     onClick={() => openService(index)}
-                    className="group flex w-full items-center gap-4 rounded-2xl border border-parchment-3 bg-paper px-4 py-4 text-left transition-all hover:border-gold hover:shadow-[0_8px_24px_rgba(77,48,24,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+                    className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/50 bg-[#1c130d] text-gold-light transition group-hover:border-gold">
-                      {imageIcon ? <img src={imageIcon} alt="" className="h-11 w-11 object-contain" /> : Icon ? <Icon className="h-5 w-5" strokeWidth={1.4} /> : <Cross className="h-5 w-5" />}
+                    <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
+                      {imageIcon ? <img src={imageIcon} alt="" /> : Icon ? <Icon className="h-6 w-6 text-gold-light" strokeWidth={1.4} /> : <Cross className="h-6 w-6 text-gold-light" />}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="font-display block text-xl font-semibold text-ink">{service.title}</span>
-                      <span className="mt-0.5 flex items-center gap-2 text-xs text-ink-soft">
-                        <Clock3 className="h-3.5 w-3.5 shrink-0" />
-                        <span>{service.time} · {service.hoofdgedachtenis}</span>
-                      </span>
+                      <span className="dienst-kaart-titel font-display block">{service.title}</span>
+                      <span className="dienst-kaart-tijd block">{service.time}</span>
+                      <span className="dienst-kaart-tekst block">{service.hoofdgedachtenis}</span>
                     </span>
-                    <ChevronDown className="h-5 w-5 shrink-0 text-gold-deep transition-transform group-hover:translate-y-0.5" />
+                    <ChevronRight className="h-5 w-5 shrink-0 text-gold-deep" />
                   </button>
                 );
               })}

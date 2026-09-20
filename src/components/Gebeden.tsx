@@ -93,7 +93,7 @@ export default function Gebeden() {
   return (
     <>
       <section id="gebeden" className="bg-bark">
-        <img src="/images/heroes/hero-gebeden.png" alt="Gebeden — het gebedenboek van de Kerk" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-gebeden.png" width={2103} height={748} alt="Gebeden — het gebedenboek van de Kerk" className="block h-auto w-full" />
       </section>
 
       {/* Introductie */}

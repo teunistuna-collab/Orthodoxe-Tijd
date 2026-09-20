@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BookOpen, CalendarDays, ChevronRight, Church, Cross as CrossIcon, Flame, ScrollText, Sparkles, Wheat } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { OPEN_DIENST_EVENT } from '../lib/events';
+import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
 import { HEILIGEN } from '../lib/heiligen';
 import { LEZINGEN_JAAR, lezingSoort, vertaalLeven, vertaalRef, vertaalTag } from '../lib/htc';
@@ -37,6 +37,8 @@ const UUR_ICONEN: Record<string, string> = {
   Vespers: '/images/ui/menu/03-Etmaal-02-Avondgebeden.png',
   Completen: '/images/ui/menu/03-Etmaal-05-Completen.png',
 };
+
+const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
 
 const WEEKTHEMAS: Record<number, { titel: string; uitleg: string }> = {
   0: { titel: 'De Verrijzenis van Christus', uitleg: 'De zondag is de Dag des Heren, een wekelijkse gedachtenis van de Verrijzenis.' },
@@ -83,9 +85,9 @@ export default function Vandaag() {
           <div className="vandaag-list">
             <a className="vandaag-item" href="#adem"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.png" alt=""/><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Naar pijlgebed →</span></div><ChevronRight/></a>
             <a className="vandaag-item" href="#etmaal" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })); }}><img className="provided-menu-icon" src={UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.png'} alt=""/><div><b>{uurMoment.naam}</b><em>“{uurMoment.tekst}”</em><small>{uurMoment.psalm} · Septuaginta</small><span className="btn-pill vandaag-cta">Naar {uurMoment.naam.toLowerCase()} →</span></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#week"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.png" alt=""/><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week →</span></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#vasten"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.png" alt=""/><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten →</span></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#pascha"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.png" alt=""/><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus →</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#week" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] } })); }}><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.png" alt=""/><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week →</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#vasten" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: dag.ymd } })); }}><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.png" alt=""/><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten →</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#pascha" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'pascha', sleutel: 'cyclus' } })); }}><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.png" alt=""/><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus →</span></div><ChevronRight/></a>
             <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; window.location.hash='kalender'; }} onKeyDown={(e)=>{ if(e.key==='Enter') window.location.hash='kalender'; }}><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.png" alt=""/><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>Leesrooster {LEZINGEN_JAAR}</span>}<span className="btn-pill vandaag-cta">Lees lezingen →</span></div><a href="#kalender"><ChevronRight/></a></article>
             <a className="vandaag-item" href="#gebeden"><img className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-05-Woestijnvaders-en-moeders.png" alt=""/><div><b>Vaders &amp; moeders</b><span>Spreuk uit de woestijn</span><small>De verzameling wordt later toegevoegd.</small><span className="btn-pill vandaag-cta">Ga naar gebeden →</span></div><ChevronRight className="vandaag-muted-chevron"/></a>
           </div>

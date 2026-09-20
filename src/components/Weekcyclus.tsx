@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import Cross from './Cross';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
@@ -133,13 +134,23 @@ function polar(cx: number, cy: number, r: number, angleDeg: number) {
 
 export default function Weekcyclus() {
   const [dayOpen, setDayOpen] = useState<DayKey | null>(null);
+
+  // Vandaag kan een pop-up van deze pagina openen.
+  useEffect(() => {
+    const opPopup = (event: Event) => {
+      const { pagina, sleutel } = (event as CustomEvent<OpenPopupDetail>).detail;
+      if (pagina === 'week') setDayOpen(sleutel as DayKey);
+    };
+    window.addEventListener(OPEN_POPUP_EVENT, opPopup);
+    return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
+  }, []);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <>
       <section id="week" className="bg-bark">
-        <img src="/images/heroes/hero-week.png" alt="Weekcyclus — van de Verrijzenis tot de Sabbat" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-week.png" width={2103} height={748} alt="Weekcyclus — van de Verrijzenis tot de Sabbat" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}

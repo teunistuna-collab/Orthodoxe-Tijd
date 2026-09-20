@@ -71,7 +71,7 @@ export default function Kalender() {
   return (
     <>
       <section id="kalender" className="bg-bark">
-        <img src="/images/heroes/hero-kalender.png" alt="Kalender — het kerkelijk jaar in overzicht" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-kalender.png" width={2103} height={748} alt="Kalender — het kerkelijk jaar in overzicht" className="block h-auto w-full" />
       </section>
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink sm:py-16">
@@ -191,7 +191,11 @@ export default function Kalender() {
                   <button
                     key={c.ymd}
                     type="button"
-                    onClick={() => setGeselecteerdeYmd(c.ymd)}
+                    onClick={() => {
+                      setGeselecteerdeYmd(c.ymd);
+                      // Op een smal scherm staat het detailpaneel onder de kalender (buiten beeld): dan een pop-up tonen.
+                      if (window.matchMedia('(max-width: 1023px)').matches) openDag(c.ymd);
+                    }}
                     className={`relative min-h-[56px] border-r border-b border-gold/20 p-1 text-left align-top transition [&:nth-child(7n)]:border-r-0 sm:min-h-[112px] sm:p-2 ${
                       buiten ? 'bg-[#f3e9d2]/50 text-ink-mute' : 'bg-[#fbf6e8] hover:bg-gold-pale/60'
                     } ${c.ymd === geselecteerd.ymd ? 'bg-[#4d1716] text-gold-light ring-2 ring-gold ring-inset' : c.isVandaag ? 'ring-2 ring-gold ring-inset' : ''}`}

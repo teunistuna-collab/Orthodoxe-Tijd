@@ -84,7 +84,7 @@ export default function Heiligen() {
   const dagenInMaand = maand ? new Date(Date.UTC(2024, maand, 0)).getUTCDate() : 0;
 
   return <>
-    <section id="heiligen" className="saints-hero"><img src="/images/heroes/hero-heiligen.png" alt="Heiligen — Orthodoxe Tijd" /></section>
+    <section id="heiligen" className="saints-hero"><img src="/images/heroes/hero-heiligen.png" width={2103} height={748} alt="Heiligen — Orthodoxe Tijd" /></section>
     <main className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">

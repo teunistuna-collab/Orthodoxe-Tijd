@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { Flame } from 'lucide-react';
 
 import { useApp } from '../lib/context';
@@ -48,6 +49,16 @@ export default function Pascha() {
   const [gekozen, setGekozen] = useState(volgendePascha(vandaag).getUTCFullYear());
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
 
+  // Vandaag kan een pop-up van deze pagina openen.
+  useEffect(() => {
+    const opPopup = (event: Event) => {
+      const { pagina, sleutel } = (event as CustomEvent<OpenPopupDetail>).detail;
+      if (pagina === 'pascha') setInfoOpen(sleutel as InfoKey);
+    };
+    window.addEventListener(OPEN_POPUP_EVENT, opPopup);
+    return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
+  }, []);
+
   const rijen = useMemo(
     () =>
       Array.from({ length: 10 }, (_, i) => {
@@ -66,7 +77,7 @@ export default function Pascha() {
   return (
     <>
       <section id="pascha" className="bg-bark">
-        <img src="/images/heroes/hero-pascha.png" alt="Pascha — de Verrijzenis van Christus" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-pascha.png" width={2103} height={748} alt="Pascha — de Verrijzenis van Christus" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}

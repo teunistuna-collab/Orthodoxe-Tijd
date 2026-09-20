@@ -54,6 +54,48 @@ export default function App() {
     return () => clearInterval(t);
   }, [vandaag]);
 
+  // Na een sprong naar een anker (#week, #jaar, ...) verschuift de pagina nog doordat afbeeldingen boven het doel
+  // laden. Daarom corrigeren we de positie een paar keer, tenzij de bezoeker zelf begint te scrollen.
+  useEffect(() => {
+    let timers: number[] = [];
+    let gebruikerScrolde = false;
+    const stop = () => {
+      gebruikerScrolde = true;
+    };
+    const bijstellen = (eersteKeerSpringen: boolean) => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const doel = id ? document.getElementById(id) : null;
+      if (!doel) return;
+      timers.forEach((t) => window.clearTimeout(t));
+      timers = [];
+      gebruikerScrolde = false;
+      if (eersteKeerSpringen) doel.scrollIntoView({ block: 'start', behavior: 'instant' });
+      const gewenst = doel.getBoundingClientRect().top;
+      for (const ms of [250, 700, 1400, 2600]) {
+        timers.push(
+          window.setTimeout(() => {
+            if (gebruikerScrolde) return;
+            const verschil = doel.getBoundingClientRect().top - gewenst;
+            if (Math.abs(verschil) > 3) window.scrollBy({ top: verschil, behavior: 'instant' });
+          }, ms),
+        );
+      }
+    };
+    const opHashwijziging = () => bijstellen(false);
+    window.addEventListener('hashchange', opHashwijziging);
+    window.addEventListener('wheel', stop, { passive: true });
+    window.addEventListener('touchmove', stop, { passive: true });
+    window.addEventListener('keydown', stop);
+    bijstellen(true); // ook bij het openen van een link met een anker
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      window.removeEventListener('hashchange', opHashwijziging);
+      window.removeEventListener('wheel', stop);
+      window.removeEventListener('touchmove', stop);
+      window.removeEventListener('keydown', stop);
+    };
+  }, []);
+
   const setMode = useCallback((m: Mode) => {
     setModeState(m);
     try {

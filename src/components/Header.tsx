@@ -38,6 +38,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cyclusOpen, setCyclusOpen] = useState(false);
   const cyclusRef = useRef<HTMLDivElement | null>(null);
+  const cyclusMobielRef = useRef<HTMLDivElement | null>(null);
   const cyclusSluitTimer = useRef<number | null>(null);
 
   // Het Cycli-menu sluit pas kort nadat de muis het verlaat en blijft open als je terugkeert.
@@ -74,7 +75,9 @@ export default function Header() {
 
   useEffect(() => {
     const onPointerDown = (event: MouseEvent) => {
-      if (cyclusRef.current && !cyclusRef.current.contains(event.target as Node)) {
+      const doel = event.target as Node;
+      // een tik op het (mobiele of desktop-)Cycli-menu zelf telt niet als "buiten"
+      if (!cyclusRef.current?.contains(doel) && !cyclusMobielRef.current?.contains(doel)) {
         setCyclusOpen(false);
       }
     };
@@ -247,7 +250,7 @@ export default function Header() {
             );
           })}
 
-          <div className="sm:hidden">
+          <div className="sm:hidden" ref={cyclusMobielRef}>
             <button
               type="button"
               onClick={() => setCyclusOpen((open) => !open)}

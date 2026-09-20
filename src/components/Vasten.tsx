@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { WEEKDAGEN_KORT, addDays, dagInfo, formatDag, formatDatum, formatKort, utc, weekRond, ymd } from '../lib/kalender';
@@ -82,6 +83,16 @@ export default function Vasten() {
   const [jaar, setJaar] = useState(vandaag.getUTCFullYear());
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [geselecteerdeDag, setGeselecteerdeDag] = useState<string | null>(null);
+
+  // Vandaag kan een pop-up van deze pagina openen.
+  useEffect(() => {
+    const opPopup = (event: Event) => {
+      const { pagina, sleutel } = (event as CustomEvent<OpenPopupDetail>).detail;
+      if (pagina === 'vasten') setGeselecteerdeDag(sleutel);
+    };
+    window.addEventListener(OPEN_POPUP_EVENT, opPopup);
+    return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
+  }, []);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const [periodeOpen, setPeriodeOpen] = useState<string | null>(null);
 
@@ -128,7 +139,7 @@ export default function Vasten() {
   return (
     <>
       <section id="vasten" className="bg-bark">
-        <img src="/images/heroes/hero-vasten.png" alt="Vasten — een weg naar vrijheid" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-vasten.png" width={2103} height={748} alt="Vasten — een weg naar vrijheid" className="block h-auto w-full" />
       </section>
 
       {/* Eén doorlopende compositie: vandaag → uitleg → jaarcyclus → week/uitzonderingen → gebed */}

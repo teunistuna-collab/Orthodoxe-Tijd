@@ -85,7 +85,7 @@ export default function Ademcyclus() {
   return (
     <>
       <section id="adem" className="bg-bark">
-        <img src="/images/heroes/hero-adem.png" alt="Ademcyclus — het onophoudelijke gebed" className="block h-auto w-full" />
+        <img src="/images/heroes/hero-adem.png" width={2103} height={748} alt="Ademcyclus — het onophoudelijke gebed" className="block h-auto w-full" />
       </section>
 
       {/* Het Jezusgebed */}
