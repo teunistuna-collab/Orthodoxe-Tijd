@@ -1,6 +1,8 @@
 import Cross from './Cross';
+import { useApp } from '../lib/context';
 
 export default function Footer() {
+  const { openKalenderUitleg } = useApp();
   return (
     <footer className="orthodox-pattern bg-bark text-[#d9cbb0]">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
@@ -35,6 +37,9 @@ export default function Footer() {
       <div className="border-t border-gold/15">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-[#9b8b70] sm:flex-row sm:px-6">
           <span>✠ Eer aan God voor alles.</span>
+          <button type="button" onClick={openKalenderUitleg} className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
+            Oud of nieuw? Uitleg over de kalenders
+          </button>
           <span>Gebouwd met liefde voor de Nederlandse orthodoxie.</span>
         </div>
       </div>

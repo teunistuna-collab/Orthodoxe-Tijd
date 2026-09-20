@@ -18,6 +18,7 @@ export interface AppState {
   htcFout: boolean;
   openDag: (ymd: string) => void;
   openLezing: (l: LezingKeuze) => void;
+  openKalenderUitleg: () => void;
 }
 
 export const AppContext = createContext<AppState | null>(null);

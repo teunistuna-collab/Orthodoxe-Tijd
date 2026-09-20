@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Repeat } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster } from '../lib/kalender';
 import { HEILIGEN } from '../lib/heiligen';
@@ -18,39 +18,8 @@ function CornerOrnament({ className = '' }: { className?: string }) {
   );
 }
 
-const KERKELIJKE_TIJD = [
-  {
-    title: 'Juliaanse kalender',
-    text: 'Deze kalender volgt de Juliaanse (oude) kalender: vaste feesten vallen dertien dagen later dan op de burgerlijke kalender. Bovenaan kunt u wisselen tussen de oude en de nieuwe kalender.',
-  },
-  {
-    title: 'Vaste jaarcyclus',
-    text: 'Het kerkelijk jaar begint op 1 september en kent voor iedere dag vaste feesten en heiligen, gedragen door het Menaion.',
-    href: '#jaar',
-    label: 'Meer over de jaarcyclus',
-  },
-  {
-    title: 'Paschale cyclus',
-    text: 'Pascha is het Feest der feesten en bepaalt de beweeglijke perioden: de voorbereiding, de Grote Vasten, de Heilige Week, Hemelvaart en Pinksteren.',
-    href: '#pascha',
-    label: 'Meer over Pascha',
-  },
-  {
-    title: 'Weekcyclus',
-    text: 'Iedere week begint met de Dag des Heren, de zondag, en kent voor elke dag van de week een eigen liturgisch karakter.',
-    href: '#week',
-    label: 'Meer over de weekcyclus',
-  },
-  {
-    title: 'Vasten en feesten',
-    text: 'Vasten en feesten wisselen elkaar af door het jaar heen; de kalender toont per dag welk vastenvoorschrift geldt.',
-    href: '#vasten',
-    label: 'Meer over vasten',
-  },
-];
-
 export default function Kalender() {
-  const { mode, setMode, vandaag, vandaagYmd, openDag } = useApp();
+  const { mode, vandaag, vandaagYmd, openDag } = useApp();
   const [cur, setCur] = useState({ y: vandaag.getUTCFullYear(), m: vandaag.getUTCMonth() + 1 });
   const [geselecteerdeYmd, setGeselecteerdeYmd] = useState(vandaagYmd);
 
@@ -89,45 +58,10 @@ export default function Kalender() {
             </div>
           </div>
 
-          {/* Uitleg oude/nieuwe kalender */}
-          <div className="mb-8 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
-            <button
-              type="button"
-              onClick={() => setMode('oud')}
-              className={`rounded-xl border p-4 text-left transition ${mode === 'oud' ? 'border-gold bg-gold-pale/70' : 'border-gold/25 bg-[#f8f1e3] hover:border-gold/60'}`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold tracking-[0.22em] text-gold-deep uppercase">Oude kalender · juliaans</span>
-                {mode === 'oud' && <span className="rounded-sm bg-gold px-1.5 py-0.5 text-[9px] font-bold text-bark uppercase">actief</span>}
-              </div>
-              <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
-                De vaste feesten vallen dertien dagen later dan op de burgerlijke kalender: Kerstmis op 7 januari, Theofanie op 19 januari. Gevolgd door de Russische, Servische, Georgische parochies en de Athos.
-              </p>
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode('nieuw')}
-              className={`rounded-xl border p-4 text-left transition ${mode === 'nieuw' ? 'border-gold bg-gold-pale/70' : 'border-gold/25 bg-[#f8f1e3] hover:border-gold/60'}`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold tracking-[0.22em] text-gold-deep uppercase">Nieuwe kalender · gereviseerd juliaans</span>
-                {mode === 'nieuw' && <span className="rounded-sm bg-gold px-1.5 py-0.5 text-[9px] font-bold text-bark uppercase">actief</span>}
-              </div>
-              <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
-                De vaste feesten vallen op de burgerlijke datum: Kerstmis op 25 december. Gevolgd door de Griekse, Roemeense, Bulgaarse en Antiocheense parochies. Pascha wordt in beide gevallen volgens de Juliaanse paasregel berekend.
-              </p>
-            </button>
-            <div className="flex items-center justify-center rounded-xl bg-bark p-4 text-center text-cream lg:w-44">
-              <div>
-                <Repeat className="mx-auto h-5 w-5 text-gold" />
-                <p className="mt-2 text-xs leading-snug text-[#d9cbb0]">Wissel bovenaan of hier tussen de twee kalenders. Pascha blijft gelijk.</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="parchment-pattern relative overflow-hidden rounded-lg border border-gold/45 bg-[#f8f1e3] shadow-[0_30px_70px_rgba(40,22,14,0.16)] lg:grid lg:grid-cols-[3fr_2fr]">
+          <div className="mt-8 parchment-pattern relative overflow-hidden rounded-lg border border-gold/45 bg-[#f8f1e3] shadow-[0_30px_70px_rgba(40,22,14,0.16)]">
             <CornerOrnament className="absolute top-4 left-4 h-12 w-12 text-gold-deep/25" />
             <CornerOrnament className="absolute top-4 right-4 h-12 w-12 -scale-x-100 text-gold-deep/25" />
+            <div className="lg:grid lg:grid-cols-[3fr_2fr]">
             <div className="relative min-w-0 border-b border-gold/35 lg:border-b-0 lg:border-r">
             {/* Werkbalk */}
             <div className="flex flex-wrap items-center gap-2 border-b border-gold/30 bg-[#f3e9d2] px-3 py-3 sm:flex-nowrap sm:justify-between sm:gap-3 sm:px-5">
@@ -255,12 +189,12 @@ export default function Kalender() {
             </div>
             </div>
 
-            <aside className="relative bg-[#f3e9d2]/70 px-5 py-7 text-ink sm:px-7 sm:py-9">
+            <aside className="relative flex flex-col bg-[#f3e9d2]/70 px-5 py-7 text-ink sm:px-7 sm:py-9">
               <p className="text-center text-[11px] font-bold tracking-[0.24em] text-gold-deep uppercase">Details van de geselecteerde dag</p>
               <h2 className="font-display mt-3 text-center text-2xl font-semibold leading-tight text-ink sm:text-3xl">{formatDatum(geselecteerd.civil)}</h2>
               <p className="mt-1 text-center text-sm italic text-ink-soft">{formatDatum(geselecteerd.kerk)} · {mode === 'oud' ? 'Juliaanse kalender' : 'kerkelijke datum'}</p>
-              <div className="mt-7 space-y-3">
-                <section className="cal-saints">
+              <div className="mt-7 flex flex-1 flex-col">
+                <section className="cal-saints flex flex-1 flex-col">
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Heilige(n) van de dag</p>
                   {hoofdheilige ? (
                     <>
@@ -288,63 +222,18 @@ export default function Kalender() {
                   ) : (
                     <p className="cal-saints-text">Geen heiligen opgenomen.</p>
                   )}
-                  <button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill mt-5">Lees meer →</button>
+                  <div className="mt-auto pt-5 text-center"><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill">Lees meer →</button></div>
                 </section>
-                <section className="border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Feestdag / gedachtenis</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.feesten.map((f) => f.naam).join(' · ') || 'Geen groot feest.'}</p></section>
-                <section className="border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Schriftlezingen</p><p className="mt-2 text-sm text-ink-soft">De bestaande lezingen en volledige daginformatie staan in het dagdetail.</p><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill mt-3">Lees de lezingen →</button></section>
-                <section className="border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Vasten</p><p className="mt-2 font-display text-lg font-semibold">{geselecteerd.vasten.label}</p><p className="mt-1 text-sm text-ink-soft">{geselecteerd.vasten.detail}</p><a href="#vasten" className="btn-pill mt-3">Meer over vasten →</a></section>
               </div>
             </aside>
-          </div>
-
-          <div className="calendar-action-grid mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {[
-              ['/images/ui/menu/01-Hoofdmenu-06-Zoek-een-datum.webp', 'Zoek een datum', 'Ontdek welke heiligen, feesten en lezingen er op een bepaalde dag zijn.', '#kalender'],
-              ['/images/ui/menu/01-Hoofdmenu-07-Bekijk-een-maand.webp', 'Bekijk een maand', 'Blader door het kerkelijk jaar.', '#kalender'],
-              ['/images/ui/menu/01-Hoofdmenu-08-Vandaag.webp', 'Vandaag', 'Ga naar de huidige dag in de kalender.', '#kalender'],
-              ['/images/ui/menu/01-Hoofdmenu-09-Feesten.webp', 'Feesten', 'Ontdek de grote en kleine feesten van de Kerk.', '#feesten'],
-              ['/images/ui/menu/01-Hoofdmenu-10-Heiligen.webp', 'Heiligen', 'Bekijk alle heiligen van de Kerk.', '#heiligen'],
-            ].map(([icoon, titel, tekst, href]) => (
-              <a key={titel} href={href} className="ornate-card calendar-action-card group">
-                <span className="ornate-medallion calendar-action-medallion" aria-hidden="true"><img loading="lazy" decoding="async" src={icoon} alt="" className="provided-card-icon" /></span>
-                <span className="ornate-side-ornaments" aria-hidden="true">❦ <b>✣</b> ❦</span>
-                <h3>{titel}</h3>
-                <p>{tekst}</p>
-                <span className="ornate-action">Open →</span>
-              </a>
-            ))}
-          </div>
-
-          {/* De kerkelijke tijd */}
-          <div className="parchment-pattern relative mt-4 overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-8 shadow-[0_16px_34px_rgba(56,31,14,0.13)] sm:px-10 sm:py-10">
-            <CornerOrnament className="absolute bottom-3 right-3 h-16 w-16 -scale-x-100 text-gold-deep/20" />
-            <div className="relative text-center">
-              <p className="text-[11px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-xs">Een heilig jaar</p>
-              <h2 className="font-display mt-2 text-2xl font-semibold text-ink sm:text-3xl">Alles heeft zijn tijd</h2>
-              <p className="mx-auto mt-2 max-w-3xl text-sm leading-relaxed text-ink-soft">Het kerkelijk jaar is een weg van herinnering, verwachting en vervulling in Christus. Door de tijd heen leert de Kerk ons Hem te ontmoeten in alle seizoenen van het leven.</p>
-              <p className="mt-6 text-[11px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-xs">De kerkelijke tijd</p>
-              <h3 className="font-display mt-2 text-xl font-semibold text-ink sm:text-2xl">Vijf ritmes van dezelfde tijd</h3>
-            </div>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-              {KERKELIJKE_TIJD.map((item) => (
-                <div key={item.title} className="rounded-xl border border-gold/30 bg-[#f8f1e3] p-4 shadow-[0_10px_24px_rgba(120,80,30,0.08)]">
-                  <h3 className="font-display text-lg font-semibold text-ink">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{item.text}</p>
-                  {item.href && (
-                    <a href={item.href} className="btn-pill mt-3">
-                      {item.label} →
-                    </a>
-                  )}
-                </div>
-              ))}
             </div>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-gold/25 pt-6 text-xs font-bold tracking-wide text-ink-soft uppercase">
-              <a href="#vandaag" className="hover:text-gold-deep hover:underline">Vandaag</a>
-              <a href="#vasten" className="hover:text-gold-deep hover:underline">Vasten</a>
-              <a href="#heiligen" className="hover:text-gold-deep hover:underline">Heiligen</a>
-              <a href="#feesten" className="hover:text-gold-deep hover:underline">Feesten</a>
-              <a href="#pascha" className="hover:text-gold-deep hover:underline">Pascha</a>
+            <div className="border-t border-gold/35 bg-[#f3e9d2]/70 px-5 py-6 sm:px-7">
+              <div className="grid gap-3 md:grid-cols-3">
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-center text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Feestdag / gedachtenis</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.feesten.map((f) => f.naam).join(' · ') || 'Geen groot feest.'}</p></section>
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-center text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Schriftlezingen</p><p className="mt-2 mb-3 text-sm text-ink-soft">De bestaande lezingen en volledige daginformatie staan in het dagdetail.</p><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill mt-auto self-start">Lees de lezingen →</button></section>
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-center text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Vasten</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.vasten.label}</p><p className="mt-1 mb-3 text-sm text-ink-soft">{geselecteerd.vasten.detail}</p><a href="#vasten" className="btn-pill mt-auto self-start">Meer over vasten →</a></section>
+              </div>
             </div>
           </div>
         </div>
@@ -354,7 +243,6 @@ export default function Kalender() {
         <div className="mx-auto w-full max-w-[1500px] px-4 text-center sm:px-8 lg:px-12">
           <p className="text-[11px] font-bold tracking-[0.3em] text-gold-light uppercase">Wandel in de tijd met de heiligen</p>
           <p className="mx-auto mt-4 max-w-2xl font-display text-lg italic leading-relaxed text-[#d9c6a3]">Elke dag is een ontmoeting met Christus door de heiligen, de feesten, de lezingen en de gebeden van de Kerk.</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3"><a href="#adem" className="btn-pill">Ontdek de cycli →</a><a href="#vandaag" className="btn-pill">Naar vandaag →</a></div>
         </div>
       </section>
     </>

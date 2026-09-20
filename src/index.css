@@ -1253,3 +1253,8 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 @media(max-width:700px){
   .saints-lowlands-map img{transform:translateX(-7%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
 }
+
+/* Bouw 47 — koptekst op mobiel: het sierteken in het midden botst met de bredere Oud/Nieuw-schakelaar */
+@media(max-width:639px){
+  header>div.bg-bark>div:after{display:none}
+}

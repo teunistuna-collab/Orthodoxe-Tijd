@@ -11,6 +11,7 @@ import Heiligen from './components/Heiligen';
 import Gebeden from './components/Gebeden';
 import DagModal from './components/DagModal';
 import LezingModal from './components/LezingModal';
+import KalenderUitleg from './components/KalenderUitleg';
 import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
@@ -31,8 +32,20 @@ function leesMode(): Mode {
   }
 }
 
+const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
+
+// De uitleg over oud/nieuw verschijnt alleen bij een eerste bezoek: nog geen uitleg gezien en nog geen kalender gekozen.
+function moetUitlegTonen(): boolean {
+  try {
+    return localStorage.getItem(UITLEG_KEY) === null && localStorage.getItem(MODE_KEY) === null;
+  } catch {
+    return false;
+  }
+}
+
 export default function App() {
   const [mode, setModeState] = useState<Mode>(leesMode);
+  const [uitlegOpen, setUitlegOpen] = useState(moetUitlegTonen);
   const [vandaag, setVandaag] = useState(bepaalVandaag);
   const [htc, setHtc] = useState<HtcData | null>(null);
   const [htcFout, setHtcFout] = useState(false);
@@ -110,10 +123,19 @@ export default function App() {
   const openLezing = useCallback((l: LezingKeuze) => setLezing(l), []);
   const sluitDag = useCallback(() => setDagOpen(null), []);
   const sluitLezing = useCallback(() => setLezing(null), []);
+  const openKalenderUitleg = useCallback(() => setUitlegOpen(true), []);
+  const sluitKalenderUitleg = useCallback(() => {
+    setUitlegOpen(false);
+    try {
+      localStorage.setItem(UITLEG_KEY, '1');
+    } catch {
+      /* geen opslag */
+    }
+  }, []);
 
   const ctx = useMemo(
-    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, htcFout, openDag, openLezing }),
-    [mode, setMode, vandaag, htc, htcFout, openDag, openLezing],
+    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, htcFout, openDag, openLezing, openKalenderUitleg }),
+    [mode, setMode, vandaag, htc, htcFout, openDag, openLezing, openKalenderUitleg],
   );
 
   return (
@@ -142,6 +164,7 @@ export default function App() {
         <Footer />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />
         <LezingModal keuze={lezing} onClose={sluitLezing} />
+        <KalenderUitleg open={uitlegOpen} onClose={sluitKalenderUitleg} />
       </div>
     </AppContext.Provider>
   );

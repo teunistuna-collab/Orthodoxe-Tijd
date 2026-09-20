@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Cross from './Cross';
 import Modal from './Modal';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
@@ -79,6 +78,17 @@ function ChurchSilhouette({ className = '' }: { className?: string }) {
   );
 }
 
+// Dunne gouden lijn met een sierteken in het midden.
+function OrnamentRule({ className = '' }: { className?: string }) {
+  return (
+    <div className={`mx-auto flex items-center gap-3 text-gold-deep ${className}`} aria-hidden="true">
+      <span className="h-px flex-1 bg-gold/50" />
+      <span className="text-base leading-none">✣</span>
+      <span className="h-px flex-1 bg-gold/50" />
+    </div>
+  );
+}
+
 export default function Ademcyclus() {
   const [popup, setPopup] = useState<PopupKey | null>(null);
 
@@ -93,47 +103,41 @@ export default function Ademcyclus() {
         <div className={CONTENT}>
           <div className="mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-12 sm:py-16 lg:px-16">
             <p className="text-center text-[13px] font-bold tracking-[0.34em] text-gold-deep uppercase sm:text-sm">Het Jezusgebed</p>
+            <OrnamentRule className="mt-4 w-48" />
 
-            <div className="mx-auto mt-10 grid gap-12 lg:grid-cols-[7fr_6fr_7fr] lg:items-center lg:gap-8">
-              <div className="text-center lg:text-left">
-                <p className="font-display text-[28px] leading-[1.25] text-ink sm:text-[32px] lg:text-[34px]">
-                  Heer Jezus Christus,
-                  <br />
-                  Zoon van God,
-                  <br />
-                  ontferm U over mij, zondaar.
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center gap-4">
-                <div className="relative flex h-[180px] w-[180px] items-center justify-center rounded-full border-2 border-gold/70 sm:h-[200px] sm:w-[200px] lg:h-[220px] lg:w-[220px]">
-                  <div className="absolute inset-4 rounded-full border border-gold/45" />
-                  <div className="absolute inset-9 rounded-full border border-gold/30" />
-                  <div className="absolute inset-14 rounded-full border border-gold/20" />
-                  <Cross className="h-12 w-12 text-gold-deep sm:h-14 sm:w-14" />
-                </div>
-                <div className="text-center">
-                  <p className="text-[12px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-[13px]">Inademen</p>
-                  <p className="mt-1 font-display text-lg text-ink-soft sm:text-xl">Heer Jezus Christus, Zoon van God</p>
+            {/* Christus-icoon met ringen en de twee korte gebeden ernaast */}
+            <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
+              <div className="col-span-2 flex justify-center lg:order-2 lg:col-span-1">
+                <div className="relative m-9 h-[200px] w-[200px] sm:m-[60px] sm:h-[230px] sm:w-[230px]">
+                  <div className="absolute -inset-3.5 rounded-full border border-gold/45 sm:-inset-5" />
+                  <div className="absolute -inset-7 rounded-full border border-gold/30 sm:-inset-10" />
+                  <div className="absolute -inset-9 rounded-full border border-dotted border-gold/40 sm:-inset-[60px]">
+                    {['top-0 left-1/2 -translate-x-1/2 -translate-y-1/2', 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2', 'left-0 top-1/2 -translate-x-1/2 -translate-y-1/2', 'right-0 top-1/2 translate-x-1/2 -translate-y-1/2'].map((plek) => (
+                      <span key={plek} aria-hidden="true" className={`absolute ${plek} flex h-6 w-6 items-center justify-center rounded-full bg-[#f8f1e3] text-[17px] leading-none text-gold-deep`}>✣</span>
+                    ))}
+                  </div>
+                  <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
+                    <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
+                  </div>
                 </div>
               </div>
 
-              <div className="text-center lg:text-left">
-                <p className="text-[12px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-[13px]">Uitademen</p>
-                <p className="mt-1 font-display text-[26px] leading-[1.3] text-ink-soft sm:text-[28px]">
-                  ontferm U over mij,
-                  <br />
-                  zondaar.
-                </p>
+              <div className="text-center lg:order-1">
+                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">Heer Jezus Christus,<br />Zoon van God.</p></div>
+                <OrnamentRule className="mt-4 w-32" />
+                <p className="mt-4 text-[12px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-[13px]">Inademen</p>
+              </div>
+              <div className="text-center lg:order-3">
+                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">ontferm U over mij,<br />zondaar.</p></div>
+                <OrnamentRule className="mt-4 w-32" />
+                <p className="mt-4 text-[12px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-[13px]">Uitademen</p>
               </div>
             </div>
 
-            <div className="gold-rule my-10" />
-
-            <p className="text-center font-display text-xl leading-relaxed text-ink-soft italic sm:text-2xl">
-              De ademhaling dient het gebed;
-              <br className="hidden sm:block" /> het gebed dient niet de ademhaling.
-            </p>
+            <blockquote className="mx-auto mt-12 max-w-3xl text-center">
+              <p className="font-display text-xl leading-relaxed text-ink-soft italic sm:text-2xl">“Het Jezusgebed is een bron van barmhartigheid, een licht in het hart en een weg naar de stilte van God.”</p>
+              <footer className="mt-3 font-display text-lg text-ink-soft">— Heilige Silouan de Athoniet</footer>
+            </blockquote>
           </div>
         </div>
       </section>

@@ -3,6 +3,7 @@ import { ChevronRight } from 'lucide-react';
 
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { JAAR_INFO } from '../lib/cyclusTeksten';
+import { ringVak } from '../lib/ringVak';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
 type InfoKey = 'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch';
@@ -125,6 +126,8 @@ function CornerOrnament({ className = '' }: { className?: string }) {
   );
 }
 
+const ring = ringVak(12);
+
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
@@ -181,8 +184,8 @@ export default function Jaarcyclus() {
             </div>
 
             {/* Desktop: cirkeldiagram */}
-            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[650px] lg:block">
-              <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[650px] lg:block" style={ring.stijl}>
+              <svg viewBox={ring.viewBox} className="absolute inset-0 h-full w-full">
                 <circle cx="50" cy="50" r="30" fill="none" stroke="#c9a227" strokeWidth="0.35" opacity="0.75" />
                 {PERIODS.map((period, index) => {
                   const angle = (360 / PERIODS.length) * index;
@@ -221,7 +224,7 @@ export default function Jaarcyclus() {
                     onClick={() => setPeriodOpen(period.key)}
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                    style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
                     className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
                   >
                     <span className="etmaal-ring-badge">

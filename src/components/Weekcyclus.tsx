@@ -5,6 +5,7 @@ import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import Cross from './Cross';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
+import { ringVak } from '../lib/ringVak';
 
 type DayKey = 'zondag' | 'maandag' | 'dinsdag' | 'woensdag' | 'donderdag' | 'vrijdag' | 'zaterdag';
 type InfoKey = 'wat' | 'dagen' | 'betekenis' | 'praktisch';
@@ -128,6 +129,8 @@ function CornerOrnament({ className = '' }: { className?: string }) {
   );
 }
 
+const ring = ringVak(12);
+
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
@@ -194,8 +197,8 @@ export default function Weekcyclus() {
             </div>
 
             {/* Desktop: cirkeldiagram */}
-            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[820px] lg:block">
-              <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[820px] lg:block" style={ring.stijl}>
+              <svg viewBox={ring.viewBox} className="absolute inset-0 h-full w-full">
                 <circle cx="50" cy="50" r="30" fill="none" stroke="#c9a227" strokeWidth="0.35" opacity="0.75" />
                 {DAYS.map((day, index) => {
                   const angle = (360 / DAYS.length) * index;
@@ -234,7 +237,7 @@ export default function Weekcyclus() {
                     onClick={() => setDayOpen(day.key)}
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                    style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
                     className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
                   >
                     <span className="etmaal-ring-badge">

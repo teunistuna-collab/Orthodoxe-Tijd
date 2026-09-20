@@ -7,6 +7,7 @@ import { vergrendelScroll } from '../lib/scrollLock';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ETMAAL_INFO } from '../lib/cyclusTeksten';
+import { ringVak } from '../lib/ringVak';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
@@ -128,6 +129,8 @@ type PdfLine = {
   x: number;
   text: string;
 };
+
+const ring = ringVak(13);
 
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
@@ -397,8 +400,8 @@ export default function UrenCyclus() {
             </div>
 
             {/* Desktop: cirkeldiagram */}
-            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[820px] lg:block">
-              <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[820px] lg:block" style={ring.stijl}>
+              <svg viewBox={ring.viewBox} className="absolute inset-0 h-full w-full">
                 <circle cx="50" cy="50" r="30" fill="none" stroke="#c9a227" strokeWidth="0.35" opacity="0.75" />
                 {/* Kompasaccenten op de vier kardinale punten van de ring */}
                 {[0, 90, 180, 270].map((deg) => {
@@ -462,7 +465,7 @@ export default function UrenCyclus() {
                     onClick={() => openService(index)}
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                    style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
                     className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
                   >
                     <span className="etmaal-ring-badge">{badge}</span>

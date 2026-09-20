@@ -53,11 +53,16 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
       maxWidth="max-w-4xl"
       actions={dag ? (
         <>
-          <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, -1)))} className="rounded-full p-2 text-[#f0cf7b] hover:bg-white/10" aria-label="Vorige dag"><ChevronLeft className="h-5 w-5" /></button>
-          <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, 1)))} className="rounded-full p-2 text-[#f0cf7b] hover:bg-white/10" aria-label="Volgende dag"><ChevronRight className="h-5 w-5" /></button>
+          {/* Op een smal scherm is in de titelbalk geen ruimte voor twee extra tikdoelen: daar staan ze in de balk onder de titel. */}
+          <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, -1)))} className="hidden rounded-full p-2 text-[#f0cf7b] hover:bg-white/10 sm:inline-block" aria-label="Vorige dag"><ChevronLeft className="h-5 w-5" /></button>
+          <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, 1)))} className="hidden rounded-full p-2 text-[#f0cf7b] hover:bg-white/10 sm:inline-block" aria-label="Volgende dag"><ChevronRight className="h-5 w-5" /></button>
         </>
       ) : undefined}
     >
+            <div className="mb-5 flex items-center justify-between gap-3 sm:hidden">
+              <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, -1)))} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] pl-2.5 pr-4 text-sm font-bold text-ink hover:border-gold"><ChevronLeft className="h-4 w-4" /> Vorige dag</button>
+              <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, 1)))} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] pl-4 pr-2.5 text-sm font-bold text-ink hover:border-gold">Volgende dag <ChevronRight className="h-4 w-4" /></button>
+            </div>
             <div className="space-y-7">
               {/* Vasten */}
               <div className="rounded-xl p-4" style={{ background: niveau.zacht, border: `1px solid ${niveau.kleur}33` }}>
@@ -102,7 +107,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                 <div className="flex items-center justify-between">
                   <h3 className="text-[11px] font-bold tracking-[0.25em] text-gold-deep uppercase">Heiligen van de dag</h3>
                   {htcDag && (
-                    <button type="button" onClick={() => setOrigineel((v) => !v)} className="text-[11px] font-bold text-gold-deep underline-offset-2 hover:underline">
+                    <button type="button" onClick={() => setOrigineel((v) => !v)} className="-mr-2 inline-flex min-h-11 items-center px-2 text-[11px] font-bold text-gold-deep underline-offset-2 hover:underline sm:min-h-0">
                       {origineel ? 'Nederlands' : 'Origineel (EN)'}
                     </button>
                   )}

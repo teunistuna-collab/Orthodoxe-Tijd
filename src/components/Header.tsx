@@ -25,6 +25,11 @@ const NAV_MARKS: Record<string, string> = {
 };
 const NavMark = ({ id }: { id: string }) => <span aria-hidden="true" className="orthodox-nav-mark">{NAV_MARKS[id] ?? '✣'}</span>;
 
+const KALENDER_KEUZES = [
+  { id: 'oud', naam: 'Oud', toelichting: 'juliaans' },
+  { id: 'nieuw', naam: 'Nieuw', toelichting: 'burgerlijk' },
+] as const;
+
 const CYCLUS_ITEMS = [
   { id: 'adem', label: '☦ ADEM', description: 'Het Jezusgebed en korte gebeden', href: '#adem' },
   { id: 'etmaal', label: '◷ ETMAAL', description: 'De gebeden van dag en nacht', href: '#etmaal' },
@@ -116,21 +121,22 @@ export default function Header() {
                 {mode === 'oud' ? `Kerkelijk: ${formatDag(kerk)} (juliaans)` : 'Nieuwe kalender (gereviseerd juliaans)'}
               </div>
             </div>
-            <div className="flex shrink-0 rounded-full border border-gold/40 bg-bark-2 p-0.5 text-[10px] font-bold tracking-wider uppercase sm:text-[11px]" role="group" aria-label="Kalenderkeuze">
-              <button
-                type="button"
-                onClick={() => setMode('nieuw')}
-                className={`rounded-full px-3 py-1.5 transition ${mode === 'nieuw' ? 'bg-gold text-bark' : 'text-gold-light hover:text-white'}`}
-              >
-                  <span className="sm:hidden">N</span><span className="hidden sm:inline">Nieuw</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode('oud')}
-                className={`rounded-full px-3 py-1.5 transition ${mode === 'oud' ? 'bg-gold text-bark' : 'text-gold-light hover:text-white'}`}
-              >
-                  <span className="sm:hidden">O</span><span className="hidden sm:inline">Oud</span>
-              </button>
+            <div className="flex shrink-0 rounded-full border border-gold/40 bg-bark-2 p-0.5" role="group" aria-label="Kalenderkeuze">
+              {KALENDER_KEUZES.map(({ id, naam, toelichting }) => {
+                const on = mode === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => setMode(id)}
+                    className={`flex min-h-11 flex-col items-center justify-center rounded-full px-2.5 leading-none transition sm:px-4 ${on ? 'bg-gold text-bark' : 'text-gold-light hover:text-white'}`}
+                  >
+                    <span className="text-[13px] font-bold tracking-wider uppercase">{naam}</span>
+                    <span className="mt-1 text-[11px] font-semibold opacity-80">{toelichting}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
             <button type="button" onClick={() => setMenuOpen((open) => !open)} className="rounded-full p-2 text-gold-light hover:bg-white/10 sm:hidden" aria-label={menuOpen ? 'Menu sluiten' : 'Menu openen'} aria-expanded={menuOpen}>
@@ -254,7 +260,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setCyclusOpen((open) => !open)}
-              className={`relative flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-[12px] font-bold tracking-wider uppercase transition ${cyclusActief ? 'text-gold-light' : 'text-[#bfa982]'}`}
+              className={`relative flex min-h-11 w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-[12px] font-bold tracking-wider uppercase transition ${cyclusActief ? 'text-gold-light' : 'text-[#bfa982]'}`}
             >
               <span className="flex items-center gap-1.5"><NavMark id="cycli" />CYCLI</span>
               <ChevronDown className={`h-3.5 w-3.5 transition ${cyclusOpen ? 'rotate-180' : ''}`} />

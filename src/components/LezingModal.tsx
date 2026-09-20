@@ -60,7 +60,7 @@ export default function LezingModal({ keuze, onClose }: Props) {
                     href={nbv}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 rounded-full bg-wine px-5 py-2.5 text-sm font-bold text-gold-light transition hover:bg-wine-deep"
+                    className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-wine px-5 py-2.5 text-sm font-bold text-gold-light transition hover:bg-wine-deep"
                   >
                     Open {refNl} in de NBV21 <ExternalLink className="h-4 w-4" />
                   </a>
@@ -73,7 +73,7 @@ export default function LezingModal({ keuze, onClose }: Props) {
               <button
                 type="button"
                 onClick={() => setToonEngels((v) => !v)}
-                className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-ink-mute underline-offset-2 hover:text-gold-deep hover:underline"
+                className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-ink-mute underline-offset-2 hover:text-gold-deep hover:underline"
               >
                 {toonEngels ? 'Engelse tekst verbergen' : 'Engelse tekst tonen (NKJV)'} <ChevronDown className={`h-3.5 w-3.5 transition ${toonEngels ? 'rotate-180' : ''}`} />
               </button>
@@ -93,7 +93,7 @@ export default function LezingModal({ keuze, onClose }: Props) {
                       </div>
                       <p className="mt-3 text-[11px] leading-relaxed text-ink-mute">Engelse tekst (NKJV) naar het leesrooster van holytrinityorthodox.com, Juliaanse kalender.</p>
                       {lezing.url && (
-                        <a href={lezing.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-gold-deep hover:underline">
+                        <a href={lezing.url} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-gold-deep hover:underline">
                           Bron openen <ExternalLink className="h-3.5 w-3.5" />
                         </a>
                       )}
