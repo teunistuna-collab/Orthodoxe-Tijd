@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ChevronRight } from 'lucide-react';
 
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { JAAR_INFO } from '../lib/cyclusTeksten';
@@ -85,20 +86,20 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
 };
 
 const PERIODS: Array<{ key: PeriodKey; label: string; short: string; iconSrc: string; movable: boolean }> = [
-  { key: 'kersttijd', label: 'Kersttijd', short: 'De komst van het Licht in de wereld', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-03-Kersttijd.png', movable: false },
-  { key: 'openbaringstijd', label: 'Openbaringstijd', short: 'Christus wordt geopenbaard aan alle volken', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-04-Openbaringstijd.png', movable: false },
-  { key: 'vastentijd', label: 'Vastentijd', short: 'Voorbereiding op het heilige Pascha', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-05-Vastentijd.png', movable: true },
-  { key: 'passietijd', label: 'Passietijd', short: 'Het lijden van de Heer', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-06-Passietijd.png', movable: true },
-  { key: 'paschatijd', label: 'Paschatijd', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.png', movable: true },
-  { key: 'pinkstertijd', label: 'Pinkstertijd', short: 'De gave van de Heilige Geest', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-08-Pinkstertijd.png', movable: true },
+  { key: 'kersttijd', label: 'Kersttijd', short: 'De komst van het Licht in de wereld', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-03-Kersttijd.webp', movable: false },
+  { key: 'openbaringstijd', label: 'Openbaringstijd', short: 'Christus wordt geopenbaard aan alle volken', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-04-Openbaringstijd.webp', movable: false },
+  { key: 'vastentijd', label: 'Vastentijd', short: 'Voorbereiding op het heilige Pascha', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-05-Vastentijd.webp', movable: true },
+  { key: 'passietijd', label: 'Passietijd', short: 'Het lijden van de Heer', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-06-Passietijd.webp', movable: true },
+  { key: 'paschatijd', label: 'Paschatijd', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.webp', movable: true },
+  { key: 'pinkstertijd', label: 'Pinkstertijd', short: 'De gave van de Heilige Geest', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-08-Pinkstertijd.webp', movable: true },
 ];
 
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-01-Wat-is-het-kerkelijk-jaar.png' },
-  { key: 'jaarcyclus', title: 'De jaarcyclus', intro: 'Het kerkelijk jaar bestaat uit perioden, feesten en vasten die ons stap voor stap meenemen in het heilshandelen van God.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-02-De-jaarcyclus.png' },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het kerkelijk jaar vormt ons hart, richt onze blik op Christus en heiligt onze tijd, dagen en seizoenen.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.png' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-05-Vastentijd.png' },
+  { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-01-Wat-is-het-kerkelijk-jaar.webp' },
+  { key: 'jaarcyclus', title: 'De jaarcyclus', intro: 'Het kerkelijk jaar bestaat uit perioden, feesten en vasten die ons stap voor stap meenemen in het heilshandelen van God.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-02-De-jaarcyclus.webp' },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het kerkelijk jaar vormt ons hart, richt onze blik op Christus en heiligt onze tijd, dagen en seizoenen.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.webp' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-05-Vastentijd.webp' },
 ];
 
 const TIMELINE_ITEMS = [
@@ -137,7 +138,7 @@ export default function Jaarcyclus() {
   return (
     <>
       <section id="jaar" className="bg-bark">
-        <img src="/images/heroes/hero-jaar.png" width={2103} height={748} alt="Jaarcyclus — het kerkelijk jaar" className="block h-auto w-full" />
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-jaar.webp" width={2103} height={748} alt="Jaarcyclus — het kerkelijk jaar" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}
@@ -152,7 +153,7 @@ export default function Jaarcyclus() {
                 className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img src={iconSrc} alt="" className="provided-card-icon" />
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
@@ -203,7 +204,7 @@ export default function Jaarcyclus() {
               </svg>
 
               <div className="absolute top-1/2 left-1/2 flex h-[190px] w-[190px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                <img src="/images/Christus-afbeelding.png" alt="Christus" className="h-full w-full object-cover" />
+                <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
               </div>
 
               {PERIODS.map((period, index) => {
@@ -220,22 +221,25 @@ export default function Jaarcyclus() {
                     onClick={() => setPeriodOpen(period.key)}
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%`, transform: `translate(${leftSide ? 'calc(-100% + 28px)' : '-28px'}, -50%)` }}
-                    className={`absolute flex w-[205px] items-center gap-3 ${leftSide ? 'flex-row-reverse' : ''}`}
+                    style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
                   >
-                    <span
-                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
-                        isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
-                      }`}
-                    >
-                      <img src={iconSrc} alt="" className="provided-cycle-icon" />
-                    </span>
-                    <span className={`min-w-0 ${leftSide ? 'text-right' : 'text-left'}`}>
-                      <span className="flex items-center gap-2" style={{ justifyContent: leftSide ? 'flex-end' : 'flex-start' }}>
-                        <span className="font-display block text-base font-semibold text-ink uppercase">{period.label}</span>
-                        {period.movable && <span className="text-[9px] font-bold tracking-[0.1em] text-wine uppercase">beweeglijk</span>}
+                    <span className="etmaal-ring-badge">
+                      <span
+                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
+                          isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
+                        }`}
+                      >
+                        <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-cycle-icon" />
                       </span>
-                      <span className="mt-1 block text-[12px] leading-snug text-ink-soft">{period.short}</span>
+                    </span>
+                    <span className="etmaal-ring-text">
+                      <span className="dienst-kaart">
+                        <span className="dienst-kaart-titel font-display uppercase">{period.label}</span>
+                        {period.movable && <span className="dienst-kaart-tijd">beweeglijk</span>}
+                        <span className="dienst-kaart-tekst">{period.short}</span>
+                        <span className="btn-pill dienst-kaart-cta">Lees meer →</span>
+                      </span>
                     </span>
                   </button>
                 );
@@ -256,18 +260,17 @@ export default function Jaarcyclus() {
                     key={`${period.key}-mobile`}
                     type="button"
                     onClick={() => setPeriodOpen(period.key)}
-                    className="flex w-full items-center gap-4 rounded-2xl border border-parchment-3 bg-paper px-4 py-4 text-left transition-all hover:border-gold"
+                    className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/50 bg-[#1c130d] text-gold-light">
-                      <img src={iconSrc} alt="" className="provided-cycle-icon" />
+                    <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
+                      <img loading="lazy" decoding="async" src={iconSrc} alt="" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="flex flex-wrap items-center gap-2">
-                        <span className="font-display block text-xl font-semibold text-ink uppercase">{period.label}</span>
-                        {period.movable && <span className="text-[9px] font-bold tracking-[0.1em] text-wine uppercase">beweeglijk</span>}
-                      </span>
-                      <span className="mt-0.5 block text-xs text-ink-soft">{period.short}</span>
+                      <span className="dienst-kaart-titel font-display block uppercase">{period.label}</span>
+                      {period.movable && <span className="dienst-kaart-tijd block">beweeglijk</span>}
+                      <span className="dienst-kaart-tekst block">{period.short}</span>
                     </span>
+                    <ChevronRight className="h-5 w-5 shrink-0 text-gold-deep" />
                   </button>
                 );
               })}

@@ -6,6 +6,7 @@ import { getSaintEnrichment } from '../lib/saintEnrichment';
 import { rangLabel, vertaalLeven } from '../lib/htc';
 import { dagInfo, formatMd, hoofdletter, MAANDEN, MAANDEN_KORT } from '../lib/kalender';
 import { LiturgicalPopup } from './CycleSections';
+import { heiligeIcoon, lageLandenTekst } from '../lib/heiligenIconen';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -15,8 +16,9 @@ function popupContent(h: Resultaat | null) {
   if (!h) return null;
   const extra = getSaintEnrichment(h.ruwNaam ?? h.naam);
   const meta = extra ? [extra.rang, extra.regio, extra.eeuw].filter(Boolean).join(' · ') : '';
-  const paragraphs = extra?.leven ? [extra.leven] : (h.kort ? [h.kort] : ['Voor deze heilige is nog geen betrouwbare uitgebreide Nederlandse levensbeschrijving beschikbaar.']);
-  return { title:h.naam, subtitle:`${formatMd(h.md)}${h.titel?` · ${h.titel}`:''}${meta?` · ${meta}`:''}`, paragraphs };
+  const paragraphs = lageLandenTekst(h) ?? (extra?.leven ? [extra.leven] : (h.kort ? [h.kort] : ['Voor deze heilige is nog geen betrouwbare uitgebreide Nederlandse levensbeschrijving beschikbaar.']));
+  const icoon = heiligeIcoon(h);
+  return { title:h.naam, image: icoon ? { src: icoon.src, alt: icoon.alt } : undefined, subtitle:`${formatMd(h.md)}${h.titel?` · ${h.titel}`:''}${meta?` · ${meta}`:''}`, paragraphs };
 }
 
 function normaliseer(tekst: string) { return tekst.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
@@ -84,7 +86,7 @@ export default function Heiligen() {
   const dagenInMaand = maand ? new Date(Date.UTC(2024, maand, 0)).getUTCDate() : 0;
 
   return <>
-    <section id="heiligen" className="saints-hero"><img src="/images/heroes/hero-heiligen.png" width={2103} height={748} alt="Heiligen — Orthodoxe Tijd" /></section>
+    <section id="heiligen" className="saints-hero"><img loading="lazy" decoding="async" src="/images/heroes/hero-heiligen.webp" width={2103} height={748} alt="Heiligen — Orthodoxe Tijd" /></section>
     <main className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">
@@ -126,7 +128,7 @@ export default function Heiligen() {
 
         {(zoek || maand || dag || categorie!=='alle' || alleenNl) && <section className="saints-results">
           <div className="saints-rule-title"><h2>{dag&&maand?`${dag} ${MAANDEN[maand-1]}`:alleenNl?'Heiligen van de Lage Landen':'Geselecteerde heiligen'}</h2><span>{resultaten.length} gedachtenissen</span></div>
-          <div className="saints-results-list">{groepen.slice(0,12).map(([md,items])=><div key={md}><time>{formatMd(md)}</time><div>{items.map((h,i)=><button key={`${h.naam}-${i}`} onClick={()=>setGeselecteerde(h)}><span><strong>{h.naam}</strong>{h.titel&&<small>{h.titel}</small>}</span><b>→</b></button>)}</div></div>)}</div>
+          <div className="saints-results-list">{groepen.slice(0,alleenNl?groepen.length:12).map(([md,items])=><div key={md}><time>{formatMd(md)}</time><div>{items.map((h,i)=><button key={`${h.naam}-${i}`} onClick={()=>setGeselecteerde(h)}><span><strong>{h.naam}</strong>{h.titel&&<small>{h.titel}</small>}</span><b>→</b></button>)}</div></div>)}</div>
           {!groepen.length&&<p className="saints-empty">Geen heiligen gevonden voor deze selectie.</p>}
         </section>}
 
@@ -136,7 +138,7 @@ export default function Heiligen() {
         </section>
 
         <section className="saints-lowlands">
-          <div className="saints-lowlands-map"><img src="/images/decor/lage-landen.png" alt="Kaart van de Lage Landen" /></div>
+          <div className="saints-lowlands-map"><img loading="lazy" decoding="async" src="/images/decor/lage-landen.webp" alt="Kaart van de Lage Landen" /></div>
           <div><h2>Heiligen van de Lage Landen</h2><p>Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p>Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('')}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen →'}</button></div>
           <blockquote>“Ook in onze streken heeft de Heer Zijn getuigen doen opstaan.”<span>✣</span></blockquote>
         </section>

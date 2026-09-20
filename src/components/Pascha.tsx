@@ -14,10 +14,10 @@ type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe Paschale cyclus.docx".
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is Pascha?', intro: 'De Verrijzenis van Christus als het hart van het kerkelijk jaar en van ons leven.', iconSrc: '/images/ui/menu/06-Pascha-01-Wat-is-Pascha.png' },
-  { key: 'cyclus', title: 'De Paschale cyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.', iconSrc: '/images/ui/menu/06-Pascha-02-De-paschale-cyclus.png' },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Pascha vernieuwt de tijd, onze blik en ons bestaan.', iconSrc: '/images/ui/menu/06-Pascha-04-Gebeden.png' },
-  { key: 'tradities', title: 'Tradities en viering', intro: 'De rijke schoonheid van de Paasdiensten en de Orthodoxe tradities.', iconSrc: '/images/ui/menu/06-Pascha-03-Tradities-en-vieringen.png' },
+  { key: 'wat', title: 'Wat is Pascha?', intro: 'De Verrijzenis van Christus als het hart van het kerkelijk jaar en van ons leven.', iconSrc: '/images/ui/menu/06-Pascha-01-Wat-is-Pascha.webp' },
+  { key: 'cyclus', title: 'De Paschale cyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.', iconSrc: '/images/ui/menu/06-Pascha-02-De-paschale-cyclus.webp' },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Pascha vernieuwt de tijd, onze blik en ons bestaan.', iconSrc: '/images/ui/menu/06-Pascha-04-Gebeden.webp' },
+  { key: 'tradities', title: 'Tradities en viering', intro: 'De rijke schoonheid van de Paasdiensten en de Orthodoxe tradities.', iconSrc: '/images/ui/menu/06-Pascha-03-Tradities-en-vieringen.webp' },
 ];
 
 const TIMELINE_ITEMS = [
@@ -77,7 +77,7 @@ export default function Pascha() {
   return (
     <>
       <section id="pascha" className="bg-bark">
-        <img src="/images/heroes/hero-pascha.png" width={2103} height={748} alt="Pascha — de Verrijzenis van Christus" className="block h-auto w-full" />
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-pascha.webp" width={2103} height={748} alt="Pascha — de Verrijzenis van Christus" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}
@@ -92,7 +92,7 @@ export default function Pascha() {
                 className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img src={iconSrc} alt="" className="provided-card-icon" />
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>

@@ -70,8 +70,9 @@ export default function App() {
       timers = [];
       gebruikerScrolde = false;
       if (eersteKeerSpringen) doel.scrollIntoView({ block: 'start', behavior: 'instant' });
-      const gewenst = doel.getBoundingClientRect().top;
-      for (const ms of [250, 700, 1400, 2600]) {
+      // Gewenste plek: de bovenkant van het doel op de scroll-margin (net onder de vaste koptekst).
+      const gewenst = parseFloat(getComputedStyle(doel).scrollMarginTop) || 0;
+      for (const ms of [120, 400, 900, 1600, 2800]) {
         timers.push(
           window.setTimeout(() => {
             if (gebruikerScrolde) return;

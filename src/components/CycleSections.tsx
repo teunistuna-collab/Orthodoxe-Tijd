@@ -156,6 +156,7 @@ export function LiturgicalPopup({ open, onClose, content }: { open: boolean; onC
   return (
     <Modal open={open} onClose={onClose} eyebrow="Lees meer" title={content.title} centerTitle maxWidth="max-w-3xl">
       <div className="exact-popup-reading">
+        {content.image && <img loading="lazy" decoding="async" src={content.image.src} alt={content.image.alt} width={400} height={400} className="heilige-portret heilige-portret-groot" />}
         {content.subtitle && <p className="exact-popup-subtitle">{content.subtitle}</p>}
         {content.highlight && <blockquote className="exact-popup-highlight">{content.highlight}</blockquote>}
         {content.paragraphs.length > 0 && (
@@ -229,13 +230,13 @@ const DEFAULT_TIMELINE_ITEMS = [
 
 export function TimeSanctificationTimeline({ current }: { current: string }) {
   const items = [
-    { id: 'adem', label: 'ADEM', title: 'Christus in iedere ademhaling', href: '#adem', image: '/images/ui/medaillons/Adem.png' },
-    { id: 'etmaal', label: 'ETMAAL', title: 'Gebed door dag en nacht', href: '#etmaal', image: '/images/ui/medaillons/Etmaal.png' },
-    { id: 'week', label: 'WEEK', title: 'Iedere dag zijn gedachtenis', href: '#week', image: '/images/ui/medaillons/Week.png' },
-    { id: 'pascha', label: 'PASCHA', title: 'De weg van Kruis naar Verrijzenis', href: '#pascha', image: '/images/ui/medaillons/Pascha.png' },
-    { id: 'jaar', label: 'JAAR', title: 'Het gehele kerkelijke jaar geheiligd', href: '#jaar', image: '/images/ui/medaillons/Jaar.png' },
+    { id: 'adem', label: 'ADEM', title: 'Christus in iedere ademhaling', href: '#adem', image: '/images/ui/medaillons/Adem.webp' },
+    { id: 'etmaal', label: 'ETMAAL', title: 'Gebed door dag en nacht', href: '#etmaal', image: '/images/ui/medaillons/Etmaal.webp' },
+    { id: 'week', label: 'WEEK', title: 'Iedere dag zijn gedachtenis', href: '#week', image: '/images/ui/medaillons/Week.webp' },
+    { id: 'pascha', label: 'PASCHA', title: 'De weg van Kruis naar Verrijzenis', href: '#pascha', image: '/images/ui/medaillons/Pascha.webp' },
+    { id: 'jaar', label: 'JAAR', title: 'Het gehele kerkelijke jaar geheiligd', href: '#jaar', image: '/images/ui/medaillons/Jaar.webp' },
   ];
-  return <section className="v15-cycle-timeline"><p className="mb-6 text-center text-[10px] font-bold tracking-[.3em] text-gold-light uppercase">De heiliging van de tijd</p><div className="timeline-track">{items.map((item,index)=><div className="timeline-node" key={item.id}><a href={item.href} className={`timeline-core ${item.id===current?'active':''}`}><span className="timeline-medallion"><img src={item.image} alt="" className="h-full w-full object-contain" /></span><span className="timeline-label">{item.label}</span><span className="timeline-title">{item.title}</span></a>{index<items.length-1&&<span className="timeline-line"/>}</div>)}</div></section>;
+  return <section className="v15-cycle-timeline"><p className="mb-6 text-center text-[10px] font-bold tracking-[.3em] text-gold-light uppercase">De heiliging van de tijd</p><div className="timeline-track">{items.map((item,index)=><div className="timeline-node" key={item.id}><a href={item.href} className={`timeline-core ${item.id===current?'active':''}`}><span className="timeline-medallion"><img loading="lazy" decoding="async" src={item.image} alt="" className="h-full w-full object-contain" /></span><span className="timeline-label">{item.label}</span><span className="timeline-title">{item.title}</span></a>{index<items.length-1&&<span className="timeline-line"/>}</div>)}</div></section>;
 }
 export function BottomCycleTimeline({
   current,
@@ -263,7 +264,7 @@ export function BottomCycleTimeline({
                     : 'border-[#d4aa3d]/35 bg-[#1f150f] hover:border-[#d4aa3d]/60'
                 }`}
               >
-                <img src={`/images/ui/medaillons/${item.label.charAt(0) + item.label.slice(1).toLowerCase()}.png`} alt="" className="h-16 w-16 object-contain" />
+                <img loading="lazy" decoding="async" src={`/images/ui/medaillons/${item.label.charAt(0) + item.label.slice(1).toLowerCase()}.webp`} alt="" className="h-16 w-16 object-contain" />
                 <div className="mt-3 text-[10px] font-bold tracking-[0.24em] text-gold-light uppercase">{item.label}</div>
                 <div className="mt-2 text-xs leading-relaxed text-[#e8dcc0]">{item.title}</div>
               </a>

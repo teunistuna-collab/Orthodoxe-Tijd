@@ -18,6 +18,8 @@ export type PopupSectie = {
 
 export type PopupInhoud = {
   title: string;
+  /** Optioneel portret (bijv. icoon van een heilige) boven de tekst. */
+  image?: { src: string; alt: string };
   subtitle?: string;
   highlight?: string;
   paragraphs: string[];

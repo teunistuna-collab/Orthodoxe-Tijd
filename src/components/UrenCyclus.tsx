@@ -152,10 +152,10 @@ type InfoContent = {
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe etmaalcyclus.docx".
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.', iconSrc: '/images/ui/medaillons/Etmaal.png' },
-  { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.', iconSrc: '/images/ui/menu/03-Etmaal-03-Metten.png' },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.', iconSrc: '/images/ui/menu/02-Gebed-05-De-betekenis-in-ons-leven.png' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.', iconSrc: '/images/ui/menu/02-Gebed-06-Praktisch.png' },
+  { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.', iconSrc: '/images/ui/medaillons/Etmaal.webp' },
+  { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.', iconSrc: '/images/ui/menu/03-Etmaal-03-Metten.webp' },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.', iconSrc: '/images/ui/menu/02-Gebed-05-De-betekenis-in-ons-leven.webp' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.', iconSrc: '/images/ui/menu/02-Gebed-06-Praktisch.webp' },
 ];
 
 const TIMELINE_ITEMS = [
@@ -179,14 +179,14 @@ const SERVICE_ICONS: Record<string, typeof Sun | null> = {
   'Negende Uur': Church,
 };
 const SERVICE_IMAGE_ICONS: Record<string, string | undefined> = {
-  Vespers: '/images/ui/menu/03-Etmaal-02-Avondgebeden.png',
-  Completen: '/images/ui/menu/03-Etmaal-05-Completen.png',
-  Middernachtdienst: '/images/ui/menu/03-Etmaal-04-Middernachtdienst.png',
-  Metten: '/images/ui/menu/03-Etmaal-03-Metten.png',
-  'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.png',
-  'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.png',
-  'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.png',
-  'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.png',
+  Vespers: '/images/ui/menu/03-Etmaal-02-Avondgebeden.webp',
+  Completen: '/images/ui/menu/03-Etmaal-05-Completen.webp',
+  Middernachtdienst: '/images/ui/menu/03-Etmaal-04-Middernachtdienst.webp',
+  Metten: '/images/ui/menu/03-Etmaal-03-Metten.webp',
+  'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.webp',
+  'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.webp',
+  'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.webp',
+  'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.webp',
 };
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het perkamentpaneel.
@@ -354,7 +354,7 @@ export default function UrenCyclus() {
   return (
     <>
       <section id="etmaal" className="bg-bark">
-        <img src="/images/heroes/hero-etmaal.png" width={2103} height={748} alt="Etmaal — een dag in Gods tegenwoordigheid" className="block h-auto w-full" />
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-etmaal.webp" width={2103} height={748} alt="Etmaal — een dag in Gods tegenwoordigheid" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}
@@ -369,7 +369,7 @@ export default function UrenCyclus() {
                 className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img src={iconSrc} alt="" className="provided-card-icon" />
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
@@ -425,7 +425,7 @@ export default function UrenCyclus() {
               </svg>
 
               <div className="absolute top-1/2 left-1/2 flex h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                <img src="/images/Christus-afbeelding.png" alt="Christus" className="h-full w-full object-cover" />
+                <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
               </div>
 
               {serviceConfig.map((service, index) => {
@@ -442,7 +442,7 @@ export default function UrenCyclus() {
                       isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
                     }`}
                   >
-                    {imageIcon ? <img src={imageIcon} alt="" className="h-14 w-14 object-contain" /> : Icon ? <Icon className="h-6 w-6" strokeWidth={1.4} /> : <Cross className="h-6 w-6" />}
+                    {imageIcon ? <img loading="lazy" decoding="async" src={imageIcon} alt="" className="h-14 w-14 object-contain" /> : Icon ? <Icon className="h-6 w-6" strokeWidth={1.4} /> : <Cross className="h-6 w-6" />}
                   </span>
                 );
 
@@ -490,7 +490,7 @@ export default function UrenCyclus() {
                     className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
                     <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
-                      {imageIcon ? <img src={imageIcon} alt="" /> : Icon ? <Icon className="h-6 w-6 text-gold-light" strokeWidth={1.4} /> : <Cross className="h-6 w-6 text-gold-light" />}
+                      {imageIcon ? <img loading="lazy" decoding="async" src={imageIcon} alt="" /> : Icon ? <Icon className="h-6 w-6 text-gold-light" strokeWidth={1.4} /> : <Cross className="h-6 w-6 text-gold-light" />}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="dienst-kaart-titel font-display block">{service.title}</span>

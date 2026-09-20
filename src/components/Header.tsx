@@ -99,7 +99,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 overflow-visible shadow-lg shadow-black/20">
       <div className="bg-bark text-cream">
         <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-2.5">
-          <a href="#vandaag" className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <a href="#vandaag" onClick={() => { setActief('vandaag'); setMenuOpen(false); }} className="flex min-w-0 items-center gap-2 sm:gap-3">
             <span className="flex h-9 w-7 shrink-0 items-center justify-center text-gold sm:h-10 sm:w-8">
               <Cross className="h-8 w-5 sm:h-9 sm:w-6" />
             </span>
@@ -279,6 +279,15 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          <a
+            href="#pascha"
+            onClick={() => { setActief('pascha'); setMenuOpen(false); }}
+            className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:hidden ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
+          >
+            <NavMark id="pascha" />Pascha
+            <span className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${actief === 'pascha' ? 'opacity-100' : 'opacity-0'}`} />
+          </a>
 
           {NAV_TRAILING.map(({ id, label, icon: Icon }) => {
             const on = actief === id;

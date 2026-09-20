@@ -71,7 +71,7 @@ export default function Kalender() {
   return (
     <>
       <section id="kalender" className="bg-bark">
-        <img src="/images/heroes/hero-kalender.png" width={2103} height={748} alt="Kalender — het kerkelijk jaar in overzicht" className="block h-auto w-full" />
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-kalender.webp" width={2103} height={748} alt="Kalender — het kerkelijk jaar in overzicht" className="block h-auto w-full" />
       </section>
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink sm:py-16">
@@ -299,14 +299,14 @@ export default function Kalender() {
 
           <div className="calendar-action-grid mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {[
-              ['/images/ui/menu/01-Hoofdmenu-06-Zoek-een-datum.png', 'Zoek een datum', 'Ontdek welke heiligen, feesten en lezingen er op een bepaalde dag zijn.', '#kalender'],
-              ['/images/ui/menu/01-Hoofdmenu-07-Bekijk-een-maand.png', 'Bekijk een maand', 'Blader door het kerkelijk jaar.', '#kalender'],
-              ['/images/ui/menu/01-Hoofdmenu-08-Vandaag.png', 'Vandaag', 'Ga naar de huidige dag in de kalender.', '#kalender'],
-              ['/images/ui/menu/01-Hoofdmenu-09-Feesten.png', 'Feesten', 'Ontdek de grote en kleine feesten van de Kerk.', '#feesten'],
-              ['/images/ui/menu/01-Hoofdmenu-10-Heiligen.png', 'Heiligen', 'Bekijk alle heiligen van de Kerk.', '#heiligen'],
+              ['/images/ui/menu/01-Hoofdmenu-06-Zoek-een-datum.webp', 'Zoek een datum', 'Ontdek welke heiligen, feesten en lezingen er op een bepaalde dag zijn.', '#kalender'],
+              ['/images/ui/menu/01-Hoofdmenu-07-Bekijk-een-maand.webp', 'Bekijk een maand', 'Blader door het kerkelijk jaar.', '#kalender'],
+              ['/images/ui/menu/01-Hoofdmenu-08-Vandaag.webp', 'Vandaag', 'Ga naar de huidige dag in de kalender.', '#kalender'],
+              ['/images/ui/menu/01-Hoofdmenu-09-Feesten.webp', 'Feesten', 'Ontdek de grote en kleine feesten van de Kerk.', '#feesten'],
+              ['/images/ui/menu/01-Hoofdmenu-10-Heiligen.webp', 'Heiligen', 'Bekijk alle heiligen van de Kerk.', '#heiligen'],
             ].map(([icoon, titel, tekst, href]) => (
               <a key={titel} href={href} className="ornate-card calendar-action-card group">
-                <span className="ornate-medallion calendar-action-medallion" aria-hidden="true"><img src={icoon} alt="" className="provided-card-icon" /></span>
+                <span className="ornate-medallion calendar-action-medallion" aria-hidden="true"><img loading="lazy" decoding="async" src={icoon} alt="" className="provided-card-icon" /></span>
                 <span className="ornate-side-ornaments" aria-hidden="true">❦ <b>✣</b> ❦</span>
                 <h3>{titel}</h3>
                 <p>{tekst}</p>

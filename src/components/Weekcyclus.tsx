@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ChevronRight } from 'lucide-react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import Cross from './Cross';
@@ -87,21 +88,21 @@ const DAY_POPUPS: Record<DayKey, PopupContent> = {
 };
 
 const DAYS: Array<{ key: DayKey; label: string; short: string; iconSrc: string }> = [
-  { key: 'zondag', label: 'Zondag', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/04-Week-04-Zondag.png' },
-  { key: 'maandag', label: 'Maandag', short: 'De engelen en hemelse machten', iconSrc: '/images/ui/menu/04-Week-05-Maandag.png' },
-  { key: 'dinsdag', label: 'Dinsdag', short: 'Johannes de Voorloper', iconSrc: '/images/ui/menu/04-Week-06-Dinsdag.png' },
-  { key: 'woensdag', label: 'Woensdag', short: 'Het verraad en het heilig Kruis', iconSrc: '/images/ui/menu/04-Week-07-Woensdag.png' },
-  { key: 'donderdag', label: 'Donderdag', short: 'De apostelen en H. Nicolaas', iconSrc: '/images/ui/menu/04-Week-08-Donderdag.png' },
-  { key: 'vrijdag', label: 'Vrijdag', short: 'De Kruisiging van de Heer', iconSrc: '/images/ui/menu/04-Week-09-Vrijdag.png' },
-  { key: 'zaterdag', label: 'Zaterdag', short: 'De heiligen en ontslapenen', iconSrc: '/images/ui/menu/04-Week-10-Zaterdag.png' },
+  { key: 'zondag', label: 'Zondag', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/04-Week-04-Zondag.webp' },
+  { key: 'maandag', label: 'Maandag', short: 'De engelen en hemelse machten', iconSrc: '/images/ui/menu/04-Week-05-Maandag.webp' },
+  { key: 'dinsdag', label: 'Dinsdag', short: 'Johannes de Voorloper', iconSrc: '/images/ui/menu/04-Week-06-Dinsdag.webp' },
+  { key: 'woensdag', label: 'Woensdag', short: 'Het verraad en het heilig Kruis', iconSrc: '/images/ui/menu/04-Week-07-Woensdag.webp' },
+  { key: 'donderdag', label: 'Donderdag', short: 'De apostelen en H. Nicolaas', iconSrc: '/images/ui/menu/04-Week-08-Donderdag.webp' },
+  { key: 'vrijdag', label: 'Vrijdag', short: 'De Kruisiging van de Heer', iconSrc: '/images/ui/menu/04-Week-09-Vrijdag.webp' },
+  { key: 'zaterdag', label: 'Zaterdag', short: 'De heiligen en ontslapenen', iconSrc: '/images/ui/menu/04-Week-10-Zaterdag.webp' },
 ];
 
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is de weekcyclus?', intro: 'De week is de ademhaling van het kerkelijk leven, geworteld in de Verrijzenis van Christus.', iconSrc: '/images/ui/menu/04-Week-01-Wat-is-de-weekcyclus.png' },
-  { key: 'dagen', title: 'De dagen van de week', intro: 'Elke dag van de week heeft een eigen liturgisch karakter, lezingen en gedenkingen.', iconSrc: '/images/ui/menu/04-Week-02-De-dagen-van-de-week.png' },
-  { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'De week vormt ons in het leven met Christus: van Verrijzenis tot verwachting.', iconSrc: '/images/ui/menu/04-Week-03-De-geestelijke-betekenis.png' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?', iconSrc: '/images/ui/menu/04-Week-03-De-geestelijke-betekenis.png' },
+  { key: 'wat', title: 'Wat is de weekcyclus?', intro: 'De week is de ademhaling van het kerkelijk leven, geworteld in de Verrijzenis van Christus.', iconSrc: '/images/ui/menu/04-Week-01-Wat-is-de-weekcyclus.webp' },
+  { key: 'dagen', title: 'De dagen van de week', intro: 'Elke dag van de week heeft een eigen liturgisch karakter, lezingen en gedenkingen.', iconSrc: '/images/ui/menu/04-Week-02-De-dagen-van-de-week.webp' },
+  { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'De week vormt ons in het leven met Christus: van Verrijzenis tot verwachting.', iconSrc: '/images/ui/menu/04-Week-03-De-geestelijke-betekenis.webp' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?', iconSrc: '/images/ui/menu/04-Week-03-De-geestelijke-betekenis.webp' },
 ];
 
 const TIMELINE_ITEMS = [
@@ -150,7 +151,7 @@ export default function Weekcyclus() {
   return (
     <>
       <section id="week" className="bg-bark">
-        <img src="/images/heroes/hero-week.png" width={2103} height={748} alt="Weekcyclus — van de Verrijzenis tot de Sabbat" className="block h-auto w-full" />
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-week.webp" width={2103} height={748} alt="Weekcyclus — van de Verrijzenis tot de Sabbat" className="block h-auto w-full" />
       </section>
 
       {/* Informatiekaarten */}
@@ -165,7 +166,7 @@ export default function Weekcyclus() {
                 className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img src={iconSrc} alt="" className="provided-card-icon" />
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
@@ -216,7 +217,7 @@ export default function Weekcyclus() {
               </svg>
 
               <div className="absolute top-1/2 left-1/2 flex h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                <img src="/images/Christus-afbeelding.png" alt="Christus" className="h-full w-full object-cover" />
+                <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
               </div>
 
               {DAYS.map((day, index) => {
@@ -233,19 +234,24 @@ export default function Weekcyclus() {
                     onClick={() => setDayOpen(day.key)}
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%`, transform: `translate(${leftSide ? 'calc(-100% + 28px)' : '-28px'}, -50%)` }}
-                    className={`absolute flex w-[220px] items-center gap-3 ${leftSide ? 'flex-row-reverse' : ''}`}
+                    style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
                   >
-                    <span
-                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
-                        isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
-                      }`}
-                    >
-                      <img src={iconSrc} alt="" className="provided-cycle-icon" />
+                    <span className="etmaal-ring-badge">
+                      <span
+                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
+                          isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
+                        }`}
+                      >
+                        <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-cycle-icon" />
+                      </span>
                     </span>
-                    <span className={`min-w-0 ${leftSide ? 'text-right' : 'text-left'}`}>
-                      <span className="font-display block text-base font-semibold text-ink uppercase">{day.label}</span>
-                      <span className="mt-1 block text-[12px] leading-snug text-ink-soft">{day.short}</span>
+                    <span className="etmaal-ring-text">
+                      <span className="dienst-kaart">
+                        <span className="dienst-kaart-titel font-display uppercase">{day.label}</span>
+                        <span className="dienst-kaart-tekst">{day.short}</span>
+                        <span className="btn-pill dienst-kaart-cta">Lees meer →</span>
+                      </span>
                     </span>
                   </button>
                 );
@@ -266,17 +272,18 @@ export default function Weekcyclus() {
                     key={`${day.key}-mobile`}
                     type="button"
                     onClick={() => setDayOpen(day.key)}
-                    className="flex w-full items-center gap-4 rounded-2xl border border-parchment-3 bg-paper px-4 py-4 text-left transition-all hover:border-gold"
+                    className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/50 bg-[#1c130d] text-gold-light">
-                      <img src={iconSrc} alt="" className="provided-cycle-icon" />
+                    <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
+                      <img loading="lazy" decoding="async" src={iconSrc} alt="" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="font-display block text-xl font-semibold text-ink uppercase">
+                      <span className="dienst-kaart-titel font-display block uppercase">
                         {index + 1}. {day.label}
                       </span>
-                      <span className="mt-0.5 block text-xs text-ink-soft">{day.short}</span>
+                      <span className="dienst-kaart-tekst block">{day.short}</span>
                     </span>
+                    <ChevronRight className="h-5 w-5 shrink-0 text-gold-deep" />
                   </button>
                 );
               })}

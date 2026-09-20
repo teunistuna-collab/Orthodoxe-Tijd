@@ -120,26 +120,26 @@ export default function Vasten() {
   const periodeGeopend = periodeOpen ? vastenP.find((p) => p.id === periodeOpen) : null;
 
   const onthoudingenVoor = (niveau: (typeof dagVandaag)['vasten']['niveau']) => [
-    { label: 'Vlees', toegestaan: ['vrij', 'geen'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-01-Vlees.png' },
-    { label: 'Zuivel', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-02-Zuivel.png' },
-    { label: 'Eieren', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-03-Eieren.png' },
-    { label: 'Vis', toegestaan: ['vrij', 'geen', 'zuivel', 'vis'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-04-Vis.png' },
-    { label: 'Olie', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-05-Olie.png' },
-    { label: 'Wijn', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-06-Wijn.png' },
+    { label: 'Vlees', toegestaan: ['vrij', 'geen'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-01-Vlees.webp' },
+    { label: 'Zuivel', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-02-Zuivel.webp' },
+    { label: 'Eieren', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-03-Eieren.webp' },
+    { label: 'Vis', toegestaan: ['vrij', 'geen', 'zuivel', 'vis'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-04-Vis.webp' },
+    { label: 'Olie', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-05-Olie.webp' },
+    { label: 'Wijn', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-06-Wijn.webp' },
   ];
   const onthoudingen = geselecteerdeDagInfo ? onthoudingenVoor(geselecteerdeDagInfo.vasten.niveau) : [];
   const onthoudingenVandaag = onthoudingenVoor(dagVandaag.vasten.niveau);
   const vastenVandaagAsset: Record<string, string> = {
-    vrij: '01-Vastenvrij.png', geen: '02-Geen-vasten.png', zuivel: '03-Zuivel-toegestaan.png', vis: '04-Vis-toegestaan.png',
-    'wijn-olie': '05-Wijn-en-olie.png', gekookt: '06-Gekookt-zonder-olie.png', vastendag: '07-Vastendag.png',
-    strikt: '08-Strikt-vasten.png', onthouding: '09-Volledige-onthouding.png'
+    vrij: '01-Vastenvrij.webp', geen: '02-Geen-vasten.webp', zuivel: '03-Zuivel-toegestaan.webp', vis: '04-Vis-toegestaan.webp',
+    'wijn-olie': '05-Wijn-en-olie.webp', gekookt: '06-Gekookt-zonder-olie.webp', vastendag: '07-Vastendag.webp',
+    strikt: '08-Strikt-vasten.webp', onthouding: '09-Volledige-onthouding.webp'
   };
-  const vastenVandaagIcon = vastenVandaagAsset[dagVandaag.vasten.niveau] ?? '02-Geen-vasten.png';
+  const vastenVandaagIcon = vastenVandaagAsset[dagVandaag.vasten.niveau] ?? '02-Geen-vasten.webp';
 
   return (
     <>
       <section id="vasten" className="bg-bark">
-        <img src="/images/heroes/hero-vasten.png" width={2103} height={748} alt="Vasten — een weg naar vrijheid" className="block h-auto w-full" />
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-vasten.webp" width={2103} height={748} alt="Vasten — een weg naar vrijheid" className="block h-auto w-full" />
       </section>
 
       {/* Eén doorlopende compositie: vandaag → uitleg → jaarcyclus → week/uitzonderingen → gebed */}
@@ -148,7 +148,7 @@ export default function Vasten() {
           {/* Vasten vandaag — donker inzetpaneel binnen dezelfde compositie */}
           <div className="v17-fasting-today provided-wide-frame orthodox-pattern rounded-2xl border border-gold/40 bg-[#1c130d] px-6 py-8 text-cream shadow-[0_20px_45px_rgba(0,0,0,0.35)] sm:px-10 sm:py-10">
             <p className="text-center text-[12px] font-bold tracking-[0.32em] text-gold-light uppercase sm:text-sm">Vasten vandaag</p>
-            <div className="mt-5 flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left"><img src={`/images/ui/vasten-vandaag/${vastenVandaagIcon}`} alt="" className="vasten-vandaag-status-icon" />
+            <div className="mt-5 flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left"><img loading="lazy" decoding="async" src={`/images/ui/vasten-vandaag/${vastenVandaagIcon}`} alt="" className="vasten-vandaag-status-icon" />
               <div>
                 <h1 className="font-display text-2xl font-semibold text-[#fbf3df] sm:text-3xl">{dagVandaag.vasten.label}</h1>
                 <p className="mt-2 text-sm text-[#d9c6a3] sm:text-base">{niveauVandaag.toegestaan}</p>
@@ -163,7 +163,7 @@ export default function Vasten() {
               {onthoudingenVandaag.map(({ label, toegestaan, iconSrc }) => (
                 <div key={label} className="fasting-food-item">
                   <span className="fasting-food-icon">
-                    <img src={iconSrc} alt="" className="h-full w-full object-contain" />
+                    <img loading="lazy" decoding="async" src={iconSrc} alt="" className="h-full w-full object-contain" />
                   </span>
                   <span className="fasting-food-status text-base leading-none font-semibold" style={{ color: toegestaan ? '#2f7a44' : '#a33a3a' }}>
                     {toegestaan ? '✓' : '×'}
@@ -196,10 +196,10 @@ export default function Vasten() {
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {(
               [
-                { key: 'wat', title: 'Wat is vasten?', intro: 'Het typikon en de orde van de Kerk door het jaar heen.', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.png' },
-                { key: 'hoe', title: 'Hoe vasten we?', intro: 'De ladder van het vasten, van vrij tot volledige onthouding.', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.png' },
-                { key: 'periodes', title: 'Vastenperioden', intro: 'Vier grote vasten, verweven met feesten en uitzonderingen.', iconSrc: '/images/ui/menu/07-Vasten-03-Vastenperiode.png' },
-                { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'Vasten als gebed, bekering en liefde tot de naaste.', iconSrc: '/images/ui/menu/07-Vasten-04-De-geestelijke-betekenis.png' },
+                { key: 'wat', title: 'Wat is vasten?', intro: 'Het typikon en de orde van de Kerk door het jaar heen.', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.webp' },
+                { key: 'hoe', title: 'Hoe vasten we?', intro: 'De ladder van het vasten, van vrij tot volledige onthouding.', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.webp' },
+                { key: 'periodes', title: 'Vastenperioden', intro: 'Vier grote vasten, verweven met feesten en uitzonderingen.', iconSrc: '/images/ui/menu/07-Vasten-03-Vastenperiode.webp' },
+                { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'Vasten als gebed, bekering en liefde tot de naaste.', iconSrc: '/images/ui/menu/07-Vasten-04-De-geestelijke-betekenis.webp' },
               ] as const
             ).map(({ key, title, intro, iconSrc }) => (
               <button
@@ -209,7 +209,7 @@ export default function Vasten() {
                 className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
               >
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img src={iconSrc} alt="" className="provided-card-icon" />
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
                 </div>
                 <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
@@ -388,7 +388,7 @@ export default function Vasten() {
                 'fasting-step provided-ladder-frame relative border border-gold/45 p-3',
               ].join(' ')}>
                 <span aria-hidden="true" className="absolute -left-[1.78rem] top-5 h-3 w-3 rounded-full border border-gold bg-[#f7edda] sm:hidden" />
-                <img src={`/images/ui/vasten-ladder/${String(i + 1).padStart(2, '0')}-${['Vastenvrij','Geen-vasten','Zuivel-toegestaan','Vis-toegestaan','Wijn-en-olie','Gekookt-zonder-olie','Vastendag','Strikt-vasten','Volledige-onthouding'][i]}.png`} alt="" className="fasting-step-symbol" />
+                <img loading="lazy" decoding="async" src={`/images/ui/vasten-ladder/${String(i + 1).padStart(2, '0')}-${['Vastenvrij','Geen-vasten','Zuivel-toegestaan','Vis-toegestaan','Wijn-en-olie','Gekookt-zonder-olie','Vastendag','Strikt-vasten','Volledige-onthouding'][i]}.webp`} alt="" className="fasting-step-symbol" />
                 <div className="fasting-step-index">{i + 1}</div>
                 <div className="fasting-step-title">{l.label}</div>
                 <div className="fasting-step-rule" aria-hidden="true">✣</div>
@@ -459,7 +459,7 @@ export default function Vasten() {
                   {onthoudingen.map(({ label, toegestaan, iconSrc }) => (
                     <div key={label} className="fasting-food-item">
                       <span className="fasting-food-icon">
-                        <img src={iconSrc} alt="" className="h-full w-full object-contain" />
+                        <img loading="lazy" decoding="async" src={iconSrc} alt="" className="h-full w-full object-contain" />
                       </span>
                       <span className="text-base font-semibold leading-none" style={{ color: toegestaan ? '#4a7c59' : '#7b1e1e' }}>{toegestaan ? '✓' : '×'}</span>
                       <span className="font-display text-[11px] leading-tight text-[#5c4d38] sm:text-sm">{label}</span>

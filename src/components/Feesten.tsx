@@ -25,7 +25,7 @@ export default function Feesten() {
   const gekozen = open ? [...lijst,...overige].find(({f})=>f.id===open) : undefined;
 
   return <>
-    <section id="feesten" className="bg-bark"><img src="/images/heroes/hero-feesten.png" width={2103} height={748} alt="Feesten — Orthodoxe Tijd" className="block h-auto w-full"/></section>
+    <section id="feesten" className="bg-bark"><img loading="lazy" decoding="async" src="/images/heroes/hero-feesten.webp" width={2103} height={748} alt="Feesten — Orthodoxe Tijd" className="block h-auto w-full"/></section>
     <section className="feasts-page bg-parchment py-12 text-ink sm:py-16"><div className={CONTENT}>
       <div className="overflow-hidden border border-gold/45 bg-[#f7edda] shadow-[0_24px_55px_rgba(56,31,14,.16)]">
         <section className="grid border-b border-gold/30 lg:grid-cols-[.8fr_1.2fr]">

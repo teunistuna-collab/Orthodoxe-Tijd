@@ -13,25 +13,25 @@ const CARDS: Array<{ key: PopupKey; title: string; intro: string; iconSrc: strin
     key: 'wat',
     title: 'Wat is de ademcyclus?',
     intro: 'Het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus.',
-    iconSrc: '/images/ui/menu/02-Gebed-01-Wat-is-de-ademcyclus.png',
+    iconSrc: '/images/ui/menu/02-Gebed-01-Wat-is-de-ademcyclus.webp',
   },
   {
     key: 'jezusgebed',
     title: 'Het Jezusgebed',
     intro: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar — telkens opnieuw aangeroepen.',
-    iconSrc: '/images/ui/menu/02-Gebed-02-Het-Jezusgebed.png',
+    iconSrc: '/images/ui/menu/02-Gebed-02-Het-Jezusgebed.webp',
   },
   {
     key: 'gebedskoord',
     title: 'Het gebedskoord',
     intro: 'De chotki helpt het gebed aandachtig te herhalen zonder de ademhaling tot een teller te maken.',
-    iconSrc: '/images/ui/menu/02-Gebed-03-Het-gebedskoord.png',
+    iconSrc: '/images/ui/menu/02-Gebed-03-Het-gebedskoord.webp',
   },
   {
     key: 'hart',
     title: 'Gebed van het hart',
     intro: 'Van de lippen, naar het verstand, tot een gebed dat het hart zelf doordringt.',
-    iconSrc: '/images/ui/menu/02-Gebed-04-Gebed-van-het-hart.png',
+    iconSrc: '/images/ui/menu/02-Gebed-04-Gebed-van-het-hart.webp',
   },
 ];
 
@@ -85,7 +85,7 @@ export default function Ademcyclus() {
   return (
     <>
       <section id="adem" className="bg-bark">
-        <img src="/images/heroes/hero-adem.png" width={2103} height={748} alt="Ademcyclus — het onophoudelijke gebed" className="block h-auto w-full" />
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-adem.webp" width={2103} height={748} alt="Ademcyclus — het onophoudelijke gebed" className="block h-auto w-full" />
       </section>
 
       {/* Het Jezusgebed */}
@@ -150,7 +150,7 @@ export default function Ademcyclus() {
                 className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img src={iconSrc} alt="" className="provided-card-icon" />
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
@@ -167,7 +167,7 @@ export default function Ademcyclus() {
             <div className="grid items-center gap-10 lg:grid-cols-[0.7fr_2fr_0.7fr]">
               <BranchOrnament className="mx-auto hidden h-40 w-28 text-gold-deep/25 lg:block" />
               <div className="text-center">
-                <div className="provided-inline-icons"><img src="/images/ui/menu/02-Gebed-05-De-betekenis-in-ons-leven.png" alt=""/><img src="/images/ui/menu/02-Gebed-06-Praktisch.png" alt=""/></div><p className="text-[13px] font-bold tracking-[0.32em] text-gold-deep uppercase sm:text-sm">Een levend ritme</p>
+                <div className="provided-inline-icons"><img loading="lazy" decoding="async" src="/images/ui/menu/02-Gebed-05-De-betekenis-in-ons-leven.webp" alt=""/><img loading="lazy" decoding="async" src="/images/ui/menu/02-Gebed-06-Praktisch.webp" alt=""/></div><p className="text-[13px] font-bold tracking-[0.32em] text-gold-deep uppercase sm:text-sm">Een levend ritme</p>
                 <p className="mx-auto mt-5 max-w-2xl font-display text-lg leading-relaxed text-ink-soft italic sm:text-xl">
                   De ademcyclus is geen afzonderlijke liturgische cyclus van de Kerk, maar het kleinste ritme van het gebedsleven:
                   de voortdurende gedachtenis aan Christus, die zich met iedere ademhaling kan verbinden.
