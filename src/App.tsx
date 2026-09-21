@@ -11,6 +11,9 @@ import Pascha from './components/Pascha';
 import Heiligen from './components/Heiligen';
 import Gebeden from './components/Gebeden';
 import DagModal from './components/DagModal';
+import DagLezingen from './components/DagLezingen';
+import DagHeiligen from './components/DagHeiligen';
+import DagPascha from './components/DagPascha';
 import LezingModal from './components/LezingModal';
 import KalenderUitleg from './components/KalenderUitleg';
 import Ademcyclus from './components/Ademcyclus';
@@ -51,6 +54,9 @@ export default function App() {
   const [htc, setHtc] = useState<HtcData | null>(null);
   const [htcFout, setHtcFout] = useState(false);
   const [dagOpen, setDagOpen] = useState<string | null>(null);
+  const [lezingenDag, setLezingenDag] = useState<string | null>(null);
+  const [heiligenDag, setHeiligenDag] = useState<string | null>(null);
+  const [paschaDag, setPaschaDag] = useState<string | null>(null);
   const [lezing, setLezing] = useState<LezingKeuze | null>(null);
 
   useEffect(() => {
@@ -123,6 +129,12 @@ export default function App() {
   const openDag = useCallback((y: string) => setDagOpen(y), []);
   const openLezing = useCallback((l: LezingKeuze) => setLezing(l), []);
   const sluitDag = useCallback(() => setDagOpen(null), []);
+  const openDagLezingen = useCallback((y: string) => setLezingenDag(y), []);
+  const sluitDagLezingen = useCallback(() => setLezingenDag(null), []);
+  const openDagHeiligen = useCallback((y: string) => setHeiligenDag(y), []);
+  const sluitDagHeiligen = useCallback(() => setHeiligenDag(null), []);
+  const openDagPascha = useCallback((y: string) => setPaschaDag(y), []);
+  const sluitDagPascha = useCallback(() => setPaschaDag(null), []);
   const sluitLezing = useCallback(() => setLezing(null), []);
   const openKalenderUitleg = useCallback(() => setUitlegOpen(true), []);
   const sluitKalenderUitleg = useCallback(() => {
@@ -135,8 +147,8 @@ export default function App() {
   }, []);
 
   const ctx = useMemo(
-    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, htcFout, openDag, openLezing, openKalenderUitleg }),
-    [mode, setMode, vandaag, htc, htcFout, openDag, openLezing, openKalenderUitleg],
+    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha }),
+    [mode, setMode, vandaag, htc, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha],
   );
 
   return (
@@ -165,6 +177,9 @@ export default function App() {
         <Footer />
         <BottomNav />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />
+        <DagLezingen ymd={lezingenDag} onClose={sluitDagLezingen} />
+        <DagHeiligen ymd={heiligenDag} onClose={sluitDagHeiligen} />
+        <DagPascha ymd={paschaDag} onClose={sluitDagPascha} />
         <LezingModal keuze={lezing} onClose={sluitLezing} />
         <KalenderUitleg open={uitlegOpen} onClose={sluitKalenderUitleg} />
       </div>

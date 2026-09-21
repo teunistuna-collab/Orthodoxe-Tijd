@@ -19,6 +19,12 @@ export interface AppState {
   openDag: (ymd: string) => void;
   openLezing: (l: LezingKeuze) => void;
   openKalenderUitleg: () => void;
+  /** Opent een pop-up met alleen de Schriftlezingen van de opgegeven dag (ymd). */
+  openDagLezingen: (ymd: string) => void;
+  /** Opent een pop-up met alleen de heiligen van de opgegeven dag (ymd). */
+  openDagHeiligen: (ymd: string) => void;
+  /** Opent de pop-up "Paschale cyclus" voor de opgegeven dag (ymd). */
+  openDagPascha: (ymd: string) => void;
 }
 
 export const AppContext = createContext<AppState | null>(null);

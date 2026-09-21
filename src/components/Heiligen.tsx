@@ -1,27 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { ALLE_HEILIGEN, HEILIGEN } from '../lib/heiligen';
-import { getSaintEnrichment } from '../lib/saintEnrichment';
+import { ALLE_HEILIGEN } from '../lib/heiligen';
 import { rangLabel, vertaalLeven } from '../lib/htc';
 import { dagInfo, formatMd, hoofdletter, MAANDEN, MAANDEN_KORT } from '../lib/kalender';
 import { LiturgicalPopup } from './CycleSections';
-import { heiligeIcoon, lageLandenTekst } from '../lib/heiligenIconen';
+import { heiligenVanDag, normaliseer, popupContent, type Resultaat } from '../lib/heiligenPopup';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-type Resultaat = { md: string; naam: string; ruwNaam?: string; titel?: string; kort?: string; nl?: boolean; bron: 'nl' | 'htc'; rang?: number };
-
-function popupContent(h: Resultaat | null) {
-  if (!h) return null;
-  const extra = getSaintEnrichment(h.ruwNaam ?? h.naam);
-  const meta = extra ? [extra.rang, extra.regio, extra.eeuw].filter(Boolean).join(' · ') : '';
-  const paragraphs = lageLandenTekst(h) ?? (extra?.leven ? [extra.leven] : (h.kort ? [h.kort] : ['Voor deze heilige is nog geen betrouwbare uitgebreide Nederlandse levensbeschrijving beschikbaar.']));
-  const icoon = heiligeIcoon(h);
-  return { title:h.naam, image: icoon ? { src: icoon.src, alt: icoon.alt } : undefined, subtitle:`${formatMd(h.md)}${h.titel?` · ${h.titel}`:''}${meta?` · ${meta}`:''}`, paragraphs };
-}
-
-function normaliseer(tekst: string) { return tekst.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 function sorteerMd(a: string, b: string) { const [am, ad] = a.split('-').map(Number); const [bm, bd] = b.split('-').map(Number); return am - bm || ad - bd; }
 
 export default function Heiligen() {
@@ -37,12 +24,7 @@ export default function Heiligen() {
   const [vandaagOpen, setVandaagOpen] = useState(false);
   const [geselecteerde, setGeselecteerde] = useState<Resultaat | null>(null);
 
-  const heiligenVandaag = useMemo<Resultaat[]>(() => {
-    const curated: Resultaat[] = (HEILIGEN[dagVandaag.kerkKey] ?? []).map(h => ({ ...h, md: dagVandaag.kerkKey, bron: 'nl' }));
-    const gezien = new Set(curated.map(h => normaliseer(h.ruwNaam ?? h.naam)));
-    const extra: Resultaat[] = (htc?.[dagVandaag.kerkKey]?.l ?? []).map(([icon, tekst]) => ({ md: dagVandaag.kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang })).filter(h => ![...gezien].some(g => normaliseer(h.naam).includes(g) || g.includes(normaliseer(h.naam))));
-    return [...curated, ...extra];
-  }, [dagVandaag.kerkKey, htc]);
+  const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, htc), [dagVandaag.kerkKey, htc]);
 
   const categorieVan = (h: Resultaat) => {
     const t = normaliseer(`${h.titel ?? ''} ${h.naam}`);
