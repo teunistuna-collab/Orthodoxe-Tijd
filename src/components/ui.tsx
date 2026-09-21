@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { NIVEAUS, type VastenRegel } from '../lib/vasten';
+import { LADDER, NIVEAUS, type VastenNiveau, type VastenRegel } from '../lib/vasten';
 import type { Feest } from '../lib/feesten';
 
 interface SectionTitleProps {
@@ -33,6 +33,19 @@ export function VastenBadge({ regel, size = 'md', showLabel = true }: { regel: V
       <span className="inline-block h-2 w-2 rounded-full" style={{ background: n.kleur }} />
       {showLabel ? regel.label : n.kort}
     </span>
+  );
+}
+
+// Kleurlegenda van het vasten: één kleurstip per trede van de ladder. Gedeeld door de kalender en de vastenpagina.
+export function VastenKleuren({ actief }: { actief?: VastenNiveau }) {
+  return (
+    <>
+      {LADDER.filter((l) => l.id !== 'geen').map((l) => (
+        <span key={l.id} className={`inline-flex items-center gap-1.5${actief === l.id ? ' font-bold text-ink' : ''}`}>
+          <span className="h-2.5 w-2.5 rounded-full" style={{ background: l.kleur }} /> {l.kort}
+        </span>
+      ))}
+    </>
   );
 }
 

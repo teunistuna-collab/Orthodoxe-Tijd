@@ -15,6 +15,9 @@ const CAT_LABEL: Record<Gebed['categorie'], string> = {
   akathisten: 'Akathisten',
 };
 
+// Gebeden voor vaste momenten van de dag: samen één categorie ("Gebeden door de dag"); elk gebed opent in de gebeden-popup.
+const DAGKEUZES = ['gebed-voor-het-werk', 'gebed-voor-het-eten', 'gebed-voor-het-slapen'];
+
 type CategorieDef = {
   id: string;
   label: string;
@@ -38,6 +41,13 @@ const CATEGORIEN: CategorieDef[] = [
     omschrijving: 'Lofzangen tot heiligen en de Moeder Gods.',
     iconSrc: '/images/ui/gebeden/08-Akathisten.webp',
     match: (g) => g.categorie === 'akathisten' && g.id !== 'akathist-moeder-gods' && g.id !== 'akathist-ontslapenen',
+  },
+  {
+    id: 'dag',
+    label: 'Gebeden door de dag',
+    omschrijving: 'Voor het werk, het eten en het slapen.',
+    iconSrc: '/images/ui/gebeden/09-Overige-gebeden.webp',
+    match: (g) => DAGKEUZES.includes(g.id),
   },
   {
     id: 'overig',

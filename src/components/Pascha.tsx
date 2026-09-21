@@ -96,9 +96,6 @@ export default function Pascha() {
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-                <span className="btn-pill mt-6">
-                  Lees meer →
-                </span>
               </button>
             ))}
           </div>
@@ -180,9 +177,6 @@ export default function Pascha() {
                       ná het Joodse Pesach. Daardoor valt het orthodoxe Pascha meestal één tot vijf weken later dan het
                       westerse Pasen, en soms op dezelfde dag.
                     </p>
-                    <span className="ornate-action">
-                      Lees meer →
-                    </span>
                   </button>
                   <button
                     type="button"
@@ -195,9 +189,6 @@ export default function Pascha() {
                       Apostelvasten — en zelfs de toon van de week en de zondagsevangeliën van het hele jaar. Wie de
                       Paasdatum kent, kent het jaar.
                     </p>
-                    <span className="ornate-action">
-                      Lees meer →
-                    </span>
                   </button>
                 </div>
               </div>

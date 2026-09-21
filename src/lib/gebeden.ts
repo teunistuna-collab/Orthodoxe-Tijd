@@ -9,6 +9,7 @@ export interface Gebed {
 }
 
 const BRON = 'Aangeleverde PDF';
+const BRON_WORD = 'Aangeleverd Word-document';
 
 export const GEBEDEN: Gebed[] = [
   {
@@ -363,5 +364,79 @@ Kondak 13 (3x)
 O Jezus onze Heer, God en Redder, alleen op Uw woord vertrouwen wij. Wees onze vreugde en vrede als wij door deze verschrikkelijke vallei gaan, en draag ons erdoorheen als onze kracht het begeeft: Halleluja, Halleluja, Halleluja!
 
 Herhaling van Ikos 1 en Kondak 1.`,
+  },
+  {
+    id: 'gebed-voor-het-werk',
+    titel: 'Gebed voor het werk',
+    wanneer: 'Voor en na het werk',
+    bron: BRON_WORD,
+    categorie: 'dagelijks',
+    tekst: `Zegen, Heer.
+
+of
+
+Heer Jezus Christus, eniggeboren Zoon van Uw beginloze Vader, Gij hebt gezegd: 'Zonder Mij kunt gij niets doen.' Mijn Heer en mijn God, ik geloof met hart en ziel in deze woorden en buig mij voor Uw goedheid. Help mij, zondaar, het werk dat ik nu ga beginnen in verbondenheid met U te volbrengen, in de Naam van de Vader, de Zoon en de Heilige Geest. Amen.
+
+GEBED NA HET WERK
+
+Ere zij U, o Heer!
+
+of
+
+De vervulling van alle goede dingen zijt Gij, o mijn Christus. Vervul mijn ziel met vreugde en blijmoedigheid en red mij, want Gij alleen zijt goed en menslievend. Amen.`,
+  },
+  {
+    id: 'gebed-voor-het-eten',
+    titel: 'Gebed voor het eten',
+    wanneer: 'Voor en na de maaltijd',
+    bron: BRON_WORD,
+    categorie: 'dagelijks',
+    tekst: `Onze Vader, Die in de hemelen zijt, Uw Naam worde geheiligd. Uw Koninkrijk kome, Uw wil geschiede, zoals in de hemel, zo ook op aarde. Geef ons heden ons dagelijks brood, en vergeef ons onze schulden, zoals ook wij onze schuldenaren vergeven. En leid ons niet in verzoeking, maar verlos ons van den boze.
+
+of
+
+Aller ogen zijn gericht op U, o Heer, Gij geeft hun spijs te rechter tijd, Gij opent Uw milde hand en vervult alles wat leeft met Uw gaven.
+
+Eer aan de Vader, de Zoon en de Heilige Geest, nu en altijd, en in de eeuwen der eeuwen. Amen.
+
+Heer, ontferm U. (3x)
+
+Door de gebeden van onze heilige vaders, Heer Jezus Christus, onze God, ontferm U over ons. Amen.
+
+GEBEDEN NA HET ETEN
+
+Wij danken U, o Christus, onze God, dat Gij ons hebt verzadigd met Uw aardse goederen: onthoud ons ook niet Uw hemels Koninkrijk, maar zoals Gij tot Uw leerlingen kwam, o Heiland, en hun vrede schonk, kom zo ook tot ons en red ons.
+
+Eer aan de Vader, de Zoon en de Heilige Geest, nu en altijd, en in de eeuwen der eeuwen. Amen.
+
+Heer, ontferm U. (3x)
+
+Door de gebeden van onze heilige vaders, Heer Jezus Christus, onze God, ontferm U over ons. Amen.`,
+  },
+  {
+    id: 'gebed-voor-het-slapen',
+    titel: 'Gebed voor het slapen',
+    wanneer: 'Bij het slapengaan',
+    bron: BRON_WORD,
+    categorie: 'dagelijks',
+    tekst: `GEBED VAN DE HEILIGE JOHANNES VAN DAMASKUS († ca. 780)
+
+Dit gebed zeg je terwijl je naar je bed wijst
+
+O menslievende Meester, zal dit bed mijn graf worden, of zult Ge mijn onzalige ziel nog door de nieuwe dag verlichten? Ziedaar mijn graf, de dood wacht op mij. Ik vrees Uw gericht, Heer, ik vrees de altijddurende kwellingen, en toch houd ik niet op kwaad te bedrijven: steeds vertoorn ik U, mijn Heer en God, en Uw alreine Moeder en alle hemelse machten en mijn beschermengel.
+
+Ik weet het, Heer, ik ben Uw liefde niet waard, ik ben waard om veroordeeld en gestraft te worden. Gij echter, Heer, red mij, of ik het wil of niet. Als Gij een rechtvaardige redden wilt, dan is dat niet iets groots, en als Gij U over een onschuldige ontfermt, dan is dat geen wonder: zij verdienen Uw barmhartigheid. Maar openbaar door mij, zondaar, Uw genade en Uw liefde voor de mensen, en sta niet toe dat mijn boosheid Uw onuitsprekelijke goedheid en barmhartigheid overweldigt: doe met mij naar Uw wil.
+
+Vlak voordat je gaat slapen
+
+Verlicht mijn ogen, o Christus God, laat mij niet inslapen ten dode; laat mijn vijand niet zeggen: 'Ik heb hem overweldigd.'
+
+Eer aan de Vader, de Zoon en de Heilige Geest.
+
+Wees de Beschermer van mijn ziel, o God, want ik wandel temidden van vele netten; verlos mij daaruit en red mij, o Algoede, want Gij hebt de mensen lief.
+
+Nu en altijd, en in de eeuwen der eeuwen. Amen.
+
+Bezingen wij zonder ophouden met hart en mond de algezegende Moeder van God, die heiliger is dan de heilige engelen. Belijden wij haar als de Moeder van God, want zij heeft waarlijk de Godmens gebaard en houdt niet op voor onze zielen te bidden.`,
   },
 ];

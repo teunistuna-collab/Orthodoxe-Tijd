@@ -173,9 +173,6 @@ export default function Weekcyclus() {
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-                <span className="btn-pill mt-6">
-                  Lees meer →
-                </span>
               </button>
             ))}
           </div>
@@ -253,7 +250,6 @@ export default function Weekcyclus() {
                       <span className="dienst-kaart">
                         <span className="dienst-kaart-titel font-display uppercase">{day.label}</span>
                         <span className="dienst-kaart-tekst">{day.short}</span>
-                        <span className="btn-pill dienst-kaart-cta">Lees meer →</span>
                       </span>
                     </span>
                   </button>
@@ -268,7 +264,7 @@ export default function Weekcyclus() {
 
             {/* Tablet/mobiel: verticale tijdlijn */}
             <div className="mt-10 space-y-3 lg:hidden">
-              {DAYS.map((day, index) => {
+              {DAYS.map((day) => {
                 const iconSrc = day.iconSrc;
                 return (
                   <button
@@ -282,7 +278,7 @@ export default function Weekcyclus() {
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="dienst-kaart-titel font-display block uppercase">
-                        {index + 1}. {day.label}
+                        {day.label}
                       </span>
                       <span className="dienst-kaart-tekst block">{day.short}</span>
                     </span>

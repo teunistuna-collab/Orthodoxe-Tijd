@@ -56,7 +56,7 @@ function huidigUurMoment(): UurMoment {
 }
 
 export default function Vandaag() {
-  const { mode, vandaag, vandaagYmd, htc, openDag, openLezing } = useApp();
+  const { mode, setMode, vandaag, vandaagYmd, htc, openDag, openLezing } = useApp();
   const [uurMoment, setUurMoment] = useState<UurMoment>(() => huidigUurMoment());
 
   useEffect(() => {
@@ -75,10 +75,24 @@ export default function Vandaag() {
   const gedachtenissen = dag.feesten;
   const datumTitel = hoofdFeest?.naam ?? heilige?.naam ?? 'Dag door het jaar';
 
+  // Mobiele opbouw (max-width: 767px): acht compacte knoppen met dezelfde iconen, links en gebeurtenissen als de lijst hierboven.
+  const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
+  const mobieleKnoppen: Array<{ key: string; titel: string; icoon: string; href: string; onClick?: () => void }> = [
+    { key: 'pijlgebed', titel: 'Pijlgebed', icoon: '/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp', href: '#adem' },
+    { key: 'uur', titel: uurMoment.naam, icoon: UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.webp', href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })) },
+    { key: 'week', titel: 'Weekcyclus', icoon: '/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.webp', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }) },
+    { key: 'vasten', titel: 'Vasten vandaag', icoon: '/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.webp', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }) },
+    { key: 'pascha', titel: 'Paschale cyclus', icoon: '/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp', href: '#pascha', onClick: () => openPopup({ pagina: 'pascha', sleutel: 'cyclus' }) },
+    { key: 'lezingen', titel: 'Schriftlezingen', icoon: '/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp', href: '#kalender', onClick: () => openDag(dag.ymd) },
+    { key: 'heiligen', titel: 'Heiligen van de dag', icoon: '/images/ui/menu/01-Hoofdmenu-10-Heiligen.webp', href: '#heiligen' },
+    { key: 'vaders', titel: 'Vaders & moeders', icoon: '/images/ui/menu/01-Hoofdmenu-05-Woestijnvaders-en-moeders.webp', href: '#gebeden' },
+  ];
+  const kerkelijkeRegel = mode === 'oud' ? `Kerkelijke datum: ${formatDag(dag.kerk)} (Juliaans)` : 'Nieuwe kalender (gereviseerd juliaans)';
+
   return (
     <section id="vandaag" className="vandaag-design-page">
       <div className="vandaag-frame">
-        <div className="vandaag-titlebar"><span className="vandaag-title-ornament">☦</span><div><p>ORTHODOXE TIJD</p><h1>Vandaag</h1></div><span className="vandaag-title-ornament">☦</span></div>
+        <h1 className="sr-only">Vandaag</h1>
         <div className="vandaag-cover"><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /><div className="vandaag-cover-shade"/><div className="vandaag-cover-copy"><span>In Gods tegenwoordigheid</span><strong>{hoofdletter(dag.weekdagNaam)} · {formatDatum(dag.civil)}</strong></div></div>
         <div className="vandaag-paper">
           <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true">☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
@@ -92,6 +106,52 @@ export default function Vandaag() {
             <a className="vandaag-item" href="#gebeden"><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-05-Woestijnvaders-en-moeders.webp" alt=""/><div><b>Vaders &amp; moeders</b><span>Spreuk uit de woestijn</span><small>De verzameling wordt later toegevoegd.</small><span className="btn-pill vandaag-cta">Ga naar gebeden →</span></div><ChevronRight className="vandaag-muted-chevron"/></a>
           </div>
           <button type="button" onClick={()=>openDag(dag.ymd)} className="vandaag-main-button"><Sparkles/> Bekijk de volledige dag <ChevronRight/></button>
+        </div>
+      </div>
+
+      <div className="vandaag-mobiel">
+        <p className="vm-titel">Orthodoxe Tijd</p>
+        <p className="vm-sier" aria-hidden="true"><span>✣</span></p>
+        <p className="vm-tagline">Een weg door de tijd<br />Een leven met Christus</p>
+
+        <div className="vm-medaillon">
+          <span className="vm-ring vm-ring-1" aria-hidden="true" />
+          <span className="vm-ring vm-ring-2" aria-hidden="true" />
+          <span className="vm-kruis vm-kruis-n" aria-hidden="true">✣</span>
+          <span className="vm-kruis vm-kruis-z" aria-hidden="true">✣</span>
+          <span className="vm-kruis vm-kruis-w" aria-hidden="true">✣</span>
+          <span className="vm-kruis vm-kruis-o" aria-hidden="true">✣</span>
+          <img decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
+        </div>
+
+        <p className="vm-weekdag">{dag.weekdagNaam}</p>
+        <p className="vm-datum">{formatDatum(dag.civil)}</p>
+        <p className="vm-kerk">{kerkelijkeRegel}</p>
+        <div className="vm-kalender" role="group" aria-label="Kalenderkeuze">
+          <button type="button" aria-pressed={mode === 'oud'} className={mode === 'oud' ? 'is-actief' : undefined} onClick={() => setMode('oud')}>Oud · juliaans</button>
+          <button type="button" aria-pressed={mode === 'nieuw'} className={mode === 'nieuw' ? 'is-actief' : undefined} onClick={() => setMode('nieuw')}>Nieuw · burgerlijk</button>
+        </div>
+        <p className="vm-sier vm-sier-breed" aria-hidden="true"><span>✣</span></p>
+
+        <div className="vm-grid">
+          {mobieleKnoppen.map(({ key, titel, icoon, href, onClick }) => (
+            <a
+              key={key}
+              className="vm-knop"
+              href={href}
+              onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
+            >
+              <img decoding="async" className="vm-icoon" src={icoon} alt="" />
+              <b>{titel}</b>
+              <ChevronRight aria-hidden="true" />
+            </a>
+          ))}
+        </div>
+
+        <div className="vm-kaars" aria-hidden="true">
+          <span className="vm-kaars-lijn"><i>✣</i></span>
+          <img decoding="async" src="/images/decor/kaars.webp" alt="" width="220" height="200" />
+          <span className="vm-kaars-lijn vm-kaars-rechts"><i>✣</i></span>
         </div>
       </div>
     </section>

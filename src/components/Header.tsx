@@ -101,7 +101,7 @@ export default function Header() {
   const cyclusActief = ['adem', 'etmaal', 'week', 'jaar'].includes(actief);
 
   return (
-    <header className="sticky top-0 z-50 overflow-visible shadow-lg shadow-black/20">
+    <header className="site-header sticky top-0 z-50 overflow-visible shadow-lg shadow-black/20">
       <div className="bg-bark text-cream">
         <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-2.5">
           <a href="#vandaag" onClick={() => { setActief('vandaag'); setMenuOpen(false); }} className="flex min-w-0 items-center gap-2 sm:gap-3">

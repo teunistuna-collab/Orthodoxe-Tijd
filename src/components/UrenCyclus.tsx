@@ -376,9 +376,6 @@ export default function UrenCyclus() {
                 </div>
                 <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-                <span className="btn-pill mt-6">
-                  Lees meer →
-                </span>
               </button>
             ))}
           </div>

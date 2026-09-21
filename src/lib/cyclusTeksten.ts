@@ -48,30 +48,16 @@ export const ADEM_POPUPS: Record<'wat' | 'jezusgebed' | 'gebedskoord' | 'hart', 
   },
   "jezusgebed": {
     "title": "Het Jezusgebed",
-    "subtitle": "Het hart van de ademcyclus",
-    "highlight": "Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar.",
-    "paragraphs": [],
-    "sections": [
-      {
-        "paragraphs": [
-          "In de orthodoxe geestelijke traditie is het Jezusgebed de meest kenmerkende vorm van het onophoudelijke gebed. Door de Naam van de Heer telkens opnieuw aan te roepen, keert het verstand terug tot Christus en wordt het hart geoefend in nederigheid, berouw en de voortdurende gedachtenis aan God.",
-          "De woorden belijden tegelijk wie Christus is en wie de mens voor Hem is: Jezus is Heer, Christus en Zoon van God; de bidder vraagt niet om een techniek of een bijzondere ervaring, maar om ontferming. Het doel is de gemeenschap met God en een leven dat steeds opnieuw naar Hem wordt gekeerd."
-        ]
-      },
-      {
-        "heading": "Gebed en adem",
-        "paragraphs": [
-          "Binnen de hesychastische traditie is het Jezusgebed soms met de lichamelijke ademhaling verbonden. Een eenvoudige vorm kan de twee delen van het gebed rustig laten meelopen met in- en uitademing:"
-        ],
-        "items": [
-          "Inademen — Heer Jezus Christus, Zoon van God",
-          "Uitademen — ontferm U over mij, zondaar"
-        ],
-        "after": [
-          "De ademhaling dient het gebed; het gebed dient niet de ademhaling.",
-          "De Kerkelijke traditie maakt hierbij een belangrijk onderscheid. Het Jezusgebed kan door iedere gelovige eenvoudig en aandachtig worden gebeden, ook tijdens de gewone bezigheden van de dag, zonder bijzondere lichaamshouding of ademtechniek. De specifieke hesychastische methoden waarin ademhaling, houding en het ‘neerdalen van het verstand in het hart’ bewust worden geoefend, behoren traditioneel onder geestelijke begeleiding te worden beoefend. De techniek is nooit het doel; Christus is het middelpunt."
-        ]
-      }
+    // Volledige tekst, letterlijk uit het aangeleverde document "Jezus gebed" (Word).
+    "paragraphs": [
+      "In zijn eerste Brief aan de Thessalonicenzen zegt de heilige apostel Paulus: Bid zonder ophouden: Hoe kan je bidden zonder ophouden? Door vaak het Jezusgebed te herhalen, zeggen de vaders van het geestelijke leven.",
+      "Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar.",
+      "Wanneer je hieraan gewend raakt, zul je een grote troost voelen en de behoefte hebben dit gebed steeds te doen. Dan zal het op den duur als het ware vanzelf in je hart doorgaan. In het begin zal de vijand van het menselijk geslacht van alles proberen om dit te verhinderen door vermoeidheid, luiheid, verveling, slaap en dergelijke op je af te sturen. Maar als je met Gods hulp deze tegenwerking te boven bent gekomen, dan zul je innerlijke vrede, geestelijke vreugde, een welwillende houding jegens de mensen, klaarheid van denken en oordeel en dankbaarheid jegens God ondervinden.",
+      "In de Naam van Jezus Christus schuilt een grote en genadevolle kracht. Vele heilige en rechtvaardige mensen raden dan ook aan om het Jezusgebed zo vaak mogelijk, ja, zonder onderbreking te bidden.",
+      "De heilige Johannes Chrysostomus zegt: 'Het is voor iedereen nodig, of hij nu eet of drinkt, zit of reist, of iets anders doet, steeds innerlijk te roepen: \"Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar.\" Dan zal de Naam van onze Heer Jezus Christus, door in de diepte van zijn hart af te dalen, de slang van het bedrog overwinnen en de ziel ver- en verlichten.'",
+      "De heilige Serafim van Sarov zegt: \"Laat al je aandacht en leren gericht zijn op het gebed: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar.' Als je loopt, eet, in de kerk staat voor het begin van de dienst, bij het binnenkomen en weggaan, laat dit gebed onophoudelijk op je lippen en in je hart zijn. Door op die manier de Naam van God aan te roepen, zul je rust vinden, geestelijke en lichamelijke reinheid bereiken en zal de Heilige Geest, bron van alle heil, woning in je maken en je leiden in heiligheid, in alle godsvrucht en reinheid.\"",
+      "De heilige Theofanes de Kluizenaar zegt: 'De vurige christen heeft een speciaal middel om zichzelf te wennen aan het leven met God in alle omstandigheden van het leven, namelijk door onophoudelijk een kort gebed van twee of drie woorden te herhalen. Meestal is dit: \"Heer, ontferm U\" of \"Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar.\" Wanneer je hierover nog niet gehoord mocht hebben, hoor het dan nu, en als je het nog niet hebt gedaan, begin er dan nu meteen mee.'",
+      "Zij die ernstig hebben besloten de Heer God te dienen, moeten zich oefenen in de voortdurende aandacht voor God en in het onophoudelijke gebed tot Jezus Christus en zeggen in de geest: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar.' Door dit te doen en door zich te behoeden voor afleiding, en met behoud van een zuiver geweten, is het mogelijk om tot God te naderen en één met Hem te worden. 'Want', met de woorden van de heilige Izaäk de Syriër: 'alleen door onophoudelijk gebed kunnen we tot God naderen.' Ook de heilige Johannes van Kronstadt heeft regelmatig het gebruik van het Jezusgebed aanbevolen."
     ]
   },
   "gebedskoord": {

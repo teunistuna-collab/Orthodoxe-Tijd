@@ -5,7 +5,7 @@ import { useApp } from '../lib/context';
 import { WEEKDAGEN_KORT, addDays, dagInfo, formatDag, formatDatum, formatKort, utc, weekRond, ymd } from '../lib/kalender';
 import { telVastendagen, vastenPeriodes } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
-import { VastenBadge } from './ui';
+import { VastenBadge, VastenKleuren } from './ui';
 import Modal from './Modal';
 import Cross from './Cross';
 import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
@@ -69,6 +69,14 @@ const INFO_POPUPS: Record<InfoKey, { title: string; subtitle?: string; paragraph
       'Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet. Zieken, zwangeren, kinderen, ouderen en reizigers vasten altijd in overleg met hun priester — barmhartigheid gaat boven de letter.',
     ],
   },
+};
+
+// Ronde iconen van de vier grote vasten (alleen zichtbaar op desktop, zie .major-icoon in index.css).
+const PERIODE_ICOON: Record<string, string> = {
+  'grote-vasten': '/images/ui/vasten-perioden/grote-vasten.webp',
+  apostelvasten: '/images/ui/vasten-perioden/apostelvasten.webp',
+  dormitionvasten: '/images/ui/vasten-perioden/dormitionvasten.webp',
+  kerstvasten: '/images/ui/vasten-perioden/kerstvasten.webp',
 };
 
 const PERIODE_INFO: Record<string, { label: string; href: string; linkLabel: string; beweeglijk: boolean }> = {
@@ -150,7 +158,11 @@ export default function Vasten() {
             <p className="text-center text-[12px] font-bold tracking-[0.32em] text-gold-light uppercase sm:text-sm">Vasten vandaag</p>
             <div className="mt-5 flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left"><img loading="lazy" decoding="async" src={`/images/ui/vasten-vandaag/${vastenVandaagIcon}`} alt="" className="vasten-vandaag-status-icon" />
               <div>
-                <h1 className="font-display text-2xl font-semibold text-[#fbf3df] sm:text-3xl">{dagVandaag.vasten.label}</h1>
+                <h1 className="font-display text-2xl font-semibold text-[#fbf3df] sm:text-3xl">
+                  {/* Stip in de kleur van de kalender-legenda (alleen mobiel) */}
+                  <span aria-hidden="true" className="mr-2.5 inline-block h-3 w-3 -translate-y-0.5 rounded-full align-middle min-[641px]:hidden" style={{ background: niveauVandaag.kleur, boxShadow: `0 0 0 3px color-mix(in srgb, ${niveauVandaag.kleur} 28%, transparent)` }} />
+                  {dagVandaag.vasten.label}
+                </h1>
                 <p className="mt-2 text-sm text-[#d9c6a3] sm:text-base">{niveauVandaag.toegestaan}</p>
                 <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#bfa982]">{dagVandaag.vasten.detail}</p>
                 {dagVandaag.vasten.periode && (
@@ -213,9 +225,6 @@ export default function Vasten() {
                 </div>
                 <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
-                <span className="btn-pill mt-4">
-                  Lees meer →
-                </span>
               </button>
             ))}
           </div>
@@ -245,11 +254,12 @@ export default function Vasten() {
               {grotevier.map((p) => {
                 const info = PERIODE_INFO[p.id];
                 return (
-                  <article key={p.id} className="v15-major-fast">
+                  <article key={p.id} className="v15-major-fast cursor-pointer" role="button" tabIndex={0} onClick={() => setPeriodeOpen(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPeriodeOpen(p.id); } }}>
+                    {PERIODE_ICOON[p.id] && <img className="major-icoon" src={PERIODE_ICOON[p.id]} alt="" loading="lazy" decoding="async" />}
                     
                     <div className="flex flex-wrap items-start justify-between gap-2 pl-3">
                       <div>
-                        <h4 className="font-display text-xl font-semibold">{info?.label ?? p.naam}</h4>
+                        <h4 className="font-display text-xl font-semibold">{(info?.label ?? p.naam).replace(/(apostel|ontslapenis)(vasten)/i, '$1­$2')}</h4>
                         <p className="major-meta">
                           {formatDag(p.start)} – {formatDatum(p.eind)} · {p.dagen} dagen
                         </p>
@@ -258,9 +268,6 @@ export default function Vasten() {
                     </div>
                     <p className="mt-4 pl-3 text-sm leading-relaxed text-ink-soft">{p.omschrijving}</p>
                     <div className="major-actions">
-                      <button type="button" onClick={() => setPeriodeOpen(p.id)} className="btn-pill">
-                        Lees meer →
-                      </button>
                       {info && (
                         <a href={info.href} className="btn-pill">
                           {info.linkLabel} →
@@ -330,6 +337,12 @@ export default function Vasten() {
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Kleurlegenda (alleen mobiel): dezelfde kleuren als in de kalender en bij "Vasten vandaag" */}
+              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-gold/30 bg-[#f3e9d2] px-4 py-3 text-[11px] font-semibold text-ink-soft min-[641px]:hidden">
+                <span className="text-[10px] font-bold tracking-widest text-gold-deep uppercase">Legenda</span>
+                <VastenKleuren actief={dagVandaag.vasten.niveau} />
               </div>
             </div>
 

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Header from './components/Header';
+import BottomNav from './components/BottomNav';
 import Footer from './components/Footer';
 import Vandaag from './components/Vandaag';
 import Kalender from './components/Kalender';
@@ -162,6 +163,7 @@ export default function App() {
           <ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame>
         </main>
         <Footer />
+        <BottomNav />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />
         <LezingModal keuze={lezing} onClose={sluitLezing} />
         <KalenderUitleg open={uitlegOpen} onClose={sluitKalenderUitleg} />

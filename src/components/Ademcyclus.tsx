@@ -74,7 +74,7 @@ export default function Ademcyclus() {
             {/* Christus-icoon met ringen en de twee korte gebeden ernaast */}
             <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
               <div className="col-span-2 flex justify-center lg:order-2 lg:col-span-1">
-                <div className="relative m-9 h-[200px] w-[200px] sm:m-[60px] sm:h-[230px] sm:w-[230px]">
+                <div className="relative m-9 h-[200px] w-[200px] shrink-0 max-[359px]:h-[160px] max-[359px]:w-[160px] sm:m-[60px] sm:h-[230px] sm:w-[230px]">
                   <div className="absolute -inset-3.5 rounded-full border border-gold/45 sm:-inset-5" />
                   <div className="absolute -inset-7 rounded-full border border-gold/30 sm:-inset-10" />
                   <div className="absolute -inset-9 rounded-full border border-dotted border-gold/40 sm:-inset-[60px]">

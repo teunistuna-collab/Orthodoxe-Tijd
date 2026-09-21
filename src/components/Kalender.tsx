@@ -3,7 +3,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster } from '../lib/kalender';
 import { HEILIGEN } from '../lib/heiligen';
-import { LADDER, NIVEAUS } from '../lib/vasten';
+import { NIVEAUS } from '../lib/vasten';
+import { VastenKleuren } from './ui';
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het kalenderpaneel.
 function CornerOrnament({ className = '' }: { className?: string }) {
@@ -172,11 +173,7 @@ export default function Kalender() {
             {/* Legenda */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-gold/25 bg-[#f3e9d2] px-4 py-3 text-[11px] font-semibold text-ink-soft sm:px-5">
               <span className="text-[10px] font-bold tracking-widest text-gold-deep uppercase">Legenda</span>
-              {LADDER.filter((l) => l.id !== 'geen').map((l) => (
-                <span key={l.id} className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: l.kleur }} /> {l.kort}
-                </span>
-              ))}
+              <VastenKleuren />
               <span className="inline-flex items-center gap-1.5">
                 <span className="text-gold-deep">✠</span> groot feest
               </span>
@@ -222,7 +219,6 @@ export default function Kalender() {
                   ) : (
                     <p className="cal-saints-text">Geen heiligen opgenomen.</p>
                   )}
-                  <div className="mt-auto pt-5 text-center"><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill">Lees meer →</button></div>
                 </section>
               </div>
             </aside>

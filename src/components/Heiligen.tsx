@@ -32,6 +32,8 @@ export default function Heiligen() {
   const [categorie, setCategorie] = useState('alle');
   const [alleenNl, setAlleenNl] = useState(false);
   const [dag, setDag] = useState<number | null>(null);
+  // Na een tik op een maandknop tonen we nog geen heiligen: eerst een dag (of "Alle dagen") kiezen.
+  const [wachtOpDag, setWachtOpDag] = useState(false);
   const [vandaagOpen, setVandaagOpen] = useState(false);
   const [geselecteerde, setGeselecteerde] = useState<Resultaat | null>(null);
 
@@ -85,6 +87,18 @@ export default function Heiligen() {
   ];
   const dagenInMaand = maand ? new Date(Date.UTC(2024, maand, 0)).getUTCDate() : 0;
 
+  // Resultaten verschijnen pas na een gekozen dag (of andere zoekopdracht). Bij alleen "Heiligen van de Lage Landen" staan ze onder dat blok.
+  const filterActief = Boolean(zoek || maand || dag || categorie !== 'alle' || alleenNl);
+  const toonResultaten = filterActief && !wachtOpDag;
+  const alleenLageLanden = alleenNl && !zoek && !maand && !dag && categorie === 'alle';
+  const resultatenBlok = (
+    <section className="saints-results">
+              <div className="saints-rule-title"><h2>{dag&&maand?`${dag} ${MAANDEN[maand-1]}`:alleenNl?'Heiligen van de Lage Landen':'Geselecteerde heiligen'}</h2><span>{resultaten.length} gedachtenissen</span></div>
+              <div className="saints-results-list">{groepen.slice(0,alleenNl?groepen.length:12).map(([md,items])=><div key={md}><time>{formatMd(md)}</time><div>{items.map((h,i)=><button key={`${h.naam}-${i}`} onClick={()=>setGeselecteerde(h)}><span><strong>{h.naam}</strong>{h.titel&&<small>{h.titel}</small>}</span><b>→</b></button>)}</div></div>)}</div>
+              {!groepen.length&&<p className="saints-empty">Geen heiligen gevonden voor deze selectie.</p>}
+    </section>
+  );
+
   return <>
     <section id="heiligen" className="saints-hero"><img loading="lazy" decoding="async" src="/images/heroes/hero-heiligen.webp" width={2103} height={748} alt="Heiligen — Orthodoxe Tijd" /></section>
     <main className="saints-refined">
@@ -95,7 +109,6 @@ export default function Heiligen() {
             <h1>Vandaag gedenken wij</h1>
             <p className="saints-date-line">{formatMd(dagVandaag.kerkKey)} <span>(kerkelijke kalender)</span></p>
             <p>Op deze dag bewaart de Kerk de gedachtenis van hen die Christus gevolgd hebben. Hun leven herinnert ons aan het licht van Christus.</p>
-            <a href="#kalender" className="saints-gold-button">Bekijk deze dag in de kalender →</a>
           </div>
           <div className="saints-today-feature">
             <p className="saints-kicker">Belangrijkste heilige van de dag</p>
@@ -113,35 +126,33 @@ export default function Heiligen() {
         <section className="saints-discover">
           <div className="saints-section-head"><h2>Ontdek alle heiligen</h2><p>Zoek op naam, maand of categorie en laat u inspireren door hun leven.</p></div>
           <div className="saints-search-row">
-            <label><Search/><input value={zoek} onChange={e=>setZoek(e.target.value)} placeholder="Zoek een heilige…" /></label>
-            <div className="saints-select"><select value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
-            <div className="saints-select"><select value={categorie} onChange={e=>setCategorie(e.target.value)}><option value="alle">Alle categorieën</option>{categories.map(c=><option key={c[0]} value={c[0]}>{c[1]}</option>)}</select><ChevronDown/></div>
+            <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setWachtOpDag(false)}} placeholder="Zoek een heilige…" /></label>
+            <div className="saints-select"><select value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false);setWachtOpDag(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
+            <div className="saints-select"><select value={categorie} onChange={e=>{setCategorie(e.target.value);setWachtOpDag(false)}}><option value="alle">Alle categorieën</option>{categories.map(c=><option key={c[0]} value={c[0]}>{c[1]}</option>)}</select><ChevronDown/></div>
             <button className="saints-search-button">Zoeken →</button>
           </div>
         </section>
 
         <section className="saints-browser">
           <div className="saints-rule-title"><h2>Heiligen per maand</h2><span>5500+ heiligen</span></div>
-          <div className="saints-month-grid">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i+1);setDag(null);setZoek('');setAlleenNl(false)}} className={maand===i+1?'active':''}>{hoofdletter(m)}<span>→</span></button>)}</div>
-          {maand && <div className="saints-days-panel"><div><p className="saints-kicker">Kies een dag in {MAANDEN[maand-1]}</p><button onClick={()=>setDag(null)} className={!dag?'active':''}>Alle dagen</button></div><div className="saints-days-grid">{Array.from({length:dagenInMaand},(_,i)=>i+1).map(n=><button key={n} onClick={()=>{setDag(n);setAlleenNl(false)}} className={dag===n?'active':''}>{n}</button>)}</div></div>}
+          <div className="saints-month-grid">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i+1);setDag(null);setZoek('');setAlleenNl(false);setWachtOpDag(true)}} className={maand===i+1?'active':''}>{hoofdletter(m)}</button>)}</div>
+          {maand && <div className="saints-days-panel"><div><p className="saints-kicker">Kies een dag in {MAANDEN[maand-1]}</p><button onClick={()=>{setDag(null);setWachtOpDag(false)}} className={!dag&&!wachtOpDag?'active':''}>Alle dagen</button></div><div className="saints-days-grid">{Array.from({length:dagenInMaand},(_,i)=>i+1).map(n=><button key={n} onClick={()=>{setDag(n);setAlleenNl(false);setWachtOpDag(false)}} className={dag===n?'active':''}>{n}</button>)}</div></div>}
         </section>
 
-        {(zoek || maand || dag || categorie!=='alle' || alleenNl) && <section className="saints-results">
-          <div className="saints-rule-title"><h2>{dag&&maand?`${dag} ${MAANDEN[maand-1]}`:alleenNl?'Heiligen van de Lage Landen':'Geselecteerde heiligen'}</h2><span>{resultaten.length} gedachtenissen</span></div>
-          <div className="saints-results-list">{groepen.slice(0,alleenNl?groepen.length:12).map(([md,items])=><div key={md}><time>{formatMd(md)}</time><div>{items.map((h,i)=><button key={`${h.naam}-${i}`} onClick={()=>setGeselecteerde(h)}><span><strong>{h.naam}</strong>{h.titel&&<small>{h.titel}</small>}</span><b>→</b></button>)}</div></div>)}</div>
-          {!groepen.length&&<p className="saints-empty">Geen heiligen gevonden voor deze selectie.</p>}
-        </section>}
+        {toonResultaten && !alleenLageLanden && resultatenBlok}
 
         <section className="saints-categories">
           <div className="saints-rule-title"><h2>Heiligen naar categorie</h2></div>
-          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>setCategorie(c[0])} className={categorie===c[0]?'active':''}><strong>{c[1]}</strong><span>{c[2]}</span><i>✣</i></button>)}</div>
+          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><strong>{c[1]}</strong><span>{c[2]}</span><i>✣</i></button>)}</div>
         </section>
 
         <section className="saints-lowlands">
           <div className="saints-lowlands-map"><img loading="lazy" decoding="async" src="/images/decor/lage-landen.webp" alt="Kaart van de Lage Landen" /></div>
-          <div><h2>Heiligen van de Lage Landen</h2><p>Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p>Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('')}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen →'}</button></div>
+          <div><h2>Heiligen van de Lage Landen</h2><p>Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p>Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('');setWachtOpDag(false)}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen →'}</button></div>
           <blockquote>“Ook in onze streken heeft de Heer Zijn getuigen doen opstaan.”<span>✣</span></blockquote>
         </section>
+
+        {toonResultaten && alleenLageLanden && resultatenBlok}
 
       </div>
     </main>
