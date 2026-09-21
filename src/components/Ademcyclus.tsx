@@ -44,40 +44,6 @@ const TIMELINE_ITEMS = [
 
 const CONTENT = 'mx-auto w-full max-w-[1600px] px-4 sm:px-8 lg:px-12';
 
-// Zeer subtiele botanische tak ter decoratie (geen fotomateriaal beschikbaar).
-function BranchOrnament({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 160 220" className={className} fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M80 210 C 70 160, 90 120, 78 70 C 72 45, 84 20, 78 4" strokeLinecap="round" />
-      <path d="M78 70 C 60 62, 45 68, 34 50" strokeLinecap="round" />
-      <path d="M78 96 C 96 90, 108 98, 118 82" strokeLinecap="round" />
-      <path d="M78 40 C 62 34, 52 40, 42 26" strokeLinecap="round" />
-      <path d="M78 20 C 92 16, 100 22, 110 10" strokeLinecap="round" />
-      <circle cx="34" cy="50" r="3.5" />
-      <circle cx="118" cy="82" r="3.5" />
-      <circle cx="42" cy="26" r="3" />
-      <circle cx="110" cy="10" r="3" />
-    </svg>
-  );
-}
-
-// Zeer subtiel silhouet van een orthodoxe kerk/klooster ter decoratie.
-function ChurchSilhouette({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 220 180" className={className} fill="currentColor">
-      <rect x="20" y="120" width="180" height="50" />
-      <rect x="40" y="90" width="38" height="30" />
-      <rect x="142" y="90" width="38" height="30" />
-      <rect x="86" y="60" width="48" height="60" />
-      <path d="M86 60 L110 30 L134 60 Z" />
-      <path d="M40 90 L59 68 L78 90 Z" />
-      <path d="M142 90 L161 68 L180 90 Z" />
-      <rect x="107" y="8" width="6" height="22" />
-      <rect x="98" y="14" width="24" height="4" />
-    </svg>
-  );
-}
-
 // Dunne gouden lijn met een sierteken in het midden.
 function OrnamentRule({ className = '' }: { className?: string }) {
   return (
@@ -165,19 +131,25 @@ export default function Ademcyclus() {
       </section>
 
       {/* Een levend ritme */}
-      <section className="border-y border-gold/25 bg-[#f3eada] py-16 sm:py-20">
+      <section className="border-y border-gold/25 bg-[#f3eada] py-8 sm:py-10">
         <div className={CONTENT}>
-          <div className="parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-12 shadow-[0_24px_55px_rgba(40,22,14,0.12)] sm:px-10 lg:px-14">
-            <div className="grid items-center gap-10 lg:grid-cols-[0.7fr_2fr_0.7fr]">
-              <BranchOrnament className="mx-auto hidden h-40 w-28 text-gold-deep/25 lg:block" />
-              <div className="text-center">
-                <div className="provided-inline-icons"><img loading="lazy" decoding="async" src="/images/ui/menu/02-Gebed-05-De-betekenis-in-ons-leven.webp" alt=""/><img loading="lazy" decoding="async" src="/images/ui/menu/02-Gebed-06-Praktisch.webp" alt=""/></div><p className="text-[13px] font-bold tracking-[0.32em] text-gold-deep uppercase sm:text-sm">Een levend ritme</p>
-                <p className="mx-auto mt-5 max-w-2xl font-display text-lg leading-relaxed text-ink-soft italic sm:text-xl">
-                  De ademcyclus is geen afzonderlijke liturgische cyclus van de Kerk, maar het kleinste ritme van het gebedsleven:
-                  de voortdurende gedachtenis aan Christus, die zich met iedere ademhaling kan verbinden.
-                </p>
-              </div>
-              <ChurchSilhouette className="mx-auto hidden h-24 w-36 text-gold-deep/20 lg:block" />
+          <div className="parchment-pattern relative overflow-hidden rounded-lg border border-gold/50 bg-[#f8f1e3] px-6 py-8 shadow-[0_24px_55px_rgba(40,22,14,0.12)] sm:px-10 sm:py-9 lg:px-16">
+            {/* Dun kader met een kruisje in elke hoek */}
+            <div className="pointer-events-none absolute inset-2.5 border border-gold/45 sm:inset-3.5" aria-hidden="true">
+              <span className="absolute -top-2.5 -left-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
+              <span className="absolute -top-2.5 -right-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
+              <span className="absolute -bottom-2.5 -left-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
+              <span className="absolute -right-2.5 -bottom-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
+            </div>
+
+            <div className="relative text-center">
+              <p className="text-[13px] font-bold tracking-[0.4em] text-ink-soft uppercase sm:text-sm">Een levend ritme</p>
+              <OrnamentRule className="mt-3 w-[22rem] max-w-full" />
+              <p className="mx-auto mt-5 max-w-4xl font-display text-xl leading-[1.5] text-ink italic sm:text-[26px]">
+                De ademcyclus is geen afzonderlijke liturgische cyclus van de Kerk, maar het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus, die zich met iedere ademhaling kan verbinden.
+              </p>
+              <OrnamentRule className="mt-5 w-60 max-w-full" />
+              <p className="mt-4 text-[12px] font-semibold tracking-[0.4em] text-ink-soft uppercase sm:text-[13px]">Bid · Adem · Leef</p>
             </div>
           </div>
         </div>
