@@ -138,9 +138,9 @@ export default function Kalender() {
                     className={`relative min-h-[56px] border-r border-b border-gold/20 p-1 text-left align-top transition [&:nth-child(7n)]:border-r-0 sm:min-h-[112px] sm:p-2 ${
                       isGeselecteerd
                         ? 'bg-[#4d1716] text-gold-light ring-2 ring-inset'
-                        : `${buiten ? 'bg-[#f3e9d2]/50 text-ink-mute' : 'bg-[#fbf6e8] hover:bg-gold-pale/60'} ${c.isVandaag ? 'ring-[3px] ring-inset' : 'ring-1 ring-inset'}`
+                        : `kalender-dag ${buiten ? 'kalender-dag--buiten text-ink-mute' : ''} ${c.isVandaag ? 'ring-[3px] ring-inset' : 'ring-1 ring-inset'}`
                     }`}
-                    style={{ '--tw-ring-color': ringHex } as CSSProperties}
+                    style={{ '--tw-ring-color': ringHex, '--dag-kleur': ringHex } as CSSProperties}
                     title="Open dagdetail"
                   >
                     <div className="flex items-start justify-center gap-1 sm:justify-between">

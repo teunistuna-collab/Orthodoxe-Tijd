@@ -946,8 +946,9 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 #top#top .feast-discover .saints-search-row :is(input,select){height:auto!important;min-height:0!important;background:transparent!important;border:0!important;border-radius:0!important;color:#3b2014!important}
 #top#top .feast-discover .saints-search-row input::placeholder{color:#806d56!important}
 
-/* Bouw 28 — kalender: geselecteerde dag krijgt een lichte gouden tint (de donkere vulling uit de code wordt elders weggehaald) */
-#top#top .exact-design-page .grid-cols-7>button[class*="4d1716"]{background:#f3e2ad!important}
+/* Bouw 28 — kalender: geselecteerde dag krijgt een lichte tint in de eigen liturgische kleur van die dag
+   (zelfde kleur als het kader), i.p.v. een vast goudkleurig vlak (de donkere vulling uit de code wordt elders weggehaald) */
+#top#top .exact-design-page .grid-cols-7>button[class*="4d1716"]{background:color-mix(in srgb, var(--dag-kleur) 24%, #fbf6e8)!important}
 
 /* Bouw 29 — Kalender, "Heilige(n) van de dag": hoofdheilige met hiërarchie, overige namen als rustige lijst */
 #top#top .cal-saints{position:relative;padding:22px 20px 20px;text-align:center;
@@ -1443,3 +1444,9 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 @media(min-width:640px){
   #top#top .page-hero-crop{aspect-ratio:6.25/1}
 }
+
+/* Bouw 57 — kalenderdagen: het vlak krijgt dezelfde liturgische kleur als het kader (niet alleen een dunne rand). */
+#top#top .kalender-dag{background:color-mix(in srgb, var(--dag-kleur) 15%, #fbf6e8)}
+#top#top .kalender-dag:hover{background:color-mix(in srgb, var(--dag-kleur) 28%, #fbf6e8)}
+#top#top .kalender-dag--buiten{background:color-mix(in srgb, var(--dag-kleur) 8%, #f3e9d2)}
+#top#top .kalender-dag--buiten:hover{background:color-mix(in srgb, var(--dag-kleur) 16%, #f3e9d2)}
