@@ -129,10 +129,10 @@ section[id] {
 @keyframes glow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(232, 207, 122, 0.35);
+    box-shadow: 0 0 0 0 var(--glow-color, #e8cf7a);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(232, 207, 122, 0);
+    box-shadow: 0 0 0 3px var(--glow-color, #e8cf7a);
   }
 }
 .today-glow {
@@ -261,22 +261,21 @@ main > section[id] > img {
 .vandaag-frame{width:min(760px,100%);margin:0 auto;border:1px solid rgba(213,169,72,.8);background:#1a0e09;box-shadow:0 24px 65px rgba(0,0,0,.48)}
 .vandaag-titlebar{height:58px;display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid rgba(213,169,72,.72);color:#f2dfaa;text-align:center;background:linear-gradient(180deg,#25150d,#180c08)}
 .vandaag-titlebar p{margin:0;font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:#b9964f}.vandaag-titlebar h1{margin:1px 0 0;font-family:var(--font-display);font-weight:500;font-size:25px;letter-spacing:.08em;text-transform:uppercase}.vandaag-title-ornament{font-size:20px;color:#d7ae4c}
-.vandaag-cover{height:260px;position:relative;overflow:hidden}.vandaag-cover img{width:100%;height:100%;object-fit:cover;object-position:center 48%;display:block}.vandaag-cover-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,7,4,.05) 30%,rgba(16,7,4,.88) 100%)}
-.vandaag-cover-copy{position:absolute;inset:auto 0 20px;text-align:center;color:#fff4da;text-shadow:0 2px 10px #000}.vandaag-cover-copy span{display:block;font-family:var(--font-display);font-size:25px}.vandaag-cover-copy strong{display:block;margin-top:4px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#e7c76f}
+.vandaag-cover{aspect-ratio:6.25/1;position:relative;overflow:hidden}.vandaag-cover img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
 .vandaag-paper{position:relative;padding:0 22px 24px;background-color:#f5ecd8;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.09),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.07),transparent 30%);box-shadow:inset 0 0 35px rgba(103,66,27,.08)}
 .vandaag-paper:before,.vandaag-paper:after{content:'❦';position:absolute;color:rgba(164,118,41,.3);font-size:40px}.vandaag-paper:before{left:10px;top:15px}.vandaag-paper:after{right:10px;bottom:14px;transform:rotate(180deg)}
 .vandaag-dayhead{text-align:center;padding:22px 20px 19px;border-bottom:1px solid rgba(138,91,35,.25)}.vandaag-dayhead p{font-family:var(--font-display);font-size:17px;margin:0;color:#3b2518}.vandaag-dayhead h2{font-family:var(--font-display);font-size:23px;font-weight:500;margin:1px 0;color:#321b13}.vandaag-dayhead>span{font-size:10px;color:#7e674f}.vandaag-dayhead i{display:block;font-style:normal;color:#b58226;font-size:22px;margin:9px 0 3px}.vandaag-dayhead h3{font-family:var(--font-display);font-size:21px;font-weight:500;margin:0;color:#3a1d16}.vandaag-dayhead small{display:block;margin-top:3px;color:#72533b;font-size:11px}
 .vandaag-list{position:relative;z-index:1}.vandaag-item{display:grid;grid-template-columns:31px 1fr 20px;gap:12px;align-items:center;min-height:67px;padding:11px 6px;border-bottom:1px solid rgba(138,91,35,.2)}.vandaag-item>svg:first-child{width:21px;height:21px;color:#a87825;stroke-width:1.5}.vandaag-item>div{min-width:0}.vandaag-item b{display:block;font-family:var(--font-display);font-size:15px;font-weight:600;color:#352117}.vandaag-item span,.vandaag-item em,.vandaag-item small{display:block;margin-top:2px;line-height:1.32;color:#5e4938}.vandaag-item span{font-size:12px}.vandaag-item em{font-family:var(--font-display);font-size:14px}.vandaag-item small{font-size:9px;color:#8a725b}.vandaag-item>a{display:flex;color:#a87825}.vandaag-item>a svg,.vandaag-muted-chevron{width:16px;height:16px;stroke-width:1.5}.vandaag-readings-item button{border:0;background:none;padding:1px 0;display:block;cursor:pointer;text-align:left;color:#5e4938;font-family:inherit}.vandaag-readings-item button:hover span{color:#8b5e18}.vandaag-muted-chevron{color:#b9a88f}
 .vandaag-main-button{position:relative;z-index:1;margin:19px auto 0;display:flex;align-items:center;justify-content:center;gap:9px;min-width:290px;border:1px solid #a77c2d;border-radius:3px;background:linear-gradient(180deg,#4a2b12,#261309);box-shadow:inset 0 1px rgba(255,235,175,.2),0 4px 10px rgba(48,25,11,.2);padding:12px 20px;color:#f3dda0;font-family:var(--font-display);font-size:12px;letter-spacing:.13em;text-transform:uppercase;cursor:pointer}.vandaag-main-button svg{width:14px;height:14px}.vandaag-main-button:hover{filter:brightness(1.12)}
-@media(min-width:980px){.vandaag-design-page{padding-top:38px}.vandaag-frame{width:min(820px,100%)}.vandaag-cover{height:290px}.vandaag-paper{padding-left:38px;padding-right:38px}.vandaag-item{min-height:70px}}
-@media(max-width:560px){.vandaag-design-page{padding:14px 8px 40px}.vandaag-titlebar{height:52px}.vandaag-cover{height:205px}.vandaag-cover-copy span{font-size:21px}.vandaag-paper{padding:0 15px 20px}.vandaag-dayhead{padding-left:10px;padding-right:10px}.vandaag-item{grid-template-columns:28px 1fr 17px;gap:8px}.vandaag-main-button{min-width:0;width:100%;font-size:10px}}
+@media(min-width:980px){.vandaag-design-page{padding-top:38px}.vandaag-frame{width:min(820px,100%)}.vandaag-paper{padding-left:38px;padding-right:38px}.vandaag-item{min-height:70px}}
+@media(max-width:560px){.vandaag-design-page{padding:14px 8px 40px}.vandaag-titlebar{height:52px}.vandaag-paper{padding:0 15px 20px}.vandaag-dayhead{padding-left:10px;padding-right:10px}.vandaag-item{grid-template-columns:28px 1fr 17px;gap:8px}.vandaag-main-button{min-width:0;width:100%;font-size:10px}}
 
 /* Exacte designbasis: alle hoofdpagina's gebruiken dezelfde boekvorm als Vandaag. */
 .exact-design-page{background:radial-gradient(circle at 50% 0%,#392314 0,#1b0e09 44%,#110806 100%);padding:38px 18px 64px;color:#2b1b12}
 .exact-frame{width:min(820px,100%);margin:0 auto;border:1px solid rgba(213,169,72,.8);background:#1a0e09;box-shadow:0 24px 65px rgba(0,0,0,.48);overflow:hidden}
 .exact-titlebar{height:58px;display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid rgba(213,169,72,.72);color:#f2dfaa;text-align:center;background:linear-gradient(180deg,#25150d,#180c08)}
 .exact-titlebar p{margin:0;font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:#b9964f}.exact-titlebar h1{margin:1px 0 0;font-family:var(--font-display);font-weight:500;font-size:25px;letter-spacing:.08em;text-transform:uppercase}.exact-title-ornament{font-size:20px;color:#d7ae4c}
-.exact-content{background:#f5ecd8}.exact-content>section{margin:0!important}.exact-content>section:first-child{height:260px!important;overflow:hidden!important;background:#160b08!important;border-bottom:1px solid rgba(213,169,72,.55)!important}.exact-content>section:first-child img{display:block!important;width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important;object-position:center!important}
+.exact-content{background:#f5ecd8}.exact-content>section{margin:0!important}.exact-content>section:first-child:not(.page-hero-crop){height:260px!important;overflow:hidden!important;background:#160b08!important;border-bottom:1px solid rgba(213,169,72,.55)!important}.exact-content>section:first-child img{display:block!important;width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important;object-position:center!important}.exact-content>section:first-child.page-hero-crop{border-bottom:1px solid rgba(213,169,72,.55)!important}
 .exact-content>section:not(:first-child){width:100%!important;max-width:none!important;padding-top:34px!important;padding-bottom:34px!important;background-color:#f5ecd8!important;color:#2b1b12!important;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.07),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.05),transparent 30%)!important;border-bottom:1px solid rgba(138,91,35,.22)!important}
 .exact-content>section:not(:first-child)>div{width:100%!important;max-width:none!important;padding-left:38px!important;padding-right:38px!important;margin-left:0!important;margin-right:0!important}
 .exact-content .rounded-2xl,.exact-content .rounded-xl,.exact-content .rounded-lg,.exact-content .rounded-md{border-radius:2px!important}
@@ -285,7 +284,7 @@ main > section[id] > img {
 .exact-content button,.exact-content a{transition:filter .15s ease,color .15s ease}.exact-content button:hover,.exact-content a:hover{filter:brightness(1.08)}
 .exact-content .bg-bark,.exact-content .bg-bark-soft,.exact-content .bg-wine-deep{border-color:rgba(213,169,72,.45)!important}
 .exact-content svg{stroke-width:1.5}.exact-content [class*="text-gold"] svg,.exact-content svg[class*="text-gold"]{color:#a87825}
-@media(max-width:560px){.exact-design-page{padding:14px 8px 40px}.exact-titlebar{height:52px}.exact-content>section:first-child{height:205px!important}.exact-content>section:not(:first-child)>div{padding-left:15px!important;padding-right:15px!important}.exact-content>section:not(:first-child){padding-top:26px!important;padding-bottom:26px!important}}
+@media(max-width:560px){.exact-design-page{padding:14px 8px 40px}.exact-titlebar{height:52px}.exact-content>section:first-child:not(.page-hero-crop){height:205px!important}.exact-content>section:not(:first-child)>div{padding-left:15px!important;padding-right:15px!important}.exact-content>section:not(:first-child){padding-top:26px!important;padding-bottom:26px!important}}
 
 /* Exact popup system — dezelfde visuele grammatica als de goedgekeurde Vandaag-pagina */
 .exact-modal-backdrop{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(17,8,6,.88);backdrop-filter:blur(5px)}
@@ -385,9 +384,7 @@ header nav>div{justify-content:center}
 /* Header + navigation share the same centered visual axis. */
 header>div.bg-bark>div, header nav>div{width:min(1500px,100%);margin-inline:auto}
 header nav>div{justify-content:space-evenly!important}
-header>div.bg-bark{background:radial-gradient(circle at 50% 120%,rgba(178,119,38,.12),transparent 45%),linear-gradient(180deg,#1d0f0a,#130806)}
 header>div.bg-bark>div{position:relative}
-header>div.bg-bark>div:after{content:"✣";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:rgba(207,161,62,.45);font-size:18px;pointer-events:none}
 
 /* Readability: important copy on parchment is always dark enough. */
 .exact-content .text-ink-soft,.exact-content .text-ink-mute,.exact-content [class*="text-[#d9c6a3]"],.exact-content [class*="text-[#e8dcc0]"]{color:#62442f!important;opacity:1!important}
@@ -457,8 +454,6 @@ header>div.bg-bark>div:after{content:"✣";position:absolute;left:50%;top:50%;tr
 .exact-content p,.exact-content h1,.exact-content h2,.exact-content h3,.exact-content blockquote{overflow-wrap:break-word}
 
 /* Header: same axis as the book, richer but restrained. */
-header>div.bg-bark{border-bottom:1px solid rgba(201,162,39,.38)!important;background:radial-gradient(ellipse at 50% 120%,rgba(184,126,39,.18),transparent 48%),linear-gradient(180deg,#24140d 0%,#150906 100%)!important}
-header>div.bg-bark>div:before{content:"";position:absolute;left:34%;right:34%;bottom:7px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,162,39,.45),transparent);pointer-events:none}
 header nav{border-bottom:1px solid rgba(201,162,39,.28)!important}
 header nav>div{justify-content:space-between!important}
 
@@ -528,7 +523,6 @@ header nav>div{justify-content:space-between!important}
 #feesten~section:last-of-type .font-display,.feasts-page+section .font-display{color:#6d3528!important;opacity:1!important}
 
 /* v14 — Heiligen rebuilt to the approved editorial reference */
-.saints-hero{background:#1b0d08}.saints-hero img{display:block;width:100%;height:auto;max-height:470px;object-fit:cover}
 .saints-refined{background:radial-gradient(circle at 50% 0%,rgba(199,145,35,.08),transparent 35%),linear-gradient(#241108,#32190b);padding:0 0 34px;color:#f4ead5}
 .saints-today-panel{transform:translateY(-2px);display:grid;grid-template-columns:1.05fr 1.35fr .42fr;background:#f6eedf;color:#35180f;border:1px solid #c89a3a;border-radius:12px;overflow:hidden;box-shadow:0 18px 45px rgba(0,0,0,.25);position:relative}
 .saints-today-panel:before{content:"";position:absolute;inset:8px;border:1px solid rgba(183,130,34,.2);border-radius:8px;pointer-events:none}
@@ -770,11 +764,7 @@ header nav>div{justify-content:space-between!important}
 .orthodox-nav-mark{display:inline-flex;min-width:17px;align-items:center;justify-content:center;color:#d5a13a;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1;text-shadow:0 0 10px rgba(201,154,57,.12)}
 nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969}
 
-/* ===== BOUW 19 — harde herstelpunten ===== */
-/* Hero's: nooit meer door een max-height/object-fit cover afsnijden. */
-#adem>img,#etmaal>img,#week>img,#jaar>img,#pascha>img,#gebeden>img,#vasten>img,#kalender>img,#feesten>img,
-.saints-hero img{width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important;display:block!important}
-.saints-hero{height:auto!important;min-height:0!important;overflow:visible!important}
+/* ===== BOUW 19 — harde herstelpunten (verouderd, zie Bouw 56: banners worden nu juist bewust uitgesneden) ===== */
 
 /* Traditionelere, typografische liturgische tekens i.p.v. generieke app-iconen. */
 .liturgical-card-mark,.liturgical-timeline-mark{font-family:Georgia,'Times New Roman',serif;color:#d7a43d;letter-spacing:.03em;line-height:1;text-align:center}
@@ -1167,9 +1157,10 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .vandaag-item:hover{padding-left:18px!important;transform:none!important}
 @media(min-width:980px){#top#top .vandaag-item:hover{padding-left:22px!important}}
 
-/* Bouw 41 — geen bruin vlak meer onder de hero-banners: de sectie is zo hoog als de afbeelding zelf */
-#top#top .exact-content>section:first-child{height:auto!important;min-height:0!important}
-#top#top .exact-content>section:first-child img{height:auto!important;object-fit:contain!important}
+/* Bouw 41 — geen bruin vlak meer onder de hero-banners: de sectie is zo hoog als de afbeelding zelf
+   (uitgezonderd .page-hero-crop, zie Bouw 56: die banners worden juist bewust uitgesneden) */
+#top#top .exact-content>section:first-child:not(.page-hero-crop){height:auto!important;min-height:0!important}
+#top#top .exact-content>section:first-child:not(.page-hero-crop) img{height:auto!important;object-fit:contain!important}
 
 /* Bouw 42 — pop-ups: grotere tikzone voor sluiten en vorige/volgende (48×48px, kruisje 24px) */
 #top#top .exact-modal-close{position:relative;display:inline-grid!important;place-items:center;width:48px!important;height:48px!important;min-width:48px;padding:0!important;font-size:0!important}
@@ -1225,7 +1216,6 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   #top#top :is(.text-xs,.text-\[12px\]){font-size:13px!important}
   #top#top :is(.timeline-label,.feast-meta,.major-badge,.major-meta,.dienst-kaart-tijd){font-size:11.5px!important}
   #top#top :is(time,small,.saints-rule-title span,.vandaag-dayhead span){font-size:12.5px!important}
-  #top#top .vandaag-cover-copy strong{font-size:12.5px!important}
   #top#top .feast-month-grid button{font-size:12.5px!important}
   #top#top table th{font-size:12px!important}
 }
@@ -1443,4 +1433,13 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 }
 @media(max-width:349px){
   #top#top .v15-major-fasts{grid-template-columns:minmax(0,1fr)!important}
+}
+
+/* Bouw 56 — alle pagina-banners in hetzelfde, compacte panoramaformaat. De banners in
+   public/images/heroes zijn zelf al op 6.25/1 (1800×288) uitgesneden, dus dit volgt exact
+   die verhouding — object-fit:cover snijdt dan niets extra weg. */
+#top#top .page-hero-crop{position:relative;overflow:hidden;background:#1b0d08;aspect-ratio:6.25/1}
+#top#top .page-hero-crop img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;max-height:none}
+@media(min-width:640px){
+  #top#top .page-hero-crop{aspect-ratio:6.25/1}
 }

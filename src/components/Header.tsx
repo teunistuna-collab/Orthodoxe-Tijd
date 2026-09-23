@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { BookOpen, CalendarDays, ChevronDown, Clock3, Flame, HandHeart, Menu, Sparkles, Sun, Wheat, X } from 'lucide-react';
-import Cross from './Cross';
 import { useApp } from '../lib/context';
-import { formatDag, kerkDatum, formatLang } from '../lib/kalender';
 
 export const SECTIES = [
   { id: 'vandaag', label: 'Vandaag', icon: Sun },
@@ -25,6 +23,15 @@ const NAV_MARKS: Record<string, string> = {
 };
 const NavMark = ({ id }: { id: string }) => <span aria-hidden="true" className="orthodox-nav-mark">{NAV_MARKS[id] ?? '✣'}</span>;
 
+// Aangeleverde afbeeldingen voor de navigatiebalk: de sierlijst als achtergrond, het kruis in het midden.
+const HEADER_ACHTERGROND = '/images/ui/nav/header-achtergrond.webp';
+const KRUIS_MEDAILLON = '/images/ui/nav/header-kruis.webp';
+
+// Dunne verticale gouden scheidingslijn, zoals in de referentie tussen logo/navigatie en navigatie/kalenderkeuze.
+function VerticalRule() {
+  return <span className="hidden h-8 w-px shrink-0 bg-gold/30 sm:block" aria-hidden="true" />;
+}
+
 const KALENDER_KEUZES = [
   { id: 'oud', naam: 'Oud', toelichting: 'juliaans' },
   { id: 'nieuw', naam: 'Nieuw', toelichting: 'burgerlijk' },
@@ -38,7 +45,7 @@ const CYCLUS_ITEMS = [
 ];
 
 export default function Header() {
-  const { mode, setMode, vandaag } = useApp();
+  const { mode, setMode } = useApp();
   const [actief, setActief] = useState('vandaag');
   const [menuOpen, setMenuOpen] = useState(false);
   const [cyclusOpen, setCyclusOpen] = useState(false);
@@ -97,64 +104,174 @@ export default function Header() {
     };
   }, []);
 
-  const kerk = kerkDatum(vandaag, mode);
   const cyclusActief = ['adem', 'etmaal', 'week', 'jaar'].includes(actief);
 
   return (
-    <header className="site-header sticky top-0 z-50 overflow-visible shadow-lg shadow-black/20">
-      <div className="bg-bark text-cream">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-2.5">
-          <a href="#vandaag" onClick={() => { setActief('vandaag'); setMenuOpen(false); }} className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <span className="flex h-9 w-7 shrink-0 items-center justify-center text-gold sm:h-10 sm:w-8">
-              <Cross className="h-8 w-5 sm:h-9 sm:w-6" />
-            </span>
+    <header className="site-header sticky top-0 z-50 overflow-visible">
+      {/* Eén donkere balk: logo, navigatie met centraal kruis-medaillon, en kalenderkeuze — allemaal in dezelfde rij.
+          De sierlijst-achtergrond wordt volledig uitgerekt (breedte én hoogte) zodat de hoekornamenten altijd zichtbaar blijven. */}
+      <div
+        className="relative bg-bark bg-no-repeat text-cream"
+        style={{ backgroundImage: `url(${HEADER_ACHTERGROND})`, backgroundSize: '100% 100%' }}
+      >
+
+        <div className="relative mx-auto flex max-w-[1600px] min-h-[76px] items-center gap-2 px-3 py-2 sm:gap-2 sm:px-4 sm:py-2 xl:min-h-[92px] xl:gap-3 xl:px-6">
+          <a href="#vandaag" onClick={() => { setActief('vandaag'); setMenuOpen(false); }} className="flex min-w-0 shrink-0 items-center">
             <span className="min-w-0 leading-tight">
-              <span className="font-display block truncate text-lg font-semibold tracking-wide text-gold-light sm:text-2xl">Orthodoxe Tijd</span>
-              <span className="hidden text-[10px] font-semibold tracking-[0.22em] text-[#bfa982] uppercase sm:block">Een weg door de tijd · een leven met Christus</span>
+              <span className="font-display block truncate text-lg font-semibold tracking-wide text-gold-light sm:text-xl xl:text-2xl">Orthodoxe Tijd</span>
+              <span className="hidden text-[8px] font-semibold tracking-[0.18em] text-[#bfa982] uppercase xl:block">Een weg door de tijd · een leven met Christus</span>
             </span>
           </a>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden text-right md:block">
-              <div className="text-sm font-semibold text-cream">{formatLang(vandaag)}</div>
-              <div className="text-[11px] text-[#bfa982]">
-                {mode === 'oud' ? `Kerkelijk: ${formatDag(kerk)} (juliaans)` : 'Nieuwe kalender (gereviseerd juliaans)'}
-              </div>
+          <VerticalRule />
+
+          {/* Desktop-navigatie: alleen tekstlabels, met het kruis-medaillon als middelpunt */}
+          <div className="relative hidden flex-1 items-center justify-evenly gap-0.5 sm:flex xl:gap-1">
+            {NAV_LEADING.map(({ id, label }) => {
+              const on = actief === id;
+              return (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={() => { setActief(id); setMenuOpen(false); }}
+                  className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${
+                    on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
+                  }`}
+                >
+                  <span className="text-[11px] font-bold tracking-wider uppercase leading-none">{label}</span>
+                  <span className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`} />
+                </a>
+              );
+            })}
+
+            <div
+              ref={cyclusRef}
+              className="relative shrink-0"
+              onMouseEnter={openCyclus}
+              onMouseLeave={planCyclusSluiten}
+            >
+              <button
+                type="button"
+                onClick={openCyclus}
+                className={`relative flex items-center gap-0.5 px-0.5 py-2 text-center xl:px-2 transition ${
+                  cyclusActief ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
+                }`}
+              >
+                <span className="text-[11px] font-bold tracking-wider uppercase leading-none">CYCLI</span>
+                <ChevronDown className={`h-3 w-3 transition ${cyclusOpen ? 'rotate-180' : ''}`} />
+                <span className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${cyclusActief ? 'opacity-100' : 'opacity-0'}`} />
+              </button>
+
+              {cyclusOpen && (
+                <div className="absolute left-1/2 top-full z-[200] -translate-x-1/2 pt-3">
+                  <div className="w-[320px] rounded-lg border border-[#c9a227]/55 bg-[#1b110d] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
+                    {CYCLUS_ITEMS.map((item) => {
+                      const itemActive = ['adem', 'etmaal', 'week', 'jaar'].includes(item.id) ? cyclusActief : false;
+                      return (
+                        <a
+                          key={`${item.id}-${item.label}`}
+                          href={item.href}
+                          onClick={() => {
+                            setActief(item.id);
+                            annuleerSluiten();
+                            setCyclusOpen(false);
+                            setMenuOpen(false);
+                          }}
+                          className={`block rounded-md border px-3 py-2.5 transition ${itemActive ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
+                        >
+                          <div className="text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">{item.label}</div>
+                          <p className="mt-1 text-[11px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="flex shrink-0 rounded-full border border-gold/40 bg-bark-2 p-0.5" role="group" aria-label="Kalenderkeuze">
-              {KALENDER_KEUZES.map(({ id, naam, toelichting }) => {
-                const on = mode === id;
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    aria-pressed={on}
-                    onClick={() => setMode(id)}
-                    className={`flex min-h-11 flex-col items-center justify-center rounded-full px-2.5 leading-none transition sm:px-4 ${on ? 'bg-gold text-bark' : 'text-gold-light hover:text-white'}`}
-                  >
-                    <span className="text-[13px] font-bold tracking-wider uppercase">{naam}</span>
-                    <span className="mt-1 text-[11px] font-semibold opacity-80">{toelichting}</span>
-                  </button>
-                );
-              })}
-            </div>
+
+            <a
+              href="#pascha"
+              onClick={() => { setActief('pascha'); setMenuOpen(false); }}
+              className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
+            >
+              <span className="text-[11px] font-bold tracking-wider uppercase leading-none">Pascha</span>
+              <span className={`absolute inset-x-2 bottom-0 h-0.5 bg-gold ${actief === 'pascha' ? 'opacity-100' : 'opacity-0'}`} />
+            </a>
+
+            {/* Ruimte voor het kruis-medaillon, dat er los overheen zweeft */}
+            <span className="w-16 shrink-0 md:w-20 xl:w-24" aria-hidden="true" />
+
+            {NAV_TRAILING.map(({ id, label }) => {
+              const on = actief === id;
+              return (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={() => { setActief(id); setMenuOpen(false); }}
+                  className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${
+                    on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
+                  }`}
+                >
+                  <span className="text-[11px] font-bold tracking-wider uppercase leading-none">{label}</span>
+                  <span className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`} />
+                </a>
+              );
+            })}
+
+            {/* Het kruis-medaillon: los boven de balk, precies in het midden van de navigatie */}
+            <a
+              href="#pascha"
+              onClick={() => { setActief('pascha'); setMenuOpen(false); }}
+              aria-label="Naar Pascha"
+              className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+            >
+              <img
+                src={KRUIS_MEDAILLON}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="h-16 w-16 rounded-full shadow-[0_10px_22px_rgba(0,0,0,0.5)] transition hover:scale-105 xl:h-[72px] xl:w-[72px]"
+              />
+            </a>
           </div>
-            <button type="button" onClick={() => setMenuOpen((open) => !open)} className="rounded-full p-2 text-gold-light hover:bg-white/10 sm:hidden" aria-label={menuOpen ? 'Menu sluiten' : 'Menu openen'} aria-expanded={menuOpen}>
-              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
+
+          <VerticalRule />
+
+          <div className="hidden shrink-0 items-center gap-0.5 rounded-full border border-gold/40 bg-bark-2 p-0.5 sm:flex" role="group" aria-label="Kalenderkeuze">
+            {KALENDER_KEUZES.map(({ id, naam, toelichting }) => {
+              const on = mode === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  aria-pressed={on}
+                  title={`${naam} · ${toelichting}`}
+                  onClick={() => setMode(id)}
+                  className={`rounded-full px-2 py-1 text-[11px] font-bold tracking-wider uppercase transition xl:px-3 ${on ? 'bg-gold text-bark' : 'text-gold-light hover:text-white'}`}
+                >
+                  {naam}
+                </button>
+              );
+            })}
+          </div>
+
+          <button type="button" onClick={() => setMenuOpen((open) => !open)} className="rounded-full p-2 text-gold-light hover:bg-white/10 sm:hidden" aria-label={menuOpen ? 'Menu sluiten' : 'Menu openen'} aria-expanded={menuOpen}>
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
 
-      <nav className={`${menuOpen ? 'block' : 'hidden'} relative z-[60] overflow-visible border-t border-gold/20 bg-bark-2 text-cream sm:block`}>
-        <div className="mx-auto flex max-w-[1500px] flex-col gap-1 px-2 py-2 sm:flex-row sm:justify-evenly sm:overflow-visible sm:py-0">
-          {NAV_LEADING.map(({ id, label, icon: Icon }) => {
+      {/* Mobiele uitklapnavigatie (alleen zichtbaar tussen 640-767px vóór de header sitebreed verdwijnt; hamburgermenu). */}
+      <nav className={`${menuOpen ? 'block' : 'hidden'} relative z-[60] overflow-visible border-t border-gold/20 bg-bark-2 text-cream sm:hidden`}>
+        <div className="mx-auto flex max-w-[1500px] flex-col gap-1 px-2 py-2">
+          {NAV_LEADING.map(({ id, label }) => {
             const on = actief === id;
             return (
               <a
                 key={id}
                 href={`#${id}`}
                 onClick={() => { setActief(id); setMenuOpen(false); }}
-                className={`relative hidden shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:flex sm:min-h-0 sm:px-4 ${
+                className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition ${
                   on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
                 }`}
               >
@@ -165,98 +282,7 @@ export default function Header() {
             );
           })}
 
-          <div
-            ref={cyclusRef}
-            className="relative hidden sm:block"
-            onMouseEnter={openCyclus}
-            onMouseLeave={planCyclusSluiten}
-          >
-            <button
-              type="button"
-              onClick={openCyclus}
-              className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:min-h-0 sm:px-4 ${
-                cyclusActief ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
-              }`}
-            >
-              <NavMark id="cycli" />
-              CYCLI
-              <ChevronDown className={`h-3.5 w-3.5 transition ${cyclusOpen ? 'rotate-180' : ''}`} />
-              <span className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${cyclusActief ? 'opacity-100' : 'opacity-0'}`} />
-            </button>
-
-            {cyclusOpen && (
-              <div className="absolute left-0 top-full z-[200] pt-3">
-                <div className="w-[320px] rounded-lg border border-[#c9a227]/55 bg-[#1b110d] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
-                  {CYCLUS_ITEMS.map((item) => {
-                    const itemActive = ['adem', 'etmaal', 'week', 'jaar'].includes(item.id) ? cyclusActief : false;
-                    return (
-                      <a
-                        key={`${item.id}-${item.label}`}
-                        href={item.href}
-                        onClick={() => {
-                          setActief(item.id);
-                          annuleerSluiten();
-                          setCyclusOpen(false);
-                          setMenuOpen(false);
-                        }}
-                        className={`block rounded-md border px-3 py-2.5 transition ${itemActive ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
-                      >
-                        <div className="text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">{item.label}</div>
-                        <p className="mt-1 text-[11px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <a
-            href="#pascha"
-            onClick={() => { setActief('pascha'); setMenuOpen(false); }}
-            className={`relative hidden shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:flex ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
-          >
-            <NavMark id="pascha" />Pascha
-            <span className={`absolute inset-x-3 bottom-0 h-0.5 bg-gold ${actief === 'pascha' ? 'opacity-100' : 'opacity-0'}`} />
-          </a>
-
-          {NAV_TRAILING.map(({ id, label, icon: Icon }) => {
-            const on = actief === id;
-            return (
-              <a
-                key={id}
-                href={`#${id}`}
-                onClick={() => { setActief(id); setMenuOpen(false); }}
-                className={`relative hidden shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:flex sm:min-h-0 sm:px-4 ${
-                  on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
-                }`}
-              >
-                <NavMark id={id} />
-                {label}
-                <span className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`} />
-              </a>
-            );
-          })}
-
-          {NAV_LEADING.map(({ id, label, icon: Icon }) => {
-            const on = actief === id;
-            return (
-              <a
-                key={id}
-                href={`#${id}`}
-                onClick={() => { setActief(id); setMenuOpen(false); }}
-                className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:hidden ${
-                  on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
-                }`}
-              >
-                <NavMark id={id} />
-                {label}
-                <span className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`} />
-              </a>
-            );
-          })}
-
-          <div className="sm:hidden" ref={cyclusMobielRef}>
+          <div ref={cyclusMobielRef}>
             <button
               type="button"
               onClick={() => setCyclusOpen((open) => !open)}
@@ -289,20 +315,20 @@ export default function Header() {
           <a
             href="#pascha"
             onClick={() => { setActief('pascha'); setMenuOpen(false); }}
-            className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:hidden ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
+            className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
           >
             <NavMark id="pascha" />Pascha
             <span className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${actief === 'pascha' ? 'opacity-100' : 'opacity-0'}`} />
           </a>
 
-          {NAV_TRAILING.map(({ id, label, icon: Icon }) => {
+          {NAV_TRAILING.map(({ id, label }) => {
             const on = actief === id;
             return (
               <a
                 key={id}
                 href={`#${id}`}
                 onClick={() => { setActief(id); setMenuOpen(false); }}
-                className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition sm:hidden ${
+                className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition ${
                   on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
                 }`}
               >

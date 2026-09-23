@@ -102,8 +102,8 @@ export default function Gebeden() {
 
   return (
     <>
-      <section id="gebeden" className="bg-bark">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-gebeden.webp" width={2103} height={748} alt="Gebeden — het gebedenboek van de Kerk" className="block h-auto w-full" />
+      <section id="gebeden" className="bg-bark page-hero-crop">
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-gebeden.webp" width={2103} height={748} alt="Gebeden — het gebedenboek van de Kerk" />
       </section>
 
       {/* Introductie */}

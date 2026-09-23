@@ -21,5 +21,6 @@ export default defineConfig(async ({ mode }) => {
     plugins,
     envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
     define: processEnvDefines,
+    server: process.env.PORT ? { port: Number(process.env.PORT), strictPort: true } : undefined,
   };
 })

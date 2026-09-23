@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { WEEKDAGEN_KORT, addDays, dagInfo, formatDag, formatDatum, formatKort, utc, weekRond, ymd } from '../lib/kalender';
-import { telVastendagen, vastenPeriodes } from '../lib/overzicht';
+import { WEEKDAGEN_KORT, dagInfo, formatDag, formatDatum, formatKort, weekRond, ymd } from '../lib/kalender';
+import { vastenPeriodes } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
+import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
 import { VastenBadge, VastenKleuren } from './ui';
 import Modal from './Modal';
 import Cross from './Cross';
@@ -33,40 +34,23 @@ const FAQ = [
 
 type InfoKey = 'wat' | 'hoe' | 'periodes' | 'betekenis';
 
-const INFO_POPUPS: Record<InfoKey, { title: string; subtitle?: string; paragraphs: string[]; highlight?: string }> = {
-  wat: {
-    title: 'Wat is vasten?',
-    subtitle: 'Het typikon: de orde van de Kerk',
-    paragraphs: [
-      'De orthodoxe Kerk vast ongeveer de helft van het jaar: vier grote vastenperiodes, enkele strenge dagen en elke woensdag en vrijdag.',
-      'Het typikon is het kerkelijke boek van de orde: het zegt welke dienst wanneer wordt gehouden, welke heilige gevierd wordt en hoe streng er die dag gevast wordt. Wie de kalender leest, leest de tijd — niet in maanden, maar in het leven van Christus.',
-      'De kalender is een leidsman, geen wetboek: volg voor het vasten het woord van uw geestelijke.',
-    ],
-  },
+// De negen treden van de vastenladder, als tekst (geen iconen) — rechtstreeks uit lib/vasten.ts,
+// zodat deze lijst niet los kan raken van de ladder die elders op de site gebruikt wordt.
+const NEGEN_TREDEN_ITEMS = LADDER.map((l) => `${l.trap}. ${l.label} — ${l.toegestaan}.`);
+
+const INFO_POPUPS: Record<InfoKey, typeof VASTEN_POPUPS[InfoKey]> = {
+  ...VASTEN_POPUPS,
   hoe: {
-    title: 'Hoe vasten we?',
-    subtitle: 'De ladder van het vasten',
-    highlight: 'Xerofagie — letterlijk „droog eten”',
-    paragraphs: [
-      'Niet elke vastendag is even streng. Hoe dichter bij Pascha, hoe scherper het vasten; hoe groter het feest, hoe meer ruimte.',
-      'Letterlijk „droog eten”: brood, rauwe of gedroogde groenten en fruit, noten, olijven en water — zonder olie of wijn, en oorspronkelijk één maaltijd na de Vespers. Het is de strikte norm van de Grote Vasten op maandag, woensdag en vrijdag.',
-      `De ladder kent negen treden: ${LADDER.map((l) => l.label).join(', ')}.`,
-    ],
-  },
-  periodes: {
-    title: 'Vastenperioden',
-    subtitle: 'Vier grote vasten, verweven met feesten',
-    paragraphs: [
-      'Dan wordt het vasten verzacht. Bij een groot feest (zoals de Annunciatie of de Transfiguratie) mag er vis gegeten worden; bij een polyeleosfeest wijn en olie. Op woensdag en vrijdag buiten de vastenperiodes heft een groot feest het vasten op tot een visdag. Alleen de Kruisverheffing blijft een vastendag.',
-      'De Grote Vasten en het begin van de Apostelvasten zijn verbonden met de beweeglijke Paschale cyclus; de Ontslapenisvasten en de Kerstvasten liggen op vaste kerkelijke data.',
-    ],
-  },
-  betekenis: {
-    title: 'De geestelijke betekenis',
-    subtitle: 'Meer dan een dieet',
-    paragraphs: [
-      'De woensdag herinnert aan het verraad van Judas, de vrijdag aan de kruisiging. Beide dagen worden al sinds de eerste eeuwen gevast — het staat al in de Didachè.',
-      'Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet. Zieken, zwangeren, kinderen, ouderen en reizigers vasten altijd in overleg met hun priester — barmhartigheid gaat boven de letter.',
+    ...VASTEN_POPUPS.hoe,
+    sections: [
+      ...(VASTEN_POPUPS.hoe.sections ?? []),
+      {
+        heading: 'De ladder van het vasten — negen treden',
+        paragraphs: [
+          'Niet elke vastendag is even streng. Hoe dichter bij Pascha, hoe scherper het vasten; hoe groter het feest, hoe meer ruimte. Van vastenvrij tot volledige onthouding kent het vasten negen treden:',
+        ],
+        items: NEGEN_TREDEN_ITEMS,
+      },
     ],
   },
 };
@@ -110,16 +94,6 @@ export default function Vasten() {
   const periodes = useMemo(() => vastenPeriodes(jaar, mode), [jaar, mode]);
   const week = useMemo(() => weekRond(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
 
-  const aantalVastendagen = useMemo(() => {
-    const dagen = [];
-    let d = utc(jaar, 1, 1);
-    while (d.getUTCFullYear() === jaar) {
-      dagen.push(dagInfo(d, mode));
-      d = addDays(d, 1);
-    }
-    return telVastendagen(dagen);
-  }, [jaar, mode]);
-
   const vastenP = periodes.filter((p) => p.soort === 'vasten');
   const grotevier = ['grote-vasten', 'apostelvasten', 'dormitionvasten', 'kerstvasten'].map((id) => vastenP.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => Boolean(p));
   const vrijP = periodes.filter((p) => p.soort === 'vrij');
@@ -146,8 +120,37 @@ export default function Vasten() {
 
   return (
     <>
-      <section id="vasten" className="bg-bark">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-vasten.webp" width={2103} height={748} alt="Vasten — een weg naar vrijheid" className="block h-auto w-full" />
+      <section id="vasten" className="bg-bark page-hero-crop">
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-vasten.webp" width={2103} height={748} alt="Vasten — een weg naar vrijheid" />
+      </section>
+
+      {/* Informatiekaarten */}
+      <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
+        <div className={CONTENT}>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {(
+              [
+                { key: 'wat', title: 'Wat is vasten?', intro: 'Het typikon en de orde van de Kerk door het jaar heen.', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.webp' },
+                { key: 'hoe', title: 'Hoe vasten we?', intro: 'De ladder van het vasten, van vrij tot volledige onthouding.', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.webp' },
+                { key: 'periodes', title: 'Vastenperioden', intro: 'Vier grote vasten, verweven met feesten en uitzonderingen.', iconSrc: '/images/ui/menu/07-Vasten-03-Vastenperiode.webp' },
+                { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'Vasten als gebed, bekering en liefde tot de naaste.', iconSrc: '/images/ui/menu/07-Vasten-04-De-geestelijke-betekenis.webp' },
+              ] as const
+            ).map(({ key, title, intro, iconSrc }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setInfoOpen(key)}
+                className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/50 text-gold-light">
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
+                </div>
+                <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Eén doorlopende compositie: vandaag → uitleg → jaarcyclus → week/uitzonderingen → gebed */}
@@ -202,31 +205,6 @@ export default function Vasten() {
               woensdag en vrijdag. Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet — het
               hoort samen met bekering, zelfbeheersing, liefde tot de naaste en de voorbereiding op de feesten van de Kerk.
             </p>
-          </div>
-
-          {/* Informatiekaarten */}
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {(
-              [
-                { key: 'wat', title: 'Wat is vasten?', intro: 'Het typikon en de orde van de Kerk door het jaar heen.', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.webp' },
-                { key: 'hoe', title: 'Hoe vasten we?', intro: 'De ladder van het vasten, van vrij tot volledige onthouding.', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.webp' },
-                { key: 'periodes', title: 'Vastenperioden', intro: 'Vier grote vasten, verweven met feesten en uitzonderingen.', iconSrc: '/images/ui/menu/07-Vasten-03-Vastenperiode.webp' },
-                { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'Vasten als gebed, bekering en liefde tot de naaste.', iconSrc: '/images/ui/menu/07-Vasten-04-De-geestelijke-betekenis.webp' },
-              ] as const
-            ).map(({ key, title, intro, iconSrc }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setInfoOpen(key)}
-                className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-                </div>
-                <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
-              </button>
-            ))}
           </div>
 
           <GoldDivider />
@@ -386,33 +364,6 @@ export default function Vasten() {
 
           <GoldDivider />
 
-          {/* Ladder */}
-          <div className="parchment-pattern rounded-lg border border-gold/35 bg-[#f7edda]/75 px-5 py-7 shadow-[0_14px_34px_rgba(55,31,15,0.1)] sm:px-8 sm:py-9">
-          <p className="text-[12px] font-bold tracking-[0.28em] text-gold-deep uppercase sm:text-sm">De ladder van het vasten</p>
-          <h3 className="font-display mt-1 text-2xl font-semibold text-ink sm:text-3xl">Negen treden — van vrij tot volledige onthouding</h3>
-          <p className="mt-2 max-w-3xl text-sm text-ink-soft">
-            Niet elke vastendag is even streng. Hoe dichter bij Pascha, hoe scherper het vasten; hoe groter het feest, hoe
-            meer ruimte. In {jaar} zijn dat op de {mode === 'oud' ? 'oude' : 'nieuwe'} kalender {aantalVastendagen} dagen met
-            een voorschrift.
-          </p>
-          <div className="relative mt-7 grid gap-3 border-l border-gold/50 pl-5 sm:grid-cols-3 sm:border-l-0 sm:pl-0 lg:grid-cols-9 lg:items-end lg:gap-2">
-            {LADDER.map((l, i) => (
-              <div key={l.id} className={[
-                'fasting-step provided-ladder-frame relative border border-gold/45 p-3',
-              ].join(' ')}>
-                <span aria-hidden="true" className="absolute -left-[1.78rem] top-5 h-3 w-3 rounded-full border border-gold bg-[#f7edda] sm:hidden" />
-                <img loading="lazy" decoding="async" src={`/images/ui/vasten-ladder/${String(i + 1).padStart(2, '0')}-${['Vastenvrij','Geen-vasten','Zuivel-toegestaan','Vis-toegestaan','Wijn-en-olie','Gekookt-zonder-olie','Vastendag','Strikt-vasten','Volledige-onthouding'][i]}.webp`} alt="" className="fasting-step-symbol" />
-                <div className="fasting-step-index">{i + 1}</div>
-                <div className="fasting-step-title">{l.label}</div>
-                <div className="fasting-step-rule" aria-hidden="true">✣</div>
-                <div className="fasting-step-copy">{l.toegestaan}</div>
-              </div>
-            ))}
-          </div>
-          </div>
-
-          <GoldDivider />
-
           {/* FAQ / praktisch */}
           <div className="parchment-pattern rounded-lg border border-gold/35 bg-[#f7edda]/75 px-5 py-7 shadow-[0_14px_34px_rgba(55,31,15,0.1)] sm:px-8 sm:py-9">
           <div className="grid gap-8 lg:grid-cols-[42%_58%]">
@@ -430,14 +381,17 @@ export default function Vasten() {
                 liturgische informatie, geen medisch of pastoraal advies.
               </div>
             </div>
-            <div className="divide-y divide-gold/35 border-y border-gold/35">
+            <div className="space-y-3">
               {FAQ.map((item, i) => (
-                <div key={item.v} className={`${openFaq === i ? 'bg-[#ead9b7]/60' : 'bg-transparent'} transition-colors duration-300`}>
-                  <button type="button" onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left">
+                <div
+                  key={item.v}
+                  className={`rounded-xl border border-gold/40 shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition-colors duration-300 ${openFaq === i ? 'bg-[#ead9b7]/60' : 'bg-[#f8f1e3]'}`}
+                >
+                  <button type="button" onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition hover:bg-gold-pale/40">
                     <span className="font-display text-lg font-semibold text-ink">{item.v}</span>
                     <ChevronDown className={`h-4 w-4 shrink-0 text-gold-deep transition ${openFaq === i ? 'rotate-180' : ''}`} />
                   </button>
-                  {openFaq === i && <p className="px-4 pb-4 text-sm leading-relaxed text-ink-soft">{item.a}</p>}
+                  {openFaq === i && <p className="px-5 pb-4 text-sm leading-relaxed text-ink-soft">{item.a}</p>}
                 </div>
               ))}
             </div>

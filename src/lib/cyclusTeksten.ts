@@ -20,6 +20,8 @@ export type PopupInhoud = {
   title: string;
   /** Optioneel portret (bijv. icoon van een heilige) boven de tekst. */
   image?: { src: string; alt: string };
+  /** Klein label boven de titel, in de titelbalk zelf. Standaard "Lees meer". */
+  eyebrow?: string;
   subtitle?: string;
   highlight?: string;
   paragraphs: string[];
@@ -643,6 +645,78 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
           "Het doel is niet om zoveel mogelijk kalenderinformatie te kennen, maar om de tijd zelf als een weg met Christus te ontvangen."
         ]
       }
+    ]
+  }
+};
+
+// Teksten uit "Wat is vasten.docx", "hoe vasten we.docx" en "vasten periode.docx".
+// De negen-tredenladder ("hoe") wordt in Vasten.tsx aan deze basistekst toegevoegd, rechtstreeks
+// uit de bestaande LADDER-data (lib/vasten.ts), zodat beide bronnen niet los van elkaar raken.
+export const VASTEN_POPUPS: Record<'wat' | 'hoe' | 'periodes' | 'betekenis', PopupInhoud> = {
+  "wat": {
+    "title": "Wat is vasten?",
+    "subtitle": "Een oude, geheiligde praktijk van de Kerk",
+    "paragraphs": [
+      "Het vasten is een zeer oude godsdienstige praktijk die vrijwel bij alle volken en in alle tijden wordt aangetroffen. In de Bijbel komt het vasten voor als uiting van bekering, berouw, boete en verdriet, maar vooral als voorbereiding op de grote feesten van het geloof.",
+      "Tijdens het leven van onze Heer Jezus Christus op aarde hielden ook de Joden hun vasten, en niemand strikter dan de Farizeeën, die tweemaal in de week, op maandag en donderdag, vastten (Lk 18:12).",
+      "Christus schafte het vasten niet af, maar heiligde het gebruik door Zelf te vasten. Veertig dagen vastte Hij in de woestijn alvorens Zijn werk onder de mensen te beginnen (Mt 4:1-2). Zijn leerlingen gaf Hij aanwijzingen hoe zij moesten vasten, en streng veroordeelde Hij de huichelachtigheid van de Farizeeën (Mt 6:16-18).",
+      "Op vele plaatsen in het Nieuwe Testament wordt vasten aanbevolen als een middel tot matiging, geestelijke verheffing en inkeer (bijvoorbeeld: Mt 9:15; Mt 17:21; Hand 9:9; 13:2; 14:23; 1 Kor 7:5).",
+      "Zo werd het vasten ook een geheiligde praktijk in de christelijke Kerk. Aanvankelijk namen de christenen de joodse vasten op maandag en donderdag in acht; later werd dit woensdag (de dag waarop de Heer werd verraden) en vrijdag (de dag van de kruisiging).",
+      "De praktijk van het vasten heeft in de loop der tijden nogal wat veranderingen ondergaan, maar het is altijd een middel gebleven tot geestelijke verheffing, tot heerschappij van de geest over het vlees en tot versterking van de wil en het karakter van de mens. De vaders en de liturgische traditie van de Kerk houden zich aan de woorden van de Heer: „Niet wat de mond ingaat, maakt de mens onrein, maar wat de mond uitkomt”, dat wil zeggen uit het hart (Mt 15:11).",
+      "Want uit het hart komen boze overleggingen, moord, echtbreuk, ontucht, diefstal, leugenachtige getuigenissen, godslasteringen (Mt 15:19). Daarom legt deze traditie naast de onthouding van voedsel de nadruk op het geestelijke vasten: het zich houden aan Christus' geboden, het zich onthouden van boze werken en het doen van goede werken."
+    ]
+  },
+  "hoe": {
+    "title": "Hoe vasten we?",
+    "subtitle": "Wat een vastendag inhoudt",
+    "paragraphs": [
+      "Een vastendag, in de gebruikelijke zin van het woord, is een dag waarop geen voedsel van dierlijke oorsprong wordt gebruikt: dus geen vlees, zuivel, eieren of vis, en daarnaast ook geen wijn (alcoholische dranken) en olie (plantaardige oliën en vetten). Dus wel: meelspijzen, groente, vruchten, noten en dergelijke.",
+      "De algemene regel voor de Grote Vasten en voor de vasten van de Ontslaping van de Moeder Gods: op alle dagen wordt volledig gevast, behalve zaterdag en zondag, waarop wijn en olie zijn toegestaan. Het laatste geldt ook voor een aantal feestdagen van heiligen; raadpleeg hiervoor een kerkelijke kalender. In de Grote Vasten is op de feesten van de Annunciatie (Aankondiging van de Geboorte) en Palmzondag (de Intocht van de Heer in Jeruzalem) vis toegestaan.",
+      "De algemene regel voor de Apostel- en Kerstvasten: op dinsdag en donderdag zijn wijn en olie toegestaan; op maandag, woensdag en vrijdag niet; van 20 tot en met 24 december wordt volledig gevast."
+    ],
+    "sections": [
+      {
+        "heading": "N.B.",
+        "paragraphs": [
+          "Deze vastenregels zijn niet bedoeld als een soort dwangbuis voor de gelovige en mogen ook nooit een bron van trots worden voor iemand die zich aan de letter van de kerkelijke wet houdt.",
+          "Ze moeten beschouwd worden als richtlijn, als maatstaf, waarnaar ieder zijn eigen praktijk kan afmeten en waarnaar hij altijd moet streven, overeenkomstig zijn krachten en omstandigheden.",
+          "Wanneer iemand wegens ziekte, zwakte of wat voor reden dan ook zich niet aan deze regels kan houden, laat hij dan het geestelijke medicijn van de zelfkritiek toepassen en er ten minste naar blijven streven zo goed mogelijk in de geest en de discipline van het vasten te leven. Want het vasten brengt een groot geestelijk gewin aan allen die er zich eerlijk en naar vermogen aan houden."
+        ]
+      }
+    ]
+  },
+  "periodes": {
+    "title": "Vastenperioden",
+    "subtitle": "Eén dag, of veertig — het ritme van het kerkelijk jaar",
+    "paragraphs": [
+      "Vasten van één dag: woensdag en vrijdag, behalve in de zogenaamde vastenvrije weken (de week na Pasen, de week na Pinksteren, de Heilige Dagen tussen de feesten van de Geboorte en de Verschijning des Heren, en de week na de zondag van de Tollenaar en de Farizeeër)."
+    ],
+    "sections": [
+      {
+        "heading": "Vaste vastendagen",
+        "items": [
+          "Vooravond van de Verschijning des Heren — 5 januari.",
+          "Onthoofding van Johannes de Doper — 29 augustus (streng vasten, plantaardige olie toegestaan).",
+          "Kruisverheffing — 14 september."
+        ]
+      },
+      {
+        "heading": "De vier vastenperioden van meerdere dagen",
+        "items": [
+          "Voorbereiding op Pasen (de heilige Veertigdagentijd, Grote Vasten) — begint op de maandag na de zevende zondag vóór Pasen, voorafgegaan door de week van de Melkspijzen (Boterweek, Maslenitsa) en gevolgd door de Lijdensweek. Goede Vrijdag is de dag van totale onthouding van spijzen, tot de avond.",
+          "Voorbereiding op het feest van de apostelen Petrus en Paulus (Apostelvasten) — van maandag na Allerheiligen (de eerste zondag na Pinksteren) tot en met 28 juni.",
+          "Voorbereiding op het feest van de Ontslaping van de Moeder Gods (Ontslapenisvasten) — 1 tot en met 14 augustus.",
+          "Voorbereiding op het feest van de Geboorte des Heren (Kerstvasten) — 15 november tot en met 24 december."
+        ]
+      }
+    ]
+  },
+  "betekenis": {
+    "title": "De geestelijke betekenis",
+    "subtitle": "Meer dan een dieet",
+    "paragraphs": [
+      "De woensdag herinnert aan het verraad van Judas, de vrijdag aan de kruisiging. Beide dagen worden al sinds de eerste eeuwen gevast — het staat al in de Didachè.",
+      "Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet. Zieken, zwangeren, kinderen, ouderen en reizigers vasten altijd in overleg met hun priester — barmhartigheid gaat boven de letter."
     ]
   }
 };

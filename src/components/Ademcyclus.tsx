@@ -60,8 +60,30 @@ export default function Ademcyclus() {
 
   return (
     <>
-      <section id="adem" className="bg-bark">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-adem.webp" width={2103} height={748} alt="Ademcyclus — het onophoudelijke gebed" className="block h-auto w-full" />
+      <section id="adem" className="bg-bark page-hero-crop">
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-adem.webp" width={2103} height={748} alt="Ademcyclus — het onophoudelijke gebed" />
+      </section>
+
+      {/* Informatiekaarten */}
+      <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
+        <div className={CONTENT}>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {CARDS.map(({ key, title, intro, iconSrc }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setPopup(key)}
+                className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
+              >
+                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
+                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
+                </div>
+                <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
+                <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Het Jezusgebed */}
@@ -104,53 +126,6 @@ export default function Ademcyclus() {
               <p className="font-display text-xl leading-relaxed text-ink-soft italic sm:text-2xl">“Het Jezusgebed is een bron van barmhartigheid, een licht in het hart en een weg naar de stilte van God.”</p>
               <footer className="mt-3 font-display text-lg text-ink-soft">— Heilige Silouan de Athoniet</footer>
             </blockquote>
-          </div>
-        </div>
-      </section>
-
-      {/* Vier informatiekaarten */}
-      <section className="bg-parchment pb-16 sm:pb-24">
-        <div className={CONTENT}>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {CARDS.map(({ key, title, intro, iconSrc }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setPopup(key)}
-                className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-                </div>
-                <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
-                <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Een levend ritme */}
-      <section className="border-y border-gold/25 bg-[#f3eada] py-8 sm:py-10">
-        <div className={CONTENT}>
-          <div className="parchment-pattern relative overflow-hidden rounded-lg border border-gold/50 bg-[#f8f1e3] px-6 py-8 shadow-[0_24px_55px_rgba(40,22,14,0.12)] sm:px-10 sm:py-9 lg:px-16">
-            {/* Dun kader met een kruisje in elke hoek */}
-            <div className="pointer-events-none absolute inset-2.5 border border-gold/45 sm:inset-3.5" aria-hidden="true">
-              <span className="absolute -top-2.5 -left-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
-              <span className="absolute -top-2.5 -right-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
-              <span className="absolute -bottom-2.5 -left-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
-              <span className="absolute -right-2.5 -bottom-2.5 flex h-5 w-5 items-center justify-center bg-[#f8f1e3] text-[15px] leading-none text-gold-deep">✣</span>
-            </div>
-
-            <div className="relative text-center">
-              <p className="text-[13px] font-bold tracking-[0.4em] text-ink-soft uppercase sm:text-sm">Een levend ritme</p>
-              <OrnamentRule className="mt-3 w-[22rem] max-w-full" />
-              <p className="mx-auto mt-5 max-w-4xl font-display text-xl leading-[1.5] text-ink italic sm:text-[26px]">
-                De ademcyclus is geen afzonderlijke liturgische cyclus van de Kerk, maar het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus, die zich met iedere ademhaling kan verbinden.
-              </p>
-              <OrnamentRule className="mt-5 w-60 max-w-full" />
-              <p className="mt-4 text-[12px] font-semibold tracking-[0.4em] text-ink-soft uppercase sm:text-[13px]">Bid · Adem · Leef</p>
-            </div>
           </div>
         </div>
       </section>

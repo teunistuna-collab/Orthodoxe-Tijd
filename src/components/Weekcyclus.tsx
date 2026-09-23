@@ -153,8 +153,8 @@ export default function Weekcyclus() {
 
   return (
     <>
-      <section id="week" className="bg-bark">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-week.webp" width={2103} height={748} alt="Weekcyclus — van de Verrijzenis tot de Sabbat" className="block h-auto w-full" />
+      <section id="week" className="bg-bark page-hero-crop">
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-week.webp" width={2103} height={748} alt="Weekcyclus — van de Verrijzenis tot de Sabbat" />
       </section>
 
       {/* Informatiekaarten */}

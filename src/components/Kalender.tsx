@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster } from '../lib/kalender';
 import { HEILIGEN } from '../lib/heiligen';
 import { NIVEAUS } from '../lib/vasten';
 import { VastenKleuren } from './ui';
+import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het kalenderpaneel.
 function CornerOrnament({ className = '' }: { className?: string }) {
@@ -40,8 +41,8 @@ export default function Kalender() {
 
   return (
     <>
-      <section id="kalender" className="bg-bark">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-kalender.webp" width={2103} height={748} alt="Kalender — het kerkelijk jaar in overzicht" className="block h-auto w-full" />
+      <section id="kalender" className="bg-bark page-hero-crop">
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-kalender.webp" width={2103} height={748} alt="Kalender — het kerkelijk jaar in overzicht" />
       </section>
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink sm:py-16">
@@ -69,7 +70,7 @@ export default function Kalender() {
               <button type="button" onClick={vorige} className="order-1 inline-flex items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] px-3 py-1.5 text-sm font-bold text-ink hover:border-gold" aria-label="Vorige maand">
                 <ChevronLeft className="h-4 w-4" /> <span className="hidden sm:inline">{MAANDEN_KORT[(cur.m + 10) % 12]}</span>
               </button>
-              <div className="order-2 flex min-w-0 flex-1 items-center gap-2 sm:flex-none">
+              <div className="order-2 flex min-w-0 basis-full items-center gap-2 sm:basis-auto sm:flex-none">
                 <select
                   value={cur.m}
                   onChange={(e) => setCur((c) => ({ ...c, m: Number(e.target.value) }))}
@@ -122,6 +123,9 @@ export default function Kalender() {
                 const isPascha = feest?.soort === 'pascha';
                 const groot = feest && feest.groot;
                 const beweeglijk = feest && feest.soort === 'beweeglijk' && !groot && !isPascha;
+                const isGeselecteerd = c.ymd === geselecteerd.ymd;
+                // Zelfde kleur voor rand én gloed: altijd de liturgische kleur van die dag, ook wanneer hij geselecteerd is.
+                const ringHex = LITURGISCHE_KLEUREN[liturgischeKleur(c)].hex;
                 return (
                   <button
                     key={c.ymd}
@@ -132,15 +136,19 @@ export default function Kalender() {
                       if (window.matchMedia('(max-width: 1023px)').matches) openDag(c.ymd);
                     }}
                     className={`relative min-h-[56px] border-r border-b border-gold/20 p-1 text-left align-top transition [&:nth-child(7n)]:border-r-0 sm:min-h-[112px] sm:p-2 ${
-                      buiten ? 'bg-[#f3e9d2]/50 text-ink-mute' : 'bg-[#fbf6e8] hover:bg-gold-pale/60'
-                    } ${c.ymd === geselecteerd.ymd ? 'bg-[#4d1716] text-gold-light ring-2 ring-gold ring-inset' : c.isVandaag ? 'ring-2 ring-gold ring-inset' : ''}`}
+                      isGeselecteerd
+                        ? 'bg-[#4d1716] text-gold-light ring-2 ring-inset'
+                        : `${buiten ? 'bg-[#f3e9d2]/50 text-ink-mute' : 'bg-[#fbf6e8] hover:bg-gold-pale/60'} ${c.isVandaag ? 'ring-[3px] ring-inset' : 'ring-1 ring-inset'}`
+                    }`}
+                    style={{ '--tw-ring-color': ringHex } as CSSProperties}
                     title="Open dagdetail"
                   >
                     <div className="flex items-start justify-center gap-1 sm:justify-between">
                       <span
                         className={`flex h-6 w-6 items-center justify-center rounded-full text-[13px] font-bold sm:h-7 sm:w-7 ${
-                          c.isVandaag ? 'today-glow bg-gold text-bark' : c.isZondag && !buiten ? 'text-wine' : ''
+                          c.isVandaag ? 'today-glow text-cream' : c.isZondag && !buiten ? 'text-wine' : ''
                         }`}
+                        style={c.isVandaag ? ({ background: ringHex, '--glow-color': ringHex } as CSSProperties) : undefined}
                       >
                         {c.dag}
                       </span>
@@ -183,6 +191,12 @@ export default function Kalender() {
               <span className="inline-flex items-center gap-1.5">
                 <span className="text-gold-deep">•</span> beweeglijk
               </span>
+              <span className="basis-full" aria-hidden="true" />
+              {Object.entries(LITURGISCHE_KLEUREN).map(([k, l]) => (
+                <span key={k} className="inline-flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 border-2" style={{ borderColor: l.hex }} /> {l.uitleg}
+                </span>
+              ))}
             </div>
             </div>
 

@@ -154,7 +154,7 @@ export function LiturgicalPopup({ open, onClose, content }: { open: boolean; onC
   if (!open || !content) return null;
 
   return (
-    <Modal open={open} onClose={onClose} eyebrow="Lees meer" title={content.title} centerTitle maxWidth="max-w-3xl">
+    <Modal open={open} onClose={onClose} eyebrow={content.eyebrow ?? 'Lees meer'} title={content.title} centerTitle maxWidth="max-w-3xl">
       <div className="exact-popup-reading">
         {content.image && <img loading="lazy" decoding="async" src={content.image.src} alt={content.image.alt} width={400} height={400} className="heilige-portret heilige-portret-groot" />}
         {content.subtitle && <p className="exact-popup-subtitle">{content.subtitle}</p>}

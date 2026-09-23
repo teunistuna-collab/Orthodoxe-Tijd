@@ -93,7 +93,7 @@ export default function Vandaag() {
     <section id="vandaag" className="vandaag-design-page">
       <div className="vandaag-frame">
         <h1 className="sr-only">Vandaag</h1>
-        <div className="vandaag-cover"><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /><div className="vandaag-cover-shade"/><div className="vandaag-cover-copy"><span>In Gods tegenwoordigheid</span><strong>{hoofdletter(dag.weekdagNaam)} · {formatDatum(dag.civil)}</strong></div></div>
+        <div className="vandaag-cover"><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></div>
         <div className="vandaag-paper">
           <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true">☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
           <div className="vandaag-list">

@@ -82,7 +82,7 @@ export default function Heiligen() {
   );
 
   return <>
-    <section id="heiligen" className="saints-hero"><img loading="lazy" decoding="async" src="/images/heroes/hero-heiligen.webp" width={2103} height={748} alt="Heiligen — Orthodoxe Tijd" /></section>
+    <section id="heiligen" className="bg-bark page-hero-crop"><img loading="lazy" decoding="async" src="/images/heroes/hero-heiligen.webp" width={2103} height={748} alt="Heiligen — Orthodoxe Tijd" /></section>
     <main className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">

@@ -140,8 +140,8 @@ export default function Jaarcyclus() {
 
   return (
     <>
-      <section id="jaar" className="bg-bark">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-jaar.webp" width={2103} height={748} alt="Jaarcyclus — het kerkelijk jaar" className="block h-auto w-full" />
+      <section id="jaar" className="bg-bark page-hero-crop">
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-jaar.webp" width={2103} height={748} alt="Jaarcyclus — het kerkelijk jaar" />
       </section>
 
       {/* Informatiekaarten */}
@@ -203,7 +203,7 @@ export default function Jaarcyclus() {
                 })}
               </svg>
 
-              <div className="absolute top-1/2 left-1/2 flex h-[190px] w-[190px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
+              <div className="absolute top-1/2 left-1/2 flex h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
                 <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
               </div>
 

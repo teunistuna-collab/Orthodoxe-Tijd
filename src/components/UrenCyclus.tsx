@@ -356,8 +356,8 @@ export default function UrenCyclus() {
 
   return (
     <>
-      <section id="etmaal" className="bg-bark">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-etmaal.webp" width={2103} height={748} alt="Etmaal — een dag in Gods tegenwoordigheid" className="block h-auto w-full" />
+      <section id="etmaal" className="bg-bark page-hero-crop">
+        <img loading="lazy" decoding="async" src="/images/heroes/hero-etmaal.webp" width={2103} height={748} alt="Etmaal — een dag in Gods tegenwoordigheid" />
       </section>
 
       {/* Informatiekaarten */}
