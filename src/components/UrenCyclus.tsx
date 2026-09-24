@@ -529,6 +529,8 @@ export default function UrenCyclus() {
           centerTitle
           maxWidth="max-w-3xl"
           labelledBy="etmaal-dienst-titel"
+          onVorige={previousService}
+          onVolgende={nextService}
           leadingActions={
             <button type="button" onClick={previousService} className="exact-modal-close" aria-label="Vorige dienst">
               <ChevronLeft />

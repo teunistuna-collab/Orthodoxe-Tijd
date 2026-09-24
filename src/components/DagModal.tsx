@@ -51,6 +51,8 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
       title={dag ? dag.feesten[0]?.naam ?? (curated[0] ? `H. ${curated[0].naam}` : htcDag?.l[0] ? vertaalLeven(htcDag.l[0][1]).replace(/\.$/, '') : 'Dag door het jaar') : ''}
       centerTitle
       maxWidth="max-w-4xl"
+      onVorige={() => onNavigate(ymd(addDays(dag.civil, -1)))}
+      onVolgende={() => onNavigate(ymd(addDays(dag.civil, 1)))}
       actions={dag ? (
         <>
           {/* Op een smal scherm is in de titelbalk geen ruimte voor twee extra tikdoelen: daar staan ze in de balk onder de titel. */}

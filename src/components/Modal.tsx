@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
+import { useSwipe } from '../lib/swipe';
 
 type ModalProps = {
   open: boolean;
@@ -12,9 +13,64 @@ type ModalProps = {
   maxWidth?: string;
   labelledBy?: string;
   centerTitle?: boolean;
+  onVorige?: () => void;
+  onVolgende?: () => void;
 };
 
-export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false }: ModalProps) {
+// Leesvoorkeuren voor alle pop-ups: een klasse op <html>, bewaard tussen bezoeken (zie "Bouw 59" in index.css).
+const LEESKEUZES = [
+  { klasse: 'lees-groot', label: 'Grote letters' },
+  { klasse: 'lees-nacht', label: 'Avondweergave' },
+];
+try {
+  for (const { klasse } of LEESKEUZES) if (localStorage.getItem(klasse)) document.documentElement.classList.add(klasse);
+} catch {
+  /* geen opslag */
+}
+
+function wisselLeeskeuze(klasse: string) {
+  const aan = document.documentElement.classList.toggle(klasse);
+  try {
+    if (aan) localStorage.setItem(klasse, '1');
+    else localStorage.removeItem(klasse);
+  } catch {
+    /* geen opslag */
+  }
+}
+
+// Houdt het scherm aan zolang er een pop-up (gebed, dienst, lezing) open staat.
+function useSchermAan(open: boolean) {
+  useEffect(() => {
+    if (!open || !('wakeLock' in navigator)) return;
+    let actief = true;
+    let slot: WakeLockSentinel | null = null;
+    const vraag = () => {
+      navigator.wakeLock
+        .request('screen')
+        .then((s) => {
+          if (actief) slot = s;
+          else void s.release();
+        })
+        .catch(() => {});
+    };
+    const opZicht = () => {
+      if (document.visibilityState === 'visible') vraag();
+    };
+    vraag();
+    document.addEventListener('visibilitychange', opZicht);
+    return () => {
+      actief = false;
+      document.removeEventListener('visibilitychange', opZicht);
+      void slot?.release().catch(() => {});
+    };
+  }, [open]);
+}
+
+export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende }: ModalProps) {
+  const [, ververs] = useState(0);
+  const veeg = useSwipe(onVorige, onVolgende);
+  useSchermAan(open);
+
   if (!open) return null;
 
   return (
@@ -25,6 +81,7 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         aria-labelledby={labelledBy}
         className={`exact-modal-frame ${maxWidth}`}
         onClick={(event) => event.stopPropagation()}
+        {...veeg}
       >
         <header className="exact-modal-titlebar">
           <div className="exact-modal-nav exact-modal-nav-left">{leadingActions}</div>
@@ -38,7 +95,24 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
             <button type="button" onClick={onClose} className="exact-modal-close" aria-label="Sluiten"><X /></button>
           </div>
         </header>
-        <div className={`exact-modal-paper ${centerTitle ? 'exact-modal-centered' : ''}`}>{children}</div>
+        <div className={`exact-modal-paper ${centerTitle ? 'exact-modal-centered' : ''}`}>
+          <div className="leeskeuzes">
+            {LEESKEUZES.map(({ klasse, label }) => (
+              <button
+                key={klasse}
+                type="button"
+                aria-pressed={document.documentElement.classList.contains(klasse)}
+                onClick={() => {
+                  wisselLeeskeuze(klasse);
+                  ververs((n) => n + 1);
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {children}
+        </div>
       </div>
     </div>
   );

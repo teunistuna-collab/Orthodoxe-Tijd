@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
-import Footer from './components/Footer';
+import Footer, { FooterInhoud } from './components/Footer';
 import Vandaag from './components/Vandaag';
 import Kalender from './components/Kalender';
 import UrenCyclus from './components/UrenCyclus';
@@ -38,6 +38,13 @@ function leesMode(): Mode {
 
 const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'bronnen'];
+
+function paginaUitHash(): string | null {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  return PAGINAS.includes(id) ? id : null;
+}
+
 // De uitleg over oud/nieuw verschijnt alleen bij een eerste bezoek: nog geen uitleg gezien en nog geen kalender gekozen.
 function moetUitlegTonen(): boolean {
   try {
@@ -58,6 +65,20 @@ export default function App() {
   const [heiligenDag, setHeiligenDag] = useState<string | null>(null);
   const [paschaDag, setPaschaDag] = useState<string | null>(null);
   const [lezing, setLezing] = useState<LezingKeuze | null>(null);
+  const [pagina, setPagina] = useState(() => paginaUitHash() ?? 'vandaag');
+
+  // Mobiel toont één pagina tegelijk (zie .pagina-verborgen in index.css); het anker in de url bepaalt welke.
+  useEffect(() => {
+    const opHash = () => {
+      const p = paginaUitHash();
+      if (!p) return;
+      setPagina(p);
+      if (window.matchMedia('(max-width: 767px)').matches) window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+    window.addEventListener('hashchange', opHash);
+    return () => window.removeEventListener('hashchange', opHash);
+  }, []);
+  const p = (id: string) => (id === pagina ? 'pagina' : 'pagina pagina-verborgen');
 
   useEffect(() => {
     laadDagen()
@@ -156,26 +177,21 @@ export default function App() {
       <div id="top" className="min-h-screen bg-parchment text-ink">
         <Header />
         <main>
-          <Vandaag />
-          <ExactPageFrame title="Kalender"><Kalender /></ExactPageFrame>
-
-          <ExactPageFrame title="Adem"><Ademcyclus /></ExactPageFrame>
-
-          <ExactPageFrame title="Etmaal"><UrenCyclus /></ExactPageFrame>
-
-          <ExactPageFrame title="Week"><Weekcyclus /></ExactPageFrame>
-
-          <ExactPageFrame title="Jaar"><Jaarcyclus /></ExactPageFrame>
-
-          <ExactPageFrame title="Pascha"><Pascha /></ExactPageFrame>
-
-          <ExactPageFrame title="Gebeden"><Gebeden /></ExactPageFrame>
-          <ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame>
-          <ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame>
-          <ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame>
+          <div className={p('vandaag')}><Vandaag /></div>
+          <div className={p('kalender')}><ExactPageFrame title="Kalender"><Kalender /></ExactPageFrame></div>
+          <div className={p('adem')}><ExactPageFrame title="Adem"><Ademcyclus /></ExactPageFrame></div>
+          <div className={p('etmaal')}><ExactPageFrame title="Etmaal"><UrenCyclus /></ExactPageFrame></div>
+          <div className={p('week')}><ExactPageFrame title="Week"><Weekcyclus /></ExactPageFrame></div>
+          <div className={p('jaar')}><ExactPageFrame title="Jaar"><Jaarcyclus /></ExactPageFrame></div>
+          <div className={p('pascha')}><ExactPageFrame title="Pascha"><Pascha /></ExactPageFrame></div>
+          <div className={p('gebeden')}><ExactPageFrame title="Gebeden"><Gebeden /></ExactPageFrame></div>
+          <div className={p('vasten')}><ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame></div>
+          <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
+          <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
+          <div className={`${p('bronnen')} pagina-bronnen`}><section id="bronnen" className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div>
         </main>
         <Footer />
-        <BottomNav />
+        <BottomNav pagina={pagina} />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />
         <DagLezingen ymd={lezingenDag} onClose={sluitDagLezingen} />
         <DagHeiligen ymd={heiligenDag} onClose={sluitDagHeiligen} />

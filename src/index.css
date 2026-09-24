@@ -1321,11 +1321,13 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 
   /* Onderbalk */
   .bottom-nav{display:block;position:fixed;left:0;right:0;bottom:0;z-index:90;background:#f8f1e3;border-top:1px solid rgba(184,134,40,.6);box-shadow:0 -6px 18px rgba(48,24,10,.14);padding-bottom:env(safe-area-inset-bottom)}
-  .bottom-nav ul{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin:0;padding:0;list-style:none}
+  .bottom-nav ul{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0;padding:0;list-style:none}
   .bottom-nav li{min-width:0}
   .bottom-nav a,.bottom-nav button{position:relative;display:flex;width:100%;min-height:62px;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px 0 8px;border:0;background:transparent;color:#7a5620;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
   .bottom-nav img{display:block;width:32px;height:32px;filter:drop-shadow(0 1px 1px rgba(48,24,10,.3))}
-  .bottom-nav span{font-family:var(--font-display);font-size:9.5px;font-weight:700;letter-spacing:0;line-height:1;text-transform:uppercase}
+  .bottom-nav span{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:.04em;line-height:1;text-transform:uppercase}
+  .bottom-nav .bottom-nav-trio{display:flex;height:32px;align-items:center}
+  .bottom-nav .bottom-nav-trio img{width:21px;height:21px;margin:0 -3px}
   .bottom-nav .is-actief{color:#6b430c}
   .bottom-nav .is-actief img{filter:drop-shadow(0 0 4px rgba(201,162,39,.75))}
   .bottom-nav .is-actief:after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:2px;border-radius:2px;background:#c9a227}
@@ -1363,8 +1365,7 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 
 /* Onderbalk op heel smalle schermen (320px): kleinere labels zodat ze niet in elkaar lopen */
 @media(max-width:340px){
-  .bottom-nav span{font-size:8.5px}
-  .bottom-nav img{width:30px;height:30px}
+  .bottom-nav span{font-size:10px}
 }
 
 /* Gebeden op desktop (4 kolommen): met 10 categorieën staan de laatste twee gecentreerd onder elkaar */
@@ -1439,10 +1440,20 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 /* Bouw 56 — alle pagina-banners in hetzelfde, compacte panoramaformaat. De banners in
    public/images/heroes zijn zelf al op 6.25/1 (1800×288) uitgesneden, dus dit volgt exact
    die verhouding — object-fit:cover snijdt dan niets extra weg. */
-#top#top .page-hero-crop{position:relative;overflow:hidden;background:#1b0d08;aspect-ratio:6.25/1}
+/* Mobiel: hoger (3/1) en in het midden uitgesneden, zodat kruis, titel en ondertitel leesbaar blijven. */
+#top#top .page-hero-crop{position:relative;overflow:hidden;background:#1b0d08;aspect-ratio:3/1}
 #top#top .page-hero-crop img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;max-height:none}
-@media(min-width:640px){
+/* Bij Etmaal en Week staat de tekst rechts van het midden van de afbeelding. */
+#top#top :is(#etmaal,#week).page-hero-crop img{object-position:73% center!important}
+@media(min-width:768px){
   #top#top .page-hero-crop{aspect-ratio:6.25/1}
+}
+
+/* Bouw 58 — mobiel toont één pagina tegelijk (App.tsx). Verborgen pagina's blijven gemount zodat pop-ups
+   die Vandaag in een andere pagina opent (week, vasten, pascha, etmaal) toch verschijnen. */
+@media(max-width:767px){
+  .pagina-verborgen{height:0;overflow:hidden;visibility:hidden}
+  .pagina-verborgen .exact-modal-backdrop{visibility:visible}
 }
 
 /* Bouw 57 — kalenderdagen: het vlak krijgt dezelfde liturgische kleur als het kader (niet alleen een dunne rand). */
@@ -1450,3 +1461,19 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .kalender-dag:hover{background:color-mix(in srgb, var(--dag-kleur) 28%, #fbf6e8)}
 #top#top .kalender-dag--buiten{background:color-mix(in srgb, var(--dag-kleur) 8%, #f3e9d2)}
 #top#top .kalender-dag--buiten:hover{background:color-mix(in srgb, var(--dag-kleur) 16%, #f3e9d2)}
+
+/* Bouw 59 — leesknoppen in elke pop-up: grotere letters en een donkere avondweergave (klasse op <html>, zie Modal.tsx) */
+#top#top .leeskeuzes{position:relative;z-index:2;display:flex;justify-content:flex-end;gap:6px;margin:-14px -10px 14px}
+#top#top .leeskeuzes button{min-height:32px;padding:4px 10px;border:1px solid rgba(169,119,32,.45);border-radius:999px;background:transparent;color:#8a5a1e;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+#top#top .leeskeuzes button[aria-pressed="true"]{background:#8a5a1e;border-color:#8a5a1e;color:#fbf3df}
+html.lees-groot #top .exact-modal-paper{zoom:1.2}
+html.lees-nacht #top .exact-modal-paper{filter:invert(1) hue-rotate(180deg)}
+html.lees-nacht #top .exact-modal-paper img{filter:invert(1) hue-rotate(180deg)}
+
+/* Bouw 60 — mobiel: de bronnen staan op een eigen pagina (#bronnen); onderaan alleen nog een smalle strook met een link. Desktop ongewijzigd. */
+@media(max-width:767px){
+  footer .footer-inhoud{display:none}
+}
+@media(min-width:768px){
+  .pagina-bronnen,.footer-bronnen-link{display:none}
+}

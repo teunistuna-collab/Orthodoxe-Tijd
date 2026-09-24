@@ -6,6 +6,7 @@ import { HEILIGEN } from '../lib/heiligen';
 import { NIVEAUS } from '../lib/vasten';
 import { VastenKleuren } from './ui';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
+import { useSwipe } from '../lib/swipe';
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het kalenderpaneel.
 function CornerOrnament({ className = '' }: { className?: string }) {
@@ -37,6 +38,7 @@ export default function Kalender() {
 
   const vorige = () => setCur((c) => (c.m === 1 ? { y: c.y - 1, m: 12 } : { y: c.y, m: c.m - 1 }));
   const volgende = () => setCur((c) => (c.m === 12 ? { y: c.y + 1, m: 1 } : { y: c.y, m: c.m + 1 }));
+  const veegMaand = useSwipe(vorige, volgende);
   const naarVandaag = () => setCur({ y: vandaag.getUTCFullYear(), m: vandaag.getUTCMonth() + 1 });
 
   return (
@@ -114,7 +116,7 @@ export default function Kalender() {
             </div>
 
             {/* Cellen */}
-            <div className="grid grid-cols-7">
+            <div className="grid grid-cols-7" {...veegMaand}>
               {cellen.map((c) => {
                 const buiten = c.maand !== cur.m;
                 const n = NIVEAUS[c.vasten.niveau];
