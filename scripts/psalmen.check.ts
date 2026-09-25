@@ -1,14 +1,18 @@
 // Zelftest voor src/lib/psalmen.ts — draaien met: npm run check:psalmen
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { MET_TEKST, PSALMEN, psalmVanHetUur, zoekPsalmen, type PsalmTeksten } from '../src/lib/psalmen';
+import { existsSync, readFileSync } from 'node:fs';
+import { PSALM_BRONNEN, PSALMEN, psalmVanHetUur, zoekPsalmen, type PsalmTeksten } from '../src/lib/psalmen';
 import { serviceConfig } from '../src/lib/etmaal';
 
 const teksten = JSON.parse(readFileSync('public/data/psalmen.json', 'utf8')) as PsalmTeksten;
 
 // De lijst met teksten in de code klopt met het gegenereerde bestand (nummers én Hebreeuwse nummering).
-assert.deepEqual(Object.keys(MET_TEKST).map(Number).sort((a, b) => a - b), Object.keys(teksten).map(Number).sort((a, b) => a - b));
-for (const [n, { mt }] of Object.entries(MET_TEKST)) assert.equal(mt, teksten[n].mt, `Hebreeuws nummer van psalm ${n}`);
+const metTekst = Object.entries(PSALM_BRONNEN).filter(([, b]) => b.tekst);
+assert.deepEqual(metTekst.map(([n]) => Number(n)).sort((a, b) => a - b), Object.keys(teksten).map(Number).sort((a, b) => a - b));
+for (const [n, { mt }] of metTekst) assert.equal(mt, teksten[n].mt, `Hebreeuws nummer van psalm ${n}`);
+// Audio: alleen echte bestanden in public/, en alleen via de centrale psalmendata.
+for (const [n, { audio }] of Object.entries(PSALM_BRONNEN)) if (audio) assert.ok(existsSync(`public${audio}`), `audiobestand van psalm ${n} ontbreekt: ${audio}`);
+assert.equal(PSALMEN.filter((p) => p.audioSrc).length, Object.values(PSALM_BRONNEN).filter((b) => b.audio).length);
 
 assert.equal(PSALMEN.length, 150);
 assert.equal(PSALMEN[0].septuagintNumber, 1);

@@ -26,7 +26,7 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
   const lezingen = rooster?.[dag.ymd] ?? [];
 
   return (
-    <Modal lezen open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
+    <Modal open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
       {lezingen.length > 0 ? (
         <ul className="grid gap-2">
           {lezingen.map((l, i) => {

@@ -22,24 +22,28 @@ export interface Psalm {
   /** Alleen gecontroleerde metadata; nog niets aangeleverd. */
   themes: string[];
   liturgicalUses: PsalmGebruik[];
+  /** Aangeleverde opname (bijvoorbeeld /audio/psalmen/psalm-050.mp3). Zonder bestand: geen audioknop. */
+  audioSrc?: string;
 }
 
 /**
- * Psalmen met aangeleverde tekst en hun Hebreeuwse nummer uit de kopregel van de bron-PDF.
- * Moet overeenkomen met public/data/psalmen.json (gemaakt met scripts/psalmen-uit-pdf.mjs; gecontroleerd door
- * scripts/psalmen.check.ts). Psalm 118 vermeldt in de bron geen Hebreeuws nummer.
+ * Gecontroleerde gegevens per psalm, alleen invullen met aangeleverd materiaal:
+ * - tekst: er is een Septuagint-tekst in public/data/psalmen.json (gemaakt met scripts/psalmen-uit-pdf.mjs);
+ * - mt: Hebreeuws nummer uit de kopregel van de bron-PDF (Psalm 118 vermeldt er geen);
+ * - audio: pad naar een aangeleverde opname in public/, bijvoorbeeld '/audio/psalmen/psalm-050.mp3'.
+ * scripts/psalmen.check.ts controleert dit tegen psalmen.json en of de audiobestanden echt bestaan.
  */
-export const MET_TEKST: Record<number, { mt?: number }> = {
-  24: { mt: 25 },
-  50: { mt: 51 },
-  62: { mt: 63 },
-  84: { mt: 85 },
-  89: { mt: 90 },
-  90: { mt: 91 },
-  102: { mt: 103 },
-  103: { mt: 104 },
-  118: {},
-  140: { mt: 141 },
+export const PSALM_BRONNEN: Record<number, { tekst?: true; mt?: number; audio?: string }> = {
+  24: { tekst: true, mt: 25 },
+  50: { tekst: true, mt: 51 },
+  62: { tekst: true, mt: 63 },
+  84: { tekst: true, mt: 85 },
+  89: { tekst: true, mt: 90 },
+  90: { tekst: true, mt: 91 },
+  102: { tekst: true, mt: 103 },
+  103: { tekst: true, mt: 104 },
+  118: { tekst: true },
+  140: { tekst: true, mt: 141 },
 };
 
 // Gebruik in het etmaal: rechtstreeks uit dezelfde dienstenlijst als de Etmaal-pagina.
@@ -53,14 +57,16 @@ for (const dienst of serviceConfig) {
 
 export const PSALMEN: Psalm[] = Array.from({ length: 150 }, (_, i) => {
   const n = i + 1;
+  const bron = PSALM_BRONNEN[n] ?? {};
   return {
     id: `psalm-${n}`,
     septuagintNumber: n,
-    ...(MET_TEKST[n]?.mt ? { masoreticNumber: MET_TEKST[n].mt } : {}),
+    ...(bron.mt ? { masoreticNumber: bron.mt } : {}),
     title: `Psalm ${n}`,
-    hasText: n in MET_TEKST,
+    hasText: !!bron.tekst,
     themes: [],
     liturgicalUses: GEBRUIK.get(n) ?? [],
+    ...(bron.audio ? { audioSrc: bron.audio } : {}),
   };
 });
 

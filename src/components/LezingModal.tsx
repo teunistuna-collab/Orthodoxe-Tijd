@@ -81,7 +81,7 @@ export default function LezingModal({ keuze, onClose }: Props) {
                   {status === 'fout' && <p className="text-sm text-ink-mute">De tekst van deze lezing kon niet worden geladen.</p>}
                   {lezing && (
                     <>
-                      <div className="font-display text-[17px] leading-[1.7] text-ink">
+                      <div className="lees-tekst font-display text-[17px] leading-[1.7] text-ink">
                         {lezing.verses.map((v, i) => (
                           <span key={i}>
                             <sup className="mr-1 text-[11px] font-bold text-gold-deep">{v.num}</sup>
