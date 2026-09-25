@@ -61,7 +61,7 @@ export default function Ademcyclus() {
 
   return (
     <>
-      <PageHero id="adem" alt="Ademcyclus — het onophoudelijke gebed" />
+      <PageHero id="adem" alt="Ademcyclus — het onophoudelijke gebed" kop />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">

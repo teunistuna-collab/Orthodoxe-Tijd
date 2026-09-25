@@ -22,18 +22,11 @@ const KEUZES: { id: Mode; titel: string; tekst: string }[] = [
 export default function KalenderUitleg({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { mode, setMode } = useApp();
 
+  // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {
     if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKey);
-    const ontgrendel = vergrendelScroll();
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      ontgrendel();
-    };
-  }, [open, onClose]);
+    return vergrendelScroll();
+  }, [open]);
 
   return (
     <Modal open={open} onClose={onClose} eyebrow="Kalenderkeuze" title="Welke kalender volgt u?" labelledBy="kalender-uitleg-titel" centerTitle maxWidth="max-w-2xl">

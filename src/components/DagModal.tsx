@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { BookOpenText, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { addDays, dagInfo, formatDag, formatLang, parseYmd, ymd } from '../lib/kalender';
-import { HEILIGEN } from '../lib/heiligen';
-import { LEZINGEN_JAAR, lezingSoort, rangLabel, vertaalLeven, vertaalRef, vertaalTag } from '../lib/htc';
+import { lezingSoort, rangLabel, roosterMelding, vertaalLeven, vertaalRef, vertaalTag } from '../lib/htc';
 import { NIVEAUS } from '../lib/vasten';
 import { FeestTag, VastenBadge } from './ui';
 import Modal from './Modal';
@@ -16,15 +15,15 @@ interface Props {
 }
 
 export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Props) {
-  const { mode, vandaagYmd, htc, openLezing } = useApp();
+  const { mode, vandaagYmd, htc, rooster, heiligen, openLezing } = useApp();
   const [origineel, setOrigineel] = useState(false);
 
   const dag = useMemo(() => (geselecteerd ? dagInfo(parseYmd(geselecteerd), mode, vandaagYmd) : null), [geselecteerd, mode, vandaagYmd]);
 
   useEffect(() => {
     if (!geselecteerd) return;
+    // Escape sluit via de gedeelde pop-upstapel (lib/terug.ts); hier alleen bladeren met de pijltjes.
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft' && dag) onNavigate(ymd(addDays(dag.civil, -1)));
       if (e.key === 'ArrowRight' && dag) onNavigate(ymd(addDays(dag.civil, 1)));
     };
@@ -36,9 +35,9 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
     };
   }, [geselecteerd, dag, onClose, onNavigate]);
 
-  const curated = dag ? HEILIGEN[dag.kerkKey] ?? [] : [];
+  const curated = dag ? heiligen?.HEILIGEN[dag.kerkKey] ?? [] : [];
   const htcDag = dag ? htc?.[dag.kerkKey] : undefined;
-  const lezingen = dag && dag.jaar === LEZINGEN_JAAR ? htc?.[dag.julianKey]?.r ?? [] : [];
+  const lezingen = dag ? rooster?.[dag.ymd] ?? [] : [];
   const niveau = dag ? NIVEAUS[dag.vasten.niveau] : null;
 
   if (!dag || !niveau) return null;
@@ -180,7 +179,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                   </ul>
                 ) : (
                   <p className="mt-2 text-sm text-ink-mute">
-                    {dag.jaar === LEZINGEN_JAAR ? (htc ? 'Geen lezingen gevonden voor deze dag.' : 'Lezingen worden geladen…') : `Het leesrooster is beschikbaar voor het kerkjaar ${LEZINGEN_JAAR}.`}
+                    {roosterMelding(rooster, dag.ymd)}
                   </p>
                 )}
               </div>

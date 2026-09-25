@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { BookOpen, CalendarDays, Ellipsis, History, House } from 'lucide-react';
+import { useApp } from '../lib/context';
 
 // Onderbalk voor mobiel (max-width: 767px). Op desktop is hij verborgen via CSS en blijft de bestaande koptekst in gebruik.
 // Gebruikt dezelfde ankers als de koptekst.
@@ -32,6 +33,7 @@ const ITEMS = [
 
 // Op mobiel staat er één pagina tegelijk in beeld; de actieve knop volgt die pagina.
 export default function BottomNav({ pagina: actief }: { pagina: string }) {
+  const { openZoeken } = useApp();
   const [open, setOpen] = useState<string | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
@@ -58,6 +60,11 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
     <>
       {open && (
         <div ref={sheetRef} className="bottom-nav-blad" role="menu" aria-label={open === 'cycli' ? 'Cycli' : 'Meer'}>
+          {open === 'meer' && (
+            <button type="button" role="menuitem" onClick={() => { setOpen(null); openZoeken(); }}>
+              Zoeken
+            </button>
+          )}
           {GROEPEN[open].map((item) => (
             <a key={item.id} href={`#${item.id}`} role="menuitem" className={actief === item.id ? 'is-actief' : undefined} onClick={() => setOpen(null)}>
               {item.label}

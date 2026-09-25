@@ -2,9 +2,6 @@ import { useMemo, useState, type CSSProperties } from 'react';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster } from '../lib/kalender';
-import { HEILIGEN } from '../lib/heiligen';
-import { NIVEAUS } from '../lib/vasten';
-import { VastenKleuren } from './ui';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
 import PageHero from './PageHero';
@@ -64,7 +61,7 @@ function CalendarToolbar({ maand, jaar, eersteJaar, onMaand, onJaar, onVorige, o
 }
 
 export default function Kalender() {
-  const { mode, vandaag, vandaagYmd, openDag } = useApp();
+  const { mode, vandaag, vandaagYmd, heiligen, openDag } = useApp();
   const [cur, setCur] = useState({ y: vandaag.getUTCFullYear(), m: vandaag.getUTCMonth() + 1 });
   const [geselecteerdeYmd, setGeselecteerdeYmd] = useState(vandaagYmd);
   const [legendaOpen, setLegendaOpen] = useState(false);
@@ -75,7 +72,7 @@ export default function Kalender() {
   const vastendagen = inMaand.filter((c) => !['geen', 'vrij'].includes(c.vasten.niveau)).length;
   const geselecteerd = cellen.find((c) => c.ymd === geselecteerdeYmd) ?? cellen.find((c) => c.isVandaag) ?? cellen.find((c) => c.maand === cur.m) ?? cellen[0];
 
-  const heiligenVanDag = HEILIGEN[geselecteerd.kerkKey] ?? [];
+  const heiligenVanDag = heiligen?.HEILIGEN[geselecteerd.kerkKey] ?? [];
   const hoofdheilige = heiligenVanDag[0];
   const overigeHeiligen = heiligenVanDag.slice(1);
 
@@ -132,9 +129,8 @@ export default function Kalender() {
             <div className="grid grid-cols-7" {...veegMaand}>
               {cellen.map((c) => {
                 const buiten = c.maand !== cur.m;
-                const n = NIVEAUS[c.vasten.niveau];
                 const feest = c.feesten[0];
-                const heilige = HEILIGEN[c.kerkKey]?.[0];
+                const heilige = heiligen?.HEILIGEN[c.kerkKey]?.[0];
                 const isPascha = feest?.soort === 'pascha';
                 const groot = feest && feest.groot;
                 const beweeglijk = feest && feest.soort === 'beweeglijk' && !groot && !isPascha;
@@ -182,12 +178,6 @@ export default function Kalender() {
                         <div className="line-clamp-2 text-[11px] leading-tight text-ink-soft">{heilige.naam}</div>
                       ) : null}
                     </div>
-                    <div className="absolute inset-x-1.5 bottom-1.5 flex items-center gap-1 xl:inset-x-2 xl:bottom-2">
-                      <span className="h-1.5 flex-1 rounded-full" style={{ background: c.vasten.niveau === 'geen' ? 'transparent' : n.kleur, opacity: buiten ? 0.35 : 1 }} />
-                      <span className="hidden text-[10.5px] font-bold tracking-wide uppercase xl:block" style={{ color: n.tekst, opacity: buiten ? 0.5 : 1 }}>
-                        {c.vasten.niveau === 'geen' ? '' : n.kort}
-                      </span>
-                    </div>
                   </button>
                 );
               })}
@@ -199,7 +189,6 @@ export default function Kalender() {
             </button>
             <div className={`${legendaOpen ? 'flex' : 'hidden'} flex-wrap items-center gap-x-4 gap-y-2 border-t border-gold/25 bg-[#f3e9d2] px-4 py-3 text-xs font-semibold text-ink-soft sm:px-5 lg:flex`}>
               <span className="hidden text-xs font-bold tracking-widest text-gold-deep uppercase lg:inline">Legenda</span>
-              <VastenKleuren />
               <span className="inline-flex items-center gap-1.5">
                 <span className="text-gold-deep">✠</span> groot feest
               </span>

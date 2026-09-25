@@ -300,7 +300,7 @@ export default function Pascha() {
 
   return (
     <>
-      <PageHero id="pascha" alt="Pascha — de Verrijzenis van Christus" />
+      <PageHero id="pascha" alt="Pascha — de Verrijzenis van Christus" kop />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">

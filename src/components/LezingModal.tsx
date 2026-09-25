@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BookOpenText, ChevronDown, ExternalLink } from 'lucide-react';
 import type { LezingKeuze } from '../lib/context';
 import { laadLezingen, lezingSoort, nbv21Url, vertaalRef, vertaalTag, type HtcLezing } from '../lib/htc';
-import { formatLang } from '../lib/kalender';
+import { formatLang, kerkDatum } from '../lib/kalender';
 import Modal from './Modal';
 
 interface Props {
@@ -21,8 +21,9 @@ export default function LezingModal({ keuze, onClose }: Props) {
     setLezing(null);
     setToonEngels(false);
     const julMaand = Number(keuze.julianKey.split('-')[0]);
+    const julJaar = kerkDatum(keuze.civil, 'oud').getUTCFullYear();
     let actief = true;
-    laadLezingen(julMaand)
+    laadLezingen(julMaand, julJaar)
       .then((data) => {
         if (!actief) return;
         const lijst = data[keuze.julianKey] ?? [];
@@ -31,13 +32,10 @@ export default function LezingModal({ keuze, onClose }: Props) {
         setStatus(gevonden ? 'ok' : 'fout');
       })
       .catch(() => actief && setStatus('fout'));
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', onKey);
     return () => {
       actief = false;
-      window.removeEventListener('keydown', onKey);
     };
-  }, [keuze, onClose]);
+  }, [keuze]);
 
   const refNl = keuze ? vertaalRef(keuze.ref) : '';
   const soort = keuze ? lezingSoort(refNl) : 'apostel';

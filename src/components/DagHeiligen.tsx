@@ -14,24 +14,16 @@ interface Props {
 // Pop-up met uitsluitend de heiligen en gedachtenissen van één dag. Een tik op een heilige opent zijn of haar
 // levensbeschrijving in dezelfde leespop-up als op de Heiligen-pagina.
 export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
-  const { mode, vandaagYmd, htc } = useApp();
+  const { mode, vandaagYmd, htc, heiligen: eigen } = useApp();
   const [gekozen, setGekozen] = useState<Resultaat | null>(null);
   const dag = useMemo(() => (gekozenDag ? dagInfo(parseYmd(gekozenDag), mode, vandaagYmd) : null), [gekozenDag, mode, vandaagYmd]);
-  const heiligen = useMemo(() => (dag ? heiligenVanDag(dag.kerkKey, htc) : []), [dag, htc]);
+  const heiligen = useMemo(() => (dag ? heiligenVanDag(dag.kerkKey, htc, eigen?.HEILIGEN) : []), [dag, htc, eigen]);
 
+  // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {
     if (!gekozenDag) return;
-    const onKey = (e: KeyboardEvent) => {
-      // met een levensbeschrijving erbovenop sluit Escape alleen die
-      if (e.key === 'Escape' && document.querySelectorAll('[role="dialog"]').length <= 1) onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    const ontgrendel = vergrendelScroll();
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      ontgrendel();
-    };
-  }, [gekozenDag, onClose]);
+    return vergrendelScroll();
+  }, [gekozenDag]);
 
   return (
     <>

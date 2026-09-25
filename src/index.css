@@ -323,7 +323,7 @@ main > section[id] > img {
 .fasting-step:nth-child(n+6){background:linear-gradient(180deg,#3b1b17,#190b08)!important}.fasting-step>div:first-of-type span:first-child{color:#d8ad4d}
 .saint-day-grid{grid-template-columns:repeat(10,minmax(0,1fr))}@media(max-width:700px){.saint-day-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
 /* Navigatie optisch op dezelfde as als de 760px pagina's. */
-header nav>div{justify-content:center}
+header>nav>div{justify-content:center}
 
 /* Ontwerpronde 11 — definitieve kaartreferentie en leesbaarheid */
 .exact-frame{overflow:visible}.exact-content{overflow:hidden}
@@ -382,8 +382,8 @@ header nav>div{justify-content:center}
 @media(max-width:767px){.exact-titlebar{top:64px!important}}
 
 /* Header + navigation share the same centered visual axis. */
-header>div.bg-bark>div, header nav>div{width:min(1500px,100%);margin-inline:auto}
-header nav>div{justify-content:space-evenly!important}
+header>div.bg-bark>div, header>nav>div{width:min(1500px,100%);margin-inline:auto}
+header>nav>div{justify-content:space-evenly!important}
 header>div.bg-bark>div{position:relative}
 
 /* Readability: important copy on parchment is always dark enough. */
@@ -446,7 +446,7 @@ header>div.bg-bark>div{position:relative}
 /* One desktop reading axis. The page is wider, while prose can still keep its own readable measure. */
 @media(min-width:980px){
   .exact-frame,.vandaag-frame{width:min(1240px,calc(100% - 36px))!important}
-  header>div.bg-bark>div,header nav>div{width:min(1240px,calc(100% - 36px))!important;max-width:1240px!important}
+  header>div.bg-bark>div,header>nav>div{width:min(1240px,calc(100% - 36px))!important;max-width:1240px!important}
   .today-shell{width:min(1240px,100%)!important}
 }
 .exact-content{overflow:hidden!important}
@@ -454,8 +454,8 @@ header>div.bg-bark>div{position:relative}
 .exact-content p,.exact-content h1,.exact-content h2,.exact-content h3,.exact-content blockquote{overflow-wrap:break-word}
 
 /* Header: same axis as the book, richer but restrained. */
-header nav{border-bottom:1px solid rgba(201,162,39,.28)!important}
-header nav>div{justify-content:space-between!important}
+header>nav{border-bottom:1px solid rgba(201,162,39,.28)!important}
+header>nav>div{justify-content:space-between!important}
 
 /* Canonical information cards: compact, equal and inviting rather than full-screen panels. */
 .ornate-card{height:330px!important;min-height:330px!important;max-height:330px!important;padding:25px 30px 23px!important}
@@ -917,7 +917,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
   box-shadow:inset 0 0 0 6px #f8efd9,inset 0 0 0 7px rgba(169,119,32,.55),0 14px 30px rgba(56,31,14,.14)!important;
 }
 #top#top .v17-fasting-today:before,#top#top .v17-fasting-today:after{color:#a97720}
-#top#top .v17-fasting-today h1{color:#2b1d12!important}
+#top#top .v17-fasting-today :is(h1,h2){color:#2b1d12!important}
 #top#top .v17-fasting-today p{color:#5b402e!important;opacity:1!important}
 #top#top .v17-fasting-today p[class*="text-gold-light"]{color:#8a5a1e!important}
 #top#top .v17-fasting-today .fasting-food-grid{border-top:1px solid rgba(169,119,32,.35)!important;gap:14px!important}
@@ -1142,16 +1142,16 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 .exact-frame,.vandaag-frame{border-color:rgba(184,134,40,.75)!important;box-shadow:0 24px 60px rgba(70,42,18,.2)!important}
 
 /* 2. Menubalk: licht perkament met donkerbruine tekst; actief = goudbruin met gouden streep */
-header nav{background:linear-gradient(180deg,#f8efdb,#f0e3c5)!important;border-top:1px solid rgba(184,134,40,.3)!important;border-bottom:1px solid rgba(184,134,40,.5)!important;color:#4a2b1d!important}
-header nav a,header nav button{color:#5b402e!important}
-header nav a:hover,header nav button:hover{color:#2b1d12!important}
-header nav [class*="text-gold-light"]{color:#8a5a1e!important}
-header nav svg{color:inherit}
+header>nav{background:linear-gradient(180deg,#f8efdb,#f0e3c5)!important;border-top:1px solid rgba(184,134,40,.3)!important;border-bottom:1px solid rgba(184,134,40,.5)!important;color:#4a2b1d!important}
+header>nav a,header>nav button{color:#5b402e!important}
+header>nav a:hover,header>nav button:hover{color:#2b1d12!important}
+header>nav [class*="text-gold-light"]{color:#8a5a1e!important}
+header>nav svg{color:inherit}
 /* uitklapmenu's (Cycli) */
-header nav [class*="bg-[#1b110d]"]{background:#fbf3e3!important;border-color:rgba(184,134,40,.6)!important;box-shadow:0 18px 36px rgba(70,42,18,.22)!important}
-header nav [class*="bg-[#2a1d16]"]{background:#f2e4c2!important;border-color:rgba(184,134,40,.6)!important}
-header nav [class*="hover:bg-[#241813]"]:hover{background:#f6ebd0!important;border-color:rgba(184,134,40,.45)!important}
-header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important}
+header>nav [class*="bg-[#1b110d]"]{background:#fbf3e3!important;border-color:rgba(184,134,40,.6)!important;box-shadow:0 18px 36px rgba(70,42,18,.22)!important}
+header>nav [class*="bg-[#2a1d16]"]{background:#f2e4c2!important;border-color:rgba(184,134,40,.6)!important}
+header>nav [class*="hover:bg-[#241813]"]:hover{background:#f6ebd0!important;border-color:rgba(184,134,40,.45)!important}
+header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important}
 
 /* Bouw 40 — Vandaag-kaarten: bij zweven verspringt de tekst niet meer (zelfde opvulling, geen optillen) */
 #top#top .vandaag-item{transition:background .18s,box-shadow .18s!important}
@@ -1206,7 +1206,7 @@ header nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   #top#top main :is(.btn-pill,.saints-gold-button,.saints-outline-button,.saints-search-button,.saints-text-link,.vandaag-main-button,.ornate-action){font-size:13px!important}
   #top#top main .btn-pill{display:inline-flex;align-items:center;justify-content:center}
   /* koptekst: N/O-schakelaar, menuknop en logo krijgen een grotere tikzone zonder de balk hoger te maken */
-  header nav button,header button{position:relative}
+  header>nav button,header button{position:relative}
   header button:after{content:"";position:absolute;inset:-9px -4px}
   header button[aria-label="Menu openen"],header button[aria-label="Menu sluiten"]{min-width:44px;min-height:44px}
   header>div:first-child a[href="#vandaag"]{min-height:44px}
@@ -1589,3 +1589,105 @@ html.lees-nacht #top .exact-modal-paper img{filter:invert(1) hue-rotate(180deg)}
   #top#top :is(.exact-frame,.vandaag-frame){width:min(1360px,calc(100% - 48px))!important}
   #top#top header>div.bg-bark>div{width:min(1360px,calc(100% - 48px))!important;max-width:1360px!important}
 }
+
+/* Bouw 69 — desktopkop (vanaf 768px; daaronder is de kop verborgen en geldt de onderbalk).
+   Zelfde familie als de onderbalk: chocolade, fijne gouden lijnen, ivoor en goud, Cormorant.
+   De bestaande sierlijst is een border-image: de hoekornamenten houden zo op elke breedte dezelfde, bescheiden maat. */
+#top#top#top header.site-header>div.bg-bark{border:0 solid transparent;border-image:url(/images/ui/nav/header-achtergrond.webp) 0 110 fill / 0 52px / 0 stretch}
+#top#top#top header.site-header>div.bg-bark>div{width:min(calc(100% - 32px),1560px)!important;max-width:none!important;min-height:78px;gap:clamp(14px,2vw,36px);padding:0 clamp(42px,3vw,56px)}
+.kop-merk{display:flex;flex:none;align-items:center;gap:11px;color:#d9b25a;text-decoration:none}
+.kop-merk svg{flex:none;width:21px;height:38px}
+.kop-naam{display:block;font-family:var(--font-display);font-size:20px;font-weight:600;line-height:1.05;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;color:#e8cf7a}
+.kop-tagline{display:block;margin-top:5px;font-family:var(--font-display);font-size:10.5px;font-weight:600;line-height:1;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;color:#bfa982}
+.kop-nav{display:flex;flex:1;min-width:0;align-items:center;justify-content:center;gap:clamp(12px,2.3vw,44px)}
+#top#top#top header .kop-link{position:relative;display:inline-flex;align-items:center;gap:3px;padding:10px 0;border:0;background:none;font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1;letter-spacing:.02em;white-space:nowrap;color:#eadfc8;cursor:pointer;transition:color .15s}
+#top#top#top header .kop-link:hover,#top#top#top header .kop-link.is-actief{color:#f0cf7b}
+#top#top#top header .kop-link.is-actief:after{content:"";position:absolute;inset:auto 0 3px;height:1.5px;background:#e8cf7a}
+.kop-link svg{width:14px;height:14px;color:#cdb07a}
+.kop-link:focus-visible,.kop-merk:focus-visible,.kop-kalender button:focus-visible{outline:1px solid #e8cf7a;outline-offset:4px}
+.kop-kalender{display:flex;flex:none;gap:1px;padding:2px;border:1px solid rgba(201,162,39,.35);border-radius:999px}
+.kop-kalender button{padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:#cdb07a;transition:color .15s}
+.kop-kalender button:hover{color:#f0cf7b}
+.kop-kalender button[aria-pressed=true]{background:rgba(201,162,39,.85);color:#160b08}
+/* krapper: eerst tussenruimte en tagline, pas daarna de navigatietekst */
+@media(max-width:1439.98px){
+  .kop-naam{font-size:18px;letter-spacing:.13em}
+  .kop-tagline{font-size:9.5px;letter-spacing:.07em}
+  .kop-nav{gap:clamp(12px,1.7vw,28px)}
+}
+@media(max-width:1279.98px){
+  .kop-tagline{display:none}
+  .kop-nav{gap:clamp(12px,1.6vw,20px)}
+  #top#top#top header .kop-link{font-size:16px;letter-spacing:0}
+}
+@media(max-width:1099.98px){
+  #top#top#top header .kop-link{font-size:15px}
+}
+@media(max-width:1023.98px){
+  #top#top#top header.site-header>div.bg-bark>div{min-height:72px;padding:0 40px}
+  .kop-naam{font-size:15px;letter-spacing:.1em}
+  #top#top#top header .kop-link{font-size:15px}
+}
+/* tablet (768–979px): de volledige kop past niet; alleen het logokruis blijft zichtbaar, de naam blijft voor schermlezers */
+@media(max-width:979.98px){
+  .kop-merk .kop-naam{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+
+/* Bouw 70 — centraal zoeken. Zoekknop in de desktopkop, "Zoeken" onder Meer en een vergrootglas op Vandaag (mobiel).
+   Het venster: op desktop een donker paneel onder de kop, op mobiel schermvullend. Zelfde familie: chocolade, goud, ivoor. */
+.kop-acties{display:flex;flex:none;align-items:center;gap:6px}
+.kop-zoek{display:inline-flex;flex:none;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:0;border-radius:999px;background:none;color:#cdb07a;cursor:pointer;transition:color .15s}
+.kop-zoek:hover{color:#f0cf7b}
+.kop-zoek:focus-visible,.kop-kalender-kort:focus-visible{outline:1px solid #e8cf7a;outline-offset:2px}
+.kop-zoek svg{width:20px;height:20px;stroke-width:1.5}
+.kop-kalender-kort{display:none;flex:none;padding:4px 11px;border:1px solid rgba(201,162,39,.45);border-radius:999px;background:none;font-size:10.5px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:#f0cf7b;cursor:pointer}
+@media(max-width:899.98px){
+  .kop-kalender{display:none}
+  .kop-kalender-kort{display:inline-flex}
+}
+
+.zoek-achtergrond{position:fixed;inset:0;z-index:120;display:flex;justify-content:center;align-items:flex-start;padding:88px 16px 24px;background:rgba(12,6,3,.55)}
+.zoek-paneel{display:flex;flex-direction:column;width:min(720px,100%);max-height:calc(100vh - 112px);max-height:calc(100dvh - 112px);border:1px solid rgba(201,162,39,.55);border-radius:6px;background:#1b110d;box-shadow:0 24px 60px rgba(0,0,0,.5);color:#eadfc8;overflow:hidden}
+.zoek-veld{display:flex;flex:none;align-items:center;gap:12px;padding:0 10px 0 18px;border-bottom:1px solid rgba(201,162,39,.4)}
+.zoek-veld>svg{flex:none;width:20px;height:20px;color:#cdb07a;stroke-width:1.5}
+.zoek-veld input{flex:1;min-width:0;height:60px;border:0;background:none;outline:none;font-family:var(--font-display);font-size:21px;font-weight:500;color:#f4ecda;-webkit-appearance:none;appearance:none}
+.zoek-veld input::placeholder{color:#a8916b}
+.zoek-veld input::-webkit-search-cancel-button{display:none}
+.zoek-sluit{display:inline-flex;flex:none;align-items:center;justify-content:center;width:44px;height:44px;border:0;border-radius:999px;background:none;color:#cdb07a;cursor:pointer}
+.zoek-sluit:hover{color:#f0cf7b}
+.zoek-sluit svg{width:20px;height:20px;stroke-width:1.5}
+.zoek-resultaten{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 0 12px}
+.zoek-hint{margin:0;padding:18px 20px;font-family:var(--font-display);font-size:16px;line-height:1.5;color:#bfa982}
+.zoek-hint i{color:#e8cf7a;font-style:italic}
+.zoek-groep{padding-top:10px}
+.zoek-groep h2{margin:0;padding:4px 20px 6px}
+.zoek-groep ul{margin:0;padding:0;list-style:none}
+.zoek-groep button{display:flex;width:100%;flex-direction:column;align-items:flex-start;gap:3px;padding:9px 20px;border:0;border-left:2px solid transparent;background:none;text-align:left;cursor:pointer;color:inherit}
+.zoek-groep button:hover,.zoek-groep button:focus-visible{outline:none;border-left-color:#c9a227;background:rgba(201,162,39,.09)}
+.zoek-titel{font-family:var(--font-display);font-size:18px;font-weight:600;line-height:1.25;color:#eadfc8}
+.zoek-groep button:hover .zoek-titel,.zoek-groep button:focus-visible .zoek-titel{color:#f0cf7b}
+.zoek-onder{font-size:13px;line-height:1.35;color:#b8a07a}
+
+@media(max-width:767px){
+  .zoek-achtergrond{padding:0;background:#1b110d}
+  .zoek-paneel{width:100%;height:100%;max-height:none;border:0;border-radius:0;box-shadow:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+  .zoek-veld{padding-left:16px}
+  .zoek-veld input{height:58px;font-size:19px}
+  .zoek-groep button{min-height:52px;justify-content:center;padding:8px 16px}
+  .zoek-groep h2,.zoek-hint{padding-left:16px;padding-right:16px}
+
+  /* "Zoeken" als eerste keuze onder Meer: zelfde opmaak als de andere keuzes */
+  .bottom-nav-blad button{position:relative;display:flex;flex:1;min-width:0;min-height:44px;align-items:center;justify-content:center;padding:0;border:0;background:none;color:#eadfc8;font-family:var(--font-display);font-size:15px;font-weight:600;cursor:pointer}
+
+  /* vergrootglas rechtsboven op Vandaag */
+  #top#top main .vandaag-mobiel .vm-zoek{position:absolute;top:calc(env(safe-area-inset-top) + 6px);right:6px;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;height:44px;padding:0;border:0;border-radius:999px;background:none;color:#8a5a1e}
+  .vandaag-mobiel .vm-zoek svg{width:22px;height:22px;stroke-width:1.5}
+}
+@media(max-width:340px){
+  .bottom-nav-blad button{font-size:14px}
+}
+
+/* Bouw 71 — sneller eerste bezoek: afbeeldingen van nog niet geopende pagina's niet ophalen.
+   Alle afbeeldingen hebben loading="lazy"; met display:none haalt de browser ze pas op als de pagina wordt geopend.
+   Pop-ups die vanuit Vandaag in een verborgen pagina openen, tonen hun afbeeldingen wel. */
+#top#top#top .pagina-verborgen img:not(.exact-modal-backdrop img){display:none!important}

@@ -28,18 +28,11 @@ export default function DagPascha({ ymd: gekozen, onClose }: Props) {
   const { mode, vandaagYmd } = useApp();
   const dag = useMemo(() => (gekozen ? dagInfo(parseYmd(gekozen), mode, vandaagYmd) : null), [gekozen, mode, vandaagYmd]);
 
+  // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {
     if (!gekozen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    const ontgrendel = vergrendelScroll();
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      ontgrendel();
-    };
-  }, [gekozen, onClose]);
+    return vergrendelScroll();
+  }, [gekozen]);
 
   if (!dag) return null;
 

@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { ALLE_HEILIGEN } from '../lib/heiligen';
 import { rangLabel, vertaalLeven } from '../lib/htc';
 import { dagInfo, formatMd, hoofdletter, MAANDEN, MAANDEN_KORT } from '../lib/kalender';
 import { LiturgicalPopup } from './CycleSections';
@@ -13,7 +12,7 @@ const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 function sorteerMd(a: string, b: string) { const [am, ad] = a.split('-').map(Number); const [bm, bd] = b.split('-').map(Number); return am - bm || ad - bd; }
 
 export default function Heiligen() {
-  const { mode, vandaag, vandaagYmd, htc } = useApp();
+  const { mode, vandaag, vandaagYmd, htc, heiligen } = useApp();
   const dagVandaag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
   const [zoek, setZoek] = useState('');
   const [maand, setMaand] = useState<number | null>(null);
@@ -25,7 +24,7 @@ export default function Heiligen() {
   const [vandaagOpen, setVandaagOpen] = useState(false);
   const [geselecteerde, setGeselecteerde] = useState<Resultaat | null>(null);
 
-  const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, htc), [dagVandaag.kerkKey, htc]);
+  const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, htc, heiligen?.HEILIGEN), [dagVandaag.kerkKey, htc, heiligen]);
 
   const categorieVan = (h: Resultaat) => {
     const t = normaliseer(`${h.titel ?? ''} ${h.naam}`);
@@ -42,7 +41,7 @@ export default function Heiligen() {
   const resultaten = useMemo<Resultaat[]>(() => {
     const query = normaliseer(zoek.trim());
     const past = (md: string, tekst: string) => (maand === null || Number(md.split('-')[0]) === maand) && (dag === null || Number(md.split('-')[1]) === dag) && (!query || normaliseer(`${tekst} ${md} ${formatMd(md)}`).includes(query));
-    const centraal: Resultaat[] = ALLE_HEILIGEN.filter(h => past(h.md, `${h.naam} ${h.titel} ${h.kort}`) && (!alleenNl || h.nl)).map(h => ({ ...h, bron: 'nl' }));
+    const centraal: Resultaat[] = (heiligen?.ALLE_HEILIGEN ?? []).filter(h => past(h.md, `${h.naam} ${h.titel} ${h.kort}`) && (!alleenNl || h.nl)).map(h => ({ ...h, bron: 'nl' }));
     const basis = [...centraal];
     if (htc && !alleenNl) {
       const gezien = new Set(centraal.map(h => `${h.md}|${normaliseer(h.ruwNaam ?? h.naam)}`));
@@ -57,7 +56,7 @@ export default function Heiligen() {
       }
     }
     return basis.filter(h => categorie === 'alle' || categorieVan(h) === categorie).sort((a,b) => sorteerMd(a.md,b.md) || a.naam.localeCompare(b.naam));
-  }, [alleenNl, htc, maand, dag, zoek, categorie]);
+  }, [alleenNl, htc, heiligen, maand, dag, zoek, categorie]);
 
   const groepen = useMemo(() => {
     const map = new Map<string, Resultaat[]>();

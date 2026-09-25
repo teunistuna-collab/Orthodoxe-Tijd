@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Bird, ChevronDown, ChevronLeft, ChevronRight, Church, Clock3, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
 import Modal from './Modal';
 import Cross from './Cross';
 import { vergrendelScroll } from '../lib/scrollLock';
@@ -10,7 +9,20 @@ import { ETMAAL_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
 import PageHero from './PageHero';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
+// De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
+let pdfjsLaden: Promise<typeof import('pdfjs-dist')> | null = null;
+function laadPdfjs() {
+  pdfjsLaden ??= import('pdfjs-dist')
+    .then((pdfjsLib) => {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
+      return pdfjsLib;
+    })
+    .catch((fout) => {
+      pdfjsLaden = null; // bij een netwerkfout de volgende keer opnieuw proberen
+      throw fout;
+    });
+  return pdfjsLaden;
+}
 
 type PsalmMapping = {
   title: string;
@@ -241,10 +253,12 @@ export default function UrenCyclus() {
 
     const parsePdf = async () => {
       try {
+        const pdfjsKlaar = laadPdfjs(); // tegelijk met het PDF-bestand ophalen
+        pdfjsKlaar.catch(() => {}); // een fout komt hieronder via Promise.all binnen
         const response = await fetch(currentPdfUrl);
         if (!response.ok) throw new Error(`PDF is niet beschikbaar (${response.status})`);
 
-        const buffer = await response.arrayBuffer();
+        const [buffer, pdfjsLib] = await Promise.all([response.arrayBuffer(), pdfjsKlaar]);
         const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
         const pages: Array<Array<PdfLine>> = [];
 
@@ -296,17 +310,10 @@ export default function UrenCyclus() {
     };
   }, [currentPdfUrl, open]);
 
+  // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {
     if (open === null) return;
-    const sluitMetEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(null);
-    };
-    window.addEventListener('keydown', sluitMetEscape);
-    const ontgrendel = vergrendelScroll();
-    return () => {
-      window.removeEventListener('keydown', sluitMetEscape);
-      ontgrendel();
-    };
+    return vergrendelScroll();
   }, [open]);
 
   const openService = (serviceIndex: number) => {
@@ -357,7 +364,7 @@ export default function UrenCyclus() {
 
   return (
     <>
-      <PageHero id="etmaal" alt="Etmaal — een dag in Gods tegenwoordigheid" />
+      <PageHero id="etmaal" alt="Etmaal — een dag in Gods tegenwoordigheid" kop />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">

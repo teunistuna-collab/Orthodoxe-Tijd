@@ -154,7 +154,7 @@ export default function Weekcyclus() {
 
   return (
     <>
-      <PageHero id="week" alt="Weekcyclus — van de Verrijzenis tot de Sabbat" />
+      <PageHero id="week" alt="Weekcyclus — van de Verrijzenis tot de Sabbat" kop />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">

@@ -3,6 +3,8 @@
  * Data: /data/dagen.json (heiligen + lezingsverwijzingen) en /data/lezingen-MM.json (volledige teksten).
  */
 
+import { MAANDEN } from './kalender';
+
 export interface HtcLezingRef {
   ref: string;
   tag: string;
@@ -41,21 +43,57 @@ export function laadDagen(): Promise<HtcData> {
   return dagenCache;
 }
 
-const lezingenCache = new Map<number, Promise<LezingenMaand>>();
-export function laadLezingen(julMaand: number): Promise<LezingenMaand> {
-  const c = lezingenCache.get(julMaand);
+/**
+ * Kerkjaren (juliaans) met een leesrooster. Het juliaanse jaar J loopt van 14 januari J t/m 13 januari J+1.
+ * 2026 staat in dagen.json en lezingen-MM.json; latere jaren in /data/<jaar>/ (ophalen met scripts/htc-rooster.mjs).
+ */
+export const ROOSTER_JAREN = [2026, 2027];
+const EERSTE_JAAR = ROOSTER_JAREN[0];
+
+/** Lezingsverwijzingen per burgerlijke datum (yyyy-mm-dd), over alle jaren heen. */
+export type Rooster = Record<string, HtcLezingRef[]>;
+
+export async function laadRooster(dagen: HtcData): Promise<Rooster> {
+  const rooster: Rooster = {};
+  for (const d of Object.values(dagen)) rooster[d.c] = d.r;
+  type JaarRooster = Record<string, { c: string; r: HtcLezingRef[] }>;
+  // Een ontbrekend jaarbestand is geen fout: die datums tonen dan de melding van roosterMelding().
+  const latere = await Promise.all(
+    ROOSTER_JAREN.filter((j) => j !== EERSTE_JAAR).map(
+      (j): Promise<JaarRooster> =>
+        fetch(`/data/${j}/rooster.json`)
+          .then((r) => (r.ok ? (r.json() as Promise<JaarRooster>) : {}))
+          .catch(() => ({})),
+    ),
+  );
+  for (const jaar of latere) for (const d of Object.values(jaar)) rooster[d.c] = d.r;
+  return rooster;
+}
+
+/** Tekst als er voor een datum geen lezingen zijn: nog aan het laden, echt geen lezingen, of buiten het rooster. */
+export function roosterMelding(rooster: Rooster | null, ymd: string): string {
+  if (!rooster) return 'Lezingen worden geladen…';
+  const data = Object.keys(rooster).sort();
+  if (ymd >= data[0] && ymd <= data[data.length - 1]) return 'Geen lezingen gevonden voor deze dag.';
+  const [j, m, d] = data[data.length - 1].split('-').map(Number);
+  return `Het leesrooster loopt tot en met ${d} ${MAANDEN[m - 1]} ${j}.`;
+}
+
+const lezingenCache = new Map<string, Promise<LezingenMaand>>();
+/** Volledige teksten van één juliaanse maand in een kerkjaar (juliaans jaar). */
+export function laadLezingen(julMaand: number, julJaar: number): Promise<LezingenMaand> {
+  const sleutel = `${julJaar}-${julMaand}`;
+  const c = lezingenCache.get(sleutel);
   if (c) return c;
-  const p = fetch(`/data/lezingen-${String(julMaand).padStart(2, '0')}.json`).then((r) => {
+  const maand = String(julMaand).padStart(2, '0');
+  const p = fetch(julJaar === EERSTE_JAAR ? `/data/lezingen-${maand}.json` : `/data/${julJaar}/lezingen-${maand}.json`).then((r) => {
     if (!r.ok) throw new Error('lezingen ontbreken');
     return r.json() as Promise<LezingenMaand>;
   });
-  p.catch(() => lezingenCache.delete(julMaand));
-  lezingenCache.set(julMaand, p);
+  p.catch(() => lezingenCache.delete(sleutel));
+  lezingenCache.set(sleutel, p);
   return p;
 }
-
-/** Het HTC-leesrooster is samengesteld voor het burgerlijk jaar 2026. */
-export const LEZINGEN_JAAR = 2026;
 
 /* ------------------------------------------------------------------ */
 /* Vertaling van bijbelboeken en lezingslabels                          */

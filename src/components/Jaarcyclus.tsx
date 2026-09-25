@@ -141,7 +141,7 @@ export default function Jaarcyclus() {
 
   return (
     <>
-      <PageHero id="jaar" alt="Jaarcyclus — het kerkelijk jaar" />
+      <PageHero id="jaar" alt="Jaarcyclus — het kerkelijk jaar" kop />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">

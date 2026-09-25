@@ -103,7 +103,7 @@ export default function Gebeden() {
 
   return (
     <>
-      <PageHero id="gebeden" alt="Gebeden — het gebedenboek van de Kerk" />
+      <PageHero id="gebeden" alt="Gebeden — het gebedenboek van de Kerk" kop />
 
       {/* Introductie */}
       <section className="orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">

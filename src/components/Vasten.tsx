@@ -172,7 +172,7 @@ export default function Vasten() {
 
   return (
     <>
-      <PageHero id="vasten" alt="Vasten — een weg naar vrijheid" />
+      <PageHero id="vasten" alt="Vasten — een weg naar vrijheid" kop />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
@@ -211,11 +211,11 @@ export default function Vasten() {
             <p className="ot-label ot-label-licht text-center">Vasten vandaag</p>
             <div className="mt-5 flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left"><img loading="lazy" decoding="async" src={`/images/ui/vasten-vandaag/${vastenVandaagIcon}`} alt="" className="vasten-vandaag-status-icon" />
               <div>
-                <h1 className="font-display text-2xl font-semibold text-[#fbf3df] sm:text-3xl">
+                <h2 className="font-display text-2xl font-semibold text-[#fbf3df] sm:text-3xl">
                   {/* Stip in de kleur van de kalender-legenda */}
                   <span aria-hidden="true" className="mr-2.5 inline-block h-3 w-3 -translate-y-0.5 rounded-full align-middle" style={{ background: niveauVandaag.kleur, boxShadow: `0 0 0 3px color-mix(in srgb, ${niveauVandaag.kleur} 28%, transparent)` }} />
                   {dagVandaag.vasten.label}
-                </h1>
+                </h2>
                 <p className="mt-2 text-sm text-[#d9c6a3] sm:text-base">{niveauVandaag.toegestaan}</p>
                 <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#bfa982]">{dagVandaag.vasten.detail}</p>
                 {dagVandaag.vasten.periode && (

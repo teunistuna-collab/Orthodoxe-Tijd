@@ -1,4 +1,4 @@
-import { HEILIGEN } from './heiligen';
+import type { Heilige } from './heiligen';
 import { getSaintEnrichment } from './saintEnrichment';
 import { rangLabel, vertaalLeven, type HtcData } from './htc';
 import { formatMd } from './kalender';
@@ -23,8 +23,8 @@ export function popupContent(h: Resultaat | null) {
 }
 
 /** Alle heiligen en gedachtenissen van één kerkelijke dag (sleutel zoals '9-7'). */
-export function heiligenVanDag(kerkKey: string, htc: HtcData | null): Resultaat[] {
-  const curated: Resultaat[] = (HEILIGEN[kerkKey] ?? []).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
+export function heiligenVanDag(kerkKey: string, htc: HtcData | null, eigen: Record<string, Heilige[]> | undefined): Resultaat[] {
+  const curated: Resultaat[] = (eigen?.[kerkKey] ?? []).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
   const gezien = new Set(curated.map((h) => normaliseer(h.ruwNaam ?? h.naam)));
   const extra: Resultaat[] = (htc?.[kerkKey]?.l ?? [])
     .map(([icon, tekst]) => ({ md: kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang }))

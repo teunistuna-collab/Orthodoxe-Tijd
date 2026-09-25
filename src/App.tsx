@@ -16,14 +16,15 @@ import DagHeiligen from './components/DagHeiligen';
 import DagPascha from './components/DagPascha';
 import LezingModal from './components/LezingModal';
 import KalenderUitleg from './components/KalenderUitleg';
+import Zoeken from './components/Zoeken';
 import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
 import ExactPageFrame from './components/ExactPageFrame';
 import { CyclePageLayout, GoldDivider, LiturgicalCard, ParchmentSection, QuoteSection, SectionHeader } from './components/CycleSections';
-import { AppContext, type LezingKeuze } from './lib/context';
-import { vandaag as bepaalVandaag, ymd, type Mode } from './lib/kalender';
-import { laadDagen, type HtcData } from './lib/htc';
+import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
+import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
+import { laadDagen, laadRooster, type HtcData, type Rooster } from './lib/htc';
 
 const MODE_KEY = 'orthodoxe-kalender-mode';
 
@@ -37,6 +38,8 @@ function leesMode(): Mode {
 }
 
 const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
+
+const STANDAARD_TITEL = document.title;
 
 const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'bronnen'];
 
@@ -59,6 +62,8 @@ export default function App() {
   const [uitlegOpen, setUitlegOpen] = useState(moetUitlegTonen);
   const [vandaag, setVandaag] = useState(bepaalVandaag);
   const [htc, setHtc] = useState<HtcData | null>(null);
+  const [rooster, setRooster] = useState<Rooster | null>(null);
+  const [heiligen, setHeiligen] = useState<HeiligenData | null>(null);
   const [htcFout, setHtcFout] = useState(false);
   const [dagOpen, setDagOpen] = useState<string | null>(null);
   const [lezingenDag, setLezingenDag] = useState<string | null>(null);
@@ -66,6 +71,7 @@ export default function App() {
   const [paschaDag, setPaschaDag] = useState<string | null>(null);
   const [lezing, setLezing] = useState<LezingKeuze | null>(null);
   const [pagina, setPagina] = useState(() => paginaUitHash() ?? 'vandaag');
+  const [zoekOpen, setZoekOpen] = useState(false);
 
   // Er staat één pagina tegelijk in beeld (zie .pagina-verborgen in index.css); het anker in de url bepaalt welke.
   useEffect(() => {
@@ -80,9 +86,20 @@ export default function App() {
   }, []);
   const p = (id: string) => (id === pagina ? 'pagina' : 'pagina pagina-verborgen');
 
+  // De tabtitel volgt de pagina (handig bij delen, bladwijzers en voor schermlezers).
   useEffect(() => {
+    document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${hoofdletter(pagina)} — Orthodoxe Tijd`;
+  }, [pagina]);
+
+  useEffect(() => {
+    import('./lib/heiligen')
+      .then(setHeiligen)
+      .catch(() => {});
     laadDagen()
-      .then(setHtc)
+      .then((dagen) => {
+        setHtc(dagen);
+        return laadRooster(dagen).then(setRooster);
+      })
       .catch(() => setHtcFout(true));
   }, []);
 
@@ -115,6 +132,8 @@ export default function App() {
   const sluitDagPascha = useCallback(() => setPaschaDag(null), []);
   const sluitLezing = useCallback(() => setLezing(null), []);
   const openKalenderUitleg = useCallback(() => setUitlegOpen(true), []);
+  const openZoeken = useCallback(() => setZoekOpen(true), []);
+  const sluitZoeken = useCallback(() => setZoekOpen(false), []);
   const sluitKalenderUitleg = useCallback(() => {
     setUitlegOpen(false);
     try {
@@ -125,8 +144,8 @@ export default function App() {
   }, []);
 
   const ctx = useMemo(
-    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha }),
-    [mode, setMode, vandaag, htc, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha],
+    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, rooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken }),
+    [mode, setMode, vandaag, htc, rooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken],
   );
 
   return (
@@ -145,7 +164,7 @@ export default function App() {
           <div className={p('vasten')}><ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame></div>
           <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
           <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
-          <div className={p('bronnen')}><section id="bronnen" className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div>
+          <div className={p('bronnen')}><section id="bronnen" className="orthodox-pattern bg-bark text-[#d9cbb0]"><h1 className="sr-only">Bronnen &amp; verwijzingen</h1><FooterInhoud /></section></div>
         </main>
         <Footer />
         <BottomNav pagina={pagina} />
@@ -155,6 +174,7 @@ export default function App() {
         <DagPascha ymd={paschaDag} onClose={sluitDagPascha} />
         <LezingModal keuze={lezing} onClose={sluitLezing} />
         <KalenderUitleg open={uitlegOpen} onClose={sluitKalenderUitleg} />
+        <Zoeken open={zoekOpen} onOpen={openZoeken} onClose={sluitZoeken} />
       </div>
     </AppContext.Provider>
   );

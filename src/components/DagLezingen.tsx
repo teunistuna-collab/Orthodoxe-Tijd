@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useApp } from '../lib/context';
 import { dagInfo, formatLang, parseYmd } from '../lib/kalender';
-import { LEZINGEN_JAAR, lezingSoort, vertaalRef, vertaalTag } from '../lib/htc';
+import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
 import Modal from './Modal';
 import { vergrendelScroll } from '../lib/scrollLock';
 
@@ -13,25 +13,17 @@ interface Props {
 // Pop-up met uitsluitend de Schriftlezingen van één dag (geen heiligen, vasten of feesten).
 // Een tik op een lezing opent de lezing zelf in de bestaande lezingen-pop-up.
 export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
-  const { mode, vandaagYmd, htc, openLezing } = useApp();
+  const { mode, vandaagYmd, rooster, openLezing } = useApp();
   const dag = useMemo(() => (gekozen ? dagInfo(parseYmd(gekozen), mode, vandaagYmd) : null), [gekozen, mode, vandaagYmd]);
 
+  // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {
     if (!gekozen) return;
-    const onKey = (e: KeyboardEvent) => {
-      // met een lezing erbovenop sluit Escape alleen die lezing
-      if (e.key === 'Escape' && document.querySelectorAll('[role="dialog"]').length <= 1) onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    const ontgrendel = vergrendelScroll();
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      ontgrendel();
-    };
-  }, [gekozen, onClose]);
+    return vergrendelScroll();
+  }, [gekozen]);
 
   if (!dag) return null;
-  const lezingen = dag.jaar === LEZINGEN_JAAR ? htc?.[dag.julianKey]?.r ?? [] : [];
+  const lezingen = rooster?.[dag.ymd] ?? [];
 
   return (
     <Modal lezen open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
@@ -61,7 +53,7 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
         </ul>
       ) : (
         <p className="text-sm text-ink-mute">
-          {dag.jaar === LEZINGEN_JAAR ? (htc ? 'Geen lezingen gevonden voor deze dag.' : 'Lezingen worden geladen…') : `Het leesrooster is beschikbaar voor het kerkjaar ${LEZINGEN_JAAR}.`}
+          {roosterMelding(rooster, dag.ymd)}
         </p>
       )}
     </Modal>

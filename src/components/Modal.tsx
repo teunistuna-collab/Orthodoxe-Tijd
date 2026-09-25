@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { useSwipe } from '../lib/swipe';
+import { useTerugSluit } from '../lib/terug';
 
 type ModalProps = {
   open: boolean;
@@ -72,6 +73,7 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
   const [, ververs] = useState(0);
   const veeg = useSwipe(onVorige, onVolgende);
   useSchermAan(open && lezen);
+  useTerugSluit(open, onClose);
 
   if (!open) return null;
 

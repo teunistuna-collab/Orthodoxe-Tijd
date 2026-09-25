@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { BookOpen, CalendarDays, ChevronDown, Flame, HandHeart, Menu, Sparkles, Sun, Wheat, X } from 'lucide-react';
+import { BookOpen, CalendarDays, ChevronDown, Flame, HandHeart, Menu, Search, Sparkles, Sun, Wheat, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 
 export const SECTIES = [
@@ -12,7 +12,7 @@ export const SECTIES = [
   { id: 'feesten', label: 'Feesten', icon: Sparkles },
 ];
 
-// Vandaag/Kalender komen vóór de Cycli-dropdown, de rest (incl. Pascha) erna.
+// Vandaag/Kalender komen vóór de Cycli-dropdown, daarna Pascha en de rest.
 const NAV_LEADING = SECTIES.slice(0, 2);
 const PASCHA_NAV = SECTIES.find((s) => s.id === 'pascha')!;
 const NAV_TRAILING = SECTIES.slice(2).filter((s) => s.id !== 'pascha');
@@ -22,15 +22,6 @@ const NAV_MARKS: Record<string, string> = {
   vandaag: '☼', kalender: '✥', gebeden: '☦', vasten: '❧', heiligen: '✠', pascha: '☦', feesten: '✣', cycli: '◉',
 };
 const NavMark = ({ id }: { id: string }) => <span aria-hidden="true" className="orthodox-nav-mark">{NAV_MARKS[id] ?? '✣'}</span>;
-
-// Aangeleverde afbeeldingen voor de navigatiebalk: de sierlijst als achtergrond, het kruis in het midden.
-const HEADER_ACHTERGROND = '/images/ui/nav/header-achtergrond.webp';
-const KRUIS_MEDAILLON = '/images/ui/nav/header-kruis.webp';
-
-// Dunne verticale gouden scheidingslijn, zoals in de referentie tussen logo/navigatie en navigatie/kalenderkeuze.
-function VerticalRule() {
-  return <span className="hidden h-8 w-px shrink-0 bg-gold/30 lg:block" aria-hidden="true" />;
-}
 
 const KALENDER_KEUZES = [
   { id: 'oud', naam: 'Oud', toelichting: 'juliaans' },
@@ -46,7 +37,7 @@ const CYCLUS_ITEMS = [
 
 // Er staat één pagina tegelijk in beeld (App.tsx); de actieve link volgt die pagina.
 export default function Header({ pagina: actief }: { pagina: string }) {
-  const { mode, setMode } = useApp();
+  const { mode, setMode, openZoeken } = useApp();
   const [menuOpen, setMenuOpen] = useState(false);
   const [cyclusOpen, setCyclusOpen] = useState(false);
   const cyclusRef = useRef<HTMLDivElement | null>(null);
@@ -92,41 +83,30 @@ export default function Header({ pagina: actief }: { pagina: string }) {
 
   return (
     <header className="site-header sticky top-0 z-50 overflow-visible">
-      {/* Eén donkere balk: logo, navigatie met centraal kruis-medaillon, en kalenderkeuze — allemaal in dezelfde rij.
-          De sierlijst-achtergrond wordt volledig uitgerekt (breedte én hoogte) zodat de hoekornamenten altijd zichtbaar blijven. */}
-      <div
-        className="relative bg-bark bg-no-repeat text-cream"
-        style={{ backgroundImage: `url(${HEADER_ACHTERGROND})`, backgroundSize: '100% 100%' }}
-      >
-
-        <div className="relative mx-auto flex max-w-[1600px] min-h-[76px] items-center gap-2 px-3 py-2 sm:gap-2 sm:px-4 sm:py-2 xl:min-h-[92px] xl:gap-3 xl:px-6">
-          <a href="#vandaag" onClick={() => { setMenuOpen(false); }} className="flex min-w-0 shrink-0 items-center">
-            <span className="min-w-0 leading-tight">
-              <span className="font-display block truncate text-lg font-semibold tracking-wide text-gold-light lg:text-xl xl:text-2xl">Orthodoxe Tijd</span>
-              <span className="hidden text-[8px] font-semibold tracking-[0.18em] text-[#bfa982] uppercase xl:block">Een weg door de tijd · een leven met Christus</span>
+      {/* Eén donkere balk (vanaf 768px; daaronder de onderbalk): merk links, navigatie in het midden, kalenderkeuze rechts.
+          De sierlijst staat als border-image (Bouw 69), zodat de hoekornamenten op elke breedte even groot blijven. */}
+      <div className="relative bg-bark text-cream">
+        <div className="relative mx-auto flex items-center">
+          <a href="#vandaag" onClick={() => { setMenuOpen(false); }} className="kop-merk">
+            {/* Het kruis uit het sitelogo (favicon.svg), zonder de donkere tegel */}
+            <svg viewBox="6 0 52 96" aria-hidden="true" fill="currentColor">
+              <rect x="29" y="2" width="6" height="92" rx="1" />
+              <rect x="20" y="12" width="24" height="5" rx="1" />
+              <rect x="8" y="28" width="48" height="6" rx="1" />
+              <rect x="16" y="69.5" width="32" height="5" rx="1" transform="rotate(-22 32 72)" />
+            </svg>
+            <span className="min-w-0">
+              <span className="kop-naam">Orthodoxe Tijd</span>
+              <span className="kop-tagline">Een weg door de tijd · een leven met Christus</span>
             </span>
           </a>
 
-          <VerticalRule />
-
-          {/* Desktop-navigatie: alleen tekstlabels, met het kruis-medaillon als middelpunt */}
-          <div className="relative hidden flex-1 items-center justify-evenly gap-0.5 sm:flex xl:gap-1">
-            {NAV_LEADING.map(({ id, label }) => {
-              const on = actief === id;
-              return (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  onClick={() => { setMenuOpen(false); }}
-                  className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${
-                    on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
-                  }`}
-                >
-                  <span className="text-[11px] font-bold tracking-wider uppercase leading-none">{label}</span>
-                  <span className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`} />
-                </a>
-              );
-            })}
+          <nav className="kop-nav" aria-label="Hoofdnavigatie">
+            {NAV_LEADING.map(({ id, label }) => (
+              <a key={id} href={`#${id}`} onClick={() => { setMenuOpen(false); }} className={`kop-link${actief === id ? ' is-actief' : ''}`} aria-current={actief === id ? 'page' : undefined}>
+                {label}
+              </a>
+            ))}
 
             <div
               ref={cyclusRef}
@@ -137,13 +117,11 @@ export default function Header({ pagina: actief }: { pagina: string }) {
               <button
                 type="button"
                 onClick={openCyclus}
-                className={`relative flex items-center gap-0.5 px-0.5 py-2 text-center xl:px-2 transition ${
-                  cyclusActief ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
-                }`}
+                aria-expanded={cyclusOpen}
+                className={`kop-link${cyclusActief ? ' is-actief' : ''}`}
               >
-                <span className="text-[11px] font-bold tracking-wider uppercase leading-none">CYCLI</span>
-                <ChevronDown className={`h-3 w-3 transition ${cyclusOpen ? 'rotate-180' : ''}`} />
-                <span className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${cyclusActief ? 'opacity-100' : 'opacity-0'}`} />
+                Cycli
+                <ChevronDown className={`transition ${cyclusOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {cyclusOpen && (
@@ -172,70 +150,29 @@ export default function Header({ pagina: actief }: { pagina: string }) {
               )}
             </div>
 
-            <a
-              href="#pascha"
-              onClick={() => { setMenuOpen(false); }}
-              className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
-            >
-              <span className="text-[11px] font-bold tracking-wider uppercase leading-none">Pascha</span>
-              <span className={`absolute inset-x-2 bottom-0 h-0.5 bg-gold ${actief === 'pascha' ? 'opacity-100' : 'opacity-0'}`} />
-            </a>
+            {[PASCHA_NAV, ...NAV_TRAILING].map(({ id, label }) => (
+              <a key={id} href={`#${id}`} onClick={() => { setMenuOpen(false); }} className={`kop-link${actief === id ? ' is-actief' : ''}`} aria-current={actief === id ? 'page' : undefined}>
+                {label}
+              </a>
+            ))}
+          </nav>
 
-            {/* Ruimte voor het kruis-medaillon, dat er los overheen zweeft */}
-            <span className="w-16 shrink-0 md:w-20 xl:w-24" aria-hidden="true" />
+          <div className="kop-acties">
+            <button type="button" onClick={openZoeken} className="kop-zoek" aria-label="Zoeken" title="Zoeken  ( /  of  Ctrl+K )">
+              <Search aria-hidden="true" />
+            </button>
 
-            {NAV_TRAILING.map(({ id, label }) => {
-              const on = actief === id;
-              return (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  onClick={() => { setMenuOpen(false); }}
-                  className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${
-                    on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
-                  }`}
-                >
-                  <span className="text-[11px] font-bold tracking-wider uppercase leading-none">{label}</span>
-                  <span className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`} />
-                </a>
-              );
-            })}
-
-            {/* Het kruis-medaillon: los boven de balk, precies in het midden van de navigatie */}
-            <a
-              href="#pascha"
-              onClick={() => { setMenuOpen(false); }}
-              aria-label="Naar Pascha"
-              className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
-            >
-              <img
-                src={KRUIS_MEDAILLON}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="h-16 w-16 rounded-full shadow-[0_10px_22px_rgba(0,0,0,0.5)] transition hover:scale-105 xl:h-[72px] xl:w-[72px]"
-              />
-            </a>
-          </div>
-
-          <VerticalRule />
-
-          <div className="hidden shrink-0 items-center gap-0.5 rounded-full border border-gold/40 bg-bark-2 p-0.5 sm:flex" role="group" aria-label="Kalenderkeuze">
-            {KALENDER_KEUZES.map(({ id, naam, toelichting }) => {
-              const on = mode === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  aria-pressed={on}
-                  title={`${naam} · ${toelichting}`}
-                  onClick={() => setMode(id)}
-                  className={`rounded-full px-2 py-1 text-[11px] font-bold tracking-wider uppercase transition xl:px-3 ${on ? 'bg-gold text-bark' : 'text-gold-light hover:text-white'}`}
-                >
+            <div className="kop-kalender" role="group" aria-label="Kalenderkeuze">
+              {KALENDER_KEUZES.map(({ id, naam, toelichting }) => (
+                <button key={id} type="button" aria-pressed={mode === id} title={`${naam} · ${toelichting}`} onClick={() => setMode(id)}>
                   {naam}
                 </button>
-              );
-            })}
+              ))}
+            </div>
+            {/* Smalle tablet: één knop met de huidige keuze; een tik wisselt naar de andere kalender. */}
+            <button type="button" className="kop-kalender-kort" onClick={() => setMode(mode === 'oud' ? 'nieuw' : 'oud')} aria-label={`Kalender: ${mode === 'oud' ? 'Oud (juliaans)' : 'Nieuw (burgerlijk)'}. Tik om te wisselen.`}>
+              {mode === 'oud' ? 'Oud' : 'Nieuw'}
+            </button>
           </div>
 
           <button type="button" onClick={() => setMenuOpen((open) => !open)} className="rounded-full p-2 text-gold-light hover:bg-white/10 sm:hidden" aria-label={menuOpen ? 'Menu sluiten' : 'Menu openen'} aria-expanded={menuOpen}>
