@@ -8,6 +8,7 @@ import { OPEN_DIENST_EVENT } from '../lib/events';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ETMAAL_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
+import PageHero from './PageHero';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
@@ -356,9 +357,7 @@ export default function UrenCyclus() {
 
   return (
     <>
-      <section id="etmaal" className="bg-bark page-hero-crop">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-etmaal.webp" width={2103} height={748} alt="Etmaal — een dag in Gods tegenwoordigheid" />
-      </section>
+      <PageHero id="etmaal" alt="Etmaal — een dag in Gods tegenwoordigheid" />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
@@ -392,8 +391,8 @@ export default function UrenCyclus() {
             <CornerOrnament className="absolute right-6 bottom-6 h-14 w-14 -scale-x-100 -scale-y-100 text-gold-deep/30" />
 
             <div className="text-center">
-              <p className="font-display text-[26px] font-semibold tracking-[0.06em] text-ink uppercase sm:text-[30px]">De diensten van het etmaal</p>
-              <p className="mt-2 text-[12px] font-bold tracking-[0.32em] text-gold-deep uppercase sm:text-sm">Een dag van gebed</p>
+              <h2 className="ot-sectietitel">De diensten van het etmaal</h2>
+              <p className="ot-label mt-2">Een dag van gebed</p>
             </div>
 
             {/* Desktop: cirkeldiagram */}
@@ -472,11 +471,6 @@ export default function UrenCyclus() {
               })}
             </div>
 
-            <div className="mx-auto mt-10 hidden max-w-lg text-center lg:block">
-              <p className="font-display text-lg leading-snug text-ink-soft italic">“Zevenmaal daags prijs ik U, omwille van Uw rechtvaardige oordelen.”</p>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Psalm 119:164</p>
-            </div>
-
             {/* Tablet/mobiel: dezelfde kaartstijl als de dagen van de weekcyclus */}
             <div className="mt-10 space-y-3 lg:hidden">
               {serviceConfig.map((service, index) => {
@@ -529,6 +523,7 @@ export default function UrenCyclus() {
           centerTitle
           maxWidth="max-w-3xl"
           labelledBy="etmaal-dienst-titel"
+          lezen
           onVorige={previousService}
           onVolgende={nextService}
           leadingActions={

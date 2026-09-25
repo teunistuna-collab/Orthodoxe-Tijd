@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { LADDER, NIVEAUS, type VastenNiveau, type VastenRegel } from '../lib/vasten';
 import type { Feest } from '../lib/feesten';
 
@@ -79,5 +79,30 @@ export function Ornament({ className = '' }: { className?: string }) {
       <span className="text-sm">✠</span>
       <span className="h-px w-12 bg-gradient-to-l from-transparent to-gold" />
     </div>
+  );
+}
+
+// Compacte lijstregel voor mobiel (feesten, weekdagen, ...): datumblok links, titel met onderregel, pijl rechts.
+export function MobileListRow({ links, icoon, titel, onder, rechts, onClick, className = '', style }: {
+  links: ReactNode;
+  icoon?: ReactNode;
+  titel: ReactNode;
+  onder?: ReactNode;
+  rechts?: ReactNode;
+  onClick: () => void;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <button type="button" onClick={onClick} className={`mlr ${className}`} style={style}>
+      <span className="mlr-links">{links}</span>
+      {icoon && <span className="mlr-icoon" aria-hidden="true">{icoon}</span>}
+      <span className="mlr-tekst">
+        <span className="mlr-titel">{titel}</span>
+        {onder && <span className="mlr-onder">{onder}</span>}
+      </span>
+      {rechts}
+      <span className="mlr-pijl" aria-hidden="true">›</span>
+    </button>
   );
 }

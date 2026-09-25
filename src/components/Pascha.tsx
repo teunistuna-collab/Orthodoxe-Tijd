@@ -9,6 +9,7 @@ import { FeestTag } from './ui';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
+import PageHero from './PageHero';
 
 type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
 type PeriodeKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | 'vijftig-dagen' | 'hemelvaart' | 'pinksteren';
@@ -299,9 +300,7 @@ export default function Pascha() {
 
   return (
     <>
-      <section id="pascha" className="bg-bark page-hero-crop">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-pascha.webp" width={2103} height={748} alt="Pascha — de Verrijzenis van Christus" />
-      </section>
+      <PageHero id="pascha" alt="Pascha — de Verrijzenis van Christus" />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
@@ -335,8 +334,8 @@ export default function Pascha() {
             <CornerOrnament className="absolute right-6 bottom-6 h-14 w-14 -scale-x-100 -scale-y-100 text-gold-deep/30" />
 
             <div className="text-center">
-              <p className="font-display text-[26px] font-semibold tracking-[0.06em] text-ink uppercase sm:text-[30px]">De Paschale cyclus</p>
-              <p className="mt-2 text-[12px] font-bold tracking-[0.32em] text-gold-deep uppercase sm:text-sm">Een liturgische reis van dood naar leven</p>
+              <h2 className="ot-sectietitel">De Paschale cyclus</h2>
+              <p className="ot-label mt-2">Een liturgische reis van dood naar leven</p>
             </div>
 
             {/* Desktop: cirkeldiagram */}
@@ -393,20 +392,13 @@ export default function Pascha() {
                     </span>
                     <span className="etmaal-ring-text">
                       <span className="dienst-kaart">
-                        <span className="dienst-kaart-titel font-display uppercase">{periode.label}</span>
+                        <span className="dienst-kaart-titel font-display">{periode.label}</span>
                         <span className="dienst-kaart-tekst">{periode.short}</span>
                       </span>
                     </span>
                   </button>
                 );
               })}
-            </div>
-
-            <div className="mx-auto mt-10 hidden max-w-lg text-center lg:block">
-              <p className="font-display text-lg leading-snug text-ink-soft italic">
-                „Christus is opgestaan uit de doden, door de dood de dood vertredend, en aan hen in de graven het leven schenkend.”
-              </p>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Troparion van Pascha</p>
             </div>
 
             {/* Tablet/mobiel: verticale tijdlijn */}
@@ -422,7 +414,7 @@ export default function Pascha() {
                     <img loading="lazy" decoding="async" src={periode.iconSrc} alt="" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="dienst-kaart-titel font-display block uppercase">{periode.label}</span>
+                    <span className="dienst-kaart-titel font-display block">{periode.label}</span>
                     <span className="dienst-kaart-tekst block">{periode.short}</span>
                   </span>
                   <ChevronRight className="h-5 w-5 shrink-0 text-gold-deep" />

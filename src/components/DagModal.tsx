@@ -82,7 +82,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
               {/* Feesten */}
               {dag.feesten.length > 0 && (
                 <div>
-                  <h3 className="text-[11px] font-bold tracking-[0.25em] text-gold-deep uppercase">Feesten & gedachtenissen</h3>
+                  <h3 className="ot-label">Feesten & gedachtenissen</h3>
                   <ul className="mt-3 space-y-3">
                     {dag.feesten.map((f) => (
                       <li key={f.id} className="rounded-lg border border-parchment-3 bg-white/60 p-4">
@@ -107,7 +107,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
               {/* Heiligen */}
               <div>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[11px] font-bold tracking-[0.25em] text-gold-deep uppercase">Heiligen van de dag</h3>
+                  <h3 className="ot-label">Heiligen van de dag</h3>
                   {htcDag && (
                     <button type="button" onClick={() => setOrigineel((v) => !v)} className="-mr-2 inline-flex min-h-11 items-center px-2 text-[11px] font-bold text-gold-deep underline-offset-2 hover:underline sm:min-h-0">
                       {origineel ? 'Nederlands' : 'Origineel (EN)'}
@@ -151,7 +151,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
 
               {/* Lezingen */}
               <div>
-                <h3 className="flex items-center gap-2 text-[11px] font-bold tracking-[0.25em] text-gold-deep uppercase">
+                <h3 className="ot-label flex items-center gap-2">
                   <BookOpenText className="h-3.5 w-3.5" /> Schriftlezingen
                 </h3>
                 {lezingen.length > 0 ? (

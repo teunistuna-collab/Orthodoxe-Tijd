@@ -43,15 +43,15 @@ export function CycleTransition({
   return (
     <section className="orthodox-pattern box-border w-full overflow-hidden bg-bark text-cream">
       <div className="mx-auto box-border w-full max-w-[1500px] px-5 py-8 min-[900px]:px-16 min-[900px]:py-12">
-        <div className="grid min-w-0 gap-8 min-[900px]:grid-cols-[35%_65%] min-[900px]:items-center min-[900px]:gap-14">
+        <div className="grid min-w-0 gap-8 min-[900px]:grid-cols-[minmax(0,35fr)_minmax(0,65fr)] min-[900px]:items-center min-[900px]:gap-14">
           <div className="min-w-0 border-l border-gold/50 pl-6 min-[900px]:pl-8">
             <blockquote className="font-display text-xl leading-relaxed break-words text-gold-light italic sm:text-2xl min-[900px]:text-[26px]">
               “{quote}”
             </blockquote>
-            <cite className="mt-4 block text-[11px] font-bold tracking-[0.2em] text-[#e8dcc0] uppercase not-italic sm:text-xs">{citation}</cite>
+            <cite className="ot-label ot-label-licht mt-4 block not-italic">{citation}</cite>
           </div>
           <div className="min-w-0 text-left">
-            <p className="text-xs font-bold tracking-[0.28em] text-gold-light uppercase sm:text-sm">{eyebrow}</p>
+            <p className="ot-label ot-label-licht">{eyebrow}</p>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed break-words text-[#d9c6a3] min-[900px]:text-lg">{text}</p>
             <a
               href={buttonHref}
@@ -69,7 +69,7 @@ export function CycleTransition({
 export function SectionHeader({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
   return (
     <div className="mb-8 text-center">
-      <p className="text-[10px] font-bold tracking-[0.32em] text-gold-deep uppercase">{eyebrow}</p>
+      <p className="ot-label">{eyebrow}</p>
       <h2 className="font-display mt-2 text-3xl font-semibold text-ink sm:text-4xl">{title}</h2>
       {subtitle && <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-ink-soft">{subtitle}</p>}
     </div>
@@ -88,7 +88,7 @@ export function QuoteSection({ quote, citation }: { quote: string; citation: str
   return (
     <div className="rounded-2xl border border-[#d4aa3d]/50 bg-[#f7f0df] p-6 text-center shadow-[0_18px_40px_rgba(40,22,14,0.08)] sm:p-8">
       <blockquote className="font-display text-2xl italic leading-relaxed text-ink sm:text-3xl">“{quote}”</blockquote>
-      <cite className="mt-3 block text-[10px] font-bold tracking-[0.24em] text-gold-deep uppercase not-italic">{citation}</cite>
+      <cite className="ot-label mt-3 block not-italic">{citation}</cite>
     </div>
   );
 }
@@ -112,14 +112,14 @@ export function CycleHero({ id, eyebrow, title, intro, quote, citation, body }: 
       <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-20">
         <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.32em] text-gold-light uppercase">{eyebrow}</p>
+            <p className="ot-label ot-label-licht">{eyebrow}</p>
             <h1 className="font-display mt-4 text-5xl font-semibold leading-none text-gold-light sm:text-6xl">{title}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#e7d9bc]">{intro}</p>
             {body && <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#d9c6a3]">{body}</p>}
           </div>
           <div className="rounded-[26px] border border-[#c9a227]/50 bg-[#1b120d]/80 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] sm:p-8">
             <div className="font-display text-4xl italic leading-tight text-gold-light">“{quote}”</div>
-            <div className="mt-4 text-[10px] font-bold tracking-[0.28em] text-[#f0d78b] uppercase">{citation}</div>
+            <div className="ot-label ot-label-licht mt-4">{citation}</div>
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ export function LiturgicalCard({ title, intro, body, meta, onReadMore }: CycleCa
         <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[#d4aa3d]/50 bg-[#f6ebc6] text-gold-deep">
           <Sparkles className="h-4 w-4" />
         </div>
-        {meta && <span className="text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">{meta}</span>}
+        {meta && <span className="ot-label">{meta}</span>}
       </div>
       <h3 className="font-display text-2xl font-semibold text-ink">{title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-ink-soft">{intro}</p>
@@ -150,11 +150,11 @@ export function LiturgicalCard({ title, intro, body, meta, onReadMore }: CycleCa
 
 type PopupContent = PopupInhoud;
 
-export function LiturgicalPopup({ open, onClose, content }: { open: boolean; onClose: () => void; content: PopupContent | null }) {
+export function LiturgicalPopup({ open, onClose, content, lezen = false }: { open: boolean; onClose: () => void; content: PopupContent | null; lezen?: boolean }) {
   if (!open || !content) return null;
 
   return (
-    <Modal open={open} onClose={onClose} eyebrow={content.eyebrow ?? 'Lees meer'} title={content.title} centerTitle maxWidth="max-w-3xl">
+    <Modal open={open} onClose={onClose} eyebrow={content.eyebrow ?? 'Lees meer'} title={content.title} centerTitle maxWidth="max-w-3xl" lezen={lezen}>
       <div className="exact-popup-reading">
         {content.image && <img loading="lazy" decoding="async" src={content.image.src} alt={content.image.alt} width={400} height={400} className="heilige-portret heilige-portret-groot" />}
         {content.subtitle && <p className="exact-popup-subtitle">{content.subtitle}</p>}
@@ -236,7 +236,7 @@ export function TimeSanctificationTimeline({ current }: { current: string }) {
     { id: 'pascha', label: 'PASCHA', title: 'De weg van Kruis naar Verrijzenis', href: '#pascha', image: '/images/ui/medaillons/Pascha.webp' },
     { id: 'jaar', label: 'JAAR', title: 'Het gehele kerkelijke jaar geheiligd', href: '#jaar', image: '/images/ui/medaillons/Jaar.webp' },
   ];
-  return <section className="v15-cycle-timeline"><p className="mb-6 text-center text-[10px] font-bold tracking-[.3em] text-gold-light uppercase">De heiliging van de tijd</p><div className="timeline-track">{items.map((item,index)=><div className="timeline-node" key={item.id}><a href={item.href} className={`timeline-core ${item.id===current?'active':''}`}><span className="timeline-medallion"><img loading="lazy" decoding="async" src={item.image} alt="" className="h-full w-full object-contain" /></span><span className="timeline-label">{item.label}</span><span className="timeline-title">{item.title}</span></a>{index<items.length-1&&<span className="timeline-line"/>}</div>)}</div></section>;
+  return <section className="v15-cycle-timeline"><p className="ot-label ot-label-licht mb-6 text-center">De heiliging van de tijd</p><div className="timeline-track">{items.map((item,index)=><div className="timeline-node" key={item.id}><a href={item.href} className={`timeline-core ${item.id===current?'active':''}`}><span className="timeline-medallion"><img loading="lazy" decoding="async" src={item.image} alt="" className="h-full w-full object-contain" /></span><span className="timeline-label">{item.label}</span><span className="timeline-title">{item.title}</span></a>{index<items.length-1&&<span className="timeline-line"/>}</div>)}</div></section>;
 }
 export function BottomCycleTimeline({
   current,
@@ -249,7 +249,7 @@ export function BottomCycleTimeline({
     <section className="bg-bark px-4 py-10 text-cream sm:px-6 lg:py-14">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 text-center">
-          <p className="text-[10px] font-bold tracking-[0.3em] text-gold-light uppercase">De heiliging van de tijd</p>
+          <p className="ot-label ot-label-licht">De heiliging van de tijd</p>
         </div>
         <div className="no-scrollbar flex gap-3 overflow-x-auto pb-2 sm:justify-center">
           {items.map((item) => {
@@ -265,7 +265,7 @@ export function BottomCycleTimeline({
                 }`}
               >
                 <img loading="lazy" decoding="async" src={`/images/ui/medaillons/${item.label.charAt(0) + item.label.slice(1).toLowerCase()}.webp`} alt="" className="h-16 w-16 object-contain" />
-                <div className="mt-3 text-[10px] font-bold tracking-[0.24em] text-gold-light uppercase">{item.label}</div>
+                <div className="ot-label ot-label-licht mt-3">{item.label}</div>
                 <div className="mt-2 text-xs leading-relaxed text-[#e8dcc0]">{item.title}</div>
               </a>
             );

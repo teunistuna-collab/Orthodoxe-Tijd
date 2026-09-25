@@ -1,7 +1,7 @@
 import Cross from './Cross';
 import { useApp } from '../lib/context';
 
-// Op desktop staat dit onderaan in de footer; op mobiel is het een eigen pagina (#bronnen, zie App.tsx).
+// De bronnen staan op een eigen pagina (#bronnen, zie App.tsx); de footer linkt ernaar.
 export function FooterInhoud() {
   return (
     <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
@@ -40,13 +40,10 @@ export default function Footer() {
   const { openKalenderUitleg } = useApp();
   return (
     <footer className="orthodox-pattern bg-bark text-[#d9cbb0]">
-      <div className="footer-inhoud">
-        <FooterInhoud />
-      </div>
-      <div className="border-t border-gold/15">
+      <div>
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-[#9b8b70] sm:flex-row sm:px-6">
           <span>✠ Eer aan God voor alles.</span>
-          <a href="#bronnen" className="footer-bronnen-link inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
+          <a href="#bronnen" className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
             Bronnen & verwijzingen
           </a>
           <button type="button" onClick={openKalenderUitleg} className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">

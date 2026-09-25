@@ -15,6 +15,8 @@ type ModalProps = {
   centerTitle?: boolean;
   onVorige?: () => void;
   onVolgende?: () => void;
+  // Echte leesinhoud (gebed, dienst, psalm, lezing): leesknoppen tonen en het scherm aan houden.
+  lezen?: boolean;
 };
 
 // Leesvoorkeuren voor alle pop-ups: een klasse op <html>, bewaard tussen bezoeken (zie "Bouw 59" in index.css).
@@ -66,10 +68,10 @@ function useSchermAan(open: boolean) {
   }, [open]);
 }
 
-export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende }: ModalProps) {
+export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false }: ModalProps) {
   const [, ververs] = useState(0);
   const veeg = useSwipe(onVorige, onVolgende);
-  useSchermAan(open);
+  useSchermAan(open && lezen);
 
   if (!open) return null;
 
@@ -96,7 +98,7 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
           </div>
         </header>
         <div className={`exact-modal-paper ${centerTitle ? 'exact-modal-centered' : ''}`}>
-          <div className="leeskeuzes">
+          {lezen && (<div className="leeskeuzes">
             {LEESKEUZES.map(({ klasse, label }) => (
               <button
                 key={klasse}
@@ -110,7 +112,7 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
                 {label}
               </button>
             ))}
-          </div>
+          </div>)}
           {children}
         </div>
       </div>

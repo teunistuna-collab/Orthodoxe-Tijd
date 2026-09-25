@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { GEBEDEN, type Gebed } from '../lib/gebeden';
 import { LiturgicalPopup, CycleTransition } from './CycleSections';
+import PageHero from './PageHero';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -65,7 +66,7 @@ function PrayerCard({ g, onOpen }: { g: Gebed; onOpen: () => void }) {
       onClick={onOpen}
       className="prayer-choice-card group p-5 text-left transition"
     >
-      <p className="text-[10px] font-bold tracking-[0.2em] text-gold-deep uppercase">{g.wanneer}</p>
+      <p className="ot-label">{g.wanneer}</p>
       <h4 className="font-display mt-1 text-lg font-semibold text-[#fbf3df]">{g.titel}</h4>
       <span className="btn-pill mt-3">
         Open gebed →
@@ -102,14 +103,12 @@ export default function Gebeden() {
 
   return (
     <>
-      <section id="gebeden" className="bg-bark page-hero-crop">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-gebeden.webp" width={2103} height={748} alt="Gebeden — het gebedenboek van de Kerk" />
-      </section>
+      <PageHero id="gebeden" alt="Gebeden — het gebedenboek van de Kerk" />
 
       {/* Introductie */}
       <section className="orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">
         <div className={CONTENT}>
-          <p className="text-[12px] font-bold tracking-[0.32em] text-gold-light uppercase sm:text-sm">Het gebedenboek</p>
+          <p className="ot-label ot-label-licht">Het gebedenboek</p>
           <h2 className="font-display mt-3 text-3xl font-semibold text-gold-light sm:text-4xl">Het gebed van de Kerk</h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#d9c6a3] sm:text-lg">
             Morgengebeden, gebeden voor het slapengaan en gebeden door de dag, naar het Orthodox Gebedenboek volgens de
@@ -211,7 +210,7 @@ export default function Gebeden() {
         buttonHref="#adem"
       />
 
-      <LiturgicalPopup open={popupGebed !== null} onClose={() => setPopupGebed(null)} content={popupContent} />
+      <LiturgicalPopup lezen open={popupGebed !== null} onClose={() => setPopupGebed(null)} content={popupContent} />
     </>
   );
 }

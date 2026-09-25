@@ -6,6 +6,7 @@ import { rangLabel, vertaalLeven } from '../lib/htc';
 import { dagInfo, formatMd, hoofdletter, MAANDEN, MAANDEN_KORT } from '../lib/kalender';
 import { LiturgicalPopup } from './CycleSections';
 import { heiligenVanDag, normaliseer, popupContent, type Resultaat } from '../lib/heiligenPopup';
+import PageHero from './PageHero';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -82,7 +83,7 @@ export default function Heiligen() {
   );
 
   return <>
-    <section id="heiligen" className="bg-bark page-hero-crop"><img loading="lazy" decoding="async" src="/images/heroes/hero-heiligen.webp" width={2103} height={748} alt="Heiligen — Orthodoxe Tijd" /></section>
+    <PageHero id="heiligen" alt="Heiligen — Orthodoxe Tijd" />
     <main className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">
@@ -125,12 +126,12 @@ export default function Heiligen() {
 
         <section className="saints-categories">
           <div className="saints-rule-title"><h2>Heiligen naar categorie</h2></div>
-          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><strong>{c[1]}</strong><span>{c[2]}</span><i>✣</i></button>)}</div>
+          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><strong>{c[1]}</strong><span>{c[2]}</span></button>)}</div>
         </section>
 
         <section className="saints-lowlands">
           <div className="saints-lowlands-map"><img loading="lazy" decoding="async" src="/images/decor/lage-landen.webp" alt="Kaart van de Lage Landen" /></div>
-          <div><h2>Heiligen van de Lage Landen</h2><p>Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p>Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('');setWachtOpDag(false)}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen →'}</button></div>
+          <div><h2>Heiligen van de Lage Landen</h2><p className="ot-tekst">Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p className="ot-tekst">Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('');setWachtOpDag(false)}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen →'}</button></div>
           <blockquote>“Ook in onze streken heeft de Heer Zijn getuigen doen opstaan.”<span>✣</span></blockquote>
         </section>
 

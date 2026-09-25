@@ -56,7 +56,7 @@ export default function KalenderUitleg({ open, onClose }: { open: boolean; onClo
               className={`w-full rounded-xl border p-4 text-left transition ${actief ? 'border-gold bg-gold-pale/70' : 'border-gold/25 bg-[#f8f1e3] hover:border-gold/60'}`}
             >
               <span className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold tracking-[0.18em] text-gold-deep uppercase">{titel}</span>
+                <span className="ot-label">{titel}</span>
                 {actief && <span className="rounded-sm bg-gold px-1.5 py-0.5 text-[11px] font-bold text-bark uppercase">actief</span>}
               </span>
               <span className="mt-1.5 block text-sm leading-relaxed text-ink-soft">{tekst}</span>

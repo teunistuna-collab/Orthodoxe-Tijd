@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { BookOpen, CalendarDays, ChevronDown, Clock3, Flame, HandHeart, Menu, Sparkles, Sun, Wheat, X } from 'lucide-react';
+import { BookOpen, CalendarDays, ChevronDown, Flame, HandHeart, Menu, Sparkles, Sun, Wheat, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 
 export const SECTIES = [
@@ -29,7 +29,7 @@ const KRUIS_MEDAILLON = '/images/ui/nav/header-kruis.webp';
 
 // Dunne verticale gouden scheidingslijn, zoals in de referentie tussen logo/navigatie en navigatie/kalenderkeuze.
 function VerticalRule() {
-  return <span className="hidden h-8 w-px shrink-0 bg-gold/30 sm:block" aria-hidden="true" />;
+  return <span className="hidden h-8 w-px shrink-0 bg-gold/30 lg:block" aria-hidden="true" />;
 }
 
 const KALENDER_KEUZES = [
@@ -44,9 +44,9 @@ const CYCLUS_ITEMS = [
   { id: 'jaar', label: '✣ JAAR', description: 'Het ritme van het kerkelijk jaar', href: '#jaar' },
 ];
 
-export default function Header() {
+// Er staat één pagina tegelijk in beeld (App.tsx); de actieve link volgt die pagina.
+export default function Header({ pagina: actief }: { pagina: string }) {
   const { mode, setMode } = useApp();
-  const [actief, setActief] = useState('vandaag');
   const [menuOpen, setMenuOpen] = useState(false);
   const [cyclusOpen, setCyclusOpen] = useState(false);
   const cyclusRef = useRef<HTMLDivElement | null>(null);
@@ -68,22 +68,6 @@ export default function Header() {
     annuleerSluiten();
     cyclusSluitTimer.current = window.setTimeout(() => setCyclusOpen(false), 400);
   };
-
-  useEffect(() => {
-    const els = [...SECTIES, { id: 'adem', label: 'Adem', icon: Clock3 }, { id: 'etmaal', label: 'Etmaal', icon: Clock3 }, { id: 'week', label: 'Week', icon: Clock3 }, { id: 'jaar', label: 'Jaar', icon: Clock3 }]
-      .map((s) => document.getElementById(s.id))
-      .filter(Boolean) as HTMLElement[];
-    if (!els.length) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const zichtbaar = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (zichtbaar[0]) setActief(zichtbaar[0].target.id);
-      },
-      { rootMargin: '-40% 0px -55% 0px', threshold: 0 },
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
 
   useEffect(() => {
     const onPointerDown = (event: MouseEvent) => {
@@ -116,9 +100,9 @@ export default function Header() {
       >
 
         <div className="relative mx-auto flex max-w-[1600px] min-h-[76px] items-center gap-2 px-3 py-2 sm:gap-2 sm:px-4 sm:py-2 xl:min-h-[92px] xl:gap-3 xl:px-6">
-          <a href="#vandaag" onClick={() => { setActief('vandaag'); setMenuOpen(false); }} className="flex min-w-0 shrink-0 items-center">
+          <a href="#vandaag" onClick={() => { setMenuOpen(false); }} className="flex min-w-0 shrink-0 items-center">
             <span className="min-w-0 leading-tight">
-              <span className="font-display block truncate text-lg font-semibold tracking-wide text-gold-light sm:text-xl xl:text-2xl">Orthodoxe Tijd</span>
+              <span className="font-display block truncate text-lg font-semibold tracking-wide text-gold-light lg:text-xl xl:text-2xl">Orthodoxe Tijd</span>
               <span className="hidden text-[8px] font-semibold tracking-[0.18em] text-[#bfa982] uppercase xl:block">Een weg door de tijd · een leven met Christus</span>
             </span>
           </a>
@@ -133,7 +117,7 @@ export default function Header() {
                 <a
                   key={id}
                   href={`#${id}`}
-                  onClick={() => { setActief(id); setMenuOpen(false); }}
+                  onClick={() => { setMenuOpen(false); }}
                   className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${
                     on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
                   }`}
@@ -166,20 +150,19 @@ export default function Header() {
                 <div className="absolute left-1/2 top-full z-[200] -translate-x-1/2 pt-3">
                   <div className="w-[320px] rounded-lg border border-[#c9a227]/55 bg-[#1b110d] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
                     {CYCLUS_ITEMS.map((item) => {
-                      const itemActive = ['adem', 'etmaal', 'week', 'jaar'].includes(item.id) ? cyclusActief : false;
+                      const itemActive = actief === item.id;
                       return (
                         <a
                           key={`${item.id}-${item.label}`}
                           href={item.href}
                           onClick={() => {
-                            setActief(item.id);
                             annuleerSluiten();
                             setCyclusOpen(false);
                             setMenuOpen(false);
                           }}
                           className={`block rounded-md border px-3 py-2.5 transition ${itemActive ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
                         >
-                          <div className="text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">{item.label}</div>
+                          <div className="ot-label ot-label-licht">{item.label}</div>
                           <p className="mt-1 text-[11px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
                         </a>
                       );
@@ -191,7 +174,7 @@ export default function Header() {
 
             <a
               href="#pascha"
-              onClick={() => { setActief('pascha'); setMenuOpen(false); }}
+              onClick={() => { setMenuOpen(false); }}
               className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
             >
               <span className="text-[11px] font-bold tracking-wider uppercase leading-none">Pascha</span>
@@ -207,7 +190,7 @@ export default function Header() {
                 <a
                   key={id}
                   href={`#${id}`}
-                  onClick={() => { setActief(id); setMenuOpen(false); }}
+                  onClick={() => { setMenuOpen(false); }}
                   className={`relative flex shrink-0 items-center px-0.5 py-2 text-center xl:px-2 transition ${
                     on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
                   }`}
@@ -221,7 +204,7 @@ export default function Header() {
             {/* Het kruis-medaillon: los boven de balk, precies in het midden van de navigatie */}
             <a
               href="#pascha"
-              onClick={() => { setActief('pascha'); setMenuOpen(false); }}
+              onClick={() => { setMenuOpen(false); }}
               aria-label="Naar Pascha"
               className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
             >
@@ -270,7 +253,7 @@ export default function Header() {
               <a
                 key={id}
                 href={`#${id}`}
-                onClick={() => { setActief(id); setMenuOpen(false); }}
+                onClick={() => { setMenuOpen(false); }}
                 className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition ${
                   on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
                 }`}
@@ -298,13 +281,12 @@ export default function Header() {
                     key={item.id}
                     href={item.href}
                     onClick={() => {
-                      setActief(item.id);
                       setCyclusOpen(false);
                       setMenuOpen(false);
                     }}
                     className="block rounded-md border border-transparent px-3 py-2 hover:border-[#c9a227]/40 hover:bg-[#241813]"
                   >
-                    <div className="text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">{item.label}</div>
+                    <div className="ot-label ot-label-licht">{item.label}</div>
                     <div className="mt-0.5 text-[10px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</div>
                   </a>
                 ))}
@@ -314,7 +296,7 @@ export default function Header() {
 
           <a
             href="#pascha"
-            onClick={() => { setActief('pascha'); setMenuOpen(false); }}
+            onClick={() => { setMenuOpen(false); }}
             className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition ${actief === 'pascha' ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'}`}
           >
             <NavMark id="pascha" />Pascha
@@ -327,7 +309,7 @@ export default function Header() {
               <a
                 key={id}
                 href={`#${id}`}
-                onClick={() => { setActief(id); setMenuOpen(false); }}
+                onClick={() => { setMenuOpen(false); }}
                 className={`relative flex min-h-11 shrink-0 items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold tracking-wider uppercase transition ${
                   on ? 'text-gold-light' : 'text-[#bfa982] hover:text-cream'
                 }`}

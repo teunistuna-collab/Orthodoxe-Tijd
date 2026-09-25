@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { JAAR_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
+import PageHero from './PageHero';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
 type InfoKey = 'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch';
@@ -140,9 +141,7 @@ export default function Jaarcyclus() {
 
   return (
     <>
-      <section id="jaar" className="bg-bark page-hero-crop">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-jaar.webp" width={2103} height={748} alt="Jaarcyclus — het kerkelijk jaar" />
-      </section>
+      <PageHero id="jaar" alt="Jaarcyclus — het kerkelijk jaar" />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
@@ -176,8 +175,8 @@ export default function Jaarcyclus() {
             <CornerOrnament className="absolute right-6 bottom-6 h-14 w-14 -scale-x-100 -scale-y-100 text-gold-deep/30" />
 
             <div className="text-center">
-              <p className="font-display text-[26px] font-semibold tracking-[0.06em] text-ink uppercase sm:text-[30px]">De cyclus van het kerkelijk jaar</p>
-              <p className="mt-2 text-[12px] font-bold tracking-[0.32em] text-gold-deep uppercase sm:text-sm">Eén verhaal, het gehele jaar</p>
+              <h2 className="ot-sectietitel">De cyclus van het kerkelijk jaar</h2>
+              <p className="ot-label mt-2">Eén verhaal, het gehele jaar</p>
             </div>
 
             {/* Desktop: cirkeldiagram */}
@@ -235,7 +234,7 @@ export default function Jaarcyclus() {
                     </span>
                     <span className="etmaal-ring-text">
                       <span className="dienst-kaart">
-                        <span className="dienst-kaart-titel font-display uppercase">{period.label}</span>
+                        <span className="dienst-kaart-titel font-display">{period.label}</span>
                         {period.movable && <span className="dienst-kaart-tijd">beweeglijk</span>}
                         <span className="dienst-kaart-tekst">{period.short}</span>
                       </span>
@@ -243,11 +242,6 @@ export default function Jaarcyclus() {
                   </button>
                 );
               })}
-            </div>
-
-            <div className="mx-auto mt-10 hidden max-w-lg text-center lg:block">
-              <p className="font-display text-lg leading-snug text-ink-soft italic">“Hij maakt alle dingen nieuw.”</p>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Openbaring 21:5</p>
             </div>
 
             {/* Tablet/mobiel: verticale tijdlijn */}
@@ -265,7 +259,7 @@ export default function Jaarcyclus() {
                       <img loading="lazy" decoding="async" src={iconSrc} alt="" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="dienst-kaart-titel font-display block uppercase">{period.label}</span>
+                      <span className="dienst-kaart-titel font-display block">{period.label}</span>
                       {period.movable && <span className="dienst-kaart-tijd block">beweeglijk</span>}
                       <span className="dienst-kaart-tekst block">{period.short}</span>
                     </span>

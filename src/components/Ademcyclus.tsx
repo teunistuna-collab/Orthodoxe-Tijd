@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from './Modal';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
+import PageHero from './PageHero';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
@@ -60,9 +61,7 @@ export default function Ademcyclus() {
 
   return (
     <>
-      <section id="adem" className="bg-bark page-hero-crop">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-adem.webp" width={2103} height={748} alt="Ademcyclus — het onophoudelijke gebed" />
-      </section>
+      <PageHero id="adem" alt="Ademcyclus — het onophoudelijke gebed" />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
@@ -90,7 +89,7 @@ export default function Ademcyclus() {
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-24">
         <div className={CONTENT}>
           <div className="mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-12 sm:py-16 lg:px-16">
-            <p className="text-center text-[13px] font-bold tracking-[0.34em] text-gold-deep uppercase sm:text-sm">Het Jezusgebed</p>
+            <p className="ot-label text-center">Het Jezusgebed</p>
             <OrnamentRule className="mt-4 w-48" />
 
             {/* Christus-icoon met ringen en de twee korte gebeden ernaast */}
@@ -113,12 +112,12 @@ export default function Ademcyclus() {
               <div className="text-center lg:order-1">
                 <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">Heer Jezus Christus,<br />Zoon van God.</p></div>
                 <OrnamentRule className="mt-4 w-32" />
-                <p className="mt-4 text-[12px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-[13px]">Inademen</p>
+                <p className="ot-label mt-4">Inademen</p>
               </div>
               <div className="text-center lg:order-3">
                 <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">ontferm U over mij,<br />zondaar.</p></div>
                 <OrnamentRule className="mt-4 w-32" />
-                <p className="mt-4 text-[12px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-[13px]">Uitademen</p>
+                <p className="ot-label mt-4">Uitademen</p>
               </div>
             </div>
 

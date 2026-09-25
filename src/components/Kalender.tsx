@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster } from '../lib/kalender';
 import { HEILIGEN } from '../lib/heiligen';
@@ -7,6 +7,7 @@ import { NIVEAUS } from '../lib/vasten';
 import { VastenKleuren } from './ui';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
+import PageHero from './PageHero';
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het kalenderpaneel.
 function CornerOrnament({ className = '' }: { className?: string }) {
@@ -21,10 +22,52 @@ function CornerOrnament({ className = '' }: { className?: string }) {
   );
 }
 
+const PIJL = 'inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] px-3 text-sm font-bold text-ink hover:border-gold sm:min-h-0 sm:py-1.5';
+
+// Mobiel: ‹ maand jaar › op één rij, daaronder compact "Vandaag". Vanaf sm alles op één rij.
+function CalendarToolbar({ maand, jaar, eersteJaar, onMaand, onJaar, onVorige, onVolgende, onVandaag }: {
+  maand: number;
+  jaar: number;
+  eersteJaar: number;
+  onMaand: (m: number) => void;
+  onJaar: (y: number) => void;
+  onVorige: () => void;
+  onVolgende: () => void;
+  onVandaag: () => void;
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-2 border-b border-gold/30 bg-[#f3e9d2] px-3 py-3 sm:flex-nowrap sm:justify-between sm:gap-3 sm:px-5">
+      <button type="button" onClick={onVorige} className={`order-1 ${PIJL}`} aria-label="Vorige maand">
+        <ChevronLeft className="h-4 w-4" /> <span className="hidden sm:inline">{MAANDEN_KORT[(maand + 10) % 12]}</span>
+      </button>
+      <div className="order-2 flex min-w-0 flex-1 items-center justify-center gap-2 sm:flex-none">
+        <select value={maand} onChange={(e) => onMaand(Number(e.target.value))} className="font-display min-w-0 flex-1 rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1.5 text-base font-semibold text-ink sm:flex-none sm:py-1 sm:text-lg" aria-label="Maand">
+          {MAANDEN.map((mn, i) => (
+            <option key={mn} value={i + 1}>{hoofdletter(mn)}</option>
+          ))}
+        </select>
+        <select value={jaar} onChange={(e) => onJaar(Number(e.target.value))} className="font-display rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1.5 text-base font-semibold text-ink sm:py-1 sm:text-lg" aria-label="Jaar">
+          {Array.from({ length: 12 }, (_, i) => eersteJaar + i).map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
+      </div>
+      <button type="button" onClick={onVolgende} className={`order-3 sm:order-4 ${PIJL}`} aria-label="Volgende maand">
+        <span className="hidden sm:inline">{MAANDEN_KORT[maand % 12]}</span> <ChevronRight className="h-4 w-4" />
+      </button>
+      <span className="order-4 basis-full sm:hidden" aria-hidden="true" />
+      <button type="button" onClick={onVandaag} className="order-5 mx-auto rounded-full bg-gold px-5 py-1.5 text-xs font-bold tracking-wider text-bark uppercase hover:bg-gold-light sm:order-3 sm:mx-0 sm:px-3">
+        Vandaag
+      </button>
+    </div>
+  );
+}
+
 export default function Kalender() {
   const { mode, vandaag, vandaagYmd, openDag } = useApp();
   const [cur, setCur] = useState({ y: vandaag.getUTCFullYear(), m: vandaag.getUTCMonth() + 1 });
   const [geselecteerdeYmd, setGeselecteerdeYmd] = useState(vandaagYmd);
+  const [legendaOpen, setLegendaOpen] = useState(false);
 
   const cellen = useMemo(() => maandRooster(cur.y, cur.m, mode, vandaagYmd), [cur, mode, vandaagYmd]);
   const inMaand = cellen.filter((c) => c.maand === cur.m);
@@ -43,18 +86,16 @@ export default function Kalender() {
 
   return (
     <>
-      <section id="kalender" className="bg-bark page-hero-crop">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-kalender.webp" width={2103} height={748} alt="Kalender — het kerkelijk jaar in overzicht" />
-      </section>
+      <PageHero id="kalender" alt="Kalender — het kerkelijk jaar in overzicht" />
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12">
-          <div className="parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] sm:px-10 sm:py-9">
-            <CornerOrnament className="absolute bottom-3 left-3 h-16 w-16 text-gold-deep/20" />
-            <CornerOrnament className="absolute right-3 top-3 h-16 w-16 -scale-x-100 text-gold-deep/20" />
+          <div className="parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] sm:px-14 sm:py-9">
+            <CornerOrnament className="pointer-events-none absolute bottom-3 left-3 hidden h-10 w-10 text-gold-deep/20 sm:block" />
+            <CornerOrnament className="pointer-events-none absolute right-3 top-3 hidden h-10 w-10 -scale-x-100 text-gold-deep/20 sm:block" />
             <div className="relative grid gap-6 lg:grid-cols-[7fr_3fr] lg:items-center">
               <div>
-                <p className="text-[11px] font-bold tracking-[0.3em] text-gold-deep uppercase sm:text-xs">Leef mee met de liturgische tijd</p>
+                <p className="ot-label">Leef mee met de liturgische tijd</p>
                 <h1 className="font-display mt-2 text-3xl font-semibold text-ink sm:text-4xl">De kalender van de Kerk</h1>
                 <p className="mt-3 max-w-3xl text-sm leading-relaxed text-ink-soft sm:text-base">{aantalFeesten} feestdagen en {vastendagen} dagen met een vastenvoorschrift deze maand. Elke dag is een ontmoeting met Christus door de heiligen, de feesten, de lezingen en de gebeden van de Kerk.</p>
               </div>
@@ -67,47 +108,19 @@ export default function Kalender() {
             <CornerOrnament className="absolute top-4 right-4 h-12 w-12 -scale-x-100 text-gold-deep/25" />
             <div className="lg:grid lg:grid-cols-[3fr_2fr]">
             <div className="relative min-w-0 border-b border-gold/35 lg:border-b-0 lg:border-r">
-            {/* Werkbalk */}
-            <div className="flex flex-wrap items-center gap-2 border-b border-gold/30 bg-[#f3e9d2] px-3 py-3 sm:flex-nowrap sm:justify-between sm:gap-3 sm:px-5">
-              <button type="button" onClick={vorige} className="order-1 inline-flex items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] px-3 py-1.5 text-sm font-bold text-ink hover:border-gold" aria-label="Vorige maand">
-                <ChevronLeft className="h-4 w-4" /> <span className="hidden sm:inline">{MAANDEN_KORT[(cur.m + 10) % 12]}</span>
-              </button>
-              <div className="order-2 flex min-w-0 basis-full items-center gap-2 sm:basis-auto sm:flex-none">
-                <select
-                  value={cur.m}
-                  onChange={(e) => setCur((c) => ({ ...c, m: Number(e.target.value) }))}
-                  className="font-display min-w-0 flex-1 rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1 text-lg font-semibold text-ink sm:flex-none"
-                  aria-label="Maand"
-                >
-                  {MAANDEN.map((mn, i) => (
-                    <option key={mn} value={i + 1}>
-                      {hoofdletter(mn)}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={cur.y}
-                  onChange={(e) => setCur((c) => ({ ...c, y: Number(e.target.value) }))}
-                  className="font-display rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1 text-lg font-semibold text-ink"
-                  aria-label="Jaar"
-                >
-                  {Array.from({ length: 12 }, (_, i) => vandaag.getUTCFullYear() - 2 + i).map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button type="button" onClick={volgende} className="order-3 inline-flex items-center gap-1 sm:order-4 rounded-full border border-gold/40 bg-[#f8f1e3] px-3 py-1.5 text-sm font-bold text-ink hover:border-gold" aria-label="Volgende maand">
-                <span className="hidden sm:inline">{MAANDEN_KORT[cur.m % 12]}</span> <ChevronRight className="h-4 w-4" />
-              </button>
-              <button type="button" onClick={naarVandaag} className="order-4 w-full rounded-full bg-gold px-3 py-1.5 text-xs font-bold tracking-wider text-bark uppercase hover:bg-gold-light sm:order-3 sm:w-auto">
-                Vandaag
-              </button>
-            </div>
+            <CalendarToolbar
+              maand={cur.m}
+              jaar={cur.y}
+              eersteJaar={vandaag.getUTCFullYear() - 2}
+              onMaand={(m) => setCur((c) => ({ ...c, m }))}
+              onJaar={(y) => setCur((c) => ({ ...c, y }))}
+              onVorige={vorige}
+              onVolgende={volgende}
+              onVandaag={naarVandaag}
+            />
 
             {/* Weekdagen */}
-            <div className="grid grid-cols-7 border-b border-gold/25 bg-[#f3e9d2] text-center text-[10px] font-bold tracking-widest text-gold-deep uppercase sm:text-[11px]">
+            <div className="grid grid-cols-7 border-b border-gold/25 bg-[#f3e9d2] text-center text-[11px] font-bold tracking-widest text-gold-deep uppercase sm:text-xs">
               {[1, 2, 3, 4, 5, 6, 0].map((d) => (
                 <div key={d} className={`py-2 ${d === 0 ? 'text-wine' : ''}`}>
                   {WEEKDAGEN_KORT[d]}
@@ -137,7 +150,7 @@ export default function Kalender() {
                       // Op een smal scherm staat het detailpaneel onder de kalender (buiten beeld): dan een pop-up tonen.
                       if (window.matchMedia('(max-width: 1023px)').matches) openDag(c.ymd);
                     }}
-                    className={`relative min-h-[56px] border-r border-b border-gold/20 p-1 text-left align-top transition [&:nth-child(7n)]:border-r-0 sm:min-h-[112px] sm:p-2 ${
+                    className={`relative min-h-[56px] border-r border-b border-gold/20 p-1 text-left align-top transition [&:nth-child(7n)]:border-r-0 xl:min-h-[112px] xl:p-2 ${
                       isGeselecteerd
                         ? 'bg-[#4d1716] text-gold-light ring-2 ring-inset'
                         : `kalender-dag ${buiten ? 'kalender-dag--buiten text-ink-mute' : ''} ${c.isVandaag ? 'ring-[3px] ring-inset' : 'ring-1 ring-inset'}`
@@ -145,33 +158,33 @@ export default function Kalender() {
                     style={{ '--tw-ring-color': ringHex, '--dag-kleur': ringHex } as CSSProperties}
                     title="Open dagdetail"
                   >
-                    <div className="flex items-start justify-center gap-1 sm:justify-between">
+                    <div className="flex items-start justify-center gap-1 xl:justify-between">
                       <span
-                        className={`flex h-6 w-6 items-center justify-center rounded-full text-[13px] font-bold sm:h-7 sm:w-7 ${
+                        className={`flex h-6 w-6 items-center justify-center rounded-full text-[13px] font-bold xl:h-7 xl:w-7 ${
                           c.isVandaag ? 'today-glow text-cream' : c.isZondag && !buiten ? 'text-wine' : ''
                         }`}
                         style={c.isVandaag ? ({ background: ringHex, '--glow-color': ringHex } as CSSProperties) : undefined}
                       >
                         {c.dag}
                       </span>
-                      {mode === 'oud' && <span className="hidden text-[10px] text-ink-mute sm:block">{c.kerk.getUTCDate()} {MAANDEN_KORT[c.kerk.getUTCMonth()]}</span>}
+                      {mode === 'oud' && <span className="hidden text-[11px] text-ink-mute xl:block">{c.kerk.getUTCDate()} {MAANDEN_KORT[c.kerk.getUTCMonth()]}</span>}
                     </div>
-                    {feest && <div className={`mt-0.5 h-3 text-center text-[11px] leading-none sm:hidden ${isPascha || groot ? 'text-wine' : 'text-gold-deep'}`} aria-hidden="true">{isPascha ? '☦' : groot ? '✠' : '•'}</div>}
-                    <div className="mt-1 hidden space-y-0.5 sm:block">
+                    {feest && <div className={`mt-0.5 h-3 text-center text-[11px] leading-none xl:hidden ${isPascha || groot ? 'text-wine' : 'text-gold-deep'}`} aria-hidden="true">{isPascha ? '☦' : groot ? '✠' : '•'}</div>}
+                    <div className="mt-1 hidden space-y-0.5 xl:block">
                       {feest ? (
-                        <div className={`line-clamp-2 text-[10px] leading-tight font-bold sm:text-[11px] ${isPascha ? 'text-wine' : groot ? 'text-wine' : 'text-ink'}`}>
+                        <div className={`line-clamp-2 text-[11px] leading-tight font-bold ${isPascha ? 'text-wine' : groot ? 'text-wine' : 'text-ink'}`}>
                           {isPascha && <span className="mr-0.5 text-gold-deep">☦</span>}
                           {!isPascha && groot && <span className="mr-0.5 text-gold-deep">✠</span>}
                           {!isPascha && !groot && beweeglijk && <span className="mr-0.5 text-gold-deep">•</span>}
                           {feest.kort ?? feest.naam}
                         </div>
                       ) : heilige ? (
-                        <div className="line-clamp-2 text-[10px] leading-tight text-ink-soft sm:text-[11px]">{heilige.naam}</div>
+                        <div className="line-clamp-2 text-[11px] leading-tight text-ink-soft">{heilige.naam}</div>
                       ) : null}
                     </div>
-                    <div className="absolute inset-x-1.5 bottom-1.5 flex items-center gap-1 sm:inset-x-2 sm:bottom-2">
+                    <div className="absolute inset-x-1.5 bottom-1.5 flex items-center gap-1 xl:inset-x-2 xl:bottom-2">
                       <span className="h-1.5 flex-1 rounded-full" style={{ background: c.vasten.niveau === 'geen' ? 'transparent' : n.kleur, opacity: buiten ? 0.35 : 1 }} />
-                      <span className="hidden text-[9px] font-bold tracking-wider uppercase sm:block" style={{ color: n.tekst, opacity: buiten ? 0.5 : 1 }}>
+                      <span className="hidden text-[10.5px] font-bold tracking-wide uppercase xl:block" style={{ color: n.tekst, opacity: buiten ? 0.5 : 1 }}>
                         {c.vasten.niveau === 'geen' ? '' : n.kort}
                       </span>
                     </div>
@@ -180,9 +193,12 @@ export default function Kalender() {
               })}
             </div>
 
-            {/* Legenda */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-gold/25 bg-[#f3e9d2] px-4 py-3 text-[11px] font-semibold text-ink-soft sm:px-5">
-              <span className="text-[10px] font-bold tracking-widest text-gold-deep uppercase">Legenda</span>
+            {/* Legenda: op mobiel en tablet inklapbaar, op desktop altijd zichtbaar */}
+            <button type="button" onClick={() => setLegendaOpen((o) => !o)} aria-expanded={legendaOpen} className="flex min-h-11 w-full items-center justify-between border-t border-gold/25 bg-[#f3e9d2] px-4 text-xs font-bold tracking-widest text-gold-deep uppercase lg:hidden">
+              Legenda <ChevronDown className={`h-4 w-4 transition ${legendaOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <div className={`${legendaOpen ? 'flex' : 'hidden'} flex-wrap items-center gap-x-4 gap-y-2 border-t border-gold/25 bg-[#f3e9d2] px-4 py-3 text-xs font-semibold text-ink-soft sm:px-5 lg:flex`}>
+              <span className="hidden text-xs font-bold tracking-widest text-gold-deep uppercase lg:inline">Legenda</span>
               <VastenKleuren />
               <span className="inline-flex items-center gap-1.5">
                 <span className="text-gold-deep">✠</span> groot feest
@@ -202,13 +218,13 @@ export default function Kalender() {
             </div>
             </div>
 
-            <aside className="relative flex flex-col bg-[#f3e9d2]/70 px-5 py-7 text-ink sm:px-7 sm:py-9">
-              <p className="text-center text-[11px] font-bold tracking-[0.24em] text-gold-deep uppercase">Details van de geselecteerde dag</p>
+            <aside className="relative hidden flex-col bg-[#f3e9d2]/70 lg:flex px-5 py-7 text-ink sm:px-7 sm:py-9">
+              <p className="ot-label text-center">Details van de geselecteerde dag</p>
               <h2 className="font-display mt-3 text-center text-2xl font-semibold leading-tight text-ink sm:text-3xl">{formatDatum(geselecteerd.civil)}</h2>
               <p className="mt-1 text-center text-sm italic text-ink-soft">{formatDatum(geselecteerd.kerk)} · {mode === 'oud' ? 'Juliaanse kalender' : 'kerkelijke datum'}</p>
               <div className="mt-7 flex flex-1 flex-col">
                 <section className="cal-saints flex flex-1 flex-col">
-                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Heilige(n) van de dag</p>
+                  <p className="ot-label">Heilige(n) van de dag</p>
                   {hoofdheilige ? (
                     <>
                       <h3 className="cal-saints-name">{hoofdheilige.naam}</h3>
@@ -240,11 +256,11 @@ export default function Kalender() {
             </aside>
             </div>
 
-            <div className="border-t border-gold/35 bg-[#f3e9d2]/70 px-5 py-6 sm:px-7">
+            <div className="hidden border-t border-gold/35 bg-[#f3e9d2]/70 px-5 py-6 sm:px-7 lg:block">
               <div className="grid gap-3 md:grid-cols-3">
-                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-center text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Feestdag / gedachtenis</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.feesten.map((f) => f.naam).join(' · ') || 'Geen groot feest.'}</p></section>
-                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-center text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Schriftlezingen</p><p className="mt-2 mb-3 text-sm text-ink-soft">De bestaande lezingen en volledige daginformatie staan in het dagdetail.</p><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill mt-auto self-start">Lees de lezingen →</button></section>
-                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="text-center text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Vasten</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.vasten.label}</p><p className="mt-1 mb-3 text-sm text-ink-soft">{geselecteerd.vasten.detail}</p><a href="#vasten" className="btn-pill mt-auto self-start">Meer over vasten →</a></section>
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Feestdag / gedachtenis</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.feesten.map((f) => f.naam).join(' · ') || 'Geen groot feest.'}</p></section>
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Schriftlezingen</p><p className="mt-2 mb-3 text-sm text-ink-soft">De bestaande lezingen en volledige daginformatie staan in het dagdetail.</p><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill mt-auto self-start">Lees de lezingen →</button></section>
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Vasten</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.vasten.label}</p><p className="mt-1 mb-3 text-sm text-ink-soft">{geselecteerd.vasten.detail}</p><a href="#vasten" className="btn-pill mt-auto self-start">Meer over vasten →</a></section>
               </div>
             </div>
           </div>
@@ -253,7 +269,7 @@ export default function Kalender() {
 
       <section className="orthodox-pattern bg-bark py-12 text-cream sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 text-center sm:px-8 lg:px-12">
-          <p className="text-[11px] font-bold tracking-[0.3em] text-gold-light uppercase">Wandel in de tijd met de heiligen</p>
+          <p className="ot-label ot-label-licht">Wandel in de tijd met de heiligen</p>
           <p className="mx-auto mt-4 max-w-2xl font-display text-lg italic leading-relaxed text-[#d9c6a3]">Elke dag is een ontmoeting met Christus door de heiligen, de feesten, de lezingen en de gebeden van de Kerk.</p>
         </div>
       </section>

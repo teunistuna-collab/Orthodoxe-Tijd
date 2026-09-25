@@ -44,11 +44,11 @@ export default function LezingModal({ keuze, onClose }: Props) {
   const nbv = keuze ? nbv21Url(keuze.ref) : null;
 
   return (
-    <Modal open={Boolean(keuze)} onClose={onClose} eyebrow={`${keuze ? vertaalTag(keuze.tag, refNl) : ''} · ${keuze ? formatLang(keuze.civil) : ''}`} title={refNl} centerTitle maxWidth="max-w-2xl">
+    <Modal lezen open={Boolean(keuze)} onClose={onClose} eyebrow={`${keuze ? vertaalTag(keuze.tag, refNl) : ''} · ${keuze ? formatLang(keuze.civil) : ''}`} title={refNl} centerTitle maxWidth="max-w-2xl">
             <div>
               {/* NBV21 */}
               <div className="rounded-xl border border-gold/40 bg-gold-pale/60 p-5">
-                <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.25em] text-gold-deep uppercase">
+                <div className="ot-label flex items-center gap-2">
                   <BookOpenText className="h-4 w-4" /> Lezen in de NBV21
                 </div>
                 <p className="font-display mt-2 text-2xl font-semibold text-ink">{refNl}</p>

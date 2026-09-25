@@ -6,6 +6,7 @@ import Cross from './Cross';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
+import PageHero from './PageHero';
 
 type DayKey = 'zondag' | 'maandag' | 'dinsdag' | 'woensdag' | 'donderdag' | 'vrijdag' | 'zaterdag';
 type InfoKey = 'wat' | 'dagen' | 'betekenis' | 'praktisch';
@@ -153,9 +154,7 @@ export default function Weekcyclus() {
 
   return (
     <>
-      <section id="week" className="bg-bark page-hero-crop">
-        <img loading="lazy" decoding="async" src="/images/heroes/hero-week.webp" width={2103} height={748} alt="Weekcyclus — van de Verrijzenis tot de Sabbat" />
-      </section>
+      <PageHero id="week" alt="Weekcyclus — van de Verrijzenis tot de Sabbat" />
 
       {/* Informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
@@ -189,8 +188,8 @@ export default function Weekcyclus() {
             <CornerOrnament className="absolute right-6 bottom-6 h-14 w-14 -scale-x-100 -scale-y-100 text-gold-deep/30" />
 
             <div className="text-center">
-              <p className="font-display text-[26px] font-semibold tracking-[0.06em] text-ink uppercase sm:text-[30px]">De dagen van de week</p>
-              <p className="mt-2 text-[12px] font-bold tracking-[0.32em] text-gold-deep uppercase sm:text-sm">Een weg met Christus</p>
+              <h2 className="ot-sectietitel">De dagen van de week</h2>
+              <p className="ot-label mt-2">Een weg met Christus</p>
             </div>
 
             {/* Desktop: cirkeldiagram */}
@@ -248,18 +247,13 @@ export default function Weekcyclus() {
                     </span>
                     <span className="etmaal-ring-text">
                       <span className="dienst-kaart">
-                        <span className="dienst-kaart-titel font-display uppercase">{day.label}</span>
+                        <span className="dienst-kaart-titel font-display">{day.label}</span>
                         <span className="dienst-kaart-tekst">{day.short}</span>
                       </span>
                     </span>
                   </button>
                 );
               })}
-            </div>
-
-            <div className="mx-auto mt-10 hidden max-w-lg text-center lg:block">
-              <p className="font-display text-lg leading-snug text-ink-soft italic">“Dit is de dag die de Heer gemaakt heeft; laat ons juichen en ons verheugen.”</p>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.18em] text-gold-deep uppercase">Psalm 118:24</p>
             </div>
 
             {/* Tablet/mobiel: verticale tijdlijn */}
@@ -277,7 +271,7 @@ export default function Weekcyclus() {
                       <img loading="lazy" decoding="async" src={iconSrc} alt="" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="dienst-kaart-titel font-display block uppercase">
+                      <span className="dienst-kaart-titel font-display block">
                         {day.label}
                       </span>
                       <span className="dienst-kaart-tekst block">{day.short}</span>

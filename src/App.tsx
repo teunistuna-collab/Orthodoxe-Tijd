@@ -67,13 +67,13 @@ export default function App() {
   const [lezing, setLezing] = useState<LezingKeuze | null>(null);
   const [pagina, setPagina] = useState(() => paginaUitHash() ?? 'vandaag');
 
-  // Mobiel toont één pagina tegelijk (zie .pagina-verborgen in index.css); het anker in de url bepaalt welke.
+  // Er staat één pagina tegelijk in beeld (zie .pagina-verborgen in index.css); het anker in de url bepaalt welke.
   useEffect(() => {
     const opHash = () => {
       const p = paginaUitHash();
       if (!p) return;
       setPagina(p);
-      if (window.matchMedia('(max-width: 767px)').matches) window.scrollTo({ top: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     };
     window.addEventListener('hashchange', opHash);
     return () => window.removeEventListener('hashchange', opHash);
@@ -94,49 +94,6 @@ export default function App() {
     }, 60_000);
     return () => clearInterval(t);
   }, [vandaag]);
-
-  // Na een sprong naar een anker (#week, #jaar, ...) verschuift de pagina nog doordat afbeeldingen boven het doel
-  // laden. Daarom corrigeren we de positie een paar keer, tenzij de bezoeker zelf begint te scrollen.
-  useEffect(() => {
-    let timers: number[] = [];
-    let gebruikerScrolde = false;
-    const stop = () => {
-      gebruikerScrolde = true;
-    };
-    const bijstellen = (eersteKeerSpringen: boolean) => {
-      const id = decodeURIComponent(window.location.hash.slice(1));
-      const doel = id ? document.getElementById(id) : null;
-      if (!doel) return;
-      timers.forEach((t) => window.clearTimeout(t));
-      timers = [];
-      gebruikerScrolde = false;
-      if (eersteKeerSpringen) doel.scrollIntoView({ block: 'start', behavior: 'instant' });
-      // Gewenste plek: de bovenkant van het doel op de scroll-margin (net onder de vaste koptekst).
-      const gewenst = parseFloat(getComputedStyle(doel).scrollMarginTop) || 0;
-      for (const ms of [120, 400, 900, 1600, 2800]) {
-        timers.push(
-          window.setTimeout(() => {
-            if (gebruikerScrolde) return;
-            const verschil = doel.getBoundingClientRect().top - gewenst;
-            if (Math.abs(verschil) > 3) window.scrollBy({ top: verschil, behavior: 'instant' });
-          }, ms),
-        );
-      }
-    };
-    const opHashwijziging = () => bijstellen(false);
-    window.addEventListener('hashchange', opHashwijziging);
-    window.addEventListener('wheel', stop, { passive: true });
-    window.addEventListener('touchmove', stop, { passive: true });
-    window.addEventListener('keydown', stop);
-    bijstellen(true); // ook bij het openen van een link met een anker
-    return () => {
-      timers.forEach((t) => window.clearTimeout(t));
-      window.removeEventListener('hashchange', opHashwijziging);
-      window.removeEventListener('wheel', stop);
-      window.removeEventListener('touchmove', stop);
-      window.removeEventListener('keydown', stop);
-    };
-  }, []);
 
   const setMode = useCallback((m: Mode) => {
     setModeState(m);
@@ -175,7 +132,7 @@ export default function App() {
   return (
     <AppContext.Provider value={ctx}>
       <div id="top" className="min-h-screen bg-parchment text-ink">
-        <Header />
+        <Header pagina={pagina} />
         <main>
           <div className={p('vandaag')}><Vandaag /></div>
           <div className={p('kalender')}><ExactPageFrame title="Kalender"><Kalender /></ExactPageFrame></div>
@@ -188,7 +145,7 @@ export default function App() {
           <div className={p('vasten')}><ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame></div>
           <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
           <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
-          <div className={`${p('bronnen')} pagina-bronnen`}><section id="bronnen" className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div>
+          <div className={p('bronnen')}><section id="bronnen" className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div>
         </main>
         <Footer />
         <BottomNav pagina={pagina} />
