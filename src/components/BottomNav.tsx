@@ -16,6 +16,7 @@ const GROEPEN: Record<string, Sub[]> = {
     { id: 'pascha', label: 'Pascha' },
   ],
   meer: [
+    { id: 'psalmen', label: 'Psalmen' },
     { id: 'vasten', label: 'Vasten' },
     { id: 'heiligen', label: 'Heiligen' },
     { id: 'feesten', label: 'Feesten' },
@@ -59,7 +60,7 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
   return (
     <>
       {open && (
-        <div ref={sheetRef} className="bottom-nav-blad" role="menu" aria-label={open === 'cycli' ? 'Cycli' : 'Meer'}>
+        <div ref={sheetRef} className={`bottom-nav-blad${open === 'meer' ? ' is-meer' : ''}`} role="menu" aria-label={open === 'cycli' ? 'Cycli' : 'Meer'}>
           {open === 'meer' && (
             <button type="button" role="menuitem" onClick={() => { setOpen(null); openZoeken(); }}>
               Zoeken

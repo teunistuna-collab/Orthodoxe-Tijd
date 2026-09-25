@@ -33,6 +33,7 @@ const PAGINAS: { id: string; titel: string; onder: string; extra?: string }[] = 
   { id: 'vasten', titel: 'Vasten', onder: 'Vasten vandaag en de vastenperioden', extra: 'vastendag vastenperiode' },
   { id: 'heiligen', titel: 'Heiligen', onder: 'Alle heiligen per dag en maand' },
   { id: 'feesten', titel: 'Feesten', onder: 'Pascha en de grote feesten' },
+  { id: 'psalmen', titel: 'Psalmen', onder: 'Het psalter in de Septuagint-vertaling', extra: 'psalter psalm' },
   { id: 'bronnen', titel: 'Bronnen', onder: 'Bronnen & verwijzingen' },
 ];
 

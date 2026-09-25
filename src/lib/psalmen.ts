@@ -1,0 +1,126 @@
+import { serviceConfig } from './etmaal';
+
+// Centrale psalmendata voor Psalmen, en later Vandaag, Etmaal, het zoeken, favorieten en de app.
+// Nummering: Septuagint (primair). Er wordt niets omgerekend of aangevuld zonder gecontroleerde bron.
+
+export interface PsalmGebruik {
+  /** Dienst uit het etmaal (lib/etmaal.ts), bijvoorbeeld "Vespers". */
+  dienst: string;
+  tijd: string;
+}
+
+export interface Psalm {
+  id: string;
+  septuagintNumber: number;
+  /** Alleen waar de bron het vermeldt (kopregel "Psalm 24 (25)" van de aangeleverde tekst). */
+  masoreticNumber?: number;
+  title: string;
+  /** Nog geen gecontroleerde ondertitels: leeg laten tot ze zijn aangeleverd. */
+  subtitle?: string;
+  /** Er is een aangeleverde Nederlandse Septuagint-tekst (public/data/psalmen.json). */
+  hasText: boolean;
+  /** Alleen gecontroleerde metadata; nog niets aangeleverd. */
+  themes: string[];
+  liturgicalUses: PsalmGebruik[];
+}
+
+/**
+ * Psalmen met aangeleverde tekst en hun Hebreeuwse nummer uit de kopregel van de bron-PDF.
+ * Moet overeenkomen met public/data/psalmen.json (gemaakt met scripts/psalmen-uit-pdf.mjs; gecontroleerd door
+ * scripts/psalmen.check.ts). Psalm 118 vermeldt in de bron geen Hebreeuws nummer.
+ */
+export const MET_TEKST: Record<number, { mt?: number }> = {
+  24: { mt: 25 },
+  50: { mt: 51 },
+  62: { mt: 63 },
+  84: { mt: 85 },
+  89: { mt: 90 },
+  90: { mt: 91 },
+  102: { mt: 103 },
+  103: { mt: 104 },
+  118: {},
+  140: { mt: 141 },
+};
+
+// Gebruik in het etmaal: rechtstreeks uit dezelfde dienstenlijst als de Etmaal-pagina.
+const GEBRUIK = new Map<number, PsalmGebruik[]>();
+for (const dienst of serviceConfig) {
+  for (const psalm of dienst.psalms) {
+    const n = Number(psalm.title.replace(/^Psalm /, ''));
+    GEBRUIK.set(n, [...(GEBRUIK.get(n) ?? []), { dienst: dienst.title, tijd: dienst.time }]);
+  }
+}
+
+export const PSALMEN: Psalm[] = Array.from({ length: 150 }, (_, i) => {
+  const n = i + 1;
+  return {
+    id: `psalm-${n}`,
+    septuagintNumber: n,
+    ...(MET_TEKST[n]?.mt ? { masoreticNumber: MET_TEKST[n].mt } : {}),
+    title: `Psalm ${n}`,
+    hasText: n in MET_TEKST,
+    themes: [],
+    liturgicalUses: GEBRUIK.get(n) ?? [],
+  };
+});
+
+/** Psalm van de dienst die nu aan de beurt is (dienst met het laatste begintijdstip vóór of op dit uur). */
+export function psalmVanHetUur(nu: Date): number {
+  const uur = nu.getHours();
+  const dienst = [...serviceConfig]
+    .map((d) => ({ d, start: Number(d.time.slice(0, 2)) }))
+    .filter((x) => x.start <= uur)
+    .sort((a, b) => b.start - a.start)[0]?.d ?? serviceConfig[0];
+  return Number(dienst.psalms[0].title.replace(/^Psalm /, ''));
+}
+
+/* ---------- Teksten (apart geladen, ±40 KB) ---------- */
+
+export interface PsalmBlok {
+  /** Versnummer zoals in de bron; het opschrift en soms vers 1 hebben in de bron geen nummer. */
+  n?: number;
+  /** Tussenkop, zoals "tweede stasis" in Psalm 118. */
+  kop?: string;
+  regels: string[];
+}
+export interface PsalmTekst {
+  lxx: number;
+  mt?: number;
+  bron: string;
+  verzen: PsalmBlok[];
+}
+export type PsalmTeksten = Record<string, PsalmTekst>;
+
+let tekstenLaden: Promise<PsalmTeksten> | null = null;
+export function laadPsalmTeksten(): Promise<PsalmTeksten> {
+  tekstenLaden ??= fetch('/data/psalmen.json')
+    .then((r) => {
+      if (!r.ok) throw new Error('psalmen.json ontbreekt');
+      return r.json() as Promise<PsalmTeksten>;
+    })
+    .catch((fout) => {
+      tekstenLaden = null;
+      throw fout;
+    });
+  return tekstenLaden;
+}
+
+/* ---------- Zoeken ---------- */
+
+const normaal = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+/** Zoekt op psalmnummer (Septuagint of Hebreeuws), dienst in het etmaal, en (zodra geladen) woorden uit de tekst. */
+export function zoekPsalmen(lijst: Psalm[], invoer: string, teksten: PsalmTeksten | null): Psalm[] {
+  const q = normaal(invoer.trim()).replace(/^psalm\s*/, '');
+  if (!q) return lijst;
+  if (/^\d+$/.test(q)) {
+    const n = Number(q);
+    // Eerst het Septuagint-nummer, daarna de psalm met dat Hebreeuwse nummer.
+    return lijst.filter((p) => p.septuagintNumber === n || p.masoreticNumber === n).sort((a) => (a.septuagintNumber === n ? -1 : 1));
+  }
+  return lijst.filter((p) => {
+    if (p.liturgicalUses.some((g) => normaal(g.dienst).includes(q))) return true;
+    const tekst = teksten?.[p.septuagintNumber];
+    return !!tekst && tekst.verzen.some((v) => v.regels.some((r) => normaal(r).includes(q)));
+  });
+}

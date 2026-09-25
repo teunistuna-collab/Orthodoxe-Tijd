@@ -260,8 +260,8 @@ export default function Vasten() {
 
           {/* De vasten door het jaar */}
           <div className="parchment-pattern relative overflow-hidden rounded-lg border border-gold/50 bg-[#f4ead6] px-6 py-10 shadow-[0_22px_52px_rgba(55,31,15,0.18)] sm:px-10 lg:px-14">
-            <span aria-hidden="true" className="absolute left-5 top-4 font-display text-3xl text-gold/35">❦</span>
-            <span aria-hidden="true" className="absolute bottom-4 right-5 rotate-180 font-display text-3xl text-gold/35">❦</span>
+            <span aria-hidden="true" className="hoeksier absolute left-4 top-4" />
+            <span aria-hidden="true" className="hoeksier absolute bottom-4 right-4 rotate-180" />
             <div className="flex flex-wrap items-end justify-between gap-4 text-center sm:text-left">
               <div className="mx-auto sm:mx-0">
                 <p className="ot-label">De vasten door het jaar</p>

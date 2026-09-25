@@ -1465,9 +1465,9 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .leeskeuzes{position:relative;z-index:2;display:flex;justify-content:flex-end;gap:6px;margin:-14px -10px 14px}
 #top#top .leeskeuzes button{min-height:32px;padding:4px 10px;border:1px solid rgba(169,119,32,.45);border-radius:999px;background:transparent;color:#8a5a1e;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
 #top#top .leeskeuzes button[aria-pressed="true"]{background:#8a5a1e;border-color:#8a5a1e;color:#fbf3df}
-html.lees-groot #top .exact-modal-paper{zoom:1.2}
-html.lees-nacht #top .exact-modal-paper{filter:invert(1) hue-rotate(180deg)}
-html.lees-nacht #top .exact-modal-paper img{filter:invert(1) hue-rotate(180deg)}
+html.lees-groot #top :is(.exact-modal-paper,.lees-vlak){zoom:1.2}
+html.lees-nacht #top :is(.exact-modal-paper,.lees-vlak){filter:invert(1) hue-rotate(180deg)}
+html.lees-nacht #top :is(.exact-modal-paper,.lees-vlak) img{filter:invert(1) hue-rotate(180deg)}
 
 /* Bouw 61 — vastentabel (FastingTable in Vasten.tsx): naam + datum per regel, op mobiel onder elkaar, noot in dezelfde maat als de regels */
 #top#top .fasting-table h4{color:#efcf82;font-size:clamp(19px,2.2vw,22px);line-height:1.2}
@@ -1615,12 +1615,12 @@ html.lees-nacht #top .exact-modal-paper img{filter:invert(1) hue-rotate(180deg)}
   .kop-tagline{font-size:9.5px;letter-spacing:.07em}
   .kop-nav{gap:clamp(12px,1.7vw,28px)}
 }
-@media(max-width:1279.98px){
+@media(max-width:1339.98px){
   .kop-tagline{display:none}
   .kop-nav{gap:clamp(12px,1.6vw,20px)}
   #top#top#top header .kop-link{font-size:16px;letter-spacing:0}
 }
-@media(max-width:1099.98px){
+@media(max-width:1179.98px){
   #top#top#top header .kop-link{font-size:15px}
 }
 @media(max-width:1023.98px){
@@ -1628,9 +1628,14 @@ html.lees-nacht #top .exact-modal-paper img{filter:invert(1) hue-rotate(180deg)}
   .kop-naam{font-size:15px;letter-spacing:.1em}
   #top#top#top header .kop-link{font-size:15px}
 }
-/* tablet (768–979px): de volledige kop past niet; alleen het logokruis blijft zichtbaar, de naam blijft voor schermlezers */
-@media(max-width:979.98px){
+/* tablet en kleine laptop (768–1139px): de volledige kop past niet; alleen het logokruis blijft zichtbaar, de naam blijft voor schermlezers */
+@media(max-width:1139.98px){
   .kop-merk .kop-naam{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+/* smalle tablet (768–859px): negen menu-items passen alleen met iets kleinere tekst */
+@media(max-width:859.98px){
+  #top#top#top header .kop-link{font-size:14px}
+  #top#top#top header.site-header>div.bg-bark>div{gap:10px}
 }
 
 /* Bouw 70 — centraal zoeken. Zoekknop in de desktopkop, "Zoeken" onder Meer en een vergrootglas op Vandaag (mobiel).
@@ -1691,3 +1696,143 @@ html.lees-nacht #top .exact-modal-paper img{filter:invert(1) hue-rotate(180deg)}
    Alle afbeeldingen hebben loading="lazy"; met display:none haalt de browser ze pas op als de pagina wordt geopend.
    Pop-ups die vanuit Vandaag in een verborgen pagina openen, tonen hun afbeeldingen wel. */
 #top#top#top .pagina-verborgen img:not(.exact-modal-backdrop img){display:none!important}
+
+/* Bouw 72 — Psalmen: digitaal psalter. Kleuren, serif en ornamenten (gouden hoekversiering, ✣ tussen gouden lijnen) zoals
+   elders op de site. #top#top#top waar oude algemene knopregels (Bouw 45) anders voorgaan. */
+#top#top #psalmen.page-hero-crop img{object-position:50% 29.5%!important}
+.ps-pagina{padding:18px 0 40px}
+.ps-inhoud{width:min(1240px,100%);margin:0 auto;padding:0 14px}
+
+.ps-kader{position:relative;border:1px solid rgba(184,134,40,.6);background:linear-gradient(180deg,#fbf5e7,#f5ead2);box-shadow:inset 0 0 0 3px #fbf5e7,inset 0 0 0 4px rgba(184,134,40,.26)}
+.ps-kader:before,.ps-kader:after{content:'❦';position:absolute;top:7px;color:#b88628;font-size:21px;line-height:1;pointer-events:none}
+.ps-kader:before{left:11px}
+.ps-kader:after{right:11px;transform:scaleX(-1)}
+.ps-sier{display:flex;align-items:center;justify-content:center;gap:10px;color:#b07d1f;font-size:13px;line-height:1}
+.ps-sier i{width:64px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,40,.8))}
+.ps-sier i:last-child{transform:scaleX(-1)}
+
+.ps-intro{padding:13px 38px 15px;text-align:center}
+.ps-intro p{max-width:66ch;margin:8px auto 0;font-family:var(--font-display);font-size:15.5px;line-height:1.45;color:#3a2a1c}
+
+.ps-zoekrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:14px}
+.ps-zoek{display:flex;align-items:center;gap:9px;min-height:46px;padding:0 12px;border:1px solid rgba(176,126,37,.5);border-radius:6px;background:#fbf6ea;cursor:text}
+.ps-zoek:focus-within{border-color:#b88628;box-shadow:0 0 0 2px rgba(184,134,40,.22)}
+.ps-zoek svg{width:18px;height:18px;flex:none;color:#8a5a1e;stroke-width:1.75}
+#top#top#top .ps-zoek input{flex:1;min-width:0;min-height:0;height:44px;padding:0;border:0;background:none;outline:none;font-family:var(--font-display);font-size:17px;color:#2b1d12;-webkit-appearance:none;appearance:none}
+.ps-zoek input::placeholder{color:#86705a}
+.ps-zoek input::-webkit-search-cancel-button{display:none}
+#top#top#top .ps-bereik{min-height:46px;height:46px;padding:0 34px 0 12px;border:1px solid rgba(176,126,37,.5);border-radius:6px;background:#fbf6ea url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238a5a1e' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 12px center/12px 8px;font-family:var(--font-display);font-size:16px;color:#2b1d12;-webkit-appearance:none;appearance:none;cursor:pointer}
+.ps-bereik:focus-visible{outline:2px solid #b88628;outline-offset:1px}
+
+.ps-filters{display:flex;gap:8px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.ps-filters::-webkit-scrollbar{display:none}
+#top#top#top .ps-filters button{display:inline-flex;flex:none;align-items:center;min-height:40px;padding:0 18px;border:1px solid rgba(176,126,37,.45);border-radius:999px;background:#f8f0de;font-family:var(--font-display);font-size:16px;color:#2b1d12;cursor:pointer}
+#top#top#top .ps-filters button[aria-pressed=true]{background:#5a1716;border-color:#5a1716;color:#f6ead2}
+.ps-filters button:focus-visible,.ps-rij:focus-visible,.ps-meer:focus-visible,.ps-tabs button:focus-visible,.ps-gebruik a:focus-visible{outline:2px solid #b88628;outline-offset:2px}
+
+.ps-psalter{display:grid;gap:14px;margin-top:12px}
+.ps-lijst{display:flex;flex-direction:column;gap:7px}
+#top#top#top .ps-rij{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:52px;padding:5px 10px 5px 8px;border:1px solid rgba(176,126,37,.42);border-radius:4px;background:linear-gradient(180deg,#fbf6ea,#f3e8d0);text-align:left;color:#2b1d12;cursor:pointer;transition:border-color .15s,background-color .15s}
+#top#top#top .ps-rij[aria-current]{border-color:#9c6f22;background:linear-gradient(180deg,#f5e5c1,#eed9ad);box-shadow:inset 3px 0 0 #5a1716}
+.ps-nummer{display:flex;flex:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#6e1f1b,#3a0d0c);box-shadow:0 0 0 1px #c9a24a,0 0 0 3px #f6ecd6,0 0 0 4px rgba(184,134,40,.55);font-family:var(--font-display);font-size:15px;font-weight:600;line-height:1;color:#f3dfae}
+.ps-rij-tekst{display:flex;min-width:0;flex-direction:column;gap:1px}
+.ps-rij-titel{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.15;color:#2b1d12}
+.ps-rij-onder{overflow:hidden;font-family:var(--font-display);font-size:13.5px;line-height:1.25;white-space:nowrap;text-overflow:ellipsis;color:#6b5540}
+.ps-pijl{width:18px;height:18px;color:#8a5a1e}
+.is-zonder-tekst .ps-rij-titel{font-weight:500;color:#6b5540}
+#top#top#top .ps-meer{display:flex;align-items:center;justify-content:center;min-height:44px;border:0;background:none;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8a5a1e;cursor:pointer}
+.ps-leeg{margin:0;padding:12px 2px;font-family:var(--font-display);font-size:17px;font-style:italic;color:#6b5540}
+
+.ps-lezer{padding:14px 14px 18px}
+.ps-lezer-kop h2{margin:6px 0 0;font-family:var(--font-display);font-size:26px;font-weight:600;line-height:1.1;color:#2b1d12}
+.ps-lezer-kop p{margin:3px 0 0;font-family:var(--font-display);font-size:15px;font-style:italic;color:#5b402e}
+.ps-lezer-kop .ps-sier:last-child{display:none}
+.ps-tabs{display:flex;gap:24px;margin-top:10px;overflow-x:auto;border-bottom:1px solid rgba(184,134,40,.4);scrollbar-width:none}
+#top#top#top .ps-tabs button{position:relative;display:inline-flex;flex:none;align-items:center;min-height:42px;padding:0 2px;border:0;background:none;font-family:var(--font-display);font-size:16px;color:#5b402e;white-space:nowrap;cursor:pointer}
+#top#top#top .ps-tabs button[aria-selected=true]{font-weight:600;color:#5a1716}
+#top#top#top .ps-tabs button[aria-selected=true]:after{content:"";position:absolute;right:0;bottom:-1px;left:0;height:2px;background:#5a1716}
+.ps-paneel{padding-top:12px}
+#top#top .ps-leeskeuzes{margin:0 0 10px;justify-content:flex-end}
+.ps-verzen{max-width:64ch;padding:2px 4px;border-radius:4px;background:#f7eedb}
+.ps-vers{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;margin:0 0 9px}
+.ps-versnr{padding-top:3px;font-family:var(--font-display);font-size:13px;line-height:1.5;text-align:right;color:#8a5a1e}
+.ps-vers p{margin:0;font-family:var(--font-display);font-size:18px;line-height:1.5;color:#2b1d12}
+.ps-vers p span{display:block}
+.ps-stasis{margin:16px 0 10px 30px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e}
+.ps-bron{margin:12px 0 0;font-size:12.5px;color:#6b5540}
+.ps-gebruik{margin:0;padding:0;list-style:none}
+.ps-gebruik li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;padding:8px 0;border-bottom:1px solid rgba(184,134,40,.25);font-family:var(--font-display);font-size:18px;color:#2b1d12}
+.ps-gebruik a{display:inline-flex;align-items:center;min-height:44px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a5a1e;text-decoration:none}
+
+/* mobiel en tablet: lijst en leesblok onder elkaar, rustig venster van vier psalmen */
+@media(max-width:1023.98px){
+  .ps-lijst.is-compact .ps-rij[data-buiten]{display:none!important}
+}
+@media(max-width:767.98px){
+  #top#top #psalmen.page-hero-crop{aspect-ratio:2/1}
+  #top#top #psalmen.page-hero-crop img{transform:scale(1.6);transform-origin:50% 38%}
+}
+@media(max-width:340px){
+  .ps-zoekrij{grid-template-columns:1fr}
+  .ps-intro{padding-left:30px;padding-right:30px}
+}
+@media(min-width:768px){
+  .ps-pagina{padding:22px 0 56px}
+  .ps-inhoud{padding:0 28px}
+  .ps-intro{padding:15px 60px 18px}
+  .ps-intro p{max-width:76ch;font-size:18px;line-height:1.5}
+  .ps-zoekrij{grid-template-columns:minmax(0,1fr) 220px;gap:14px;margin-top:18px}
+  .ps-lezer{padding:18px 28px 24px}
+  .ps-lezer-kop{text-align:center}
+  .ps-lezer-kop h2{font-size:30px}
+  .ps-lezer-kop .ps-sier:last-child{display:flex;margin-top:9px}
+  .ps-vers{grid-template-columns:26px minmax(0,1fr)}
+  .ps-vers p{font-size:19px}
+}
+/* desktop: lijst links (±46%), leesvenster rechts (±54%); de lijst blijft staan terwijl je leest */
+@media(min-width:1024px){
+  .ps-psalter{grid-template-columns:minmax(0,46fr) minmax(0,54fr);align-items:start;gap:22px;margin-top:16px}
+  .ps-lijst{position:sticky;top:94px;max-height:calc(100vh - 118px);overflow-y:auto;padding:1px 6px 1px 1px;scrollbar-width:thin;scrollbar-color:rgba(184,134,40,.5) transparent}
+  #top#top#top .ps-rij{min-height:58px;gap:14px;padding:7px 12px 7px 10px}
+  #top#top#top .ps-rij:hover{border-color:#b88628}
+  .ps-nummer{width:40px;height:40px;font-size:17px}
+  .ps-rij-titel{font-size:18px}
+  .ps-rij-onder{font-size:14px}
+  #top#top#top .ps-meer{display:none}
+  #top#top#top .ps-filters button{min-height:36px}
+}
+
+/* Meer-menu met Psalmen erbij: zes keuzes in twee rijen van drie */
+@media(max-width:767.98px){
+  .bottom-nav-blad.is-meer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:767.98px){
+  .ps-intro-vervolg{display:none}
+  #top#top#top .ps-meer{min-height:40px;margin-top:-2px}
+}
+@media(max-width:767.98px){
+  .ps-inhoud{padding:0 10px}
+  .ps-lezer{padding:12px 12px 16px}
+  .ps-verzen{padding:2px 0}
+  .ps-vers{grid-template-columns:18px minmax(0,1fr);gap:7px}
+}
+
+/* Bouw 73 — gouden hoekversiering (public/images/ui/hoeksier.svg) in plaats van het teken ❦, overal hetzelfde.
+   De tekening is voor de hoek linksboven; de bestaande spiegelingen (scaleX(-1), rotate(180deg)) blijven gelden. */
+:root{--hoeksier:url(/images/ui/hoeksier.svg)}
+.hoeksier{display:block;width:34px;height:34px;background:var(--hoeksier) no-repeat center/contain;opacity:.85;pointer-events:none}
+#top#top#top .vandaag-paper:before,#top#top#top .vandaag-paper:after,
+#top#top#top .v17-fasting-today:before,#top#top#top .v17-fasting-today:after,
+#top#top#top .ps-kader:before,#top#top#top .ps-kader:after,
+#top#top#top .exact-modal-paper:before,#top#top#top .exact-modal-paper:after{content:'';width:34px;height:34px;background:var(--hoeksier) no-repeat center/contain;font-size:0;opacity:.85}
+#top#top#top .ps-kader:before,#top#top#top .ps-kader:after{top:6px;width:30px;height:30px}
+#top#top#top .ps-kader:before{left:6px}
+#top#top#top .ps-kader:after{right:6px}
+#top#top#top .vandaag-paper:before,#top#top#top .vandaag-paper:after{top:14px;width:40px;height:40px}
+#top#top#top .v17-fasting-today:before,#top#top#top .v17-fasting-today:after{opacity:1}
+#top#top#top .exact-modal-paper:before,#top#top#top .exact-modal-paper:after{opacity:.7}
+@media(max-width:767.98px){
+  #top#top#top .ps-kader:before,#top#top#top .ps-kader:after{width:26px;height:26px;top:5px}
+  #top#top#top .ps-kader:before{left:5px}
+  #top#top#top .ps-kader:after{right:5px}
+}

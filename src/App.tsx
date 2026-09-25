@@ -6,6 +6,7 @@ import Vandaag from './components/Vandaag';
 import Kalender from './components/Kalender';
 import UrenCyclus from './components/UrenCyclus';
 import Feesten from './components/Feesten';
+import Psalmen from './components/Psalmen';
 import Vasten from './components/Vasten';
 import Pascha from './components/Pascha';
 import Heiligen from './components/Heiligen';
@@ -41,7 +42,7 @@ const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
 const STANDAARD_TITEL = document.title;
 
-const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'bronnen'];
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen'];
 
 function paginaUitHash(): string | null {
   const id = decodeURIComponent(window.location.hash.slice(1));
@@ -164,6 +165,7 @@ export default function App() {
           <div className={p('vasten')}><ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame></div>
           <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
           <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
+          <div className={p('psalmen')}><ExactPageFrame title="Psalmen"><Psalmen actief={pagina === 'psalmen'} /></ExactPageFrame></div>
           <div className={p('bronnen')}><section id="bronnen" className="orthodox-pattern bg-bark text-[#d9cbb0]"><h1 className="sr-only">Bronnen &amp; verwijzingen</h1><FooterInhoud /></section></div>
         </main>
         <Footer />

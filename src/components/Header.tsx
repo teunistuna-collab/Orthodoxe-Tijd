@@ -10,6 +10,7 @@ export const SECTIES = [
   { id: 'heiligen', label: 'Heiligen', icon: BookOpen },
   { id: 'pascha', label: 'Pascha', icon: Flame },
   { id: 'feesten', label: 'Feesten', icon: Sparkles },
+  { id: 'psalmen', label: 'Psalmen', icon: BookOpen },
 ];
 
 // Vandaag/Kalender komen vóór de Cycli-dropdown, daarna Pascha en de rest.

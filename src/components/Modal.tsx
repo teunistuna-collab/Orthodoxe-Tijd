@@ -69,8 +69,29 @@ function useSchermAan(open: boolean) {
   }, [open]);
 }
 
-export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false }: ModalProps) {
+/** Leesknoppen (Grote letters, Avondweergave). Werkt op elk element met .exact-modal-paper of .lees-vlak (Bouw 59). */
+export function Leeskeuzes({ className = '' }: { className?: string }) {
   const [, ververs] = useState(0);
+  return (
+    <div className={`leeskeuzes ${className}`}>
+      {LEESKEUZES.map(({ klasse, label }) => (
+        <button
+          key={klasse}
+          type="button"
+          aria-pressed={document.documentElement.classList.contains(klasse)}
+          onClick={() => {
+            wisselLeeskeuze(klasse);
+            ververs((n) => n + 1);
+          }}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false }: ModalProps) {
   const veeg = useSwipe(onVorige, onVolgende);
   useSchermAan(open && lezen);
   useTerugSluit(open, onClose);
@@ -100,21 +121,7 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
           </div>
         </header>
         <div className={`exact-modal-paper ${centerTitle ? 'exact-modal-centered' : ''}`}>
-          {lezen && (<div className="leeskeuzes">
-            {LEESKEUZES.map(({ klasse, label }) => (
-              <button
-                key={klasse}
-                type="button"
-                aria-pressed={document.documentElement.classList.contains(klasse)}
-                onClick={() => {
-                  wisselLeeskeuze(klasse);
-                  ververs((n) => n + 1);
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>)}
+          {lezen && <Leeskeuzes />}
           {children}
         </div>
       </div>
