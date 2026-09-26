@@ -1872,3 +1872,11 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 .ps-groep h3 span{font-weight:500;letter-spacing:.04em;color:#6b5540}
 .ps-groep h4{margin:3px 0 0;padding:0 2px;font-family:var(--font-display);font-size:15px;font-style:italic;font-weight:500;color:#5b402e}
 .ps-sier-popup{margin:8px 0 2px}
+
+/* Bouw 76 — deelknop (components/DeelKnop.tsx), links naar het psalter vanuit Etmaal en Vandaag */
+.dag-deel svg{width:18px;height:18px}
+.etmaal-naar-psalter{display:inline-flex;align-items:center;min-height:44px;margin-top:4px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a5a1e;text-decoration:none}
+.etmaal-naar-psalter:hover{text-decoration:underline}
+.vandaag-uur-item{cursor:pointer}
+#top#top .vandaag-uur-item small a{display:inline;color:inherit;text-decoration:underline;text-decoration-color:rgba(138,90,30,.45);text-underline-offset:2px}
+#top#top .vandaag-uur-item small a:hover{color:#8a5a1e}

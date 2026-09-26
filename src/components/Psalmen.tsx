@@ -184,7 +184,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
                   <i />✣<i />
                 </span>
               </header>
-              <PsalmLezer key={psalm.id} idVoorvoegsel="ps-pagina" psalm={psalm} tekst={teksten?.[gekozen]} laadFout={laadFout} bediening={psalm.hasText ? <Leesbediening audioSrc={psalm.audioSrc} /> : undefined} />
+              <PsalmLezer key={psalm.id} idVoorvoegsel="ps-pagina" psalm={psalm} tekst={teksten?.[gekozen]} laadFout={laadFout} bediening={psalm.hasText ? <Leesbediening audioSrc={psalm.audioSrc} deel={{ titel: psalm.title, pad: `psalmen/${psalm.septuagintNumber}` }} /> : undefined} />
             </article>
           </div>
         </div>
@@ -200,6 +200,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           maxWidth="max-w-3xl"
           lezen={popupPsalm.hasText}
           leesAudio={popupPsalm.audioSrc}
+          deel={{ titel: popupPsalm.title, pad: `psalmen/${popupPsalm.septuagintNumber}` }}
           onVorige={() => blader(-1)}
           onVolgende={() => blader(1)}
         >

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { GEBEDEN, type Gebed } from '../lib/gebeden';
 import { LiturgicalPopup, CycleTransition } from './CycleSections';
@@ -79,6 +79,17 @@ export default function Gebeden() {
   const [zoek, setZoek] = useState('');
   const [actieveCat, setActieveCat] = useState<string | null>(null);
   const [popupGebed, setPopupGebed] = useState<Gebed | null>(null);
+
+  // Deeplink (bijvoorbeeld gedeeld vanuit de pop-up): #gebeden/<id> opent dat gebed.
+  useEffect(() => {
+    const opHash = () => {
+      const g = GEBEDEN.find((x) => window.location.hash === `#gebeden/${x.id}`);
+      if (g) setPopupGebed(g);
+    };
+    opHash();
+    window.addEventListener('hashchange', opHash);
+    return () => window.removeEventListener('hashchange', opHash);
+  }, []);
 
   const zoekterm = zoek.trim().toLowerCase();
   const gezocht = useMemo(
@@ -210,7 +221,7 @@ export default function Gebeden() {
         buttonHref="#adem"
       />
 
-      <LiturgicalPopup lezen open={popupGebed !== null} onClose={() => setPopupGebed(null)} content={popupContent} />
+      <LiturgicalPopup lezen open={popupGebed !== null} onClose={() => setPopupGebed(null)} content={popupContent} deel={popupGebed ? { titel: popupGebed.titel, pad: `gebeden/${popupGebed.id}` } : undefined} />
     </>
   );
 }

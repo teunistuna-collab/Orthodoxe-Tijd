@@ -27,6 +27,9 @@ assert.ok(titels('jezusgebed', "Pagina's").includes('Adem'), 'pagina via trefwoo
 assert.ok(titels('ochtend', 'Gebeden').length > 0, 'gebed op moment');
 assert.ok(titels('willibrord', 'Heiligen').length > 0, 'heilige uit de eigen lijst');
 assert.equal(zoek('a', index, vandaag, 'oud').length, 0, 'minimaal twee tekens');
+assert.deepEqual(titels('Psalm 50', 'Psalmen'), ['Psalm 50'], 'psalm op nummer');
+assert.ok(titels('hexapsalm', 'Psalmen').includes('Psalm 3'), 'psalm op onderdeel van de dienst');
+assert.equal(titels('psalm', 'Psalmen').length, 0, 'alleen "psalm" geeft geen 150 psalmen');
 assert.equal(zoek('6 augustus', index, vandaag, 'oud')[0].titel, 'Datum', 'datum bovenaan');
 // bij gelijke score gaan de grote feesten voor
 const pascha = zoek('pascha', index, vandaag, 'oud').find((g) => g.titel === 'Feesten')!.items[0];

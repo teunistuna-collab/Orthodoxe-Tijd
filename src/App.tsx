@@ -107,6 +107,16 @@ export default function App() {
       document.removeEventListener('click', opKlik);
     };
   }, []);
+  // Deeplink (bijvoorbeeld gedeeld vanuit de dag-pop-up): #kalender/2026-09-26 opent die dag.
+  useEffect(() => {
+    const opDag = () => {
+      const m = /^#kalender\/(\d{4}-\d{2}-\d{2})$/.exec(window.location.hash);
+      if (m) setDagOpen(m[1]);
+    };
+    opDag();
+    window.addEventListener('hashchange', opDag);
+    return () => window.removeEventListener('hashchange', opDag);
+  }, []);
   useLayoutEffect(() => {
     window.scrollTo({ top: scrollPosities.current[pagina] ?? 0, behavior: 'instant' });
   }, [pagina]);

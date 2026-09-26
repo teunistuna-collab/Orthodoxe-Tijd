@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import Modal from './Modal';
+import type { Deel } from './Leesbediening';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
 
 type CycleCard = {
@@ -150,11 +151,11 @@ export function LiturgicalCard({ title, intro, body, meta, onReadMore }: CycleCa
 
 type PopupContent = PopupInhoud;
 
-export function LiturgicalPopup({ open, onClose, content, lezen = false }: { open: boolean; onClose: () => void; content: PopupContent | null; lezen?: boolean }) {
+export function LiturgicalPopup({ open, onClose, content, lezen = false, deel }: { open: boolean; onClose: () => void; content: PopupContent | null; lezen?: boolean; deel?: Deel }) {
   if (!open || !content) return null;
 
   return (
-    <Modal open={open} onClose={onClose} eyebrow={content.eyebrow ?? 'Lees meer'} title={content.title} centerTitle maxWidth="max-w-3xl" lezen={lezen}>
+    <Modal open={open} onClose={onClose} eyebrow={content.eyebrow ?? 'Lees meer'} title={content.title} centerTitle maxWidth="max-w-3xl" lezen={lezen} deel={deel}>
       <div className="exact-popup-reading">
         {content.image && <img loading="lazy" decoding="async" src={content.image.src} alt={content.image.alt} width={400} height={400} className="heilige-portret heilige-portret-groot" />}
         {content.subtitle && <p className="exact-popup-subtitle">{content.subtitle}</p>}

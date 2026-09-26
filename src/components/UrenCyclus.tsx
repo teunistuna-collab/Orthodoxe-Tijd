@@ -462,6 +462,12 @@ export default function UrenCyclus() {
                 </button>
               ))}
             </div>
+            {modalState?.selectedPsalm && (
+              // De link zelf gaat via gaNaar (App.tsx); de dienst sluit, de psalm opent op de Psalmenpagina.
+              <a className="etmaal-naar-psalter" href={`#psalmen/${modalState.selectedPsalm.title.replace('Psalm ', '')}`} onClick={closeModal}>
+                Open in het psalter →
+              </a>
+            )}
 
             {(pdfStatus === 'loading' || pdfStatus === 'idle') && <p className="etmaal-pdf-melding">De tekst wordt geladen…</p>}
             {pdfStatus === 'error' && (

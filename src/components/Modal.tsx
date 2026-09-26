@@ -2,7 +2,7 @@ import { useEffect, useId, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
-import Leesbediening from './Leesbediening';
+import Leesbediening, { type Deel } from './Leesbediening';
 
 type ModalProps = {
   open: boolean;
@@ -21,6 +21,8 @@ type ModalProps = {
   lezen?: boolean;
   // Alleen psalmen: opname bij de leesbediening (verschijnt pas als er een echt bestand is).
   leesAudio?: string;
+  // Deelknop bij de leesbediening, met een deeplink naar deze inhoud.
+  deel?: Deel;
 };
 
 // Houdt het scherm aan zolang er een leesvenster (gebed, dienst, lezing, psalm) open staat.
@@ -51,7 +53,7 @@ function useSchermAan(open: boolean) {
   }, [open]);
 }
 
-export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false, leesAudio }: ModalProps) {
+export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false, leesAudio, deel }: ModalProps) {
   const veeg = useSwipe(onVorige, onVolgende);
   const eigenId = useId();
   const titelId = labelledBy ?? eigenId;
@@ -85,7 +87,7 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         <div className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>{children}</div>
         {lezen && (
           <div className="exact-modal-voet">
-            <Leesbediening audioSrc={leesAudio} />
+            <Leesbediening audioSrc={leesAudio} deel={deel} />
           </div>
         )}
       </div>

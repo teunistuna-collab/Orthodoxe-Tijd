@@ -138,7 +138,7 @@ export function laadPsalmTeksten(): Promise<PsalmTeksten> {
 
 const normaal = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
-/** Zoekt op psalmnummer (Septuagint of Hebreeuws), dienst in het etmaal, en (zodra geladen) woorden uit de tekst. */
+/** Zoekt op psalmnummer (Septuagint of Hebreeuws), dienst of onderdeel in het etmaal, en (zodra geladen) woorden uit de tekst. */
 export function zoekPsalmen(lijst: Psalm[], invoer: string, teksten: PsalmTeksten | null): Psalm[] {
   const q = normaal(invoer.trim()).replace(/^psalm\s*/, '');
   if (!q) return lijst;
@@ -148,7 +148,7 @@ export function zoekPsalmen(lijst: Psalm[], invoer: string, teksten: PsalmTekste
     return lijst.filter((p) => p.septuagintNumber === n || p.masoreticNumber === n).sort((a) => (a.septuagintNumber === n ? -1 : 1));
   }
   return lijst.filter((p) => {
-    if (p.liturgicalUses.some((g) => normaal(g.dienst).includes(q))) return true;
+    if (p.liturgicalUses.some((g) => normaal(`${g.dienst} ${g.onderdeel ?? ''}`).includes(q))) return true;
     const tekst = teksten?.[p.septuagintNumber];
     return !!tekst && tekst.verzen.some((v) => v.regels.some((r) => normaal(r).includes(q)));
   });

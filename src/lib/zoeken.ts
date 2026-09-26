@@ -5,8 +5,9 @@ import { rangLabel, vertaalLeven, type HtcData } from './htc';
 import { addDays, formatLang, formatMd, MAANDEN, MAANDEN_KORT, orthodoxPascha, utc, ymd, type Mode } from './kalender';
 import { volgendeFeestDatum } from './overzicht';
 import { normaliseer, type Resultaat } from './heiligenPopup';
+import { PSALMEN, zoekPsalmen } from './psalmen';
 
-// Centraal zoeken over bestaande inhoud: pagina's, gebeden, feesten, heiligen en datums.
+// Centraal zoeken over bestaande inhoud: pagina's, psalmen, gebeden, feesten, heiligen en datums.
 // Losse, React-vrije logica, zodat een latere app dezelfde index kan gebruiken.
 
 export type ZoekTreffer =
@@ -14,7 +15,8 @@ export type ZoekTreffer =
   | { soort: 'gebed'; titel: string; onder: string; gebed: Gebed }
   | { soort: 'feest'; titel: string; onder: string; feest: Feest; datum: Date }
   | { soort: 'heilige'; titel: string; onder: string; heilige: Resultaat }
-  | { soort: 'datum'; titel: string; onder: string; ymd: string };
+  | { soort: 'datum'; titel: string; onder: string; ymd: string }
+  | { soort: 'psalm'; titel: string; onder: string; nr: number };
 
 export interface ZoekGroep {
   titel: string;
@@ -149,6 +151,17 @@ export function zoek(invoer: string, index: ZoekIndex, vandaag: Date, mode: Mode
 
   const paginas = PAGINAS.map((p) => ({ p, s: score(q, normaliseer(p.titel), normaliseer(p.extra ?? '')) })).filter((x): x is { p: (typeof PAGINAS)[number]; s: number } => x.s !== null);
   if (paginas.length) groepen.push({ titel: "Pagina's", top: Math.min(...paginas.map((x) => x.s)), items: paginas.slice(0, 4).map(({ p }) => ({ soort: 'pagina', titel: p.titel, onder: p.onder, id: p.id })) });
+
+  // Psalmen op nummer ("50", "Psalm 50") of op dienst en onderdeel in het etmaal ("vespers", "hexapsalm"); alleen "psalm" is te vaag.
+  if (q.replace(/^psalm\s*/, '')) {
+    const psalmen = zoekPsalmen(PSALMEN, q, null).slice(0, 6);
+    if (psalmen.length)
+      groepen.push({
+        titel: 'Psalmen',
+        top: /\d/.test(q) ? 0 : 1,
+        items: psalmen.map((p) => ({ soort: 'psalm', titel: p.title, onder: p.liturgicalUses.length ? `Etmaal · ${p.liturgicalUses.map((g) => g.dienst).join(', ')}` : 'Psalter', nr: p.septuagintNumber })),
+      });
+  }
 
   const gebeden = beste(q, index.gebeden, 6, (g) => g.titel);
   if (gebeden.items.length) groepen.push({ titel: 'Gebeden', top: gebeden.top, items: gebeden.items.map((g) => ({ soort: 'gebed', titel: g.titel, onder: g.wanneer, gebed: g })) });

@@ -9,13 +9,14 @@ import { useTerugSluit } from '../lib/terug';
 import { gaNaar } from '../lib/navigatie';
 import { LiturgicalPopup } from './CycleSections';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
+import type { Deel } from './Leesbediening';
 
 // Centraal zoekvenster: op desktop een donker paneel onder de kop, op mobiel schermvullend (Bouw 70 in index.css).
 // Openen via de zoekknop in de kop, "Zoeken" onder Meer, het vergrootglas op Vandaag (mobiel), of de toets / en Ctrl+K.
 export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpen: () => void; onClose: () => void }) {
   const { htc, heiligen, vandaag, mode, openDag } = useApp();
   const [invoer, setInvoer] = useState('');
-  const [popup, setPopup] = useState<{ content: PopupInhoud; lezen: boolean } | null>(null);
+  const [popup, setPopup] = useState<{ content: PopupInhoud; lezen: boolean; deel?: Deel } | null>(null);
   const invoerRef = useRef<HTMLInputElement | null>(null);
   const lijstRef = useRef<HTMLDivElement | null>(null);
 
@@ -53,8 +54,9 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
   const kies = (t: ZoekTreffer) => {
     onClose();
     if (t.soort === 'pagina') gaNaar(t.id);
+    else if (t.soort === 'psalm') gaNaar(`psalmen/${t.nr}`);
     else if (t.soort === 'datum') openDag(t.ymd);
-    else if (t.soort === 'gebed') setPopup({ lezen: true, content: { title: t.gebed.titel, subtitle: t.gebed.wanneer, highlight: t.gebed.rubriek, paragraphs: t.gebed.tekst.split('\n\n') } });
+    else if (t.soort === 'gebed') setPopup({ lezen: true, deel: { titel: t.gebed.titel, pad: `gebeden/${t.gebed.id}` }, content: { title: t.gebed.titel, subtitle: t.gebed.wanneer, highlight: t.gebed.rubriek, paragraphs: t.gebed.tekst.split('\n\n') } });
     else if (t.soort === 'feest') {
       const f = t.feest;
       setPopup({ lezen: false, content: { title: f.naam, subtitle: formatLang(t.datum), highlight: f.troparion, paragraphs: [f.toelichting, ...(f.traditie ? [`Gebruiken: ${f.traditie}`] : [])].filter((p): p is string => Boolean(p)) } });
@@ -95,7 +97,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && eerste) kies(eerste);
                 }}
-                placeholder="Zoek een gebed, feest, heilige of datum"
+                placeholder="Zoek een gebed, psalm, feest, heilige of datum"
                 aria-label="Zoeken"
                 aria-controls="zoek-resultaten"
                 enterKeyHint="search"
@@ -109,7 +111,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
 
             <div id="zoek-resultaten" ref={lijstRef} className="zoek-resultaten" aria-live="polite">
               {zoekterm.length < 2 ? (
-                <p className="zoek-hint">Bijvoorbeeld: <i>Jezusgebed</i> · <i>Kruisverheffing</i> · <i>Nicolaas</i> · <i>6 augustus</i> · <i>Pascha 2027</i></p>
+                <p className="zoek-hint">Bijvoorbeeld: <i>Jezusgebed</i> · <i>Psalm 50</i> · <i>Kruisverheffing</i> · <i>Nicolaas</i> · <i>6 augustus</i> · <i>Pascha 2027</i></p>
               ) : groepen.length === 0 ? (
                 <p className="zoek-hint">Niets gevonden voor “{zoekterm}”.</p>
               ) : (
@@ -133,7 +135,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
           </div>
         </div>
       )}
-      <LiturgicalPopup lezen={popup?.lezen} open={popup !== null} onClose={() => setPopup(null)} content={popup?.content ?? null} />
+      <LiturgicalPopup lezen={popup?.lezen} open={popup !== null} onClose={() => setPopup(null)} content={popup?.content ?? null} deel={popup?.deel} />
     </>
   );
 }
