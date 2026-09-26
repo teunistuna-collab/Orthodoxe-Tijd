@@ -45,8 +45,9 @@ const STANDAARD_TITEL = document.title;
 
 const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen'];
 
+// "#psalmen/50" hoort bij de pagina "psalmen" (de Psalmenpagina opent zelf Psalm 50).
 function paginaUitHash(): string | null {
-  const id = decodeURIComponent(window.location.hash.slice(1));
+  const id = decodeURIComponent(window.location.hash.slice(1)).split('/')[0];
   return PAGINAS.includes(id) ? id : null;
 }
 
@@ -94,7 +95,7 @@ export default function App() {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const link = e.target instanceof Element ? e.target.closest('a[href^="#"]') : null;
       const doel = link?.getAttribute('href')?.slice(1);
-      if (!doel || !PAGINAS.includes(doel)) return;
+      if (!doel || !PAGINAS.includes(doel.split('/')[0])) return;
       e.preventDefault();
       if (doel === huidige.current) window.scrollTo({ top: 0, behavior: 'smooth' });
       else gaNaar(doel);

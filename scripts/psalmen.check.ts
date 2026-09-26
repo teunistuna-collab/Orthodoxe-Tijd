@@ -1,7 +1,7 @@
 // Zelftest voor src/lib/psalmen.ts — draaien met: npm run check:psalmen
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { PSALM_BRONNEN, PSALMEN, psalmVanHetUur, zoekPsalmen, type PsalmTeksten } from '../src/lib/psalmen';
+import { ETMAAL_GROEPEN, PSALM_BRONNEN, PSALMEN, psalmVanHetUur, zoekPsalmen, type PsalmTeksten } from '../src/lib/psalmen';
 import { serviceConfig } from '../src/lib/etmaal';
 
 const teksten = JSON.parse(readFileSync('public/data/psalmen.json', 'utf8')) as PsalmTeksten;
@@ -17,6 +17,10 @@ assert.equal(PSALMEN.filter((p) => p.audioSrc).length, Object.values(PSALM_BRONN
 assert.equal(PSALMEN.length, 150);
 assert.equal(PSALMEN[0].septuagintNumber, 1);
 assert.equal(PSALMEN.filter((p) => p.hasText).length, Object.keys(teksten).length);
+
+// Elke dienst heeft psalmen (een verkeerd gespelde dienstnaam in ETMAAL_PSALMEN valt zo op).
+for (const g of ETMAAL_GROEPEN) assert.ok(g.delen.length > 0, `psalmen voor ${g.dienst}`);
+assert.deepEqual(PSALMEN[2].liturgicalUses, [{ dienst: 'Metten', tijd: '03:00', onderdeel: 'Hexapsalm' }]);
 
 // Iedere psalm uit het etmaal heeft zijn dienst als gebruik, en een tekst.
 for (const dienst of serviceConfig) {
@@ -37,7 +41,7 @@ assert.equal(om(10), 24); // Derde Uur 09:00
 // Zoeken: Septuagint- en Hebreeuws nummer, dienst, woord uit de tekst.
 assert.deepEqual(zoekPsalmen(PSALMEN, '24', null).map((p) => p.septuagintNumber), [24]);
 assert.deepEqual(zoekPsalmen(PSALMEN, 'Psalm 51', null).map((p) => p.septuagintNumber), [51, 50]);
-assert.deepEqual(zoekPsalmen(PSALMEN, 'vespers', null).map((p) => p.septuagintNumber), [103, 140]);
+assert.deepEqual(zoekPsalmen(PSALMEN, 'vespers', null).map((p) => p.septuagintNumber), [103, 116, 129, 140, 141]);
 assert.ok(zoekPsalmen(PSALMEN, 'allerhoogste', teksten).some((p) => p.septuagintNumber === 90));
 assert.equal(zoekPsalmen(PSALMEN, '', null).length, 150);
 

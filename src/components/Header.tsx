@@ -6,11 +6,11 @@ export const SECTIES = [
   { id: 'vandaag', label: 'Vandaag', icon: Sun },
   { id: 'kalender', label: 'Kalender', icon: CalendarDays },
   { id: 'gebeden', label: 'Gebeden', icon: HandHeart },
+  { id: 'psalmen', label: 'Psalmen', icon: BookOpen },
   { id: 'vasten', label: 'Vasten', icon: Wheat },
   { id: 'heiligen', label: 'Heiligen', icon: BookOpen },
   { id: 'pascha', label: 'Pascha', icon: Flame },
   { id: 'feesten', label: 'Feesten', icon: Sparkles },
-  { id: 'psalmen', label: 'Psalmen', icon: BookOpen },
 ];
 
 // Vandaag/Kalender komen vóór de Cycli-dropdown, daarna Pascha en de rest.

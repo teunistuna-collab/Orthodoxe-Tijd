@@ -7,6 +7,8 @@ export interface PsalmGebruik {
   /** Dienst uit het etmaal (lib/etmaal.ts), bijvoorbeeld "Vespers". */
   dienst: string;
   tijd: string;
+  /** Deel van de dienst, bijvoorbeeld "Hexapsalm" in de Metten. */
+  onderdeel?: string;
 }
 
 export interface Psalm {
@@ -46,12 +48,33 @@ export const PSALM_BRONNEN: Record<number, { tekst?: true; mt?: number; audio?: 
   140: { tekst: true, mt: 141 },
 };
 
-// Gebruik in het etmaal: rechtstreeks uit dezelfde dienstenlijst als de Etmaal-pagina.
+/**
+ * Psalmen per dienst van het etmaal, zoals aangeleverd door de redactie. Sleutels = diensten in lib/etmaal.ts;
+ * die lijst zelf blijft ongewijzigd (de Etmaal-pagina toont daar alleen de psalmen met een PDF).
+ */
+const ETMAAL_PSALMEN: Record<string, { onderdeel?: string; psalmen: number[] }[]> = {
+  Vespers: [{ psalmen: [103, 140, 141, 129, 116] }],
+  Completen: [{ psalmen: [50, 69, 142] }],
+  Middernachtdienst: [{ psalmen: [50, 118] }],
+  Metten: [
+    { onderdeel: 'Koninklijk officie', psalmen: [19, 20] },
+    { onderdeel: 'Hexapsalm', psalmen: [3, 37, 62, 87, 102, 142] },
+    { onderdeel: 'Polyeleos · alleen op zon- en feestdagen', psalmen: [134, 135] },
+    { onderdeel: 'Lofpsalmen', psalmen: [148, 149, 150] },
+  ],
+  'Eerste Uur': [{ psalmen: [5, 89, 100] }],
+  'Derde Uur': [{ psalmen: [16, 24, 50] }],
+  'Zesde Uur': [{ psalmen: [53, 54, 90] }],
+  'Negende Uur': [{ psalmen: [83, 84, 85] }],
+};
+
+/** Psalmen per dienst, in de volgorde van het etmaal (Vespers eerst): voor de Etmaal-weergave. */
+export const ETMAAL_GROEPEN = serviceConfig.map((d) => ({ dienst: d.title, tijd: d.time, delen: ETMAAL_PSALMEN[d.title] ?? [] }));
+
 const GEBRUIK = new Map<number, PsalmGebruik[]>();
-for (const dienst of serviceConfig) {
-  for (const psalm of dienst.psalms) {
-    const n = Number(psalm.title.replace(/^Psalm /, ''));
-    GEBRUIK.set(n, [...(GEBRUIK.get(n) ?? []), { dienst: dienst.title, tijd: dienst.time }]);
+for (const { dienst, tijd, delen } of ETMAAL_GROEPEN) {
+  for (const { onderdeel, psalmen } of delen) {
+    for (const n of psalmen) GEBRUIK.set(n, [...(GEBRUIK.get(n) ?? []), { dienst, tijd, ...(onderdeel ? { onderdeel } : {}) }]);
   }
 }
 
