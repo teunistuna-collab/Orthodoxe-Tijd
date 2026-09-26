@@ -75,6 +75,17 @@ export default function Psalmen({ actief }: { actief: boolean }) {
     return zoekPsalmen(l, zoek, teksten);
   }, [filter, bereik, zoek, teksten]);
 
+  // Springen in een lange lijst: naar de eerste psalm vanaf nummer n.
+  const spring = (n: number) => {
+    const el = lijstRef.current;
+    const doel = lijst.find((p) => p.septuagintNumber >= n);
+    const rij = doel && el?.querySelector<HTMLElement>(`[data-nr="${doel.septuagintNumber}"]`);
+    if (!el || !rij) return;
+    // Desktop: de lijst scrolt zelf (onder de vastgezette sprongbalk); mobiel: de pagina scrolt.
+    if (el.scrollHeight > el.clientHeight) el.scrollTop = rij.offsetTop - (el.querySelector<HTMLElement>('.ps-sprong')?.offsetHeight ?? 0) - 6;
+    else rij.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+
   const kies = (p: Psalm) => {
     setGekozen(p.septuagintNumber);
     // Op desktop staat het leesvenster naast de lijst; kleiner opent de psalm in een leesvenster.
@@ -133,11 +144,20 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
           <div className="ps-psalter">
             <div ref={lijstRef} className="ps-lijst">
+              {lijst.length > 50 && (
+                <div className="ps-sprong" role="group" aria-label="Ga naar psalm">
+                  {[1, 51, 101].map((n) => (
+                    <button key={n} type="button" onClick={() => spring(n)} aria-label={`Ga naar psalm ${n}`}>
+                      {n}–{n + 49}
+                    </button>
+                  ))}
+                </div>
+              )}
               {lijst.length === 0 && <p className="ps-leeg">Geen psalmen gevonden{zoek.trim() ? ` voor “${zoek.trim()}”` : ''}.</p>}
               {lijst.map((p) => {
                 const onder = p.liturgicalUses.length ? `Etmaal · ${p.liturgicalUses.map((g) => g.dienst).join(', ')}` : undefined;
                 return (
-                  <button key={p.id} type="button" className={`ps-rij${p.hasText ? '' : ' is-zonder-tekst'}`} aria-current={p.septuagintNumber === gekozen ? 'true' : undefined} onClick={() => kies(p)}>
+                  <button key={p.id} type="button" data-nr={p.septuagintNumber} className={`ps-rij${p.hasText ? '' : ' is-zonder-tekst'}`} aria-current={p.septuagintNumber === gekozen ? 'true' : undefined} onClick={() => kies(p)}>
                     <span className="ps-nummer" aria-hidden="true">
                       {p.septuagintNumber}
                     </span>

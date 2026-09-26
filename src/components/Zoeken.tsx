@@ -6,6 +6,7 @@ import { popupContent } from '../lib/heiligenPopup';
 import { bouwIndex, zoek, type ZoekTreffer } from '../lib/zoeken';
 import { vergrendelScroll } from '../lib/scrollLock';
 import { useTerugSluit } from '../lib/terug';
+import { gaNaar } from '../lib/navigatie';
 import { LiturgicalPopup } from './CycleSections';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
 
@@ -51,7 +52,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
 
   const kies = (t: ZoekTreffer) => {
     onClose();
-    if (t.soort === 'pagina') window.location.hash = t.id;
+    if (t.soort === 'pagina') gaNaar(t.id);
     else if (t.soort === 'datum') openDag(t.ymd);
     else if (t.soort === 'gebed') setPopup({ lezen: true, content: { title: t.gebed.titel, subtitle: t.gebed.wanneer, highlight: t.gebed.rubriek, paragraphs: t.gebed.tekst.split('\n\n') } });
     else if (t.soort === 'feest') {

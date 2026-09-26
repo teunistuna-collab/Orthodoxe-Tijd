@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import Footer, { FooterInhoud } from './components/Footer';
@@ -18,6 +18,7 @@ import DagPascha from './components/DagPascha';
 import LezingModal from './components/LezingModal';
 import KalenderUitleg from './components/KalenderUitleg';
 import Zoeken from './components/Zoeken';
+import { gaNaar } from './lib/navigatie';
 import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
@@ -75,16 +76,39 @@ export default function App() {
   const [zoekOpen, setZoekOpen] = useState(false);
 
   // Er staat één pagina tegelijk in beeld (zie .pagina-verborgen in index.css); het anker in de url bepaalt welke.
+  // Elke pagina onthoudt hoe ver je gescrold was: terug naar een pagina brengt je weer op die plek.
+  // Een tik op de pagina waar je al bent (bijvoorbeeld in de onderbalk) brengt je naar boven.
+  const huidige = useRef(pagina);
+  const scrollPosities = useRef<Record<string, number>>({});
   useEffect(() => {
+    history.scrollRestoration = 'manual';
     const opHash = () => {
       const p = paginaUitHash();
-      if (!p) return;
+      if (!p || p === huidige.current) return;
+      scrollPosities.current[huidige.current] = window.scrollY;
+      huidige.current = p;
       setPagina(p);
-      window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+    // Interne paginalinks zelf afhandelen: zo springt de browser niet eerst naar het element met die id.
+    const opKlik = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = e.target instanceof Element ? e.target.closest('a[href^="#"]') : null;
+      const doel = link?.getAttribute('href')?.slice(1);
+      if (!doel || !PAGINAS.includes(doel)) return;
+      e.preventDefault();
+      if (doel === huidige.current) window.scrollTo({ top: 0, behavior: 'smooth' });
+      else gaNaar(doel);
     };
     window.addEventListener('hashchange', opHash);
-    return () => window.removeEventListener('hashchange', opHash);
+    document.addEventListener('click', opKlik);
+    return () => {
+      window.removeEventListener('hashchange', opHash);
+      document.removeEventListener('click', opKlik);
+    };
   }, []);
+  useLayoutEffect(() => {
+    window.scrollTo({ top: scrollPosities.current[pagina] ?? 0, behavior: 'instant' });
+  }, [pagina]);
   const p = (id: string) => (id === pagina ? 'pagina' : 'pagina pagina-verborgen');
 
   // De tabtitel volgt de pagina (handig bij delen, bladwijzers en voor schermlezers).

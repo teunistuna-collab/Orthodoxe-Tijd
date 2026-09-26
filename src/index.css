@@ -1864,3 +1864,12 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
   .ps-lezer{display:none!important}
 }
 .ps-ondertitel{margin:2px 0 0;font-family:var(--font-display);font-size:15px;font-style:italic;color:#5b402e}
+
+/* Bouw 75 — Psalmen: sprongbalk boven de lange lijst (1–50 · 51–100 · 101–150), blijft bovenaan staan tijdens het scrollen */
+.ps-sprong{position:sticky;top:0;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0 -2px;padding:6px 2px 7px;border-bottom:1px solid rgba(184,134,40,.35);background:linear-gradient(180deg,#f8f0de 80%,rgba(248,240,222,.92))}
+#top#top#top .ps-sprong button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 6px;border:1px solid rgba(176,126,37,.45);border-radius:999px;background:#fbf6ea;font-family:var(--font-display);font-size:16px;font-weight:600;color:#4a2b1d;cursor:pointer}
+#top#top#top .ps-sprong button:hover{border-color:#b88628}
+.ps-sprong button:focus-visible{outline:2px solid #b88628;outline-offset:2px}
+.ps-rij{scroll-margin-top:62px}
+/* overflow:hidden op het paginakader maakt position:sticky onmogelijk; clip knipt hetzelfde af maar laat de sprongbalk werken */
+#top#top#top .exact-content:has(.ps-pagina){overflow:clip!important}
