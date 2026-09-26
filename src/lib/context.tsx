@@ -20,6 +20,8 @@ export interface AppState {
   htc: HtcData | null;
   /** Lezingsverwijzingen per burgerlijke datum (yyyy-mm-dd), over alle kerkjaren met een rooster. */
   rooster: Rooster | null;
+  /** Laadt (eenmalig) het leesrooster van het kerkjaar van deze datum (yyyy-mm-dd). */
+  vraagRooster: (ymd: string) => void;
   /** null zolang de heiligenlijst nog laadt. */
   heiligen: HeiligenData | null;
   htcFout: boolean;

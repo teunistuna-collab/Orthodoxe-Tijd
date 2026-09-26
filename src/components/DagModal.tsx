@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Props) {
-  const { mode, vandaagYmd, htc, rooster, heiligen, openLezing } = useApp();
+  const { mode, vandaagYmd, htc, rooster, vraagRooster, heiligen, openLezing } = useApp();
   const [origineel, setOrigineel] = useState(false);
 
   const dag = useMemo(() => (geselecteerd ? dagInfo(parseYmd(geselecteerd), mode, vandaagYmd) : null), [geselecteerd, mode, vandaagYmd]);
@@ -34,6 +34,10 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
       ontgrendel();
     };
   }, [geselecteerd, dag, onClose, onNavigate]);
+
+  useEffect(() => {
+    if (geselecteerd) vraagRooster(geselecteerd);
+  }, [geselecteerd, vraagRooster]);
 
   const curated = dag ? heiligen?.HEILIGEN[dag.kerkKey] ?? [] : [];
   const htcDag = dag ? htc?.[dag.kerkKey] : undefined;
@@ -179,7 +183,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                   </ul>
                 ) : (
                   <p className="mt-2 text-sm text-ink-mute">
-                    {roosterMelding(rooster, dag.ymd)}
+                    {roosterMelding(dag.ymd)}
                   </p>
                 )}
               </div>

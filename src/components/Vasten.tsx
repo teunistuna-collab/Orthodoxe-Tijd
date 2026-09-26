@@ -236,14 +236,6 @@ export default function Vasten() {
                 </div>
               ))}
             </div>
-            <div className="mt-6 flex justify-center">
-              <a
-                href="#kalender"
-                className="btn-pill"
-              >
-                Bekijk vastendagen in de kalender →
-              </a>
-            </div>
           </div>
 
           {/* Doorlopende verticale lijn verbindt het dagpaneel met de algemene uitleg — geen nieuwe pagina */}

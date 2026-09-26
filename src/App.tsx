@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import Footer, { FooterInhoud } from './components/Footer';
@@ -25,7 +25,7 @@ import ExactPageFrame from './components/ExactPageFrame';
 import { CyclePageLayout, GoldDivider, LiturgicalCard, ParchmentSection, QuoteSection, SectionHeader } from './components/CycleSections';
 import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
 import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
-import { laadDagen, laadRooster, type HtcData, type Rooster } from './lib/htc';
+import { kerkjaarVan, laadDagen, laadRoosterJaar, voegRoosterToe, type HtcData, type Rooster } from './lib/htc';
 
 const MODE_KEY = 'orthodoxe-kalender-mode';
 
@@ -99,7 +99,9 @@ export default function App() {
     laadDagen()
       .then((dagen) => {
         setHtc(dagen);
-        return laadRooster(dagen).then(setRooster);
+        // Leesrooster: het huidige en het volgende kerkjaar meteen, andere jaren pas als je er een datum uit opent.
+        const nu = kerkjaarVan(ymd(bepaalVandaag()));
+        for (const jaar of [nu, nu + 1]) void laadRoosterJaar(jaar, dagen).then((r) => setRooster((oud) => voegRoosterToe(oud, r)));
       })
       .catch(() => setHtcFout(true));
   }, []);
@@ -134,6 +136,19 @@ export default function App() {
   const sluitLezing = useCallback(() => setLezing(null), []);
   const openKalenderUitleg = useCallback(() => setUitlegOpen(true), []);
   const openZoeken = useCallback(() => setZoekOpen(true), []);
+  // Laadt het kerkjaar van een datum één keer; daarna niets meer (geen nieuwe state bij herhaald vragen).
+  const gevraagd = useRef(new Set<number>());
+  const vraagRooster = useCallback(
+    (datum: string) => {
+      const jaar = kerkjaarVan(datum);
+      if (!htc || gevraagd.current.has(jaar)) return;
+      gevraagd.current.add(jaar);
+      laadRoosterJaar(jaar, htc)
+        .then((r) => setRooster((oud) => voegRoosterToe(oud, r)))
+        .catch(() => gevraagd.current.delete(jaar));
+    },
+    [htc],
+  );
   const sluitZoeken = useCallback(() => setZoekOpen(false), []);
   const sluitKalenderUitleg = useCallback(() => {
     setUitlegOpen(false);
@@ -145,8 +160,8 @@ export default function App() {
   }, []);
 
   const ctx = useMemo(
-    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, rooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken }),
-    [mode, setMode, vandaag, htc, rooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken],
+    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, rooster, vraagRooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken }),
+    [mode, setMode, vandaag, htc, rooster, vraagRooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken],
   );
 
   return (

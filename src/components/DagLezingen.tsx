@@ -13,7 +13,10 @@ interface Props {
 // Pop-up met uitsluitend de Schriftlezingen van één dag (geen heiligen, vasten of feesten).
 // Een tik op een lezing opent de lezing zelf in de bestaande lezingen-pop-up.
 export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
-  const { mode, vandaagYmd, rooster, openLezing } = useApp();
+  const { mode, vandaagYmd, rooster, vraagRooster, openLezing } = useApp();
+  useEffect(() => {
+    if (gekozen) vraagRooster(gekozen);
+  }, [gekozen, vraagRooster]);
   const dag = useMemo(() => (gekozen ? dagInfo(parseYmd(gekozen), mode, vandaagYmd) : null), [gekozen, mode, vandaagYmd]);
 
   // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
@@ -53,7 +56,7 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
         </ul>
       ) : (
         <p className="text-sm text-ink-mute">
-          {roosterMelding(rooster, dag.ymd)}
+          {roosterMelding(dag.ymd)}
         </p>
       )}
     </Modal>
