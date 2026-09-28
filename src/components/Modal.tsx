@@ -84,7 +84,9 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
             <button type="button" onClick={onClose} className="exact-modal-close" aria-label="Sluiten"><X /></button>
           </div>
         </header>
-        <div className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>{children}</div>
+        <div className="exact-modal-vlak">
+          <div className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>{children}</div>
+        </div>
         {lezen && (
           <div className="exact-modal-voet">
             <Leesbediening audioSrc={leesAudio} deel={deel} />

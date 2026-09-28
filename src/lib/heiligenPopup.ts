@@ -6,7 +6,10 @@ import { heiligeIcoon, lageLandenTekst } from './heiligenIconen';
 
 // Gedeeld door de Heiligen-pagina en de pop-up "Heiligen van de dag" (Vandaag, mobiel).
 
-export type Resultaat = { md: string; naam: string; ruwNaam?: string; titel?: string; kort?: string; nl?: boolean; bron: 'nl' | 'htc'; rang?: number };
+export type Resultaat = { md: string; naam: string; ruwNaam?: string; titel?: string; kort?: string; nl?: boolean; bron: 'nl' | 'htc'; rang?: number; bronTekst?: string };
+
+/** Alle tekst van een heilige (Nederlands en, bij holytrinityorthodox.com, de Engelse bron) voor lib/heiligenSoort.ts. */
+export const tekstVoorIndeling = (h: Resultaat) => `${h.bronTekst ?? ''} ${h.ruwNaam ?? ''} ${h.naam} ${h.titel ?? ''}`;
 
 export function normaliseer(tekst: string) {
   return tekst.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -27,7 +30,7 @@ export function heiligenVanDag(kerkKey: string, htc: HtcData | null, eigen: Reco
   const curated: Resultaat[] = (eigen?.[kerkKey] ?? []).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
   const gezien = new Set(curated.map((h) => normaliseer(h.ruwNaam ?? h.naam)));
   const extra: Resultaat[] = (htc?.[kerkKey]?.l ?? [])
-    .map(([icon, tekst]) => ({ md: kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang }))
+    .map(([icon, tekst]) => ({ md: kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang, bronTekst: tekst }))
     .filter((h) => ![...gezien].some((g) => normaliseer(h.naam).includes(g) || g.includes(normaliseer(h.naam))));
   return [...curated, ...extra];
 }

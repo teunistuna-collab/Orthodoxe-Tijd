@@ -6,6 +6,7 @@ import { addDays, formatLang, formatMd, MAANDEN, MAANDEN_KORT, orthodoxPascha, u
 import { volgendeFeestDatum } from './overzicht';
 import { normaliseer, type Resultaat } from './heiligenPopup';
 import { PSALMEN, zoekPsalmen } from './psalmen';
+import { soortVan } from './heiligenSoort';
 
 // Centraal zoeken over bestaande inhoud: pagina's, psalmen, gebeden, feesten, heiligen en datums.
 // Losse, React-vrije logica, zodat een latere app dezelfde index kan gebruiken.
@@ -58,7 +59,7 @@ export function bouwIndex(htc: HtcData | null, ALLE_HEILIGEN: HeiligeMetDatum[])
   const feestNamen = new Set([...feesten.values()].map((f) => zonderLidwoord(f.naam)));
   // Slotpunt weg, behalve bij een afkorting als "n.Chr."
   const zonderPunt = (t: string) => t.trim().replace(/(?<!\.\S*)\.$/, '');
-  const heiligen: Ingang<Resultaat>[] = ALLE_HEILIGEN.filter((h) => !feestNamen.has(zonderLidwoord(zonderPunt(h.naam)))).map((h) => {
+  const heiligen: Ingang<Resultaat>[] = ALLE_HEILIGEN.filter((h) => !feestNamen.has(zonderLidwoord(zonderPunt(h.naam))) && soortVan(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`) === 'heilige').map((h) => {
     const naam = zonderPunt(h.naam);
     // Een titel die (bijna) de naam herhaalt, voegt niets toe als ondertitel.
     const [n, t] = [normaliseer(naam), normaliseer(zonderPunt(h.titel ?? ''))];
@@ -71,7 +72,7 @@ export function bouwIndex(htc: HtcData | null, ALLE_HEILIGEN: HeiligeMetDatum[])
       for (const [icon, tekst] of d.l ?? []) {
         const naam = zonderPunt(vertaalLeven(tekst));
         const sleutel = normaliseer(naam);
-        if (gezien.has(`${md}|${sleutel}`) || feestNamen.has(zonderLidwoord(naam))) continue;
+        if (gezien.has(`${md}|${sleutel}`) || feestNamen.has(zonderLidwoord(naam)) || soortVan(tekst) !== 'heilige') continue;
         gezien.add(`${md}|${sleutel}`);
         heiligen.push({ waarde: { md, naam, kort: naam, bron: 'htc', rang: rangLabel(icon)?.rang }, sleutel });
       }

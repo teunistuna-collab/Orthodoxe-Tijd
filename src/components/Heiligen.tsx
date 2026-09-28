@@ -4,7 +4,8 @@ import { useApp } from '../lib/context';
 import { rangLabel, vertaalLeven } from '../lib/htc';
 import { dagInfo, formatMd, hoofdletter, MAANDEN, MAANDEN_KORT } from '../lib/kalender';
 import { LiturgicalPopup } from './CycleSections';
-import { heiligenVanDag, normaliseer, popupContent, type Resultaat } from '../lib/heiligenPopup';
+import { heiligenVanDag, normaliseer, popupContent, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
+import { CATEGORIEEN, categorieenVan, soortVan } from '../lib/heiligenSoort';
 import PageHero from './PageHero';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
@@ -26,36 +27,29 @@ export default function Heiligen() {
 
   const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, htc, heiligen?.HEILIGEN), [dagVandaag.kerkKey, htc, heiligen]);
 
-  const categorieVan = (h: Resultaat) => {
-    const t = normaliseer(`${h.titel ?? ''} ${h.naam}`);
-    if (/martelaar|martelares|martyr/.test(t)) return 'martelaren';
-    if (/bisschop|aartsbisschop|bishop/.test(t)) return 'bisschoppen';
-    if (/monnik|monnikin|abt|abdis|monk/.test(t)) return 'monniken';
-    if (/kluizenaar|heremiet|eremiet/.test(t)) return 'kluizenaars';
-    if (/moeder|maagd|vrouw|abdis|martelares/.test(t)) return 'vrouwheiligen';
-    if (/rechtvaardig|righteous/.test(t)) return 'rechtvaardigen';
-    if (/priester|leraar|vader|apostel/.test(t)) return 'herders';
-    return 'overige';
-  };
+  // Uitgelicht als "heilige van vandaag": de eerste echte heilige, geen voorfeest of icoon (die staan wel in de daglijst).
+  const uitgelicht = heiligenVandaag.find((h) => soortVan(tekstVoorIndeling(h)) === 'heilige') ?? heiligenVandaag[0];
 
   const resultaten = useMemo<Resultaat[]>(() => {
     const query = normaliseer(zoek.trim());
     const past = (md: string, tekst: string) => (maand === null || Number(md.split('-')[0]) === maand) && (dag === null || Number(md.split('-')[1]) === dag) && (!query || normaliseer(`${tekst} ${md} ${formatMd(md)}`).includes(query));
-    const centraal: Resultaat[] = (heiligen?.ALLE_HEILIGEN ?? []).filter(h => past(h.md, `${h.naam} ${h.titel} ${h.kort}`) && (!alleenNl || h.nl)).map(h => ({ ...h, bron: 'nl' }));
+    // Alleen heiligen: feesten, kalendernotities ("Zondag vóór …") en iconen horen bij de dag, niet in deze lijst.
+    const centraal: Resultaat[] = (heiligen?.ALLE_HEILIGEN ?? []).filter(h => past(h.md, `${h.naam} ${h.titel} ${h.kort}`) && (!alleenNl || h.nl) && soortVan(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`) === 'heilige').map(h => ({ ...h, bron: 'nl' }));
     const basis = [...centraal];
     if (htc && !alleenNl) {
       const gezien = new Set(centraal.map(h => `${h.md}|${normaliseer(h.ruwNaam ?? h.naam)}`));
       for (const [md, d] of Object.entries(htc)) {
         if (!past(md, '')) continue;
         for (const [icon, tekst] of d.l) {
+          if (soortVan(tekst) !== 'heilige') continue;
           const naam = vertaalLeven(tekst).replace(/\.$/, '');
           if (query && !normaliseer(naam).includes(query)) continue;
           const sleutel = `${md}|${normaliseer(naam)}`;
-          if (!gezien.has(sleutel)) { gezien.add(sleutel); basis.push({ md, naam, kort: naam, bron: 'htc', rang: rangLabel(icon)?.rang }); }
+          if (!gezien.has(sleutel)) { gezien.add(sleutel); basis.push({ md, naam, kort: naam, bron: 'htc', rang: rangLabel(icon)?.rang, bronTekst: tekst }); }
         }
       }
     }
-    return basis.filter(h => categorie === 'alle' || categorieVan(h) === categorie).sort((a,b) => sorteerMd(a.md,b.md) || a.naam.localeCompare(b.naam));
+    return basis.filter(h => categorie === 'alle' || categorieenVan(tekstVoorIndeling(h)).includes(categorie)).sort((a,b) => sorteerMd(a.md,b.md) || a.naam.localeCompare(b.naam));
   }, [alleenNl, htc, heiligen, maand, dag, zoek, categorie]);
 
   const groepen = useMemo(() => {
@@ -64,9 +58,7 @@ export default function Heiligen() {
     return [...map.entries()].sort(([a],[b]) => sorteerMd(a,b));
   }, [resultaten]);
 
-  const categories = [
-    ['martelaren','Martelaren','Getuigen in lijden'],['bisschoppen','Bisschoppen','Herder en leraar'],['monniken','Monniken','Voorbeelden van toewijding'],['kluizenaars','Kluizenaars','In de stilte met God'],['vrouwheiligen','Vrouwheiligen','Moeders, maagden en monialen'],['rechtvaardigen','Rechtvaardigen','Een heilig leven in de wereld'],['herders','Herders en leraren','Vaders van de Kerk'],['overige','Overige','Verschillende gedachtenissen']
-  ];
+  const categories = [...CATEGORIEEN.map((c) => [c.id, c.label, c.omschrijving]), ['overige', 'Overige heiligen', 'Zonder nadere aanduiding in de bron']];
   const dagenInMaand = maand ? new Date(Date.UTC(2024, maand, 0)).getUTCDate() : 0;
 
   // Resultaten verschijnen pas na een gekozen dag (of andere zoekopdracht). Bij alleen "Heiligen van de Lage Landen" staan ze onder dat blok.
@@ -94,12 +86,12 @@ export default function Heiligen() {
           </div>
           <div className="saints-today-feature">
             <p className="saints-kicker">Belangrijkste heilige van de dag</p>
-            {heiligenVandaag[0] ? <>
-              <button onClick={()=>setGeselecteerde(heiligenVandaag[0])} className="saints-feature-name">{heiligenVandaag[0].naam}</button>
-              {heiligenVandaag[0].titel && <p className="saints-feature-title">{heiligenVandaag[0].titel}</p>}
+            {uitgelicht ? <>
+              <button onClick={()=>setGeselecteerde(uitgelicht)} className="saints-feature-name">{uitgelicht.naam}</button>
+              {uitgelicht.titel && <p className="saints-feature-title">{uitgelicht.titel}</p>}
               <p className="saints-feature-date">{formatMd(dagVandaag.kerkKey)}</p>
-              <p>{heiligenVandaag[0].kort || 'Lees meer over het leven en de gedachtenis van deze heilige.'}</p>
-              <div className="saints-feature-actions"><button onClick={()=>setGeselecteerde(heiligenVandaag[0])} className="saints-gold-button">Lees het leven →</button>{heiligenVandaag.length>1&&<button onClick={()=>setVandaagOpen(true)} className="saints-text-link">Bekijk alle {heiligenVandaag.length} heiligen →</button>}</div>
+              <p>{uitgelicht.kort || 'Lees meer over het leven en de gedachtenis van deze heilige.'}</p>
+              <div className="saints-feature-actions"><button onClick={()=>setGeselecteerde(uitgelicht)} className="saints-gold-button">Lees het leven →</button>{heiligenVandaag.length>1&&<button onClick={()=>setVandaagOpen(true)} className="saints-text-link">Bekijk alle {heiligenVandaag.length} heiligen →</button>}</div>
             </> : <p>Voor deze dag is nog geen heilige beschikbaar.</p>}
           </div>
           <blockquote className="saints-side-quote">“Het doel van ons leven is de vergoddelijking door genade.”<span>✣</span></blockquote>
@@ -116,7 +108,7 @@ export default function Heiligen() {
         </section>
 
         <section className="saints-browser">
-          <div className="saints-rule-title"><h2>Heiligen per maand</h2><span>5500+ heiligen</span></div>
+          <div className="saints-rule-title"><h2>Heiligen per maand</h2><span>5000+ heiligen</span></div>
           <div className="saints-month-grid">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i+1);setDag(null);setZoek('');setAlleenNl(false);setWachtOpDag(true)}} className={maand===i+1?'active':''}>{hoofdletter(m)}</button>)}</div>
           {maand && <div className="saints-days-panel"><div><p className="saints-kicker">Kies een dag in {MAANDEN[maand-1]}</p><button onClick={()=>{setDag(null);setWachtOpDag(false)}} className={!dag&&!wachtOpDag?'active':''}>Alle dagen</button></div><div className="saints-days-grid">{Array.from({length:dagenInMaand},(_,i)=>i+1).map(n=><button key={n} onClick={()=>{setDag(n);setAlleenNl(false);setWachtOpDag(false)}} className={dag===n?'active':''}>{n}</button>)}</div></div>}
         </section>
