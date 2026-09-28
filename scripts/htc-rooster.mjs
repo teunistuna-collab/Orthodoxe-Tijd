@@ -2,7 +2,6 @@
 // public/data/dagen.json (r) en public/data/lezingen-MM.json.
 //
 //   node scripts/htc-rooster.mjs 2027            → public/data/2027/rooster.json + public/data/2027/lezingen-MM.json
-//   node scripts/htc-rooster.mjs 2026 --vergelijk → haalt een steekproef uit 2026 en vergelijkt met de bestaande bestanden
 //
 // Het juliaanse jaar J loopt van 14 januari J t/m 13 januari J+1 (burgerlijk; geldig 1900–2099).
 // Antwoorden worden bewaard in node_modules/.cache/htc, zodat een tweede run niets opnieuw hoeft op te halen.
@@ -11,8 +10,7 @@ import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 
 const jaar = Number(process.argv[2]);
-const vergelijk = process.argv.includes('--vergelijk');
-if (!(jaar >= 1901 && jaar <= 2098)) throw new Error('Gebruik: node scripts/htc-rooster.mjs <juliaans jaar> [--vergelijk]');
+if (!(jaar >= 1901 && jaar <= 2098)) throw new Error('Gebruik: node scripts/htc-rooster.mjs <juliaans jaar>');
 
 const CACHE = 'node_modules/.cache/htc';
 await mkdir(CACHE, { recursive: true });
@@ -75,7 +73,6 @@ for (let m = 1; m <= 12; m++) {
   const aantal = [31, jaar % 4 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1];
   for (let d = 1; d <= aantal; d++) dagen.push([m, d]);
 }
-const selectie = vergelijk ? dagen.filter((_, i) => i % 23 === 0) : dagen;
 
 // Met 3 tegelijk ophalen.
 async function parallel(items, n, fn) {
@@ -88,34 +85,16 @@ async function parallel(items, n, fn) {
 let klaar = 0;
 const rooster = {};
 const lezingen = {};
-await parallel(selectie, 3, async ([m, d]) => {
+await parallel(dagen, 3, async ([m, d]) => {
   const dg = await dag(m, d);
   const sleutel = `${m}-${d}`;
   rooster[sleutel] = { c: dg.c, h: dg.h, r: dg.r.map(({ ref, tag }) => ({ ref, tag })) };
   lezingen[sleutel] = await parallel(dg.r, 2, async (l) => ({ ref: l.ref, tag: l.tag, url: l.url, verses: await lezing(l.url) }));
-  if (++klaar % 25 === 0) console.log(`${klaar}/${selectie.length} dagen`);
+  if (++klaar % 25 === 0) console.log(`${klaar}/${dagen.length} dagen`);
 });
 
 const leeg = Object.entries(lezingen).flatMap(([k, ls]) => ls.filter((l) => !l.verses.length).map((l) => `${k} ${l.ref}`));
 if (leeg.length) console.warn(`Let op: ${leeg.length} lezingen zonder verzen:`, leeg.slice(0, 10));
-
-if (vergelijk) {
-  // Steekproef naast de bestaande bestanden leggen (dag, lezingen en teksten moeten exact gelijk zijn).
-  const oud = JSON.parse(await readFile('public/data/dagen.json', 'utf8'));
-  let verschil = 0;
-  for (const [k, v] of Object.entries(rooster)) {
-    const o = oud[k];
-    if (o.c !== v.c || JSON.stringify(o.r) !== JSON.stringify(v.r) || o.h !== v.h) { verschil++; console.log('VERSCHIL dag', k, { oud: { c: o.c, h: o.h, r: o.r }, nieuw: v }); }
-    const oudeTekst = JSON.parse(await readFile(`public/data/lezingen-${k.split('-')[0].padStart(2, '0')}.json`, 'utf8'))[k] ?? [];
-    if (JSON.stringify(oudeTekst) !== JSON.stringify(lezingen[k])) {
-      verschil++;
-      const i = oudeTekst.findIndex((l, n) => JSON.stringify(l) !== JSON.stringify(lezingen[k][n]));
-      console.log('VERSCHIL tekst', k, JSON.stringify(oudeTekst[i]).slice(0, 300), '\n  nieuw:', JSON.stringify(lezingen[k][i]).slice(0, 300));
-    }
-  }
-  console.log(`Vergeleken: ${Object.keys(rooster).length} dagen, ${verschil} verschillen`);
-  process.exit(verschil ? 1 : 0);
-}
 
 const map = `public/data/${jaar}`;
 await mkdir(map, { recursive: true });

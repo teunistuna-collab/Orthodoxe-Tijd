@@ -23,10 +23,9 @@ import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
 import ExactPageFrame from './components/ExactPageFrame';
-import { CyclePageLayout, GoldDivider, LiturgicalCard, ParchmentSection, QuoteSection, SectionHeader } from './components/CycleSections';
 import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
 import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
-import { kerkjaarVan, laadDagen, laadRoosterJaar, voegRoosterToe, type HtcData, type Rooster } from './lib/htc';
+import { kerkjaarVan, laadDagen, laadRoosterJaar, type HtcData, type Rooster } from './lib/htc';
 
 const MODE_KEY = 'orthodoxe-kalender-mode';
 
@@ -136,7 +135,7 @@ export default function App() {
         setHtc(dagen);
         // Leesrooster: het huidige en het volgende kerkjaar meteen, andere jaren pas als je er een datum uit opent.
         const nu = kerkjaarVan(ymd(bepaalVandaag()));
-        for (const jaar of [nu, nu + 1]) void laadRoosterJaar(jaar, dagen).then((r) => setRooster((oud) => voegRoosterToe(oud, r)));
+        for (const jaar of [nu, nu + 1]) void laadRoosterJaar(jaar, dagen).then((r) => setRooster((oud) => ({ ...oud, ...r })));
       })
       .catch(() => setHtcFout(true));
   }, []);
@@ -179,7 +178,7 @@ export default function App() {
       if (!htc || gevraagd.current.has(jaar)) return;
       gevraagd.current.add(jaar);
       laadRoosterJaar(jaar, htc)
-        .then((r) => setRooster((oud) => voegRoosterToe(oud, r)))
+        .then((r) => setRooster((oud) => ({ ...oud, ...r })))
         .catch(() => gevraagd.current.delete(jaar));
     },
     [htc],

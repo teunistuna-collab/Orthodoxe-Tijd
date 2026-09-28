@@ -1,7 +1,7 @@
 // Zelftest voor src/lib/psalmen.ts — draaien met: npm run check:psalmen
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { ETMAAL_GROEPEN, PSALM_BRONNEN, PSALMEN, psalmVanHetUur, zoekPsalmen, type PsalmTeksten } from '../src/lib/psalmen';
+import { ETMAAL_GROEPEN, KATHISMATA, THEMAS, PSALM_BRONNEN, PSALMEN, psalmVanHetUur, zoekPsalmen, type PsalmTeksten } from '../src/lib/psalmen';
 import { serviceConfig } from '../src/lib/etmaal';
 
 const teksten = JSON.parse(readFileSync('public/data/psalmen.json', 'utf8')) as PsalmTeksten;
@@ -30,6 +30,18 @@ for (const dienst of serviceConfig) {
     assert.ok(p.hasText, `${title} heeft tekst`);
   }
 }
+
+// Kathismata: 1 t/m 20, oplopend en zonder overlap, binnen 1–150.
+assert.deepEqual(KATHISMATA.map((k) => k.nr), Array.from({ length: 20 }, (_, i) => i + 1));
+KATHISMATA.forEach((k, i) => assert.ok(k.van <= k.tot && k.tot <= 150 && (i === 0 || k.van > KATHISMATA[i - 1].tot), `kathisma ${k.nr}`));
+
+// Thema's: geldige nummers, verzen alleen bij psalmen van dat thema; Psalm 18 deels lofzang, deels wet.
+for (const t of THEMAS) {
+  assert.ok(t.psalmen.every((n) => n >= 1 && n <= 150), t.naam);
+  assert.ok(Object.keys(t.verzen ?? {}).every((n) => t.psalmen.includes(Number(n))), `verzen ${t.naam}`);
+}
+assert.deepEqual(PSALMEN[17].themes, ['Lofzangen (vers 1–7)', 'Wet (vers 8–15)']);
+assert.deepEqual(zoekPsalmen(PSALMEN, 'histories', null).map((p) => p.septuagintNumber), [77, 105, 113]);
 
 // Psalm van het uur volgt de begintijden van de diensten.
 const om = (uur: number) => psalmVanHetUur(new Date(2026, 8, 25, uur, 30));

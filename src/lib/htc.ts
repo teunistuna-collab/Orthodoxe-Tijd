@@ -84,11 +84,6 @@ export function laadRoosterJaar(jaar: number, dagen: HtcData): Promise<Rooster> 
   return p;
 }
 
-/** Voegt een geladen kerkjaar samen met wat er al was. */
-export function voegRoosterToe(oud: Rooster | null, nieuw: Rooster): Rooster {
-  return { ...oud, ...nieuw };
-}
-
 /** Tekst als er voor een datum geen lezingen zijn: nog aan het laden, echt geen lezingen, of buiten het rooster. */
 export function roosterMelding(ymd: string): string {
   if (ymd < EERSTE_DATUM) return 'Het leesrooster begint op 1 januari 2026.';

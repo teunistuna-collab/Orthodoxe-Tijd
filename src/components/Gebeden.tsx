@@ -3,6 +3,7 @@ import { Search, X } from 'lucide-react';
 import { GEBEDEN, type Gebed } from '../lib/gebeden';
 import { LiturgicalPopup, CycleTransition } from './CycleSections';
 import PageHero from './PageHero';
+import { useFavorieten } from '../lib/favorieten';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -79,6 +80,8 @@ export default function Gebeden() {
   const [zoek, setZoek] = useState('');
   const [actieveCat, setActieveCat] = useState<string | null>(null);
   const [popupGebed, setPopupGebed] = useState<Gebed | null>(null);
+  const favorieten = useFavorieten();
+  const favorieteGebeden = GEBEDEN.filter((g) => favorieten.includes(`gebeden/${g.id}`));
 
   // Deeplink (bijvoorbeeld gedeeld vanuit de pop-up): #gebeden/<id> opent dat gebed.
   useEffect(() => {
@@ -188,6 +191,17 @@ export default function Gebeden() {
               )}
             </div>
           ) : (
+            <>
+            {favorieteGebeden.length > 0 && (
+              <div className="mt-10">
+                <h3 className="font-display text-2xl font-semibold text-ink sm:text-3xl">Jouw favorieten</h3>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {favorieteGebeden.map((g) => (
+                    <PrayerCard key={g.id} g={g} onOpen={() => setPopupGebed(g)} />
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="prayer-category-grid mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {categorieMetData.map((cat) => {
                 return (
@@ -207,6 +221,7 @@ export default function Gebeden() {
                 );
               })}
             </div>
+            </>
           )}
         </div>
       </section>

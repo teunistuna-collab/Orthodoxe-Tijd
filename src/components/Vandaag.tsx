@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BookOpen, CalendarDays, ChevronRight, Church, Cross as CrossIcon, Flame, ScrollText, Search, Sparkles, Wheat } from 'lucide-react';
+import { ChevronRight, Search, Sparkles } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
-import { lezingSoort, roosterMelding, vertaalLeven, vertaalRef, vertaalTag } from '../lib/htc';
+import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 
 
 type UurMoment = {
@@ -70,7 +70,6 @@ export default function Vandaag() {
   const lezingen = rooster?.[dag.ymd] ?? [];
   const hoofdFeest = dag.feesten[0];
   const heilige = heiligen?.HEILIGEN[dag.kerkKey]?.[0];
-  const gedachtenissen = dag.feesten;
   const datumTitel = hoofdFeest?.naam ?? heilige?.naam ?? 'Dag door het jaar';
 
   // Mobiele opbouw (max-width: 767px): acht compacte knoppen met dezelfde iconen, links en gebeurtenissen als de lijst hierboven.

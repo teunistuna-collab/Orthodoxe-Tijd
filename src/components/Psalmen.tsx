@@ -4,7 +4,8 @@ import PageHero from './PageHero';
 import Modal from './Modal';
 import Leesbediening from './Leesbediening';
 import { OPEN_DIENST_EVENT } from '../lib/events';
-import { ETMAAL_GROEPEN, PSALMEN, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
+import { useFavorieten } from '../lib/favorieten';
+import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 
 // Psalmen: een digitaal psalter. Desktop: lijst links, leesvenster rechts. Mobiel en tablet: de lijst op de pagina,
 // een psalm opent in het gewone leesvenster (Modal). Opmaak: Bouw 72 en 74 in index.css.
@@ -15,12 +16,15 @@ import { ETMAAL_GROEPEN, PSALMEN, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen,
 const INTRO = 'De Psalmen zijn het gebed van de Kerk.';
 const INTRO_VERVOLG = 'Zij verwoorden de vreugde, de wanhoop, de dank, de smeekbede en het vertrouwen van de mens voor God. Door alle tijden heen bidden de christenen de Psalmen, in het ritme van het etmaal en in alle omstandigheden van het leven.';
 
-type Filter = 'alle' | 'etmaal';
+type Filter = 'alle' | 'etmaal' | 'kathisma' | 'themas' | 'favorieten';
 const FILTERS: [Filter, string][] = [
   ['alle', 'Alle'],
   ['etmaal', 'Etmaal'],
+  ['kathisma', 'Kathisma'],
+  ['themas', "Thema's"],
+  ['favorieten', 'Favorieten'],
 ];
-// Thema's, A–Z en Favorieten komen er pas bij als daar gecontroleerde data of een favorietensysteem voor is.
+// A–Z komt er pas bij als er gecontroleerde titels per psalm zijn.
 
 const LEESVENSTER_NAAST_LIJST = '(min-width: 1024px)';
 
@@ -37,7 +41,11 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const [popup, setPopup] = useState<number | null>(null);
   const [zoek, setZoek] = useState('');
   const [filter, setFilter] = useState<Filter>('alle');
+  const [kathismaNr, setKathismaNr] = useState(1);
+  const kathisma = KATHISMATA[kathismaNr - 1];
+  const [thema, setThema] = useState(THEMAS[0]);
   const lijstRef = useRef<HTMLDivElement | null>(null);
+  const favorieten = useFavorieten();
   // Op een telefoon past alleen een korte hint in het zoekveld.
   const [plaatshouder] = useState(() => (window.matchMedia('(max-width: 767px)').matches ? 'Zoek een psalm…' : 'Zoek een psalmnummer, woord of dienst…'));
 
@@ -66,8 +74,21 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   // Etmaal zonder zoekterm: gegroepeerd per dienst, in de volgorde van het etmaal.
   const groepen = filter === 'etmaal' && !zoek.trim() ? ETMAAL_GROEPEN : null;
   const lijst = useMemo(
-    () => (groepen ? groepen.flatMap((g) => g.delen.flatMap((d) => d.psalmen.map((n) => PSALMEN[n - 1]))) : zoekPsalmen(filter === 'etmaal' ? PSALMEN.filter((p) => p.liturgicalUses.length > 0) : PSALMEN, zoek, teksten)),
-    [groepen, filter, zoek, teksten],
+    () => {
+      if (groepen) return groepen.flatMap((g) => g.delen.flatMap((d) => d.psalmen.map((n) => PSALMEN[n - 1])));
+      const basis =
+        filter === 'etmaal'
+          ? PSALMEN.filter((p) => p.liturgicalUses.length > 0)
+          : filter === 'kathisma'
+            ? PSALMEN.slice(kathisma.van - 1, kathisma.tot)
+            : filter === 'themas'
+              ? thema.psalmen.map((n) => PSALMEN[n - 1])
+              : filter === 'favorieten'
+              ? PSALMEN.filter((p) => favorieten.includes(`psalmen/${p.septuagintNumber}`))
+              : PSALMEN;
+      return zoekPsalmen(basis, zoek, teksten);
+    },
+    [groepen, filter, kathisma, thema, zoek, teksten, favorieten],
   );
 
   const kies = (p: Psalm) => {
@@ -132,16 +153,6 @@ export default function Psalmen({ actief }: { actief: boolean }) {
               <Search aria-hidden="true" />
               <input type="search" value={zoek} onChange={(e) => setZoek(e.target.value)} placeholder={plaatshouder} aria-label="Zoek een psalm op nummer, woord of dienst" />
             </label>
-            <select className="ps-bereik" value="" onChange={(e) => kies(PSALMEN[Number(e.target.value) - 1])} aria-label="Ga naar psalm">
-              <option value="" disabled>
-                Ga naar Psalm
-              </option>
-              {PSALMEN.map((p) => (
-                <option key={p.id} value={p.septuagintNumber}>
-                  {p.title}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div className="ps-filters" role="group" aria-label="Filter">
@@ -152,9 +163,49 @@ export default function Psalmen({ actief }: { actief: boolean }) {
             ))}
           </div>
 
+          {filter === 'kathisma' && (
+            <div className="ps-kathismas" role="group" aria-label="Kathisma">
+              {KATHISMATA.map((k) => (
+                <button key={k.nr} type="button" aria-pressed={k.nr === kathismaNr} aria-label={`Kathisma ${k.nr}`} onClick={() => setKathismaNr(k.nr)}>
+                  {k.nr}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {filter === 'themas' && (
+            <div className="ps-themas" role="group" aria-label="Thema">
+              {THEMAS.map((t) => (
+                <button key={t.naam} type="button" aria-pressed={t === thema} onClick={() => setThema(t)}>
+                  {t.naam}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="ps-psalter">
             <div ref={lijstRef} className="ps-lijst">
-              {lijst.length === 0 && <p className="ps-leeg">Geen psalmen gevonden{zoek.trim() ? ` voor “${zoek.trim()}”` : ''}.</p>}
+              {lijst.length === 0 &&
+                (filter === 'favorieten' && !zoek.trim() ? (
+                  <p className="ps-leeg">Nog geen favorieten. Tik bij een psalm op de bladwijzer om hem hier te bewaren.</p>
+                ) : (
+                  <p className="ps-leeg">Geen psalmen gevonden{zoek.trim() ? ` voor “${zoek.trim()}”` : ''}.</p>
+                ))}
+              {filter === 'kathisma' && (
+                <div className="ps-groep">
+                  <h3>
+                    Kathisma {kathisma.nr} <span>Psalm {kathisma.van === kathisma.tot ? kathisma.van : `${kathisma.van}–${kathisma.tot}`}</span>
+                  </h3>
+                  {kathisma.noot && <h4>{kathisma.noot}</h4>}
+                </div>
+              )}
+              {filter === 'themas' && (
+                <div className="ps-groep">
+                  <h3>
+                    {thema.naam} <span>{thema.psalmen.length} psalmen</span>
+                  </h3>
+                </div>
+              )}
               {groepen
                 ? groepen.map((g) => (
                     <section key={g.dienst} className="ps-groep" aria-label={g.dienst}>
@@ -169,7 +220,10 @@ export default function Psalmen({ actief }: { actief: boolean }) {
                       ))}
                     </section>
                   ))
-                : lijst.map((p) => rij(p, p.liturgicalUses.length ? `Etmaal · ${p.liturgicalUses.map((g) => g.dienst).join(', ')}` : undefined))}
+                : lijst.map((p) => {
+                    const verzen = filter === 'themas' ? thema.verzen?.[p.septuagintNumber] : undefined;
+                    return rij(p, verzen ? `Vers ${verzen}` : p.liturgicalUses.length ? `Etmaal · ${p.liturgicalUses.map((g) => g.dienst).join(', ')}` : undefined);
+                  })}
             </div>
 
             {/* Desktop: leesvenster naast de lijst (op kleinere schermen verborgen, daar opent het leesvenster als pop-up) */}
@@ -217,10 +271,9 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
 /** Tabs en tekst van één psalm; gedeeld door het desktopvenster en het leesvenster op mobiel. */
 function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, bediening }: { psalm: Psalm; tekst?: PsalmTekst; laadFout: boolean; idVoorvoegsel: string; bediening?: ReactNode }) {
-  const [tab, setTab] = useState<'tekst' | 'gebruik'>('tekst');
+  const [tab, setTab] = useState<'tekst' | 'themas' | 'gebruik'>('tekst');
   const id = (s: string) => `${idVoorvoegsel}-${s}`;
 
-  // Een tab "Thema's" komt er pas bij als psalm.themes gecontroleerde data bevat (nu nog leeg).
   return (
     <>
       <div className="ps-tabrij">
@@ -228,6 +281,11 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, bediening }: { psal
           <button type="button" role="tab" id={id('tab-tekst')} aria-controls={id('paneel')} aria-selected={tab === 'tekst'} onClick={() => setTab('tekst')}>
             Septuagint (NL)
           </button>
+          {psalm.themes.length > 0 && (
+            <button type="button" role="tab" id={id('tab-themas')} aria-controls={id('paneel')} aria-selected={tab === 'themas'} onClick={() => setTab('themas')}>
+              Thema's
+            </button>
+          )}
           {psalm.liturgicalUses.length > 0 && (
             <button type="button" role="tab" id={id('tab-gebruik')} aria-controls={id('paneel')} aria-selected={tab === 'gebruik'} onClick={() => setTab('gebruik')}>
               Liturgisch gebruik
@@ -237,8 +295,16 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, bediening }: { psal
         {bediening}
       </div>
 
-      <div id={id('paneel')} role="tabpanel" aria-labelledby={id(tab === 'tekst' ? 'tab-tekst' : 'tab-gebruik')} className="ps-paneel">
-        {tab === 'gebruik' ? (
+      <div id={id('paneel')} role="tabpanel" aria-labelledby={id(`tab-${tab}`)} className="ps-paneel">
+        {tab === 'themas' ? (
+          <ul className="ps-gebruik">
+            {psalm.themes.map((t) => (
+              <li key={t}>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        ) : tab === 'gebruik' ? (
           <ul className="ps-gebruik">
             {psalm.liturgicalUses.map((g) => (
               <li key={g.dienst}>

@@ -12,8 +12,7 @@ type Voorkeur = { stap: number; nacht: boolean };
 function lees(): Voorkeur {
   try {
     const opgeslagen = localStorage.getItem('lees-stap');
-    // Oude knop "Grote letters" (lees-groot) komt overeen met stap 1,2.
-    const stap = opgeslagen !== null ? Number(opgeslagen) : localStorage.getItem('lees-groot') ? 3 : STANDAARD;
+    const stap = opgeslagen !== null ? Number(opgeslagen) : STANDAARD;
     return { stap: Math.min(LEES_STAPPEN.length - 1, Math.max(0, Number.isFinite(stap) ? stap : STANDAARD)), nacht: !!localStorage.getItem('lees-nacht') };
   } catch {
     return { stap: STANDAARD, nacht: false };
@@ -27,7 +26,6 @@ function pasToe() {
   const html = document.documentElement;
   html.style.setProperty('--lees-schaal', String(LEES_STAPPEN[voorkeur.stap]));
   html.classList.toggle('lees-nacht', voorkeur.nacht);
-  html.classList.remove('lees-groot');
 }
 pasToe();
 
@@ -38,7 +36,6 @@ function zet(nieuw: Voorkeur) {
     localStorage.setItem('lees-stap', String(nieuw.stap));
     if (nieuw.nacht) localStorage.setItem('lees-nacht', '1');
     else localStorage.removeItem('lees-nacht');
-    localStorage.removeItem('lees-groot');
   } catch {
     /* geen opslag: de keuze geldt dan alleen voor dit bezoek */
   }
