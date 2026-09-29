@@ -72,7 +72,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
         </>
       ) : undefined}
     >
-            <div className="mb-5 flex items-center justify-between gap-3 sm:hidden">
+            <div className="dag-navrij mb-5 flex items-center justify-between gap-3 sm:hidden">
               <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, -1)))} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] pl-2.5 pr-4 text-sm font-bold text-ink hover:border-gold"><ChevronLeft className="h-4 w-4" /> Vorige dag</button>
               <DeelKnop titel={formatLang(dag.civil)} pad={`kalender/${dag.ymd}`} className="dag-deel inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-gold/40 bg-[#f8f1e3] text-ink hover:border-gold" />
               <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, 1)))} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] pl-4 pr-2.5 text-sm font-bold text-ink hover:border-gold">Volgende dag <ChevronRight className="h-4 w-4" /></button>

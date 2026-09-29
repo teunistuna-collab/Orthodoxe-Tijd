@@ -233,10 +233,11 @@ export default function Vasten() {
                   <span className="fasting-food-icon">
                     <img loading="lazy" decoding="async" src={iconSrc} alt="" className="h-full w-full object-contain" />
                   </span>
-                  <span className="fasting-food-status text-base leading-none font-semibold" style={{ color: toegestaan ? '#2f7a44' : '#a33a3a' }}>
+                  <span aria-hidden="true" className="fasting-food-status text-base leading-none font-semibold" style={{ color: toegestaan ? '#2f7a44' : '#a33a3a' }}>
                     {toegestaan ? '✓' : '×'}
                   </span>
                   <span className="text-[10px] leading-tight text-[#d9c6a3] sm:text-xs">{label}</span>
+                  <span className="sr-only">{toegestaan ? 'toegestaan' : 'niet toegestaan'}</span>
                 </div>
               ))}
             </div>
@@ -455,15 +456,16 @@ export default function Vasten() {
               </div>
               <div className="gold-rule my-5" />
               <div>
-                <p className="ot-label mb-2">Vandaag onthouden van</p>
+                <p className="ot-label mb-2">Toegestaan op deze dag</p>
                 <div className="fasting-food-grid">
                   {onthoudingen.map(({ label, toegestaan, iconSrc }) => (
                     <div key={label} className="fasting-food-item">
                       <span className="fasting-food-icon">
                         <img loading="lazy" decoding="async" src={iconSrc} alt="" className="h-full w-full object-contain" />
                       </span>
-                      <span className="text-base font-semibold leading-none" style={{ color: toegestaan ? '#4a7c59' : '#7b1e1e' }}>{toegestaan ? '✓' : '×'}</span>
+                      <span aria-hidden="true" className="text-base font-semibold leading-none" style={{ color: toegestaan ? '#4a7c59' : '#7b1e1e' }}>{toegestaan ? '✓' : '×'}</span>
                       <span className="font-display text-[11px] leading-tight text-[#5c4d38] sm:text-sm">{label}</span>
+                      <span className="sr-only">{toegestaan ? 'toegestaan' : 'niet toegestaan'}</span>
                     </div>
                   ))}
                 </div>

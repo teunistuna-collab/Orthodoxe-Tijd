@@ -139,13 +139,12 @@ export default function App() {
   }, []);
 
   // De heiligenlijst (±530 KB) en de Engelse dagdata van holytrinityorthodox.com (dagen.json, ±480 KB) pas laden als
-  // een weergave ze gebruikt. Vandaag op mobiel heeft ze niet nodig; op desktop wel (titel van de dag).
+  // een weergave ze gebruikt. Vandaag gebruikt de heiligenlijst (titel van de dag, onderregel "H. …" op mobiel).
   const heiligenGevraagd = useRef(false);
   const htcGevraagd = useRef(false);
   useEffect(() => {
     const popup = dagOpen !== null || heiligenDag !== null || zoekOpen;
-    const breedVandaag = pagina === 'vandaag' && window.matchMedia('(min-width: 768px)').matches;
-    if (!heiligenGevraagd.current && (popup || breedVandaag || pagina === 'heiligen' || pagina === 'kalender')) {
+    if (!heiligenGevraagd.current && (popup || pagina === 'vandaag' || pagina === 'heiligen' || pagina === 'kalender')) {
       heiligenGevraagd.current = true;
       import('./lib/heiligen')
         .then(setHeiligen)

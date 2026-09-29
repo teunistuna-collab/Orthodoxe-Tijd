@@ -1902,3 +1902,24 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 .zoek-veld input{caret-color:#e8cf7a}
 /* Heiligen: "(kerkelijke kalender)" had te weinig contrast (3,7:1) */
 #top .saints-date-line span{color:#6b5540}
+
+/* Bouw 79 — uit de critique van de mobiele versie (.impeccable/critique):
+   Vandaag mobiel: onder Vasten, Schriftlezingen en Heiligen staat meteen het antwoord van vandaag (max. 2 regels) */
+.vm-knop-tekst{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
+.vm-knop-tekst small{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-family:var(--font-body);font-size:12.5px;line-height:1.25;color:#6b5540}
+/* Bronvermelding onder een citaat in de (licht gemaakte) overgangsblokken: was lichtgoud op perkament (±1,5:1) */
+#top#top#top .exact-content > section:not(:first-child)[class*="bg-bark"] cite.ot-label{color:#8a5a1e!important}
+/* De pop-up krijgt de focus bij openen (Modal.tsx); het venster zelf hoeft geen ring */
+.exact-modal-frame:focus{outline:none}
+/* Zeer smal scherm of 200% zoom (onder 300px): niets meer buiten beeld of over elkaar */
+@media(max-width:299.98px){
+  .vm-titel{padding:0 44px;font-size:20px}
+  .vm-kalender{display:flex;flex-direction:column;border-radius:16px}
+  .vm-grid{grid-template-columns:1fr}
+  .vm-grid>.vm-knop:last-child:nth-child(odd){justify-self:stretch;width:auto}
+  .bottom-nav span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .exact-modal-titlebar{grid-template-columns:auto minmax(0,1fr) auto!important;padding:6px 4px!important}
+  .dag-navrij{flex-wrap:wrap;justify-content:center}
+  .exact-modal-heading h2{font-size:17px!important;overflow-wrap:break-word;hyphens:auto}
+  .exact-modal-heading p{letter-spacing:.08em!important;overflow-wrap:break-word}
+}

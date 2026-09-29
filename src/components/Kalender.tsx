@@ -1,10 +1,10 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster } from '../lib/kalender';
+import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster, formatLang } from '../lib/kalender';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
-import { eersteHeilige } from '../lib/heiligenPopup';
+import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import PageHero from './PageHero';
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het kalenderpaneel.
@@ -154,6 +154,8 @@ export default function Kalender() {
                     }`}
                     style={{ '--tw-ring-color': ringHex, '--dag-kleur': ringHex } as CSSProperties}
                     title="Open dagdetail"
+                    aria-label={`${formatLang(c.civil)}${c.isVandaag ? ' (vandaag)' : ''}${feest ? `, ${feest.naam}` : heilige ? `, ${heiligeTitel(heilige.naam)}` : ''}, ${c.vasten.label}`}
+                    aria-current={c.isVandaag ? 'date' : undefined}
                   >
                     <div className="flex items-start justify-center gap-1 xl:justify-between">
                       <span

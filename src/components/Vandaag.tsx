@@ -4,7 +4,7 @@ import { useApp } from '../lib/context';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
-import { eersteHeilige } from '../lib/heiligenPopup';
+import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 
 // Leeg plaatje (1×1) voor een <source> die op dat scherm niets hoeft te laden: de desktopbanner (±400 KB) niet op
 // mobiel, het mobiele Christusmedaillon (±185 KB) niet op desktop. <picture class="contents"> verandert de opmaak niet.
@@ -80,14 +80,16 @@ export default function Vandaag() {
 
   // Mobiele opbouw (max-width: 767px): acht compacte knoppen met dezelfde iconen, links en gebeurtenissen als de lijst hierboven.
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
-  const mobieleKnoppen: Array<{ key: string; titel: string; icoon: string; href: string; onClick?: () => void }> = [
+  // Onder drie knoppen staat meteen het antwoord van vandaag, zodat je niet voor elk feit een pop-up hoeft te openen.
+  const lezingRegel = lezingen.length ? lezingen.slice(0, 2).map((l) => vertaalRef(l.ref)).join(' · ') : undefined;
+  const mobieleKnoppen: Array<{ key: string; titel: string; icoon: string; href: string; onClick?: () => void; onder?: string }> = [
     { key: 'pijlgebed', titel: 'Pijlgebed', icoon: '/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp', href: '#adem' },
     { key: 'uur', titel: uurMoment.naam, icoon: UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.webp', href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })) },
     { key: 'week', titel: 'Weekcyclus', icoon: '/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.webp', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }) },
-    { key: 'vasten', titel: 'Vasten vandaag', icoon: '/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.webp', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }) },
+    { key: 'vasten', titel: 'Vasten vandaag', icoon: '/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.webp', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }), onder: dag.vasten.label },
     { key: 'pascha', titel: 'Paschale cyclus', icoon: '/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp', href: '#pascha', onClick: () => openDagPascha(dag.ymd) },
-    { key: 'lezingen', titel: 'Schriftlezingen', icoon: '/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp', href: '#kalender', onClick: () => openDagLezingen(dag.ymd) },
-    { key: 'heiligen', titel: 'Heiligen van de dag', icoon: '/images/ui/menu/01-Hoofdmenu-10-Heiligen.webp', href: '#heiligen', onClick: () => openDagHeiligen(dag.ymd) },
+    { key: 'lezingen', titel: 'Schriftlezingen', icoon: '/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp', href: '#kalender', onClick: () => openDagLezingen(dag.ymd), onder: lezingRegel },
+    { key: 'heiligen', titel: 'Heiligen van de dag', icoon: '/images/ui/menu/01-Hoofdmenu-10-Heiligen.webp', href: '#heiligen', onClick: () => openDagHeiligen(dag.ymd), onder: heilige ? heiligeTitel(heilige.naam) : undefined },
     // "Vaders & moeders" (woestijnvaders en -moeders) komt terug zodra de verzameling er is; icoon: 01-Hoofdmenu-05-Woestijnvaders-en-moeders.webp
   ];
   const kerkelijkeRegel = mode === 'oud' ? `Kerkelijke datum: ${formatDag(dag.kerk)} (Juliaans)` : 'Nieuwe kalender (gereviseerd juliaans)';
@@ -142,7 +144,7 @@ export default function Vandaag() {
         <p className="vm-sier vm-sier-breed" aria-hidden="true"><span>✣</span></p>
 
         <div className="vm-grid">
-          {mobieleKnoppen.map(({ key, titel, icoon, href, onClick }) => (
+          {mobieleKnoppen.map(({ key, titel, icoon, href, onClick, onder }) => (
             <a
               key={key}
               className="vm-knop"
@@ -150,7 +152,10 @@ export default function Vandaag() {
               onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
             >
               <img decoding="async" className="vm-icoon" src={icoon} alt="" />
-              <b>{titel}</b>
+              <span className="vm-knop-tekst">
+                <b>{titel}</b>
+                {onder && <small>{onder}</small>}
+              </span>
               <ChevronRight aria-hidden="true" />
             </a>
           ))}

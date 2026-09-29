@@ -1,4 +1,4 @@
-import { useEffect, useId, type ReactNode } from 'react';
+import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
@@ -60,6 +60,15 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
   useSchermAan(open && lezen);
   useTerugSluit(open, onClose);
 
+  // Focus naar de pop-up (schermlezer en toetsenbord beginnen in het venster) en bij sluiten terug naar waar hij vandaan kwam.
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!open) return;
+    const terug = document.activeElement as HTMLElement | null;
+    frameRef.current?.focus({ preventScroll: true });
+    return () => terug?.focus?.({ preventScroll: true });
+  }, [open]);
+
   if (!open) return null;
 
   return (
@@ -68,6 +77,8 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         role="dialog"
         aria-modal="true"
         aria-labelledby={titelId}
+        ref={frameRef}
+        tabIndex={-1}
         className={`exact-modal-frame ${maxWidth}`}
         onClick={(event) => event.stopPropagation()}
         {...veeg}
