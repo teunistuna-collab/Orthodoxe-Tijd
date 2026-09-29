@@ -59,31 +59,36 @@ function OrnamentRule({ className = '' }: { className?: string }) {
 export default function Ademcyclus() {
   const [popup, setPopup] = useState<PopupKey | null>(null);
 
+  // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
+  const infoTegels = (zicht: string) => (
+    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20`}>
+      <div className={CONTENT}>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {CARDS.map(({ key, title, intro, iconSrc }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setPopup(key)}
+              className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
+            >
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
+                <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
+              </div>
+              <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
+              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <>
       <PageHero id="adem" alt="Ademcyclus — het onophoudelijke gebed" kop />
 
-      {/* Informatiekaarten */}
-      <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
-        <div className={CONTENT}>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {CARDS.map(({ key, title, intro, iconSrc }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setPopup(key)}
-                className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-                </div>
-                <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
-                <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
+      {infoTegels('max-md:hidden')}
 
       {/* Het Jezusgebed */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-24">
@@ -128,6 +133,8 @@ export default function Ademcyclus() {
           </div>
         </div>
       </section>
+
+      {infoTegels('md:hidden')}
 
       {/* Quote + Van adem naar etmaal */}
       <CycleTransition

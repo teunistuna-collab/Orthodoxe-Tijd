@@ -643,12 +643,12 @@ header>nav>div{justify-content:space-between!important}
 .feast-discover .saints-rule-title h2{color:#f1e5cf!important}.feast-discover .saints-rule-title:after{content:"✣"!important;color:#c8902d!important;background:none!important;border-bottom:1px solid rgba(211,164,71,.48)!important;text-align:center!important;line-height:1px!important}.feast-discover .saints-rule-title span{color:#e1b75c!important}
 .feast-month-grid button{min-height:62px;background:linear-gradient(145deg,#fbf3e3,#eee0c7)!important;border:1px solid #cda95f!important;color:#4a2817!important;box-shadow:0 4px 12px rgba(0,0,0,.15)}.feast-month-grid button.active{background:#32170c!important;color:#efc969!important;box-shadow:inset 0 0 0 2px #c49332!important}
 .feast-day-grid{display:flex!important;flex-wrap:wrap!important;gap:12px!important}.feast-day-grid button{width:52px!important;height:52px!important;padding:0!important;border-radius:50%!important;background:#1d0e09!important;border:2px solid #a97720!important;color:#e8c467!important;box-shadow:inset 0 0 0 3px #28140d,inset 0 0 0 4px rgba(196,147,50,.38)}.feast-day-grid button.active{background:#c49332!important;color:#241108!important}
-.feast-discover .group.grid{padding:16px 12px!important;border-color:rgba(211,164,71,.3)!important;color:#eadbc1!important;transition:.18s}.feast-discover .group.grid:hover{background:rgba(196,147,50,.08)!important;padding-left:18px!important}.feast-discover .group.grid .font-display{color:#f1e5cf!important}.feast-discover .group.grid .text-ink-mute{color:#bca98a!important}
+.feast-discover .group.grid{padding:16px 12px!important;border-color:rgba(211,164,71,.3)!important;color:#eadbc1!important;transition:background-color .18s}.feast-discover .group.grid:hover{background:rgba(196,147,50,.08)!important}.feast-discover .group.grid .font-display{color:#f1e5cf!important}.feast-discover .group.grid .text-ink-mute{color:#bca98a!important}
 
 /* 6. Today: preserve the calm list, add book-like richness */
 .vandaag-paper{background:radial-gradient(circle at 50% 0,rgba(202,154,57,.11),transparent 24%),linear-gradient(180deg,#f8efdd,#f3e6cf)!important;position:relative}.vandaag-paper:before,.vandaag-paper:after{content:"❦";position:absolute;top:24px;color:rgba(176,126,37,.38);font-size:28px}.vandaag-paper:before{left:18px}.vandaag-paper:after{right:18px;transform:scaleX(-1)}
 .vandaag-dayhead{border-bottom:1px solid rgba(170,119,34,.42)!important;padding-bottom:26px!important}.vandaag-dayhead:after{content:"✣";display:block;width:90px;margin:18px auto -31px;color:#b78328;background:#f6ead5;text-align:center}
-.vandaag-list{margin-top:14px}.vandaag-item{min-height:78px!important;padding:13px 10px!important;border-bottom:1px solid rgba(157,105,36,.25)!important;transition:background .18s,padding .18s!important}.vandaag-item:hover{background:linear-gradient(90deg,rgba(201,162,39,.12),rgba(201,162,39,.04))!important;padding-left:15px!important}.vandaag-item>svg:first-child{width:44px!important;height:44px!important;padding:10px!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 3px #211109,inset 0 0 0 4px rgba(201,162,39,.5)!important}.vandaag-item b{font-size:17px!important}.vandaag-item span{font-size:13px!important}.vandaag-item em{font-size:15px!important}.vandaag-item small{font-size:10px!important;color:#775c45!important}
+.vandaag-list{margin-top:14px}.vandaag-item{min-height:78px!important;padding:13px 10px!important;border-bottom:1px solid rgba(157,105,36,.25)!important;transition:background .18s!important}.vandaag-item:hover{background:linear-gradient(90deg,rgba(201,162,39,.12),rgba(201,162,39,.04))!important}.vandaag-item>svg:first-child{width:44px!important;height:44px!important;padding:10px!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 3px #211109,inset 0 0 0 4px rgba(201,162,39,.5)!important}.vandaag-item b{font-size:17px!important}.vandaag-item span{font-size:13px!important}.vandaag-item em{font-size:15px!important}.vandaag-item small{font-size:10px!important;color:#775c45!important}
 
 /* 7. Annual wheel: compact, less empty parchment */
 #jaar .parchment-pattern:has(.aspect-square){padding-top:32px!important;padding-bottom:32px!important}
@@ -1891,3 +1891,14 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 
 /* Vandaag mobiel: bij een oneven aantal knoppen staat de laatste gecentreerd, even breed als de andere */
 .vm-grid>.vm-knop:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 3.5px)}
+
+/* Bouw 78 — afwerking van wat de browser zelf tekent, in de huisstijl.
+   Focusring (toetsenbord) voor alles zonder eigen ring; :where() houdt de specificiteit op nul, zodat bestaande ringen voorgaan. */
+:where(a[href],button,select,input,textarea,summary,[role=button],[role=link],[tabindex]:not([tabindex="-1"])):focus-visible{outline:2px solid #b88628;outline-offset:2px}
+/* Schuifbalken en tekstcursor in de goudtint (scrollbar-color erft door naar pop-ups en lijsten); op het donkere zoekpaneel lichter goud */
+html{scrollbar-color:rgba(138,90,30,.55) transparent}
+:where(input,textarea){caret-color:#8a5a1e}
+.zoek-paneel{scrollbar-color:rgba(232,207,122,.45) transparent}
+.zoek-veld input{caret-color:#e8cf7a}
+/* Heiligen: "(kerkelijke kalender)" had te weinig contrast (3,7:1) */
+#top .saints-date-line span{color:#6b5540}

@@ -85,7 +85,10 @@ export default function App() {
     const opHash = () => {
       const p = paginaUitHash();
       if (!p || p === huidige.current) return;
-      scrollPosities.current[huidige.current] = window.scrollY;
+      // Onderaan weggegaan (bijvoorbeeld via de tijdlijn of de knop onder aan een cycluspagina): de pagina is uit,
+      // dus de volgende keer weer bovenaan beginnen. Halverwege weggaan onthoudt de plek wel.
+      const totEinde = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      scrollPosities.current[huidige.current] = totEinde < window.innerHeight ? 0 : window.scrollY;
       huidige.current = p;
       setPagina(p);
     };
