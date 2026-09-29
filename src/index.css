@@ -1888,3 +1888,6 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
    Na de algemene 11,5px-regel voor labels (Bouw 62, via :is() zwaarder), daarom aan het eind en met dubbele klasse. */
 #top#top#top main .dienst-kaart-tijd.dienst-kaart-tijd{font-size:13px!important;letter-spacing:.08em}
 #top#top#top main .fasting-food-item.fasting-food-item.fasting-food-item>span:last-child{font-size:13px!important}
+
+/* Vandaag mobiel: bij een oneven aantal knoppen staat de laatste gecentreerd, even breed als de andere */
+.vm-grid>.vm-knop:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 3.5px)}

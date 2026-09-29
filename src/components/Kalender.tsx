@@ -86,22 +86,22 @@ export default function Kalender() {
     <>
       <PageHero id="kalender" alt="Kalender — het kerkelijk jaar in overzicht" />
 
-      <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink sm:py-16">
+      <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink max-md:py-5 sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12">
-          <div className="parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] sm:px-14 sm:py-9">
+          <div className="parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] max-md:px-5 max-md:py-4 sm:px-14 sm:py-9">
             <CornerOrnament className="pointer-events-none absolute bottom-3 left-3 hidden h-10 w-10 text-gold-deep/20 sm:block" />
             <CornerOrnament className="pointer-events-none absolute right-3 top-3 hidden h-10 w-10 -scale-x-100 text-gold-deep/20 sm:block" />
             <div className="relative grid gap-6 lg:grid-cols-[7fr_3fr] lg:items-center">
               <div>
                 <p className="ot-label">Leef mee met de liturgische tijd</p>
                 <h1 className="font-display mt-2 text-3xl font-semibold text-ink sm:text-4xl">De kalender van de Kerk</h1>
-                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-ink-soft sm:text-base">{aantalFeesten} feestdagen en {vastendagen} dagen met een vastenvoorschrift deze maand. Elke dag is een ontmoeting met Christus door de heiligen, de feesten, de lezingen en de gebeden van de Kerk.</p>
+                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-ink-soft sm:text-base">{aantalFeesten} feestdagen en {vastendagen} dagen met een vastenvoorschrift deze maand.<span className="max-md:hidden"> Elke dag is een ontmoeting met Christus door de heiligen, de feesten, de lezingen en de gebeden van de Kerk.</span></p>
               </div>
-              <blockquote className="border-l border-gold/60 pl-5 font-display text-lg italic leading-relaxed text-ink-soft">“In de tijd komt de Eeuwige ons tegemoet.”</blockquote>
+              <blockquote className="border-l border-gold/60 pl-5 font-display text-lg italic leading-relaxed text-ink-soft max-md:hidden">“In de tijd komt de Eeuwige ons tegemoet.”</blockquote>
             </div>
           </div>
 
-          <div className="mt-8 parchment-pattern relative overflow-hidden rounded-lg border border-gold/45 bg-[#f8f1e3] shadow-[0_30px_70px_rgba(40,22,14,0.16)]">
+          <div className="mt-8 parchment-pattern relative overflow-hidden rounded-lg border border-gold/45 bg-[#f8f1e3] shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:mt-4">
             <CornerOrnament className="absolute top-4 left-4 h-12 w-12 text-gold-deep/25" />
             <CornerOrnament className="absolute top-4 right-4 h-12 w-12 -scale-x-100 text-gold-deep/25" />
             <div className="lg:grid lg:grid-cols-[3fr_2fr]">
