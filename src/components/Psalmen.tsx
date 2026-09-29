@@ -135,7 +135,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
   return (
     <>
-      <PageHero id="psalmen" alt="Psalmen — De adem van de ziel" kop />
+      <PageHero id="psalmen" titel="Psalmen" ondertitel="De adem van de ziel" kop />
 
       <section className="ps-pagina parchment-pattern bg-parchment text-ink">
         <div className="ps-inhoud">

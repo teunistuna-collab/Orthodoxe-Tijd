@@ -41,7 +41,7 @@ export const NIVEAUS: Record<VastenNiveau, NiveauInfo> = {
     kort: 'Geen',
     uitleg: 'Gewone dag buiten de vastenperiodes, geen voorschrift.',
     toegestaan: 'Alles toegestaan',
-    kleur: '#9b8b70',
+    kleur: 'var(--ot-gold)',
     zacht: '#f3ede0',
     tekst: '#5c4d38',
     trap: 2,
@@ -246,4 +246,20 @@ export function berekenVasten({ kerk, offset, weekdag, feesten }: Ctx): VastenRe
   }
 
   return regel('geen', 'Geen vasten', 'Geen vasten voorgeschreven voor deze dag.', null);
+}
+
+// Groep voor het vastensymbool (kalender, dagvenster): vier groepen uit de bestaande niveaus; geen/vrij heeft geen symbool.
+export type VastenGroep = 'strikt' | 'olie' | 'vis' | 'zuivel';
+export const VASTEN_GROEPEN: Record<VastenGroep, string> = {
+  strikt: 'Strikt: plantaardig, zonder olie en wijn',
+  olie: 'Wijn en olie toegestaan',
+  vis: 'Vis toegestaan',
+  zuivel: 'Zuivel toegestaan, geen vlees',
+};
+export function vastenGroep(niveau: VastenNiveau): VastenGroep | null {
+  if (niveau === 'zuivel') return 'zuivel';
+  if (niveau === 'vis') return 'vis';
+  if (niveau === 'wijn-olie') return 'olie';
+  if (niveau === 'vrij' || niveau === 'geen') return null;
+  return 'strikt'; // zonder-olie, vastendag, streng, onthouding
 }

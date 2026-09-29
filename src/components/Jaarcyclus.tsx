@@ -101,7 +101,7 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: s
   { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-01-Wat-is-het-kerkelijk-jaar.webp' },
   { key: 'jaarcyclus', title: 'De jaarcyclus', intro: 'Het kerkelijk jaar bestaat uit perioden, feesten en vasten die ons stap voor stap meenemen in het heilshandelen van God.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-02-De-jaarcyclus.webp' },
   { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het kerkelijk jaar vormt ons hart, richt onze blik op Christus en heiligt onze tijd, dagen en seizoenen.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.webp' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-05-Vastentijd.webp' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?', iconSrc: '/images/ui/menu/01-Hoofdmenu-06-Zoek-een-datum.webp' },
 ];
 
 const TIMELINE_ITEMS = [
@@ -167,7 +167,7 @@ export default function Jaarcyclus() {
 
   return (
     <>
-      <PageHero id="jaar" alt="Jaarcyclus — het kerkelijk jaar" kop />
+      <PageHero id="jaar" titel="Jaar" ondertitel="Het kerkelijk jaar" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}

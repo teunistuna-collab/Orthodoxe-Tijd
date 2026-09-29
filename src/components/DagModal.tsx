@@ -79,7 +79,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
             </div>
             <div className="space-y-7">
               {/* Vasten */}
-              <div className="rounded-xl p-4" style={{ background: niveau.zacht, border: `1px solid ${niveau.kleur}33` }}>
+              <div className="rounded-xl p-4" style={{ background: niveau.zacht, border: `1px solid color-mix(in srgb, ${niveau.kleur} 20%, transparent)` }}>
                 <div className="flex flex-wrap items-center gap-3">
                   <VastenBadge regel={dag.vasten} size="lg" />
                   <span className="text-sm font-semibold" style={{ color: niveau.tekst }}>

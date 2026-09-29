@@ -5,6 +5,7 @@ import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../li
 import { dagInfo, daysBetween, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
 import { DERTIEN } from '../lib/feesten';
 import { volgendeFeestDatum } from '../lib/overzicht';
+import { serviceConfig } from '../lib/etmaal';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
@@ -35,13 +36,13 @@ const UURMOMENTEN: Array<{ vanaf: number; tot: number; moment: UurMoment }> = [
 ];
 
 const UUR_ICONEN: Record<string, string> = {
-  Middernachtdienst: '/images/ui/menu/03-Etmaal-04-Middernachtdienst.webp',
+  Middernachtdienst: '/images/ui/menu/01-Hoofdmenu-09-Feesten.webp',
   Metten: '/images/ui/menu/03-Etmaal-03-Metten.webp',
   'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.webp',
   'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.webp',
   'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.webp',
   'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.webp',
-  Vespers: '/images/ui/menu/03-Etmaal-02-Avondgebeden.webp',
+  Vespers: '/images/ui/gebeden/07-Overledenen.webp',
   Completen: '/images/ui/menu/03-Etmaal-05-Completen.webp',
 };
 
@@ -91,16 +92,18 @@ export default function Vandaag() {
   const aftelTekst = volgendFeest && volgendFeest.dagen > 0 ? `${volgendFeest.dagen === 1 ? 'Morgen' : `Over ${volgendFeest.dagen} dagen`}: ${volgendFeest.f.naam}` : null;
   const kleurTekst = `Liturgische kleur van vandaag: ${kleur === 'wit' ? 'wit' : kleur} (${LITURGISCHE_KLEUREN[kleur].uitleg})`;
 
-  // Mobiele opbouw (max-width: 767px): acht compacte knoppen met dezelfde iconen, links en gebeurtenissen als de lijst hierboven.
+  // Mobiele opbouw (max-width: 767px): één kolom van zeven balken met dezelfde iconen, links en gebeurtenissen als de
+  // lijst hierboven. Onder elke titel staat meteen het antwoord van vandaag; de dienst van dit moment krijgt "Nu".
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
-  // Onder drie knoppen staat meteen het antwoord van vandaag, zodat je niet voor elk feit een pop-up hoeft te openen.
-  const lezingRegel = lezingen.length ? lezingen.slice(0, 2).map((l) => vertaalRef(l.ref)).join(' · ') : undefined;
-  const mobieleKnoppen: Array<{ key: string; titel: string; icoon: string; href: string; onClick?: () => void; onder?: string }> = [
-    { key: 'pijlgebed', titel: 'Pijlgebed', icoon: '/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp', href: '#adem' },
-    { key: 'uur', titel: uurMoment.naam, icoon: UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.webp', href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })) },
-    { key: 'week', titel: 'Weekcyclus', icoon: '/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.webp', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }) },
+  const lezingRegel = lezingen.length ? lezingen.slice(0, 2).map((l) => vertaalRef(l.ref)).join(' · ') : roosterMelding(dag.ymd);
+  const uurPsalmen = serviceConfig.find((s) => s.title === uurMoment.naam)?.psalms.map((p) => p.title.replace(/^Psalm /, '')) ?? [];
+  const psalmRegel = uurPsalmen.length === 0 ? undefined : uurPsalmen.length === 1 ? `Psalm ${uurPsalmen[0]}` : `Psalmen ${uurPsalmen.slice(0, -1).join(', ')} en ${uurPsalmen[uurPsalmen.length - 1]}`;
+  const mobieleKnoppen: Array<{ key: string; titel: string; icoon: string; href: string; onClick?: () => void; onder?: string; nu?: boolean }> = [
+    { key: 'pijlgebed', titel: 'Pijlgebed', icoon: '/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp', href: '#adem', onder: '“Heer Jezus Christus, ontferm U over ons.”' },
+    { key: 'uur', titel: uurMoment.naam, icoon: UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.webp', href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })), onder: psalmRegel, nu: true },
+    { key: 'week', titel: 'Weekcyclus', icoon: '/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.webp', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }), onder: `${hoofdletter(dag.weekdagNaam)} · ${weekthema.titel}` },
     { key: 'vasten', titel: 'Vasten vandaag', icoon: '/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.webp', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }), onder: dag.vasten.label },
-    { key: 'pascha', titel: 'Paschale cyclus', icoon: '/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp', href: '#pascha', onClick: () => openDagPascha(dag.ymd) },
+    { key: 'pascha', titel: 'Paschale cyclus', icoon: '/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp', href: '#pascha', onClick: () => openDagPascha(dag.ymd), onder: `${dag.seizoen}${dag.toon ? ` · Toon ${dag.toon}` : ''}` },
     { key: 'lezingen', titel: 'Schriftlezingen', icoon: '/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp', href: '#kalender', onClick: () => openDagLezingen(dag.ymd), onder: lezingRegel },
     { key: 'heiligen', titel: 'Heiligen van de dag', icoon: '/images/ui/menu/01-Hoofdmenu-10-Heiligen.webp', href: '#heiligen', onClick: () => openDagHeiligen(dag.ymd), onder: heilige ? heiligeTitel(heilige.naam) : undefined },
     // "Vaders & moeders" (woestijnvaders en -moeders) komt terug zodra de verzameling er is; icoon: 01-Hoofdmenu-05-Woestijnvaders-en-moeders.webp
@@ -129,6 +132,7 @@ export default function Vandaag() {
       </div>
 
       <div className="vandaag-mobiel">
+        {['lb', 'rb', 'lo', 'ro'].map((hoek) => <span key={hoek} className={`vm-hoek vm-hoek-${hoek}`} aria-hidden="true" />)}
         <button type="button" onClick={openZoeken} className="vm-zoek" aria-label="Zoeken"><Search aria-hidden="true" /></button>
         <p className="vm-titel">Orthodoxe Tijd</p>
         <p className="vm-sier" aria-hidden="true"><span>✣</span></p>
@@ -149,25 +153,28 @@ export default function Vandaag() {
 
         <p className="vm-weekdag">{dag.weekdagNaam}</p>
         <p className="vm-datum">{formatDatum(dag.civil)}</p>
+        <p className="vm-sier vm-sier-datum" aria-hidden="true"><span>✣</span></p>
         <p className="vm-kerk">{kerkelijkeRegel}</p>
         {aftelTekst && <a href="#feesten" className="vm-aftel">{aftelTekst}</a>}
         <div className="vm-kalender" role="group" aria-label="Kalenderkeuze">
           <button type="button" aria-pressed={mode === 'oud'} className={mode === 'oud' ? 'is-actief' : undefined} onClick={() => setMode('oud')}>Oud · juliaans</button>
           <button type="button" aria-pressed={mode === 'nieuw'} className={mode === 'nieuw' ? 'is-actief' : undefined} onClick={() => setMode('nieuw')}>Nieuw · burgerlijk</button>
         </div>
-        <p className="vm-sier vm-sier-breed" aria-hidden="true"><span>✣</span></p>
 
-        <div className="vm-grid">
-          {mobieleKnoppen.map(({ key, titel, icoon, href, onClick, onder }) => (
+        <div className="vm-lijst">
+          {mobieleKnoppen.map(({ key, titel, icoon, href, onClick, onder, nu }) => (
             <a
               key={key}
-              className="vm-knop"
+              className="vm-rij"
               href={href}
               onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
             >
               <img decoding="async" className="vm-icoon" src={icoon} alt="" />
-              <span className="vm-knop-tekst">
-                <b>{titel}</b>
+              <span className="vm-rij-tekst">
+                <b>
+                  {titel}
+                  {nu && <span className="vm-nu">Nu</span>}
+                </b>
                 {onder && <small>{onder}</small>}
               </span>
               <ChevronRight aria-hidden="true" />

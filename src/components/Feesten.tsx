@@ -27,7 +27,7 @@ export default function Feesten() {
   const gekozen = open ? [...lijst,...overige].find(({f})=>f.id===open) : undefined;
 
   return <>
-    <PageHero id="feesten" alt="Feesten — Orthodoxe Tijd" />
+    <PageHero id="feesten" titel="Feesten" ondertitel="Licht in de tijd" />
     <section className="feasts-page bg-parchment py-12 text-ink sm:py-16"><div className={CONTENT}>
       {/* Op mobiel staat "Ontdek alle feesten" (zoeken) bovenaan: flex-kolom met order-first; vanaf tablet de gewone volgorde. */}
       <div className="overflow-hidden border border-gold/45 bg-[#f7edda] shadow-[0_24px_55px_rgba(56,31,14,.16)] max-md:flex max-md:flex-col">
@@ -40,8 +40,8 @@ export default function Feesten() {
 
         <section className="grid border-b border-gold/30 max-md:border-b-0 lg:grid-cols-2"><div className="px-7 py-9 sm:px-10 lg:border-r lg:border-gold/30"><p className="ot-label">Één jaar — twee ritmes</p><h3 className="font-display mt-2 text-3xl">Vaste feesten</h3><p className="ot-tekst mt-3 text-sm leading-6 text-ink-soft">Deze gedachtenissen keren ieder kerkelijk jaar terug op dezelfde kerkelijke datum en worden door de jaarcyclus gedragen.</p><a href="#jaar" className="btn-pill mt-5">Ontdek de jaarcyclus →</a></div><div className="bg-[#efe3cb]/55 px-7 py-9 sm:px-10"><p className="ot-label">Rond Pascha</p><h3 className="font-display mt-2 text-3xl">Beweeglijke feesten</h3><p className="ot-tekst mt-3 text-sm leading-6 text-ink-soft">De datum van Pascha bepaalt onder meer de Grote Week, Hemelvaart en Pinksteren. Deze data komen uit dezelfde centrale Pascha-berekening als de kalender.</p><a href="#pascha" className="btn-pill mt-5">Ontdek de Paschacyclus →</a></div></section>
 
-        <section className="feast-discover px-6 py-9 max-md:order-first max-md:border-b max-md:border-gold/30 sm:px-10 sm:py-12">
-          <div><p className="ot-label">Door het kerkelijk jaar</p><h2 className="font-display mt-1 text-4xl">Ontdek alle feesten</h2><p className="mt-2 text-sm text-ink-soft">Zoek op naam, maand of soort en kies daarna desgewenst een dag.</p></div>
+        <section className="feast-discover bibliotheek px-6 py-9 max-md:order-first max-md:border-b max-md:border-gold/30 sm:px-10 sm:py-12">
+          <div className="bieb-kop"><p className="ot-label">Door het kerkelijk jaar</p><h2 className="font-display mt-1 text-4xl">Ontdek alle feesten</h2><p className="mt-2 text-sm text-ink-soft">Zoek op naam, maand of soort en kies daarna desgewenst een dag.</p></div>
           <div className="saints-search-row">
             <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setDag(null)}} placeholder="Zoek een feest…" /></label>
             <div className="saints-select"><select value={maand===null?'':maand} onChange={e=>{setMaand(e.target.value===''?null:Number(e.target.value));setDag(null)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
@@ -52,7 +52,7 @@ export default function Feesten() {
           <div className="feast-month-grid mt-4">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i);setDag(null);setZoek('')}} className={maand===i?'active':''}>{m}</button>)}</div>
           {maand!==null && <><div className="saints-rule-title mt-8"><h2>Kies een dag in {MAANDEN[maand]}</h2><span>{dagenInMaand.length} dagen met feesten</span></div><div className="feast-day-grid mt-4">{dagenInMaand.map(d=><button key={d} onClick={()=>setDag(d)} className={dag===d?'active':''}>{d}</button>)}</div></>}
           <div className="saints-rule-title mt-8"><h2>{dag!==null&&maand!==null?`${dag} ${MAANDEN[maand]}`:'Geselecteerde feesten'}</h2><span>{alle.length} resultaten</span></div>
-          <div className="mt-4 space-y-1">{alle.slice(0,30).map(({f,datum,dagen})=><button key={`${f.id}-${datum.toISOString()}`} onClick={()=>setOpen(f.id)} className="feest-rij group grid w-full border-t border-gold/25 py-4 text-left sm:grid-cols-[120px_1fr_auto] sm:items-center sm:gap-5"><span className="ot-label">{MAANDEN[datum.getUTCMonth()]} {datum.getUTCDate()}</span><span><span className="font-display block text-xl group-hover:text-wine">{f.naam}</span><span className="text-xs text-ink-mute">{f.offset!==undefined?'beweeglijk feest':'vaste gedachtenis'}{mode==='oud'&&f.md?` · kerkelijk ${formatDag(kerkDatum(datum,mode))}`:''}</span></span><span className="btn-pill mt-2 sm:mt-0">{dagen===0?'Vandaag':'Open →'}</span></button>)}</div>
+          <div className="bieb-lijst mt-4">{alle.slice(0,30).map(({f,datum,dagen})=>{ const datumTekst=`${MAANDEN[datum.getUTCMonth()]} ${datum.getUTCDate()}${dagen===0?' · vandaag':''}`; return <button key={`${f.id}-${datum.toISOString()}`} type="button" onClick={()=>setOpen(f.id)} aria-label={`${f.naam}, ${datum.getUTCDate()} ${MAANDEN[datum.getUTCMonth()]}${dagen===0?', vandaag':''}. Openen`} className="bieb-rij"><span className="bieb-rij-tekst"><span className="bieb-rij-datum">{datumTekst}</span><span className="bieb-rij-titel">{f.naam}</span><span className="bieb-rij-sub">{f.offset!==undefined?'beweeglijk feest':'vaste gedachtenis'}{mode==='oud'&&f.md?` · kerkelijk ${formatDag(kerkDatum(datum,mode))}`:''}</span></span><span className="bieb-rij-pijl" aria-hidden="true">›</span></button>})}</div>
         </section>
       </div>
     </div></section>

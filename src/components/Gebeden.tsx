@@ -48,14 +48,14 @@ const CATEGORIEN: CategorieDef[] = [
     id: 'dag',
     label: 'Gebeden door de dag',
     omschrijving: 'Voor het werk, het eten en het slapen.',
-    iconSrc: '/images/ui/gebeden/09-Overige-gebeden.webp',
+    iconSrc: '/images/ui/placeholders/gebeden-door-de-dag.svg',
     match: (g) => DAGKEUZES.includes(g.id),
   },
   {
     id: 'overig',
     label: 'Overige gebeden',
     omschrijving: 'Voor de gebedsregel en de Goddelijke Liturgie.',
-    iconSrc: '/images/ui/gebeden/09-Overige-gebeden.webp',
+    iconSrc: '/images/ui/placeholders/gebeden-overige.svg',
     match: (g) => ['inleidende-gebeden-pdf', 'psalm-50-pdf', 'geloofsbelijdenis-pdf', 'kanon-beschermengel'].includes(g.id),
   },
 ];
@@ -117,7 +117,7 @@ export default function Gebeden() {
 
   return (
     <>
-      <PageHero id="gebeden" alt="Gebeden — het gebedenboek van de Kerk" kop />
+      <PageHero id="gebeden" titel="Gebeden" ondertitel="Een gesprek met God, in alle momenten" kop />
 
       {/* Introductie */}
       <section className="orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">

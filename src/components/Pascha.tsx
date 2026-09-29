@@ -219,7 +219,7 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
 // offsetRange = [eerste, laatste] dag t.o.v. Pascha die tot deze periode hoort (zie PAASCYCLUS in lib/feesten.ts).
 const PERIODEN: Array<{ key: PeriodeKey; label: string; short: string; iconSrc: string; offsetRange: [number, number] }> = [
   { key: 'voorbereiding', label: 'Voorbereiding', short: 'Zondagen voor de Vasten', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.webp', offsetRange: [-70, -49] },
-  { key: 'grote-vasten', label: 'Grote Vasten', short: 'Een weg van bekering', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-05-Vastentijd.webp', offsetRange: [-48, -14] },
+  { key: 'grote-vasten', label: 'Grote Vasten', short: 'Een weg van bekering', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.webp', offsetRange: [-48, -14] },
   { key: 'goede-week', label: 'Goede Week', short: 'Lijden en liefde', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-06-Passietijd.webp', offsetRange: [-8, -1] },
   { key: 'pascha', label: 'Pascha', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/06-Pascha-01-Wat-is-Pascha.webp', offsetRange: [0, 6] },
   { key: 'vijftig-dagen', label: 'De Vijftig Dagen', short: 'Leven in het licht', iconSrc: '/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp', offsetRange: [7, 38] },
@@ -326,7 +326,7 @@ export default function Pascha() {
 
   return (
     <>
-      <PageHero id="pascha" alt="Pascha — de Verrijzenis van Christus" kop />
+      <PageHero id="pascha" titel="Pascha" ondertitel="Van het Kruis naar de Verrijzenis" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}

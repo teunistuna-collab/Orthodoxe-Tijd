@@ -164,11 +164,11 @@ export default function Vasten() {
   const onthoudingen = geselecteerdeDagInfo ? onthoudingenVoor(geselecteerdeDagInfo.vasten.niveau) : [];
   const onthoudingenVandaag = onthoudingenVoor(dagVandaag.vasten.niveau);
   const vastenVandaagAsset: Record<string, string> = {
-    vrij: '01-Vastenvrij.webp', geen: '02-Geen-vasten.webp', zuivel: '03-Zuivel-toegestaan.webp', vis: '04-Vis-toegestaan.webp',
-    'wijn-olie': '05-Wijn-en-olie.webp', gekookt: '06-Gekookt-zonder-olie.webp', vastendag: '07-Vastendag.webp',
-    strikt: '08-Strikt-vasten.webp', onthouding: '09-Volledige-onthouding.webp'
+    vrij: '01-Vastenvrij.webp', geen: '../placeholders/vasten-geen-vasten.svg', zuivel: '03-Zuivel-toegestaan.webp', vis: '04-Vis-toegestaan.webp',
+    'wijn-olie': '05-Wijn-en-olie.webp', 'zonder-olie': '06-Gekookt-zonder-olie.webp', vastendag: '07-Vastendag.webp',
+    streng: '08-Strikt-vasten.webp', onthouding: '09-Volledige-onthouding.webp'
   };
-  const vastenVandaagIcon = vastenVandaagAsset[dagVandaag.vasten.niveau] ?? '02-Geen-vasten.webp';
+  const vastenVandaagIcon = vastenVandaagAsset[dagVandaag.vasten.niveau] ?? '../placeholders/vasten-geen-vasten.svg';
 
   const infoKaarten = (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -198,7 +198,7 @@ export default function Vasten() {
 
   return (
     <>
-      <PageHero id="vasten" alt="Vasten — een weg naar vrijheid" kop />
+      <PageHero id="vasten" titel="Vasten" ondertitel="Een weg naar vrijheid" kop />
 
       {/* Informatiekaarten: vanaf tablet bovenaan; op mobiel onder "Vasten vandaag" (daar komen de meeste mensen voor) */}
       <section className="max-md:hidden orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">

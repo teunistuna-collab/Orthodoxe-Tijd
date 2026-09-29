@@ -4,6 +4,8 @@ import { useApp } from '../lib/context';
 import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster, formatLang } from '../lib/kalender';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
+import { NIVEAUS, VASTEN_GROEPEN, vastenGroep, type VastenGroep } from '../lib/vasten';
+import { VastenSymbool } from './ui';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import PageHero from './PageHero';
 
@@ -19,6 +21,11 @@ function CornerOrnament({ className = '' }: { className?: string }) {
     </svg>
   );
 }
+
+// Weergave van de liturgische kleur in een vakje: 'balk' (balkje onderin) of 'rand' (rand van 2px). Keuze volgt nog.
+const KLEURWEERGAVE: 'balk' | 'rand' = 'balk';
+const TEKEN = { pascha: '☦', groot: '✠', ander: '✦' } as const;
+const kleineLetter = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
 const PIJL = 'inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] px-3 text-sm font-bold text-ink hover:border-gold sm:min-h-0 sm:py-1.5';
 
@@ -67,7 +74,10 @@ export default function Kalender() {
   const [geselecteerdeYmd, setGeselecteerdeYmd] = useState(vandaagYmd);
   const [legendaOpen, setLegendaOpen] = useState(false);
 
-  const cellen = useMemo(() => maandRooster(cur.y, cur.m, mode, vandaagYmd), [cur, mode, vandaagYmd]);
+  const alleCellen = useMemo(() => maandRooster(cur.y, cur.m, mode, vandaagYmd), [cur, mode, vandaagYmd]);
+  // Alleen zoveel weken als de maand nodig heeft (5 of 6).
+  const laatste = alleCellen.map((c) => c.maand).lastIndexOf(cur.m);
+  const cellen = alleCellen.slice(0, Math.ceil((laatste + 1) / 7) * 7);
   const inMaand = cellen.filter((c) => c.maand === cur.m);
   const aantalFeesten = inMaand.filter((c) => c.feesten.some((f) => f.groot || f.soort === 'pascha' || f.soort === 'feest')).length;
   const vastendagen = inMaand.filter((c) => !['geen', 'vrij'].includes(c.vasten.niveau)).length;
@@ -84,7 +94,7 @@ export default function Kalender() {
 
   return (
     <>
-      <PageHero id="kalender" alt="Kalender — het kerkelijk jaar in overzicht" />
+      <PageHero id="kalender" titel="Kalender" ondertitel="Leven in het ritme van de Kerk" />
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink max-md:py-5 sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12">
@@ -120,12 +130,13 @@ export default function Kalender() {
             {/* Weekdagen */}
             <div className="grid grid-cols-7 border-b border-gold/25 bg-[#f3e9d2] text-center text-[11px] font-bold tracking-widest text-gold-deep uppercase sm:text-xs">
               {[1, 2, 3, 4, 5, 6, 0].map((d) => (
-                <div key={d} className={`py-2 ${d === 0 ? 'text-wine' : ''}`}>
+                <div key={d} className={`py-2 ${d === 0 ? 'text-[var(--ot-wijnrood)]' : ''}`}>
                   {WEEKDAGEN_KORT[d]}
                 </div>
               ))}
             </div>
 
+            <div className={`kal-kleur-${KLEURWEERGAVE}`}>
             {/* Cellen */}
             <div className="grid grid-cols-7" {...veegMaand}>
               {cellen.map((c) => {
@@ -133,11 +144,20 @@ export default function Kalender() {
                 const feest = c.feesten[0];
                 const heilige = eersteHeilige(heiligen?.HEILIGEN[c.kerkKey]);
                 const isPascha = feest?.soort === 'pascha';
-                const groot = feest && feest.groot;
-                const beweeglijk = feest && feest.soort === 'beweeglijk' && !groot && !isPascha;
+                const groot = !!feest?.groot;
+                const beweeglijk = feest?.soort === 'beweeglijk' && !groot && !isPascha;
+                const teken = isPascha ? TEKEN.pascha : groot ? TEKEN.groot : feest ? TEKEN.ander : null;
+                const kleur = liturgischeKleur(c);
+                const lit = LITURGISCHE_KLEUREN[kleur];
+                const groep = vastenGroep(c.vasten.niveau);
                 const isGeselecteerd = c.ymd === geselecteerd.ymd;
-                // Zelfde kleur voor rand én gloed: altijd de liturgische kleur van die dag, ook wanneer hij geselecteerd is.
-                const ringHex = LITURGISCHE_KLEUREN[liturgischeKleur(c)].hex;
+                const label = [
+                  `${hoofdletter(formatLang(c.civil))}${c.isVandaag ? ' (vandaag)' : ''}`,
+                  feest ? feest.naam : heilige ? heiligeTitel(heilige.naam) : '',
+                  isPascha ? 'Pascha' : groot ? 'groot feest' : beweeglijk ? 'beweeglijk feest' : '',
+                  lit.css ? `liturgische kleur ${lit.naam}` : '',
+                  c.vasten.label === NIVEAUS[c.vasten.niveau].label ? kleineLetter(c.vasten.label) : c.vasten.label,
+                ].filter(Boolean).join(', ');
                 return (
                   <button
                     key={c.ymd}
@@ -147,40 +167,24 @@ export default function Kalender() {
                       // Op een smal scherm staat het detailpaneel onder de kalender (buiten beeld): dan een pop-up tonen.
                       if (window.matchMedia('(max-width: 1023px)').matches) openDag(c.ymd);
                     }}
-                    className={`relative min-h-[56px] border-r border-b border-gold/20 p-1 text-left align-top transition [&:nth-child(7n)]:border-r-0 xl:min-h-[112px] xl:p-2 ${
-                      isGeselecteerd
-                        ? 'bg-[#4d1716] text-gold-light ring-2 ring-inset'
-                        : `kalender-dag ${buiten ? 'kalender-dag--buiten text-ink-mute' : ''} ${c.isVandaag ? 'ring-[3px] ring-inset' : 'ring-1 ring-inset'}`
-                    }`}
-                    style={{ '--tw-ring-color': ringHex, '--dag-kleur': ringHex } as CSSProperties}
-                    title="Open dagdetail"
-                    aria-label={`${formatLang(c.civil)}${c.isVandaag ? ' (vandaag)' : ''}${feest ? `, ${feest.naam}` : heilige ? `, ${heiligeTitel(heilige.naam)}` : ''}, ${c.vasten.label}`}
+                    className={`kal-dag${buiten ? ' is-buiten' : ''}${c.isZondag ? ' is-zondag' : ''}${c.isVandaag ? ' is-vandaag' : ''}${isGeselecteerd ? ' is-gekozen' : ''}`}
+                    data-lit={lit.css && !buiten ? kleur : undefined}
+                    style={lit.css ? ({ '--lit': lit.css } as CSSProperties) : undefined}
+                    title={feest ? feest.naam : 'Open dagdetail'}
+                    aria-label={label}
                     aria-current={c.isVandaag ? 'date' : undefined}
                   >
-                    <div className="flex items-start justify-center gap-1 xl:justify-between">
-                      <span
-                        className={`flex h-6 w-6 items-center justify-center rounded-full text-[13px] font-bold xl:h-7 xl:w-7 ${
-                          c.isVandaag ? 'today-glow text-cream' : c.isZondag && !buiten ? 'text-wine' : ''
-                        }`}
-                        style={c.isVandaag ? ({ background: ringHex, '--glow-color': ringHex } as CSSProperties) : undefined}
-                      >
-                        {c.dag}
+                    <span className="kal-dag-kop">
+                      <span className="kal-dag-nr">{c.dag}</span>
+                      {mode === 'oud' && <span className="kal-dag-kerk">{c.kerk.getUTCDate()} {MAANDEN_KORT[c.kerk.getUTCMonth()]}</span>}
+                    </span>
+                    {!buiten && (feest || heilige) && (
+                      <span className={`kal-dag-feest${feest ? '' : ' is-heilige'}${isPascha || groot ? ' is-groot' : ''}`} aria-hidden="true">
+                        {teken && <span className="kal-dag-teken">{teken}</span>}
+                        <span className="kal-dag-naam">{feest ? feest.kort ?? feest.naam : heilige!.naam}</span>
                       </span>
-                      {mode === 'oud' && <span className="hidden text-[11px] text-ink-mute xl:block">{c.kerk.getUTCDate()} {MAANDEN_KORT[c.kerk.getUTCMonth()]}</span>}
-                    </div>
-                    {feest && <div className={`mt-0.5 h-3 text-center text-[11px] leading-none xl:hidden ${isPascha || groot ? 'text-wine' : 'text-gold-deep'}`} aria-hidden="true">{isPascha ? '☦' : groot ? '✠' : '•'}</div>}
-                    <div className="mt-1 hidden space-y-0.5 xl:block">
-                      {feest ? (
-                        <div className={`line-clamp-2 text-[11px] leading-tight font-bold ${isPascha ? 'text-wine' : groot ? 'text-wine' : 'text-ink'}`}>
-                          {isPascha && <span className="mr-0.5 text-gold-deep">☦</span>}
-                          {!isPascha && groot && <span className="mr-0.5 text-gold-deep">✠</span>}
-                          {!isPascha && !groot && beweeglijk && <span className="mr-0.5 text-gold-deep">•</span>}
-                          {feest.kort ?? feest.naam}
-                        </div>
-                      ) : heilige ? (
-                        <div className="line-clamp-2 text-[11px] leading-tight text-ink-soft">{heilige.naam}</div>
-                      ) : null}
-                    </div>
+                    )}
+                    {!buiten && groep && <VastenSymbool groep={groep} className="kal-dag-vasten" />}
                   </button>
                 );
               })}
@@ -190,23 +194,38 @@ export default function Kalender() {
             <button type="button" onClick={() => setLegendaOpen((o) => !o)} aria-expanded={legendaOpen} className="flex min-h-11 w-full items-center justify-between border-t border-gold/25 bg-[#f3e9d2] px-4 text-xs font-bold tracking-widest text-gold-deep uppercase lg:hidden">
               Legenda <ChevronDown className={`h-4 w-4 transition ${legendaOpen ? 'rotate-180' : ''}`} />
             </button>
-            <div className={`${legendaOpen ? 'flex' : 'hidden'} flex-wrap items-center gap-x-4 gap-y-2 border-t border-gold/25 bg-[#f3e9d2] px-4 py-3 text-xs font-semibold text-ink-soft sm:px-5 lg:flex`}>
-              <span className="hidden text-xs font-bold tracking-widest text-gold-deep uppercase lg:inline">Legenda</span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="text-gold-deep">✠</span> groot feest
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="text-gold-deep">☦</span> Pascha
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="text-gold-deep">•</span> beweeglijk
-              </span>
-              <span className="basis-full" aria-hidden="true" />
-              {Object.entries(LITURGISCHE_KLEUREN).map(([k, l]) => (
-                <span key={k} className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 border-2" style={{ borderColor: l.hex }} /> {l.uitleg}
-                </span>
-              ))}
+            <div className={`kal-legenda ${legendaOpen ? 'grid' : 'hidden'} lg:grid`}>
+              <p className="kal-legenda-titel max-lg:hidden">Legenda</p>
+              <section>
+                <h3>Liturgische kleuren</h3>
+                <ul>
+                  {Object.entries(LITURGISCHE_KLEUREN).map(([k, l]) => (
+                    <li key={k}>
+                      <span className="kal-staal" data-lit={l.css ? k : undefined} style={l.css ? ({ '--lit': l.css } as CSSProperties) : undefined} aria-hidden="true" />
+                      {l.css ? l.uitleg : 'gewone dagen (geen kleur)'}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <h3>Vasten</h3>
+                <ul>
+                  {(Object.keys(VASTEN_GROEPEN) as VastenGroep[]).map((g) => (
+                    <li key={g}><VastenSymbool groep={g} className="kal-legenda-symbool" /> {VASTEN_GROEPEN[g]}</li>
+                  ))}
+                  <li><span className="kal-legenda-symbool" aria-hidden="true" /> geen symbool: geen vasten</li>
+                </ul>
+              </section>
+              <section>
+                <h3>Tekens</h3>
+                <ul>
+                  <li><span className="kal-legenda-teken" aria-hidden="true">{TEKEN.groot}</span> groot feest</li>
+                  <li><span className="kal-legenda-teken" aria-hidden="true">{TEKEN.pascha}</span> Pascha</li>
+                  <li><span className="kal-legenda-teken" aria-hidden="true">{TEKEN.ander}</span> ander feest of gedachtenis (vast of beweeglijk)</li>
+                  <li><span className="kal-legenda-zondag" aria-hidden="true">7</span> zondag</li>
+                </ul>
+              </section>
+            </div>
             </div>
             </div>
 

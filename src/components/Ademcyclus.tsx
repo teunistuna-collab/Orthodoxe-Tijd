@@ -88,7 +88,7 @@ export default function Ademcyclus() {
 
   return (
     <>
-      <PageHero id="adem" alt="Ademcyclus — het onophoudelijke gebed" kop />
+      <PageHero id="adem" titel="Ademcyclus" ondertitel="Het onophoudelijke gebed" citaat="„Bidt zonder ophouden”" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}

@@ -7,6 +7,7 @@ import { LiturgicalPopup } from './CycleSections';
 import { heiligenVanDag, normaliseer, popupContent, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
 import { CATEGORIEEN, categorieenVan, soortVan } from '../lib/heiligenSoort';
 import PageHero from './PageHero';
+import Cross from './Cross';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -66,7 +67,7 @@ export default function Heiligen() {
   const toonResultaten = filterActief && !wachtOpDag;
   const alleenLageLanden = alleenNl && !zoek && !maand && !dag && categorie === 'alle';
   const resultatenBlok = (
-    <section className="saints-results">
+    <section className="saints-results bibliotheek">
               <div className="saints-rule-title"><h2>{dag&&maand?`${dag} ${MAANDEN[maand-1]}`:alleenNl?'Heiligen van de Lage Landen':'Geselecteerde heiligen'}</h2><span>{resultaten.length} gedachtenissen</span></div>
               <div className="saints-results-list">{groepen.slice(0,alleenNl?groepen.length:12).map(([md,items])=><div key={md}><time>{formatMd(md)}</time><div>{items.map((h,i)=><button key={`${h.naam}-${i}`} onClick={()=>setGeselecteerde(h)}><span><strong>{h.naam}</strong>{h.titel&&<small>{h.titel}</small>}</span><b>→</b></button>)}</div></div>)}</div>
               {!groepen.length&&<p className="saints-empty">Geen heiligen gevonden voor deze selectie.</p>}
@@ -74,7 +75,7 @@ export default function Heiligen() {
   );
 
   return <>
-    <PageHero id="heiligen" alt="Heiligen — Orthodoxe Tijd" />
+    <PageHero id="heiligen" titel="Heiligen" ondertitel="Voorbeelden op onze weg" />
     <main className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">
@@ -97,8 +98,8 @@ export default function Heiligen() {
           <blockquote className="saints-side-quote">“Het doel van ons leven is de vergoddelijking door genade.”<span>✣</span></blockquote>
         </section>
 
-        <section className="saints-discover">
-          <div className="saints-section-head"><h2>Ontdek alle heiligen</h2><p>Zoek op naam, maand of categorie en laat u inspireren door hun leven.</p></div>
+        <section className="saints-discover bibliotheek">
+          <div className="saints-section-head bieb-kop"><h2>Ontdek alle heiligen</h2><p>Zoek op naam, maand of categorie en laat u inspireren door hun leven.</p></div>
           <div className="saints-search-row">
             <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setWachtOpDag(false)}} placeholder="Zoek een heilige…" /></label>
             <div className="saints-select"><select value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false);setWachtOpDag(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
@@ -107,7 +108,7 @@ export default function Heiligen() {
           </div>
         </section>
 
-        <section className="saints-browser">
+        <section className="saints-browser bibliotheek">
           <div className="saints-rule-title"><h2>Heiligen per maand</h2><span>5000+ heiligen</span></div>
           <div className="saints-month-grid">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i+1);setDag(null);setZoek('');setAlleenNl(false);setWachtOpDag(true)}} className={maand===i+1?'active':''}>{hoofdletter(m)}</button>)}</div>
           {maand && <div className="saints-days-panel"><div><p className="saints-kicker">Kies een dag in {MAANDEN[maand-1]}</p><button onClick={()=>{setDag(null);setWachtOpDag(false)}} className={!dag&&!wachtOpDag?'active':''}>Alle dagen</button></div><div className="saints-days-grid">{Array.from({length:dagenInMaand},(_,i)=>i+1).map(n=><button key={n} onClick={()=>{setDag(n);setAlleenNl(false);setWachtOpDag(false)}} className={dag===n?'active':''}>{n}</button>)}</div></div>}
@@ -115,9 +116,9 @@ export default function Heiligen() {
 
         {toonResultaten && !alleenLageLanden && resultatenBlok}
 
-        <section className="saints-categories">
+        <section className="saints-categories bibliotheek">
           <div className="saints-rule-title"><h2>Heiligen naar categorie</h2></div>
-          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><strong>{c[1]}</strong><span>{c[2]}</span></button>)}</div>
+          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><span className="bieb-icoon" aria-hidden="true"><Cross className="h-[58%] w-[58%]" /></span><strong>{c[1]}</strong><span>{c[2]}</span></button>)}</div>
         </section>
 
         <section className="saints-lowlands">

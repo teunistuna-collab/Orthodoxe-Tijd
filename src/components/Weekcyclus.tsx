@@ -104,7 +104,7 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: s
   { key: 'wat', title: 'Wat is de weekcyclus?', intro: 'De week is de ademhaling van het kerkelijk leven, geworteld in de Verrijzenis van Christus.', iconSrc: '/images/ui/menu/04-Week-01-Wat-is-de-weekcyclus.webp' },
   { key: 'dagen', title: 'De dagen van de week', intro: 'Elke dag van de week heeft een eigen liturgisch karakter, lezingen en gedenkingen.', iconSrc: '/images/ui/menu/04-Week-02-De-dagen-van-de-week.webp' },
   { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'De week vormt ons in het leven met Christus: van Verrijzenis tot verwachting.', iconSrc: '/images/ui/menu/04-Week-03-De-geestelijke-betekenis.webp' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?', iconSrc: '/images/ui/menu/04-Week-03-De-geestelijke-betekenis.webp' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?', iconSrc: '/images/ui/menu/02-Gebed-03-Het-gebedskoord.webp' },
 ];
 
 const TIMELINE_ITEMS = [
@@ -180,7 +180,7 @@ export default function Weekcyclus() {
 
   return (
     <>
-      <PageHero id="week" alt="Weekcyclus — van de Verrijzenis tot de Sabbat" kop />
+      <PageHero id="week" titel="Week" ondertitel="Van de Verrijzenis tot de Sabbat" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}

@@ -3,14 +3,15 @@ import type { DagInfo } from './kalender';
 // Liturgische kleur van een dag (vereenvoudigd, naar Russisch gebruik). Alleen gebruikt voor de rand om vandaag in de kalender.
 export type LiturgischeKleur = 'goud' | 'rood' | 'wit' | 'groen' | 'blauw' | 'paars' | 'donkerpaars';
 
-export const LITURGISCHE_KLEUREN: Record<LiturgischeKleur, { hex: string; uitleg: string }> = {
-  goud: { hex: '#b0914f', uitleg: 'gewone dagen' },
-  rood: { hex: '#a32d2d', uitleg: 'Pascha, martelaren' },
-  wit: { hex: '#a8adb3', uitleg: 'Geboorte, Theofanie, Hemelvaart' }, // zilver: wit valt weg op de crème achtergrond
-  groen: { hex: '#1b7a43', uitleg: 'Palmzondag, Pinksteren' },
-  blauw: { hex: '#1a5276', uitleg: 'feesten van de Moeder Gods' },
-  paars: { hex: '#5c2d91', uitleg: 'kruisfeesten, zondagen in de Vasten' },
-  donkerpaars: { hex: '#321454', uitleg: 'Vasten, Goede Week' },
+// css: de variabele uit index.css (Bouw 86) die de kalender én de legenda gebruiken; gewone dagen hebben geen kleuraccent.
+export const LITURGISCHE_KLEUREN: Record<LiturgischeKleur, { hex: string; css: string; naam: string; uitleg: string }> = {
+  goud: { hex: '#b0914f', css: '', naam: 'goud', uitleg: 'gewone dagen' },
+  rood: { hex: '#a32d2d', css: 'var(--lit-rood)', naam: 'rood', uitleg: 'Pascha, martelaren' },
+  wit: { hex: '#a8adb3', css: 'var(--lit-wit)', naam: 'wit', uitleg: 'Geboorte, Theofanie, Hemelvaart' }, // hex zilver: wit valt weg op de crème achtergrond
+  groen: { hex: '#1b7a43', css: 'var(--lit-groen)', naam: 'groen', uitleg: 'Palmzondag, Pinksteren' },
+  blauw: { hex: '#1a5276', css: 'var(--lit-blauw)', naam: 'blauw', uitleg: 'feesten van de Moeder Gods' },
+  paars: { hex: '#5c2d91', css: 'var(--lit-paars)', naam: 'paars', uitleg: 'kruisfeesten, zondagen in de Vasten' },
+  donkerpaars: { hex: '#321454', css: 'var(--lit-donker)', naam: 'donker', uitleg: 'Vasten, Goede Week' },
 };
 
 // Vaste feesten op kerkelijke datum (sleutel zoals mdKey: "M-D").

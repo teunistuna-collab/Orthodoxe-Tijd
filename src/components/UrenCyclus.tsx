@@ -87,9 +87,9 @@ const SERVICE_ICONS: Record<string, typeof Sun | null> = {
   'Negende Uur': Church,
 };
 const SERVICE_IMAGE_ICONS: Record<string, string | undefined> = {
-  Vespers: '/images/ui/menu/03-Etmaal-02-Avondgebeden.webp',
+  Vespers: '/images/ui/gebeden/07-Overledenen.webp',
   Completen: '/images/ui/menu/03-Etmaal-05-Completen.webp',
-  Middernachtdienst: '/images/ui/menu/03-Etmaal-04-Middernachtdienst.webp',
+  Middernachtdienst: '/images/ui/menu/01-Hoofdmenu-09-Feesten.webp',
   Metten: '/images/ui/menu/03-Etmaal-03-Metten.webp',
   'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.webp',
   'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.webp',
@@ -282,7 +282,7 @@ export default function UrenCyclus() {
 
   return (
     <>
-      <PageHero id="etmaal" alt="Etmaal — een dag in Gods tegenwoordigheid" kop />
+      <PageHero id="etmaal" titel="Etmaal" ondertitel="De gebeden van dag en nacht" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}
