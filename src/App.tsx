@@ -126,19 +126,38 @@ export default function App() {
     document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${hoofdletter(pagina)} — Orthodoxe Tijd`;
   }, [pagina]);
 
+  // Leesrooster: het huidige en het volgende kerkjaar meteen, andere jaren pas als je er een datum uit opent.
   useEffect(() => {
-    import('./lib/heiligen')
-      .then(setHeiligen)
-      .catch(() => {});
-    laadDagen()
-      .then((dagen) => {
-        setHtc(dagen);
-        // Leesrooster: het huidige en het volgende kerkjaar meteen, andere jaren pas als je er een datum uit opent.
-        const nu = kerkjaarVan(ymd(bepaalVandaag()));
-        for (const jaar of [nu, nu + 1]) void laadRoosterJaar(jaar, dagen).then((r) => setRooster((oud) => ({ ...oud, ...r })));
-      })
-      .catch(() => setHtcFout(true));
+    const nu = kerkjaarVan(ymd(bepaalVandaag()));
+    for (const jaar of [nu, nu + 1])
+      laadRoosterJaar(jaar)
+        .then((r) => setRooster((oud) => ({ ...oud, ...r })))
+        .catch(() => {});
   }, []);
+
+  // De heiligenlijst (±530 KB) en de Engelse dagdata van holytrinityorthodox.com (dagen.json, ±480 KB) pas laden als
+  // een weergave ze gebruikt. Vandaag op mobiel heeft ze niet nodig; op desktop wel (titel van de dag).
+  const heiligenGevraagd = useRef(false);
+  const htcGevraagd = useRef(false);
+  useEffect(() => {
+    const popup = dagOpen !== null || heiligenDag !== null || zoekOpen;
+    const breedVandaag = pagina === 'vandaag' && window.matchMedia('(min-width: 768px)').matches;
+    if (!heiligenGevraagd.current && (popup || breedVandaag || pagina === 'heiligen' || pagina === 'kalender')) {
+      heiligenGevraagd.current = true;
+      import('./lib/heiligen')
+        .then(setHeiligen)
+        .catch(() => (heiligenGevraagd.current = false));
+    }
+    if (!htcGevraagd.current && (popup || pagina === 'heiligen')) {
+      htcGevraagd.current = true;
+      laadDagen()
+        .then(setHtc)
+        .catch(() => {
+          htcGevraagd.current = false;
+          setHtcFout(true);
+        });
+    }
+  }, [pagina, dagOpen, heiligenDag, zoekOpen]);
 
   // Datum verversen als de pagina lang open staat.
   useEffect(() => {
@@ -175,13 +194,13 @@ export default function App() {
   const vraagRooster = useCallback(
     (datum: string) => {
       const jaar = kerkjaarVan(datum);
-      if (!htc || gevraagd.current.has(jaar)) return;
+      if (gevraagd.current.has(jaar)) return;
       gevraagd.current.add(jaar);
-      laadRoosterJaar(jaar, htc)
+      laadRoosterJaar(jaar)
         .then((r) => setRooster((oud) => ({ ...oud, ...r })))
         .catch(() => gevraagd.current.delete(jaar));
     },
-    [htc],
+    [],
   );
   const sluitZoeken = useCallback(() => setZoekOpen(false), []);
   const sluitKalenderUitleg = useCallback(() => {

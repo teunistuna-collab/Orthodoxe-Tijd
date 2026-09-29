@@ -1883,3 +1883,8 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 #top#top#top .leesbediening button[aria-pressed=true] .lucide-bookmark{fill:currentColor}
 #top#top .vandaag-uur-item small a{display:inline;color:inherit;text-decoration:underline;text-decoration-color:rgba(138,90,30,.45);text-underline-offset:2px}
 #top#top .vandaag-uur-item small a:hover{color:#8a5a1e}
+
+/* Bouw 77 — leesbaarheid: inhoudelijke kleine tekst minstens 13px (tijden van de diensten, voedingslabels bij Vasten).
+   Na de algemene 11,5px-regel voor labels (Bouw 62, via :is() zwaarder), daarom aan het eind en met dubbele klasse. */
+#top#top#top main .dienst-kaart-tijd.dienst-kaart-tijd{font-size:13px!important;letter-spacing:.08em}
+#top#top#top main .fasting-food-item.fasting-food-item.fasting-food-item>span:last-child{font-size:13px!important}

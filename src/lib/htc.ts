@@ -63,12 +63,12 @@ export function kerkjaarVan(ymd: string): number {
 type JaarRooster = Record<string, { c: string; r: HtcLezingRef[] }>;
 const jaarCache = new Map<number, Promise<Rooster>>();
 const geladenJaren = new Set<number>();
-export function laadRoosterJaar(jaar: number, dagen: HtcData): Promise<Rooster> {
+export function laadRoosterJaar(jaar: number): Promise<Rooster> {
   const c = jaarCache.get(jaar);
   if (c) return c;
   const bron: Promise<JaarRooster> =
     jaar === OUD_JAAR
-      ? Promise.resolve(Object.fromEntries(Object.entries(dagen).filter(([, d]) => d.c >= EERSTE_DATUM && kerkjaarVan(d.c) === OUD_JAAR)))
+      ? laadDagen().then((dagen) => Object.fromEntries(Object.entries(dagen).filter(([, d]) => d.c >= EERSTE_DATUM && kerkjaarVan(d.c) === OUD_JAAR)))
       : ROOSTER_JAREN.includes(jaar)
         ? fetch(`/data/${jaar}/rooster.json`).then((r) => {
             if (!r.ok) throw new Error(`leesrooster ${jaar} ontbreekt`);

@@ -4,6 +4,7 @@ import { useApp } from '../lib/context';
 import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandRooster } from '../lib/kalender';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
+import { eersteHeilige } from '../lib/heiligenPopup';
 import PageHero from './PageHero';
 
 // Zeer subtiel botanisch hoekornament ter decoratie van het kalenderpaneel.
@@ -130,7 +131,7 @@ export default function Kalender() {
               {cellen.map((c) => {
                 const buiten = c.maand !== cur.m;
                 const feest = c.feesten[0];
-                const heilige = heiligen?.HEILIGEN[c.kerkKey]?.[0];
+                const heilige = eersteHeilige(heiligen?.HEILIGEN[c.kerkKey]);
                 const isPascha = feest?.soort === 'pascha';
                 const groot = feest && feest.groot;
                 const beweeglijk = feest && feest.soort === 'beweeglijk' && !groot && !isPascha;

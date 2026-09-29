@@ -170,36 +170,40 @@ export default function Vasten() {
   };
   const vastenVandaagIcon = vastenVandaagAsset[dagVandaag.vasten.niveau] ?? '02-Geen-vasten.webp';
 
+  const infoKaarten = (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {(
+        [
+          { key: 'wat', title: 'Wat is vasten?', intro: 'Het typikon en de orde van de Kerk door het jaar heen.', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.webp' },
+          { key: 'hoe', title: 'Hoe vasten we?', intro: 'De ladder van het vasten, van vrij tot volledige onthouding.', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.webp' },
+          { key: 'periodes', title: 'Vastenperioden', intro: 'Vier grote vasten, verweven met feesten en uitzonderingen.', iconSrc: '/images/ui/menu/07-Vasten-03-Vastenperiode.webp' },
+          { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'Vasten als gebed, bekering en liefde tot de naaste.', iconSrc: '/images/ui/menu/07-Vasten-04-De-geestelijke-betekenis.webp' },
+        ] as const
+      ).map(({ key, title, intro, iconSrc }) => (
+        <button
+          key={key}
+          type="button"
+          onClick={() => setInfoOpen(key)}
+          className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
+        >
+          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/50 text-gold-light">
+            <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
+          </div>
+          <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
+          <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
+        </button>
+      ))}
+    </div>
+  );
+
   return (
     <>
       <PageHero id="vasten" alt="Vasten — een weg naar vrijheid" kop />
 
-      {/* Informatiekaarten */}
-      <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
+      {/* Informatiekaarten: vanaf tablet bovenaan; op mobiel onder "Vasten vandaag" (daar komen de meeste mensen voor) */}
+      <section className="max-md:hidden orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
         <div className={CONTENT}>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {(
-              [
-                { key: 'wat', title: 'Wat is vasten?', intro: 'Het typikon en de orde van de Kerk door het jaar heen.', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.webp' },
-                { key: 'hoe', title: 'Hoe vasten we?', intro: 'De ladder van het vasten, van vrij tot volledige onthouding.', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.webp' },
-                { key: 'periodes', title: 'Vastenperioden', intro: 'Vier grote vasten, verweven met feesten en uitzonderingen.', iconSrc: '/images/ui/menu/07-Vasten-03-Vastenperiode.webp' },
-                { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'Vasten als gebed, bekering en liefde tot de naaste.', iconSrc: '/images/ui/menu/07-Vasten-04-De-geestelijke-betekenis.webp' },
-              ] as const
-            ).map(({ key, title, intro, iconSrc }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setInfoOpen(key)}
-                className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                  <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-                </div>
-                <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
-              </button>
-            ))}
-          </div>
+          {infoKaarten}
         </div>
       </section>
 
@@ -237,6 +241,7 @@ export default function Vasten() {
               ))}
             </div>
           </div>
+          <div className="mt-10 md:hidden">{infoKaarten}</div>
 
           {/* Doorlopende verticale lijn verbindt het dagpaneel met de algemene uitleg — geen nieuwe pagina */}
           <div className="mx-auto mt-10 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">

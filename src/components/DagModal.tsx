@@ -8,6 +8,8 @@ import { FeestTag, VastenBadge } from './ui';
 import Modal from './Modal';
 import DeelKnop from './DeelKnop';
 import { vergrendelScroll } from '../lib/scrollLock';
+import { eersteHeilige, heiligeTitel, hoortBijDag } from '../lib/heiligenPopup';
+import { soortVan } from '../lib/heiligenSoort';
 
 interface Props {
   ymd: string | null;
@@ -40,8 +42,12 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
     if (geselecteerd) vraagRooster(geselecteerd);
   }, [geselecteerd, vraagRooster]);
 
-  const curated = dag ? heiligen?.HEILIGEN[dag.kerkKey] ?? [] : [];
   const htcDag = dag ? htc?.[dag.kerkKey] : undefined;
+  // Regels die aan het jaar van de bron gebonden zijn ("Zaterdag vóór …") alleen tonen in dat jaar (lib/heiligenPopup.ts).
+  const curated = dag ? (heiligen?.HEILIGEN[dag.kerkKey] ?? []).filter((h) => hoortBijDag(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`, htcDag?.c, dag.ymd)) : [];
+  const htcRegels = dag ? (htcDag?.l ?? []).filter(([, tekst]) => hoortBijDag(tekst, htcDag?.c, dag.ymd)) : [];
+  const eerste = eersteHeilige(curated);
+  const eersteHtc = htcRegels.find(([, tekst]) => soortVan(tekst) === 'heilige');
   const lezingen = dag ? rooster?.[dag.ymd] ?? [] : [];
   const niveau = dag ? NIVEAUS[dag.vasten.niveau] : null;
 
@@ -52,7 +58,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
       open
       onClose={onClose}
       eyebrow={dag ? `${formatLang(dag.civil)}${mode === 'oud' ? ` · kerkelijk ${formatDag(dag.kerk)}` : ''}` : undefined}
-      title={dag ? dag.feesten[0]?.naam ?? (curated[0] ? `H. ${curated[0].naam}` : htcDag?.l[0] ? vertaalLeven(htcDag.l[0][1]).replace(/\.$/, '') : 'Dag door het jaar') : ''}
+      title={dag ? dag.feesten[0]?.naam ?? (eerste ? heiligeTitel(eerste.naam) : eersteHtc ? vertaalLeven(eersteHtc[1]).replace(/\.$/, '') : 'Dag door het jaar') : ''}
       centerTitle
       maxWidth="max-w-4xl"
       onVorige={() => onNavigate(ymd(addDays(dag.civil, -1)))}
@@ -136,7 +142,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                 )}
                 {htcDag ? (
                   <ul className="mt-3 space-y-1.5 text-sm leading-snug">
-                    {htcDag.l.map(([icon, tekst], i) => {
+                    {htcRegels.map(([icon, tekst], i) => {
                       const r = rangLabel(icon);
                       return (
                         <li key={i} className="flex gap-2">

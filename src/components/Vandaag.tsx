@@ -4,6 +4,11 @@ import { useApp } from '../lib/context';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
+import { eersteHeilige } from '../lib/heiligenPopup';
+
+// Leeg plaatje (1×1) voor een <source> die op dat scherm niets hoeft te laden: de desktopbanner (±400 KB) niet op
+// mobiel, het mobiele Christusmedaillon (±185 KB) niet op desktop. <picture class="contents"> verandert de opmaak niet.
+const LEEG = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 
 type UurMoment = {
@@ -69,7 +74,8 @@ export default function Vandaag() {
   const weekthema = WEEKTHEMAS[dag.weekdag];
   const lezingen = rooster?.[dag.ymd] ?? [];
   const hoofdFeest = dag.feesten[0];
-  const heilige = heiligen?.HEILIGEN[dag.kerkKey]?.[0];
+  // De eerste echte heilige van de dag (geen voorfeest, "Zaterdag vóór …" of icoon).
+  const heilige = eersteHeilige(heiligen?.HEILIGEN[dag.kerkKey]);
   const datumTitel = hoofdFeest?.naam ?? heilige?.naam ?? 'Dag door het jaar';
 
   // Mobiele opbouw (max-width: 767px): acht compacte knoppen met dezelfde iconen, links en gebeurtenissen als de lijst hierboven.
@@ -90,7 +96,7 @@ export default function Vandaag() {
     <section id="vandaag" className="vandaag-design-page">
       <div className="vandaag-frame">
         <h1 className="sr-only">Vandaag</h1>
-        <div className="vandaag-cover"><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></div>
+        <div className="vandaag-cover"><picture className="contents"><source media="(max-width: 767.98px)" srcSet={LEEG} /><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></picture></div>
         <div className="vandaag-paper">
           <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true">☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
           <div className="vandaag-list">
@@ -100,7 +106,7 @@ export default function Vandaag() {
             <a className="vandaag-item" href="#week" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] } })); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.webp" alt=""/><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week →</span></div><ChevronRight/></a>
             <a className="vandaag-item" href="#vasten" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: dag.ymd } })); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.webp" alt=""/><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten →</span></div><ChevronRight/></a>
             <a className="vandaag-item" href="#pascha" onClick={(e)=>{ e.preventDefault(); openDagPascha(dag.ymd); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp" alt=""/><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus →</span></div><ChevronRight/></a>
-            <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; openDagLezingen(dag.ymd); }} onKeyDown={(e)=>{ if(e.key==='Enter') openDagLezingen(dag.ymd); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp" alt=""/><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>{roosterMelding(dag.ymd)}</span>}<span className="btn-pill vandaag-cta">Lees lezingen →</span></div><a href="#kalender" onClick={(e)=>e.preventDefault()}><ChevronRight/></a></article>
+            <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; openDagLezingen(dag.ymd); }} onKeyDown={(e)=>{ if(e.key==='Enter') openDagLezingen(dag.ymd); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp" alt=""/><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>{roosterMelding(dag.ymd)}</span>}<span className="btn-pill vandaag-cta">Lees lezingen →</span></div><ChevronRight aria-hidden="true"/></article>
             <a className="vandaag-item" href="#gebeden"><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-05-Woestijnvaders-en-moeders.webp" alt=""/><div><b>Vaders &amp; moeders</b><span>Spreuk uit de woestijn</span><small>De verzameling wordt later toegevoegd.</small><span className="btn-pill vandaag-cta">Ga naar gebeden →</span></div><ChevronRight className="vandaag-muted-chevron"/></a>
           </div>
           <button type="button" onClick={()=>openDag(dag.ymd)} className="vandaag-main-button"><Sparkles/> Bekijk de volledige dag <ChevronRight/></button>
@@ -120,7 +126,10 @@ export default function Vandaag() {
           <span className="vm-kruis vm-kruis-z" aria-hidden="true">✣</span>
           <span className="vm-kruis vm-kruis-w" aria-hidden="true">✣</span>
           <span className="vm-kruis vm-kruis-o" aria-hidden="true">✣</span>
-          <img decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
+          <picture className="contents">
+            <source media="(min-width: 768px)" srcSet={LEEG} />
+            <img decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
+          </picture>
         </div>
 
         <p className="vm-weekdag">{dag.weekdagNaam}</p>

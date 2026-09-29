@@ -17,7 +17,7 @@ export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
   const { mode, vandaagYmd, htc, heiligen: eigen } = useApp();
   const [gekozen, setGekozen] = useState<Resultaat | null>(null);
   const dag = useMemo(() => (gekozenDag ? dagInfo(parseYmd(gekozenDag), mode, vandaagYmd) : null), [gekozenDag, mode, vandaagYmd]);
-  const heiligen = useMemo(() => (dag ? heiligenVanDag(dag.kerkKey, htc, eigen?.HEILIGEN) : []), [dag, htc, eigen]);
+  const heiligen = useMemo(() => (dag ? heiligenVanDag(dag.kerkKey, htc, eigen?.HEILIGEN, dag.ymd) : []), [dag, htc, eigen]);
 
   // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {

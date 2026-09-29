@@ -3,6 +3,7 @@ import { getSaintEnrichment } from './saintEnrichment';
 import { rangLabel, vertaalLeven, type HtcData } from './htc';
 import { formatMd } from './kalender';
 import { heiligeIcoon, lageLandenTekst } from './heiligenIconen';
+import { soortVan } from './heiligenSoort';
 
 // Gedeeld door de Heiligen-pagina en de pop-up "Heiligen van de dag" (Vandaag, mobiel).
 
@@ -25,11 +26,31 @@ export function popupContent(h: Resultaat | null) {
   return { title: h.naam, image: icoon ? { src: icoon.src, alt: icoon.alt } : undefined, subtitle: `${formatMd(h.md)}${h.titel ? ` · ${h.titel}` : ''}${meta ? ` · ${meta}` : ''}`, paragraphs };
 }
 
-/** Alle heiligen en gedachtenissen van één kerkelijke dag (sleutel zoals '9-7'). */
-export function heiligenVanDag(kerkKey: string, htc: HtcData | null, eigen: Record<string, Heilige[]> | undefined): Resultaat[] {
-  const curated: Resultaat[] = (eigen?.[kerkKey] ?? []).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
+/** Hoort deze regel bij de getoonde dag (ymd)? Aan een jaar gebonden regels ("Zaterdag vóór …", beweeglijke
+ *  gedachtenissen) alleen als de dag in het jaar van de bron valt; bronDatum is de datum uit dagen.json (veld c). */
+export function hoortBijDag(tekst: string, bronDatum: string | undefined, ymd: string): boolean {
+  return bronDatum === ymd || soortVan(tekst) !== 'wisselend';
+}
+
+const tekstVan = (h: Heilige) => `${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`;
+
+/** De eerste echte heilige van een dag (geen feest, notitie of icoon), voor de titel van de dag. */
+export function eersteHeilige(lijst: Heilige[] | undefined): Heilige | undefined {
+  return lijst?.find((h) => soortVan(tekstVan(h)) === 'heilige');
+}
+
+/** "H." ervoor, behalve als de naam al met een aanduiding begint ("Profeet …", "Eerbiedwaardige …", "HH. …"). */
+export function heiligeTitel(naam: string): string {
+  return /^(h\.|hh\.|heilige|profe|apostel|martela|grootmartela|priestermartela|nieuwe|eerbiedwaardige|rechtvaardige|maagd|zalige|synaxis|gedachtenis|overbrenging|vinding|ontslaping|alle |belijder|dwaas)/i.test(naam) ? naam : `H. ${naam}`;
+}
+
+/** Alle heiligen en gedachtenissen van één kerkelijke dag (sleutel zoals '9-7'); ymd is de getoonde burgerlijke dag. */
+export function heiligenVanDag(kerkKey: string, htc: HtcData | null, eigen: Record<string, Heilige[]> | undefined, ymd: string): Resultaat[] {
+  const bronDatum = htc?.[kerkKey]?.c;
+  const curated: Resultaat[] = (eigen?.[kerkKey] ?? []).filter((h) => hoortBijDag(tekstVan(h), bronDatum, ymd)).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
   const gezien = new Set(curated.map((h) => normaliseer(h.ruwNaam ?? h.naam)));
   const extra: Resultaat[] = (htc?.[kerkKey]?.l ?? [])
+    .filter(([, tekst]) => hoortBijDag(tekst, bronDatum, ymd))
     .map(([icon, tekst]) => ({ md: kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang, bronTekst: tekst }))
     .filter((h) => ![...gezien].some((g) => normaliseer(h.naam).includes(g) || g.includes(normaliseer(h.naam))));
   return [...curated, ...extra];
