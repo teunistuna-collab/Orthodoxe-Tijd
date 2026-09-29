@@ -3,6 +3,7 @@ import Modal from './Modal';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
 import PageHero from './PageHero';
+import Gebedssnoer from './Gebedssnoer';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
@@ -133,6 +134,13 @@ export default function Ademcyclus() {
               <footer className="mt-3 font-display text-lg text-ink-soft">— Heilige Silouan de Athoniet</footer>
             </blockquote>
           </div>
+        </div>
+      </section>
+
+      {/* Het gebedssnoer: het Jezusgebed tellen per knoop */}
+      <section className="orthodox-pattern parchment-pattern bg-parchment pb-16 text-ink sm:pb-24">
+        <div className={CONTENT}>
+          <Gebedssnoer />
         </div>
       </section>
 

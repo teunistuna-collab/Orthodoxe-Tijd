@@ -1443,7 +1443,9 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 
 /* Bouw 58 — er staat één pagina tegelijk in beeld (App.tsx). Verborgen pagina's blijven gemount zodat pop-ups
    die Vandaag in een andere pagina opent (week, vasten, pascha, etmaal) toch verschijnen. */
-.pagina-verborgen{height:0;overflow:hidden;visibility:hidden}
+/* position:relative: zonder dit telden absoluut geplaatste sierelementen in verborgen pagina's (ringen, ornamenten) mee
+   voor de scrolllengte, zodat je onder de footer kon doorscrollen naar leeg vlak. Pop-ups (position:fixed) blijven werken. */
+.pagina-verborgen{position:relative;height:0;overflow:hidden;visibility:hidden}
 .pagina-verborgen .exact-modal-backdrop{visibility:visible}
 
 /* Bouw 57 — kalenderdagen: het vlak krijgt dezelfde liturgische kleur als het kader (niet alleen een dunne rand). */
@@ -1923,3 +1925,32 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
   .exact-modal-heading h2{font-size:17px!important;overflow-wrap:break-word;hyphens:auto}
   .exact-modal-heading p{letter-spacing:.08em!important;overflow-wrap:break-word}
 }
+
+/* Bouw 80 — Vandaag leeft mee: liturgische kleur rond het medaillon, een flakkerende kaars; gebedssnoer op Adem.
+   Beweging alleen waar het iets betekent (kaarsvlam, knoop gebeden) en uit bij "minder beweging". */
+.vm-ring-1{border:2px solid color-mix(in srgb,var(--dag-kleur,#b88628) 80%,transparent)}
+.vm-vlam{position:relative;display:inline-flex;flex:none}
+.vm-vlam:after{content:"";position:absolute;left:50%;top:-10px;width:52px;height:52px;margin-left:-26px;border-radius:50%;background:radial-gradient(circle,rgba(255,196,92,.62),rgba(255,170,60,.22) 42%,transparent 70%);pointer-events:none;transform-origin:50% 62%;animation:vm-vlam 3.4s ease-in-out infinite}
+@keyframes vm-vlam{0%,100%{opacity:.72;transform:scale(1)}17%{opacity:.96;transform:scale(1.07) translateY(-1px)}33%{opacity:.66;transform:scale(.96)}51%{opacity:.9;transform:scale(1.04)}69%{opacity:.76;transform:scale(.99) translateY(1px)}84%{opacity:.94;transform:scale(1.06)}}
+
+.snoer{max-width:560px}
+.snoer-ring{position:relative;display:block;width:min(300px,100%);aspect-ratio:1;margin:22px auto 0;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;transition:transform .12s cubic-bezier(.2,.8,.2,1)}
+.snoer-ring:active{transform:scale(.985)}
+.snoer-ring svg{display:block;width:100%;height:100%}
+.snoer-draad{fill:none;stroke:rgba(138,90,30,.35);stroke-width:1}
+.snoer-knoop{fill:#f3e8d0;stroke:rgba(176,126,37,.75);stroke-width:1.2;transition:fill .25s ease-out,stroke .25s ease-out}
+.snoer-knoop.is-merk{fill:#ead8ae}
+.snoer-knoop.is-gebeden{fill:#5a1716;stroke:#b88628}
+.snoer-kruis{position:absolute;left:50%;top:calc(32 / 300 * 100%);width:22px;height:33px;margin:-17px 0 0 -11px;color:#8a5a1e}
+.snoer-telling{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.snoer-telling b{font-family:var(--font-display);font-size:58px;font-weight:600;line-height:1;color:#2b1d12;font-variant-numeric:lining-nums tabular-nums}
+.snoer-telling small{margin-top:4px;font-family:var(--font-body);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#6b5540}
+.snoer-telling em{margin-top:8px;font-family:var(--font-display);font-size:16px;font-style:italic;color:#5a1716}
+.snoer-bediening{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:22px}
+.snoer-keuze{display:inline-flex;padding:2px;border:1px solid rgba(184,134,40,.55);border-radius:999px;background:rgba(255,251,240,.6)}
+#top#top#top .snoer-keuze button{min-width:52px;min-height:44px;padding:0 14px;border:0;border-radius:999px;background:transparent;font-family:var(--font-display);font-size:17px;font-weight:600;color:#4a2b1d;cursor:pointer}
+#top#top#top .snoer-keuze button[aria-pressed=true]{background:#5a1716;color:#f6ead2}
+.snoer-acties{display:flex;gap:8px}
+#top#top#top .snoer-acties button{min-height:44px;padding:0 18px;border:1px solid rgba(176,126,37,.55);border-radius:999px;background:#fbf6ea;font-family:var(--font-display);font-size:16px;font-weight:600;color:#4a2b1d;cursor:pointer}
+#top#top#top .snoer-acties button:disabled{opacity:.45;cursor:default}
+@media(prefers-reduced-motion:reduce){.vm-vlam:after{animation:none}.snoer-ring,.snoer-knoop{transition:none}.snoer-ring:active{transform:none}}

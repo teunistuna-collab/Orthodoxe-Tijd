@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ChevronRight, Search, Sparkles } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
+import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 
 // Leeg plaatje (1×1) voor een <source> die op dat scherm niets hoeft te laden: de desktopbanner (±400 KB) niet op
 // mobiel, het mobiele Christusmedaillon (±185 KB) niet op desktop. <picture class="contents"> verandert de opmaak niet.
@@ -77,6 +78,10 @@ export default function Vandaag() {
   // De eerste echte heilige van de dag (geen voorfeest, "Zaterdag vóór …" of icoon).
   const heilige = eersteHeilige(heiligen?.HEILIGEN[dag.kerkKey]);
   const datumTitel = hoofdFeest?.naam ?? heilige?.naam ?? 'Dag door het jaar';
+  // Liturgische kleur van de dag: de ring rond het medaillon (mobiel) en het kruis in de dagkop (desktop).
+  const kleur = liturgischeKleur(dag);
+  const kleurHex = LITURGISCHE_KLEUREN[kleur].hex;
+  const kleurTekst = `Liturgische kleur van vandaag: ${kleur === 'wit' ? 'wit' : kleur} (${LITURGISCHE_KLEUREN[kleur].uitleg})`;
 
   // Mobiele opbouw (max-width: 767px): acht compacte knoppen met dezelfde iconen, links en gebeurtenissen als de lijst hierboven.
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
@@ -100,7 +105,7 @@ export default function Vandaag() {
         <h1 className="sr-only">Vandaag</h1>
         <div className="vandaag-cover"><picture className="contents"><source media="(max-width: 767.98px)" srcSet={LEEG} /><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></picture></div>
         <div className="vandaag-paper">
-          <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true">☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
+          <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true" style={{ color: kleurHex }} title={kleurTekst}>☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
           <div className="vandaag-list">
             <a className="vandaag-item" href="#adem"><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp" alt=""/><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Naar pijlgebed →</span></div><ChevronRight/></a>
             {/* De kaart opent de dienst; de psalmverwijzing erin opent die psalm in het psalter (daarom geen <a> om het geheel). */}
@@ -121,7 +126,8 @@ export default function Vandaag() {
         <p className="vm-sier" aria-hidden="true"><span>✣</span></p>
         <p className="vm-tagline">Een weg door de tijd<br />Een leven met Christus</p>
 
-        <div className="vm-medaillon">
+        <div className="vm-medaillon" style={{ '--dag-kleur': kleurHex } as CSSProperties}>
+          <span className="sr-only">{kleurTekst}</span>
           <span className="vm-ring vm-ring-1" aria-hidden="true" />
           <span className="vm-ring vm-ring-2" aria-hidden="true" />
           <span className="vm-kruis vm-kruis-n" aria-hidden="true">✣</span>
@@ -163,7 +169,7 @@ export default function Vandaag() {
 
         <div className="vm-kaars" aria-hidden="true">
           <span className="vm-kaars-lijn"><i>✣</i></span>
-          <img decoding="async" src="/images/decor/kaars.webp" alt="" width="220" height="200" />
+          <span className="vm-vlam"><img decoding="async" src="/images/decor/kaars.webp" alt="" width="220" height="200" /></span>
           <span className="vm-kaars-lijn vm-kaars-rechts"><i>✣</i></span>
         </div>
       </div>
