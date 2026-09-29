@@ -89,6 +89,8 @@ export default function App() {
       // dus de volgende keer weer bovenaan beginnen. Halverwege weggaan onthoudt de plek wel.
       const totEinde = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
       scrollPosities.current[huidige.current] = totEinde < window.innerHeight ? 0 : window.scrollY;
+      // Vanaf de eerste wissel vervaagt een nieuwe pagina zacht in (index.css, Bouw 81); bij het openen van de site niet.
+      document.documentElement.dataset.overgang = '1';
       huidige.current = p;
       setPagina(p);
     };

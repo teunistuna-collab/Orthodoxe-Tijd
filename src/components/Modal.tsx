@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
@@ -69,6 +69,46 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
     return () => terug?.focus?.({ preventScroll: true });
   }, [open]);
 
+  // Leesvensters: dunne gouden voortgangslijn bovenaan, en bij een lange tekst "Verder lezen" waar je gebleven was.
+  // De plek wordt per tekst op dit toestel bewaard (sleutel: deeplink of titel) en vergeten zodra de tekst uit is.
+  const papierRef = useRef<HTMLDivElement | null>(null);
+  const balkRef = useRef<HTMLSpanElement | null>(null);
+  const [hervat, setHervat] = useState<number | null>(null);
+  const leesSleutel = `leesplek:${deel?.pad ?? title}`;
+  useEffect(() => {
+    const papier = papierRef.current;
+    if (!open || !lezen || !papier) return;
+    let bewaard = 0;
+    try {
+      bewaard = Number(localStorage.getItem(leesSleutel)) || 0;
+    } catch {
+      /* geen opslag */
+    }
+    setHervat(bewaard > 400 ? bewaard : null);
+    let frame = 0;
+    const opScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const max = papier.scrollHeight - papier.clientHeight;
+        const deelGelezen = max > 0 ? papier.scrollTop / max : 0;
+        balkRef.current?.style.setProperty('--gelezen', String(deelGelezen));
+        if (papier.scrollTop > 200) setHervat(null);
+        try {
+          if (deelGelezen > 0.97) localStorage.removeItem(leesSleutel);
+          else if (papier.scrollTop > 400) localStorage.setItem(leesSleutel, String(Math.round(papier.scrollTop)));
+        } catch {
+          /* geen opslag */
+        }
+      });
+    };
+    opScroll();
+    papier.addEventListener('scroll', opScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      papier.removeEventListener('scroll', opScroll);
+    };
+  }, [open, lezen, leesSleutel]);
+
   if (!open) return null;
 
   return (
@@ -96,7 +136,20 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
           </div>
         </header>
         <div className="exact-modal-vlak">
-          <div className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>{children}</div>
+          {lezen && <span ref={balkRef} className="lees-voortgang" aria-hidden="true" />}
+          <div ref={papierRef} className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>{children}</div>
+          {lezen && hervat !== null && (
+            <button
+              type="button"
+              className="lees-hervat"
+              onClick={() => {
+                papierRef.current?.scrollTo({ top: hervat, behavior: 'smooth' });
+                setHervat(null);
+              }}
+            >
+              Verder lezen
+            </button>
+          )}
         </div>
         {lezen && (
           <div className="exact-modal-voet">

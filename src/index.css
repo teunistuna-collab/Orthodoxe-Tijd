@@ -1274,7 +1274,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   .vm-sier:after{transform:scaleX(-1)}
   .vm-sier span{font-size:15px}
   .vm-sier-breed{width:min(100%,300px);margin:4px auto 8px}
-  .vm-tagline{margin:4px 0 0;font-size:10.5px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;line-height:1.55;color:#3a2a1c}
 
   .vm-medaillon{position:relative;width:clamp(124px,35vw,150px);aspect-ratio:1;margin:clamp(34px,8.6vw,38px) auto clamp(32px,8.2vw,36px)}
   .vm-medaillon img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid rgba(184,134,40,.75);box-shadow:0 10px 24px rgba(120,80,30,.22)}
@@ -1474,7 +1473,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 /* Bouw 62 — ondergrens voor kleine labels: niets in de pagina's kleiner dan ±11,5px (A3) */
 #top main :is(.text-\[8px\],.text-\[9px\],.text-\[10px\],.text-\[10\.5px\]){font-size:11.5px}
 /* labels die elders met !important op 9–10px staan */
-#top#top#top main :is(.timeline-label,.cal-saints-label,.major-badge,.saints-kicker,.feast-meta,.saints-rule-title span,.vandaag-dayhead>span,.saints-ending span,.vm-tagline,.dienst-kaart-tijd,.vandaag-item small){font-size:11.5px!important}
+#top#top#top main :is(.timeline-label,.cal-saints-label,.major-badge,.saints-kicker,.feast-meta,.saints-rule-title span,.vandaag-dayhead>span,.saints-ending span,.dienst-kaart-tijd,.vandaag-item small){font-size:11.5px!important}
 #top#top#top :is(.exact-modal-heading p,.exact-popup-subtitle){font-size:11px!important}
 
 /* Bouw 63 — MobileListRow (ui.tsx): compacte liturgische lijstregel voor mobiel (feesten, weekdagen) */
@@ -1954,3 +1953,30 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 #top#top#top .snoer-acties button{min-height:44px;padding:0 18px;border:1px solid rgba(176,126,37,.55);border-radius:999px;background:#fbf6ea;font-family:var(--font-display);font-size:16px;font-weight:600;color:#4a2b1d;cursor:pointer}
 #top#top#top .snoer-acties button:disabled{opacity:.45;cursor:default}
 @media(prefers-reduced-motion:reduce){.vm-vlam:after{animation:none}.snoer-ring,.snoer-knoop{transition:none}.snoer-ring:active{transform:none}}
+
+/* Bouw 81 — tijd en beweging: aftellen naar het volgende grote feest (Vandaag), één rustige overgang, leesvoortgang.
+   Het ene vaste moment: een pop-up schuift zacht omhoog, de gouden lijnen in de kop tekenen zich uit en het ✣ bloeit op.
+   Pagina's vervagen alleen in bij wisselen. Alles uit bij "minder beweging". */
+.vm-aftel{display:block;max-width:300px;margin:4px auto 0;font-family:var(--font-display);font-size:16px;font-style:italic;line-height:1.3;color:#5a1716;text-decoration:none}
+.vandaag-aftel{display:block;margin-top:6px;font-family:var(--font-display);font-size:15px;font-style:italic;color:#5a1716;text-decoration:none}
+.vm-aftel:hover,.vandaag-aftel:hover{text-decoration:underline;text-underline-offset:3px}
+
+html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease-out}
+@keyframes pagina-in{from{opacity:0}}
+.exact-modal-backdrop{animation:venster-achtergrond .22s ease-out}
+@keyframes venster-achtergrond{from{opacity:0}}
+.exact-modal-frame{animation:venster-in .36s cubic-bezier(.22,1,.36,1)}
+@keyframes venster-in{from{opacity:0;transform:translateY(16px)}}
+.exact-modal-heading-line span{animation:lijn-uit .5s .1s cubic-bezier(.22,1,.36,1) both}
+.exact-modal-heading-line span:first-child{transform-origin:right center}
+.exact-modal-heading-line span:last-child{transform-origin:left center}
+@keyframes lijn-uit{from{transform:scaleX(0)}}
+.exact-modal-heading-line b{display:inline-block;animation:ster-in .55s .18s cubic-bezier(.22,1,.36,1) both}
+@keyframes ster-in{from{opacity:0;transform:scale(.3) rotate(-60deg)}}
+
+.lees-voortgang{position:absolute;top:0;left:0;right:0;z-index:2;height:2px;background:linear-gradient(90deg,#b88628,#e8cf7a);transform:scaleX(var(--gelezen,0));transform-origin:left center;pointer-events:none}
+.lees-hervat{position:absolute;left:50%;bottom:14px;z-index:3;transform:translateX(-50%);min-height:44px;padding:0 20px;border:1px solid #b88628;border-radius:999px;background:#2b1707;box-shadow:0 8px 20px rgba(0,0,0,.28);font-family:var(--font-display);font-size:16px;font-weight:600;color:#f3dfae;cursor:pointer;animation:venster-in .36s cubic-bezier(.22,1,.36,1)}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-overgang] .pagina:not(.pagina-verborgen),.exact-modal-backdrop,.exact-modal-frame,.exact-modal-heading-line span,.exact-modal-heading-line b,.lees-hervat{animation:none}
+}

@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ChevronRight, Search, Sparkles } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
-import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
+import { dagInfo, daysBetween, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
+import { DERTIEN } from '../lib/feesten';
+import { volgendeFeestDatum } from '../lib/overzicht';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
@@ -81,6 +83,12 @@ export default function Vandaag() {
   // Liturgische kleur van de dag: de ring rond het medaillon (mobiel) en het kruis in de dagkop (desktop).
   const kleur = liturgischeKleur(dag);
   const kleurHex = LITURGISCHE_KLEUREN[kleur].hex;
+  // Het eerstvolgende grote feest (Pascha en de twaalf), zelfde berekening als de Feesten-pagina; op de dag zelf staat het al in de titel.
+  const volgendFeest = useMemo(
+    () => DERTIEN.map((f) => ({ f, dagen: daysBetween(vandaag, volgendeFeestDatum(f, vandaag, mode)) })).sort((a, b) => a.dagen - b.dagen)[0],
+    [vandaag, mode],
+  );
+  const aftelTekst = volgendFeest && volgendFeest.dagen > 0 ? `${volgendFeest.dagen === 1 ? 'Morgen' : `Over ${volgendFeest.dagen} dagen`}: ${volgendFeest.f.naam}` : null;
   const kleurTekst = `Liturgische kleur van vandaag: ${kleur === 'wit' ? 'wit' : kleur} (${LITURGISCHE_KLEUREN[kleur].uitleg})`;
 
   // Mobiele opbouw (max-width: 767px): acht compacte knoppen met dezelfde iconen, links en gebeurtenissen als de lijst hierboven.
@@ -105,7 +113,7 @@ export default function Vandaag() {
         <h1 className="sr-only">Vandaag</h1>
         <div className="vandaag-cover"><picture className="contents"><source media="(max-width: 767.98px)" srcSet={LEEG} /><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></picture></div>
         <div className="vandaag-paper">
-          <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true" style={{ color: kleurHex }} title={kleurTekst}>☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
+          <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true" style={{ color: kleurHex }} title={kleurTekst}>☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}{aftelTekst && <a href="#feesten" className="vandaag-aftel">{aftelTekst}</a>}</header>
           <div className="vandaag-list">
             <a className="vandaag-item" href="#adem"><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp" alt=""/><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Naar pijlgebed →</span></div><ChevronRight/></a>
             {/* De kaart opent de dienst; de psalmverwijzing erin opent die psalm in het psalter (daarom geen <a> om het geheel). */}
@@ -124,7 +132,6 @@ export default function Vandaag() {
         <button type="button" onClick={openZoeken} className="vm-zoek" aria-label="Zoeken"><Search aria-hidden="true" /></button>
         <p className="vm-titel">Orthodoxe Tijd</p>
         <p className="vm-sier" aria-hidden="true"><span>✣</span></p>
-        <p className="vm-tagline">Een weg door de tijd<br />Een leven met Christus</p>
 
         <div className="vm-medaillon" style={{ '--dag-kleur': kleurHex } as CSSProperties}>
           <span className="sr-only">{kleurTekst}</span>
@@ -143,6 +150,7 @@ export default function Vandaag() {
         <p className="vm-weekdag">{dag.weekdagNaam}</p>
         <p className="vm-datum">{formatDatum(dag.civil)}</p>
         <p className="vm-kerk">{kerkelijkeRegel}</p>
+        {aftelTekst && <a href="#feesten" className="vm-aftel">{aftelTekst}</a>}
         <div className="vm-kalender" role="group" aria-label="Kalenderkeuze">
           <button type="button" aria-pressed={mode === 'oud'} className={mode === 'oud' ? 'is-actief' : undefined} onClick={() => setMode('oud')}>Oud · juliaans</button>
           <button type="button" aria-pressed={mode === 'nieuw'} className={mode === 'nieuw' ? 'is-actief' : undefined} onClick={() => setMode('nieuw')}>Nieuw · burgerlijk</button>
