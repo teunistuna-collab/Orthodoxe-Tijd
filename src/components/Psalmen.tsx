@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Search } from 'lucide-react';
+import { ChevronUp, Search } from 'lucide-react';
 import PageHero from './PageHero';
 import Modal from './Modal';
 import Leesbediening from './Leesbediening';
@@ -133,6 +133,14 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const psalm = PSALMEN[gekozen - 1];
   const popupPsalm = popup !== null ? PSALMEN[popup - 1] : null;
 
+  const [naarBoven, setNaarBoven] = useState(false);
+  useEffect(() => {
+    const opScroll = () => setNaarBoven(window.scrollY > 700);
+    opScroll();
+    window.addEventListener('scroll', opScroll, { passive: true });
+    return () => window.removeEventListener('scroll', opScroll);
+  }, []);
+
   return (
     <>
       <PageHero id="psalmen" titel="Psalmen" ondertitel="De adem van de ziel" kop />
@@ -164,7 +172,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           </div>
 
           {filter === 'kathisma' && (
-            <div className="ps-kathismas" role="group" aria-label="Kathisma">
+            <div className="ps-kathismas ps-kies" role="group" aria-label="Kathisma">
               {KATHISMATA.map((k) => (
                 <button key={k.nr} type="button" aria-pressed={k.nr === kathismaNr} aria-label={`Kathisma ${k.nr}`} onClick={() => setKathismaNr(k.nr)}>
                   {k.nr}
@@ -174,7 +182,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           )}
 
           {filter === 'themas' && (
-            <div className="ps-themas" role="group" aria-label="Thema">
+            <div className="ps-themas ps-kies" role="group" aria-label="Thema">
               {THEMAS.map((t) => (
                 <button key={t.naam} type="button" aria-pressed={t === thema} onClick={() => setThema(t)}>
                   {t.naam}
@@ -265,6 +273,17 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           <PsalmLezer key={popupPsalm.id} idVoorvoegsel="ps-popup" psalm={popupPsalm} tekst={teksten?.[popupPsalm.septuagintNumber]} laadFout={laadFout} />
         </Modal>
       )}
+      {/* Zwevende "naar boven"-knop: verschijnt na een stuk scrollen (de lijst met 150 psalmen is lang) */}
+      <button
+        type="button"
+        className={`naar-boven${naarBoven ? ' is-zichtbaar' : ''}`}
+        onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
+        aria-label="Naar boven"
+        tabIndex={naarBoven ? 0 : -1}
+        aria-hidden={!naarBoven}
+      >
+        <ChevronUp aria-hidden="true" />
+      </button>
     </>
   );
 }

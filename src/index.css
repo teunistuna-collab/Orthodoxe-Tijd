@@ -2296,3 +2296,36 @@ details[open]::details-content{height:auto}
   #top#top#top .cyclus-paneel .ot-sectietitel{padding-inline:22px;font-size:24px}
   #top#top#top .cyclus-paneel .mt-10.space-y-3{margin-top:18px}
 }
+
+/* Bouw 100 — psalmnummer als medaillon zoals de rest (donker met gouden ring) in plaats van wijnrood; groter, gewone cijfers */
+#top#top#top .ps-rij .ps-nummer{width:40px;height:40px;background:radial-gradient(circle at 50% 35%,var(--ot-bark2),var(--ot-bark));
+  box-shadow:0 0 0 1.5px var(--ot-gold),0 0 0 3px color-mix(in srgb,var(--ot-gold) 25%,transparent),0 3px 8px color-mix(in srgb,var(--ot-bark) 35%,transparent);
+  font-size:19px;font-variant-numeric:lining-nums;color:var(--ot-gold2)}
+@media(min-width:768px){#top#top#top .ps-rij .ps-nummer{width:44px;height:44px;font-size:21px}}
+
+/* Bouw 101 — Psalmen: filters als tabbalk (zoals de tabs in het psalmvenster), geen dikke donkere pillen en geen geel vlak.
+   Kathisma-nummers en thema's als dunne lichte knopjes; gekozen = donker met gouden tekst. Vervangt Bouw 88/89 voor deze knoppen. */
+#top#top#top#top .ps-filters.ps-filters{flex-wrap:nowrap;justify-content:space-between;gap:8px;margin-top:10px;overflow-x:auto;border-bottom:1px solid var(--ot-rand);scrollbar-width:none}
+#top#top#top#top .ps-filters.ps-filters button{position:relative;min-height:44px!important;padding:0 1px!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;
+  font-family:"Cormorant Garamond",serif;font-size:16px!important;font-weight:500;color:var(--color-ink-soft)!important}
+@media(min-width:768px){#top#top#top#top .ps-filters.ps-filters{justify-content:flex-start;gap:22px}#top#top#top#top .ps-filters.ps-filters button{font-size:17px!important}}
+#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]{font-weight:700;color:var(--ot-ink)!important}
+#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]:after{content:"";position:absolute;right:0;bottom:-1px;left:0;height:2px;background:var(--color-gold-deep)}
+#top#top#top#top .ps-filters.ps-filters button:is(:hover,:focus-visible){color:var(--ot-ink)!important;outline:none}
+#top#top#top#top .ps-filters.ps-filters button:focus-visible{box-shadow:inset 0 -2px 0 var(--ot-gold)!important}
+#top#top#top#top :is(.ps-themas,.ps-kathismas).ps-kies button{min-height:38px!important;border:1px solid var(--ot-rand)!important;background:color-mix(in srgb,var(--ot-ivory) 35%,var(--color-paper))!important;
+  box-shadow:none!important;font-family:"Cormorant Garamond",serif;font-weight:600;font-variant-numeric:lining-nums;color:var(--ot-ink)!important}
+#top#top#top#top :is(.ps-themas,.ps-kathismas).ps-kies button:is(:hover,:focus-visible){border-color:var(--color-gold-deep)!important;outline:none}
+#top#top#top#top :is(.ps-themas,.ps-kathismas).ps-kies button[aria-pressed=true]{border-color:var(--ot-bark)!important;background:var(--ot-bark2)!important;color:var(--ot-gold2)!important}
+
+/* Bouw 102 — zwevende "naar boven"-knop op Psalmen: klein medaillon rechtsonder, boven de onderbalk; verschijnt na 700px scrollen */
+#top#top#top .naar-boven{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:80;display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;min-height:44px;padding:0;border:1px solid var(--ot-gold);border-radius:50%;background:color-mix(in srgb,var(--ot-bark2) 92%,transparent);
+  color:var(--ot-gold2);box-shadow:0 0 0 3px color-mix(in srgb,var(--ot-gold) 18%,transparent),0 6px 16px color-mix(in srgb,var(--ot-bark) 35%,transparent);
+  opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility .2s}
+#top#top#top .naar-boven.is-zichtbaar{opacity:.92;visibility:visible;transform:none}
+#top#top#top .naar-boven:is(:hover,:focus-visible){opacity:1;outline:none;box-shadow:0 0 0 2px var(--ot-gold2),0 6px 16px color-mix(in srgb,var(--ot-bark) 35%,transparent)}
+#top#top#top .naar-boven svg{width:22px;height:22px;stroke-width:1.75}
+.pagina-verborgen .naar-boven{display:none}
+@media(min-width:768px){#top#top#top .naar-boven{right:24px;bottom:24px}}
+@media(prefers-reduced-motion:reduce){#top#top#top .naar-boven{transition:none}}
