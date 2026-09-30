@@ -10,11 +10,41 @@ import DeelKnop from './DeelKnop';
 import { vergrendelScroll } from '../lib/scrollLock';
 import { eersteHeilige, heiligeTitel, hoortBijDag } from '../lib/heiligenPopup';
 import { soortVan } from '../lib/heiligenSoort';
+import type { Heilige } from '../lib/heiligen';
 
 interface Props {
   ymd: string | null;
   onClose: () => void;
   onNavigate: (ymd: string) => void;
+}
+
+// Eigen (Nederlandstalige) heilige als kaartje; `los` = in het "Meer"-lijstje, anders met bovenmarge onder de kop.
+function HeiligeKaart({ h, los = false }: { h: Heilige; los?: boolean }) {
+  const kaart = (
+    <li className="dag-blok">
+      <div className="flex items-baseline gap-2">
+        <span className="font-display text-lg font-semibold">{h.naam}</span>
+        {h.nl && <span className="rounded-sm bg-wine px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-gold-light uppercase">Lage Landen</span>}
+      </div>
+      <div className="text-xs font-semibold text-gold-deep">{h.titel}</div>
+      <p className="mt-1 text-sm leading-relaxed text-ink-soft">{h.kort}</p>
+    </li>
+  );
+  return los ? kaart : <ul className="mt-3">{kaart}</ul>;
+}
+
+// Eén regel uit de heiligenlijst van holytrinityorthodox.com, met rangteken.
+function HtcRegel({ regel: [icon, tekst], origineel }: { regel: [string, string]; origineel: boolean }) {
+  const r = rangLabel(icon);
+  return (
+    <li className="flex gap-2">
+      <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${r && r.rang >= 4 ? 'bg-gold' : 'bg-parchment-4'}`} />
+      <span className={r && r.rang >= 5 ? 'font-semibold' : ''}>
+        {origineel ? tekst : vertaalLeven(tekst)}
+        {r && <span className="ml-1.5 text-[10px] font-bold tracking-wider text-gold-deep uppercase">{r.label}</span>}
+      </span>
+    </li>
+  );
 }
 
 export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Props) {
@@ -79,7 +109,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
             </div>
             <div className="space-y-7">
               {/* Vasten */}
-              <div className="rounded-xl p-4" style={{ background: niveau.zacht, border: `1px solid color-mix(in srgb, ${niveau.kleur} 20%, transparent)` }}>
+              <div className="dag-blok">
                 <div className="flex flex-wrap items-center gap-3">
                   <VastenBadge regel={dag.vasten} size="lg" />
                   <span className="text-sm font-semibold" style={{ color: niveau.tekst }}>
@@ -94,10 +124,10 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
               {/* Feesten */}
               {dag.feesten.length > 0 && (
                 <div>
-                  <h3 className="ot-label">Feesten & gedachtenissen</h3>
+                  <h3 className="ot-label dag-kop">Feesten & gedachtenissen</h3>
                   <ul className="mt-3 space-y-3">
                     {dag.feesten.map((f) => (
-                      <li key={f.id} className="rounded-lg border border-parchment-3 bg-white/60 p-4">
+                      <li key={f.id} className="dag-blok">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="font-display text-xl font-semibold">{f.naam}</span>
                           <FeestTag feest={f} />
@@ -119,51 +149,47 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
               {/* Heiligen */}
               <div>
                 <div className="flex items-center justify-between">
-                  <h3 className="ot-label">Heiligen van de dag</h3>
+                  <h3 className="ot-label dag-kop">Heiligen van de dag</h3>
                   {htcDag && (
                     <button type="button" onClick={() => setOrigineel((v) => !v)} className="-mr-2 inline-flex min-h-11 items-center px-2 text-[11px] font-bold text-gold-deep underline-offset-2 hover:underline sm:min-h-0">
                       {origineel ? 'Nederlands' : 'Origineel (EN)'}
                     </button>
                   )}
                 </div>
-                {curated.length > 0 && (
-                  <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-                    {curated.map((h) => (
-                      <li key={h.naam} className="rounded-lg bg-parchment-2 p-3">
-                        <div className="flex items-baseline gap-2">
-                          <span className="font-display text-lg font-semibold">{h.naam}</span>
-                          {h.nl && <span className="rounded-sm bg-wine px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-gold-light uppercase">Lage Landen</span>}
-                        </div>
-                        <div className="text-xs font-semibold text-gold-deep">{h.titel}</div>
-                        <p className="mt-1 text-sm leading-relaxed text-ink-soft">{h.kort}</p>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {htcDag ? (
-                  <ul className="mt-3 space-y-1.5 text-sm leading-snug">
-                    {htcRegels.map(([icon, tekst], i) => {
-                      const r = rangLabel(icon);
-                      return (
-                        <li key={i} className="flex gap-2">
-                          <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${r && r.rang >= 4 ? 'bg-gold' : 'bg-parchment-4'}`} />
-                          <span className={r && r.rang >= 5 ? 'font-semibold' : ''}>
-                            {origineel ? tekst : vertaalLeven(tekst)}
-                            {r && <span className="ml-1.5 text-[10px] font-bold tracking-wider text-gold-deep uppercase">{r.label}</span>}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                {/* Eén heilige zichtbaar, de rest onder "Meer", zodat de lezingen niet ver naar beneden verdwijnen */}
+                {curated.length > 0 ? (
+                  <HeiligeKaart h={curated[0]} />
+                ) : htcRegels.length > 0 ? (
+                  <ul className="mt-3 text-sm leading-snug"><HtcRegel regel={htcRegels[0]} origineel={origineel} /></ul>
                 ) : (
                   <p className="mt-2 text-sm text-ink-mute">{htc ? 'Geen gegevens voor deze dag.' : 'Heiligen worden geladen…'}</p>
                 )}
-                <p className="mt-2 text-[11px] text-ink-mute">Bron: holytrinityorthodox.com · kerkelijke datum {formatDag(dag.kerk)} · vertaling automatisch</p>
+                {(() => {
+                  const overigeEigen = curated.slice(1);
+                  const overigeHtc = curated.length > 0 ? htcRegels : htcRegels.slice(1);
+                  const aantal = overigeEigen.length + overigeHtc.length;
+                  return aantal > 0 && (
+                    <details className="dag-meer mt-3">
+                      <summary>Meer heiligen en gedachtenissen ({aantal})</summary>
+                      {overigeEigen.length > 0 && (
+                        <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+                          {overigeEigen.map((h) => <HeiligeKaart key={h.naam} h={h} los />)}
+                        </ul>
+                      )}
+                      {overigeHtc.length > 0 && (
+                        <ul className="mt-3 space-y-1.5 text-sm leading-snug">
+                          {overigeHtc.map((regel, i) => <HtcRegel key={i} regel={regel} origineel={origineel} />)}
+                        </ul>
+                      )}
+                      <p className="mt-2 text-[11px] text-ink-mute">Bron: holytrinityorthodox.com · kerkelijke datum {formatDag(dag.kerk)} · vertaling automatisch</p>
+                    </details>
+                  );
+                })()}
               </div>
 
               {/* Lezingen */}
               <div>
-                <h3 className="ot-label flex items-center gap-2">
+                <h3 className="ot-label dag-kop">
                   <BookOpenText className="h-3.5 w-3.5" /> Schriftlezingen
                 </h3>
                 {lezingen.length > 0 ? (
@@ -176,7 +202,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                           <button
                             type="button"
                             onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: dag.civil })}
-                            className="flex w-full items-center justify-between gap-3 rounded-lg border border-parchment-3 bg-white/70 px-3 py-2 text-left transition hover:border-gold hover:bg-gold-pale"
+                            className="dag-lezing flex w-full items-center justify-between gap-3 text-left"
                           >
                             <span>
                               <span className="block text-[10px] font-bold tracking-wider text-gold-deep uppercase">{vertaalTag(l.tag, refNl)}</span>
@@ -185,6 +211,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                             <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-bold uppercase ${soort === 'evangelie' ? 'bg-wine text-gold-light' : soort === 'oud' ? 'bg-parchment-3 text-ink' : 'bg-gold-pale text-gold-deep'}`}>
                               {soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'OT' : 'Apostel'}
                             </span>
+                            <span className="pijl" aria-hidden="true">›</span>
                           </button>
                         </li>
                       );

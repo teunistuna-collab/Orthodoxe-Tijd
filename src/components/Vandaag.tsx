@@ -135,7 +135,6 @@ export default function Vandaag() {
         {['lb', 'rb', 'lo', 'ro'].map((hoek) => <span key={hoek} className={`vm-hoek vm-hoek-${hoek}`} aria-hidden="true" />)}
         <button type="button" onClick={openZoeken} className="vm-zoek" aria-label="Zoeken"><Search aria-hidden="true" /></button>
         <p className="vm-titel">Orthodoxe Tijd</p>
-        <p className="vm-sier" aria-hidden="true"><span>✣</span></p>
 
         <div className="vm-medaillon" style={{ '--dag-kleur': kleurHex } as CSSProperties}>
           <span className="sr-only">{kleurTekst}</span>

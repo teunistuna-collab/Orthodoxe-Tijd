@@ -60,12 +60,21 @@ const CATEGORIEN: CategorieDef[] = [
   },
 ];
 
+// Mobiel een rij zoals op Vandaag en bij de categorieën (vm-rij); vanaf tablet de kaart.
 function PrayerCard({ g, onOpen }: { g: Gebed; onOpen: () => void }) {
   return (
+    <>
+    <button type="button" onClick={onOpen} className="vm-rij gebed-rij md:hidden">
+      <span className="vm-rij-tekst">
+        <b>{g.titel}</b>
+        <small>{g.wanneer}</small>
+      </span>
+      <span className="pijl" aria-hidden="true">›</span>
+    </button>
     <button
       type="button"
       onClick={onOpen}
-      className="prayer-choice-card group p-5 text-left transition"
+      className="prayer-choice-card group p-5 text-left transition max-md:hidden"
     >
       <p className="ot-label">{g.wanneer}</p>
       <h4 className="font-display mt-1 text-lg font-semibold text-[#fbf3df]">{g.titel}</h4>
@@ -73,6 +82,7 @@ function PrayerCard({ g, onOpen }: { g: Gebed; onOpen: () => void }) {
         Open gebed ›
       </span>
     </button>
+    </>
   );
 }
 
@@ -120,7 +130,7 @@ export default function Gebeden() {
       <PageHero id="gebeden" titel="Gebeden" ondertitel="Een gesprek met God, in alle momenten" kop />
 
       {/* Introductie */}
-      <section className="orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">
+      <section className="gebed-intro orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">
         <div className={CONTENT}>
           <p className="ot-label ot-label-licht">Het gebedenboek</p>
           <h2 className="font-display mt-3 text-3xl font-semibold text-gold-light sm:text-4xl">Het gebed van de Kerk</h2>
@@ -132,7 +142,7 @@ export default function Gebeden() {
       </section>
 
       {/* Gebedscategorieën / overzicht */}
-      <section className="orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
+      <section className="gebed-overzicht orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
         <div className={CONTENT}>
           <div className="mx-auto max-w-xl">
             <div className="ot-zoek relative">
@@ -202,7 +212,20 @@ export default function Gebeden() {
                 </div>
               </div>
             )}
-            <div className="prayer-category-grid mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Mobiel: dezelfde rijen als op Vandaag (vm-rij, Bouw 82/91/92), met de omschrijving als subregel; vanaf tablet de tegels. */}
+            <div className="vm-lijst gebed-lijst md:hidden">
+              {categorieMetData.map((cat) => (
+                <button key={cat.id} type="button" onClick={() => setActieveCat(cat.id)} className="vm-rij">
+                  <img loading="lazy" decoding="async" src={cat.iconSrc} alt="" className="vm-icoon" />
+                  <span className="vm-rij-tekst">
+                    <b>{cat.label}</b>
+                    <small>{cat.omschrijving}</small>
+                  </span>
+                  <span className="pijl" aria-hidden="true">›</span>
+                </button>
+              ))}
+            </div>
+            <div className="prayer-category-grid mt-10 grid gap-5 max-md:hidden sm:grid-cols-2 lg:grid-cols-4">
               {categorieMetData.map((cat) => {
                 return (
                   <button

@@ -2208,15 +2208,49 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 
 /* Bouw 92 — één kaartstijl voor alle lichte knoppen/rijen: de kaarten van de cycli (Etmaal, Week, Jaar, Pascha),
    de rijen op Vandaag (mobiel) en de psalmrijen. Perkament, gouden rand, dubbele binnenlijn, hoeksier, zelfde hover. */
-#top#top#top#top :is(.dienst-kaart,.vm-rij,.ps-rij){position:relative;border:1px solid var(--ot-rand)!important;border-radius:4px!important;
+#top#top#top#top :is(.dienst-kaart,.vm-rij,.ps-rij,.dag-blok,.dag-lezing){position:relative;border:1px solid var(--ot-rand)!important;border-radius:4px!important;
   background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;
   box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important;
   transition:border-color .18s,box-shadow .18s}
-#top#top#top#top :is(.etmaal-ring-node:hover .dienst-kaart,.etmaal-ring-node:focus-visible .dienst-kaart,button.dienst-kaart,.vm-rij,.ps-rij):is(:hover,:focus-visible),
+#top#top#top#top :is(.etmaal-ring-node:hover .dienst-kaart,.etmaal-ring-node:focus-visible .dienst-kaart,button.dienst-kaart,.vm-rij,.ps-rij,.dag-lezing):is(:hover,:focus-visible),
 #top#top#top#top :is(.etmaal-ring-node:hover,.etmaal-ring-node:focus-visible) .dienst-kaart{border-color:var(--color-gold-deep)!important;outline:none;
   box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 14px 26px color-mix(in srgb,var(--ot-bark) 13%,transparent)!important}
-#top#top#top#top :is(.vm-rij,.ps-rij):before,#top#top#top#top :is(.vm-rij,.ps-rij):after{content:"";position:absolute;width:12px;height:12px;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
-#top#top#top#top :is(.vm-rij,.ps-rij):before{left:3px;top:3px}
-#top#top#top#top :is(.vm-rij,.ps-rij):after{right:3px;bottom:3px;transform:rotate(180deg)}
+#top#top#top#top :is(.vm-rij,.ps-rij,.dag-blok,.dag-lezing):before,#top#top#top#top :is(.vm-rij,.ps-rij,.dag-blok,.dag-lezing):after{content:"";position:absolute;width:12px;height:12px;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
+#top#top#top#top :is(.vm-rij,.ps-rij,.dag-blok,.dag-lezing):before{left:3px;top:3px}
+#top#top#top#top :is(.vm-rij,.ps-rij,.dag-blok,.dag-lezing):after{right:3px;bottom:3px;transform:rotate(180deg)}
 #top#top#top#top .ps-rij[aria-current]{border-color:var(--color-gold-deep)!important;
   box-shadow:inset 3px 0 0 var(--color-gold-deep),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 10%,transparent)!important}
+
+/* Bouw 93 — Gebeden (mobiel): de categorieën als rijen, zelfde onderdelen als Vandaag (vm-rij); hier als knop */
+@media(max-width:767.98px){
+  #top#top#top .gebed-lijst{max-width:none;margin:28px 0 0;gap:8px}
+  #top#top#top :is(.gebed-lijst .vm-rij,.gebed-rij){width:100%;font:inherit;text-align:left;cursor:pointer}
+  /* de gebeden binnen een categorie (en zoekresultaten, favorieten): zelfde rij, zonder icoon, dichter op elkaar */
+  #top#top#top .gebed-rij{padding-left:16px}
+  #top#top#top :has(>.gebed-rij){gap:8px}
+  #top#top#top .prayer-choice-card{display:none!important}
+  /* introductie compacter: minder leesruimte kwijt boven de zoekbalk */
+  #top#top#top .gebed-intro{padding-top:16px!important;padding-bottom:16px!important}
+  #top#top#top .gebed-intro h2{margin-top:2px!important;font-size:22px!important;line-height:1.2}
+  #top#top#top .gebed-intro h2+p{margin-top:6px!important;font-size:14px!important;line-height:1.5!important}
+  #top#top#top .gebed-overzicht{padding-top:16px!important}
+}
+@media(min-width:768px){#top#top#top .gebed-rij{display:none!important}}
+
+/* Bouw 94 — dagvenster (DagModal): één heilige zichtbaar, de rest achter "Meer heiligen en gedachtenissen" */
+.dag-meer summary{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--ot-rand);border-radius:4px;list-style:none;cursor:pointer;
+  font-family:"Alegreya Sans",sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--color-gold-deep)}
+.dag-meer summary::-webkit-details-marker{display:none}
+.dag-meer summary:after{content:"›";margin-left:auto;font-size:22px;line-height:1;transition:transform .18s}
+.dag-meer[open] summary:after{transform:rotate(90deg)}
+.dag-meer summary:hover{border-color:var(--color-gold-deep)}
+.dag-meer summary:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.dag-meer summary:after{transition:none}}
+
+/* Bouw 95 — dagvenster in de vaste stijl: vasten, feesten, heilige en lezingen als losse kaarten (Bouw 92), koppen met een gouden lijn */
+.dag-blok{padding:14px 16px}
+.dag-lezing{min-height:56px;padding:8px 12px 8px 14px;font:inherit;cursor:pointer}
+.dag-kop{display:flex;flex:1;align-items:center;gap:10px}
+#top#top#top#top .dag-kop{color:var(--ot-ink)!important}
+.dag-kop:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--ot-rand),transparent)}
+.dag-kop svg{flex:none;width:14px;height:14px}
