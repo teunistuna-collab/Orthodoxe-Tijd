@@ -295,7 +295,7 @@ export default function Vasten() {
                     <div className="major-actions">
                       {info && (
                         <a href={info.href} className="btn-pill">
-                          {info.linkLabel} →
+                          {info.linkLabel} ›
                         </a>
                       )}
                     </div>
@@ -317,7 +317,7 @@ export default function Vasten() {
               Pinksteren, de Kersttijd en de week na Tollenaar en Farizeeër.
             </p>
             <a href="#week" className="btn-pill mt-3">
-              Ontdek de weekcyclus →
+              Ontdek de weekcyclus ›
             </a>
 
             {/* Deze week (levend voorbeeld, geen hardgecodeerde status) */}

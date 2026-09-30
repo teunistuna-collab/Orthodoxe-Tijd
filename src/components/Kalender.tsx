@@ -5,22 +5,9 @@ import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandR
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
 import { NIVEAUS, VASTEN_GROEPEN, vastenGroep, type VastenGroep } from '../lib/vasten';
-import { VastenSymbool } from './ui';
+import { VastenSymbool, Hoeksier } from './ui';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import PageHero from './PageHero';
-
-// Zeer subtiel botanisch hoekornament ter decoratie van het kalenderpaneel.
-function CornerOrnament({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 80 80" className={className} fill="none" stroke="currentColor" strokeWidth="1.4">
-      <path d="M4 4 C 20 6, 30 16, 32 32" strokeLinecap="round" />
-      <path d="M4 4 C 6 20, 16 30, 32 32" strokeLinecap="round" />
-      <circle cx="32" cy="32" r="2.4" />
-      <circle cx="14" cy="6" r="1.8" />
-      <circle cx="6" cy="14" r="1.8" />
-    </svg>
-  );
-}
 
 // Weergave van de liturgische kleur in een vakje: 'balk' (balkje onderin) of 'rand' (rand van 2px). Keuze volgt nog.
 const KLEURWEERGAVE: 'balk' | 'rand' = 'balk';
@@ -99,8 +86,8 @@ export default function Kalender() {
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink max-md:py-5 sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12">
           <div className="parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] max-md:px-5 max-md:py-4 sm:px-14 sm:py-9">
-            <CornerOrnament className="pointer-events-none absolute bottom-3 left-3 hidden h-10 w-10 text-gold-deep/20 sm:block" />
-            <CornerOrnament className="pointer-events-none absolute right-3 top-3 hidden h-10 w-10 -scale-x-100 text-gold-deep/20 sm:block" />
+            <Hoeksier className="pointer-events-none absolute bottom-3 left-3 hidden sm:block -scale-y-100" />
+            <Hoeksier className="pointer-events-none absolute right-3 top-3 hidden -scale-x-100 sm:block" />
             <div className="relative grid gap-6 lg:grid-cols-[7fr_3fr] lg:items-center">
               <div>
                 <p className="ot-label">Leef mee met de liturgische tijd</p>
@@ -112,8 +99,8 @@ export default function Kalender() {
           </div>
 
           <div className="mt-8 parchment-pattern relative overflow-hidden rounded-lg border border-gold/45 bg-[#f8f1e3] shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:mt-4">
-            <CornerOrnament className="absolute top-4 left-4 h-12 w-12 text-gold-deep/25" />
-            <CornerOrnament className="absolute top-4 right-4 h-12 w-12 -scale-x-100 text-gold-deep/25" />
+            <Hoeksier className="absolute top-4 left-4" />
+            <Hoeksier className="absolute top-4 right-4 -scale-x-100" />
             <div className="lg:grid lg:grid-cols-[3fr_2fr]">
             <div className="relative min-w-0 border-b border-gold/35 lg:border-b-0 lg:border-r">
             <CalendarToolbar
@@ -270,8 +257,8 @@ export default function Kalender() {
             <div className="hidden border-t border-gold/35 bg-[#f3e9d2]/70 px-5 py-6 sm:px-7 lg:block">
               <div className="grid gap-3 md:grid-cols-3">
                 <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Feestdag / gedachtenis</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.feesten.map((f) => f.naam).join(' · ') || 'Geen groot feest.'}</p></section>
-                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Schriftlezingen</p><p className="mt-2 mb-3 text-sm text-ink-soft">De bestaande lezingen en volledige daginformatie staan in het dagdetail.</p><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill mt-auto self-start">Lees de lezingen →</button></section>
-                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Vasten</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.vasten.label}</p><p className="mt-1 mb-3 text-sm text-ink-soft">{geselecteerd.vasten.detail}</p><a href="#vasten" className="btn-pill mt-auto self-start">Meer over vasten →</a></section>
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Schriftlezingen</p><p className="mt-2 mb-3 text-sm text-ink-soft">De bestaande lezingen en volledige daginformatie staan in het dagdetail.</p><button type="button" onClick={() => openDag(geselecteerd.ymd)} className="btn-pill mt-auto self-start">Lees de lezingen ›</button></section>
+                <section className="flex flex-col border border-gold/30 bg-[#fbf3e3]/75 p-4 shadow-[0_6px_14px_rgba(58,33,16,0.06)]"><p className="ot-label text-center">Vasten</p><p className="mt-2 text-sm leading-relaxed text-ink-soft">{geselecteerd.vasten.label}</p><p className="mt-1 mb-3 text-sm text-ink-soft">{geselecteerd.vasten.detail}</p><a href="#vasten" className="btn-pill mt-auto self-start">Meer over vasten ›</a></section>
               </div>
             </div>
           </div>

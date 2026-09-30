@@ -87,6 +87,11 @@ export function FeestTag({ feest }: { feest: Feest }) {
   return <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase ${map[key]}`}>{label[key]}</span>;
 }
 
+// De gouden hoekversiering (public/images/ui/hoeksier.svg, getekend voor linksboven); spiegelen met -scale-x-100 / -scale-y-100.
+export function Hoeksier({ className = '' }: { className?: string }) {
+  return <span aria-hidden="true" className={`hoeksier ${className}`} />;
+}
+
 export function Ornament({ className = '' }: { className?: string }) {
   return (
     <div className={`flex items-center justify-center gap-3 text-gold ${className}`} aria-hidden>

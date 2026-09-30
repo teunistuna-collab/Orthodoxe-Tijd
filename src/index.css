@@ -2148,3 +2148,75 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 @media(min-width:600px){.kal-legenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1280px){.kal-legenda{grid-template-columns:1.3fr 1fr .8fr}}
 @media(prefers-reduced-motion:reduce){.kal-dag.is-vandaag .kal-dag-nr{animation:none}}
+
+/* Bouw 88 — één stijl over de hele site:
+   · grote tegels en de bibliotheek donker; lijstrijen en kaarten op een perkamentpagina licht (Etmaal, Week, Jaar, Pascha, Vandaag, Psalmen);
+   · één zoekveld (donker, gouden rand), één actieve stijl (goud gevuld, donkere tekst), één pijl (›);
+   · overal de gouden hoeksier in plaats van losse hoektekens. Alleen --ot-kleuren en --hoeksier. */
+:root{--ot-rand:color-mix(in srgb,var(--ot-gold) 60%,transparent);--ot-dempt:color-mix(in srgb,var(--ot-ivory) 80%,var(--ot-bark2))}
+/* kaarten van Etmaal, Week, Jaar en Pascha: licht, gouden rand, hoeksier */
+#top#top#top#top .dienst-kaart{border:1px solid var(--ot-rand)!important;border-radius:4px!important;transition:border-color .18s,box-shadow .18s}
+#top#top#top#top .dienst-kaart:before,#top#top#top#top .dienst-kaart:after{content:"";width:14px;height:14px;background:var(--hoeksier) no-repeat center/contain;font-size:0;opacity:.8}
+#top#top#top#top .dienst-kaart:before{left:4px;top:4px}
+#top#top#top#top .dienst-kaart:after{right:4px;bottom:4px;transform:rotate(180deg)}
+#top#top#top#top :is(.etmaal-ring-node:hover .dienst-kaart,.etmaal-ring-node:focus-visible .dienst-kaart,button.dienst-kaart:hover,button.dienst-kaart:focus-visible){border-color:var(--color-gold-deep)!important;outline:none;box-shadow:0 0 0 1px var(--color-gold-deep),0 6px 14px color-mix(in srgb,var(--ot-bark) 14%,transparent)!important}
+/* één pijl */
+.pijl{flex:none;font-family:"Alegreya Sans",sans-serif;font-size:28px;font-weight:500;line-height:1;color:var(--color-gold-deep);transition:transform .18s,color .18s}
+:is(button,a):is(:hover,:focus-visible)>.pijl{transform:translateX(3px)}
+#top#top#top .ps-pijl.pijl{width:auto;height:auto;font-size:24px}
+@media(max-width:767.98px){#top#top#top .vm-rij .pijl{font-size:24px}}
+@media(prefers-reduced-motion:reduce){.pijl{transition:none}}
+/* één zoekveld: Psalmen, Gebeden en de bibliotheek (Heiligen, Feesten) gelijk */
+#top#top#top .ps-zoek{border:1px solid var(--ot-rand);border-radius:4px;background:var(--ot-bark2)}
+#top#top#top .ps-zoek:focus-within{border-color:var(--ot-gold2);box-shadow:0 0 0 1px var(--ot-gold2),0 0 14px color-mix(in srgb,var(--ot-gold2) 30%,transparent)}
+#top#top#top .ps-zoek svg{color:var(--ot-gold)}
+#top#top#top#top .ps-zoek input{color:var(--ot-ivory)}
+#top#top#top .ps-zoek input::placeholder{color:var(--ot-dempt);opacity:1}
+#top#top#top .ot-zoek input{min-height:46px;border:1px solid var(--ot-rand)!important;border-radius:4px!important;background:var(--ot-bark2)!important;color:var(--ot-ivory)!important}
+#top#top#top .ot-zoek input::placeholder{color:var(--ot-dempt)!important;opacity:1}
+#top#top#top .ot-zoek input:focus{border-color:var(--ot-gold2)!important;box-shadow:0 0 0 1px var(--ot-gold2),0 0 14px color-mix(in srgb,var(--ot-gold2) 30%,transparent)}
+#top#top#top .ot-zoek svg{color:var(--ot-gold)!important}
+#top#top#top .ot-zoek button{color:var(--ot-dempt)!important}
+#top#top#top#top .bibliotheek :is(.saints-search-row label,.saints-select){border-radius:4px!important}
+/* één actieve stijl: goud gevuld met donkere tekst */
+#top#top#top#top :is(.ps-filters,.ps-themas,.ps-kathismas,.snoer-keuze) button[aria-pressed=true]{border-color:var(--ot-gold)!important;background:var(--ot-gold)!important;color:var(--ot-bark)!important}
+
+/* Bouw 89 — Psalmen: filterknoppen (Etmaal, Kathisma, Thema's, Favorieten, de kathisma-nummers en thema's) donker zoals de
+   bibliotheek; actief blijft goud gevuld (Bouw 88). De psalmrijen blijven licht, met gouden rand. */
+#top#top#top#top :is(.ps-filters,.ps-themas,.ps-kathismas) button{border:1px solid var(--ot-rand);background:var(--ot-bark2);color:var(--ot-gold2);transition:border-color .18s,box-shadow .18s}
+#top#top#top#top :is(.ps-filters,.ps-themas,.ps-kathismas) button:is(:hover,:focus-visible){border-color:var(--ot-gold2);outline:none;box-shadow:0 0 0 1px var(--ot-gold2),0 0 14px color-mix(in srgb,var(--ot-gold2) 30%,transparent)}
+
+
+/* Bouw 90 — paginabanner op mobiel compacter (was 214px hoog): minder leesruimte kwijt, zelfde opbouw en tekst */
+@media(max-width:767.98px){
+  #top#top#top .page-hero-crop.page-hero{min-height:136px;padding:12px 16px 12px}
+  #top#top#top .page-hero-kruis{width:14px;height:21px;margin-bottom:4px}
+  #top#top#top#top .page-hero-titel{font-size:1.75rem;letter-spacing:.12em}
+  #top#top#top#top .page-hero-ondertitel{margin-top:3px;font-size:1rem}
+  #top#top#top .page-hero-lijn{margin-top:6px}
+  #top#top#top#top .page-hero-citaat{margin-top:5px;font-size:.95rem}
+}
+
+/* Bouw 91 — Vandaag (mobiel): de rijen licht, zoals de kaarten op de andere perkamentpagina's; "Nu" goud gevuld */
+@media(max-width:767.98px){
+  #top#top#top .vm-rij:active{background:color-mix(in srgb,var(--ot-gold) 16%,var(--color-paper))}
+  #top#top#top .vm-rij-tekst b{color:var(--color-ink)}
+  #top#top#top .vm-rij-tekst small{color:var(--color-ink-soft)}
+  #top#top#top .vm-icoon{filter:drop-shadow(0 2px 3px color-mix(in srgb,var(--ot-bark) 30%,transparent))}
+  #top#top#top .vm-nu{background:var(--ot-gold);color:var(--ot-bark)}
+}
+
+/* Bouw 92 — één kaartstijl voor alle lichte knoppen/rijen: de kaarten van de cycli (Etmaal, Week, Jaar, Pascha),
+   de rijen op Vandaag (mobiel) en de psalmrijen. Perkament, gouden rand, dubbele binnenlijn, hoeksier, zelfde hover. */
+#top#top#top#top :is(.dienst-kaart,.vm-rij,.ps-rij){position:relative;border:1px solid var(--ot-rand)!important;border-radius:4px!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important;
+  transition:border-color .18s,box-shadow .18s}
+#top#top#top#top :is(.etmaal-ring-node:hover .dienst-kaart,.etmaal-ring-node:focus-visible .dienst-kaart,button.dienst-kaart,.vm-rij,.ps-rij):is(:hover,:focus-visible),
+#top#top#top#top :is(.etmaal-ring-node:hover,.etmaal-ring-node:focus-visible) .dienst-kaart{border-color:var(--color-gold-deep)!important;outline:none;
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 14px 26px color-mix(in srgb,var(--ot-bark) 13%,transparent)!important}
+#top#top#top#top :is(.vm-rij,.ps-rij):before,#top#top#top#top :is(.vm-rij,.ps-rij):after{content:"";position:absolute;width:12px;height:12px;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
+#top#top#top#top :is(.vm-rij,.ps-rij):before{left:3px;top:3px}
+#top#top#top#top :is(.vm-rij,.ps-rij):after{right:3px;bottom:3px;transform:rotate(180deg)}
+#top#top#top#top .ps-rij[aria-current]{border-color:var(--color-gold-deep)!important;
+  box-shadow:inset 3px 0 0 var(--color-gold-deep),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 10%,transparent)!important}

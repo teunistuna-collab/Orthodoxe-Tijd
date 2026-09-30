@@ -70,7 +70,7 @@ function PrayerCard({ g, onOpen }: { g: Gebed; onOpen: () => void }) {
       <p className="ot-label">{g.wanneer}</p>
       <h4 className="font-display mt-1 text-lg font-semibold text-[#fbf3df]">{g.titel}</h4>
       <span className="btn-pill mt-3">
-        Open gebed →
+        Open gebed ›
       </span>
     </button>
   );
@@ -135,7 +135,7 @@ export default function Gebeden() {
       <section className="orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
         <div className={CONTENT}>
           <div className="mx-auto max-w-xl">
-            <div className="relative">
+            <div className="ot-zoek relative">
               <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-gold-deep" />
               <input
                 type="text"
@@ -186,7 +186,7 @@ export default function Gebeden() {
                   href="#adem"
                   className="btn-pill mt-6"
                 >
-                  Ontdek de ademcyclus →
+                  Ontdek de ademcyclus ›
                 </a>
               )}
             </div>
@@ -216,7 +216,7 @@ export default function Gebeden() {
                     </div>
                     <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{cat.label}</h3>
                     <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{cat.omschrijving}</p>
-                    <span className="btn-pill mt-4">Bekijk gebeden →</span>
+                    <span className="btn-pill mt-4">Bekijk gebeden ›</span>
                   </button>
                 );
               })}

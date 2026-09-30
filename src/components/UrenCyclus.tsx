@@ -9,6 +9,7 @@ import { ETMAAL_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
 import { serviceConfig, type PsalmMapping } from '../lib/etmaal';
 import PageHero from './PageHero';
+import { Hoeksier } from './ui';
 
 // De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
 let pdfjsLaden: Promise<typeof import('pdfjs-dist')> | null = null;
@@ -96,19 +97,6 @@ const SERVICE_IMAGE_ICONS: Record<string, string | undefined> = {
   'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.webp',
   'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.webp',
 };
-
-// Zeer subtiel botanisch hoekornament ter decoratie van het perkamentpaneel.
-function CornerOrnament({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 80 80" className={className} fill="none" stroke="currentColor" strokeWidth="1.4">
-      <path d="M4 4 C 20 6, 30 16, 32 32" strokeLinecap="round" />
-      <path d="M4 4 C 6 20, 16 30, 32 32" strokeLinecap="round" />
-      <circle cx="32" cy="32" r="2.4" />
-      <circle cx="14" cy="6" r="1.8" />
-      <circle cx="6" cy="14" r="1.8" />
-    </svg>
-  );
-}
 
 export default function UrenCyclus() {
   const [open, setOpen] = useState<number | null>(null);
@@ -291,10 +279,10 @@ export default function UrenCyclus() {
       <section className="bg-parchment pb-16 sm:pb-20">
         <div className={CONTENT}>
           <div className="parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
-            <CornerOrnament className="absolute top-6 left-6 h-14 w-14 text-gold-deep/30" />
-            <CornerOrnament className="absolute top-6 right-6 h-14 w-14 -scale-x-100 text-gold-deep/30" />
-            <CornerOrnament className="absolute bottom-6 left-6 h-14 w-14 -scale-y-100 text-gold-deep/30" />
-            <CornerOrnament className="absolute right-6 bottom-6 h-14 w-14 -scale-x-100 -scale-y-100 text-gold-deep/30" />
+            <Hoeksier className="absolute top-6 left-6" />
+            <Hoeksier className="absolute top-6 right-6 -scale-x-100" />
+            <Hoeksier className="absolute bottom-6 left-6 -scale-y-100" />
+            <Hoeksier className="absolute right-6 bottom-6 -scale-x-100 -scale-y-100" />
 
             <div className="text-center">
               <h2 className="ot-sectietitel">De diensten van het etmaal</h2>
@@ -356,7 +344,7 @@ export default function UrenCyclus() {
                     <span className="dienst-kaart-titel font-display">{service.title}</span>
                     <span className="dienst-kaart-tijd">{service.time}</span>
                     <span className="dienst-kaart-tekst">{service.hoofdgedachtenis}</span>
-                    <span className="btn-pill dienst-kaart-cta">Open dienst →</span>
+                    <span className="btn-pill dienst-kaart-cta">Open dienst ›</span>
                   </span>
                 );
 
@@ -397,7 +385,7 @@ export default function UrenCyclus() {
                       <span className="dienst-kaart-tijd block">{service.time}</span>
                       <span className="dienst-kaart-tekst block">{service.hoofdgedachtenis}</span>
                     </span>
-                    <ChevronRight className="h-5 w-5 shrink-0 text-gold-deep" />
+                    <span className="pijl" aria-hidden="true">›</span>
                   </button>
                 );
               })}
@@ -474,7 +462,7 @@ export default function UrenCyclus() {
             {modalState?.selectedPsalm && (
               // De link zelf gaat via gaNaar (App.tsx); de dienst sluit, de psalm opent op de Psalmenpagina.
               <a className="etmaal-naar-psalter" href={`#psalmen/${modalState.selectedPsalm.title.replace('Psalm ', '')}`} onClick={closeModal}>
-                Open in het psalter →
+                Open in het psalter ›
               </a>
             )}
 

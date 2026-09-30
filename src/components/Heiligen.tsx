@@ -69,7 +69,7 @@ export default function Heiligen() {
   const resultatenBlok = (
     <section className="saints-results bibliotheek">
               <div className="saints-rule-title"><h2>{dag&&maand?`${dag} ${MAANDEN[maand-1]}`:alleenNl?'Heiligen van de Lage Landen':'Geselecteerde heiligen'}</h2><span>{resultaten.length} gedachtenissen</span></div>
-              <div className="saints-results-list">{groepen.slice(0,alleenNl?groepen.length:12).map(([md,items])=><div key={md}><time>{formatMd(md)}</time><div>{items.map((h,i)=><button key={`${h.naam}-${i}`} onClick={()=>setGeselecteerde(h)}><span><strong>{h.naam}</strong>{h.titel&&<small>{h.titel}</small>}</span><b>→</b></button>)}</div></div>)}</div>
+              <div className="saints-results-list">{groepen.slice(0,alleenNl?groepen.length:12).map(([md,items])=><div key={md}><time>{formatMd(md)}</time><div>{items.map((h,i)=><button key={`${h.naam}-${i}`} onClick={()=>setGeselecteerde(h)}><span><strong>{h.naam}</strong>{h.titel&&<small>{h.titel}</small>}</span><b>›</b></button>)}</div></div>)}</div>
               {!groepen.length&&<p className="saints-empty">Geen heiligen gevonden voor deze selectie.</p>}
     </section>
   );
@@ -92,7 +92,7 @@ export default function Heiligen() {
               {uitgelicht.titel && <p className="saints-feature-title">{uitgelicht.titel}</p>}
               <p className="saints-feature-date">{formatMd(dagVandaag.kerkKey)}</p>
               <p>{uitgelicht.kort || 'Lees meer over het leven en de gedachtenis van deze heilige.'}</p>
-              <div className="saints-feature-actions"><button onClick={()=>setGeselecteerde(uitgelicht)} className="saints-gold-button">Lees het leven →</button>{heiligenVandaag.length>1&&<button onClick={()=>setVandaagOpen(true)} className="saints-text-link">Bekijk alle {heiligenVandaag.length} heiligen →</button>}</div>
+              <div className="saints-feature-actions"><button onClick={()=>setGeselecteerde(uitgelicht)} className="saints-gold-button">Lees het leven ›</button>{heiligenVandaag.length>1&&<button onClick={()=>setVandaagOpen(true)} className="saints-text-link">Bekijk alle {heiligenVandaag.length} heiligen ›</button>}</div>
             </> : <p>Voor deze dag is nog geen heilige beschikbaar.</p>}
           </div>
           <blockquote className="saints-side-quote">“Het doel van ons leven is de vergoddelijking door genade.”<span>✣</span></blockquote>
@@ -104,7 +104,7 @@ export default function Heiligen() {
             <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setWachtOpDag(false)}} placeholder="Zoek een heilige…" /></label>
             <div className="saints-select"><select value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false);setWachtOpDag(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
             <div className="saints-select"><select value={categorie} onChange={e=>{setCategorie(e.target.value);setWachtOpDag(false)}}><option value="alle">Alle categorieën</option>{categories.map(c=><option key={c[0]} value={c[0]}>{c[1]}</option>)}</select><ChevronDown/></div>
-            <button className="saints-search-button">Zoeken →</button>
+            <button className="saints-search-button">Zoeken ›</button>
           </div>
         </section>
 
@@ -123,7 +123,7 @@ export default function Heiligen() {
 
         <section className="saints-lowlands">
           <div className="saints-lowlands-map"><img loading="lazy" decoding="async" src="/images/decor/lage-landen.webp" alt="Kaart van de Lage Landen" /></div>
-          <div><h2>Heiligen van de Lage Landen</h2><p className="ot-tekst">Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p className="ot-tekst">Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('');setWachtOpDag(false)}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen →'}</button></div>
+          <div><h2>Heiligen van de Lage Landen</h2><p className="ot-tekst">Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p className="ot-tekst">Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('');setWachtOpDag(false)}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen ›'}</button></div>
           <blockquote>“Ook in onze streken heeft de Heer Zijn getuigen doen opstaan.”<span>✣</span></blockquote>
         </section>
 

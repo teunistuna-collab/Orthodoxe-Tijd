@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { ChevronRight, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import PageHero from './PageHero';
 import Modal from './Modal';
 import Leesbediening from './Leesbediening';
@@ -116,7 +116,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
         <span className="ps-rij-titel">{p.title}</span>
         {onder && <span className="ps-rij-onder">{onder}</span>}
       </span>
-      <ChevronRight className="ps-pijl" aria-hidden="true" />
+      <span className="ps-pijl pijl" aria-hidden="true">›</span>
     </button>
   );
 
@@ -320,7 +320,7 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, bediening }: { psal
                     window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: g.dienst }));
                   }}
                 >
-                  Open in het etmaal →
+                  Open in het etmaal ›
                 </a>
               </li>
             ))}

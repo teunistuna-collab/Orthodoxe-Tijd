@@ -5,7 +5,7 @@ import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { useApp } from '../lib/context';
 import { PAASCYCLUS } from '../lib/feesten';
 import { addDays, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
-import { FeestTag } from './ui';
+import { FeestTag, Hoeksier } from './ui';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
@@ -246,19 +246,6 @@ const TIMELINE_ITEMS = [
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-// Zeer subtiel botanisch hoekornament ter decoratie van het perkamentpaneel.
-function CornerOrnament({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 80 80" className={className} fill="none" stroke="currentColor" strokeWidth="1.4">
-      <path d="M4 4 C 20 6, 30 16, 32 32" strokeLinecap="round" />
-      <path d="M4 4 C 6 20, 16 30, 32 32" strokeLinecap="round" />
-      <circle cx="32" cy="32" r="2.4" />
-      <circle cx="14" cy="6" r="1.8" />
-      <circle cx="6" cy="14" r="1.8" />
-    </svg>
-  );
-}
-
 const ring = ringVak(12);
 
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
@@ -335,10 +322,10 @@ export default function Pascha() {
       <section className="bg-parchment pb-16 sm:pb-20">
         <div className={CONTENT}>
           <div className="parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
-            <CornerOrnament className="absolute top-6 left-6 h-14 w-14 text-gold-deep/30" />
-            <CornerOrnament className="absolute top-6 right-6 h-14 w-14 -scale-x-100 text-gold-deep/30" />
-            <CornerOrnament className="absolute bottom-6 left-6 h-14 w-14 -scale-y-100 text-gold-deep/30" />
-            <CornerOrnament className="absolute right-6 bottom-6 h-14 w-14 -scale-x-100 -scale-y-100 text-gold-deep/30" />
+            <Hoeksier className="absolute top-6 left-6" />
+            <Hoeksier className="absolute top-6 right-6 -scale-x-100" />
+            <Hoeksier className="absolute bottom-6 left-6 -scale-y-100" />
+            <Hoeksier className="absolute right-6 bottom-6 -scale-x-100 -scale-y-100" />
 
             <div className="text-center">
               <h2 className="ot-sectietitel">De Paschale cyclus</h2>
@@ -424,7 +411,7 @@ export default function Pascha() {
                     <span className="dienst-kaart-titel font-display block">{periode.label}</span>
                     <span className="dienst-kaart-tekst block">{periode.short}</span>
                   </span>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-gold-deep" />
+                  <span className="pijl" aria-hidden="true">›</span>
                 </button>
               ))}
             </div>

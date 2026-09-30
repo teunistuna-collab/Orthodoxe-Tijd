@@ -42,7 +42,7 @@ export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
                       <span className="font-display block text-lg font-semibold leading-snug">{h.naam}</span>
                       {h.titel && h.titel !== h.naam && <span className="mt-0.5 block text-[13px] text-ink-soft">{h.titel}</span>}
                     </span>
-                    <span aria-hidden="true" className="shrink-0 text-gold-deep">→</span>
+                    <span aria-hidden="true" className="shrink-0 text-gold-deep">›</span>
                   </button>
                 </li>
               ))}

@@ -58,7 +58,7 @@ export function CycleTransition({
               href={buttonHref}
               className="btn-pill mt-6"
             >
-              {buttonLabel} →
+              {buttonLabel} ›
             </a>
           </div>
         </div>
