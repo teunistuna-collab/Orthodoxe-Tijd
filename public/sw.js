@@ -21,7 +21,7 @@ const MELDING = `<!doctype html>
 </head>
 <body>
 <main>
-  <svg viewBox="0 0 64 96" fill="currentColor" aria-hidden="true"><rect x="29" y="2" width="6" height="92" rx="1"/><rect x="20" y="12" width="24" height="5" rx="1"/><rect x="8" y="28" width="48" height="6" rx="1"/><g transform="rotate(-22 32 72)"><rect x="16" y="69.5" width="32" height="5" rx="1"/></g></svg>
+  <svg viewBox="0 0 64 96" fill="currentColor" aria-hidden="true"><rect x="29" y="2" width="6" height="92" rx="1"/><rect x="20" y="12" width="24" height="5" rx="1"/><rect x="8" y="28" width="48" height="6" rx="1"/><g transform="rotate(22 32 72)"><rect x="16" y="69.5" width="32" height="5" rx="1"/></g></svg>
   <h1>Geen verbinding</h1>
   <p>Orthodoxe Tijd heeft internet nodig. Controleer je verbinding en probeer het opnieuw.</p>
   <button type="button" onclick="location.reload()">Opnieuw proberen</button>

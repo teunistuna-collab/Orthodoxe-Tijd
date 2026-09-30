@@ -84,7 +84,7 @@ export default function Header({ pagina: actief }: { pagina: string }) {
               <rect x="29" y="2" width="6" height="92" rx="1" />
               <rect x="20" y="12" width="24" height="5" rx="1" />
               <rect x="8" y="28" width="48" height="6" rx="1" />
-              <rect x="16" y="69.5" width="32" height="5" rx="1" transform="rotate(-22 32 72)" />
+              <rect x="16" y="69.5" width="32" height="5" rx="1" transform="rotate(22 32 72)" />
             </svg>
             <span className="min-w-0">
               <span className="kop-naam">Orthodoxe Tijd</span>
