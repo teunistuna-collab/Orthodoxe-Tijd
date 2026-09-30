@@ -1,18 +1,27 @@
-// Beginschermiconen (Android, iPhone) uit het bestaande logo public/favicon.svg — draaien met: node scripts/app-iconen.mjs
-// Zelfde gouden kruis en donkere kleur, maar een volle vierkante tegel (iOS en Android ronden zelf af) en meer ruimte
-// rondom, zodat het kruis ook in de maskable-veilige zone (cirkel van 80%) valt en nooit wordt afgesneden.
-import { readFileSync, mkdirSync } from 'node:fs';
+// Beginschermiconen (Android, iPhone) uit de aangeleverde app-knop scripts/app-icoon.webp — draaien met: node scripts/app-iconen.mjs
+// Alleen de donkerrode tegel wordt gebruikt, zonder de lichtbruine achtergrond en de gouden rand eromheen: een vierkant binnen
+// de tegel, met de hoeken zacht ingevuld in de tegelkleur. iOS en Android ronden de hoeken zelf af.
+import { mkdirSync } from 'node:fs';
 import sharp from 'sharp';
 
-const logo = readFileSync('public/favicon.svg', 'utf8');
-const tegel = /<rect[^>]*fill="([^"]+)"/.exec(logo)[1];
-const [, goud, kruis] = /<g fill="([^"]+)"[^>]*>([\s\S]*)<\/g>\s*<\/svg>/.exec(logo);
+// Vierkant binnen de gouden rand van de tegel (rand op x 42–1212, y 42–1188 in het bronbeeld van 1254 px).
+const UITSNEDE = { left: 62, top: 50, width: 1130, height: 1130 };
+const TEGEL = { r: 45, g: 10, b: 4 }; // gemiddelde tegelkleur langs de rand
+const ZIJDE = UITSNEDE.width;
 
-// Kruis: 92 eenheden hoog, midden op y=48. Schaal 4 per 512 px = 368 px hoog (72%); verste punt 46×4 = 184 px < 205 px (40%).
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="${tegel}"/>
-  <g fill="${goud}" transform="translate(256 256) scale(4) translate(-32 -48)">${kruis}</g>
-</svg>`;
+// Afgeronde maske binnen de afgeronde tegelhoek (straal 280), met een zachte overgang zodat geen naad of rand zichtbaar is.
+const masker = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${ZIJDE}" height="${ZIJDE}">
+  <filter id="z"><feGaussianBlur stdDeviation="14"/></filter>
+  <rect x="14" y="14" width="${ZIJDE - 28}" height="${ZIJDE - 28}" rx="280" fill="#fff" filter="url(#z)"/>
+</svg>`);
+
+const tegel = await sharp('scripts/app-icoon.webp')
+  .extract(UITSNEDE)
+  .ensureAlpha()
+  .composite([{ input: masker, blend: 'dest-in' }])
+  .png()
+  .toBuffer();
+const vol = await sharp(tegel).flatten({ background: TEGEL }).png().toBuffer();
 
 mkdirSync('public/icons', { recursive: true });
 for (const [bestand, px] of [
@@ -20,6 +29,6 @@ for (const [bestand, px] of [
   ['public/icons/icon-192.png', 192],
   ['public/apple-touch-icon.png', 180],
 ]) {
-  await sharp(Buffer.from(svg), { density: 72 * (px / 512) * 4 }).resize(px, px).flatten({ background: tegel }).png().toFile(bestand);
+  await sharp(vol).resize(px, px, { kernel: 'lanczos3' }).png().toFile(bestand);
   console.log(bestand, `${px}×${px}`);
 }
