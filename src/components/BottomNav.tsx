@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { BookOpen, CalendarDays, Ellipsis, History, House } from 'lucide-react';
 import { useApp } from '../lib/context';
 
@@ -61,15 +61,18 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
     <>
       {open && (
         <div ref={sheetRef} className={`bottom-nav-blad${open === 'meer' ? ' is-meer' : ''}`} role="menu" aria-label={open === 'cycli' ? 'Cycli' : 'Meer'}>
-          {open === 'meer' && (
-            <button type="button" role="menuitem" onClick={() => { setOpen(null); openZoeken(); }}>
-              Zoeken
-            </button>
-          )}
+          {/* Meer: Psalmen, Vasten, Heiligen, Feesten, Zoeken, Bronnen */}
           {GROEPEN[open].map((item) => (
-            <a key={item.id} href={`#${item.id}`} role="menuitem" className={actief === item.id ? 'is-actief' : undefined} onClick={() => setOpen(null)}>
-              {item.label}
-            </a>
+            <Fragment key={item.id}>
+              {item.id === 'bronnen' && (
+                <button type="button" role="menuitem" onClick={() => { setOpen(null); openZoeken(); }}>
+                  Zoeken
+                </button>
+              )}
+              <a href={`#${item.id}`} role="menuitem" className={actief === item.id ? 'is-actief' : undefined} onClick={() => setOpen(null)}>
+                {item.label}
+              </a>
+            </Fragment>
           ))}
         </div>
       )}

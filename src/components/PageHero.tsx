@@ -3,9 +3,10 @@ import Cross from './Cross';
 
 // Eén paginabanner voor alle pagina's, met de titel als echte tekst (schaalt mee, voorleesbaar, nooit afgesneden).
 // Achtergrond: public/images/heroes/zonder-tekst/hero-<id>.webp; pagina's zonder eigen banner gebruiken banner_08.webp.
+// Op mobiel een eigen banner per pagina: public/images/heroes/mobiel/hero-<id>.webp (alle 11 pagina's).
 // Opmaak: Bouw 83 in index.css. `kop`: de titel is de h1 van de pagina (alleen waar de pagina zelf geen h1 heeft).
 
-const EIGEN_BANNER = new Set(['adem', 'etmaal', 'week', 'jaar', 'pascha', 'feesten', 'heiligen']);
+const EIGEN_BANNER = new Set(['adem', 'etmaal', 'week', 'jaar', 'pascha', 'feesten', 'heiligen', 'gebeden']);
 
 const volgHash = (melding: () => void) => {
   window.addEventListener('hashchange', melding);
@@ -20,14 +21,18 @@ export default function PageHero({ id, titel, ondertitel, citaat, kop = false }:
   const Titel = kop ? 'h1' : 'p';
   return (
     <section id={id} className="bg-bark page-hero-crop page-hero">
-      <img
-        className="page-hero-beeld"
-        loading={open ? 'eager' : 'lazy'}
-        fetchPriority={open ? 'high' : 'auto'}
-        decoding="async"
-        src={`/images/heroes/zonder-tekst/${EIGEN_BANNER.has(id) ? `hero-${id}` : 'banner_08'}.webp`}
-        alt=""
-      />
+      <picture>
+        {/* Mobiel: een eigen, smallere banner per pagina (public/images/heroes/mobiel), zodat het beeld niet wegvalt in de uitsnede */}
+        <source media="(max-width: 767.98px)" srcSet={`/images/heroes/mobiel/hero-${id}.webp`} />
+        <img
+          className="page-hero-beeld"
+          loading={open ? 'eager' : 'lazy'}
+          fetchPriority={open ? 'high' : 'auto'}
+          decoding="async"
+          src={`/images/heroes/zonder-tekst/${EIGEN_BANNER.has(id) ? `hero-${id}` : 'banner_08'}.webp`}
+          alt=""
+        />
+      </picture>
       <div className="page-hero-tekst">
         <span className="page-hero-kruis" aria-hidden="true">
           <Cross className="h-full w-full" />

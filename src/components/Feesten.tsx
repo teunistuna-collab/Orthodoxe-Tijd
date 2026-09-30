@@ -46,7 +46,7 @@ export default function Feesten() {
             <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setDag(null)}} placeholder="Zoek een feest…" /></label>
             <div className="saints-select"><select value={maand===null?'':maand} onChange={e=>{setMaand(e.target.value===''?null:Number(e.target.value));setDag(null)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
             <div className="saints-select"><select value={categorie} onChange={e=>setCategorie(e.target.value as 'alle'|'vast'|'beweeglijk')}><option value="alle">Alle categorieën</option><option value="vast">Vaste feesten</option><option value="beweeglijk">Beweeglijke feesten</option></select><ChevronDown/></div>
-            <button type="button" className="saints-search-button">Zoeken ›</button>
+            <button type="button" onClick={()=>document.querySelector('.pagina:not(.pagina-verborgen) .bieb-lijst')?.scrollIntoView({behavior:'smooth',block:'center'})} className="saints-search-button">Zoeken ›</button>
           </div>
           <div className="saints-rule-title mt-8"><h2>Feesten per maand</h2><span>{alleItems.length}+ feesten</span></div>
           <div className="feast-month-grid mt-4">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i);setDag(null);setZoek('')}} className={maand===i?'active':''}>{m}</button>)}</div>

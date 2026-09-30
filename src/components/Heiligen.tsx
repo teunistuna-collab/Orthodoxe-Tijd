@@ -7,6 +7,7 @@ import { LiturgicalPopup } from './CycleSections';
 import { heiligenVanDag, normaliseer, popupContent, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
 import { CATEGORIEEN, categorieenVan, soortVan } from '../lib/heiligenSoort';
 import PageHero from './PageHero';
+import NaarBoven from './NaarBoven';
 import Cross from './Cross';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
@@ -76,7 +77,7 @@ export default function Heiligen() {
 
   return <>
     <PageHero id="heiligen" titel="Heiligen" ondertitel="Voorbeelden op onze weg" />
-    <main className="saints-refined">
+    <section className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">
           <div className="saints-today-intro">
@@ -104,7 +105,7 @@ export default function Heiligen() {
             <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setWachtOpDag(false)}} placeholder="Zoek een heilige…" /></label>
             <div className="saints-select"><select value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false);setWachtOpDag(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
             <div className="saints-select"><select value={categorie} onChange={e=>{setCategorie(e.target.value);setWachtOpDag(false)}}><option value="alle">Alle categorieën</option>{categories.map(c=><option key={c[0]} value={c[0]}>{c[1]}</option>)}</select><ChevronDown/></div>
-            <button className="saints-search-button">Zoeken ›</button>
+            <button type="button" onClick={()=>document.querySelector('.pagina:not(.pagina-verborgen) .saints-results')?.scrollIntoView({behavior:'smooth',block:'start'})} className="saints-search-button">Zoeken ›</button>
           </div>
         </section>
 
@@ -130,9 +131,10 @@ export default function Heiligen() {
         {toonResultaten && alleenLageLanden && resultatenBlok}
 
       </div>
-    </main>
+    </section>
     <section className="saints-ending"><div className={CONTENT}><h2>Een wolk van getuigen</h2><p>“Daarom ook, nu wij zo’n grote wolk van getuigen om ons heen hebben…”</p><span>Hebreeën 12:1</span></div></section>
     <LiturgicalPopup open={vandaagOpen} onClose={()=>setVandaagOpen(false)} content={{title:`Heiligen van ${formatMd(dagVandaag.kerkKey)}`,subtitle:`${heiligenVandaag.length} gedachtenissen`,paragraphs:heiligenVandaag.map(h=>`${h.naam}${h.titel?` — ${h.titel}`:''}`)}}/>
     <LiturgicalPopup open={!!geselecteerde} onClose={()=>setGeselecteerde(null)} content={popupContent(geselecteerde)}/>
+    <NaarBoven />
   </>;
 }

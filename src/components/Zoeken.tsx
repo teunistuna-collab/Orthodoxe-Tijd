@@ -22,6 +22,25 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
 
   useTerugSluit(open, onClose);
 
+  // Mobiel blijft de onderbalk zichtbaar onder het zoekscherm: een tik daarop sluit het zoeken.
+  // Naar een andere pagina: sluiten ná de paginawissel (hashchange), zodat de stap terug van het zoekscherm de navigatie niet
+  // ongedaan maakt. Een tik op de pagina waar je al bent verandert de hash niet: dan meteen sluiten.
+  useEffect(() => {
+    if (!open) return;
+    const opHash = () => onClose();
+    const opKlik = (e: MouseEvent) => {
+      const link = e.target instanceof Element ? e.target.closest('.bottom-nav a, .bottom-nav-blad a') : null;
+      const doel = link?.getAttribute('href')?.slice(1).split('/')[0];
+      if (doel && doel === window.location.hash.slice(1).split('/')[0]) onClose();
+    };
+    window.addEventListener('hashchange', opHash);
+    document.addEventListener('click', opKlik);
+    return () => {
+      window.removeEventListener('hashchange', opHash);
+      document.removeEventListener('click', opKlik);
+    };
+  }, [open, onClose]);
+
   const index = useMemo(() => (open ? bouwIndex(htc, heiligen?.ALLE_HEILIGEN ?? []) : null), [open, htc, heiligen]);
   const groepen = useMemo(() => (index ? zoek(invoer, index, vandaag, mode) : []), [index, invoer, vandaag, mode]);
 

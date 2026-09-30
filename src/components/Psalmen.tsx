@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { ChevronUp, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import PageHero from './PageHero';
+import NaarBoven from './NaarBoven';
 import Modal from './Modal';
 import Leesbediening from './Leesbediening';
 import { OPEN_DIENST_EVENT } from '../lib/events';
@@ -132,14 +133,6 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
   const psalm = PSALMEN[gekozen - 1];
   const popupPsalm = popup !== null ? PSALMEN[popup - 1] : null;
-
-  const [naarBoven, setNaarBoven] = useState(false);
-  useEffect(() => {
-    const opScroll = () => setNaarBoven(window.scrollY > 700);
-    opScroll();
-    window.addEventListener('scroll', opScroll, { passive: true });
-    return () => window.removeEventListener('scroll', opScroll);
-  }, []);
 
   return (
     <>
@@ -273,17 +266,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           <PsalmLezer key={popupPsalm.id} idVoorvoegsel="ps-popup" psalm={popupPsalm} tekst={teksten?.[popupPsalm.septuagintNumber]} laadFout={laadFout} />
         </Modal>
       )}
-      {/* Zwevende "naar boven"-knop: verschijnt na een stuk scrollen (de lijst met 150 psalmen is lang) */}
-      <button
-        type="button"
-        className={`naar-boven${naarBoven ? ' is-zichtbaar' : ''}`}
-        onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
-        aria-label="Naar boven"
-        tabIndex={naarBoven ? 0 : -1}
-        aria-hidden={!naarBoven}
-      >
-        <ChevronUp aria-hidden="true" />
-      </button>
+      <NaarBoven />
     </>
   );
 }
