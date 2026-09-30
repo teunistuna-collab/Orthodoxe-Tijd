@@ -9,8 +9,6 @@ import { VastenSymbool, Hoeksier } from './ui';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import PageHero from './PageHero';
 
-// Weergave van de liturgische kleur in een vakje: 'balk' (balkje onderin) of 'rand' (rand van 2px). Keuze volgt nog.
-const KLEURWEERGAVE: 'balk' | 'rand' = 'balk';
 const TEKEN = { pascha: '☦', groot: '✠', ander: '✦' } as const;
 const kleineLetter = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
@@ -123,7 +121,7 @@ export default function Kalender() {
               ))}
             </div>
 
-            <div className={`kal-kleur-${KLEURWEERGAVE}`}>
+            <div className="kal-kleur-balk">
             {/* Cellen */}
             <div className="grid grid-cols-7" {...veegMaand}>
               {cellen.map((c) => {
