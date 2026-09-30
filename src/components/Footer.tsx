@@ -3,6 +3,7 @@ import { useApp } from '../lib/context';
 
 // De bronnen staan op een eigen pagina (#bronnen, zie App.tsx); de footer linkt ernaar.
 export function FooterInhoud() {
+  const { openKalenderUitleg } = useApp();
   return (
     <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
       <div>
@@ -23,6 +24,10 @@ export function FooterInhoud() {
           <li>Vastenregels naar het Typikon van Sabbas in zijn gangbare parochiële toepassing.</li>
           <li>Troparia en gebeden in eigen Nederlandse weergave.</li>
         </ul>
+        {/* Op mobiel is de footer verborgen; hier blijft de uitleg bereikbaar (Meer → Bronnen). */}
+        <button type="button" onClick={openKalenderUitleg} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
+          Oud of nieuw? Uitleg over de kalenders
+        </button>
       </div>
       <div>
         <h3 className="text-sm font-bold tracking-widest text-gold-light uppercase">Een woord vooraf</h3>
@@ -39,7 +44,7 @@ export function FooterInhoud() {
 export default function Footer() {
   const { openKalenderUitleg } = useApp();
   return (
-    <footer className="orthodox-pattern bg-bark text-[#d9cbb0]">
+    <footer className="site-voet orthodox-pattern bg-bark text-[#d9cbb0]">
       <div>
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-[#9b8b70] sm:flex-row sm:px-6">
           <span>✠ Eer aan God voor alles.</span>

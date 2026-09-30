@@ -26,7 +26,7 @@ export default function Heiligen() {
   const [vandaagOpen, setVandaagOpen] = useState(false);
   const [geselecteerde, setGeselecteerde] = useState<Resultaat | null>(null);
 
-  const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, htc, heiligen?.HEILIGEN, dagVandaag.ymd), [dagVandaag.kerkKey, dagVandaag.ymd, htc, heiligen]);
+  const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, htc, heiligen?.HEILIGEN, dagVandaag.ymd, heiligen?.DUBBEL), [dagVandaag.kerkKey, dagVandaag.ymd, htc, heiligen]);
 
   // Uitgelicht als "heilige van vandaag": de eerste echte heilige, geen voorfeest of icoon (die staan wel in de daglijst).
   const uitgelicht = heiligenVandaag.find((h) => soortVan(tekstVoorIndeling(h)) === 'heilige') ?? heiligenVandaag[0];

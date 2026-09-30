@@ -3,7 +3,7 @@ import { getSaintEnrichment } from './saintEnrichment';
 import { rangLabel, vertaalLeven, type HtcData } from './htc';
 import { formatMd } from './kalender';
 import { heiligeIcoon, lageLandenTekst } from './heiligenIconen';
-import { soortVan } from './heiligenSoort';
+import { isVastNotitie, soortVan } from './heiligenSoort';
 
 // Gedeeld door de Heiligen-pagina en de pop-up "Heiligen van de dag" (Vandaag, mobiel).
 
@@ -45,12 +45,13 @@ export function heiligeTitel(naam: string): string {
 }
 
 /** Alle heiligen en gedachtenissen van één kerkelijke dag (sleutel zoals '9-7'); ymd is de getoonde burgerlijke dag. */
-export function heiligenVanDag(kerkKey: string, htc: HtcData | null, eigen: Record<string, Heilige[]> | undefined, ymd: string): Resultaat[] {
+// dubbel = de uit de eigen lijst weggelaten dubbelen (DUBBEL in lib/heiligen.ts), zodat die ook uit de bronregels wegblijven.
+export function heiligenVanDag(kerkKey: string, htc: HtcData | null, eigen: Record<string, Heilige[]> | undefined, ymd: string, dubbel?: Record<string, string[]>): Resultaat[] {
   const bronDatum = htc?.[kerkKey]?.c;
-  const curated: Resultaat[] = (eigen?.[kerkKey] ?? []).filter((h) => hoortBijDag(tekstVan(h), bronDatum, ymd)).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
-  const gezien = new Set(curated.map((h) => normaliseer(h.ruwNaam ?? h.naam)));
+  const curated: Resultaat[] = (eigen?.[kerkKey] ?? []).filter((h) => hoortBijDag(tekstVan(h), bronDatum, ymd) && !isVastNotitie(tekstVan(h))).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
+  const gezien = new Set([...curated.map((h) => h.ruwNaam ?? h.naam), ...(dubbel?.[kerkKey] ?? [])].map(normaliseer));
   const extra: Resultaat[] = (htc?.[kerkKey]?.l ?? [])
-    .filter(([, tekst]) => hoortBijDag(tekst, bronDatum, ymd))
+    .filter(([, tekst]) => hoortBijDag(tekst, bronDatum, ymd) && !isVastNotitie(tekst))
     .map(([icon, tekst]) => ({ md: kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang, bronTekst: tekst }))
     .filter((h) => ![...gezien].some((g) => normaliseer(h.naam).includes(g) || g.includes(normaliseer(h.naam))));
   return [...curated, ...extra];

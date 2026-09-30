@@ -468,6 +468,91 @@ const eeuw = (s: string) =>
     .replace(/\((\d{1,2})(?:st|nd|rd|th) c\.\)/g, '($1e eeuw)')
     .replace(/\b(\d{1,2})(?:st|nd|rd|th) c\./g, '$1e eeuw');
 
+// Laatste Engelse resten uit de woord-voor-woord-vertaling (nagekeken per regel in lib/heiligen.ts).
+// Dubbelzinnige woorden ("of" = Nederlands "of") blijven bewust staan.
+const REST: Regel[] = [
+  [/Martelaar Marus de Magician die was converted op witnessing de martyrdom van Hermias\./g, 'Martelaar Marus de tovenaar, die zich bekeerde toen hij het martelaarschap van Hermias zag.'],
+  [/\bAll van de venerable fathers\b/g, 'Alle eerbiedwaardige vaders'],
+  [/\bend van de Apostelen Petrus en Paulus Vasten\b/g, 'Einde van de vasten van de apostelen Petrus en Paulus'],
+  [/\bCommemorating de appearance\b/g, 'Gedachtenis van de verschijning'],
+  [/\bappearance\b/g, 'verschijning'],
+  [/\bnaar a monnik\b/g, 'aan een monnik'],
+  [/"?The Joy van All(?: die Sorrow)?(?:-icoon)?/g, '„Vreugde van allen die bedroefd zijn”'],
+  [/„The Melkgeefster”/g, '„De Melkgeefster”'],
+  [/„The Unfading Flower”/g, '„De Onverwelkbare Bloem”'],
+  [/\bDirectress\b/g, 'Wegwijzeres'],
+  [/\bbrought uit\b/g, 'gebracht uit'],
+  [/\bin de village van\b/g, 'in het dorp'],
+  [/\b(\p{Lu}[\p{L}'-]+) village\b/gu, 'het dorp $1'],
+  [/\bvan het dorp\b/g, 'uit het dorp'],
+  [/\(Moskou diocese\)/g, '(bisdom Moskou)'],
+  [/\bvan The Paradise\b/g, 'van het Paradijs'],
+  [/\bThe Catholicos\b/g, 'de Katholikos'],
+  [/\bEquals-naar-de-Apostelen\b/g, 'Gelijk-aan-de-apostelen'],
+  [/\bSecond translation van de relieken\b/g, 'Tweede overbrenging van de relieken'],
+  [/\bEerste \(4e eeuw\) en Second \(452\) Findings van de Kostbare Head\b/g, 'Eerste (4e eeuw) en tweede (452) vinding van het kostbare hoofd'],
+  [/\bThird Vinding van het Kostbare Head\b/g, 'Derde vinding van het kostbare hoofd'],
+  [/\bvan het head\b/g, 'van het hoofd'],
+  [/\bNederlegging van Honorable Robe\b/g, 'Nederlegging van het eerbiedwaardige gewaad'],
+  [/\bConception van de Honorable\b/g, 'Ontvangenis van de eerbiedwaardige'],
+  [/\bMassacre van\b/g, 'Moord op'],
+  [/\bvan senatorial rank beheaded\b/g, 'van senatorenrang, onthoofd'],
+  [/\bChild Martelaar\b/g, 'Kind-martelaar'],
+  [/\bWomen Olympias\b/g, 'Olympias'],
+  [/\bde Diakeness\b/g, 'de diacones'],
+  [/\bDaughter van\b/g, 'dochter van'],
+  [/\bde Son van Non\b/g, 'de zoon van Nun'],
+  [/\bNieuwe Theologian\b/g, 'Nieuwe Theoloog'],
+  [/\bzijn elder Symeon de Reverent van de Studium\b/g, 'zijn geestelijke vader Symeon de Godvruchtige van het Studion'],
+  [/\b(Aristoclius) elder\b/g, '$1, oudvader'],
+  [/\bGregorius de Dialogist\b/g, 'Gregorius de Dialoog'],
+  [/\bde Areopagite\b/g, 'de Areopagiet'],
+  [/ \((?:Eustace|Dennys|Margaret)\)/g, ''],
+  [/\bEustace\b/g, 'Eustathius'],
+  [/\bMargaret\b/g, 'Margaretha'],
+  [/\bMathew\b/g, 'Matteüs'],
+  [/\bArchpriest\b/g, 'aartspriester'],
+  [/\barchimandrite\b/g, 'archimandriet'],
+  [/\ben Companions\b/g, 'en metgezellen'],
+  [/\ben those met him\b/g, 'en zijn metgezellen'],
+  [/\ben those met them\b/g, 'en hun metgezellen'],
+  [/\bthose met him\b/g, 'zijn metgezellen'],
+  [/\bone met him\b/g, 'één met hem'],
+  [/\bmet him\b/g, 'met hem'],
+  [/\bmet them\b/g, 'met hen'],
+  [/\bGrote-martyr en Healer\b/g, 'Grootmartelaar en Geneesheer'],
+  [/\bGrote-martyr\b/g, 'Grootmartelaar'],
+  [/\bNon-martyr\b/g, 'Non-martelares'],
+  [/\bWomen-(?:martyrs|Martelaren)\b/g, 'martelaressen'],
+  [/\bmaagd-martyrs\b/g, 'maagd-martelaressen'],
+  [/\b(kind|monnik|Soldaat|Vorst)-martyrs\b/g, '$1-martelaren'],
+  [/\b(kind|monnik|Soldaat|Vorst)-martyr\b/g, '$1-martelaar'],
+  [/\bvenerable confessor\b/g, 'eerbiedwaardige belijder'],
+  [/\bmartyrs\b/g, 'martelaren'],
+  [/\bmartyr\b/g, 'martelaar'],
+  [/\bdie was crucified\b/g, 'die gekruisigd werd'],
+  [/\bconverted door\b/g, 'bekeerd door'],
+  [/\bkilled door Bulgarians\b/g, 'gedood door de Bulgaren'],
+  [/\bbeheaded\b/g, 'onthoofd'],
+  [/\b(\p{Lu}[\p{L}'-]+) brothers\b/gu, 'gebroeders $1'],
+  [/\bbrothers\b/g, 'broers'],
+  [/\bthree women gezellen\b/g, 'drie vrouwelijke gezellen'],
+  [/\bthree\b/g, 'drie'],
+  [/\b(\d+) men en (\d+) women\b/g, '$1 mannen en $2 vrouwen'],
+  [/^women\b/gi, 'Vrouwen'],
+  [/^Forty\b/g, 'Veertig'],
+  [/^Five\b/g, 'Vijf'],
+  [/^Four\b/g, 'Vier'],
+  [/^Two\b/g, 'Twee'],
+  [/\bgirls\b/g, 'meisjes'],
+  [/\bvirgins\b/g, 'maagden'],
+  [/\bnuns\b/g, 'nonnen'],
+  [/\byouths\b/g, 'jongelingen'],
+  [/\bguards\b/g, 'wachters'],
+  [/\blaymen\b/g, 'leken'],
+  [/\bphilosophers\b/g, 'filosofen'],
+];
+
 // Grammaticale correcties na het vervangen van de woorden.
 const NA: Regel[] = [
   [/\bvan de (Kostbare(?: en (?:Levenschenkende|Levengevende))? Kruis)/g, 'van het $1'],
@@ -508,11 +593,13 @@ export function verbeterNaam(invoer: string): string {
   // rechte aanhalingstekens rond een titel → Nederlandse aanhalingstekens
   s = s.replace(/"([^"]+)"/g, '„$1”');
   s = pas(s, WOORDEN);
+  s = pas(s, REST);
   s = pas(s, NA);
   // „X” en Y Icoon → X- en Y-icoon;  „X” Icoon → X-icoon;  X Icoon → X-icoon
   s = s.replace(/„([^”]+)” en (\p{Lu}[\p{L}'-]+) Icoon\b/gu, '$1- en $2-icoon');
   s = s.replace(/„([^”]+)” (\([^)]*\) )?Icoon\b/g, (_m, naam: string, jaar?: string) => `${naam}-icoon${jaar ? ' ' + jaar.trim() : ''}`);
   s = s.replace(/\b(\p{Lu}[\p{L}'-]+|wenende|mirre-vloeiende) Icoon\b/gu, (m, naam: string) => (BIJVOEGLIJK.test(naam) ? `${naam} icoon` : `${naam}-icoon`));
+  s = s.replace(/^The Izborsk-icoon\b/, 'Izborsk-icoon').replace(/^The Merciful-icoon\b/, 'Icoon „De Barmhartige”');
   s = ruimOp(s);
   // begon de invoer met een hoofdletter, dan ook de uitvoer (bijv. "Weeping Icon" → "Wenende icoon")
   if (/^\p{Lu}/u.test(invoer)) s = s.charAt(0).toUpperCase() + s.slice(1);

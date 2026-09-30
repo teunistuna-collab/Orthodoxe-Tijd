@@ -30,6 +30,11 @@ export function soortVan(tekst: string): Soort {
   return 'heilige';
 }
 
+/** Een vastennotitie ("Vastendag.", "Fast-free", "… is het vastenvrij"): hoort bij het vastenblok, niet tussen de heiligen. */
+export function isVastNotitie(tekst: string): boolean {
+  return /\b(vastendag|fast[- ]?day|fast-free|vastenvrij)\b/i.test(tekst);
+}
+
 /** Categorieën voor de Heiligen-pagina; een heilige kan in meer dan één categorie vallen. */
 export const CATEGORIEEN: { id: string; label: string; omschrijving: string; test: RegExp }[] = [
   { id: 'martelaren', label: 'Martelaren', omschrijving: 'Getuigen in lijden', test: /martyr|martela|passion-?bearer|lijdensdrager|passiedrager/ },

@@ -59,6 +59,8 @@ function OrnamentRule({ className = '' }: { className?: string }) {
 
 export default function Ademcyclus() {
   const [popup, setPopup] = useState<PopupKey | null>(null);
+  // "Adem mee": de ringen rond het icoon zetten uit bij het inademen en krimpen bij het uitademen (8 s per ademhaling, index.css Bouw 97).
+  const [meeAdemen, setMeeAdemen] = useState(false);
 
   // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
   const infoTegels = (zicht: string) => (
@@ -94,40 +96,47 @@ export default function Ademcyclus() {
       {infoTegels('max-md:hidden')}
 
       {/* Het Jezusgebed */}
-      <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-24">
+      <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink max-md:pt-4 max-md:pb-10 sm:py-24">
         <div className={CONTENT}>
-          <div className="mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-12 sm:py-16 lg:px-16">
+          <div className="mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:pt-6 sm:px-12 sm:py-16 lg:px-16">
             <p className="ot-label text-center">Het Jezusgebed</p>
             <OrnamentRule className="mt-4 w-48" />
 
             {/* Christus-icoon met ringen en de twee korte gebeden ernaast */}
-            <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
-              <div className="col-span-2 flex justify-center lg:order-2 lg:col-span-1">
+            <div className={`adem-ritme mx-auto mt-10 max-md:mt-0 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center${meeAdemen ? ' is-actief' : ''}`}>
+              <div className="col-span-2 flex flex-col items-center lg:order-2 lg:col-span-1">
                 <div className="relative m-9 h-[200px] w-[200px] shrink-0 max-[359px]:h-[160px] max-[359px]:w-[160px] sm:m-[60px] sm:h-[230px] sm:w-[230px]">
-                  <div className="absolute -inset-3.5 rounded-full border border-gold/45 sm:-inset-5" />
-                  <div className="absolute -inset-7 rounded-full border border-gold/30 sm:-inset-10" />
+                  <div className="adem-gloed" aria-hidden="true" />
+                  <div className="adem-ring absolute -inset-3.5 rounded-full border border-gold/45 sm:-inset-5" />
+                  <div className="adem-ring adem-ring-2 absolute -inset-7 rounded-full border border-gold/30 sm:-inset-10" />
                   <div className="absolute -inset-9 rounded-full border border-dotted border-gold/40 sm:-inset-[60px]">
                     {['top-0 left-1/2 -translate-x-1/2 -translate-y-1/2', 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2', 'left-0 top-1/2 -translate-x-1/2 -translate-y-1/2', 'right-0 top-1/2 translate-x-1/2 -translate-y-1/2'].map((plek) => (
                       <span key={plek} aria-hidden="true" className={`absolute ${plek} flex h-6 w-6 items-center justify-center rounded-full bg-[#f8f1e3] text-[17px] leading-none text-gold-deep`}>✣</span>
                     ))}
                   </div>
-                  <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
+                  <div className="relative z-[1] flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
                     <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
                   </div>
-                </div>
-              </div>
+                </div>              </div>
 
-              <div className="text-center lg:order-1">
+              <div className="adem-in text-center lg:order-1">
                 <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">Heer Jezus Christus,<br />Zoon van God.</p></div>
                 <OrnamentRule className="mt-4 w-32" />
                 <p className="ot-label mt-4">Inademen</p>
               </div>
-              <div className="text-center lg:order-3">
+              <div className="adem-uit text-center lg:order-3">
                 <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">ontferm U over mij,<br />zondaar.</p></div>
                 <OrnamentRule className="mt-4 w-32" />
                 <p className="ot-label mt-4">Uitademen</p>
               </div>
             </div>
+
+            <div className="mt-8 flex justify-center">
+              <button type="button" onClick={() => setMeeAdemen((a) => !a)} aria-pressed={meeAdemen} className="btn-pill">
+                {meeAdemen ? 'Stoppen' : 'Adem mee'}
+              </button>
+            </div>
+            <p className="sr-only" aria-live="polite">{meeAdemen ? 'Adem in bij de eerste regel, adem uit bij de tweede; ongeveer vier seconden elk.' : ''}</p>
 
             <blockquote className="mx-auto mt-12 max-w-3xl text-center">
               <p className="font-display text-xl leading-relaxed text-ink-soft italic sm:text-2xl">“Het Jezusgebed is een bron van barmhartigheid, een licht in het hart en een weg naar de stilte van God.”</p>

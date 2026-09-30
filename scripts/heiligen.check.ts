@@ -1,8 +1,25 @@
 // Zelftest voor src/lib/heiligenSoort.ts — draaien met: npm run check:heiligen
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { categorieenVan, soortVan } from '../src/lib/heiligenSoort';
+import { categorieenVan, isVastNotitie, soortVan } from '../src/lib/heiligenSoort';
 import { heiligeTitel, hoortBijDag } from '../src/lib/heiligenPopup';
+import { DUBBEL_ONBEKEND, HEILIGEN } from '../src/lib/heiligen';
+import { verbeterNaam } from '../src/lib/vertaalNamen';
+
+// Opschoning heiligenlijst: nagekeken dubbelen bestaan echt in de bron; naamgenoten blijven staan.
+assert.deepEqual(DUBBEL_ONBEKEND, [], 'DUBBEL in lib/heiligen.ts verwijst naar onbekende namen');
+assert.ok(!HEILIGEN['9-17'].some((h) => h.naam === 'H. Lambert') && HEILIGEN['9-17'].some((h) => h.naam === 'Lambertus van Maastricht'), 'Lambertus één keer op 17 september');
+assert.ok(HEILIGEN['1-17'].some((h) => h.naam === 'Eerbiedwaardige Antonius van Krasny Kholm'), 'naamgenoot blijft staan');
+// Vastennotities horen in het vastenblok.
+for (const t of ['Vastendag.', 'Fast Day.', 'Van 25 december tot en met 5 januari is het vastenvrij']) assert.ok(isVastNotitie(t), t);
+assert.ok(!isVastNotitie('Martelaar Theodota te Nicaea (230) en Agathoklea.'));
+// Engelse resten uit de woord-voor-woord-vertaling.
+for (const [in_, uit] of [
+  ['Martelaren Sophia en haar three dochters: Geloof (Vera)', 'Martelaren Sophia en haar drie dochters: Geloof (Vera)'],
+  ['Martelaar Arethas van Omir en met him 4299 Martelaren', 'Martelaar Arethas van Omir en met hem 4299 Martelaren'],
+  ['Non-martyr Martha', 'Non-martelares Martha'],
+  ['Cyrion (of Quirio)', 'Cyrion (of Quirio)'],
+]) assert.equal(verbeterNaam(in_), uit, in_);
 
 // Feesten en kalendernotities horen bij de dag, niet in de heiligenlijst.
 for (const t of [

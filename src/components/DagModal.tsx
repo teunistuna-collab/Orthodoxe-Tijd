@@ -8,8 +8,8 @@ import { FeestTag, VastenBadge } from './ui';
 import Modal from './Modal';
 import DeelKnop from './DeelKnop';
 import { vergrendelScroll } from '../lib/scrollLock';
-import { eersteHeilige, heiligeTitel, hoortBijDag } from '../lib/heiligenPopup';
-import { soortVan } from '../lib/heiligenSoort';
+import { eersteHeilige, heiligeTitel, heiligenVanDag, hoortBijDag } from '../lib/heiligenPopup';
+import { isVastNotitie, soortVan } from '../lib/heiligenSoort';
 import type { Heilige } from '../lib/heiligen';
 
 interface Props {
@@ -26,8 +26,8 @@ function HeiligeKaart({ h, los = false }: { h: Heilige; los?: boolean }) {
         <span className="font-display text-lg font-semibold">{h.naam}</span>
         {h.nl && <span className="rounded-sm bg-wine px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-gold-light uppercase">Lage Landen</span>}
       </div>
-      <div className="text-xs font-semibold text-gold-deep">{h.titel}</div>
-      <p className="mt-1 text-sm leading-relaxed text-ink-soft">{h.kort}</p>
+      {h.titel && h.titel !== h.naam && <div className="text-xs font-semibold text-gold-deep">{h.titel}</div>}
+      {h.kort && h.kort !== h.naam && h.kort !== h.titel && <p className="mt-1 text-sm leading-relaxed text-ink-soft">{h.kort}</p>}
     </li>
   );
   return los ? kaart : <ul className="mt-3">{kaart}</ul>;
@@ -74,8 +74,15 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
 
   const htcDag = dag ? htc?.[dag.kerkKey] : undefined;
   // Regels die aan het jaar van de bron gebonden zijn ("Zaterdag vóór …") alleen tonen in dat jaar (lib/heiligenPopup.ts).
-  const curated = dag ? (heiligen?.HEILIGEN[dag.kerkKey] ?? []).filter((h) => hoortBijDag(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`, htcDag?.c, dag.ymd)) : [];
-  const htcRegels = dag ? (htcDag?.l ?? []).filter(([, tekst]) => hoortBijDag(tekst, htcDag?.c, dag.ymd)) : [];
+  // Zonder vastennotities (die staan in het vastenblok); echte heiligen eerst, dan feesten en iconen.
+  const heiligEerst = <T,>(lijst: T[], tekst: (x: T) => string) => [...lijst.filter((x) => soortVan(tekst(x)) === 'heilige'), ...lijst.filter((x) => soortVan(tekst(x)) !== 'heilige')];
+  const curated = dag
+    ? heiligEerst(
+        (heiligen?.HEILIGEN[dag.kerkKey] ?? []).filter((h) => hoortBijDag(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`, htcDag?.c, dag.ymd) && !isVastNotitie(`${h.ruwNaam ?? ''} ${h.naam}`)),
+        (h) => `${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`,
+      )
+    : [];
+  const htcRegels = dag ? heiligEerst((htcDag?.l ?? []).filter(([, tekst]) => hoortBijDag(tekst, htcDag?.c, dag.ymd) && !isVastNotitie(tekst)), ([, tekst]) => tekst) : [];
   const eerste = eersteHeilige(curated);
   const eersteHtc = htcRegels.find(([, tekst]) => soortVan(tekst) === 'heilige');
   const lezingen = dag ? rooster?.[dag.ymd] ?? [] : [];
@@ -166,7 +173,10 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                 )}
                 {(() => {
                   const overigeEigen = curated.slice(1);
-                  const overigeHtc = curated.length > 0 ? htcRegels : htcRegels.slice(1);
+                  // Regels van holytrinityorthodox.com die al als eigen (Nederlandse) heilige in de lijst staan, niet nog eens tonen
+                  const uniek = new Set(heiligenVanDag(dag.kerkKey, htc, heiligen?.HEILIGEN, dag.ymd, heiligen?.DUBBEL).filter((h) => h.bron === 'htc').map((h) => h.bronTekst));
+                  const htcUniek = htcRegels.filter(([, tekst]) => uniek.has(tekst));
+                  const overigeHtc = curated.length > 0 ? htcUniek : htcUniek.slice(1);
                   const aantal = overigeEigen.length + overigeHtc.length;
                   return aantal > 0 && (
                     <details className="dag-meer mt-3">
