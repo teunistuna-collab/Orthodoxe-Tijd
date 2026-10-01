@@ -2539,3 +2539,16 @@ details[open]::details-content{height:auto}
   #top#top#top#top .vm-aftel{min-height:44px;display:flex;align-items:center}
   #top#top#top#top .ps-filters>button{min-width:44px;padding-inline:6px}
 }
+
+/* Bouw 117 — kaars op Vandaag duidelijker laten flakkeren: een warmere, grotere gloed met meer verschil in licht,
+   en een eigen vlamkern die onregelmatig rekt en zwiept. Alleen transform en opacity; uit bij "minder beweging". */
+#top#top#top#top .vm-vlam:after{top:-18px;width:66px;height:66px;margin-left:-33px;z-index:1;
+  background:radial-gradient(circle,rgba(255,200,96,.8),rgba(255,166,56,.32) 40%,transparent 70%);animation:vm-vlam 2.6s ease-in-out infinite}
+#top#top#top#top .vm-vlam:before{content:"";position:absolute;left:50%;top:5px;z-index:2;width:9px;height:22px;margin-left:-4.5px;border-radius:50% 50% 45% 45%/62% 62% 38% 38%;
+  background:radial-gradient(ellipse at 50% 72%,rgba(255,255,230,.95),rgba(255,214,118,.7) 45%,transparent 75%);pointer-events:none;transform-origin:50% 100%;
+  animation:vm-vlam-kern 1.7s ease-in-out infinite}
+@keyframes vm-vlam{0%,100%{opacity:.62;transform:scale(1)}12%{opacity:1;transform:scale(1.14) translateY(-2px)}27%{opacity:.5;transform:scale(.9)}41%{opacity:.92;transform:scale(1.08)}
+  58%{opacity:.58;transform:scale(.94) translateY(1px)}73%{opacity:1;transform:scale(1.12) translateY(-1px)}88%{opacity:.68;transform:scale(.97)}}
+@keyframes vm-vlam-kern{0%,100%{opacity:.85;transform:scaleY(1) skewX(0)}18%{opacity:1;transform:scaleY(1.18) skewX(-5deg)}36%{opacity:.7;transform:scaleY(.86) skewX(3deg)}
+  54%{opacity:.95;transform:scaleY(1.1) skewX(4deg)}72%{opacity:.75;transform:scaleY(.9) skewX(-3deg)}86%{opacity:1;transform:scaleY(1.14) skewX(1deg)}}
+@media(prefers-reduced-motion:reduce){#top#top#top#top .vm-vlam:before,#top#top#top#top .vm-vlam:after{animation:none}}
