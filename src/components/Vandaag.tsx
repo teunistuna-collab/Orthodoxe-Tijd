@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ChevronRight, Search, Sparkles } from 'lucide-react';
 import { useApp } from '../lib/context';
+import { usePaginaOpen } from '../lib/paginaOpen';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, daysBetween, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
 import { DERTIEN } from '../lib/feesten';
@@ -64,6 +65,7 @@ function huidigUurMoment(): UurMoment {
 }
 
 export default function Vandaag() {
+  const open = usePaginaOpen('vandaag');
   const { mode, setMode, vandaag, vandaagYmd, rooster, heiligen, openDag, openLezing, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken } = useApp();
   const [uurMoment, setUurMoment] = useState<UurMoment>(() => huidigUurMoment());
 
@@ -114,7 +116,7 @@ export default function Vandaag() {
     <section id="vandaag" className="vandaag-design-page">
       <div className="vandaag-frame">
         <h1 className="sr-only">Vandaag</h1>
-        <div className="vandaag-cover"><picture className="contents"><source media="(max-width: 767.98px)" srcSet={LEEG} /><img fetchPriority="high" src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></picture></div>
+        <div className="vandaag-cover"><picture className="contents"><source media="(max-width: 767.98px)" srcSet={LEEG} /><img fetchPriority={open ? 'high' : 'auto'} loading={open ? 'eager' : 'lazy'} src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></picture></div>
         <div className="vandaag-paper">
           <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true" style={{ color: kleurHex }} title={kleurTekst}>☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}{aftelTekst && <a href="#feesten" className="vandaag-aftel">{aftelTekst}</a>}</header>
           <div className="vandaag-list">
@@ -134,7 +136,8 @@ export default function Vandaag() {
       <div className="vandaag-mobiel">
         {['lb', 'rb', 'lo', 'ro'].map((hoek) => <span key={hoek} className={`vm-hoek vm-hoek-${hoek}`} aria-hidden="true" />)}
         <button type="button" onClick={openZoeken} className="vm-zoek" aria-label="Zoeken"><Search aria-hidden="true" /></button>
-        <p className="vm-titel">Orthodoxe Tijd</p>
+        {/* Koppen voor schermlezers: h1 is de site met "Vandaag", de datum is h2 (het desktopdeel met zijn eigen koppen is op mobiel verborgen) */}
+        <h1 className="vm-titel">Orthodoxe Tijd<span className="sr-only"> — Vandaag</span></h1>
 
         <div className="vm-medaillon" style={{ '--dag-kleur': kleurHex } as CSSProperties}>
           <span className="sr-only">{kleurTekst}</span>
@@ -146,12 +149,12 @@ export default function Vandaag() {
           <span className="vm-kruis vm-kruis-o" aria-hidden="true">✣</span>
           <picture className="contents">
             <source media="(min-width: 768px)" srcSet={LEEG} />
-            <img decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
+            <img decoding="async" loading={open ? 'eager' : 'lazy'} src="/images/Christus-afbeelding.webp" alt="Christus" />
           </picture>
         </div>
 
         <p className="vm-weekdag">{dag.weekdagNaam}</p>
-        <p className="vm-datum">{formatDatum(dag.civil)}</p>
+        <h2 className="vm-datum">{formatDatum(dag.civil)}</h2>
         <p className="vm-sier vm-sier-datum" aria-hidden="true"><span>✣</span></p>
         <p className="vm-kerk">{kerkelijkeRegel}</p>
         {aftelTekst && <a href="#feesten" className="vm-aftel">{aftelTekst}</a>}

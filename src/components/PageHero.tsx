@@ -1,22 +1,16 @@
-import { useSyncExternalStore } from 'react';
 import Cross from './Cross';
+import { usePaginaOpen } from '../lib/paginaOpen';
 
 // Eén paginabanner voor alle pagina's, met de titel als echte tekst (schaalt mee, voorleesbaar, nooit afgesneden).
 // Achtergrond per pagina (alle 11): public/images/heroes/web/hero-<id>.webp (vanaf 768px, brede strook van ongeveer 8:1)
 // en public/images/heroes/mobiel/hero-<id>.webp (mobiel). De desktopbanner is daarom laag (index.css, Bouw 105).
 // Opmaak: Bouw 83 in index.css. `kop`: de titel is de h1 van de pagina (alleen waar de pagina zelf geen h1 heeft).
 
-
-const volgHash = (melding: () => void) => {
-  window.addEventListener('hashchange', melding);
-  return () => window.removeEventListener('hashchange', melding);
-};
-
 type Props = { id: string; titel: string; ondertitel?: string; citaat?: string; kop?: boolean };
 
 export default function PageHero({ id, titel, ondertitel, citaat, kop = false }: Props) {
   // De banner van de pagina die open staat laadt meteen en met voorrang; die van verborgen pagina's pas als ze in beeld komen.
-  const open = useSyncExternalStore(volgHash, () => window.location.hash.slice(1).split('/')[0] === id);
+  const open = usePaginaOpen(id);
   const Titel = kop ? 'h1' : 'p';
   return (
     <section id={id} className="bg-bark page-hero-crop page-hero">

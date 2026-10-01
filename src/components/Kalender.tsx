@@ -30,7 +30,8 @@ function CalendarToolbar({ maand, jaar, eersteJaar, onMaand, onJaar, onVorige, o
       <button type="button" onClick={onVorige} className={`order-1 ${PIJL}`} aria-label="Vorige maand">
         <ChevronLeft className="h-4 w-4" /> <span className="hidden sm:inline">{MAANDEN_KORT[(maand + 10) % 12]}</span>
       </button>
-      <div className="order-2 flex min-w-0 flex-1 items-center justify-center gap-2 sm:flex-none">
+      {/* Onder 360px krijgen maand en jaar een eigen rij (anders wordt "Oktober" afgekapt); de pijlen en Vandaag eronder */}
+      <div className="order-2 flex min-w-0 flex-1 items-center justify-center gap-2 max-[359px]:order-first max-[359px]:basis-full sm:flex-none">
         <select value={maand} onChange={(e) => onMaand(Number(e.target.value))} className="font-display min-w-0 flex-1 rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1.5 text-base font-semibold text-ink sm:flex-none sm:py-1 sm:text-lg" aria-label="Maand">
           {MAANDEN.map((mn, i) => (
             <option key={mn} value={i + 1}>{hoofdletter(mn)}</option>
@@ -46,7 +47,7 @@ function CalendarToolbar({ maand, jaar, eersteJaar, onMaand, onJaar, onVorige, o
         <span className="hidden sm:inline">{MAANDEN_KORT[maand % 12]}</span> <ChevronRight className="h-4 w-4" />
       </button>
       <span className="order-4 basis-full sm:hidden" aria-hidden="true" />
-      <button type="button" onClick={onVandaag} className="order-5 mx-auto rounded-full bg-gold px-5 py-1.5 text-xs font-bold tracking-wider text-bark uppercase hover:bg-gold-light sm:order-3 sm:mx-0 sm:px-3">
+      <button type="button" onClick={onVandaag} className="order-5 mx-auto max-[359px]:order-2 rounded-full bg-gold px-5 py-1.5 text-xs font-bold tracking-wider text-bark uppercase hover:bg-gold-light sm:order-3 sm:mx-0 sm:px-3">
         Vandaag
       </button>
     </div>

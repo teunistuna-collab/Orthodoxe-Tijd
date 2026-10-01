@@ -2415,7 +2415,9 @@ details[open]::details-content{height:auto}
 
 /* Bouw 109 — Feesten, De grote feesten (tot 1024px) en Vasten, Deze week (mobiel): elk feest een duidelijke knop in de kaartstijl van de andere rijen (Bouw 92)
    in plaats van een lijst met alleen scheidingslijnen. Datum links, titel, vast/beweeglijk, pijl. */
-#top#top#top#top :is(.feest-rijen,.week-rijen){display:flex;flex-direction:column;gap:8px;border-top:0}
+/* alleen op de breedtes waar de lijst hoort te staan (Feesten tot 1024px, Vasten tot 768px); daarboven de tegels */
+@media(max-width:1023.98px){#top#top#top#top .feest-rijen{display:flex;flex-direction:column;gap:8px;border-top:0}}
+@media(max-width:767.98px){#top#top#top#top .week-rijen{display:flex;flex-direction:column;gap:8px;border-top:0}}
 #top#top#top#top :is(.feest-rijen,.week-rijen) .mlr{position:relative;min-height:60px;padding:8px 12px 8px 6px;border:1px solid var(--ot-rand);border-radius:4px;
   background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)));
   box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent);
@@ -2552,3 +2554,19 @@ details[open]::details-content{height:auto}
 @keyframes vm-vlam-kern{0%,100%{opacity:.85;transform:scaleY(1) skewX(0)}18%{opacity:1;transform:scaleY(1.18) skewX(-5deg)}36%{opacity:.7;transform:scaleY(.86) skewX(3deg)}
   54%{opacity:.95;transform:scaleY(1.1) skewX(4deg)}72%{opacity:.75;transform:scaleY(.9) skewX(-3deg)}86%{opacity:1;transform:scaleY(1.14) skewX(1deg)}}
 @media(prefers-reduced-motion:reduce){#top#top#top#top .vm-vlam:before,#top#top#top#top .vm-vlam:after{animation:none}}
+
+/* Bouw 118 — testrapport P2
+   a. Tablet liggend (vanaf 1024px, aanraakscherm): dezelfde tikvlakken van 44px als onder 1024px (die regels gelden alleen daar).
+   b. Psalmen zonder tekst: gedempt, met het label "tekst volgt", zodat ze niet als gewone psalm ogen.
+   c. Heiligen naar categorie: titels alleen op de woordgrens afbreken (zachte afbreekstreep in Heiligen.tsx), niet midden in het woord. */
+@media(min-width:1024px) and (pointer:coarse){
+  #top#top main :is(button,select,summary,.btn-pill,input:not([type=checkbox]):not([type=radio]):not([type=range])){min-height:44px!important}
+  #top#top main .saints-select select,#top#top main .saints-search-row input{min-height:44px!important;height:44px}
+  #top#top main .v17-year-arrow{flex:0 0 44px!important;min-width:44px!important}
+  #top#top main button.inline-flex.order-1,#top#top main button.inline-flex.order-3{min-width:44px}
+}
+.ps-rij-label{display:inline-block;margin-left:8px;padding:0 7px;border:1px solid var(--ot-rand);border-radius:999px;vertical-align:2px;
+  font-family:"Alegreya Sans",sans-serif;font-size:12px;font-weight:700;letter-spacing:.03em;line-height:1.5;color:var(--color-ink-soft)}
+#top#top#top#top .ps-rij.is-zonder-tekst .ps-nummer{opacity:.55}
+#top#top#top#top .ps-rij.is-zonder-tekst .ps-pijl{opacity:.45}
+#top#top#top#top .bibliotheek .saints-category-grid button strong{overflow-wrap:normal;word-break:normal;hyphens:manual}

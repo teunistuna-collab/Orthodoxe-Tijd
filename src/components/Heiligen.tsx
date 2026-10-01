@@ -9,6 +9,9 @@ import { CATEGORIEEN, categorieenVan, soortVan } from '../lib/heiligenSoort';
 import PageHero from './PageHero';
 import NaarBoven from './NaarBoven';
 
+// Lange samenstellingen mogen alleen op de woordgrens afbreken (met streepje), niet midden in het woord: Klooster-heiligen.
+const afbreekbaar = (label: string) => label.replace(/^(Klooster|Recht|Vrouw)(?=\S)/, '$1\u00AD');
+
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
 function sorteerMd(a: string, b: string) { const [am, ad] = a.split('-').map(Number); const [bm, bd] = b.split('-').map(Number); return am - bm || ad - bd; }
@@ -101,9 +104,9 @@ export default function Heiligen() {
         <section className="saints-discover bibliotheek">
           <div className="saints-section-head bieb-kop"><h2>Ontdek alle heiligen</h2><p>Zoek op naam, maand of categorie en laat u inspireren door hun leven.</p></div>
           <div className="saints-search-row">
-            <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setWachtOpDag(false)}} placeholder="Zoek een heilige…" /></label>
-            <div className="saints-select"><select value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false);setWachtOpDag(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
-            <div className="saints-select"><select value={categorie} onChange={e=>{setCategorie(e.target.value);setWachtOpDag(false)}}><option value="alle">Alle categorieën</option>{categories.map(c=><option key={c[0]} value={c[0]}>{c[1]}</option>)}</select><ChevronDown/></div>
+            <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setWachtOpDag(false)}} placeholder="Zoek een heilige…" aria-label="Zoek een heilige" /></label>
+            <div className="saints-select"><select aria-label="Maand" value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false);setWachtOpDag(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
+            <div className="saints-select"><select aria-label="Categorie" value={categorie} onChange={e=>{setCategorie(e.target.value);setWachtOpDag(false)}}><option value="alle">Alle categorieën</option>{categories.map(c=><option key={c[0]} value={c[0]}>{c[1]}</option>)}</select><ChevronDown/></div>
             <button type="button" onClick={()=>document.querySelector('.pagina:not(.pagina-verborgen) .saints-results')?.scrollIntoView({behavior:'smooth',block:'start'})} className="saints-search-button">Zoeken ›</button>
           </div>
         </section>
@@ -118,7 +121,7 @@ export default function Heiligen() {
 
         <section className="saints-categories bibliotheek">
           <div className="saints-rule-title"><h2>Heiligen naar categorie</h2></div>
-          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><span className="bieb-icoon bieb-embleem" aria-hidden="true"><img src="/images/ui/embleem.webp" alt="" loading="lazy" /></span><strong>{c[1]}</strong><span>{c[2]}</span></button>)}</div>
+          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><span className="bieb-icoon bieb-embleem" aria-hidden="true"><img src="/images/ui/embleem.webp" alt="" loading="lazy" /></span><strong>{afbreekbaar(c[1])}</strong><span>{c[2]}</span></button>)}</div>
         </section>
 
         <section className="saints-lowlands">

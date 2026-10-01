@@ -43,9 +43,9 @@ export default function Feesten() {
         <section className="feast-discover bibliotheek px-6 py-9 max-md:order-first max-md:border-b max-md:border-gold/30 sm:px-10 sm:py-12">
           <div className="bieb-kop"><p className="ot-label">Door het kerkelijk jaar</p><h2 className="font-display mt-1 text-4xl">Ontdek alle feesten</h2><p className="mt-2 text-sm text-ink-soft">Zoek op naam, maand of soort en kies daarna desgewenst een dag.</p></div>
           <div className="saints-search-row">
-            <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setDag(null)}} placeholder="Zoek een feest…" /></label>
-            <div className="saints-select"><select value={maand===null?'':maand} onChange={e=>{setMaand(e.target.value===''?null:Number(e.target.value));setDag(null)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
-            <div className="saints-select"><select value={categorie} onChange={e=>setCategorie(e.target.value as 'alle'|'vast'|'beweeglijk')}><option value="alle">Alle categorieën</option><option value="vast">Vaste feesten</option><option value="beweeglijk">Beweeglijke feesten</option></select><ChevronDown/></div>
+            <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setDag(null)}} placeholder="Zoek een feest…" aria-label="Zoek een feest" /></label>
+            <div className="saints-select"><select aria-label="Maand" value={maand===null?'':maand} onChange={e=>{setMaand(e.target.value===''?null:Number(e.target.value));setDag(null)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
+            <div className="saints-select"><select aria-label="Categorie" value={categorie} onChange={e=>setCategorie(e.target.value as 'alle'|'vast'|'beweeglijk')}><option value="alle">Alle categorieën</option><option value="vast">Vaste feesten</option><option value="beweeglijk">Beweeglijke feesten</option></select><ChevronDown/></div>
             <button type="button" onClick={()=>document.querySelector('.pagina:not(.pagina-verborgen) .bieb-lijst')?.scrollIntoView({behavior:'smooth',block:'center'})} className="saints-search-button">Zoeken ›</button>
           </div>
           <div className="saints-rule-title mt-8"><h2>Feesten per maand</h2><span>{alleItems.length}+ feesten</span></div>

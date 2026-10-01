@@ -6,6 +6,7 @@ import { popupContent } from '../lib/heiligenPopup';
 import { bouwIndex, zoek, type ZoekTreffer } from '../lib/zoeken';
 import { vergrendelScroll } from '../lib/scrollLock';
 import { useTerugSluit } from '../lib/terug';
+import { houdFocusBinnen } from '../lib/focus';
 import { gaNaar } from '../lib/navigatie';
 import { LiturgicalPopup } from './CycleSections';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
@@ -88,6 +89,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
   // Pijltjes omhoog/omlaag lopen door het veld en de resultaten; Enter in het veld opent het eerste resultaat.
   // Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    houdFocusBinnen(e);
     if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
     const knoppen = [invoerRef.current, ...(lijstRef.current?.querySelectorAll('button') ?? [])].filter(Boolean) as HTMLElement[];
     const i = knoppen.indexOf(document.activeElement as HTMLElement);

@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
+import { houdFocusBinnen } from '../lib/focus';
 import Leesbediening, { type Deel } from './Leesbediening';
 
 type ModalProps = {
@@ -121,6 +122,7 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         tabIndex={-1}
         className={`exact-modal-frame ${maxWidth}`}
         onClick={(event) => event.stopPropagation()}
+        onKeyDown={houdFocusBinnen}
         {...veeg}
       >
         <header className="exact-modal-titlebar">

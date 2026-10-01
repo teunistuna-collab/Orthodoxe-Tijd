@@ -152,6 +152,7 @@ export default function Gebeden() {
                 value={zoek}
                 onChange={(e) => setZoek(e.target.value)}
                 placeholder="Zoek een gebed"
+                aria-label="Zoek een gebed"
                 className="w-full rounded-full border border-gold/40 bg-[#f8f1e3] py-3 pr-10 pl-11 text-sm text-ink placeholder:text-ink-mute focus:border-gold focus:outline-none"
               />
               {zoek && (

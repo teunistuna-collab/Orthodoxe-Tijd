@@ -114,7 +114,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
         {p.septuagintNumber}
       </span>
       <span className="ps-rij-tekst">
-        <span className="ps-rij-titel">{p.title}</span>
+        <span className="ps-rij-titel">{p.title}{!p.hasText && <> <span className="ps-rij-label">tekst volgt</span></>}</span>
         {onder && <span className="ps-rij-onder">{onder}</span>}
       </span>
       <span className="ps-pijl pijl" aria-hidden="true">›</span>
