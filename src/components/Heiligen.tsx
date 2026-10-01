@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { rangLabel, vertaalLeven } from '../lib/htc';
-import { dagInfo, formatMd, hoofdletter, MAANDEN, MAANDEN_KORT } from '../lib/kalender';
+import { dagInfo, formatMd, hoofdletter, MAANDEN } from '../lib/kalender';
 import { LiturgicalPopup } from './CycleSections';
 import { heiligenVanDag, normaliseer, popupContent, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
 import { CATEGORIEEN, categorieenVan, soortVan } from '../lib/heiligenSoort';

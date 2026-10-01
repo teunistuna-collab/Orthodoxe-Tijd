@@ -18,8 +18,8 @@ export default defineConfig(async ({ mode, command }) => {
   // data-source-loc-attributen (voor de element-picker) alleen tijdens ontwikkeling, niet in de gebouwde site.
   if (command === 'serve') {
     try {
-      // @ts-ignore
-      const m = await import('./.vite-source-tags.js');
+      const pad = './.vite-source-tags.js'; // bestaat alleen lokaal; variabel pad, dus geen typecontrole op de import
+      const m = await import(/* @vite-ignore */ pad);
       plugins.push(m.sourceTags());
     } catch {
       /* alleen aanwezig in de Agon-ontwikkelomgeving */

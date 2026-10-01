@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
-import Cross from './Cross';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
@@ -107,13 +106,6 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: s
   { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?', iconSrc: '/images/ui/menu/02-Gebed-03-Het-gebedskoord.webp' },
 ];
 
-const TIMELINE_ITEMS = [
-  { id: 'adem', label: 'ADEM', title: 'Christus in iedere\nademhaling', href: '#adem' },
-  { id: 'etmaal', label: 'ETMAAL', title: 'Gebed door\ndag en nacht', href: '#etmaal' },
-  { id: 'week', label: 'WEEK', title: 'Iedere dag\nzijn gedachtenis', href: '#week' },
-  { id: 'pascha', label: 'PASCHA', title: 'De weg van Kruis\nnaar Verrijzenis', href: '#pascha' },
-  { id: 'jaar', label: 'JAAR', title: 'Het gehele\nkerkelijke jaar geheiligd', href: '#jaar' },
-];
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 

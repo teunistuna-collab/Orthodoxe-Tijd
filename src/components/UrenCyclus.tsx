@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Bird, ChevronDown, ChevronLeft, ChevronRight, Church, Clock3, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
+import { Bird, ChevronLeft, ChevronRight, Church, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
 import Modal from './Modal';
 import Cross from './Cross';
 import { vergrendelScroll } from '../lib/scrollLock';
@@ -52,11 +52,6 @@ const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
 type InfoKey = 'wat' | 'diensten' | 'betekenis' | 'praktisch';
 
-type InfoContent = {
-  title: string;
-  subtitle: string;
-  paragraphs: string[];
-};
 
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe etmaalcyclus.docx".
 
@@ -67,13 +62,6 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: s
   { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.', iconSrc: '/images/ui/menu/02-Gebed-06-Praktisch.webp' },
 ];
 
-const TIMELINE_ITEMS = [
-  { id: 'adem', label: 'ADEM', title: 'Christus in iedere\nademhaling', href: '#adem' },
-  { id: 'etmaal', label: 'ETMAAL', title: 'Gebed door\ndag en nacht', href: '#etmaal' },
-  { id: 'week', label: 'WEEK', title: 'Iedere dag\nzijn gedachtenis', href: '#week' },
-  { id: 'pascha', label: 'PASCHA', title: 'De weg van Kruis\nnaar Verrijzenis', href: '#pascha' },
-  { id: 'jaar', label: 'JAAR', title: 'Het gehele\nkerkelijke jaar geheiligd', href: '#jaar' },
-];
 
 // Symbolische lijnicoon per dienst, gebaseerd op het schematische moment (bron: docx).
 // 'Zesde Uur' gebruikt het orthodoxe kruis-component in plaats van een lucide-icoon.
@@ -103,39 +91,29 @@ export default function UrenCyclus() {
   const [modalState, setModalState] = useState<ModalState | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
-  const [pdfPages, setPdfPages] = useState<Array<Array<PdfLine>>>([]);
-  const [pdfStatus, setPdfStatus] = useState<'idle' | 'loading' | 'error' | 'done'>('idle');
+  const [pdf, setPdf] = useState<{ url: string; pages: Array<Array<PdfLine>>; status: 'error' | 'done' } | null>(null);
 
   const activeIndex = hovered ?? open ?? 0;
   const currentService = modalState !== null ? serviceConfig[modalState.serviceIndex] : serviceConfig[activeIndex];
   const currentPdfUrl = modalState?.selectedPsalm ? modalState.selectedPsalm.pdf : currentService?.pdf ?? '';
   const currentTitle = modalState?.selectedPsalm ? `${currentService.title} · ${modalState.selectedPsalm.title}` : currentService.title;
 
+  // PDF-tekst: uit de cache, of het geladen resultaat zolang het bij de huidige url hoort; anders nog aan het laden.
+  const pdfUrl = open !== null ? currentPdfUrl : '';
+  const cachedPages = pdfUrl ? pdfTextCache.get(pdfUrl) : undefined;
+  const pdfHuidig = pdf && pdf.url === pdfUrl ? pdf : null;
+  const pdfPages = cachedPages ?? pdfHuidig?.pages ?? [];
+  const pdfStatus = !pdfUrl ? 'idle' : cachedPages ? 'done' : (pdfHuidig?.status ?? 'loading');
+
   useEffect(() => {
-    if (open === null || !currentPdfUrl) {
-      setPdfPages([]);
-      setPdfStatus('idle');
-      return;
-    }
-
+    if (!pdfUrl || pdfTextCache.has(pdfUrl)) return;
     let active = true;
-    const cachedPages = pdfTextCache.get(currentPdfUrl);
-    if (cachedPages) {
-      setPdfPages(cachedPages);
-      setPdfStatus('done');
-      return () => {
-        active = false;
-      };
-    }
-
-    setPdfStatus('loading');
-    setPdfPages([]);
 
     const parsePdf = async () => {
       try {
         const pdfjsKlaar = laadPdfjs(); // tegelijk met het PDF-bestand ophalen
         pdfjsKlaar.catch(() => {}); // een fout komt hieronder via Promise.all binnen
-        const response = await fetch(currentPdfUrl);
+        const response = await fetch(pdfUrl);
         if (!response.ok) throw new Error(`PDF is niet beschikbaar (${response.status})`);
 
         const [buffer, pdfjsLib] = await Promise.all([response.arrayBuffer(), pdfjsKlaar]);
@@ -173,13 +151,12 @@ export default function UrenCyclus() {
         }
 
         if (!active) return;
-        pdfTextCache.set(currentPdfUrl, pages);
-        setPdfPages(pages);
-        setPdfStatus('done');
+        pdfTextCache.set(pdfUrl, pages);
+        setPdf({ url: pdfUrl, pages, status: 'done' });
       } catch (error) {
         if (!active) return;
         console.error('PDF parsing failed', error);
-        setPdfStatus('error');
+        setPdf({ url: pdfUrl, pages: [], status: 'error' });
       }
     };
 
@@ -188,7 +165,7 @@ export default function UrenCyclus() {
     return () => {
       active = false;
     };
-  }, [currentPdfUrl, open]);
+  }, [pdfUrl]);
 
   // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {

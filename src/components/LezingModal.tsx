@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BookOpenText, ChevronDown, ExternalLink } from 'lucide-react';
 import type { LezingKeuze } from '../lib/context';
-import { laadLezingen, lezingSoort, nbv21Url, vertaalRef, vertaalTag, type HtcLezing } from '../lib/htc';
+import { laadLezingen, nbv21Url, vertaalRef, vertaalTag, type HtcLezing } from '../lib/htc';
 import { formatLang, kerkDatum } from '../lib/kalender';
 import Modal from './Modal';
 
@@ -11,15 +11,16 @@ interface Props {
 }
 
 export default function LezingModal({ keuze, onClose }: Props) {
-  const [lezing, setLezing] = useState<HtcLezing | null>(null);
-  const [status, setStatus] = useState<'laden' | 'ok' | 'fout'>('laden');
-  const [toonEngels, setToonEngels] = useState(false);
+  // Resultaat en "Engels tonen" horen bij één keuze; bij een andere keuze vallen ze vanzelf terug (laden, dicht).
+  const [geladen, setGeladen] = useState<{ keuze: LezingKeuze; lezing: HtcLezing | null } | null>(null);
+  const [engelsVoor, setEngelsVoor] = useState<LezingKeuze | null>(null);
+  const klaar = geladen && geladen.keuze === keuze ? geladen : null;
+  const lezing = klaar?.lezing ?? null;
+  const status = !klaar ? 'laden' : lezing ? 'ok' : 'fout';
+  const toonEngels = engelsVoor !== null && engelsVoor === keuze;
 
   useEffect(() => {
     if (!keuze) return;
-    setStatus('laden');
-    setLezing(null);
-    setToonEngels(false);
     const julMaand = Number(keuze.julianKey.split('-')[0]);
     const julJaar = kerkDatum(keuze.civil, 'oud').getUTCFullYear();
     let actief = true;
@@ -28,17 +29,15 @@ export default function LezingModal({ keuze, onClose }: Props) {
         if (!actief) return;
         const lijst = data[keuze.julianKey] ?? [];
         const gevonden = lijst.find((l) => l.ref === keuze.ref && l.tag === keuze.tag) ?? lijst.find((l) => l.ref === keuze.ref) ?? null;
-        setLezing(gevonden);
-        setStatus(gevonden ? 'ok' : 'fout');
+        setGeladen({ keuze, lezing: gevonden });
       })
-      .catch(() => actief && setStatus('fout'));
+      .catch(() => actief && setGeladen({ keuze, lezing: null }));
     return () => {
       actief = false;
     };
   }, [keuze]);
 
   const refNl = keuze ? vertaalRef(keuze.ref) : '';
-  const soort = keuze ? lezingSoort(refNl) : 'apostel';
   const nbv = keuze ? nbv21Url(keuze.ref) : null;
 
   return (
@@ -70,7 +69,7 @@ export default function LezingModal({ keuze, onClose }: Props) {
               {/* Engelse tekst als reserve */}
               <button
                 type="button"
-                onClick={() => setToonEngels((v) => !v)}
+                onClick={() => setEngelsVoor((v) => (v === keuze ? null : keuze))}
                 className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-ink-mute underline-offset-2 hover:text-gold-deep hover:underline"
               >
                 {toonEngels ? 'Engelse tekst verbergen' : 'Engelse tekst tonen (NKJV)'} <ChevronDown className={`h-3.5 w-3.5 transition ${toonEngels ? 'rotate-180' : ''}`} />

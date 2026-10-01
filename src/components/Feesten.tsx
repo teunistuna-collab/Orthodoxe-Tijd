@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { DERTIEN, OVERIGE_VASTE } from '../lib/feesten';
-import { MAANDEN, MAANDEN_KORT, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum, ymd } from '../lib/kalender';
+import { MAANDEN, MAANDEN_KORT, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum } from '../lib/kalender';
 import { volgendeFeestDatum } from '../lib/overzicht';
 import { LiturgicalPopup } from './CycleSections';
 import { MobileListRow } from './ui';
@@ -11,7 +11,7 @@ import PageHero from './PageHero';
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
 export default function Feesten() {
-  const { mode, vandaag, openDag } = useApp();
+  const { mode, vandaag } = useApp();
   const [open, setOpen] = useState<string | null>(null);
   const [zoek, setZoek] = useState('');
   const [maand, setMaand] = useState<number | null>(vandaag.getUTCMonth());

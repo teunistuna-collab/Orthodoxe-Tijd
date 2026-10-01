@@ -2461,3 +2461,19 @@ details[open]::details-content{height:auto}
 #top#top#top#top .v15-fasting-panel.fasting-table .fasting-table-wanneer{color:var(--color-ink-soft)!important}
 #top#top#top#top .v15-fasting-panel.fasting-table .fasting-table-noot{border-top-color:var(--ot-rand)!important;color:var(--color-ink-soft)!important}
 @media(max-width:767.98px){#top#top#top#top .v15-fasting-panel.fasting-table{padding:6px 16px!important}#top#top#top#top .v15-fasting-panel.fasting-table h4{font-size:19px!important}#top#top#top#top .v15-fasting-panel.fasting-table:has(>button[aria-expanded=true]){padding-bottom:14px!important}}
+
+/* Bouw 112 — desktop en tablet (vanaf 768px): de tegels licht, zoals op mobiel (Bouw 107/109/111). Geldt voor de infotegels
+   van de cycli en Vasten, de gebedscategorieën, de feesttegels en de vier grote vastenperiodes. Medaillons blijven donker. */
+@media(min-width:768px){
+  #top#top#top#top :is(.ornate-card,.v15-major-fast){border:1px solid var(--ot-rand)!important;border-radius:4px!important;color:var(--color-ink)!important;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;
+    box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important}
+  #top#top#top#top :is(.ornate-card,.v15-major-fast):is(:hover,:focus-visible){border-color:var(--color-gold-deep)!important;outline:none;
+    box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 14px 26px color-mix(in srgb,var(--ot-bark) 13%,transparent)!important}
+  #top#top#top#top .ornate-card:before{border-color:var(--ot-rand)!important}
+  #top#top#top#top :is(.ornate-card,.v15-major-fast) :is(h3,h4){color:var(--color-ink)!important}
+  #top#top#top#top :is(.ornate-card,.v15-major-fast) :is(p,li,.feast-meta,.major-meta,.ornate-side-ornaments){color:var(--color-ink-soft)!important}
+  #top#top#top#top :is(.ornate-card,.v15-major-fast) .major-badge{border-color:var(--ot-rand)!important;background:transparent!important;color:var(--color-gold-deep)!important}
+  #top#top#top#top :is(.ornate-card,.v15-major-fast) .btn-pill{border-color:var(--color-gold-deep)!important;background:transparent!important;color:var(--color-gold-deep)!important}
+  #top#top#top#top :is(.ornate-card,.v15-major-fast):is(:hover,:focus-visible) .btn-pill,#top#top#top#top :is(.ornate-card,.v15-major-fast) .btn-pill:is(:hover,:focus-visible){background:var(--color-gold-deep)!important;color:var(--color-paper)!important}
+}
