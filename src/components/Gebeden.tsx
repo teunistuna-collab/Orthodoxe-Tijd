@@ -194,7 +194,7 @@ export default function Gebeden() {
               {huidigeCat.id === 'jezusgebed' && (
                 <a
                   href="#adem"
-                  className="btn-pill mt-6"
+                  className="btn-pill cyclus-verder mt-6"
                 >
                   Ontdek de ademcyclus ›
                 </a>

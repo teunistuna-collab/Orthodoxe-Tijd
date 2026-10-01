@@ -25,7 +25,8 @@ export function GoldDivider() {
   return <div className="gold-rule my-8" />;
 }
 
-// Gedeeld donker overgangsblok (citaat links, tekst + knop rechts) voor alle cycluspagina's.
+// Gedeeld donker overgangsblok (citaat links, tekst + knop rechts) voor alle cycluspagina's. De knop naar de volgende cyclus
+// alleen vanaf tablet; op mobiel staan de cycli al onder Cycli in de onderbalk.
 export function CycleTransition({
   quote,
   citation,
@@ -56,7 +57,7 @@ export function CycleTransition({
             <p className="mt-4 max-w-2xl text-sm leading-relaxed break-words text-[#d9c6a3] min-[900px]:text-lg">{text}</p>
             <a
               href={buttonHref}
-              className="btn-pill mt-6"
+              className="btn-pill cyclus-verder mt-6"
             >
               {buttonLabel} ›
             </a>

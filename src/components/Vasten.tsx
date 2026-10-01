@@ -316,7 +316,7 @@ export default function Vasten() {
               eerste eeuwen gevast — het staat al in de Didachè. Vastenvrij zijn alleen de Lichte Week, de week na
               Pinksteren, de Kersttijd en de week na Tollenaar en Farizeeër.
             </p>
-            <a href="#week" className="btn-pill mt-3">
+            <a href="#week" className="btn-pill cyclus-verder mt-3">
               Ontdek de weekcyclus ›
             </a>
 
