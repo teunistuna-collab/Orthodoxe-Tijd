@@ -2477,3 +2477,10 @@ details[open]::details-content{height:auto}
   #top#top#top#top :is(.ornate-card,.v15-major-fast) .btn-pill{border-color:var(--color-gold-deep)!important;background:transparent!important;color:var(--color-gold-deep)!important}
   #top#top#top#top :is(.ornate-card,.v15-major-fast):is(:hover,:focus-visible) .btn-pill,#top#top#top#top :is(.ornate-card,.v15-major-fast) .btn-pill:is(:hover,:focus-visible){background:var(--color-gold-deep)!important;color:var(--color-paper)!important}
 }
+
+/* Bouw 113 — desktopkop zonder de gouden sierlijst met hoekornamenten (border-image uit Bouw 69): een rustige donkere balk
+   met onderaan een fijne dubbele goudlijn, zoals de binnenlijn van de kaarten. */
+#top#top#top#top header.site-header>div.bg-bark{border-image:none;border:0;border-bottom:1px solid var(--ot-rand);
+  background:linear-gradient(180deg,var(--ot-bark2),var(--ot-bark));
+  box-shadow:inset 0 -4px 0 var(--ot-bark),inset 0 -5px 0 color-mix(in srgb,var(--ot-gold) 28%,transparent),0 6px 16px color-mix(in srgb,var(--ot-bark) 25%,transparent)}
+#top#top#top#top header.site-header>div.bg-bark>div{min-height:72px;padding:0 clamp(16px,2vw,32px)}
