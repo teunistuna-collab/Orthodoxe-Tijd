@@ -415,7 +415,7 @@ export default function Pascha() {
                 type="button"
                 onClick={() => setCyclusOpen((open) => !open)}
                 aria-expanded={cyclusOpen}
-                className="flex w-full items-center justify-between gap-3 rounded-xl border border-gold/40 bg-[#f8f1e3] px-5 py-4 text-left shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition hover:bg-gold-pale/40"
+                className="ot-kaart flex w-full items-center justify-between gap-3 rounded-xl border border-gold/40 bg-[#f8f1e3] px-5 py-4 text-left shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition hover:bg-gold-pale/40"
               >
                 <span>
                   <span className="font-display block text-xl font-semibold text-ink sm:text-2xl">Paascyclus {paaschaJaar}</span>

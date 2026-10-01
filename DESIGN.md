@@ -95,8 +95,9 @@ Warm palette only. One accent family: gold. Never pure black.
   - Secondary actions: outlined pill, Deep Gold 1px border, uppercase Alegreya Sans 13px bold, text ending in ` ›`.
   - Gold fill is reserved for the small "Vandaag" jump in the calendar and the calendar toggle (Oud/Nieuw).
   - Every button must do something: no decorative or dead buttons.
-- **Big tiles (desktop).** Square dark tiles with a painted frame for the main entry points of a page. On mobile
-  they become light rows.
+- **Big tiles (desktop).** The main entry points of a page (cycle info, prayer categories, feasts, fasting periods)
+  are light cards in the same style as rows: Card Paper, Gold Border, double inner line, two small corner ornaments,
+  a dark medallion on top. On mobile they become light rows. Tiles are never dark.
 - **Dialog.** A dark Bark header band (eyebrow date, centered Cormorant title, close ×) over a parchment body.
   Each section is a light card and each heading has a thin gold line after it. Long lists collapse behind a
   "Meer … (n)" disclosure.

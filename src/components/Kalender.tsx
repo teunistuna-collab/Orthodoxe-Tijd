@@ -83,9 +83,9 @@ export default function Kalender() {
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink max-md:py-5 sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12">
-          <div className="parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] max-md:px-5 max-md:py-4 sm:px-14 sm:py-9">
-            <Hoeksier className="pointer-events-none absolute bottom-3 left-3 hidden sm:block -scale-y-100" />
-            <Hoeksier className="pointer-events-none absolute right-3 top-3 hidden -scale-x-100 sm:block" />
+          <div className="kal-intro parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] max-md:px-5 max-md:py-4 sm:px-14 sm:py-9">
+            <Hoeksier className="pointer-events-none absolute bottom-1.5 left-1.5 hidden sm:block -scale-y-100" />
+            <Hoeksier className="pointer-events-none absolute right-1.5 top-1.5 hidden -scale-x-100 sm:block" />
             <div className="relative grid gap-6 lg:grid-cols-[7fr_3fr] lg:items-center">
               <div>
                 <p className="ot-label">Leef mee met de liturgische tijd</p>

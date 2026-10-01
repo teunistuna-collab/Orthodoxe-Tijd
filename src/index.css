@@ -2068,7 +2068,7 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top .bibliotheek .saints-results-list button strong{color:var(--color-ink)!important;font-family:"Cormorant Garamond",serif}
 #top#top#top#top .bibliotheek .saints-results-list button small{color:var(--bieb-dempt)!important}
 #top#top#top#top .bibliotheek .saints-results-list button b{color:var(--color-gold-deep)!important}
-#top#top#top#top .bibliotheek .saints-results-list button:is(:hover,:focus-visible){outline:none;background:color-mix(in srgb,var(--ot-gold) 10%,transparent)!important;box-shadow:inset 3px 0 0 var(--color-gold-deep)!important}
+#top#top#top#top .bibliotheek .saints-results-list button:is(:hover,:focus-visible){outline:none;background:color-mix(in srgb,var(--ot-gold) 10%,transparent)!important;box-shadow:inset 0 0 0 1px var(--color-gold-deep)!important}
 /* Heiligen: "Vandaag gedenken wij" als lichte band over de volle breedte */
 #top#top#top#top .saints-refined{padding-top:0!important}
 #top#top#top#top .saints-today-panel{margin-inline:calc(50% - 50vw)!important;padding-inline:calc(50vw - 50%);border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;border-bottom:1px solid var(--ot-gold)!important}
@@ -2226,7 +2226,7 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top :is(.vm-rij,.ps-rij,.dag-blok,.dag-lezing):before{left:3px;top:3px}
 #top#top#top#top :is(.vm-rij,.ps-rij,.dag-blok,.dag-lezing):after{right:3px;bottom:3px;transform:rotate(180deg)}
 #top#top#top#top .ps-rij[aria-current]{border-color:var(--color-gold-deep)!important;
-  box-shadow:inset 3px 0 0 var(--color-gold-deep),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 10%,transparent)!important}
+  box-shadow:inset 0 0 0 1px var(--color-gold-deep),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 10%,transparent)!important}
 
 /* Bouw 93 — Gebeden (mobiel): de categorieën als rijen, zelfde onderdelen als Vandaag (vm-rij); hier als knop */
 @media(max-width:767.98px){
@@ -2428,7 +2428,7 @@ details[open]::details-content{height:auto}
 #top#top#top#top :is(.feest-rijen,.week-rijen) .mlr-links{padding-right:10px;border-right:1px solid var(--ot-rand)}
 #top#top#top#top :is(.feest-rijen,.week-rijen) .mlr-pijl{color:var(--color-gold-deep)}
 #top#top#top#top .week-rijen .mlr.is-today{border-color:var(--color-gold-deep);
-  box-shadow:inset 3px 0 0 var(--color-gold-deep),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 10%,transparent)}
+  box-shadow:inset 0 0 0 1px var(--color-gold-deep),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 10%,transparent)}
 #top#top#top#top .week-rijen .mlr .week-dag-balk{position:static;align-self:center}
 
 /* Bouw 110 — Vasten, vragen onder "Het vasten is een school": dezelfde kaartstijl als de andere knoppen (Bouw 92), compacter */
@@ -2484,3 +2484,58 @@ details[open]::details-content{height:auto}
   background:linear-gradient(180deg,var(--ot-bark2),var(--ot-bark));
   box-shadow:inset 0 -4px 0 var(--ot-bark),inset 0 -5px 0 color-mix(in srgb,var(--ot-gold) 28%,transparent),0 6px 16px color-mix(in srgb,var(--ot-bark) 25%,transparent)}
 #top#top#top#top header.site-header>div.bg-bark>div{min-height:72px;padding:0 clamp(16px,2vw,32px)}
+
+/* Bouw 114 — één kaartstijl voor alle tegels (zoals Bouw 92): ook de tegels op Vandaag (desktop), de resultatenrijen bij
+   Feesten en Heiligen (bieb-rij) en de knop Paascyclus (ot-kaart) en de categorieknoppen bij Heiligen. Overal dezelfde rand, achtergrond, binnenlijn, hoeksier en hover.
+   De grote tegels (cycli, gebeden, feesten, vastenperiodes) krijgen dezelfde kleine hoeksier in plaats van de brede binnenlijst. */
+#top#top#top#top :is(.vandaag-item,.bieb-rij,.ot-kaart,.bibliotheek .saints-category-grid button:not(.active)){position:relative;border:1px solid var(--ot-rand)!important;border-radius:4px!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important;
+  transition:border-color .18s,box-shadow .18s!important}
+#top#top#top#top :is(.vandaag-item,.bieb-rij,.ot-kaart,.bibliotheek .saints-category-grid button:not(.active)):is(:hover,:focus-visible){border-color:var(--color-gold-deep)!important;outline:none;transform:none!important;
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 14px 26px color-mix(in srgb,var(--ot-bark) 13%,transparent)!important}
+#top#top#top#top :is(.vandaag-item,.bieb-rij,.ot-kaart,.bibliotheek .saints-category-grid button:not(.active)):before,#top#top#top#top :is(.vandaag-item,.bieb-rij,.ot-kaart,.bibliotheek .saints-category-grid button:not(.active)):after{content:""!important;position:absolute;width:12px;height:12px;font-size:0!important;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
+#top#top#top#top :is(.vandaag-item,.bieb-rij,.ot-kaart,.bibliotheek .saints-category-grid button:not(.active)):before{left:3px!important;top:3px!important;right:auto!important;bottom:auto!important}
+#top#top#top#top :is(.vandaag-item,.bieb-rij,.ot-kaart,.bibliotheek .saints-category-grid button:not(.active)):after{right:3px!important;bottom:3px!important;left:auto!important;top:auto!important;transform:rotate(180deg)}
+/* Vandaag: geen groot vervaagd watermerk-icoon meer en niet meer verspringen bij aanwijzen */
+#top#top#top#top .vandaag-item>div:after{display:none!important}
+#top#top#top#top .vandaag-item:hover{padding-left:revert-layer}
+@media(min-width:901px){#top#top#top#top .vandaag-item,#top#top#top#top .vandaag-item:hover{padding:20px 22px!important}}
+#top#top#top#top .vandaag-list{gap:12px!important}
+/* resultatenrijen: losse kaarten met wat ruimte ertussen */
+#top#top#top#top .bieb-lijst{gap:8px}
+#top#top#top#top .bieb-rij{padding:10px 12px 10px 16px}
+@media(min-width:768px){
+  #top#top#top#top :is(.ornate-card,.v15-major-fast):before{content:""!important;inset:auto!important;left:3px!important;top:3px!important;width:12px!important;height:12px!important;border:0!important;background:var(--hoeksier) no-repeat center/contain!important;background-size:contain!important;opacity:.8}
+  #top#top#top#top :is(.ornate-card,.v15-major-fast):after{content:""!important;display:block!important;position:absolute!important;inset:auto!important;right:3px!important;bottom:3px!important;width:12px!important;height:12px!important;border:0!important;background:var(--hoeksier) no-repeat center/contain!important;opacity:.8;transform:rotate(180deg);pointer-events:none}
+}
+
+/* Bouw 115 — Kalender, introductie (mobiel): sierhoekjes kleiner, zoals bij de cycluspanelen (Bouw 99); ze staan dicht bij de rand (Kalender.tsx) */
+@media(max-width:767.98px){#top#top#top .kal-intro>.hoeksier{width:26px;height:26px}}
+
+/* Bouw 116 — polijstronde
+   1. Vasten, de vier grote vastenperiodes op mobiel: lichte rijen zoals alle andere knoppen (was nog donkere 2x2-tegels).
+   2. Cyclusbalk: labels in Deep Gold (contrast 3,7 naar ruim 5:1 op perkament).
+   3. Tikdoelen van minstens 44px: Heiligen (Lees het leven, Bekijk alle), Vandaag (aftellen), psalmtab Alle. */
+@media(max-width:767.98px){
+  #top#top#top#top .v15-major-fasts{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+  #top#top#top#top .v15-major-fast{position:relative;display:grid!important;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;column-gap:12px;
+    min-height:52px!important;height:auto!important;padding:5px 12px 5px 7px!important;text-align:left!important;
+    border:1px solid var(--ot-rand)!important;border-radius:4px!important;color:var(--color-ink)!important;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;
+    box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important}
+  #top#top#top#top .v15-major-fast:active{border-color:var(--color-gold-deep)!important}
+  #top#top#top#top .v15-major-fast:before{content:""!important;inset:auto!important;left:3px!important;top:3px!important;width:12px!important;height:12px!important;border:0!important;background:var(--hoeksier) no-repeat center/contain!important;opacity:.8}
+  #top#top#top#top .v15-major-fast:after{content:"›"!important;display:block!important;position:static!important;grid-column:3;font-family:"Alegreya Sans",sans-serif;font-size:24px;font-weight:500;line-height:1;color:var(--color-gold-deep);background:none!important;border:0!important;width:auto!important;height:auto!important}
+  #top#top#top#top .v15-major-fast .major-icoon{grid-column:1;width:42px!important;height:42px!important;margin:0!important;position:static!important}
+  #top#top#top#top .v15-major-fast>div.flex{grid-column:2;display:block!important;padding:0!important;margin:0!important}
+  #top#top#top#top .v15-major-fast>div.flex:after,#top#top#top#top .v15-major-fast h4:after,#top#top#top#top .v15-major-fast>div.flex>div:after{content:none!important;display:none!important}
+  #top#top#top#top .v15-major-fast h4{margin:0!important;font-size:17px!important;line-height:1.1!important;letter-spacing:.01em!important;text-transform:none!important;text-align:left!important;color:var(--color-ink)!important}
+  #top#top#top#top .v15-major-fast .major-meta{display:block!important;margin-top:2px!important;font-size:13px!important;font-weight:400!important;line-height:1.28!important;letter-spacing:0!important;text-transform:none!important;text-align:left!important;color:var(--color-ink-soft)!important}
+}
+#top#top#top#top .timeline-label{color:var(--color-gold-deep)!important}
+@media(max-width:1023.98px){
+  #top#top#top#top :is(.saints-gold-button,.saints-text-link){min-height:44px!important}
+  #top#top#top#top .vm-aftel{min-height:44px;display:flex;align-items:center}
+  #top#top#top#top .ps-filters>button{min-width:44px;padding-inline:6px}
+}
