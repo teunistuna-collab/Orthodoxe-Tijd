@@ -8,7 +8,6 @@ import { heiligenVanDag, normaliseer, popupContent, tekstVoorIndeling, type Resu
 import { CATEGORIEEN, categorieenVan, soortVan } from '../lib/heiligenSoort';
 import PageHero from './PageHero';
 import NaarBoven from './NaarBoven';
-import Cross from './Cross';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -119,7 +118,7 @@ export default function Heiligen() {
 
         <section className="saints-categories bibliotheek">
           <div className="saints-rule-title"><h2>Heiligen naar categorie</h2></div>
-          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><span className="bieb-icoon" aria-hidden="true"><Cross className="h-[58%] w-[58%]" /></span><strong>{c[1]}</strong><span>{c[2]}</span></button>)}</div>
+          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><span className="bieb-icoon bieb-embleem" aria-hidden="true"><img src="/images/ui/embleem.webp" alt="" loading="lazy" /></span><strong>{c[1]}</strong><span>{c[2]}</span></button>)}</div>
         </section>
 
         <section className="saints-lowlands">

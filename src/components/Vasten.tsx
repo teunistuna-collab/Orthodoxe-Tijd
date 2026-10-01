@@ -420,7 +420,7 @@ export default function Vasten() {
               {FAQ.map((item, i) => (
                 <div
                   key={item.v}
-                  className={`rounded-xl border border-gold/40 shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition-colors duration-300 ${openFaq === i ? 'bg-[#ead9b7]/60' : 'bg-[#f8f1e3]'}`}
+                  className={`vasten-faq rounded-xl border border-gold/40 shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition-colors duration-300 ${openFaq === i ? 'bg-[#ead9b7]/60' : 'bg-[#f8f1e3]'}`}
                 >
                   <button type="button" onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition hover:bg-gold-pale/40">
                     <span className="font-display text-lg font-semibold text-ink">{item.v}</span>

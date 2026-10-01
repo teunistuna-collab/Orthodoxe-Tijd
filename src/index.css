@@ -1567,7 +1567,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top#top header.site-header>div.bg-bark{border:0 solid transparent;border-image:url(/images/ui/nav/header-achtergrond.webp) 0 110 fill / 0 52px / 0 stretch}
 #top#top#top header.site-header>div.bg-bark>div{width:min(calc(100% - 32px),1560px)!important;max-width:none!important;min-height:78px;gap:clamp(14px,2vw,36px);padding:0 clamp(42px,3vw,56px)}
 .kop-merk{display:flex;flex:none;align-items:center;gap:11px;color:#d9b25a;text-decoration:none}
-.kop-merk svg{flex:none;width:21px;height:38px}
+.kop-merk img{flex:none;width:44px;height:43px}
 .kop-naam{display:block;font-family:var(--font-display);font-size:20px;font-weight:600;line-height:1.05;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;color:#e8cf7a}
 .kop-tagline{display:block;margin-top:5px;font-family:var(--font-display);font-size:10.5px;font-weight:600;line-height:1;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;color:#bfa982}
 .kop-nav{display:flex;flex:1;min-width:0;align-items:center;justify-content:center;gap:clamp(12px,2.3vw,44px)}
@@ -2373,6 +2373,11 @@ details[open]::details-content{height:auto}
   #top#top#top#top .page-hero-citaat{margin-top:5px}
 }
 
+/* Bouw 106 — embleem (kruis in ring) als icoon bij Heiligen naar categorie: donkere schijf alleen binnen de ring,
+   de sierknoppen steken erbuiten uit op het perkament. */
+#top#top#top#top .bibliotheek .bieb-embleem{width:52px;height:52px;overflow:visible;border-radius:0;box-shadow:none;background:radial-gradient(circle closest-side,var(--ot-bark) 0 76%,transparent 77%)}
+#top#top#top#top .bibliotheek .bieb-embleem img{object-fit:contain}
+
 /* Bouw 107 — cycli en Vasten (mobiel): dezelfde rijen als Vandaag en Gebeden (vm-rij). Desktop ongewijzigd.
    1. de dienst-/dagkaarten (Etmaal, Week, Jaar, Pascha): klein medaillon, titel, tijd en tekst op één regel eronder;
    2. de vier informatietegels (Adem, Etmaal, Week, Jaar, Pascha, Vasten): licht in plaats van donker, als rij met pijl. */
@@ -2407,3 +2412,52 @@ details[open]::details-content{height:auto}
 
 /* Bouw 108 — de knoppen "Ontdek de …" naar een andere pagina (cycli, Vasten, Feesten, Gebeden) alleen vanaf tablet; op mobiel staan die pagina's al in de onderbalk */
 @media(max-width:767.98px){#top#top#top#top .cyclus-verder{display:none!important}}
+
+/* Bouw 109 — Feesten, De grote feesten (tot 1024px) en Vasten, Deze week (mobiel): elk feest een duidelijke knop in de kaartstijl van de andere rijen (Bouw 92)
+   in plaats van een lijst met alleen scheidingslijnen. Datum links, titel, vast/beweeglijk, pijl. */
+#top#top#top#top :is(.feest-rijen,.week-rijen){display:flex;flex-direction:column;gap:8px;border-top:0}
+#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr{position:relative;min-height:60px;padding:8px 12px 8px 6px;border:1px solid var(--ot-rand);border-radius:4px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)));
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent);
+  transition:border-color .18s,box-shadow .18s}
+#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr:is(:hover,:focus-visible,:active){border-color:var(--color-gold-deep);outline:none;
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 14px 26px color-mix(in srgb,var(--ot-bark) 13%,transparent)}
+#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr:before,#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr:after{content:"";position:absolute;width:12px;height:12px;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
+#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr:before{left:3px;top:3px}
+#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr:after{right:3px;bottom:3px;transform:rotate(180deg)}
+#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr-links{padding-right:10px;border-right:1px solid var(--ot-rand)}
+#top#top#top#top :is(.feest-rijen,.week-rijen) .mlr-pijl{color:var(--color-gold-deep)}
+#top#top#top#top .week-rijen .mlr.is-today{border-color:var(--color-gold-deep);
+  box-shadow:inset 3px 0 0 var(--color-gold-deep),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 50%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 10%,transparent)}
+#top#top#top#top .week-rijen .mlr .week-dag-balk{position:static;align-self:center}
+
+/* Bouw 110 — Vasten, vragen onder "Het vasten is een school": dezelfde kaartstijl als de andere knoppen (Bouw 92), compacter */
+#top#top#top#top .vasten-faq{position:relative;border:1px solid var(--ot-rand);border-radius:4px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)));
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)}
+#top#top#top#top .vasten-faq:has(>button:is(:hover,:focus-visible)){border-color:var(--color-gold-deep)}
+#top#top#top#top .vasten-faq:before,#top#top#top#top .vasten-faq:after{content:"";position:absolute;width:12px;height:12px;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
+#top#top#top#top .vasten-faq:before{left:3px;top:3px}
+#top#top#top#top .vasten-faq:after{right:3px;bottom:3px;transform:rotate(180deg)}
+#top#top#top#top .vasten-faq>button{min-height:52px;padding:10px 16px;background:transparent}
+#top#top#top#top .vasten-faq>button>span{font-size:17px;line-height:1.2}
+#top#top#top#top .vasten-faq>p{padding:0 16px 14px}
+@media(max-width:767.98px){#top#top#top#top div:has(>.vasten-faq){gap:8px}#top#top#top#top div:has(>.vasten-faq)>*+*{margin-top:8px}}
+
+/* Bouw 111 — Vasten, Vastenvrije weken en Strenge losse vastendagen: licht in de kaartstijl (Bouw 92) in plaats van donker.
+   Binnen de kaart blijft het een lijst met dunne scheidingslijnen; op mobiel inklapbaar zoals voorheen. */
+#top#top#top#top .v15-fasting-panel.fasting-table{position:relative!important;min-height:0!important;padding:22px 24px!important;border:1px solid var(--ot-rand)!important;border-radius:4px!important;color:var(--color-ink)!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;
+  box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important}
+#top#top#top#top .v15-fasting-panel.fasting-table:before,#top#top#top#top .v15-fasting-panel.fasting-table:after{content:""!important;position:absolute;width:12px;height:12px;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
+#top#top#top#top .v15-fasting-panel.fasting-table:before{left:3px!important;top:3px!important}
+#top#top#top#top .v15-fasting-panel.fasting-table:after{right:3px!important;bottom:3px!important;left:auto!important;top:auto!important;transform:rotate(180deg)}
+#top#top#top#top .v15-fasting-panel.fasting-table :is(h4,.fasting-table-kop,.fasting-table-kop svg){color:var(--color-ink)!important}
+#top#top#top#top .v15-fasting-panel.fasting-table .fasting-table-kop svg{color:var(--color-gold-deep)!important}
+#top#top#top#top .v15-fasting-panel.fasting-table li{border-bottom:1px solid var(--ot-rand)!important}
+#top#top#top#top .v15-fasting-panel.fasting-table li:last-child{border-bottom:0!important}
+#top#top#top#top .v15-fasting-panel.fasting-table .fasting-table-naam{color:var(--color-ink)!important}
+#top#top#top#top .v15-fasting-panel.fasting-table button.fasting-table-rij:is(:hover,:focus-visible) .fasting-table-naam{color:var(--color-gold-deep)!important}
+#top#top#top#top .v15-fasting-panel.fasting-table .fasting-table-wanneer{color:var(--color-ink-soft)!important}
+#top#top#top#top .v15-fasting-panel.fasting-table .fasting-table-noot{border-top-color:var(--ot-rand)!important;color:var(--color-ink-soft)!important}
+@media(max-width:767.98px){#top#top#top#top .v15-fasting-panel.fasting-table{padding:6px 16px!important}#top#top#top#top .v15-fasting-panel.fasting-table h4{font-size:19px!important}#top#top#top#top .v15-fasting-panel.fasting-table:has(>button[aria-expanded=true]){padding-bottom:14px!important}}
