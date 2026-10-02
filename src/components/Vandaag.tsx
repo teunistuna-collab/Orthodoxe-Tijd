@@ -160,7 +160,7 @@ export default function Vandaag() {
         {aftelTekst && <a href="#feesten" className="vm-aftel">{aftelTekst}</a>}
         <div className="vm-kalender" role="group" aria-label="Kalenderkeuze">
           <button type="button" aria-pressed={mode === 'oud'} className={mode === 'oud' ? 'is-actief' : undefined} onClick={() => setMode('oud')}>Oud · juliaans</button>
-          <button type="button" aria-pressed={mode === 'nieuw'} className={mode === 'nieuw' ? 'is-actief' : undefined} onClick={() => setMode('nieuw')}>Nieuw · burgerlijk</button>
+          <button type="button" aria-pressed={mode === 'nieuw'} className={mode === 'nieuw' ? 'is-actief' : undefined} onClick={() => setMode('nieuw')}>Nieuw · gregoriaans</button>
         </div>
 
         <div className="vm-lijst">

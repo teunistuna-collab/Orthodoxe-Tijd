@@ -21,7 +21,7 @@ const NAV_TRAILING = SECTIES.slice(2).filter((s) => s.id !== 'pascha');
 
 const KALENDER_KEUZES = [
   { id: 'oud', naam: 'Oud', toelichting: 'juliaans' },
-  { id: 'nieuw', naam: 'Nieuw', toelichting: 'burgerlijk' },
+  { id: 'nieuw', naam: 'Nieuw', toelichting: 'gregoriaans' },
 ] as const;
 
 const CYCLUS_ITEMS = [
@@ -155,7 +155,7 @@ export default function Header({ pagina: actief }: { pagina: string }) {
               ))}
             </div>
             {/* Smalle tablet: één knop met de huidige keuze; een tik wisselt naar de andere kalender. */}
-            <button type="button" className="kop-kalender-kort" onClick={() => setMode(mode === 'oud' ? 'nieuw' : 'oud')} aria-label={`Kalender: ${mode === 'oud' ? 'Oud (juliaans)' : 'Nieuw (burgerlijk)'}. Tik om te wisselen.`}>
+            <button type="button" className="kop-kalender-kort" onClick={() => setMode(mode === 'oud' ? 'nieuw' : 'oud')} aria-label={`Kalender: ${mode === 'oud' ? 'Oud (juliaans)' : 'Nieuw (gregoriaans)'}. Tik om te wisselen.`}>
               {mode === 'oud' ? 'Oud' : 'Nieuw'}
             </button>
           </div>
