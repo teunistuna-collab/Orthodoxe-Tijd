@@ -9,19 +9,22 @@ All interface copy is **Dutch**.
 
 This project follows its own liturgical identity. Where a generic "premium UI" rule conflicts, the brand wins:
 
-- **Serif is the core voice.** `Cormorant Garamond` is used for all titles, names, numbers and prayer text. It echoes
-  printed prayer books and icon inscriptions. Do not replace it with a modern display serif.
+- **Serif is the core voice, in three roles.** `Cinzel` (inscription capitals) for page titles, small labels and
+  buttons; `Cormorant Garamond` for card titles, navigation and descriptions; `EB Garamond` for prayers, psalms and
+  long reading texts. Together they echo icon inscriptions and printed prayer books. No sans-serif, no modern serif.
 - **Warm neutrals, not Zinc/Slate.** The base is dark bark brown and parchment. Cool grays are banned.
 - **Centered, symmetric banners are correct here.** Variance is deliberately low: symmetry reads as liturgical order.
 - **No perpetual micro-interactions.** Nothing loops by itself except two quiet signals (today's pulse, the candle
   glow). Every other movement starts from a user action. This is a place for prayer, not a dashboard.
-- **Ornamental glyphs are allowed** as typography, never as emoji: `✣` (dividers), `✠` (great feast), `☦` (Pascha),
-  `✦` (other feast), `◆` (banner rule), `›` (forward).
+- **Ornamental glyphs are allowed** as typography, never as emoji: `✣` (dividers), `✠` (great feast), `✦` (other
+  feast), `›` (forward). The cross is always the gold cross image (`public/images/ui/kruis.webp`, also as a CSS mask
+  in liturgical colors via `KruisTeken`), never the ☦ glyph.
 
 ## 1. Visual Theme & Atmosphere
 
-A quiet, candle-lit prayer book on a phone. Warm parchment pages framed by dark carved wood, thin gold rules and
-small gold corner ornaments, with painted icon medallions as the only imagery besides the page banners.
+A quiet, candle-lit prayer book on a phone. One continuous sheet of aged parchment (a fixed texture behind every
+page), an illuminated Byzantine arch at the top of each page and dialog, and buttons that look printed and painted on
+the same parchment, slightly worn. The Christ icon (Pantocrator) is the only figurative image on Vandaag and the cycles.
 Calm, reverent, legible; never flashy, never "app-store SaaS".
 
 - **Density 4** — daily-app balanced; generous line height for reading, compact lists for navigation.
@@ -40,14 +43,17 @@ Warm palette only. One accent family: gold. Never pure black.
 **Gold (the single accent)**
 - **Liturgical Gold** (#C49332, `--ot-gold`) — rings around medallions, 1px rules, corner ornaments, `›` on dark.
 - **Candle Gold** (#E0B95A, `--ot-gold2`) — gold *text* on dark (selected chip label, numbers in medallions), focus on dark.
-- **Deep Gold** (#8A5A1E, `--color-gold-deep`) — gold for small text and icons on parchment
-  (labels, `›`, borders on hover). Use this, not Liturgical Gold, for text on light backgrounds (contrast ≥ 5:1).
+- **Deep Gold** (#7D5218, `--color-gold-deep`) — gold for small text and icons on parchment
+  (labels, `›`, printed button edges). Use this, not Liturgical Gold, for text on light backgrounds (contrast ≥ 4.9:1
+  on the parchment texture).
 - **Gold Border** (Liturgical Gold at 60% opacity, `color-mix(... 60%, transparent)`) — the 1px card and field border.
 
 **Parchment (reading surfaces)**
-- **Parchment** (#F5ECD8 with a faint warm radial glow) — page background of every content page.
-- **Ivory** (#F4E6C8, `--ot-ivory`) — text on dark; full-width light bands (for example "Vandaag gedenken wij").
-- **Card Paper** (Ivory mixed with #FFFDF6 paper) — card, row and chip fill.
+- **Parchment** (`public/images/ui/perkament.webp`, fixed, fallback #F7E4BB) — the background of the whole site and of
+  every dialog. Large panels are transparent so they become one with it.
+- **Button Parchment** (`--knop-vlak`: the same texture under a 50% warm white wash) — cards, rows, buttons and search
+  fields: a few shades lighter than the page, so they stay distinct.
+- **Ivory** (#F4E6C8, `--ot-ivory`) — text on dark.
 
 **Ink (text)**
 - **Ink** (#2B1D12, `--color-ink`) — primary text on parchment.
@@ -63,44 +69,51 @@ Warm palette only. One accent family: gold. Never pure black.
 
 ## 3. Typography Rules
 
-- **Display — Cormorant Garamond** (500–600). Page and section titles, names, prayer text, numbers.
-  Page banner title: uppercase, letter-spacing 0.12–0.14em, `clamp(1.75rem, 7vw, 3.5rem)`.
-  Section titles: sentence case, 22–26px. Always **lining numerals** (`font-variant-numeric: lining-nums`),
-  so "1" never reads as "I".
-- **Body — Alegreya Sans** (400–700). Descriptions and sublines 13–15px, relaxed leading (1.5), max about 65 characters.
-- **Labels — Alegreya Sans** 11.5–12px, bold, uppercase, letter-spacing 0.14em, Deep Gold.
-- Hierarchy through weight and color, not size jumps. Italic Cormorant only for quotes and prayer lines.
-- **Banned:** Inter, system UI stacks, any second serif, monospace.
+Self-hosted via `@fontsource` (`src/main.tsx`); tokens `--font-titel`, `--font-display` / `--font-body`, `--font-lees`.
+
+| Role | Font |
+|---|---|
+| Page title (banner), `h1` | **Cinzel** 500 |
+| Small uppercase labels | **Cinzel** 500, letter-spacing 0.14em, Deep Gold |
+| Buttons | **Cinzel** 500, letter-spacing 0.08em |
+| Card titles, section titles | **Cormorant Garamond** 500–600 |
+| Navigation | **Cormorant Garamond** 500 |
+| Descriptions | **Cormorant Garamond** 400, at least 15px (16px from tablet) |
+| Prayers, psalms, long saints' lives (reading dialogs) | **EB Garamond** 400 |
+
+- Always **lining numerals** in Cormorant (`font-variant-numeric: lining-nums`), so "1" never reads as "I".
+- Hierarchy through weight and color, not size jumps. Italic only for quotes and prayer lines.
+- **Banned:** sans-serif, Inter, system UI stacks, monospace.
 
 ## 4. Component Stylings
 
-- **Page banner.** A text-free photo (icons, candles, church interior) under a dark radial Bark overlay.
-  Centered: small gold cross, uppercase title, subtitle, gold rule with `◆`, optional italic quote in Candle Gold.
-  Compact on mobile (about 136px high), so reading starts on the first screen.
-- **Light card or row (the default clickable element).** Card Paper fill, 1px Gold Border, 4px corners,
-  a double inner line (inset 4px paper, 5px faint gold), gold corner ornaments (`hoeksier`, 12–14px) in two
-  opposite corners, and a Deep Gold `›` at the right.
-  - Hover and focus: the border turns Deep Gold and the soft shadow deepens slightly.
-  - The same style is used for services, days, periods, psalm rows, prayer rows and "today" rows.
-- **Medallion.** A round Bark disc with a 1–1.5px gold ring and a soft shadow, holding a painted icon, a gold cross
-  or a number (Candle Gold, Cormorant, lining numerals). About 40–46px in rows and 64px in cards.
-- **Search field.** The one dark input: Bark Two fill, Gold Border, Ivory text, gold magnifier, 4px corners.
-  Selects and other filters stay light.
+- **Page banner (sier-kop)** — `PageHero`, on every page except Vandaag. An illuminated arch cut out of its
+  parchment (`scripts/sierkop.mjs`), the gold cross under its point and the page title (Cinzel, uppercase) in the
+  opening. Mobile: the 3:1 arch (`boog.webp`). From 768px: a flatter arch (`boog-web.webp`) as a low 200px band,
+  cropped from the top. The banner is sticky; content scrolls away beneath it.
+- **Vandaag** has no banner: the Christ icon, then the date head.
+- **Card or row (the default clickable element).** Button Parchment fill, a worn, printed double ink line in Deep Gold
+  as a 9-slice `border-image` (`knop-rand.png`, `scripts/knop-rand.mjs`), square corners, a Deep Gold `›` at the
+  right. **No round icons or medallions inside buttons.** Hover brightens slightly; press moves 1px down.
+  The same style is used for services, days, periods, psalm rows, prayer rows, "today" rows and the big desktop tiles.
+- **Search field and selects.** Same as a card: Button Parchment, printed edge, Ink text, Deep Gold magnifier.
+- **Cycle rings (Etmaal, Week, Jaar, Pascha, desktop).** The Christ icon in the center; each position on the ring is
+  a small gold dot, and the card beside it is the button.
 - **Filters.**
   - Top level: a **tab bar**, plain Cormorant text on parchment over a thin gold line; the active tab is darker and
     bolder with a 2px Deep Gold underline.
   - Second level: **thin light chips** with a Gold Border; the selected chip is Bark Two with Candle Gold text.
   - **Never a large yellow or gold fill for a selected state.**
 - **Buttons.**
-  - Secondary actions: outlined pill, Deep Gold 1px border, uppercase Alegreya Sans 13px bold, text ending in ` ›`.
-  - Gold fill is reserved for the small "Vandaag" jump in the calendar and the calendar toggle (Oud/Nieuw).
+  - Actions: the printed-parchment style above, Cinzel 500 uppercase, text ending in ` ›`.
+  - A gold wash marks the selected calendar (Oud/Nieuw) and the small "Vandaag" jump in the calendar.
   - Every button must do something: no decorative or dead buttons.
-- **Big tiles (desktop).** The main entry points of a page (cycle info, prayer categories, feasts, fasting periods)
-  are light cards in the same style as rows: Card Paper, Gold Border, double inner line, two small corner ornaments,
-  a dark medallion on top. On mobile they become light rows. Tiles are never dark.
-- **Dialog.** A dark Bark header band (eyebrow date, centered Cormorant title, close ×) over a parchment body.
-  Each section is a light card and each heading has a thin gold line after it. Long lists collapse behind a
-  "Meer … (n)" disclosure.
+- **Dialog.** Parchment throughout. The header is the same arch as the page banner with cross and title; the eyebrow
+  (date, kind of reading) sits small in Cinzel just below the arch; the close × is a round parchment button. Long
+  titles run on below the cross. In evening reading mode the body inverts and the header switches to a tight-cut arch
+  (`boog-nacht.webp`) on #1D1400. Each section is a card; long lists collapse behind a "Meer … (n)" disclosure.
+- **First visit.** One menu: calendar (Oud · juliaans / Nieuw · gregoriaans) and tradition (Koptisch, Syrisch,
+  Oosters Orthodox). A tradition button closes it and opens Vandaag. Reachable later from the footer.
 - **Floating "naar boven" button.** A 44px Bark medallion with a gold ring and a chevron, bottom-right above the
   navigation. It appears only after scrolling far on long pages.
 - **Bottom navigation (mobile).** Five items on Bark, gold active state.
@@ -110,8 +123,8 @@ Warm palette only. One accent family: gold. Never pure black.
 - Mobile first (375px), single column below 768px, 16px side gutters, content max-width 1500px.
 - **Where light and dark go:**
   - Reading and list content always sits on parchment.
-  - Dark is reserved for the frame (header, navigation, banners), medallions, the search field, selected states,
-    and at most one accent block per page.
+  - Dark is reserved for the frame (header, bottom navigation), the site search panel, the Bronnen page and at most
+    one accent block per page.
 - Pages are one continuous flow. Avoid alternating light and dark bands more than once.
 - Tap targets are at least 44px. There is never horizontal scroll on a page (horizontal scroll inside a tab bar
   is allowed).
@@ -127,7 +140,7 @@ Warm palette only. One accent family: gold. Never pure black.
   - today's date pulses softly;
   - the candle glow flickers.
 - **"Adem mee" (breathe along)** on the Jesus Prayer runs only after a tap. It uses an 8 s cycle: 4 s in and 4 s out;
-  a gold glow and the rings grow and shrink, and the matching prayer line lights up.
+  a warm Byzantine-red glow behind the Christ icon and the rings grow and shrink, and the matching prayer line lights up.
 - `prefers-reduced-motion`: no movement. Only opacity signals remain.
 
 ## 7. Anti-Patterns (Banned)
@@ -143,7 +156,8 @@ Warm palette only. One accent family: gold. Never pure black.
   - no more than one dark accent block on a light page;
   - no saturated accents outside the liturgical calendar colors.
 - **Shape and layout:**
-  - no rounded "SaaS" cards (keep 4px corners) and no floating pastel UI;
+  - no rounded "SaaS" cards or pills (printed, square edges) and no floating pastel UI;
+  - no round icons or medallions inside buttons;
   - no 3-equal-card marketing rows;
   - no glassmorphism;
   - no custom cursors.

@@ -5,14 +5,14 @@ import { MAANDEN, MAANDEN_KORT, WEEKDAGEN_KORT, formatDatum, hoofdletter, maandR
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
 import { NIVEAUS, VASTEN_GROEPEN, vastenGroep, type VastenGroep } from '../lib/vasten';
-import { VastenSymbool, Hoeksier } from './ui';
+import { VastenSymbool, Hoeksier, KruisTeken } from './ui';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import PageHero from './PageHero';
 
-const TEKEN = { pascha: '☦', groot: '✠', ander: '✦' } as const;
+const TEKEN = { pascha: <KruisTeken />, groot: '✠', ander: '✦' };
 const kleineLetter = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
-const PIJL = 'inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] px-3 text-sm font-bold text-ink hover:border-gold sm:min-h-0 sm:py-1.5';
+const PIJL = 'kal-knop inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] px-3 text-sm font-bold text-ink hover:border-gold sm:min-h-0 sm:py-1.5';
 
 // Mobiel: ‹ maand jaar › op één rij, daaronder compact "Vandaag". Vanaf sm alles op één rij.
 function CalendarToolbar({ maand, jaar, eersteJaar, onMaand, onJaar, onVorige, onVolgende, onVandaag }: {
@@ -32,12 +32,12 @@ function CalendarToolbar({ maand, jaar, eersteJaar, onMaand, onJaar, onVorige, o
       </button>
       {/* Onder 360px krijgen maand en jaar een eigen rij (anders wordt "Oktober" afgekapt); de pijlen en Vandaag eronder */}
       <div className="order-2 flex min-w-0 flex-1 items-center justify-center gap-2 max-[359px]:order-first max-[359px]:basis-full sm:flex-none">
-        <select value={maand} onChange={(e) => onMaand(Number(e.target.value))} className="font-display min-w-0 flex-1 rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1.5 text-base font-semibold text-ink sm:flex-none sm:py-1 sm:text-lg" aria-label="Maand">
+        <select value={maand} onChange={(e) => onMaand(Number(e.target.value))} className="kal-knop font-display min-w-0 flex-1 rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1.5 text-base font-semibold text-ink sm:flex-none sm:py-1 sm:text-lg" aria-label="Maand">
           {MAANDEN.map((mn, i) => (
             <option key={mn} value={i + 1}>{hoofdletter(mn)}</option>
           ))}
         </select>
-        <select value={jaar} onChange={(e) => onJaar(Number(e.target.value))} className="font-display rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1.5 text-base font-semibold text-ink sm:py-1 sm:text-lg" aria-label="Jaar">
+        <select value={jaar} onChange={(e) => onJaar(Number(e.target.value))} className="kal-knop font-display rounded-md border border-gold/40 bg-[#f8f1e3] px-2 py-1.5 text-base font-semibold text-ink sm:py-1 sm:text-lg" aria-label="Jaar">
           {Array.from({ length: 12 }, (_, i) => eersteJaar + i).map((y) => (
             <option key={y} value={y}>{y}</option>
           ))}
@@ -47,7 +47,7 @@ function CalendarToolbar({ maand, jaar, eersteJaar, onMaand, onJaar, onVorige, o
         <span className="hidden sm:inline">{MAANDEN_KORT[maand % 12]}</span> <ChevronRight className="h-4 w-4" />
       </button>
       <span className="order-4 basis-full sm:hidden" aria-hidden="true" />
-      <button type="button" onClick={onVandaag} className="order-5 mx-auto max-[359px]:order-2 rounded-full bg-gold px-5 py-1.5 text-xs font-bold tracking-wider text-bark uppercase hover:bg-gold-light sm:order-3 sm:mx-0 sm:px-3">
+      <button type="button" onClick={onVandaag} className="kal-vandaag order-5 mx-auto max-[359px]:order-2 rounded-full bg-gold px-5 py-1.5 text-xs font-bold tracking-wider text-bark uppercase hover:bg-gold-light sm:order-3 sm:mx-0 sm:px-3">
         Vandaag
       </button>
     </div>
@@ -80,7 +80,7 @@ export default function Kalender() {
 
   return (
     <>
-      <PageHero id="kalender" titel="Kalender" ondertitel="Leven in het ritme van de Kerk" />
+      <PageHero id="kalender" titel="Kalender" />
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink max-md:py-5 sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12">
@@ -97,7 +97,7 @@ export default function Kalender() {
             </div>
           </div>
 
-          <div className="mt-8 parchment-pattern relative overflow-hidden rounded-lg border border-gold/45 bg-[#f8f1e3] shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:mt-4">
+          <div className="vlak mt-8 parchment-pattern relative overflow-hidden rounded-lg border border-gold/45 bg-[#f8f1e3] shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:mt-4">
             <Hoeksier className="absolute top-4 left-4" />
             <Hoeksier className="absolute top-4 right-4 -scale-x-100" />
             <div className="lg:grid lg:grid-cols-[3fr_2fr]">

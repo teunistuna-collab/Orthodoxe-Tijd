@@ -46,6 +46,19 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const kathisma = KATHISMATA[kathismaNr - 1];
   const [thema, setThema] = useState(THEMAS[0]);
   const lijstRef = useRef<HTMLDivElement | null>(null);
+  // Zolang je zelf geen psalm koos, volgt de gekozen psalm het uur: ook als de app lang open staat.
+  const zelfGekozen = useRef(false);
+  useEffect(() => {
+    const ververs = () => {
+      if (!zelfGekozen.current && document.visibilityState === 'visible') setGekozen(psalmVanHetUur(new Date()));
+    };
+    document.addEventListener('visibilitychange', ververs);
+    window.addEventListener('hashchange', ververs);
+    return () => {
+      document.removeEventListener('visibilitychange', ververs);
+      window.removeEventListener('hashchange', ververs);
+    };
+  }, []);
   const favorieten = useFavorieten();
   // Op een telefoon past alleen een korte hint in het zoekveld.
   const [plaatshouder] = useState(() => (window.matchMedia('(max-width: 767px)').matches ? 'Zoek een psalm…' : 'Zoek een psalmnummer, woord of dienst…'));
@@ -93,6 +106,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   );
 
   const kies = (p: Psalm) => {
+    zelfGekozen.current = true;
     setGekozen(p.septuagintNumber);
     // Op desktop staat het leesvenster naast de lijst; kleiner opent de psalm in een leesvenster.
     if (!window.matchMedia(LEESVENSTER_NAAST_LIJST).matches) setPopup(p.septuagintNumber);
@@ -136,7 +150,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
   return (
     <>
-      <PageHero id="psalmen" titel="Psalmen" ondertitel="De adem van de ziel" kop />
+      <PageHero id="psalmen" titel="Psalmen" kop />
 
       <section className="ps-pagina parchment-pattern bg-parchment text-ink">
         <div className="ps-inhoud">

@@ -64,7 +64,7 @@ export const GROTE_FEESTEN: Feest[] = [
       'Herinnering aan de vinding van het Kruis door keizerin Helena in Jeruzalem (326) en de terugvoering uit Perzië (628). Het met bloemen omkranste kruis wordt in het midden van de kerk plechtig verheven naar de vier windstreken, terwijl de gelovigen ter aarde buigen en honderdmaal „Heer, ontferm U” zingen.',
     traditie: 'Strenge vastendag — het enige grote feest van de Heer waarop gevast wordt.',
     troparion:
-      'Red, o Heer, Uw volk en zegen Uw erfdeel; schenk overwinning aan de orthodoxe christenen over hun tegenstanders, en bewaar door Uw Kruis Uw gemeenschap.',
+      'Red, o Heer, Uw volk en zegen Uw erfdeel; schenk overwinning aan de Orthodoxe christenen over hun tegenstanders, en bewaar door Uw Kruis Uw gemeenschap.',
   },
   {
     id: 'opdracht-moeder-gods',
@@ -233,7 +233,7 @@ export const OVERIGE_VASTE: Feest[] = [
   { id: 'geboorte-johannes', naam: 'Geboorte van Johannes de Doper', soort: 'feest', md: '6-24', rang: 5, toelichting: 'Zes maanden vóór Kerstmis; binnen de Apostelvasten is vis toegestaan.' },
   { id: 'petrus-paulus', naam: 'HH. Apostelen Petrus en Paulus', soort: 'feest', md: '6-29', rang: 5, toelichting: 'Slot van de Apostelvasten; de twee pijlers van de Kerk gezamenlijk geëerd.' },
   { id: 'twaalf-apostelen', naam: 'Synaxis van de Twaalf Apostelen', soort: 'gedachtenis', md: '6-30', rang: 4 },
-  { id: 'johannes-shanghai', naam: 'H. Johannes van Shanghai en San Francisco', soort: 'gedachtenis', md: '6-19', rang: 3, toelichting: 'Wonderdoener van onze tijd (†1966); als aartsbisschop van West-Europa nauw verbonden met de Nederlandse orthodoxie.' },
+  { id: 'johannes-shanghai', naam: 'H. Johannes van Shanghai en San Francisco', soort: 'gedachtenis', md: '6-19', rang: 3, toelichting: 'Wonderdoener van onze tijd (†1966); als aartsbisschop van West-Europa nauw verbonden met de Nederlandse Orthodoxie.' },
   { id: 'elia', naam: 'H. Profeet Elia', soort: 'feest', md: '7-20', rang: 4 },
   { id: 'vladimir', naam: 'H. Vladimir, gelijk aan de apostelen', soort: 'gedachtenis', md: '7-15', rang: 4 },
   { id: 'pantelejmon', naam: 'H. Pantelejmon, geneesheer en martelaar', soort: 'gedachtenis', md: '7-27', rang: 4 },

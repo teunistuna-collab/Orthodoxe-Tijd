@@ -4,21 +4,15 @@ import { useApp } from '../lib/context';
 import type { Mode } from '../lib/kalender';
 import { vergrendelScroll } from '../lib/scrollLock';
 
-const KEUZES: { id: Mode; titel: string; tekst: string }[] = [
-  {
-    id: 'oud',
-    titel: 'Oude kalender · juliaans',
-    tekst: 'De vaste feesten vallen dertien dagen later dan op de burgerlijke kalender: Kerstmis op 7 januari, Theofanie op 19 januari. Gevolgd door de Russische, Servische, Georgische parochies en de Athos.',
-  },
-  {
-    id: 'nieuw',
-    titel: 'Nieuwe kalender · gereviseerd juliaans',
-    tekst: 'De vaste feesten vallen op de burgerlijke datum: Kerstmis op 25 december. Gevolgd door de Griekse, Roemeense, Bulgaarse en Antiocheense parochies.',
-  },
+const KALENDERS: { id: Mode; label: string }[] = [
+  { id: 'oud', label: 'Oud · juliaans' },
+  { id: 'nieuw', label: 'Nieuw · gregoriaans' },
 ];
 
-// Legt uit wat de Oud/Nieuw-schakelaar in de koptekst doet. Verschijnt één keer bij het eerste bezoek
-// en is daarna op te roepen via de voettekst.
+const TRADITIES = ['Koptisch Orthodox', 'Syrisch Orthodox', 'Oosters Orthodox'];
+
+// Keuzemenu bij het eerste bezoek (daarna op te roepen via de voettekst): de kalender (Oud/Nieuw, zoals de schakelaar
+// in de koptekst) en de traditie. Elke traditieknop sluit het menu en gaat naar Vandaag.
 export default function KalenderUitleg({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { mode, setMode } = useApp();
 
@@ -29,35 +23,33 @@ export default function KalenderUitleg({ open, onClose }: { open: boolean; onClo
   }, [open]);
 
   return (
-    <Modal open={open} onClose={onClose} eyebrow="Kalenderkeuze" title="Welke kalender volgt u?" labelledBy="kalender-uitleg-titel" centerTitle maxWidth="max-w-2xl">
-      <p className="text-sm leading-relaxed text-ink-soft sm:text-base">
-        Dit bepaalt op welke dag feesten, heiligen en lezingen vallen. Kies de kalender van uw parochie; u kunt later altijd wisselen met de knop <strong>Oud / Nieuw</strong> bovenaan de pagina.
-      </p>
-      <div className="mt-4 grid gap-3">
-        {KEUZES.map(({ id, titel, tekst }) => {
-          const actief = mode === id;
-          return (
-            <button
-              key={id}
-              type="button"
-              autoFocus={actief}
-              aria-pressed={actief}
-              onClick={() => {
-                setMode(id);
-                onClose();
-              }}
-              className={`w-full rounded-xl border p-4 text-left transition ${actief ? 'border-gold bg-gold-pale/70' : 'border-gold/25 bg-[#f8f1e3] hover:border-gold/60'}`}
-            >
-              <span className="flex items-center justify-between gap-2">
-                <span className="ot-label">{titel}</span>
-                {actief && <span className="rounded-sm bg-gold px-1.5 py-0.5 text-[11px] font-bold text-bark uppercase">actief</span>}
-              </span>
-              <span className="mt-1.5 block text-sm leading-relaxed text-ink-soft">{tekst}</span>
+    <Modal open={open} onClose={onClose} eyebrow="Welkom" title="Kies uw traditie" labelledBy="kalender-uitleg-titel" centerTitle maxWidth="max-w-2xl">
+      <div className="keuze-menu">
+        <p className="ot-label">Kalender</p>
+        <div className="keuze-rij" role="group" aria-label="Kalender">
+          {KALENDERS.map(({ id, label }) => (
+            <button key={id} type="button" aria-pressed={mode === id} onClick={() => setMode(id)} className="btn-pill keuze-kalender">
+              {label}
             </button>
-          );
-        })}
+          ))}
+        </div>
+        <p className="ot-label">Traditie</p>
+        <div className="keuze-tradities">
+          {TRADITIES.map((traditie) => (
+            <button
+              key={traditie}
+              type="button"
+              onClick={() => {
+                onClose();
+                window.location.hash = 'vandaag';
+              }}
+              className="btn-pill keuze-traditie"
+            >
+              {traditie}
+            </button>
+          ))}
+        </div>
       </div>
-      <p className="mt-4 text-sm leading-relaxed text-ink-soft">Pascha wordt in beide gevallen volgens de Juliaanse paasregel berekend en valt dus op dezelfde dag.</p>
     </Modal>
   );
 }

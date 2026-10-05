@@ -22,6 +22,7 @@ import { gaNaar } from './lib/navigatie';
 import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
+import PageHero from './components/PageHero';
 import ExactPageFrame from './components/ExactPageFrame';
 import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
 import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
@@ -82,9 +83,15 @@ export default function App() {
   const scrollPosities = useRef<Record<string, number>>({});
   useEffect(() => {
     history.scrollRestoration = 'manual';
+    // Een onbekend anker (#bestaatniet) of een leeg anker: naar Vandaag; het adres wordt dan ook #vandaag.
+    const herstelAnker = () => {
+      if (window.location.hash && !paginaUitHash()) history.replaceState(history.state, '', '#vandaag');
+    };
+    herstelAnker();
     const opHash = () => {
-      const p = paginaUitHash();
-      if (!p || p === huidige.current) return;
+      herstelAnker();
+      const p = paginaUitHash() ?? 'vandaag';
+      if (p === huidige.current) return;
       // Onderaan weggegaan (bijvoorbeeld via de tijdlijn of de knop onder aan een cycluspagina): de pagina is uit,
       // dus de volgende keer weer bovenaan beginnen. Halverwege weggaan onthoudt de plek wel.
       const totEinde = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
@@ -225,7 +232,7 @@ export default function App() {
     <AppContext.Provider value={ctx}>
       <div id="top" className="min-h-screen bg-parchment text-ink">
         <Header pagina={pagina} />
-        <main>
+        <main id="inhoud" tabIndex={-1}>
           <div className={p('vandaag')}><Vandaag /></div>
           <div className={p('kalender')}><ExactPageFrame title="Kalender"><Kalender /></ExactPageFrame></div>
           <div className={p('adem')}><ExactPageFrame title="Adem"><Ademcyclus /></ExactPageFrame></div>
@@ -238,7 +245,7 @@ export default function App() {
           <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
           <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
           <div className={p('psalmen')}><ExactPageFrame title="Psalmen"><Psalmen actief={pagina === 'psalmen'} /></ExactPageFrame></div>
-          <div className={p('bronnen')}><section id="bronnen" className="orthodox-pattern bg-bark text-[#d9cbb0]"><h1 className="sr-only">Bronnen &amp; verwijzingen</h1><FooterInhoud /></section></div>
+          <div className={p('bronnen')}><div className="exact-content"><PageHero id="bronnen" titel="Bronnen" kop /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
         </main>
         <Footer />
         <BottomNav pagina={pagina} />

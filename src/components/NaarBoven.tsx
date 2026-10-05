@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
 import { ChevronUp } from 'lucide-react';
 
-// Zwevende "naar boven"-knop voor lange pagina's (Psalmen, Heiligen): verschijnt na 700px scrollen. Opmaak: index.css, Bouw 102.
+// Zwevende "naar boven"-knop voor lange pagina's (Psalmen, Heiligen): verschijnt na 700px, en alleen zolang je omhoog scrolt,
+// zodat hij tijdens het lezen (omlaag scrollen) geen rijen of knoppen bedekt. Opmaak: index.css, Bouw 102.
 export default function NaarBoven() {
   const [zichtbaar, setZichtbaar] = useState(false);
   useEffect(() => {
-    const opScroll = () => setZichtbaar(window.scrollY > 700);
-    opScroll();
+    let vorige = window.scrollY;
+    const opScroll = () => {
+      const y = window.scrollY;
+      if (y <= 700) setZichtbaar(false);
+      else if (y < vorige - 4) setZichtbaar(true);
+      else if (y > vorige + 4) setZichtbaar(false);
+      vorige = y;
+    };
     window.addEventListener('scroll', opScroll, { passive: true });
     return () => window.removeEventListener('scroll', opScroll);
   }, []);

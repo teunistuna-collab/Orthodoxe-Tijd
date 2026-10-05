@@ -313,13 +313,13 @@ Herhaling van Ikos 1 en Kondak 1.`,
 Laten wij met vreugde in ons hart de onlangs onthulde ster van de Orthodoxie, het nieuw opgerichte bolwerk van de Kerk, bezingen met liederen. Want verheerlijkt door de werking van de Geest, stort hij de overvloedige genade van genezingen uit over hen die roepen: Verheug u, o Vader Nektarios, voorbeeld van geduld en liefhebber van de deugdzaamheid!
 
 Ikos 1
-In de wereld werd u getoond als een man met een hemelse geest, o Nektarios, hiërarch van Christus. Verheug u, door wie de gelovigen zijn opgebouwd; verheug u, goddelijke leraar van de orthodoxen; verheug u, stevig bolwerk van de Orthodoxie; verheug u, goede gids van mensen. Verheug u, o Vader Nektarios, toonbeeld van geduld en minnaar van de deugdzaamheid!
+In de wereld werd u getoond als een man met een hemelse geest, o Nektarios, hiërarch van Christus. Verheug u, door wie de gelovigen zijn opgebouwd; verheug u, goddelijke leraar van de Orthodoxen; verheug u, stevig bolwerk van de Orthodoxie; verheug u, goede gids van mensen. Verheug u, o Vader Nektarios, toonbeeld van geduld en minnaar van de deugdzaamheid!
 
 Kondak 2-12 en Ikos 2-12
 De volledige akathist bezingt zijn onderwijs, nederigheid, geduld, barmhartigheid, wonderen en voorspraak. Het vaste refrein luidt: Verheug u, o Vader Nektarios, toonbeeld van geduld en minnaar van de deugdzaamheid!
 
 Kondak 13 (3x)
-Als deelgenoot aan het leven van de hemel, o Vader Nektarios, aanvaard ons offer en bid voor uw kudde en voor alle orthodoxen die u eren, opdat wij genezen mogen worden van ziekten van lichaam en ziel: Halleluja!
+Als deelgenoot aan het leven van de hemel, o Vader Nektarios, aanvaard ons offer en bid voor uw kudde en voor alle Orthodoxen die u eren, opdat wij genezen mogen worden van ziekten van lichaam en ziel: Halleluja!
 
 Gebed
 Heilige Nektarios, wij eren u als onze geestelijke vader die voor ons blijft bidden in het Koninkrijk der Hemelen. Leer ons de geboden van God lief te hebben en te volgen en help ons anderen te vergeven. Amen.`,

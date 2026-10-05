@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
+import { KruisTeken } from './ui';
 
 const SECTIES = [
   { id: 'vandaag', label: 'Vandaag' },
@@ -25,7 +26,7 @@ const KALENDER_KEUZES = [
 ] as const;
 
 const CYCLUS_ITEMS = [
-  { id: 'adem', label: '☦ ADEM', description: 'Het Jezusgebed en korte gebeden', href: '#adem' },
+  { id: 'adem', label: 'ADEM', kruis: true, description: 'Het Jezusgebed en korte gebeden', href: '#adem' },
   { id: 'etmaal', label: '◷ ETMAAL', description: 'De gebeden van dag en nacht', href: '#etmaal' },
   { id: 'week', label: '☼ WEEK', description: 'Van zondag tot zaterdag', href: '#week' },
   { id: 'jaar', label: '✣ JAAR', description: 'Het ritme van het kerkelijk jaar', href: '#jaar' },
@@ -74,13 +75,14 @@ export default function Header({ pagina: actief }: { pagina: string }) {
 
   return (
     <header className="site-header sticky top-0 z-50 overflow-visible">
+      <a href="#inhoud" className="naar-inhoud" onClick={(e) => { e.preventDefault(); const m = document.getElementById('inhoud'); m?.focus({ preventScroll: true }); m?.scrollIntoView(); }}>Naar de inhoud</a>
       {/* Eén donkere balk (vanaf 768px; daaronder de onderbalk): merk links, navigatie in het midden, kalenderkeuze rechts.
           De sierlijst staat als border-image (Bouw 69), zodat de hoekornamenten op elke breedte even groot blijven. */}
       <div className="relative bg-bark text-cream">
         <div className="relative mx-auto flex items-center">
           <a href="#vandaag" className="kop-merk">
-            {/* Embleem: gouden kruis in een ring (public/images/ui/embleem.webp, doorzichtige achtergrond) */}
-            <img src="/images/ui/embleem.webp" alt="" width={44} height={43} />
+            {/* Het kruis van de site (public/images/ui/kruis.webp) */}
+            <img src="/images/ui/kruis.webp" alt="" width={33} height={40} />
             <span className="min-w-0">
               <span className="kop-naam">Orthodoxe Tijd</span>
               <span className="kop-tagline">Een weg door de tijd · een leven met Christus</span>
@@ -125,7 +127,7 @@ export default function Header({ pagina: actief }: { pagina: string }) {
                           }}
                           className={`block rounded-md border px-3 py-2.5 transition ${itemActive ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
                         >
-                          <div className="ot-label ot-label-licht">{item.label}</div>
+                          <div className="ot-label ot-label-licht">{item.kruis && <><KruisTeken />{' '}</>}{item.label}</div>
                           <p className="mt-1 text-[11px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
                         </a>
                       );

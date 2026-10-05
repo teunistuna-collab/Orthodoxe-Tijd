@@ -1,41 +1,28 @@
 import Cross from './Cross';
 import { usePaginaOpen } from '../lib/paginaOpen';
 
-// Eén paginabanner voor alle pagina's, met de titel als echte tekst (schaalt mee, voorleesbaar, nooit afgesneden).
-// Achtergrond per pagina (alle 11): public/images/heroes/web/hero-<id>.webp (vanaf 768px, brede strook van ongeveer 8:1)
-// en public/images/heroes/mobiel/hero-<id>.webp (mobiel). De desktopbanner is daarom laag (index.css, Bouw 105).
-// Opmaak: Bouw 83 in index.css. `kop`: de titel is de h1 van de pagina (alleen waar de pagina zelf geen h1 heeft).
+// Eén sierkop voor alle pagina's behalve Vandaag: een gouden boog op perkament met kruis en titel als echte tekst.
+// Mobiel: public/images/heroes/sier/boog.webp (3:1); vanaf 768px een eigen, vlakkere boog als lage band (boog-web.webp).
+// De kop blijft bij het scrollen staan; de inhoud verdwijnt eronder (index.css, Bouw 126–132).
+// `kop`: de titel is de h1 van de pagina (alleen waar de pagina zelf geen h1 heeft).
 
-type Props = { id: string; titel: string; ondertitel?: string; citaat?: string; kop?: boolean };
+type Props = { id: string; titel: string; kop?: boolean };
 
-export default function PageHero({ id, titel, ondertitel, citaat, kop = false }: Props) {
-  // De banner van de pagina die open staat laadt meteen en met voorrang; die van verborgen pagina's pas als ze in beeld komen.
+export default function PageHero({ id, titel, kop = false }: Props) {
+  // De kop van de pagina die open staat laadt meteen en met voorrang; die van verborgen pagina's pas als ze in beeld komen.
   const open = usePaginaOpen(id);
   const Titel = kop ? 'h1' : 'p';
   return (
-    <section id={id} className="bg-bark page-hero-crop page-hero">
-      <picture>
-        {/* Mobiel: een eigen, smallere banner per pagina (public/images/heroes/mobiel), zodat het beeld niet wegvalt in de uitsnede */}
-        <source media="(max-width: 767.98px)" srcSet={`/images/heroes/mobiel/hero-${id}.webp`} />
-        <img
-          className="page-hero-beeld"
-          loading={open ? 'eager' : 'lazy'}
-          fetchPriority={open ? 'high' : 'auto'}
-          decoding="async"
-          src={`/images/heroes/web/hero-${id}.webp`}
-          alt=""
-        />
-      </picture>
-      <div className="page-hero-tekst">
-        <span className="page-hero-kruis" aria-hidden="true">
-          <Cross className="h-full w-full" />
+    <section id={id} className="sier-kop">
+      <div className="sier-kop-binnen">
+        <picture>
+          <source media="(min-width: 768px)" srcSet="/images/heroes/sier/boog-web.webp" width={2000} height={667} />
+          <img src="/images/heroes/sier/boog.webp" alt="" width={1200} height={400} loading={open ? 'eager' : 'lazy'} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+        </picture>
+        <span className="sier-kop-kruis" aria-hidden="true">
+          <Cross className="h-full w-full" title="" />
         </span>
-        <Titel className="page-hero-titel">{titel}</Titel>
-        {ondertitel && <p className="page-hero-ondertitel">{ondertitel}</p>}
-        <span className="page-hero-lijn" aria-hidden="true">
-          <i />◆<i />
-        </span>
-        {citaat && <p className="page-hero-citaat">{citaat}</p>}
+        <Titel className="sier-kop-titel">{titel}</Titel>
       </div>
     </section>
   );

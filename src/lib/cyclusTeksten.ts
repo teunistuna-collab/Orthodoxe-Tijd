@@ -37,7 +37,7 @@ export const ADEM_POPUPS: Record<'wat' | 'jezusgebed' | 'gebedskoord' | 'hart', 
     "sections": [
       {
         "paragraphs": [
-          "Met de naam ‘ademcyclus’ wordt hier geen officiële liturgische cyclus van de Orthodoxe Kerk bedoeld. De term wordt gebruikt als een ordenende naam voor het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus, die zelfs de ademhaling kan begeleiden. Anders dan de etmaal-, week-, Paschale en jaarcyclus is dit dus geen onderdeel van het kerkelijk Typikon, maar een manier om het orthodoxe ideaal van het onophoudelijke gebed zichtbaar te maken."
+          "Met de naam ‘ademcyclus’ wordt hier geen officiële liturgische cyclus van de Orthodoxe Kerk bedoeld. De term wordt gebruikt als een ordenende naam voor het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus, die zelfs de ademhaling kan begeleiden. Anders dan de etmaal-, week-, Paschale en jaarcyclus is dit dus geen onderdeel van het kerkelijk Typikon, maar een manier om het Orthodoxe ideaal van het onophoudelijke gebed zichtbaar te maken."
         ]
       },
       {
@@ -75,7 +75,7 @@ export const ADEM_POPUPS: Record<'wat' | 'jezusgebed' | 'gebedskoord' | 'hart', 
       {
         "heading": "Onophoudelijk gebed en de vaste gebedsregel",
         "paragraphs": [
-          "Onophoudelijk gebed vervangt de vaste gebeden van de Kerk niet. De orthodoxe traditie houdt beide samen: de gelovige heeft vaste tijden van gebed en neemt de gedachtenis aan God mee in de uren daartussen. Persoonlijk gebed en de gemeenschappelijke liturgische eredienst zijn evenmin hetzelfde; het persoonlijke gebed vindt zijn bedding in het grotere gebedsleven van de Kerk."
+          "Onophoudelijk gebed vervangt de vaste gebeden van de Kerk niet. De Orthodoxe traditie houdt beide samen: de gelovige heeft vaste tijden van gebed en neemt de gedachtenis aan God mee in de uren daartussen. Persoonlijk gebed en de gemeenschappelijke liturgische eredienst zijn evenmin hetzelfde; het persoonlijke gebed vindt zijn bedding in het grotere gebedsleven van de Kerk."
         ]
       }
     ]
@@ -87,13 +87,13 @@ export const ADEM_POPUPS: Record<'wat' | 'jezusgebed' | 'gebedskoord' | 'hart', 
     "sections": [
       {
         "paragraphs": [
-          "Het onophoudelijke gebed begint eenvoudig. Het gebed wordt uitgesproken met de lippen, vervolgens stiller en aandachtiger in het verstand, en de orthodoxe geestelijke schrijvers spreken uiteindelijk over het ‘gebed van het hart’: een toestand waarin de gedachtenis aan God het innerlijke leven steeds dieper doordringt. Dit is geen prestatie die door een ademritme kan worden afgedwongen, maar een gave die wordt gezocht in nederigheid, bekering en het sacramentele en liturgische leven van de Kerk."
+          "Het onophoudelijke gebed begint eenvoudig. Het gebed wordt uitgesproken met de lippen, vervolgens stiller en aandachtiger in het verstand, en de Orthodoxe geestelijke schrijvers spreken uiteindelijk over het ‘gebed van het hart’: een toestand waarin de gedachtenis aan God het innerlijke leven steeds dieper doordringt. Dit is geen prestatie die door een ademritme kan worden afgedwongen, maar een gave die wordt gezocht in nederigheid, bekering en het sacramentele en liturgische leven van de Kerk."
         ]
       },
       {
         "heading": "Korte aanroepingen door de dag",
         "paragraphs": [
-          "Naast het volledige Jezusgebed kent het orthodoxe leven korte aanroepingen en schietgebeden. Zij kunnen opkomen tijdens arbeid, reizen, wachten, vreugde, angst of verzoeking. Hun betekenis ligt niet in een vast ademschema, maar in het telkens terugkeren van hart en verstand tot God. Het Jezusgebed blijft daarbij de centrale en meest karakteristieke korte aanroeping."
+          "Naast het volledige Jezusgebed kent het Orthodoxe leven korte aanroepingen en schietgebeden. Zij kunnen opkomen tijdens arbeid, reizen, wachten, vreugde, angst of verzoeking. Hun betekenis ligt niet in een vast ademschema, maar in het telkens terugkeren van hart en verstand tot God. Het Jezusgebed blijft daarbij de centrale en meest karakteristieke korte aanroeping."
         ]
       }
     ]
@@ -300,7 +300,7 @@ export const WEEK_INFO: Record<'wat' | 'dagen' | 'betekenis' | 'praktisch', Popu
       {
         "heading": "De week als weg naar de Verrijzenis",
         "paragraphs": [
-          "De orthodoxe week is geen loutere opeenvolging van dagen. Zij begint in de vreugde van de Verrijzenis, voert de gelovige langs de hemelse machten, de Voorloper, het Kruis, de apostolische verkondiging en de gedachtenis van hen die in Christus ontslapen zijn, en opent zich vervolgens opnieuw naar de Dag des Heren. Zo wordt de tijd zelf opgenomen in het gebed van de Kerk."
+          "De Orthodoxe week is geen loutere opeenvolging van dagen. Zij begint in de vreugde van de Verrijzenis, voert de gelovige langs de hemelse machten, de Voorloper, het Kruis, de apostolische verkondiging en de gedachtenis van hen die in Christus ontslapen zijn, en opent zich vervolgens opnieuw naar de Dag des Heren. Zo wordt de tijd zelf opgenomen in het gebed van de Kerk."
         ]
       }
     ]
@@ -460,7 +460,7 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
       {
         "heading": "Pascha en de Paschale cyclus",
         "paragraphs": [
-          "Daarom is Pascha niet eenvoudig één feest tussen andere feesten. In de orthodoxe eredienst is de Verrijzenis van Christus het centrum waarnaar de voorbereiding wijst en vanwaar de vreugde van de daaropvolgende periode uitgaat."
+          "Daarom is Pascha niet eenvoudig één feest tussen andere feesten. In de Orthodoxe eredienst is de Verrijzenis van Christus het centrum waarnaar de voorbereiding wijst en vanwaar de vreugde van de daaropvolgende periode uitgaat."
         ]
       },
       {
@@ -479,7 +479,7 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
       {
         "heading": "Wat is de Paschale cyclus?",
         "paragraphs": [
-          "De Paschale cyclus is het beweeglijke deel van het orthodoxe kerkelijk jaar dat zijn ordening ontvangt vanuit de datum van het heilige Pascha, de Verrijzenis van Christus. Omdat de datum van Pascha van jaar tot jaar verschuift, bewegen ook de perioden en gedachtenissen die ermee verbonden zijn mee.",
+          "De Paschale cyclus is het beweeglijke deel van het Orthodoxe kerkelijk jaar dat zijn ordening ontvangt vanuit de datum van het heilige Pascha, de Verrijzenis van Christus. Omdat de datum van Pascha van jaar tot jaar verschuift, bewegen ook de perioden en gedachtenissen die ermee verbonden zijn mee.",
           "De cyclus omvat niet alleen de Paasnacht zelf. Zij begint reeds in de voorbereiding op de Grote Vasten, voert door de veertigdagentijd en de Grote en Heilige Week, bereikt haar hoogtepunt in Pascha en gaat daarna verder door de veertig dagen tot Hemelvaart en de vijftig dagen tot Pinksteren. De eerste zondag na Pinksteren, Allerheiligen, vormt een belangrijke overgang naar het verdere kerkelijke jaar."
         ]
       },
@@ -508,7 +508,7 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
       {
         "heading": "De zondagen van de Grote Vasten",
         "items": [
-          "Eerste zondag — Zondag van de Orthodoxie: de overwinning van het orthodoxe geloof en de herstelling van de heilige iconen.",
+          "Eerste zondag — Zondag van de Orthodoxie: de overwinning van het Orthodoxe geloof en de herstelling van de heilige iconen.",
           "Tweede zondag — Heilige Gregorius Palamas: het leven in Gods genade en het gebed van het hart.",
           "Derde zondag — Verering van het kostbare en levenschenkende Kruis: midden in de vasten wordt het Kruis tot versterking en hoop opgericht.",
           "Vierde zondag — Heilige Johannes Climacus: de geestelijke opgang en de strijd tegen de hartstochten.",
@@ -564,14 +564,14 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
         "heading": "Pinksteren",
         "paragraphs": [
           "Vijftig dagen na Pascha viert de Kerk het heilige Pinksteren: de nederdaling van de Heilige Geest over de apostelen. Pinksteren is de vervulling van de Paschale beweging. De Verrijzenis opent het nieuwe leven; de Geest schenkt dit leven aan de Kerk en zendt haar uit in de wereld.",
-          "De maandag na Pinksteren is in de orthodoxe traditie bijzonder gewijd aan de Heilige Geest."
+          "De maandag na Pinksteren is in de Orthodoxe traditie bijzonder gewijd aan de Heilige Geest."
         ]
       },
       {
         "heading": "Allerheiligen en de overgang",
         "paragraphs": [
           "De eerste zondag na Pinksteren is de Zondag van Allerheiligen. Zij laat zien wat de gave van de Heilige Geest in mensen voortbrengt: heiligheid. De heiligen zijn de vruchten van Pascha en Pinksteren in het leven van de Kerk.",
-          "Na Allerheiligen begint de Apostelvasten. De begindatum daarvan beweegt mee met Pascha, terwijl het einde aan een vaste kalenderdatum verbonden is. Dit laat mooi zien hoe de Paschale en de vaste jaarcyclus elkaar in het orthodoxe kerkelijk jaar ontmoeten."
+          "Na Allerheiligen begint de Apostelvasten. De begindatum daarvan beweegt mee met Pascha, terwijl het einde aan een vaste kalenderdatum verbonden is. Dit laat mooi zien hoe de Paschale en de vaste jaarcyclus elkaar in het Orthodoxe kerkelijk jaar ontmoeten."
         ]
       },
       {

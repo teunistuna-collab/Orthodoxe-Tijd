@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { GEBEDEN, type Gebed } from '../lib/gebeden';
 import { LiturgicalPopup, CycleTransition } from './CycleSections';
-import PageHero from './PageHero';
 import { useFavorieten } from '../lib/favorieten';
+import PageHero from './PageHero';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -24,38 +24,34 @@ type CategorieDef = {
   id: string;
   label: string;
   omschrijving: string;
-  iconSrc: string;
   match: (g: Gebed) => boolean;
 };
 
 // Groepering is uitsluitend een presentatielaag boven de bestaande GEBEDEN-dataset; geen nieuwe gebedsdata.
 const CATEGORIEN: CategorieDef[] = [
-  { id: 'ochtend', label: 'Ochtendgebeden', omschrijving: 'Gebeden bij het ontwaken, vóór de iconen.', iconSrc: '/images/ui/gebeden/01-Ochtendgebeden.webp', match: (g) => g.categorie === 'ochtend' },
-  { id: 'avond', label: 'Avondgebeden', omschrijving: 'Gebeden voor het slapengaan.', iconSrc: '/images/ui/gebeden/02-Avondgebeden.webp', match: (g) => g.categorie === 'avond' },
-  { id: 'jezusgebed', label: 'Het Jezusgebed', omschrijving: 'Het onophoudelijke gebed, door de dag heen met het gebedssnoer.', iconSrc: '/images/ui/gebeden/03-Het-Jezusgebed.webp', match: (g) => g.id === 'jezusgebed' },
-  { id: 'moeder-gods', label: 'Gebeden tot de Moeder Gods', omschrijving: 'Akathist en aanroepingen tot de Moeder Gods.', iconSrc: '/images/ui/gebeden/04-Moeder-Gods.webp', match: (g) => g.id === 'akathist-moeder-gods' },
-  { id: 'gezin', label: 'Gebeden voor gezin en kinderen', omschrijving: 'Voor ouders en kinderen samen.', iconSrc: '/images/ui/gebeden/05-Gezin-en-kinderen.webp', match: (g) => g.id === 'gebed-voor-het-gezin' },
-  { id: 'nood', label: 'Gebeden bij ziekte en nood', omschrijving: 'In tijden van nood, leegte en lijden.', iconSrc: '/images/ui/gebeden/06-Ziekte-en-nood.webp', match: (g) => g.id === 'gebed-in-nood' },
-  { id: 'overledenen', label: 'Gebeden voor overledenen', omschrijving: 'Gedachtenis van hen die ontslapen zijn.', iconSrc: '/images/ui/gebeden/07-Overledenen.webp', match: (g) => g.id === 'akathist-ontslapenen' },
+  { id: 'ochtend', label: 'Ochtendgebeden', omschrijving: 'Gebeden bij het ontwaken, vóór de iconen.', match: (g) => g.categorie === 'ochtend' },
+  { id: 'avond', label: 'Avondgebeden', omschrijving: 'Gebeden voor het slapengaan.', match: (g) => g.categorie === 'avond' },
+  { id: 'jezusgebed', label: 'Het Jezusgebed', omschrijving: 'Het onophoudelijke gebed, door de dag heen met het gebedssnoer.', match: (g) => g.id === 'jezusgebed' },
+  { id: 'moeder-gods', label: 'Gebeden tot de Moeder Gods', omschrijving: 'Akathist en aanroepingen tot de Moeder Gods.', match: (g) => g.id === 'akathist-moeder-gods' },
+  { id: 'gezin', label: 'Gebeden voor gezin en kinderen', omschrijving: 'Voor ouders en kinderen samen.', match: (g) => g.id === 'gebed-voor-het-gezin' },
+  { id: 'nood', label: 'Gebeden bij ziekte en nood', omschrijving: 'In tijden van nood, leegte en lijden.', match: (g) => g.id === 'gebed-in-nood' },
+  { id: 'overledenen', label: 'Gebeden voor overledenen', omschrijving: 'Gedachtenis van hen die ontslapen zijn.', match: (g) => g.id === 'akathist-ontslapenen' },
   {
     id: 'akathisten',
     label: 'Akathisten',
     omschrijving: 'Lofzangen tot heiligen en de Moeder Gods.',
-    iconSrc: '/images/ui/gebeden/08-Akathisten.webp',
     match: (g) => g.categorie === 'akathisten' && g.id !== 'akathist-moeder-gods' && g.id !== 'akathist-ontslapenen',
   },
   {
     id: 'dag',
     label: 'Gebeden door de dag',
     omschrijving: 'Voor het werk, het eten en het slapen.',
-    iconSrc: '/images/ui/placeholders/gebeden-door-de-dag.svg',
     match: (g) => DAGKEUZES.includes(g.id),
   },
   {
     id: 'overig',
     label: 'Overige gebeden',
     omschrijving: 'Voor de gebedsregel en de Goddelijke Liturgie.',
-    iconSrc: '/images/ui/placeholders/gebeden-overige.svg',
     match: (g) => ['inleidende-gebeden-pdf', 'psalm-50-pdf', 'geloofsbelijdenis-pdf', 'kanon-beschermengel'].includes(g.id),
   },
 ];
@@ -127,7 +123,9 @@ export default function Gebeden() {
 
   return (
     <>
-      <PageHero id="gebeden" titel="Gebeden" ondertitel="Een gesprek met God, in alle momenten" kop />
+      {/* Proef: sierkop (alleen de boog, gemaakt met scripts/sierkop.mjs; kruis en titel als echte elementen) in plaats van de fotobanner. Hij blijft bovenaan
+          staan tijdens het scrollen; de inhoud schuift eronder door. Opmaak: index.css, Bouw 126. */}
+      <PageHero id="gebeden" titel="Gebeden" kop />
 
       {/* Introductie */}
       <section className="gebed-intro orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">
@@ -217,7 +215,6 @@ export default function Gebeden() {
             <div className="vm-lijst gebed-lijst md:hidden">
               {categorieMetData.map((cat) => (
                 <button key={cat.id} type="button" onClick={() => setActieveCat(cat.id)} className="vm-rij">
-                  <img loading="lazy" decoding="async" src={cat.iconSrc} alt="" className="vm-icoon" />
                   <span className="vm-rij-tekst">
                     <b>{cat.label}</b>
                     <small>{cat.omschrijving}</small>
@@ -235,9 +232,6 @@ export default function Gebeden() {
                     onClick={() => setActieveCat(cat.id)}
                     className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
                   >
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                      <img loading="lazy" decoding="async" src={cat.iconSrc} alt="" className="provided-card-icon" />
-                    </div>
                     <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{cat.label}</h3>
                     <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{cat.omschrijving}</p>
                     <span className="btn-pill mt-4">Bekijk gebeden ›</span>

@@ -2,7 +2,9 @@
 
 @theme {
   --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --font-body: "Alegreya Sans", "Gill Sans", "Segoe UI", sans-serif;
+  --font-body: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-titel: "Cinzel", "Trajan Pro", Georgia, serif;
+  --font-lees: "EB Garamond", Georgia, "Times New Roman", serif;
 
   --color-parchment: #faf6ec;
   --color-parchment-2: #f3eada;
@@ -15,7 +17,7 @@
   --color-gold: #c9a227;
   --color-gold-light: #e8cf7a;
   --color-gold-pale: #f6ebc6;
-  --color-gold-deep: #8a5a1e;
+  --color-gold-deep: #7d5218;
   --color-wine: #5a2424;
   --color-wine-deep: #3b1515;
   --color-bark: #160b08;
@@ -195,7 +197,7 @@ section[id] {
   font-weight: 800;
   letter-spacing: .26em;
   text-transform: uppercase;
-  color: #8a5a1e;
+  color: #7d5218;
 }
 .today-link {
   font-size: 10px;
@@ -203,7 +205,7 @@ section[id] {
   font-weight: 800;
   letter-spacing: .15em;
   text-transform: uppercase;
-  color: #8a5a1e;
+  color: #7d5218;
   transition: color .18s ease, transform .18s ease;
 }
 .today-link:hover { color: #5a2424; transform: translateX(2px); }
@@ -211,7 +213,6 @@ section[id] {
 /* Heiligen & Feesten — één rustig digitaal menologion/feestboek */
 .saints-page,.feasts-page{background-image:radial-gradient(circle at 50% 0%,rgba(201,162,39,.10),transparent 32%),linear-gradient(180deg,#f5ecdb 0%,#faf6ec 48%,#efe3cb 100%)}
 .saints-book{background-image:radial-gradient(circle at 10% 10%,rgba(201,162,39,.07),transparent 28%),radial-gradient(circle at 90% 88%,rgba(90,36,36,.04),transparent 30%)}
-
 
 /* Orthodoxe Tijd — sitebrede editorial polish */
 :root { color-scheme: light; }
@@ -247,12 +248,12 @@ main > section[id] > img {
 .today-page{background:radial-gradient(circle at 50% 0%,rgba(201,162,39,.11),transparent 31%),linear-gradient(180deg,#160b08 0%,#24130d 48%,#160b08 100%);padding:54px 20px 72px}
 .today-shell{width:min(1320px,100%);margin:0 auto}.today-heading{text-align:center;margin:0 auto 28px;max-width:900px}.today-heading p{font-size:10px;font-weight:800;letter-spacing:.34em;color:#e8cf7a}.today-heading h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.8rem);font-weight:500;line-height:1.04;margin:10px 0 18px;color:#f4ecda}.today-heading span,.today-desert span{display:block;width:105px;height:1px;margin:auto;background:linear-gradient(90deg,transparent,#c9a227,transparent)}
 .today-book{overflow:hidden;border:1px solid rgba(201,162,39,.58);border-radius:10px;background:#f5ecd9;color:#2b1d12;box-shadow:0 34px 80px rgba(0,0,0,.38),inset 0 0 0 6px rgba(255,253,246,.35);background-image:radial-gradient(circle at 8% 8%,rgba(201,162,39,.08),transparent 25%),radial-gradient(circle at 92% 85%,rgba(90,36,36,.05),transparent 30%)}
-.today-book>section{border-bottom:1px solid rgba(138,90,30,.28)}.today-book>section:last-child{border-bottom:0}.today-opening{display:grid;grid-template-columns:1fr 1fr}.today-opening>article{padding:48px 52px}.today-arrow-prayer{border-right:1px solid rgba(138,90,30,.28)}.today-arrow-prayer blockquote{font-family:var(--font-display);font-size:clamp(2.25rem,4vw,4rem);font-weight:500;line-height:1.02;color:#3b1515;margin:20px 0}.today-copy{font-size:15px;line-height:1.7;color:#6b5b45;max-width:650px}.today-kicker{font-size:10px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:.25em!important;text-transform:uppercase!important;color:#8a5a1e!important;margin:0!important}.today-link{display:inline-block;margin-top:18px;border:0;background:none;padding:0;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e;cursor:pointer;text-decoration:none}.today-link:hover{color:#5a2424}
-.today-hour{background:rgba(239,227,203,.55)}.today-hour-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.today-hour-head h2,.today-week-theme h2,.today-fast-row h2,.today-date-row h2,.today-pascha h2{font-family:var(--font-display);font-weight:500}.today-hour-head h2{font-size:2.35rem;margin:7px 0 0}.today-hour-head>span{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8a5a1e;border:1px solid rgba(138,90,30,.35);padding:7px 11px;border-radius:999px;background:#fffaf0}.today-hour blockquote{font-family:var(--font-display);font-size:clamp(1.65rem,2.6vw,2.6rem);font-style:italic;line-height:1.15;color:#5a2424;border-left:2px solid #c9a227;padding-left:22px;margin:28px 0 12px}.today-source{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#9b8b70}
+.today-book>section{border-bottom:1px solid rgba(138,90,30,.28)}.today-book>section:last-child{border-bottom:0}.today-opening{display:grid;grid-template-columns:1fr 1fr}.today-opening>article{padding:48px 52px}.today-arrow-prayer{border-right:1px solid rgba(138,90,30,.28)}.today-arrow-prayer blockquote{font-family:var(--font-display);font-size:clamp(2.25rem,4vw,4rem);font-weight:500;line-height:1.02;color:#3b1515;margin:20px 0}.today-copy{font-size:15px;line-height:1.7;color:#6b5b45;max-width:650px}.today-kicker{font-size:10px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:.25em!important;text-transform:uppercase!important;color:#7d5218!important;margin:0!important}.today-link{display:inline-block;margin-top:18px;border:0;background:none;padding:0;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7d5218;cursor:pointer;text-decoration:none}.today-link:hover{color:#5a2424}
+.today-hour{background:rgba(239,227,203,.55)}.today-hour-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.today-hour-head h2,.today-week-theme h2,.today-fast-row h2,.today-date-row h2,.today-pascha h2{font-family:var(--font-display);font-weight:500}.today-hour-head h2{font-size:2.35rem;margin:7px 0 0}.today-hour-head>span{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7d5218;border:1px solid rgba(138,90,30,.35);padding:7px 11px;border-radius:999px;background:#fffaf0}.today-hour blockquote{font-family:var(--font-display);font-size:clamp(1.65rem,2.6vw,2.6rem);font-style:italic;line-height:1.15;color:#5a2424;border-left:2px solid #c9a227;padding-left:22px;margin:28px 0 12px}.today-source{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#9b8b70}
 .today-week-row,.today-date-row{display:grid;grid-template-columns:220px 1fr auto;align-items:stretch}.today-day-name{background:#24130d;color:#f4ecda;padding:32px 36px;display:flex;flex-direction:column;justify-content:center}.today-day-name p{font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#e8cf7a}.today-day-name strong{font-family:var(--font-display);font-size:2.2rem;font-weight:500;color:#e8cf7a;margin-top:4px}.today-week-theme{padding:30px 42px}.today-week-theme h2{font-size:2rem;margin:6px 0}.today-week-theme>p:last-child{font-size:14px;color:#6b5b45;line-height:1.55}.today-week-row>.today-link,.today-date-row>.today-link{align-self:center;margin:0 36px}
-.today-fast-row{display:grid;grid-template-columns:minmax(270px,.8fr) minmax(300px,1.4fr) auto;gap:34px;align-items:center;padding:30px 42px;background:linear-gradient(90deg,rgba(90,36,36,.08),rgba(201,162,39,.06))}.today-fast-row h2{font-size:2rem;color:#5a2424;margin:6px 0 0}.today-fast-period{font-size:11px;color:#8a5a1e;margin-top:4px}.today-fast-row>.today-link{margin:0}
-.today-date-row{padding:0}.today-date-block{padding:32px 36px;background:#efe3cb}.today-date-block h2{font-size:1.8rem;color:#5a2424;margin:7px 0 3px}.today-date-block>p:last-child{font-size:11px;color:#9b8b70}.today-saint-block{padding:30px 42px}.today-saint-block h2{font-size:2rem;margin:0 0 4px}.today-saint-block p{font-size:14px;color:#8a5a1e}.today-saint-block small{display:block;color:#9b8b70;margin-top:7px}
-.today-pascha{display:grid;grid-template-columns:.85fr 1.15fr}.today-pascha>article{padding:42px 48px}.today-pascha>article:first-child{background:rgba(239,227,203,.55);border-right:1px solid rgba(138,90,30,.28)}.today-pascha h2{font-size:2.4rem;color:#5a2424;line-height:1.08;margin:10px 0}.today-readings>div{margin-top:13px;border-top:1px solid rgba(138,90,30,.24)}.today-readings button{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;border:0;border-bottom:1px solid rgba(138,90,30,.2);background:transparent;padding:12px 0;cursor:pointer;color:#2b1d12}.today-readings button small{display:block;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#8a5a1e}.today-readings button strong{display:block;font-family:var(--font-display);font-size:1.35rem;font-weight:500;margin-top:2px}.today-readings button b{color:#8a5a1e}
+.today-fast-row{display:grid;grid-template-columns:minmax(270px,.8fr) minmax(300px,1.4fr) auto;gap:34px;align-items:center;padding:30px 42px;background:linear-gradient(90deg,rgba(90,36,36,.08),rgba(201,162,39,.06))}.today-fast-row h2{font-size:2rem;color:#5a2424;margin:6px 0 0}.today-fast-period{font-size:11px;color:#7d5218;margin-top:4px}.today-fast-row>.today-link{margin:0}
+.today-date-row{padding:0}.today-date-block{padding:32px 36px;background:#efe3cb}.today-date-block h2{font-size:1.8rem;color:#5a2424;margin:7px 0 3px}.today-date-block>p:last-child{font-size:11px;color:#9b8b70}.today-saint-block{padding:30px 42px}.today-saint-block h2{font-size:2rem;margin:0 0 4px}.today-saint-block p{font-size:14px;color:#7d5218}.today-saint-block small{display:block;color:#9b8b70;margin-top:7px}
+.today-pascha{display:grid;grid-template-columns:.85fr 1.15fr}.today-pascha>article{padding:42px 48px}.today-pascha>article:first-child{background:rgba(239,227,203,.55);border-right:1px solid rgba(138,90,30,.28)}.today-pascha h2{font-size:2.4rem;color:#5a2424;line-height:1.08;margin:10px 0}.today-readings>div{margin-top:13px;border-top:1px solid rgba(138,90,30,.24)}.today-readings button{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;border:0;border-bottom:1px solid rgba(138,90,30,.2);background:transparent;padding:12px 0;cursor:pointer;color:#2b1d12}.today-readings button small{display:block;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7d5218}.today-readings button strong{display:block;font-family:var(--font-display);font-size:1.35rem;font-weight:500;margin-top:2px}.today-readings button b{color:#7d5218}
 .today-desert{text-align:center;padding:42px 28px!important;background:#24130d;color:#f4ecda}.today-desert>p:first-child{font-size:10px;font-weight:800;letter-spacing:.3em;color:#e8cf7a}.today-desert h2{font-family:var(--font-display);font-size:2.5rem;font-weight:500;color:#e8cf7a;margin:8px 0 15px}.today-desert>p:last-child{max-width:720px;margin:17px auto 0;color:#d9c6a3;font-size:14px;line-height:1.65}
 @media(max-width:900px){.today-page{padding:36px 14px 50px}.today-opening,.today-pascha{grid-template-columns:1fr}.today-arrow-prayer,.today-pascha>article:first-child{border-right:0;border-bottom:1px solid rgba(138,90,30,.28)}.today-opening>article,.today-pascha>article{padding:32px 26px}.today-week-row,.today-date-row,.today-fast-row{grid-template-columns:1fr}.today-week-theme,.today-saint-block,.today-fast-row{padding:26px}.today-week-row>.today-link,.today-date-row>.today-link{margin:0 26px 26px}.today-fast-row{gap:8px}.today-fast-row>.today-link{margin-top:10px}.today-date-block{padding:26px}.today-hour-head{flex-direction:column}.today-hero img{max-height:430px}}
 
@@ -261,7 +262,7 @@ main > section[id] > img {
 .vandaag-frame{width:min(760px,100%);margin:0 auto;border:1px solid rgba(213,169,72,.8);background:#1a0e09;box-shadow:0 24px 65px rgba(0,0,0,.48)}
 .vandaag-titlebar{height:58px;display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid rgba(213,169,72,.72);color:#f2dfaa;text-align:center;background:linear-gradient(180deg,#25150d,#180c08)}
 .vandaag-titlebar p{margin:0;font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:#b9964f}.vandaag-titlebar h1{margin:1px 0 0;font-family:var(--font-display);font-weight:500;font-size:25px;letter-spacing:.08em;text-transform:uppercase}.vandaag-title-ornament{font-size:20px;color:#d7ae4c}
-.vandaag-cover{aspect-ratio:6.25/1;position:relative;overflow:hidden}.vandaag-cover img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+
 .vandaag-paper{position:relative;padding:0 22px 24px;background-color:#f5ecd8;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.09),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.07),transparent 30%);box-shadow:inset 0 0 35px rgba(103,66,27,.08)}
 .vandaag-paper:before,.vandaag-paper:after{content:'❦';position:absolute;color:rgba(164,118,41,.3);font-size:40px}.vandaag-paper:before{left:10px;top:15px}.vandaag-paper:after{right:10px;bottom:14px;transform:rotate(180deg)}
 .vandaag-dayhead{text-align:center;padding:22px 20px 19px;border-bottom:1px solid rgba(138,91,35,.25)}.vandaag-dayhead p{font-family:var(--font-display);font-size:17px;margin:0;color:#3b2518}.vandaag-dayhead h2{font-family:var(--font-display);font-size:23px;font-weight:500;margin:1px 0;color:#321b13}.vandaag-dayhead>span{font-size:10px;color:#7e674f}.vandaag-dayhead i{display:block;font-style:normal;color:#b58226;font-size:22px;margin:9px 0 3px}.vandaag-dayhead h3{font-family:var(--font-display);font-size:21px;font-weight:500;margin:0;color:#3a1d16}.vandaag-dayhead small{display:block;margin-top:3px;color:#72533b;font-size:11px}
@@ -275,7 +276,7 @@ main > section[id] > img {
 .exact-frame{width:min(820px,100%);margin:0 auto;border:1px solid rgba(213,169,72,.8);background:#1a0e09;box-shadow:0 24px 65px rgba(0,0,0,.48);overflow:hidden}
 .exact-titlebar{height:58px;display:flex;align-items:center;justify-content:center;gap:18px;border-bottom:1px solid rgba(213,169,72,.72);color:#f2dfaa;text-align:center;background:linear-gradient(180deg,#25150d,#180c08)}
 .exact-titlebar p{margin:0;font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:#b9964f}.exact-titlebar h1{margin:1px 0 0;font-family:var(--font-display);font-weight:500;font-size:25px;letter-spacing:.08em;text-transform:uppercase}.exact-title-ornament{font-size:20px;color:#d7ae4c}
-.exact-content{background:#f5ecd8}.exact-content>section{margin:0!important}.exact-content>section:first-child:not(.page-hero-crop){height:260px!important;overflow:hidden!important;background:#160b08!important;border-bottom:1px solid rgba(213,169,72,.55)!important}.exact-content>section:first-child img{display:block!important;width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important;object-position:center!important}.exact-content>section:first-child.page-hero-crop{border-bottom:1px solid rgba(213,169,72,.55)!important}
+.exact-content{background:#f5ecd8}.exact-content>section{margin:0!important}.exact-content>section:first-child{height:260px!important;overflow:hidden!important;background:#160b08!important;border-bottom:1px solid rgba(213,169,72,.55)!important}.exact-content>section:first-child img{display:block!important;width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important;object-position:center!important}
 .exact-content>section:not(:first-child){width:100%!important;max-width:none!important;padding-top:34px!important;padding-bottom:34px!important;background-color:#f5ecd8!important;color:#2b1b12!important;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.07),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.05),transparent 30%)!important;border-bottom:1px solid rgba(138,91,35,.22)!important}
 .exact-content>section:not(:first-child)>div{width:100%!important;max-width:none!important;padding-left:38px!important;padding-right:38px!important;margin-left:0!important;margin-right:0!important}
 .exact-content .rounded-2xl,.exact-content .rounded-xl,.exact-content .rounded-lg,.exact-content .rounded-md{border-radius:2px!important}
@@ -284,24 +285,23 @@ main > section[id] > img {
 .exact-content button,.exact-content a{transition:filter .15s ease,color .15s ease}.exact-content button:hover,.exact-content a:hover{filter:brightness(1.08)}
 .exact-content .bg-bark,.exact-content .bg-bark-soft,.exact-content .bg-wine-deep{border-color:rgba(213,169,72,.45)!important}
 .exact-content svg{stroke-width:1.5}.exact-content [class*="text-gold"] svg,.exact-content svg[class*="text-gold"]{color:#a87825}
-@media(max-width:560px){.exact-design-page{padding:14px 8px 40px}.exact-titlebar{height:52px}.exact-content>section:first-child:not(.page-hero-crop){height:205px!important}.exact-content>section:not(:first-child)>div{padding-left:15px!important;padding-right:15px!important}.exact-content>section:not(:first-child){padding-top:26px!important;padding-bottom:26px!important}}
+@media(max-width:560px){.exact-design-page{padding:14px 8px 40px}.exact-titlebar{height:52px}.exact-content>section:first-child{height:205px!important}.exact-content>section:not(:first-child)>div{padding-left:15px!important;padding-right:15px!important}.exact-content>section:not(:first-child){padding-top:26px!important;padding-bottom:26px!important}}
 
 /* Exact popup system — dezelfde visuele grammatica als de goedgekeurde Vandaag-pagina */
 .exact-modal-backdrop{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(17,8,6,.88);backdrop-filter:blur(5px)}
 .exact-modal-frame{width:min(820px,calc(100vw - 28px));max-width:820px!important;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(213,169,72,.82);border-radius:0;background:#1a0e09;box-shadow:0 28px 80px rgba(0,0,0,.58)}
 .exact-modal-titlebar{position:relative;flex:0 0 auto;min-height:78px;display:grid;grid-template-columns:minmax(72px,1fr) minmax(0,2.4fr) minmax(72px,1fr);align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid rgba(213,169,72,.72);background:linear-gradient(180deg,#25150d,#180c08);color:#f2dfaa}
-.exact-modal-heading{text-align:center;min-width:0}.exact-modal-heading-line{display:flex;align-items:center;justify-content:center;gap:8px;color:#d7ae4c}.exact-modal-heading-line span{width:26px;height:1px;background:rgba(213,169,72,.65)}.exact-modal-heading-line b{font-size:13px;font-weight:400}.exact-modal-heading p{margin:2px 0 0;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:#b9964f}.exact-modal-heading h2{margin:2px 0 0;font-family:var(--font-display);font-size:clamp(20px,3vw,27px);font-weight:500;line-height:1.05;letter-spacing:.045em;color:#f2dfaa}
 .exact-modal-nav{display:flex;align-items:center;gap:5px}.exact-modal-nav-left{justify-content:flex-start}.exact-modal-nav-right{justify-content:flex-end}.exact-modal-nav button,.exact-modal-nav a{border:0!important;background:transparent!important;color:#d7ae4c!important;border-radius:0!important;box-shadow:none!important}.exact-modal-nav button:hover,.exact-modal-nav a:hover{color:#fff0bf!important;background:transparent!important}.exact-modal-close{display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:7px;cursor:pointer}.exact-modal-close svg{width:18px;height:18px;stroke-width:1.4}
 .exact-modal-paper{position:relative;min-height:0;overflow-y:auto;padding:32px 38px 38px;background-color:#f5ecd8;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.09),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.07),transparent 30%);box-shadow:inset 0 0 35px rgba(103,66,27,.08);color:#352117}.exact-modal-vlak:before,.exact-modal-vlak:after{content:'❦';position:absolute;pointer-events:none;color:rgba(164,118,41,.24);font-size:34px}.exact-modal-vlak:before{left:10px;top:9px}.exact-modal-vlak:after{right:10px;bottom:8px;transform:rotate(180deg)}
 .exact-modal-paper h1,.exact-modal-paper h2,.exact-modal-paper h3,.exact-modal-paper h4{font-family:var(--font-display);font-weight:500;color:#3a1d16}.exact-modal-paper p{line-height:1.65}.exact-modal-paper svg{stroke-width:1.5}.exact-modal-paper .rounded-2xl,.exact-modal-paper .rounded-xl,.exact-modal-paper .rounded-lg,.exact-modal-paper .rounded-md{border-radius:2px!important}.exact-modal-paper [class*="shadow-"]{box-shadow:none!important}.exact-modal-paper [class*="bg-white"]{background:rgba(255,250,240,.42)!important}.exact-modal-paper [class*="bg-parchment"]{background:rgba(239,227,203,.48)!important}.exact-modal-paper button:not(.exact-modal-close),.exact-modal-paper a{border-radius:2px!important}
 .exact-modal-paper .gold-rule{height:1px!important;background:linear-gradient(90deg,transparent,rgba(168,120,37,.62),transparent)!important}.exact-modal-paper blockquote{font-family:var(--font-display);color:#5a2424}
-.exact-popup-reading{position:relative;z-index:1;max-width:660px;margin:0 auto}.exact-popup-subtitle{text-align:center;margin:0 0 20px!important;font-size:9px!important;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#8a5a1e}.exact-popup-highlight{margin:0 0 24px;padding:16px 20px;border-top:1px solid rgba(138,91,35,.28);border-bottom:1px solid rgba(138,91,35,.28);text-align:center;font-size:20px;line-height:1.35;font-style:italic;background:rgba(239,227,203,.42)}.exact-popup-prose{font-size:15px;line-height:1.75;color:#5e4938}.exact-popup-prose p{margin:0 0 16px}.exact-popup-prose p:last-child{margin-bottom:0}
-@media(max-width:640px){.exact-modal-backdrop{padding:7px;align-items:stretch}.exact-modal-frame{width:100%;max-height:calc(100vh - 14px);margin:auto}.exact-modal-titlebar{min-height:70px;grid-template-columns:55px minmax(0,1fr) 55px;padding:8px 8px}.exact-modal-heading h2{font-size:20px}.exact-modal-heading-line span{width:18px}.exact-modal-nav{gap:0}.exact-modal-nav button,.exact-modal-nav a{font-size:0!important}.exact-modal-nav button svg,.exact-modal-nav a svg{width:18px;height:18px}.exact-modal-paper{padding:27px 18px 30px}.exact-modal-vlak:before,.exact-modal-vlak:after{font-size:26px}.exact-popup-highlight{font-size:18px;padding:14px 10px}}
+.exact-popup-reading{position:relative;z-index:1;max-width:660px;margin:0 auto}.exact-popup-subtitle{text-align:center;margin:0 0 20px!important;font-size:9px!important;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#7d5218}.exact-popup-highlight{margin:0 0 24px;padding:16px 20px;border-top:1px solid rgba(138,91,35,.28);border-bottom:1px solid rgba(138,91,35,.28);text-align:center;font-size:20px;line-height:1.35;font-style:italic;background:rgba(239,227,203,.42)}.exact-popup-prose{font-size:15px;line-height:1.75;color:#5e4938}.exact-popup-prose p{margin:0 0 16px}.exact-popup-prose p:last-child{margin-bottom:0}
+@media(max-width:640px){.exact-modal-backdrop{padding:7px;align-items:stretch}.exact-modal-frame{width:100%;max-height:calc(100vh - 14px);margin:auto}.exact-modal-titlebar{min-height:70px;grid-template-columns:55px minmax(0,1fr) 55px;padding:8px 8px}.exact-modal-nav{gap:0}.exact-modal-nav button,.exact-modal-nav a{font-size:0!important}.exact-modal-nav button svg,.exact-modal-nav a svg{width:18px;height:18px}.exact-modal-paper{padding:27px 18px 30px}.exact-modal-vlak:before,.exact-modal-vlak:after{font-size:26px}.exact-popup-highlight{font-size:18px;padding:14px 10px}}
 
 /* Designronde 10 — goedgekeurde Orthodoxe Tijd kaarttaal */
 .ornate-card{position:relative;overflow:hidden;border-radius:2px!important;border:1px solid #b88628!important;background:radial-gradient(circle at 50% 0,rgba(201,162,39,.10),transparent 42%),linear-gradient(145deg,#2b180f,#1a0d09)!important;color:#f5ead1!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.48),0 12px 28px rgba(25,11,6,.25)!important}
 .ornate-card:before{content:"";position:absolute;inset:9px;border:1px solid rgba(211,165,62,.38);pointer-events:none}
-.ornate-card h3{color:#f3dfb4!important;letter-spacing:.04em}.ornate-card p{color:#eadcc1!important}.ornate-card>div:first-child,.ornate-medallion{background:#1a0d09!important;border:1px solid #b88628!important;color:#d3a53e!important;box-shadow:inset 0 0 0 3px #24130d,0 0 0 1px rgba(211,165,62,.2)}
+.ornate-card h3{color:#f3dfb4!important;letter-spacing:.04em}.ornate-card p{color:#eadcc1!important}.ornate-card>div:first-child{background:#1a0d09!important;border:1px solid #b88628!important;color:#d3a53e!important;box-shadow:inset 0 0 0 3px #24130d,0 0 0 1px rgba(211,165,62,.2)}
 .ornate-card:hover{border-color:#e0b955!important;transform:translateY(-2px)}
 
 /* De paginatitel blijft staan onder de hoofdnavigatie. */
@@ -334,8 +334,8 @@ header>nav>div{justify-content:center}
 .exact-content div.grid:has(> .ornate-card){grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:28px!important}
 .ornate-card{min-height:330px!important;padding:34px 38px 30px!important;align-items:center!important;text-align:center!important;justify-content:flex-start!important;border:2px solid #a97720!important;background:radial-gradient(circle at 50% 18%,rgba(157,99,30,.14),transparent 40%),linear-gradient(145deg,#321d12,#1b0d09)!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.72),0 13px 28px rgba(25,11,6,.22)!important}
 .ornate-card:before{inset:12px;border-color:rgba(222,179,78,.62)}
-.ornate-card>div:first-child,.ornate-medallion{width:108px!important;height:108px!important;min-width:108px!important;border-radius:999px!important;border:2px solid #b9872c!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:4px auto 18px!important;background:#1b0e09!important;box-shadow:inset 0 0 0 5px #25130d,inset 0 0 0 6px rgba(210,161,56,.52),0 0 0 1px rgba(210,161,56,.28)!important}
-.ornate-card>div:first-child svg,.ornate-medallion svg{width:45px!important;height:45px!important;stroke-width:1.25!important;color:#c99635!important}
+.ornate-card>div:first-child{width:108px!important;height:108px!important;min-width:108px!important;border-radius:999px!important;border:2px solid #b9872c!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:4px auto 18px!important;background:#1b0e09!important;box-shadow:inset 0 0 0 5px #25130d,inset 0 0 0 6px rgba(210,161,56,.52),0 0 0 1px rgba(210,161,56,.28)!important}
+.ornate-card>div:first-child svg{width:45px!important;height:45px!important;stroke-width:1.25!important;color:#c99635!important}
 .ornate-card h3{margin-top:8px!important;font-size:clamp(20px,2.2vw,28px)!important;line-height:1.25!important;text-align:center!important;text-transform:uppercase!important;letter-spacing:.08em!important;color:#f2dfb7!important}
 .ornate-card h3:after{content:"✣";display:block;width:72%;margin:18px auto 0;padding-top:0;border-top:1px solid rgba(204,154,52,.65);font-size:16px;line-height:0;color:#c59635}
 .ornate-card p{margin-top:20px!important;max-width:460px!important;font-size:15px!important;line-height:1.7!important;text-align:center!important;color:#f1e4cc!important}
@@ -394,14 +394,14 @@ header>div.bg-bark>div{position:relative}
 .ornate-card{height:390px!important;min-height:390px!important;max-height:390px!important;box-sizing:border-box!important;position:relative!important;overflow:hidden!important;padding:32px 34px 28px!important;border:2px solid #a97720!important;background:radial-gradient(circle at 50% 16%,rgba(157,99,30,.15),transparent 40%),linear-gradient(145deg,#321d12,#190c08)!important;color:var(--ot-ivory)!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.75),0 13px 28px rgba(25,11,6,.22)!important;display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important}
 .ornate-card:before{content:""!important;position:absolute!important;inset:12px!important;border:1px solid rgba(222,179,78,.66)!important;pointer-events:none!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg transform='translate(44 0) scale(-1 1)'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg transform='translate(0 44) scale(1 -1)'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg transform='translate(44 44) scale(-1 -1)'%3E%3Cpath d='M4 25C4 12 12 4 25 4M8 21c0-7 6-13 13-13M4 10c6 0 10-4 10-10M10 4c0 6-4 10-10 10' fill='none' stroke='%23c59635' stroke-width='1.2'/%3E%3Ccircle cx='9' cy='9' r='1.6' fill='%23c59635'/%3E%3C/g%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:left top,right top,left bottom,right bottom!important}
 .ornate-card:after{display:none!important}
-.ornate-card>div:first-child,.ornate-medallion{width:104px!important;height:104px!important;min-width:104px!important;min-height:104px!important;border-radius:50%!important;border:2px solid var(--ot-gold)!important;background:#1a0d09!important;color:#d4a43d!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px!important;box-shadow:inset 0 0 0 5px #25130d,inset 0 0 0 6px rgba(210,161,56,.58),0 0 0 1px rgba(210,161,56,.35)!important;font-size:34px!important}
-.ornate-card>div:first-child svg,.ornate-medallion svg{width:44px!important;height:44px!important;stroke-width:1.25!important;color:#d1a03b!important}
+.ornate-card>div:first-child{width:104px!important;height:104px!important;min-width:104px!important;min-height:104px!important;border-radius:50%!important;border:2px solid var(--ot-gold)!important;background:#1a0d09!important;color:#d4a43d!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0 auto 8px!important;box-shadow:inset 0 0 0 5px #25130d,inset 0 0 0 6px rgba(210,161,56,.58),0 0 0 1px rgba(210,161,56,.35)!important;font-size:34px!important}
+.ornate-card>div:first-child svg{width:44px!important;height:44px!important;stroke-width:1.25!important;color:#d1a03b!important}
 .ornate-side-ornaments{display:block!important;height:20px;margin:0 0 5px;color:#b9852d!important;font-size:17px;letter-spacing:18px;white-space:nowrap}.ornate-side-ornaments b{font-weight:400;font-size:12px}
 .ornate-card h3{width:100%;margin:4px 0 0!important;padding-bottom:17px!important;position:relative;font-size:clamp(19px,2vw,25px)!important;line-height:1.22!important;text-transform:uppercase!important;letter-spacing:.065em!important;color:#f2dfb7!important}
 .ornate-card h3:after{content:"✣"!important;display:block!important;width:70%!important;margin:15px auto 0!important;border-top:1px solid rgba(204,154,52,.68)!important;font-size:14px!important;line-height:0!important;color:#c59635!important}
 .ornate-card p{margin:13px auto 0!important;max-width:480px!important;font-size:14px!important;line-height:1.55!important;color:#f1e4cc!important;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .ornate-card .ornate-action,.ornate-card>span:last-child,.ornate-card>a:last-child{margin-top:auto!important;padding-top:14px!important;color:#e0b454!important;font-size:11px!important;font-weight:800!important;letter-spacing:.22em!important;text-transform:uppercase!important}
-@media(max-width:700px){.ornate-card{height:370px!important;min-height:370px!important;max-height:370px!important;padding:28px 24px 25px!important}.ornate-card>div:first-child,.ornate-medallion{width:92px!important;height:92px!important;min-width:92px!important;min-height:92px!important}}
+@media(max-width:700px){.ornate-card{height:370px!important;min-height:370px!important;max-height:370px!important;padding:28px 24px 25px!important}.ornate-card>div:first-child{width:92px!important;height:92px!important;min-width:92px!important;min-height:92px!important}}
 
 /* Pascha: countdown has room; information blocks use canonical cards. */
 .pascha-countdown{min-height:300px!important;padding:32px!important;border-radius:2px!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(213,169,72,.5)!important}
@@ -410,7 +410,7 @@ header>div.bg-bark>div{position:relative}
 
 /* Feasts: no database-table look for the great feasts. */
 .feasts-page .grid.gap-px:has(> .feast-tile){gap:22px!important;background:transparent!important;border:0!important;overflow:visible!important}
-.feast-tile{height:390px!important}.feast-meta{font-size:9px!important;font-weight:800!important;letter-spacing:.17em!important;text-transform:uppercase!important;color:#d5aa4d!important}.feast-medallion{margin-bottom:4px!important}
+.feast-tile{height:390px!important}.feast-meta{font-size:9px!important;font-weight:800!important;letter-spacing:.17em!important;text-transform:uppercase!important;color:#d5aa4d!important}
 
 /* Dark introductory panels: decorated instead of flat brown slabs. */
 .feasts-page section.grid>div.bg-bark,.saint-date-panel{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 15%,rgba(169,105,32,.13),transparent 42%),linear-gradient(145deg,#2b170f,#180b08)!important;box-shadow:inset 0 0 0 7px #211109,inset 0 0 0 8px rgba(210,161,56,.58)!important}
@@ -457,8 +457,8 @@ header>nav>div{justify-content:space-between!important}
 
 /* Canonical information cards: compact, equal and inviting rather than full-screen panels. */
 .ornate-card{height:330px!important;min-height:330px!important;max-height:330px!important;padding:25px 30px 23px!important}
-.ornate-card>div:first-child,.ornate-medallion{width:82px!important;height:82px!important;min-width:82px!important;min-height:82px!important;margin:0 auto 4px!important}
-.ornate-card>div:first-child svg,.ornate-medallion svg{width:34px!important;height:34px!important}
+.ornate-card>div:first-child{width:82px!important;height:82px!important;min-width:82px!important;min-height:82px!important;margin:0 auto 4px!important}
+.ornate-card>div:first-child svg{width:34px!important;height:34px!important}
 .ornate-side-ornaments{height:15px!important;margin:0 0 2px!important;font-size:14px!important;letter-spacing:14px!important}
 .ornate-card h3{min-height:58px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;margin:0!important;padding-bottom:12px!important;font-size:clamp(17px,1.55vw,22px)!important;line-height:1.18!important}
 .ornate-card h3:after{width:62%!important;margin:11px auto 0!important}
@@ -550,8 +550,8 @@ header>nav>div{justify-content:space-between!important}
  .exact-content div.grid:has(> .ornate-card),
  #vasten div.grid:has(> .ornate-card){grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important}
  .ornate-card{height:310px!important;min-height:310px!important;max-height:310px!important;padding:24px 22px 22px!important}
- .ornate-card>div:first-child,.ornate-medallion{width:76px!important;height:76px!important;min-width:76px!important;min-height:76px!important;margin:0 auto 12px!important}
- .ornate-card>div:first-child svg,.ornate-medallion svg{width:34px!important;height:34px!important}
+ .ornate-card>div:first-child{width:76px!important;height:76px!important;min-width:76px!important;min-height:76px!important;margin:0 auto 12px!important}
+ .ornate-card>div:first-child svg{width:34px!important;height:34px!important}
  .ornate-card h3{font-size:19px!important;margin-top:4px!important}
  .ornate-card h3:after{margin-top:12px!important}
  .ornate-card p{font-size:13px!important;line-height:1.5!important;margin-top:12px!important}
@@ -664,7 +664,6 @@ header>nav>div{justify-content:space-between!important}
 .etmaal-ring-text{position:absolute;top:0;width:250px;transform:translateY(-50%)}
 .etmaal-ring-node.is-right .etmaal-ring-text{left:42px;text-align:left}
 .etmaal-ring-node.is-left .etmaal-ring-text{right:42px;text-align:right}
-
 
 /* Vasten vandaag: ornate wide card + legible practical status. */
 .v17-fasting-today{position:relative;border:2px solid #a97720!important;border-radius:3px!important;background:radial-gradient(circle at 50% 0,rgba(183,123,33,.13),transparent 42%),linear-gradient(145deg,#30180f,#160a07)!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(205,158,55,.52),0 16px 36px rgba(42,19,7,.2)!important}
@@ -826,10 +825,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 .saints-lowlands h2{color:#d9aa45!important;opacity:1!important}.saints-lowlands p,.saints-lowlands blockquote{color:#f1e3c4!important;opacity:1!important}.saints-lowlands>div:nth-child(2){opacity:1!important}
 
 /* Bouw 22 — definitive supplied asset integration */
-.provided-menu-icon{width:58px;height:58px;object-fit:contain;display:block;filter:drop-shadow(0 3px 6px rgba(48,24,10,.18))}
-.vandaag-item>.provided-menu-icon:first-child{width:58px!important;height:58px!important;object-fit:contain;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
-.provided-card-icon,.provided-cycle-icon{width:100%;height:100%;object-fit:contain;display:block}
-.ornate-medallion .provided-card-icon{width:82px!important;height:82px!important;max-width:none!important}
+.provided-cycle-icon{width:100%;height:100%;object-fit:contain;display:block}
 .provided-inline-icons{display:flex;justify-content:center;gap:18px;margin:0 auto 16px}.provided-inline-icons img{width:74px;height:74px;object-fit:contain}
 .vasten-vandaag-status-icon{width:104px;height:104px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 5px 10px rgba(0,0,0,.3))}
 .provided-wide-frame{background-image:linear-gradient(rgba(28,19,13,.88),rgba(28,19,13,.88)),url('/images/ui/vasten-vandaag/10-Leeg-breed-kader.webp')!important;background-size:100% 100%!important;background-position:center!important}
@@ -845,9 +841,8 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 .exact-content div.grid:has(> .ornate-card),.calendar-action-grid{gap:14px!important}
 .ornate-card,.calendar-action-card,.feast-tile{height:auto!important;min-height:0!important;max-height:none!important;padding:18px 18px 14px!important}
 .ornate-card:before{inset:7px}
-.ornate-card>div:first-child,.ornate-medallion,.calendar-action-card .calendar-action-medallion,.feast-medallion{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;margin:0 auto 2px!important}
-.ornate-medallion .provided-card-icon{width:54px!important;height:54px!important}
-.ornate-card>div:first-child svg,.ornate-medallion svg{width:26px!important;height:26px!important}
+.ornate-card>div:first-child,.calendar-action-card .calendar-action-medallion{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;margin:0 auto 2px!important}
+.ornate-card>div:first-child svg{width:26px!important;height:26px!important}
 .ornate-side-ornaments,.calendar-action-card .ornate-side-ornaments{height:12px!important;margin:0 0 2px!important;font-size:11px!important;letter-spacing:10px!important}
 .ornate-card h3,.calendar-action-card h3{min-height:0!important;padding-bottom:8px!important;font-size:16px!important}
 .ornate-card h3:after,.calendar-action-card h3:after{margin-top:8px!important;width:56%!important}
@@ -871,13 +866,13 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
    hun (lichte) tekst moet daar donker zijn. Donkere kaarten erin behouden hun gouden tekst (hogere specificiteit hierboven). */
 .exact-content > section:not(:first-child)[class*="bg-bark"] :is(p,li,.text-ink-soft){color:#583b2b!important;opacity:1!important}
 .exact-content > section:not(:first-child)[class*="bg-bark"] :is(blockquote,.font-display.italic){color:#6d3528!important;opacity:1!important}
-.exact-content > section:not(:first-child)[class*="bg-bark"] :is([class*="text-gold-light"],a.border){color:#8a5a1e!important}
+.exact-content > section:not(:first-child)[class*="bg-bark"] :is([class*="text-gold-light"],a.border){color:#7d5218!important}
 .exact-content > section:not(:first-child)[class*="bg-bark"] :is([class*="text-cream"],h1,h2,h3){color:#2b1d12!important}
 
 /* Bouw 23 — tijdlijn en jaarkiezer stonden op perkament met crème tekst */
 .exact-content .v15-cycle-timeline .timeline-title{color:#5a3523!important;opacity:1!important}
-.exact-content .v17-year-next{color:#8a5a1e}
-.exact-content .saints-ending span{color:#8a5a1e}
+.exact-content .v17-year-next{color:#7d5218}
+.exact-content .saints-ending span{color:#7d5218}
 
 /* Bouw 24 — één knopstijl voor alle actieknoppen (referentie: de gebedskaarten).
    Lichte vlakken: gouddiepe pil; donkere vlakken: goudlichte pil. Hover: gouden vulling.
@@ -886,7 +881,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
   display:inline-flex!important;align-items:center;justify-content:center;gap:8px;width:auto!important;min-height:0!important;max-width:100%;
   padding:8px 18px!important;border:1px solid rgba(138,90,30,.65)!important;border-radius:9999px!important;
   background:transparent!important;background-image:none!important;box-shadow:none!important;
-  color:#8a5a1e!important;font-family:inherit;font-size:12px!important;font-weight:700!important;letter-spacing:.14em!important;line-height:1.3!important;
+  color:#7d5218!important;font-family:inherit;font-size:12px!important;font-weight:700!important;letter-spacing:.14em!important;line-height:1.3!important;
   text-align:center;text-transform:uppercase!important;text-decoration:none!important;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s;
 }
 #top#top :is(.btn-pill,.vandaag-main-button) svg{width:14px;height:14px;flex:none}
@@ -910,7 +905,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 #top#top .v17-fasting-today:before,#top#top .v17-fasting-today:after{color:#a97720}
 #top#top .v17-fasting-today :is(h1,h2){color:#2b1d12!important}
 #top#top .v17-fasting-today p{color:#5b402e!important;opacity:1!important}
-#top#top .v17-fasting-today p[class*="text-gold-light"]{color:#8a5a1e!important}
+#top#top .v17-fasting-today p[class*="text-gold-light"]{color:#7d5218!important}
 #top#top .v17-fasting-today .fasting-food-grid{border-top:1px solid rgba(169,119,32,.35)!important;gap:14px!important}
 #top#top .v17-fasting-today .fasting-food-item{
   padding:14px 6px 12px;background:rgba(255,251,240,.75);border:1px solid rgba(169,119,32,.4);border-radius:2px;
@@ -942,7 +937,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
   background:radial-gradient(circle at 50% 0,rgba(201,162,39,.16),transparent 60%),linear-gradient(180deg,#fdf7e8,#f5e9cd);
   border:1px solid rgba(169,119,32,.6);box-shadow:inset 0 0 0 4px #f8efd9,inset 0 0 0 5px rgba(169,119,32,.3),0 8px 18px rgba(58,33,16,.09)}
 #top#top .cal-saints-name{font-family:var(--font-display);font-size:24px;line-height:1.2;font-weight:600;color:#2b1d12;margin:12px 0 0}
-#top#top .cal-saints-title{font-style:italic;font-size:14px;line-height:1.4;color:#8a5a1e;margin:6px 0 0;opacity:1}
+#top#top .cal-saints-title{font-style:italic;font-size:14px;line-height:1.4;color:#7d5218;margin:6px 0 0;opacity:1}
 #top#top .cal-saints-text{font-size:14px;line-height:1.6;color:#5b402e;margin:12px 0 0;text-align:left}
 #top#top .cal-saints-rule{display:flex;align-items:center;gap:10px;margin:18px 0 10px;color:#b88628;font-size:14px;line-height:1}
 #top#top .cal-saints-rule:before,#top#top .cal-saints-rule:after{content:"";flex:1;border-top:1px solid rgba(169,119,32,.4)}
@@ -952,7 +947,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 #top#top .cal-saints ul>li:first-child{border-top:0}
 #top#top .cal-saints li:before{content:"✣";position:absolute;left:0;top:7px;font-size:10px;color:#b88628}
 #top#top .cal-saints details{margin-top:6px}
-#top#top .cal-saints summary{cursor:pointer;list-style:none;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e;padding:8px 0 2px;text-align:center}
+#top#top .cal-saints summary{cursor:pointer;list-style:none;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7d5218;padding:8px 0 2px;text-align:center}
 #top#top .cal-saints summary::-webkit-details-marker{display:none}
 #top#top .cal-saints summary:after{content:" ▾"}
 #top#top .cal-saints details[open] summary:after{content:" ▴"}
@@ -981,8 +976,6 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
   #top#top .vandaag-item:before,#top#top .vandaag-item:after{font-size:26px;line-height:1;color:#b98429;z-index:2}
   #top#top .vandaag-item:before{left:10px;top:8px}
   #top#top .vandaag-item:after{right:10px;bottom:8px}
-  #top#top .vandaag-item>.provided-menu-icon:first-child{width:112px!important;height:112px!important;filter:drop-shadow(0 6px 10px rgba(48,24,10,.28));position:relative;z-index:1}
-  #top#top .vandaag-list>:nth-child(-n+2)>.provided-menu-icon:first-child{width:140px!important;height:140px!important}
   #top#top .vandaag-item>div{display:block!important;position:relative;z-index:1}
   /* vaag watermerk van het eigen medaillon */
   #top#top .vandaag-item>div:after{content:"";position:absolute;right:-70px;top:50%;width:230px;height:230px;transform:translateY(-50%);
@@ -996,7 +989,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
   #top#top .vandaag-item>svg:last-child,#top#top .vandaag-item>a{display:none!important}
   #top#top .vandaag-readings-item button{display:block;font-size:16px;line-height:1.5;color:#3b2518;text-align:left;margin-top:4px}
   #top#top .vandaag-readings-item button span{font-size:16px!important;margin:0;color:inherit}
-  #top#top .vandaag-readings-item button:hover{color:#8a5a1e;text-decoration:underline}
+  #top#top .vandaag-readings-item button:hover{color:#7d5218;text-decoration:underline}
 }
 #top#top .vandaag-main-button{display:flex!important;width:fit-content!important;margin-left:auto!important;margin-right:auto!important}
 @media(min-width:980px){
@@ -1014,7 +1007,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 
 /* Bouw 32 — Etmaal: venster met de tekst van een dienst (uur, psalmen, PDF-tekst) */
 #top#top .etmaal-popup-keuze{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:18px 0 6px}
-#top#top .etmaal-popup-keuze .btn-pill.is-actief{background:#8a5a1e!important;border-color:#8a5a1e!important;color:#fbf3df!important}
+#top#top .etmaal-popup-keuze .btn-pill.is-actief{background:#7d5218!important;border-color:#7d5218!important;color:#fbf3df!important}
 #top#top .etmaal-pdf-melding{text-align:center;color:#5b402e;margin:22px 0 6px;font-size:15px}
 #top#top .etmaal-pdf{margin-top:14px;text-align:left}
 #top#top .etmaal-pdf-pagina{padding:14px 0}
@@ -1029,8 +1022,6 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
   #top#top .vandaag-list>:nth-child(7){grid-column:1/-1}
   #top#top .vandaag-item{min-height:0!important;padding:20px 22px!important;column-gap:18px}
   #top#top .vandaag-list>:nth-child(-n+2){min-height:0!important}
-  #top#top .vandaag-item>.provided-menu-icon:first-child,
-  #top#top .vandaag-list>:nth-child(-n+2)>.provided-menu-icon:first-child{width:76px!important;height:76px!important}
   #top#top .vandaag-item b,#top#top .vandaag-list>:nth-child(-n+2) b{font-size:20px!important}
   #top#top .vandaag-item em{font-size:15px!important;margin-top:6px}
   #top#top .vandaag-item span:not(.btn-pill){font-size:14px!important;margin-top:5px}
@@ -1105,10 +1096,10 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 #top#top .exact-popup-sectie ul{list-style:none;margin:6px 0 14px;padding:0}
 #top#top .exact-popup-sectie li{position:relative;padding:5px 0 5px 22px;font-size:15.5px;line-height:1.6;color:#3b2518}
 #top#top .exact-popup-sectie li:before{content:"✣";position:absolute;left:0;top:7px;font-size:11px;color:#b88628}
-#top#top .exact-popup-sectie p.exact-popup-note{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a5a1e;margin-top:-2px}
+#top#top .exact-popup-sectie p.exact-popup-note{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7d5218;margin-top:-2px}
 #top#top .exact-popup-tabel-wrap{overflow-x:auto;margin:6px 0 12px}
 #top#top .exact-popup-tabel{width:100%;border-collapse:collapse;font-size:15px}
-#top#top .exact-popup-tabel th{text-align:left;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e;padding:8px 10px;border-bottom:2px solid rgba(169,119,32,.5)}
+#top#top .exact-popup-tabel th{text-align:left;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7d5218;padding:8px 10px;border-bottom:2px solid rgba(169,119,32,.5)}
 #top#top .exact-popup-tabel td{padding:9px 10px;border-bottom:1px solid rgba(169,119,32,.25);color:#3b2518;vertical-align:top;line-height:1.45}
 #top#top .exact-popup-tabel tr:nth-child(even) td{background:rgba(201,162,39,.07)}
 #top#top .exact-popup-tabel td:first-child{font-family:var(--font-display);font-weight:600;color:#2b1d12}
@@ -1132,7 +1123,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 header>nav{background:linear-gradient(180deg,#f8efdb,#f0e3c5)!important;border-top:1px solid rgba(184,134,40,.3)!important;border-bottom:1px solid rgba(184,134,40,.5)!important;color:#4a2b1d!important}
 header>nav a,header>nav button{color:#5b402e!important}
 header>nav a:hover,header>nav button:hover{color:#2b1d12!important}
-header>nav [class*="text-gold-light"]{color:#8a5a1e!important}
+header>nav [class*="text-gold-light"]{color:#7d5218!important}
 header>nav svg{color:inherit}
 /* uitklapmenu's (Cycli) */
 header>nav [class*="bg-[#1b110d]"]{background:#fbf3e3!important;border-color:rgba(184,134,40,.6)!important;box-shadow:0 18px 36px rgba(70,42,18,.22)!important}
@@ -1146,9 +1137,9 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 @media(min-width:980px){#top#top .vandaag-item:hover{padding-left:22px!important}}
 
 /* Bouw 41 — geen bruin vlak meer onder de hero-banners: de sectie is zo hoog als de afbeelding zelf
-   (uitgezonderd .page-hero-crop, zie Bouw 56: die banners worden juist bewust uitgesneden) */
-#top#top .exact-content>section:first-child:not(.page-hero-crop){height:auto!important;min-height:0!important}
-#top#top .exact-content>section:first-child:not(.page-hero-crop) img{height:auto!important;object-fit:contain!important}
+   */
+#top#top .exact-content>section:first-child{height:auto!important;min-height:0!important}
+#top#top .exact-content>section:first-child img{height:auto!important;object-fit:contain!important}
 
 /* Bouw 42 — pop-ups: grotere tikzone voor sluiten en vorige/volgende (48×48px, kruisje 24px) */
 #top#top .exact-modal-close{position:relative;display:inline-grid!important;place-items:center;width:48px!important;height:48px!important;min-width:48px;padding:0!important;font-size:0!important}
@@ -1166,7 +1157,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .etmaal-ring-node:hover .dienst-kaart,#top#top button.dienst-kaart:hover{background:linear-gradient(180deg,#fdf8ea,#f6ebd3);
   box-shadow:inset 0 0 0 4px #f8efd9,inset 0 0 0 5px rgba(169,119,32,.5),0 14px 26px rgba(58,33,16,.13)}
 #top#top .dienst-kaart-titel{font-size:19px;font-weight:500;line-height:1.15;color:#2b1d12}
-#top#top .dienst-kaart-tijd{display:block;margin-top:4px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e}
+#top#top .dienst-kaart-tijd{display:block;margin-top:4px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7d5218}
 #top#top .dienst-kaart-tekst{display:block;margin-top:6px;font-size:13.5px;line-height:1.4;color:#5b402e}
 #top#top .dienst-kaart-cta{margin-top:10px;padding:6px 15px!important;font-size:11px!important;letter-spacing:.12em!important}
 #top#top .etmaal-ring-text{width:236px;text-align:left}
@@ -1176,8 +1167,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .etmaal-ring-text .dienst-kaart{width:100%}
 /* lijst op tablet/mobiel */
 #top#top .dienst-kaart-rij{display:flex;align-items:center;padding:14px 26px 14px 18px;min-height:88px}
-#top#top .dienst-kaart-medaillon img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 4px 7px rgba(48,24,10,.28))}
-#top#top .dienst-kaart-medaillon svg{box-sizing:content-box;padding:11px;border-radius:999px;border:1px solid #b88628;background:#211109}
 #top#top .dienst-kaart-rij .dienst-kaart-tijd{margin-top:3px;font-size:10.5px}
 #top#top .dienst-kaart-rij .dienst-kaart-tekst{margin-top:3px;font-size:13px}
 
@@ -1272,14 +1261,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 
   .vm-medaillon{position:relative;width:clamp(124px,35vw,150px);aspect-ratio:1;margin:clamp(34px,8.6vw,38px) auto clamp(32px,8.2vw,36px)}
   .vm-medaillon img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid rgba(184,134,40,.75);box-shadow:0 10px 24px rgba(120,80,30,.22)}
-  .vm-ring{position:absolute;border-radius:50%;pointer-events:none}
-  .vm-ring-1{inset:-10px;border:1px solid rgba(184,134,40,.5)}
-  .vm-ring-2{inset:-20px;border:1px dotted rgba(184,134,40,.5)}
-  .vm-kruis{position:absolute;display:flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:50%;background:#f6ecd6;color:#b07d1f;font-size:17px;line-height:1}
-  .vm-kruis-n{top:-20px;left:50%;transform:translate(-50%,-50%)}
-  .vm-kruis-z{bottom:-20px;left:50%;transform:translate(-50%,50%)}
-  .vm-kruis-w{left:-20px;top:50%;transform:translate(-50%,-50%)}
-  .vm-kruis-o{right:-20px;top:50%;transform:translate(50%,-50%)}
 
   .vm-weekdag{margin:0;padding-left:.5em;font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.5em;text-transform:uppercase;color:#3a2a1c}
   .vm-datum{margin:1px 0 0;font-family:var(--font-display);font-size:clamp(19px,5.6vw,24px);font-weight:600;letter-spacing:.06em;text-transform:uppercase;line-height:1.1;color:#2b1d12}
@@ -1288,7 +1269,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   /* keuzeknop met een echte tikhoogte van 44px */
   #top#top main .vm-kalender.vm-kalender.vm-kalender button{position:relative;min-height:44px!important;padding:0 16px;border:0;border-radius:999px;background:transparent;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6b4a22}
   #top#top main .vm-kalender.vm-kalender.vm-kalender button.is-actief{background:#c9a227;color:#2b1707}
-
 
   .vm-kaars{display:flex;align-items:center;justify-content:center;gap:6px;max-width:340px;margin:6px auto 0}
   .vm-kaars img{width:78px;height:auto;flex:none}
@@ -1315,30 +1295,28 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   .bottom-nav-blad a.is-actief:after{content:"";position:absolute;left:50%;bottom:6px;width:22px;height:1.5px;margin-left:-11px;background:#e8cf7a}
 }
 
-/* Bouw 52 — bruine navigatie-/actiekaarten op mobiel (max-width:767px): compact, alleen icoon + titel + sierlijn.
-   Geldt voor de kaarten met een icoon-afbeelding (Adem, Etmaal, Week, Jaar, Pascha, Vasten, Gebeden). Desktop blijft ongewijzigd. */
+/* Bouw 52 — bruine navigatie-/actiekaarten op mobiel (max-width:767px): compact, alleen titel + sierlijn.
+   Geldt voor de infokaarten (titel als eerste kind) (Adem, Etmaal, Week, Jaar, Pascha, Vasten, Gebeden). Desktop blijft ongewijzigd. */
 @media(max-width:767px){
-  #top#top .exact-content div.grid:has(> .ornate-card > div:first-child > img.provided-card-icon){grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
+  #top#top .exact-content div.grid:has(> .ornate-card > h3:first-child){grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
   #top#top .prayer-category-grid>.ornate-card:last-child:nth-child(odd){grid-column:1/-1!important;justify-self:center!important;width:calc(50% - 5px)!important;max-width:none!important}
 
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon){height:auto!important;min-height:0!important;max-height:none!important;padding:14px 8px 12px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;text-align:center!important;cursor:pointer}
+  #top#top .ornate-card.ornate-card:has(> h3:first-child){height:auto!important;min-height:0!important;max-height:none!important;padding:14px 8px 12px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;text-align:center!important;cursor:pointer}
   /* dubbele gouden rand en hoekornamenten blijven, iets kleiner */
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon):before{inset:6px!important;background-size:26px 26px!important}
-  /* bestaand rond medaillon, gecentreerd bovenaan */
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon)>div:first-child{width:54px!important;height:54px!important;min-width:54px!important;min-height:54px!important;margin:0 auto 8px!important;box-shadow:inset 0 0 0 3px #25130d,inset 0 0 0 4px rgba(210,161,56,.5),0 0 0 1px rgba(210,161,56,.3)!important}
+  #top#top .ornate-card.ornate-card:has(> h3:first-child):before{inset:6px!important;background-size:26px 26px!important}
   /* titel gecentreerd in goud met korte lijn – ornament – korte lijn */
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon) h3{width:100%!important;min-height:0!important;margin:0!important;padding:0!important;display:block!important;font-size:clamp(13px,3.6vw,15px)!important;line-height:1.2!important;letter-spacing:.05em!important;overflow-wrap:break-word;hyphens:auto;color:#f2dfb7!important}
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon) h3:after{content:"✣"!important;display:block!important;width:74%!important;max-width:110px!important;margin:8px auto 0!important;padding:0!important;border-top:0!important;font-size:13px!important;line-height:1!important;color:#c59635!important;background:linear-gradient(90deg,#b88628 0 34%,transparent 34% 66%,#b88628 66% 100%) center/100% 1px no-repeat!important}
+  #top#top .ornate-card.ornate-card:has(> h3:first-child) h3{width:100%!important;min-height:0!important;margin:0!important;padding:0!important;display:block!important;font-size:clamp(13px,3.6vw,15px)!important;line-height:1.2!important;letter-spacing:.05em!important;overflow-wrap:break-word;hyphens:auto;color:#f2dfb7!important}
+  #top#top .ornate-card.ornate-card:has(> h3:first-child) h3:after{content:"✣"!important;display:block!important;width:74%!important;max-width:110px!important;margin:8px auto 0!important;padding:0!important;border-top:0!important;font-size:13px!important;line-height:1!important;color:#c59635!important;background:linear-gradient(90deg,#b88628 0 34%,transparent 34% 66%,#b88628 66% 100%) center/100% 1px no-repeat!important}
   /* geen omschrijving, geen "Lees meer"/"Bekijk", geen extra ornamenten */
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon) p,
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon) .btn-pill,
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon) .ornate-action,
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon) .ornate-side-ornaments,
-  #top#top .ornate-card.ornate-card:has(> div:first-child > img.provided-card-icon)>span:last-child{display:none!important}
+  #top#top .ornate-card.ornate-card:has(> h3:first-child) p,
+  #top#top .ornate-card.ornate-card:has(> h3:first-child) .btn-pill,
+  #top#top .ornate-card.ornate-card:has(> h3:first-child) .ornate-action,
+  #top#top .ornate-card.ornate-card:has(> h3:first-child) .ornate-side-ornaments,
+  #top#top .ornate-card.ornate-card:has(> h3:first-child)>span:last-child{display:none!important}
 }
 /* op heel smalle schermen één kaart per rij, zodat titels nooit afbreken of worden afgesneden */
 @media(max-width:349px){
-  #top#top .exact-content div.grid:has(> .ornate-card > div:first-child > img.provided-card-icon){grid-template-columns:minmax(0,1fr)!important}
+  #top#top .exact-content div.grid:has(> .ornate-card > h3:first-child){grid-template-columns:minmax(0,1fr)!important}
   #top#top .prayer-category-grid>.ornate-card:last-child:nth-child(odd){width:auto!important;justify-self:stretch!important}
 }
 
@@ -1360,9 +1338,9 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 }
 
 /* Bouw 53 — datum- en maandknoppen bij Heiligen en Feesten: duidelijk leesbaar (desktop en mobiel) */
-#top#top .saints-days-grid button,#top#top .feast-day-grid button{display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;font-family:'Alegreya Sans',system-ui,sans-serif!important;font-size:18px!important;font-weight:700!important;line-height:1!important;letter-spacing:0!important;text-align:center!important;font-variant-numeric:lining-nums tabular-nums!important;font-feature-settings:"lnum" 1,"tnum" 1!important;color:#2b1707!important}
+#top#top .saints-days-grid button,#top#top .feast-day-grid button{display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;font-family:var(--font-body)!important;font-size:18px!important;font-weight:700!important;line-height:1!important;letter-spacing:0!important;text-align:center!important;font-variant-numeric:lining-nums tabular-nums!important;font-feature-settings:"lnum" 1,"tnum" 1!important;color:#2b1707!important}
 #top#top .saints-days-grid button:hover,#top#top .saints-days-grid button.active,#top#top .feast-day-grid button.active{color:#f6dc8a!important}
-#top#top .saints-month-grid button,#top#top .feast-month-grid button{display:flex!important;align-items:center!important;justify-content:center!important;height:auto!important;min-height:54px!important;padding:8px 4px!important;font-family:'Alegreya Sans',system-ui,sans-serif!important;font-size:clamp(13px,3.7vw,15px)!important;font-weight:800!important;letter-spacing:.07em!important;line-height:1.1!important;text-align:center!important;text-transform:uppercase!important;color:#2b1707!important}
+#top#top .saints-month-grid button,#top#top .feast-month-grid button{display:flex!important;align-items:center!important;justify-content:center!important;height:auto!important;min-height:54px!important;padding:8px 4px!important;font-family:var(--font-body)!important;font-size:clamp(13px,3.7vw,15px)!important;font-weight:800!important;letter-spacing:.07em!important;line-height:1.1!important;text-align:center!important;text-transform:uppercase!important;color:#2b1707!important}
 #top#top .saints-month-grid button.active,#top#top .feast-month-grid button.active{color:#f6dc8a!important}
 /* bijschrift boven de dagen was donkerbruin op donkerbruin */
 #top#top .saints-kicker{color:#e3c27a!important}
@@ -1421,13 +1399,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
    public/images/heroes zijn zelf al op 6.25/1 (1800×288) uitgesneden, dus dit volgt exact
    die verhouding — object-fit:cover snijdt dan niets extra weg. */
 /* Mobiel: hoger (3/1) en in het midden uitgesneden, zodat kruis, titel en ondertitel leesbaar blijven. */
-#top#top .page-hero-crop{position:relative;overflow:hidden;background:#1b0d08;aspect-ratio:3/1}
-#top#top .page-hero-crop img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;max-height:none}
 /* Bij Etmaal en Week staat de tekst rechts van het midden van de afbeelding. */
-#top#top :is(#etmaal,#week).page-hero-crop img{object-position:73% center!important}
-@media(min-width:768px){
-  #top#top .page-hero-crop{aspect-ratio:6.25/1}
-}
 
 /* Bouw 58 — er staat één pagina tegelijk in beeld (App.tsx). Verborgen pagina's blijven gemount zodat pop-ups
    die Vandaag in een andere pagina opent (week, vasten, pascha, etmaal) toch verschijnen. */
@@ -1459,7 +1431,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top main :is(.text-\[8px\],.text-\[9px\],.text-\[10px\],.text-\[10\.5px\]){font-size:11.5px}
 /* labels die elders met !important op 9–10px staan */
 #top#top#top main :is(.timeline-label,.cal-saints-label,.major-badge,.saints-kicker,.feast-meta,.saints-rule-title span,.vandaag-dayhead>span,.saints-ending span,.dienst-kaart-tijd,.vandaag-item small){font-size:11.5px!important}
-#top#top#top :is(.exact-modal-heading p,.exact-popup-subtitle){font-size:11px!important}
+#top#top#top :is(.exact-popup-subtitle){font-size:11px!important}
 
 /* Bouw 63 — MobileListRow (ui.tsx): compacte liturgische lijstregel voor mobiel (feesten, weekdagen) */
 #top#top .mlr-lijst{border-top:1px solid rgba(169,119,32,.35)}
@@ -1468,7 +1440,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top#top .mlr.is-today{background:linear-gradient(90deg,rgba(238,215,155,.55),rgba(238,215,155,.15))}
 #top#top .mlr-links{display:flex;flex:0 0 50px;flex-direction:column;align-items:center;gap:1px;font-family:var(--font-display);line-height:1.05;color:#5a2424}
 #top#top .mlr-links b{font-size:22px;font-weight:600}
-#top#top .mlr-links small{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a5a1e}
+#top#top .mlr-links small{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7d5218}
 #top#top .mlr-icoon{display:grid;flex:0 0 auto;place-items:center}
 #top#top .mlr-tekst{display:flex;min-width:0;flex:1;flex-direction:column;gap:2px}
 #top#top .mlr-titel{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.25;color:#2b1d12;text-transform:none;letter-spacing:0}
@@ -1496,7 +1468,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 
 /* Bouw 64 — centrale typografie: één stijl voor labels, sectietitels, subtitels, kaarttitels en lopende tekst.
    Klassen: .ot-label (+ .ot-label-licht op donker), .ot-sectietitel, .ot-subtitel, .ot-tekst. Oudere Heiligen-/Feesten-koppen volgen mee. */
-#top#top#top .ot-label{font-family:var(--font-body);font-size:11.5px;font-weight:800;line-height:1.45;letter-spacing:.2em;text-transform:uppercase;color:#8a5a1e}
+#top#top#top .ot-label{font-family:var(--font-body);font-size:11.5px;font-weight:800;line-height:1.45;letter-spacing:.2em;text-transform:uppercase;color:#7d5218}
 #top#top#top .ot-label.ot-label-licht{color:#e3c27a}
 #top#top#top :is(.ot-sectietitel,.saints-section-head h2){font-family:var(--font-display);font-size:clamp(26px,3.2vw,36px);font-weight:600;line-height:1.15;letter-spacing:.01em;text-transform:none;color:#2b1d12}
 #top#top#top :is(.ot-subtitel,.saints-rule-title h2){font-family:var(--font-display);font-size:clamp(21px,2.2vw,26px);font-weight:600;line-height:1.2;letter-spacing:.01em;text-transform:none;color:#2b1d12}
@@ -1504,7 +1476,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top#top .dienst-kaart-titel{text-transform:none;letter-spacing:.01em}
 #top#top#top .ot-tekst{max-width:68ch}
 /* labels op een licht vlak binnen donkere pagina's (Heiligen: paneel van vandaag) */
-#top#top#top .saints-today-panel .saints-kicker{color:#8a5a1e!important}
+#top#top#top .saints-today-panel .saints-kicker{color:#7d5218!important}
 /* lange koppen op mobiel kleiner, met behoud van hiërarchie */
 @media(max-width:767px){
   #top#top .exact-content :is(h1,h2,h3):is(.text-3xl,.text-4xl,.text-5xl,.text-2xl){font-size:clamp(23px,6.4vw,30px);line-height:1.18}
@@ -1564,10 +1536,10 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 /* Bouw 69 — desktopkop (vanaf 768px; daaronder is de kop verborgen en geldt de onderbalk).
    Zelfde familie als de onderbalk: chocolade, fijne gouden lijnen, ivoor en goud, Cormorant.
    De bestaande sierlijst is een border-image: de hoekornamenten houden zo op elke breedte dezelfde, bescheiden maat. */
-#top#top#top header.site-header>div.bg-bark{border:0 solid transparent;border-image:url(/images/ui/nav/header-achtergrond.webp) 0 110 fill / 0 52px / 0 stretch}
+
 #top#top#top header.site-header>div.bg-bark>div{width:min(calc(100% - 32px),1560px)!important;max-width:none!important;min-height:78px;gap:clamp(14px,2vw,36px);padding:0 clamp(42px,3vw,56px)}
 .kop-merk{display:flex;flex:none;align-items:center;gap:11px;color:#d9b25a;text-decoration:none}
-.kop-merk img{flex:none;width:44px;height:43px}
+.kop-merk img{flex:none;width:33px;height:40px;object-fit:contain}
 .kop-naam{display:block;font-family:var(--font-display);font-size:20px;font-weight:600;line-height:1.05;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;color:#e8cf7a}
 .kop-tagline{display:block;margin-top:5px;font-family:var(--font-display);font-size:10.5px;font-weight:600;line-height:1;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;color:#bfa982}
 .kop-nav{display:flex;flex:1;min-width:0;align-items:center;justify-content:center;gap:clamp(12px,2.3vw,44px)}
@@ -1658,7 +1630,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   .bottom-nav-blad button{position:relative;display:flex;flex:1;min-width:0;min-height:44px;align-items:center;justify-content:center;padding:0;border:0;background:none;color:#eadfc8;font-family:var(--font-display);font-size:15px;font-weight:600;cursor:pointer}
 
   /* vergrootglas rechtsboven op Vandaag */
-  #top#top main .vandaag-mobiel .vm-zoek{position:absolute;top:calc(env(safe-area-inset-top) + 6px);right:6px;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;height:44px;padding:0;border:0;border-radius:999px;background:none;color:#8a5a1e}
+  #top#top main .vandaag-mobiel .vm-zoek{position:absolute;top:calc(env(safe-area-inset-top) + 6px);right:6px;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;height:44px;padding:0;border:0;border-radius:999px;background:none;color:#7d5218}
   .vandaag-mobiel .vm-zoek svg{width:22px;height:22px;stroke-width:1.5}
 }
 @media(max-width:340px){
@@ -1689,7 +1661,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .ps-zoekrij{margin-top:14px}
 .ps-zoek{display:flex;align-items:center;gap:9px;min-height:46px;padding:0 12px;border:1px solid rgba(176,126,37,.5);border-radius:6px;background:#fbf6ea;cursor:text}
 .ps-zoek:focus-within{border-color:#b88628;box-shadow:0 0 0 2px rgba(184,134,40,.22)}
-.ps-zoek svg{width:18px;height:18px;flex:none;color:#8a5a1e;stroke-width:1.75}
+.ps-zoek svg{width:18px;height:18px;flex:none;color:#7d5218;stroke-width:1.75}
 #top#top#top .ps-zoek input{flex:1;min-width:0;min-height:0;height:44px;padding:0;border:0;background:none;outline:none;font-family:var(--font-display);font-size:17px;color:#2b1d12;-webkit-appearance:none;appearance:none}
 .ps-zoek input::placeholder{color:#86705a}
 .ps-zoek input::-webkit-search-cancel-button{display:none}
@@ -1708,7 +1680,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .ps-rij-tekst{display:flex;min-width:0;flex-direction:column;gap:1px}
 .ps-rij-titel{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.15;color:#2b1d12}
 .ps-rij-onder{overflow:hidden;font-family:var(--font-display);font-size:13.5px;line-height:1.25;white-space:nowrap;text-overflow:ellipsis;color:#6b5540}
-.ps-pijl{width:18px;height:18px;color:#8a5a1e}
+.ps-pijl{width:18px;height:18px;color:#7d5218}
 .is-zonder-tekst .ps-rij-titel{font-weight:500;color:#6b5540}
 .ps-leeg{margin:0;padding:12px 2px;font-family:var(--font-display);font-size:17px;font-style:italic;color:#6b5540}
 
@@ -1723,14 +1695,14 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .ps-paneel{padding-top:12px}
 .ps-verzen{max-width:64ch;padding:2px 4px;border-radius:4px;background:#f7eedb}
 .ps-vers{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;margin:0 0 9px}
-.ps-versnr{padding-top:3px;font-family:var(--font-display);font-size:13px;line-height:1.5;text-align:right;color:#8a5a1e}
+.ps-versnr{padding-top:3px;font-family:var(--font-display);font-size:13px;line-height:1.5;text-align:right;color:#7d5218}
 .ps-vers p{margin:0;font-family:var(--font-display);font-size:18px;line-height:1.5;color:#2b1d12}
 .ps-vers p span{display:block}
-.ps-stasis{margin:16px 0 10px 30px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1e}
+.ps-stasis{margin:16px 0 10px 30px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7d5218}
 .ps-bron{margin:12px 0 0;font-size:12.5px;color:#6b5540}
 .ps-gebruik{margin:0;padding:0;list-style:none}
 .ps-gebruik li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;padding:8px 0;border-bottom:1px solid rgba(184,134,40,.25);font-family:var(--font-display);font-size:18px;color:#2b1d12}
-.ps-gebruik a{display:inline-flex;align-items:center;min-height:44px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a5a1e;text-decoration:none}
+.ps-gebruik a{display:inline-flex;align-items:center;min-height:44px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7d5218;text-decoration:none}
 
 /* mobiel en tablet: lijst en leesblok onder elkaar, rustig venster van vier psalmen */
 @media(max-width:340px){
@@ -1840,14 +1812,14 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 /* Bouw 75 — Psalmen: Etmaal-weergave per dienst, gouden lijn onder de kop in het leesvenster */
 .ps-groep{display:flex;flex-direction:column;gap:7px}
 .ps-groep+.ps-groep{margin-top:8px}
-.ps-groep h3{display:flex;align-items:baseline;gap:8px;margin:0;padding:2px 2px 0;font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8a5a1e}
+.ps-groep h3{display:flex;align-items:baseline;gap:8px;margin:0;padding:2px 2px 0;font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7d5218}
 .ps-groep h3 span{font-weight:500;letter-spacing:.04em;color:#6b5540}
 .ps-groep h4{margin:3px 0 0;padding:0 2px;font-family:var(--font-display);font-size:15px;font-style:italic;font-weight:500;color:#5b402e}
 .ps-sier-popup{margin:8px 0 2px}
 
 /* Bouw 76 — deelknop (components/DeelKnop.tsx), links naar het psalter vanuit Etmaal en Vandaag */
 .dag-deel svg{width:18px;height:18px}
-.etmaal-naar-psalter{display:inline-flex;align-items:center;min-height:44px;margin-top:4px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a5a1e;text-decoration:none}
+.etmaal-naar-psalter{display:inline-flex;align-items:center;min-height:44px;margin-top:4px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7d5218;text-decoration:none}
 .etmaal-naar-psalter:hover{text-decoration:underline}
 .vandaag-uur-item{cursor:pointer}
 /* Psalmen: op mobiel lopen de filters door op een tweede regel in plaats van zijwaarts te scrollen */
@@ -1869,7 +1841,7 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 /* Bewaard bij favorieten (lib/favorieten.ts): gevulde bladwijzer */
 #top#top#top .leesbediening button[aria-pressed=true] .lucide-bookmark{fill:currentColor}
 #top#top .vandaag-uur-item small a{display:inline;color:inherit;text-decoration:underline;text-decoration-color:rgba(138,90,30,.45);text-underline-offset:2px}
-#top#top .vandaag-uur-item small a:hover{color:#8a5a1e}
+#top#top .vandaag-uur-item small a:hover{color:#7d5218}
 
 /* Bouw 77 — leesbaarheid: inhoudelijke kleine tekst minstens 13px (tijden van de diensten, voedingslabels bij Vasten).
    Na de algemene 11,5px-regel voor labels (Bouw 62, via :is() zwaarder), daarom aan het eind en met dubbele klasse. */
@@ -1883,7 +1855,7 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 :where(a[href],button,select,input,textarea,summary,[role=button],[role=link],[tabindex]:not([tabindex="-1"])):focus-visible{outline:2px solid #b88628;outline-offset:2px}
 /* Schuifbalken en tekstcursor in de goudtint (scrollbar-color erft door naar pop-ups en lijsten); op het donkere zoekpaneel lichter goud */
 html{scrollbar-color:rgba(138,90,30,.55) transparent}
-:where(input,textarea){caret-color:#8a5a1e}
+:where(input,textarea){caret-color:#7d5218}
 .zoek-paneel{scrollbar-color:rgba(232,207,122,.45) transparent}
 .zoek-veld input{caret-color:#e8cf7a}
 /* Heiligen: "(kerkelijke kalender)" had te weinig contrast (3,7:1) */
@@ -1892,7 +1864,7 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 /* Bouw 79 — uit de critique van de mobiele versie (.impeccable/critique):
    Vandaag mobiel: onder Vasten, Schriftlezingen en Heiligen staat meteen het antwoord van vandaag (max. 2 regels) */
 /* Bronvermelding onder een citaat in de (licht gemaakte) overgangsblokken: was lichtgoud op perkament (±1,5:1) */
-#top#top#top .exact-content > section:not(:first-child)[class*="bg-bark"] cite.ot-label{color:#8a5a1e!important}
+#top#top#top .exact-content > section:not(:first-child)[class*="bg-bark"] cite.ot-label{color:#7d5218!important}
 /* De pop-up krijgt de focus bij openen (Modal.tsx); het venster zelf hoeft geen ring */
 .exact-modal-frame:focus{outline:none}
 /* Zeer smal scherm of 200% zoom (onder 300px): niets meer buiten beeld of over elkaar */
@@ -1902,13 +1874,10 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
   .bottom-nav span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .exact-modal-titlebar{grid-template-columns:auto minmax(0,1fr) auto!important;padding:6px 4px!important}
   .dag-navrij{flex-wrap:wrap;justify-content:center}
-  .exact-modal-heading h2{font-size:17px!important;overflow-wrap:break-word;hyphens:auto}
-  .exact-modal-heading p{letter-spacing:.08em!important;overflow-wrap:break-word}
 }
 
 /* Bouw 80 — Vandaag leeft mee: liturgische kleur rond het medaillon, een flakkerende kaars; gebedssnoer op Adem.
    Beweging alleen waar het iets betekent (kaarsvlam, knoop gebeden) en uit bij "minder beweging". */
-.vm-ring-1{border:2px solid color-mix(in srgb,var(--dag-kleur,#b88628) 80%,transparent)}
 .vm-vlam{position:relative;display:inline-flex;flex:none}
 .vm-vlam:after{content:"";position:absolute;left:50%;top:-10px;width:52px;height:52px;margin-left:-26px;border-radius:50%;background:radial-gradient(circle,rgba(255,196,92,.62),rgba(255,170,60,.22) 42%,transparent 70%);pointer-events:none;transform-origin:50% 62%;animation:vm-vlam 3.4s ease-in-out infinite}
 @keyframes vm-vlam{0%,100%{opacity:.72;transform:scale(1)}17%{opacity:.96;transform:scale(1.07) translateY(-1px)}33%{opacity:.66;transform:scale(.96)}51%{opacity:.9;transform:scale(1.04)}69%{opacity:.76;transform:scale(.99) translateY(1px)}84%{opacity:.94;transform:scale(1.06)}}
@@ -1921,7 +1890,7 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 .snoer-knoop{fill:#f3e8d0;stroke:rgba(176,126,37,.75);stroke-width:1.2;transition:fill .25s ease-out,stroke .25s ease-out}
 .snoer-knoop.is-merk{fill:#ead8ae}
 .snoer-knoop.is-gebeden{fill:#5a1716;stroke:#b88628}
-.snoer-kruis{position:absolute;left:50%;top:calc(32 / 300 * 100%);width:22px;height:33px;margin:-17px 0 0 -11px;color:#8a5a1e}
+.snoer-kruis{position:absolute;left:50%;top:calc(32 / 300 * 100%);width:22px;height:33px;margin:-17px 0 0 -11px;color:#7d5218}
 .snoer-telling{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
 .snoer-telling b{font-family:var(--font-display);font-size:58px;font-weight:600;line-height:1;color:#2b1d12;font-variant-numeric:lining-nums tabular-nums}
 .snoer-telling small{margin-top:4px;font-family:var(--font-body);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#6b5540}
@@ -1938,9 +1907,6 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 /* Bouw 81 — tijd en beweging: aftellen naar het volgende grote feest (Vandaag), één rustige overgang, leesvoortgang.
    Het ene vaste moment: een pop-up schuift zacht omhoog, de gouden lijnen in de kop tekenen zich uit en het ✣ bloeit op.
    Pagina's vervagen alleen in bij wisselen. Alles uit bij "minder beweging". */
-.vm-aftel{display:block;max-width:300px;margin:4px auto 0;font-family:var(--font-display);font-size:16px;font-style:italic;line-height:1.3;color:#5a1716;text-decoration:none}
-.vandaag-aftel{display:block;margin-top:6px;font-family:var(--font-display);font-size:15px;font-style:italic;color:#5a1716;text-decoration:none}
-.vm-aftel:hover,.vandaag-aftel:hover{text-decoration:underline;text-underline-offset:3px}
 
 html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease-out}
 @keyframes pagina-in{from{opacity:0}}
@@ -1948,18 +1914,14 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 @keyframes venster-achtergrond{from{opacity:0}}
 .exact-modal-frame{animation:venster-in .36s cubic-bezier(.22,1,.36,1)}
 @keyframes venster-in{from{opacity:0;transform:translateY(16px)}}
-.exact-modal-heading-line span{animation:lijn-uit .5s .1s cubic-bezier(.22,1,.36,1) both}
-.exact-modal-heading-line span:first-child{transform-origin:right center}
-.exact-modal-heading-line span:last-child{transform-origin:left center}
 @keyframes lijn-uit{from{transform:scaleX(0)}}
-.exact-modal-heading-line b{display:inline-block;animation:ster-in .55s .18s cubic-bezier(.22,1,.36,1) both}
 @keyframes ster-in{from{opacity:0;transform:scale(.3) rotate(-60deg)}}
 
 .lees-voortgang{position:absolute;top:0;left:0;right:0;z-index:2;height:2px;background:linear-gradient(90deg,#b88628,#e8cf7a);transform:scaleX(var(--gelezen,0));transform-origin:left center;pointer-events:none}
 .lees-hervat{position:absolute;left:50%;bottom:14px;z-index:3;transform:translateX(-50%);min-height:44px;padding:0 20px;border:1px solid #b88628;border-radius:999px;background:#2b1707;box-shadow:0 8px 20px rgba(0,0,0,.28);font-family:var(--font-display);font-size:16px;font-weight:600;color:#f3dfae;cursor:pointer;animation:venster-in .36s cubic-bezier(.22,1,.36,1)}
 
 @media(prefers-reduced-motion:reduce){
-  html[data-overgang] .pagina:not(.pagina-verborgen),.exact-modal-backdrop,.exact-modal-frame,.exact-modal-heading-line span,.exact-modal-heading-line b,.lees-hervat{animation:none}
+  html[data-overgang] .pagina:not(.pagina-verborgen),.exact-modal-backdrop,.exact-modal-frame,.lees-hervat{animation:none}
 }
 
 /* Bouw 82 — Vandaag mobiel als dagboek: één kolom van zeven donkere balken met een onderregel met het antwoord van vandaag,
@@ -1977,7 +1939,6 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
   .vm-medaillon{margin-top:30px;margin-bottom:28px}
   .vm-rij{display:flex;align-items:center;gap:12px;min-height:52px;padding:5px 12px 5px 7px;border:1px solid rgba(201,162,39,.55);border-radius:6px;background:linear-gradient(180deg,#33201a,#231510);box-shadow:inset 0 0 0 2px #2a1911,inset 0 0 0 3px rgba(201,162,39,.16),0 3px 8px rgba(40,20,10,.16);color:#f6ead2;text-decoration:none;-webkit-tap-highlight-color:transparent;transition:background-color .15s}
   .vm-rij:active{background:linear-gradient(180deg,#3d2820,#2a1911)}
-  .vm-icoon{width:42px;height:42px;flex:none;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
   .vm-rij-tekst{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
   .vm-rij-tekst b{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.1;color:#f6ead2}
   .vm-rij-tekst small{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-family:var(--font-body);font-size:13px;line-height:1.28;color:#d9c6a3}
@@ -1996,21 +1957,6 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
    Hoogte met min-height in plaats van een vaste uitsnede: de tekst past altijd. Donker verloop in het midden voor contrast,
    ook boven lichte fotodelen (zon bij Jaar en Pascha).
    Pagina's zonder eigen banner gebruiken banner_08. */
-#top#top#top .page-hero-crop.page-hero{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:auto;min-height:clamp(214px,56vw,300px);padding:22px 16px 20px;overflow:hidden;background:var(--ot-bark)}
-#top#top#top .page-hero img.page-hero-beeld{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover}
-.page-hero:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 62% 78% at 50% 52%,color-mix(in srgb,var(--ot-bark) 72%,transparent),color-mix(in srgb,var(--ot-bark) 34%,transparent) 62%,color-mix(in srgb,var(--ot-bark) 12%,transparent)),linear-gradient(180deg,color-mix(in srgb,var(--ot-bark) 30%,transparent),transparent 30%,transparent 70%,color-mix(in srgb,var(--ot-bark) 40%,transparent))}
-.page-hero-tekst{position:relative;z-index:2;display:flex;max-width:min(640px,100%);flex-direction:column;align-items:center;text-align:center;text-shadow:0 2px 14px var(--ot-bark)}
-.page-hero-kruis{display:block;width:22px;height:33px;margin-bottom:8px;color:var(--ot-gold);filter:drop-shadow(0 2px 6px var(--ot-bark))}
-#top#top#top .page-hero-titel{margin:0;font-family:"Cormorant Garamond",serif;font-size:clamp(2rem,7vw,3.5rem);font-weight:500;line-height:1.02;letter-spacing:.14em;text-transform:uppercase;color:var(--ot-ivory);overflow-wrap:anywhere}
-#top#top#top .page-hero-ondertitel{margin:6px 0 0;font-family:"Cormorant Garamond",serif;font-size:clamp(1.05rem,3.5vw,1.5rem);font-weight:500;line-height:1.25;color:var(--ot-ivory)}
-.page-hero-lijn{display:flex;align-items:center;gap:10px;margin-top:10px;color:var(--ot-gold);font-size:10px;line-height:1}
-.page-hero-lijn i{display:block;width:clamp(46px,14vw,86px);height:1px;background:linear-gradient(90deg,transparent,var(--ot-gold))}
-.page-hero-lijn i:last-child{transform:scaleX(-1)}
-#top#top#top .page-hero-citaat{margin:9px 0 0;font-family:"Cormorant Garamond",serif;font-size:clamp(1rem,3vw,1.2rem);font-style:italic;line-height:1.3;color:var(--ot-gold2)}
-@media(min-width:768px){
-  #top#top#top .page-hero-crop.page-hero{min-height:clamp(240px,22vw,320px);padding:28px 24px}
-  .page-hero-kruis{width:26px;height:39px}
-}
 
 /* Bouw 84 — .bibliotheek: Heiligen en Feesten in dezelfde lichte stijl als Psalmen en de cycli (was donker).
    Zoekveld donker (zoals Psalmen en Gebeden); keuzelijsten, tegels, categorieën en resultaten licht met gouden rand;
@@ -2027,7 +1973,7 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top .bibliotheek :is(.ot-label,.saints-kicker,.saints-rule-title span){color:var(--color-gold-deep)!important}
 #top#top#top#top .bibliotheek .bieb-kop h2:after,#top#top#top#top .bibliotheek .saints-rule-title:after{content:"✣"/"";display:block!important;flex:1 0 100%;order:9;max-width:260px;margin-top:10px;background:linear-gradient(90deg,transparent,var(--bieb-rand) 25%,transparent 44%,transparent 56%,var(--bieb-rand) 75%,transparent) center/100% 1px no-repeat!important;border:0!important;color:var(--color-gold-deep)!important;font-size:12px;line-height:1!important;text-align:center!important}
 #top#top#top#top .bibliotheek .saints-rule-title{flex-wrap:wrap!important}
-#top#top#top#top .bibliotheek .bieb-kop h2:after{margin-top:12px;font-family:"Alegreya Sans",sans-serif}
+#top#top#top#top .bibliotheek .bieb-kop h2:after{margin-top:12px;font-family:var(--font-body)}
 /* zoekveld donker (zoals Psalmen), keuzelijsten licht */
 #top#top#top#top .bibliotheek .saints-search-row label{border:1px solid var(--bieb-rand)!important;background:var(--ot-bark2)!important;color:var(--ot-ivory)!important;box-shadow:none!important}
 #top#top#top#top .bibliotheek .saints-search-row label input{border:0!important;background:transparent!important;color:var(--ot-ivory)!important;box-shadow:none!important}
@@ -2040,7 +1986,7 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top .bibliotheek .saints-select select option{background:var(--color-paper);color:var(--color-ink)}
 #top#top#top#top .bibliotheek :is(.saints-search-row label,.saints-select):focus-within{border-color:var(--color-gold-deep)!important;outline:none;box-shadow:0 0 0 1px var(--color-gold-deep)!important}
 /* ZOEKEN: omlijnde knop zoals de andere knoppen op de site (geen geel vlak); brengt je naar de resultaten */
-#top#top#top#top .bibliotheek .saints-search-button{min-height:44px;border:1px solid var(--color-gold-deep)!important;border-radius:999px!important;background:transparent!important;color:var(--color-gold-deep)!important;font-family:"Alegreya Sans",sans-serif!important;font-size:13px!important;font-weight:700!important;letter-spacing:.1em!important;text-transform:uppercase;box-shadow:none!important}
+#top#top#top#top .bibliotheek .saints-search-button{min-height:44px;border:1px solid var(--color-gold-deep)!important;border-radius:999px!important;background:transparent!important;color:var(--color-gold-deep)!important;font-family:var(--font-body)!important;font-size:13px!important;font-weight:700!important;letter-spacing:.1em!important;text-transform:uppercase;box-shadow:none!important}
 #top#top#top#top .bibliotheek .saints-search-button:is(:hover,:focus-visible){background:color-mix(in srgb,var(--ot-gold) 12%,transparent)!important;outline:none;box-shadow:0 0 0 1px var(--color-gold-deep)!important}
 /* tegels: maanden, dagen, categorieën — licht met gouden rand en hoeksier; gekozen = donker met gouden tekst */
 #top#top#top#top .bibliotheek :is(.saints-month-grid,.feast-month-grid,.saints-category-grid,.saints-days-panel>div:first-child) button{position:relative;background:var(--bieb-vak)!important;border:1px solid var(--bieb-rand)!important;border-radius:4px!important;color:var(--color-ink)!important;font-family:"Cormorant Garamond",serif!important;font-variant-numeric:lining-nums;box-shadow:0 3px 10px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important;transition:border-color .18s,box-shadow .18s,color .18s,background-color .18s}
@@ -2051,14 +1997,11 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top .bibliotheek :is(.saints-month-grid,.feast-month-grid,.saints-category-grid,.saints-days-grid,.feast-day-grid,.saints-days-panel>div:first-child) button:is(:hover,:focus-visible){border-color:var(--color-gold-deep)!important;outline:none;box-shadow:0 0 0 1px var(--color-gold-deep),0 6px 14px color-mix(in srgb,var(--ot-bark) 12%,transparent)!important}
 #top#top#top#top .bibliotheek :is(.saints-month-grid,.feast-month-grid,.saints-category-grid,.saints-days-grid,.feast-day-grid,.saints-days-panel>div:first-child) button.active{background:var(--ot-bark2)!important;border-color:var(--ot-bark)!important;color:var(--ot-gold2)!important}
 #top#top#top#top .bibliotheek .saints-category-grid button.active strong{color:var(--ot-gold2)!important}
-#top#top#top#top .bibliotheek .saints-category-grid button.active>span:not(.bieb-icoon){color:color-mix(in srgb,var(--ot-ivory) 80%,var(--ot-bark2))!important}
+#top#top#top#top .bibliotheek .saints-category-grid button.active>span{color:color-mix(in srgb,var(--ot-ivory) 80%,var(--ot-bark2))!important}
 /* categoriekaarten: licht, met rond donker medaillon */
 #top#top#top#top .bibliotheek .saints-category-grid button{display:flex!important;flex-direction:column;align-items:center!important;justify-content:flex-start!important;gap:6px!important;padding:16px 12px 14px!important;text-align:center}
 #top#top#top#top .bibliotheek .saints-category-grid strong{max-width:100%;color:var(--color-ink)!important;font-family:"Cormorant Garamond",serif!important;font-size:clamp(16px,2.4vw,18px)!important;line-height:1.15;hyphens:auto;overflow-wrap:break-word}
-#top#top#top#top .bibliotheek .saints-category-grid button>span:not(.bieb-icoon){color:var(--bieb-dempt)!important;font-size:13px!important}
-.bieb-icoon{display:flex;align-items:center;justify-content:center;width:46px;height:46px;flex:0 0 auto;overflow:hidden;border-radius:50%;background:var(--ot-bark);color:var(--ot-gold);box-shadow:0 0 0 1px var(--ot-gold),0 3px 8px color-mix(in srgb,var(--ot-bark) 35%,transparent)}
-.bieb-icoon img{width:100%;height:100%;object-fit:cover}
-#top#top#top#top .bibliotheek .bieb-icoon{color:var(--ot-gold2)!important}
+#top#top#top#top .bibliotheek .saints-category-grid button>span{color:var(--bieb-dempt)!important;font-size:13px!important}
 /* dagenpaneel (na het kiezen van een maand): licht paneel in plaats van het grijze vlak van de donkere stijl */
 #top#top#top#top .bibliotheek .saints-days-panel{border:1px solid var(--bieb-rand)!important;border-radius:4px!important;background:color-mix(in srgb,var(--ot-ivory) 20%,var(--color-paper))!important;box-shadow:none!important}
 #top#top#top#top .bibliotheek .saints-days-panel>div:first-child button{min-height:36px!important;padding:0 14px!important;font-size:15px!important}
@@ -2085,10 +2028,10 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 .bieb-rij:hover{background:color-mix(in srgb,var(--ot-gold) 8%,transparent)}
 .bieb-rij:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:-2px;background:color-mix(in srgb,var(--ot-gold) 10%,transparent)}
 .bieb-rij-tekst{display:flex;min-width:0;flex-direction:column;gap:2px}
-#top#top#top#top .bieb-rij-datum{font-family:"Alegreya Sans",sans-serif;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-gold-deep)}
+#top#top#top#top .bieb-rij-datum{font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-gold-deep)}
 #top#top#top#top .bieb-rij-titel{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:600;line-height:1.2;color:var(--color-ink);overflow-wrap:anywhere}
-#top#top#top#top .bieb-rij-sub{font-family:"Alegreya Sans",sans-serif;font-size:13px;line-height:1.35;color:var(--color-ink-soft)}
-.bieb-rij-pijl{padding:0 4px 0 2px;font-family:"Alegreya Sans",sans-serif;font-size:28px;font-weight:500;line-height:1;color:var(--color-gold-deep);transition:transform .18s,color .18s}
+#top#top#top#top .bieb-rij-sub{font-family:var(--font-body);font-size:13px;line-height:1.35;color:var(--color-ink-soft)}
+.bieb-rij-pijl{padding:0 4px 0 2px;font-family:var(--font-body);font-size:28px;font-weight:500;line-height:1;color:var(--color-gold-deep);transition:transform .18s,color .18s}
 .bieb-rij:is(:hover,:focus-visible) .bieb-rij-pijl{transform:translateX(3px)}
 @media(min-width:768px){
   .bieb-rij{gap:18px;padding:16px 8px}
@@ -2168,7 +2111,7 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top .dienst-kaart:after{right:4px;bottom:4px;transform:rotate(180deg)}
 #top#top#top#top :is(.etmaal-ring-node:hover .dienst-kaart,.etmaal-ring-node:focus-visible .dienst-kaart,button.dienst-kaart:hover,button.dienst-kaart:focus-visible){border-color:var(--color-gold-deep)!important;outline:none;box-shadow:0 0 0 1px var(--color-gold-deep),0 6px 14px color-mix(in srgb,var(--ot-bark) 14%,transparent)!important}
 /* één pijl */
-.pijl{flex:none;font-family:"Alegreya Sans",sans-serif;font-size:28px;font-weight:500;line-height:1;color:var(--color-gold-deep);transition:transform .18s,color .18s}
+.pijl{flex:none;font-family:var(--font-body);font-size:28px;font-weight:500;line-height:1;color:var(--color-gold-deep);transition:transform .18s,color .18s}
 :is(button,a):is(:hover,:focus-visible)>.pijl{transform:translateX(3px)}
 #top#top#top .ps-pijl.pijl{width:auto;height:auto;font-size:24px}
 @media(max-width:767.98px){#top#top#top .vm-rij .pijl{font-size:24px}}
@@ -2193,23 +2136,13 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top :is(.ps-filters,.ps-themas,.ps-kathismas) button{border:1px solid var(--ot-rand);background:var(--ot-bark2);color:var(--ot-gold2);transition:border-color .18s,box-shadow .18s}
 #top#top#top#top :is(.ps-filters,.ps-themas,.ps-kathismas) button:is(:hover,:focus-visible){border-color:var(--ot-gold2);outline:none;box-shadow:0 0 0 1px var(--ot-gold2),0 0 14px color-mix(in srgb,var(--ot-gold2) 30%,transparent)}
 
-
 /* Bouw 90 — paginabanner op mobiel compacter (was 214px hoog): minder leesruimte kwijt, zelfde opbouw en tekst */
-@media(max-width:767.98px){
-  #top#top#top .page-hero-crop.page-hero{min-height:136px;padding:12px 16px 12px}
-  #top#top#top .page-hero-kruis{width:14px;height:21px;margin-bottom:4px}
-  #top#top#top#top .page-hero-titel{font-size:1.75rem;letter-spacing:.12em}
-  #top#top#top#top .page-hero-ondertitel{margin-top:3px;font-size:1rem}
-  #top#top#top .page-hero-lijn{margin-top:6px}
-  #top#top#top#top .page-hero-citaat{margin-top:5px;font-size:.95rem}
-}
 
 /* Bouw 91 — Vandaag (mobiel): de rijen licht, zoals de kaarten op de andere perkamentpagina's; "Nu" goud gevuld */
 @media(max-width:767.98px){
   #top#top#top .vm-rij:active{background:color-mix(in srgb,var(--ot-gold) 16%,var(--color-paper))}
   #top#top#top .vm-rij-tekst b{color:var(--color-ink)}
   #top#top#top .vm-rij-tekst small{color:var(--color-ink-soft)}
-  #top#top#top .vm-icoon{filter:drop-shadow(0 2px 3px color-mix(in srgb,var(--ot-bark) 30%,transparent))}
   #top#top#top .vm-nu{background:var(--ot-gold);color:var(--ot-bark)}
 }
 
@@ -2246,7 +2179,7 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 
 /* Bouw 94 — dagvenster (DagModal): één heilige zichtbaar, de rest achter "Meer heiligen en gedachtenissen" */
 .dag-meer summary{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--ot-rand);border-radius:4px;list-style:none;cursor:pointer;
-  font-family:"Alegreya Sans",sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--color-gold-deep)}
+  font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--color-gold-deep)}
 .dag-meer summary::-webkit-details-marker{display:none}
 .dag-meer summary:after{content:"›";margin-left:auto;font-size:22px;line-height:1;transition:transform .18s}
 .dag-meer[open] summary:after{transform:rotate(90deg)}
@@ -2364,27 +2297,12 @@ details[open]::details-content{height:auto}
 
 /* Bouw 105 — desktopbanner (vanaf 768px) laag, passend bij de aangeleverde brede webbanners (ongeveer 8:1);
    titel en kruis iets kleiner zodat alles in de strook past. Mobiel ongewijzigd (Bouw 90). */
-@media(min-width:768px){
-  #top#top#top .page-hero-crop.page-hero{min-height:clamp(150px,13vw,190px);padding:14px 24px}
-  #top#top#top .page-hero-kruis{width:18px;height:27px;margin-bottom:4px}
-  #top#top#top#top .page-hero-titel{font-size:clamp(2rem,3.4vw,2.9rem)}
-  #top#top#top#top .page-hero-ondertitel{margin-top:3px;font-size:clamp(1.05rem,1.6vw,1.3rem)}
-  #top#top#top .page-hero-lijn{margin-top:6px}
-  #top#top#top#top .page-hero-citaat{margin-top:5px}
-}
-
-/* Bouw 106 — embleem (kruis in ring) als icoon bij Heiligen naar categorie: donkere schijf alleen binnen de ring,
-   de sierknoppen steken erbuiten uit op het perkament. */
-#top#top#top#top .bibliotheek .bieb-embleem{width:52px;height:52px;overflow:visible;border-radius:0;box-shadow:none;background:radial-gradient(circle closest-side,var(--ot-bark) 0 76%,transparent 77%)}
-#top#top#top#top .bibliotheek .bieb-embleem img{object-fit:contain}
 
 /* Bouw 107 — cycli en Vasten (mobiel): dezelfde rijen als Vandaag en Gebeden (vm-rij). Desktop ongewijzigd.
    1. de dienst-/dagkaarten (Etmaal, Week, Jaar, Pascha): klein medaillon, titel, tijd en tekst op één regel eronder;
    2. de vier informatietegels (Adem, Etmaal, Week, Jaar, Pascha, Vasten): licht in plaats van donker, als rij met pijl. */
 @media(max-width:767.98px){
   #top#top#top#top .dienst-kaart-rij{min-height:52px;padding:5px 12px 5px 7px;gap:12px}
-  #top#top#top#top .dienst-kaart-rij .dienst-kaart-medaillon img{width:42px;height:42px;filter:drop-shadow(0 2px 3px color-mix(in srgb,var(--ot-bark) 30%,transparent))}
-  #top#top#top#top .dienst-kaart-rij .dienst-kaart-medaillon svg{width:22px;height:22px;padding:9px}
   #top#top#top#top .dienst-kaart-rij>span:nth-child(2){line-height:1.28}
   #top#top#top#top .dienst-kaart-rij .dienst-kaart-titel{margin-bottom:2px;font-size:17px;font-weight:600;line-height:1.1}
   #top#top#top#top .dienst-kaart-rij .dienst-kaart-tijd.dienst-kaart-tijd{display:inline;margin:0;font-size:12px!important;letter-spacing:.06em}
@@ -2393,21 +2311,19 @@ details[open]::details-content{height:auto}
   #top#top#top#top .dienst-kaart-rij .pijl{font-size:24px}
   #top#top#top#top .cyclus-paneel .space-y-3>:not(:last-child){margin-block:0 8px}
 
-  #top#top#top#top .exact-content div.grid:has(>.ornate-card>div:first-child>img.provided-card-icon){grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
-  #top#top#top#top section:has(>div>div.grid>.ornate-card>div:first-child>img.provided-card-icon){padding-block:20px!important}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon){position:relative;display:grid!important;grid-template-columns:42px minmax(0,1fr) auto;grid-template-rows:auto auto;align-content:center;align-items:center;column-gap:12px;row-gap:2px;
-    min-height:52px!important;padding:5px 12px 5px 7px!important;text-align:left!important;border:1px solid var(--ot-rand)!important;border-radius:4px!important;
+  #top#top#top#top .exact-content div.grid:has(>.ornate-card>h3:first-child){grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+  #top#top#top#top section:has(>div>div.grid>.ornate-card>h3:first-child){padding-block:20px!important}
+  #top#top#top#top .ornate-card.ornate-card:has(>h3:first-child){position:relative;display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-content:center;align-items:center;column-gap:12px;row-gap:2px;
+    min-height:52px!important;padding:7px 12px 7px 14px!important;text-align:left!important;border:1px solid var(--ot-rand)!important;border-radius:4px!important;
     background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;
     box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon):active{border-color:var(--color-gold-deep)!important}
+  #top#top#top#top .ornate-card.ornate-card:has(>h3:first-child):active{border-color:var(--color-gold-deep)!important}
   /* hoeksier linksboven (::before) en de pijl › (::after), zoals bij de andere rijen */
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon):before{content:""!important;inset:auto!important;left:3px!important;top:3px!important;width:12px!important;height:12px!important;border:0!important;background:var(--hoeksier) no-repeat center/contain!important;opacity:.8}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon):after{content:"›"!important;display:block!important;position:static!important;grid-column:3;grid-row:1/3;font-family:"Alegreya Sans",sans-serif;font-size:24px;font-weight:500;line-height:1;color:var(--color-gold-deep)}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon)>div:first-child{grid-column:1;grid-row:1/3;width:42px!important;height:42px!important;min-width:0!important;min-height:0!important;margin:0!important;border:0!important;box-shadow:none!important;background:none!important}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon)>div:first-child>img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 3px color-mix(in srgb,var(--ot-bark) 30%,transparent))}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon) h3{grid-column:2;grid-row:1;align-self:end;text-align:left!important;font-size:17px!important;font-weight:600!important;line-height:1.1!important;letter-spacing:.01em!important;text-transform:none!important;color:var(--color-ink)!important}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon) h3:after{content:none!important;display:none!important}
-  #top#top#top#top .ornate-card.ornate-card:has(>div:first-child>img.provided-card-icon) p{display:-webkit-box!important;grid-column:2;grid-row:2;align-self:start;margin:0!important;text-align:left!important;overflow:hidden!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;font-size:13px!important;line-height:1.28!important;color:var(--color-ink-soft)!important}
+  #top#top#top#top .ornate-card.ornate-card:has(>h3:first-child):before{content:""!important;inset:auto!important;left:3px!important;top:3px!important;width:12px!important;height:12px!important;border:0!important;background:var(--hoeksier) no-repeat center/contain!important;opacity:.8}
+  #top#top#top#top .ornate-card.ornate-card:has(>h3:first-child):after{content:"›"!important;display:block!important;position:static!important;grid-column:2;grid-row:1/3;font-family:var(--font-body);font-size:24px;font-weight:500;line-height:1;color:var(--color-gold-deep)}
+  #top#top#top#top .ornate-card.ornate-card:has(>h3:first-child) h3{grid-column:1;grid-row:1;align-self:end;text-align:left!important;font-size:17px!important;font-weight:600!important;line-height:1.1!important;letter-spacing:.01em!important;text-transform:none!important;color:var(--color-ink)!important}
+  #top#top#top#top .ornate-card.ornate-card:has(>h3:first-child) h3:after{content:none!important;display:none!important}
+  #top#top#top#top .ornate-card.ornate-card:has(>h3:first-child) p{display:-webkit-box!important;grid-column:1;grid-row:2;align-self:start;margin:0!important;text-align:left!important;overflow:hidden!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;font-size:13px!important;line-height:1.28!important;color:var(--color-ink-soft)!important}
 }
 
 /* Bouw 108 — de knoppen "Ontdek de …" naar een andere pagina (cycli, Vasten, Feesten, Gebeden) alleen vanaf tablet; op mobiel staan die pagina's al in de onderbalk */
@@ -2528,7 +2444,7 @@ details[open]::details-content{height:auto}
     box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important}
   #top#top#top#top .v15-major-fast:active{border-color:var(--color-gold-deep)!important}
   #top#top#top#top .v15-major-fast:before{content:""!important;inset:auto!important;left:3px!important;top:3px!important;width:12px!important;height:12px!important;border:0!important;background:var(--hoeksier) no-repeat center/contain!important;opacity:.8}
-  #top#top#top#top .v15-major-fast:after{content:"›"!important;display:block!important;position:static!important;grid-column:3;font-family:"Alegreya Sans",sans-serif;font-size:24px;font-weight:500;line-height:1;color:var(--color-gold-deep);background:none!important;border:0!important;width:auto!important;height:auto!important}
+  #top#top#top#top .v15-major-fast:after{content:"›"!important;display:block!important;position:static!important;grid-column:3;font-family:var(--font-body);font-size:24px;font-weight:500;line-height:1;color:var(--color-gold-deep);background:none!important;border:0!important;width:auto!important;height:auto!important}
   #top#top#top#top .v15-major-fast .major-icoon{grid-column:1;width:42px!important;height:42px!important;margin:0!important;position:static!important}
   #top#top#top#top .v15-major-fast>div.flex{grid-column:2;display:block!important;padding:0!important;margin:0!important}
   #top#top#top#top .v15-major-fast>div.flex:after,#top#top#top#top .v15-major-fast h4:after,#top#top#top#top .v15-major-fast>div.flex>div:after{content:none!important;display:none!important}
@@ -2538,7 +2454,6 @@ details[open]::details-content{height:auto}
 #top#top#top#top .timeline-label{color:var(--color-gold-deep)!important}
 @media(max-width:1023.98px){
   #top#top#top#top :is(.saints-gold-button,.saints-text-link){min-height:44px!important}
-  #top#top#top#top .vm-aftel{min-height:44px;display:flex;align-items:center}
   #top#top#top#top .ps-filters>button{min-width:44px;padding-inline:6px}
 }
 
@@ -2566,7 +2481,373 @@ details[open]::details-content{height:auto}
   #top#top main button.inline-flex.order-1,#top#top main button.inline-flex.order-3{min-width:44px}
 }
 .ps-rij-label{display:inline-block;margin-left:8px;padding:0 7px;border:1px solid var(--ot-rand);border-radius:999px;vertical-align:2px;
-  font-family:"Alegreya Sans",sans-serif;font-size:12px;font-weight:700;letter-spacing:.03em;line-height:1.5;color:var(--color-ink-soft)}
+  font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.03em;line-height:1.5;color:var(--color-ink-soft)}
 #top#top#top#top .ps-rij.is-zonder-tekst .ps-nummer{opacity:.55}
 #top#top#top#top .ps-rij.is-zonder-tekst .ps-pijl{opacity:.45}
 #top#top#top#top .bibliotheek .saints-category-grid button strong{overflow-wrap:normal;word-break:normal;hyphens:manual}
+
+/* Bouw 119 — testrapport P3
+   a. Geen tekst kleiner dan 12px: knoppen in de tegels (Vandaag, Etmaal), kerkelijke datum in de kalender, vastendata, "Toon nog … meer".
+   b. Psalmen, tabbalk op mobiel: rechts vervaagd als hint dat je kunt vegen; extra ruimte zodat de laatste tab helemaal in beeld komt.
+   c. Gebeden (desktop): de gebedskaarten in een categorie licht, in de kaartstijl van de rest (Bouw 114).
+   d. Kalender, introductie op mobiel: wat meer ruimte onderaan, zodat het sierhoekje de tekst niet raakt.
+   e. "Naar de inhoud": verborgen tot hij focus krijgt (eerste Tab).
+   Regel voor nieuwe blokken: een display-overschrijving altijd binnen een media query, zodat responsieve verberg-klassen blijven werken. */
+#top#top#top#top :is(.vandaag-cta,.vandaag-main-button,.dienst-kaart-cta){font-size:12px!important}
+#top#top#top#top .kal-dag-kerk{font-size:12px}
+#top#top#top#top .v15-major-fast .major-meta{font-size:12px}
+@media(max-width:767.98px){#top#top#top#top .v15-major-fast .major-meta{font-size:13px!important}}
+#top#top#top#top .cal-saints summary{font-size:12px}
+@media(max-width:767.98px){
+  #top#top#top .ps-filters{padding-right:28px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+  #top#top#top#top .kal-intro{padding-bottom:28px!important}
+}
+#top#top#top#top .prayer-choice-card{position:relative;border:1px solid var(--ot-rand)!important;border-radius:4px!important;background:linear-gradient(180deg,color-mix(in srgb,var(--ot-ivory) 25%,var(--color-paper)),color-mix(in srgb,var(--ot-ivory) 80%,var(--color-paper)))!important;box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--ot-ivory) 45%,var(--color-paper)),inset 0 0 0 5px color-mix(in srgb,var(--ot-gold) 32%,transparent),0 8px 18px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important}
+#top#top#top#top .prayer-choice-card:is(:hover,:focus-visible){border-color:var(--color-gold-deep)!important;outline:none}
+#top#top#top#top .prayer-choice-card h4{color:var(--color-ink)!important}
+#top#top#top#top .prayer-choice-card .ot-label{color:var(--color-gold-deep)!important}
+#top#top#top#top .prayer-choice-card .btn-pill{border-color:var(--color-gold-deep)!important;background:transparent!important;color:var(--color-gold-deep)!important}
+#top#top#top#top .prayer-choice-card:is(:hover,:focus-visible) .btn-pill{background:var(--color-gold-deep)!important;color:var(--color-paper)!important}
+#top#top#top#top .prayer-choice-card:before,#top#top#top#top .prayer-choice-card:after{content:"";position:absolute;width:12px;height:12px;background:var(--hoeksier) no-repeat center/contain;opacity:.8;pointer-events:none}
+#top#top#top#top .prayer-choice-card:before{left:3px;top:3px}
+#top#top#top#top .prayer-choice-card:after{right:3px;bottom:3px;transform:rotate(180deg)}
+.naar-inhoud{position:fixed;left:12px;top:-60px;z-index:300;padding:10px 16px;border:1px solid var(--ot-gold);border-radius:4px;background:var(--ot-bark);color:var(--ot-gold2);font-family:var(--font-body);font-size:14px;font-weight:700;text-decoration:none;transition:top .15s}
+.naar-inhoud:focus{top:12px;outline:2px solid var(--ot-gold2);outline-offset:2px}
+main#inhoud:focus{outline:none}
+
+/* Bouw 120 — het nieuwe kruis (public/images/ui/kruis.webp) overal in plaats van het orthodoxe kruis.
+   Het kruisteken in de tekst (Pascha in de kalender, kruisje op Vandaag, ADEM in het menu) is het silhouet in de tekstkleur,
+   zodat de liturgische kleur blijft werken. Het kruis is breder dan het oude (verhouding 0,83): iets meer breedte boven de titels. */
+.kruis-teken{display:inline-block;width:.83em;height:1em;vertical-align:-.14em;background:currentColor;
+  -webkit-mask:url(/images/ui/kruis.webp) center/contain no-repeat;mask:url(/images/ui/kruis.webp) center/contain no-repeat}
+#top#top#top .snoer-kruis{width:28px;height:33px;margin:-17px 0 0 -14px}
+
+/* Bouw 121 — nieuw Christus-icoon (Pantocrator met eigen sierrand, scripts/christus-bron.png): overal in zijn geheel tonen.
+   Geen ronde uitsnede en geen extra gouden rand meer om de afbeelding (die zou de eigen rand verdubbelen en de vier knoppen afknippen);
+   de ringen, kruisjes en de liturgische kleurring eromheen blijven. */
+#top#top#top :has(>img[src$="Christus-afbeelding.webp"]){overflow:visible!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important}
+#top#top#top img[src$="Christus-afbeelding.webp"]{object-fit:contain!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:drop-shadow(0 8px 16px color-mix(in srgb,var(--ot-bark) 28%,transparent))}
+
+/* Bouw 122 — achtergrond: één vel oud perkament (public/images/ui/perkament.webp, gemaakt met scripts/perkament.mjs),
+   vast achter de inhoud op web en mobiel; de inhoud schuift eroverheen. De effen tussenlagen (paginakader, inhoud, secties,
+   het vel van Vandaag) zijn doorzichtig; kaarten, rijen, tegels en pop-ups houden hun eigen lichte vlak.
+   Een vaste laag (position:fixed) in plaats van background-attachment:fixed, omdat dat laatste op iPhone niet werkt. */
+/* eigen stapellaag, zodat het vaste perkament (z-index -1) boven de achtergrondkleur van #top komt en onder de inhoud */
+#top#top{position:relative;z-index:0;background:#f7e4bb}
+#top#top::before{content:"";position:fixed;inset:0;z-index:-1;background:url(/images/ui/perkament.webp) center/100% 100% no-repeat;pointer-events:none}
+#top#top :is(.exact-design-page,.vandaag-design-page){background:none!important}
+#top#top :is(.exact-frame,.exact-content,.vandaag-frame){background:transparent!important}
+#top#top .exact-content>section:not(:first-child),#top#top .vandaag-paper{background-color:transparent!important;background-image:none!important}
+/* afdekvlakjes rond siertekens (✣ op een lijn of ring): hetzelfde vaste perkament, zodat ze in de achtergrond opgaan */
+#top#top#top :is(.vandaag-dayhead,.saints-today-panel)::after{background:#f7e4bb url(/images/ui/perkament.webp) center/100% 100% fixed!important}
+
+/* Bouw 123 — Vandaag (mobiel): het Christus-icoon groter. De gestippelde cirkel en de vier kruisjes erom zijn weg (het icoon heeft
+   zelf al een sierrand met vier knoppen); de dunne ring in de liturgische kleur van de dag blijft, vlak om het icoon. */
+@media(max-width:767.98px){
+  #top#top#top .vm-medaillon{width:clamp(250px,72vw,300px);margin:clamp(10px,3vw,16px) auto clamp(12px,3.5vw,16px)}
+}
+/* Adem (mobiel): het Christus-icoon even groot als op Vandaag; de ringen eromheen schalen mee */
+@media(max-width:639.98px){#top#top#top .adem-ritme .m-9{width:clamp(200px,58vw,240px);height:clamp(200px,58vw,240px);margin:28px}}
+
+/* Bouw 124 — grote lichte vlakken (geen kaarten of knoppen) worden één met de perkamentachtergrond, web en mobiel:
+   introductie en kader van de kalender, de panelen van Adem (Jezusgebed, gebedssnoer), Etmaal, Week, Jaar en Pascha,
+   drie panelen op Vasten en het kader op Feesten. De dunne goudrand blijft als ordening; kaarten, rijen en tegels houden hun vlak. */
+#top#top#top#top :is(.kal-intro,.cyclus-paneel,.snoer,.vlak){background-color:transparent!important;background-image:none!important;box-shadow:none!important}
+/* de kruisjes op de ring rond het Christus-icoon (Adem) staan nu direct op het perkament */
+#top#top#top .rounded-full.h-6.w-6[class*="bg-[#f8f1e3]"]{background:#f7e4bb url(/images/ui/perkament.webp) center/100% 100% fixed!important}
+/* ook de stroken in de kalender (maand/jaar-balk, legenda, onderste rij) en het introductievak bij Psalmen */
+#top#top#top#top :is(.kal-legenda,.ps-intro.ps-kader,.vlak [class*="bg-[#f3e9d2]"]){background-color:transparent!important;background-image:none!important;box-shadow:none!important}
+
+/* Bouw 125 — pop-ups: dezelfde perkamentachtergrond als de pagina. Het vel ligt op het vaste vlak van de pop-up
+   (het leesvlak zelf scrolt en is doorzichtig); kaarten in de pop-up houden hun lichte vlak. In de avondweergave krijgt het leesvlak
+   weer een effen ondergrond, anders zou de omkering (invert) lichte tekst op licht perkament geven. */
+#top#top#top .exact-modal-vlak{background:#f7e4bb url(/images/ui/perkament.webp) center/100% 100% no-repeat}
+#top#top#top .exact-modal-paper{background-color:transparent!important;background-image:none!important}
+html.lees-nacht #top#top#top .exact-modal-paper{background-color:#f5ecd8!important}
+
+/* Bouw 126 — proef Gebeden: sierkop (boog met kruis) in plaats van de fotobanner, vast bovenaan tijdens het scrollen.
+   De kop ligt op hetzelfde vaste perkament als de achtergrond, zodat de inhoud er naadloos onder verdwijnt. exact-content krijgt
+   overflow:clip in plaats van hidden: zelfde afsnijding, maar dan werkt position:sticky wel. */
+#top#top#top#top .exact-content:has(>.sier-kop){overflow:clip!important}
+#top#top#top#top .exact-content>section.sier-kop{position:sticky;top:0;z-index:30;display:flex;justify-content:center;height:auto!important;min-height:0!important;padding:0!important;
+  background:#f7e4bb url(/images/ui/perkament.webp) center/100% 100% fixed!important;border-bottom:1px solid var(--ot-rand)!important;box-shadow:0 8px 14px -10px color-mix(in srgb,var(--ot-bark) 45%,transparent)}
+#top#top#top#top .exact-content>section.sier-kop img{display:block!important;width:100%!important;max-width:560px;height:auto!important;object-fit:contain!important}
+@media(min-width:768px){#top#top#top#top .exact-content>section.sier-kop{top:72px}#top#top#top#top .exact-content>section.sier-kop img{max-width:520px}}
+/* sierkop: alleen de boog (doorzichtige binnenkant, het vaste perkament schijnt erdoor); kruis en titel als echte elementen,
+   meeschalend met de breedte van de boog (cqw = procent van de boogbreedte) */
+#top#top#top#top .sier-kop-binnen{position:relative;width:100%;max-width:560px;container-type:inline-size}
+#top#top#top#top .sier-kop .sier-kop-kruis{position:absolute;left:50%;top:24%;width:8.5cqw;height:10.3cqw;transform:translateX(-50%)}
+#top#top#top#top .sier-kop .sier-kop-kruis img{width:100%!important;height:100%!important;max-width:none}
+#top#top#top#top .sier-kop .sier-kop-titel{position:absolute;left:0;right:0;top:66%;margin:0;text-align:center;font-family:var(--font-display);font-size:6.4cqw;font-weight:600;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--color-ink)}
+@media(min-width:768px){#top#top#top#top .sier-kop-binnen{max-width:520px}}
+
+/* Bouw 127 — proef: de gebeden-pop-up krijgt dezelfde sierkop als de gebeden-pagina (boog, kruis, titel). Het hele
+   venster krijgt het perkament. Lange titels lopen door onder de boog in plaats van eruit te vallen. */
+#top#top#top .exact-modal-frame.met-sierkop{background:#f7e4bb url(/images/ui/perkament.webp) center/100% 100% no-repeat}
+#top#top#top .met-sierkop .exact-modal-vlak{background:transparent}
+#top#top#top .met-sierkop .exact-modal-titlebar{display:block!important;padding:0!important;background:transparent;border-bottom:1px solid var(--ot-rand);color:var(--color-ink)}
+#top#top#top .met-sierkop .exact-modal-nav{position:absolute;top:6px;z-index:1}#top#top#top .met-sierkop .exact-modal-nav-left{left:6px}#top#top#top .met-sierkop .exact-modal-nav-right{right:6px}
+#top#top#top .met-sierkop .exact-modal-nav button,#top#top#top .met-sierkop .exact-modal-nav a{color:var(--color-ink)!important;background:rgba(247,228,187,.92)!important;border-radius:50%!important}
+#top#top#top .met-sierkop .exact-modal-nav button:hover,#top#top#top .met-sierkop .exact-modal-nav a:hover{color:var(--color-gold-deep)!important}
+#top#top#top#top .met-sierkop .sier-kop-binnen{display:grid;grid-template-rows:1fr auto auto;width:100%;max-width:none;margin:0}
+#top#top#top#top .met-sierkop .sier-kop-binnen>img{grid-area:1/1/3/2;display:block;width:100%;height:auto}
+#top#top#top#top .met-sierkop .sier-kop .sier-kop-titel,#top#top#top#top .met-sierkop.sier-kop .sier-kop-titel,#top#top#top#top .met-sierkop .sier-kop-titel{grid-area:2/1;position:relative;top:auto;margin:0 9cqw 4.9cqw;overflow-wrap:break-word;hyphens:auto}
+/* avondweergave: rond de sierkop dezelfde donkere kleur als het omgekeerde leesvlak (#1d1400), titel en sluitknop licht */
+html.lees-nacht #top#top#top .exact-modal-frame.met-sierkop{background:#1d1400}
+html.lees-nacht #top#top#top#top .met-sierkop .sier-kop-titel{color:#f2dfaa}
+html.lees-nacht #top#top#top .met-sierkop .exact-modal-nav :is(button,a){color:#f2dfaa!important;background:rgba(29,20,0,.88)!important}
+/* Bouw 128 — sierkop: het gouden kruis wat groter en dikker (gouden gloed om de vorm), met een zachte schaduw. */
+#top#top#top#top .sier-kop .sier-kop-kruis{width:9.5cqw;height:11.5cqw;top:23%}
+#top#top#top#top .sier-kop .sier-kop-kruis img{filter:drop-shadow(0 0 .8px #c08a2e) drop-shadow(0 0 .8px #c08a2e) drop-shadow(0 0 .6px #a8741f) drop-shadow(0 1px 2px rgba(58,29,12,.45))}
+/* Bouw 129 — sierkop: op de pagina (web) over de volle breedte van de inhoud; de gebeden-pop-up op het web smaller
+   (prettiger leesbreedte, kop minder hoog); kruis en titel krijgen een bovengrens op brede schermen. */
+@media(min-width:768px){
+  #top#top#top#top#top .exact-content>section.sier-kop img,#top#top#top#top#top .sier-kop-binnen{max-width:none!important}
+  #top#top#top .exact-modal-frame.met-sierkop{width:min(820px,calc(100vw - 40px))!important;max-width:820px!important}
+}
+#top#top#top#top .sier-kop .sier-kop-kruis{width:min(9.5cqw,60px);height:min(11.5cqw,72px)}
+#top#top#top#top .sier-kop .sier-kop-titel,#top#top#top#top .met-sierkop .sier-kop-titel{font-size:min(6.4cqw,42px)!important}
+/* Bouw 130 — sierkop op de pagina (web): een lage band over de volle breedte; alleen de bovenkant van de boog. */
+@media(min-width:768px){
+  #top#top#top#top#top .exact-content>section.sier-kop{height:200px!important}
+  #top#top#top#top#top .exact-content>section.sier-kop .sier-kop-binnen{height:100%}
+  #top#top#top#top#top .exact-content>section.sier-kop img{height:100%!important;object-fit:cover!important;object-position:center top!important}
+  #top#top#top#top#top .exact-content>section.sier-kop .sier-kop-kruis{top:52%;width:34px;height:41px}
+  #top#top#top#top#top .exact-content>section.sier-kop .sier-kop-titel{top:auto;bottom:7%;font-size:30px!important}
+}
+/* Bouw 131 — web: een eigen, vlakkere boog (boog-web.webp) voor de lage band; mobiel houdt boog.webp. */
+#top#top#top#top .sier-kop picture{display:contents}
+/* Bouw 132 — sierkop web: het kruis groter, in het perkament onder de punt. */
+@media(min-width:768px){#top#top#top#top#top .exact-content>section.sier-kop .sier-kop-kruis{top:28%;width:70px;height:82px}}
+/* Bouw 133 — avondweergave: de pop-up-kop wisselt naar de strak uitgesneden boog (geen lichte rand op donker). */
+#top#top#top#top .met-sierkop .kop-nacht,html.lees-nacht #top#top#top#top .met-sierkop .kop-dag{display:none}
+html.lees-nacht #top#top#top#top .met-sierkop .kop-nacht{display:block}
+/* Bouw 134 — Adem mee: de gouden gloed viel weg op het perkament; nu een warme Byzantijns-rode gloed (de kleur van de
+   rozetten in de sierkop), die op het perkament goed zichtbaar is. */
+#top#top .adem-gloed{background:radial-gradient(circle,rgba(150,38,26,.62) 0 44%,rgba(150,38,26,.26) 61%,transparent 72%)}
+html.lees-nacht #top#top .adem-gloed{background:radial-gradient(circle,rgba(214,92,60,.55) 0 44%,rgba(214,92,60,.2) 61%,transparent 72%)}
+/* Bouw 135 — lettertypes. Cinzel: grote paginatitels, kleine hoofdletterlabels en knoppen (Medium).
+   Cormorant Garamond: kaarttitels, navigatie en beschrijvingen (--font-body). EB Garamond: gebeden, psalmen en lange
+   leesteksten in de vensters (heiligenlevens). */
+#top#top#top#top#top#top :is(h1,.sier-kop-titel,.vm-titel){font-family:var(--font-titel)!important;font-weight:500!important}
+#top#top#top#top#top#top :is(.ot-label,.saints-kicker,.today-kicker,.kal-legenda-titel,.cal-saints-label,.vm-weekdag,.tracking-widest,.bieb-rij-datum,.timeline-label,.major-badge,.saints-rule-title span,.exact-popup-subtitle,.feast-meta,.page-label){font-family:var(--font-titel)!important;font-weight:500!important;letter-spacing:.14em!important}
+#top#top#top#top#top#top :is(.btn-pill,.saints-search-button,.saints-gold-button,.saints-outline-button,.saints-text-link,.vandaag-main-button,.vandaag-cta,.today-link,.lees-hervat,.cyclus-verder){font-family:var(--font-titel)!important;font-weight:500!important;letter-spacing:.08em!important}
+#top#top#top :is(.lees-vlak,.exact-popup-prose,.exact-popup-sectie){font-family:var(--font-lees)!important}
+#top#top#top :is(.lees-vlak,.exact-popup-prose,.exact-popup-sectie) :is(p,li,td){font-family:inherit!important}
+/* Bouw 136 — knoppen, kaarten en zoekvensters: hetzelfde perkament als de achtergrond, een paar tinten lichter, met
+   een verweerde, gedrukte dubbele inktrand (public/images/ui/knop-rand.png, scripts/knop-rand.mjs; 9-slice, dus de rand
+   blijft overal even dik). Hoekig zoals oud drukwerk. */
+:root{--knop-vlak:linear-gradient(rgba(255,250,236,.5),rgba(255,250,236,.5)),url(/images/ui/perkament.webp) center/cover}
+#top#top#top#top#top#top :is(.vm-rij,.dienst-kaart,.ornate-card,.prayer-choice-card,.saints-category-grid>button,.ps-rij,.vandaag-item,.btn-pill,.saints-search-button,.saints-gold-button,.saints-outline-button,.vandaag-main-button,.cyclus-verder,.ot-zoek input,.ps-zoek,.saints-search-row>label,.saints-select){
+  background:var(--knop-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/knop-rand.png) 60 / 15px stretch!important;border-radius:0!important;
+  box-shadow:0 3px 8px rgba(80,45,15,.1)!important;color:var(--color-ink)!important;transition:transform .12s,filter .12s}
+#top#top#top#top#top#top :is(.vm-rij,.dienst-kaart,.ornate-card,.prayer-choice-card,.saints-category-grid>button,.ps-rij,.vandaag-item,.btn-pill,.saints-search-button,.saints-gold-button,.saints-outline-button,.vandaag-main-button,.cyclus-verder):is(:hover,:focus-visible){filter:brightness(1.04)}
+#top#top#top#top#top#top :is(.vm-rij,.dienst-kaart,.ornate-card,.prayer-choice-card,.saints-category-grid>button,.ps-rij,.vandaag-item,.btn-pill,.saints-search-button,.saints-gold-button,.saints-outline-button,.vandaag-main-button,.cyclus-verder):active{transform:translateY(1px);filter:brightness(.98)}
+/* de oude sierlagen (dubbele gouden binnenrand, hoeksier) vallen weg: de gedrukte rand neemt die rol over */
+#top#top#top#top#top#top :is(.vm-rij,.dienst-kaart,.ornate-card,.prayer-choice-card,.vandaag-item)::before{display:none!important}
+/* zoekvensters: het invoerveld zelf doorzichtig in het omlijste vak; tekst en icoon in inkt en goud */
+#top#top#top#top :is(.ps-zoek,.saints-search-row>label) input{background:transparent!important;border:0!important;box-shadow:none!important;color:var(--color-ink)!important}
+#top#top#top#top :is(.ot-zoek,.ps-zoek,.saints-search-row>label) input::placeholder{color:var(--color-ink-soft)!important;opacity:1}
+#top#top#top#top :is(.ot-zoek,.ps-zoek,.saints-search-row>label) svg{color:var(--color-gold-deep)!important}
+#top#top#top#top .saints-select select{color:var(--color-ink)!important}
+/* Bouw 137 — ringen van Etmaal, Week, Jaar en Pascha: geen ronde iconen meer op de knopen, alleen een klein gouden punt
+   op de ring als plaatsaanduiding; de kaart ernaast is de knop. */
+#top#top#top#top .etmaal-ring-badge>span.rounded-full{width:14px!important;height:14px!important;border:2px solid #f7e4bb!important;background:var(--color-gold-deep)!important;box-shadow:0 0 0 1px var(--color-gold-deep)!important;transform:none!important}
+#top#top#top#top .etmaal-ring-badge>span.rounded-full>*{display:none!important}
+#top#top#top#top .etmaal-ring-node:is(:hover,:focus-visible) .etmaal-ring-badge>span.rounded-full{background:var(--color-ink)!important}
+/* Bouw 138 — keuzemenu bij het eerste bezoek: kalender (twee knoppen naast elkaar) en traditie (drie knoppen onder elkaar). */
+#top#top#top .keuze-menu{display:grid;gap:12px;max-width:440px;margin:0 auto;text-align:center}
+#top#top#top .keuze-menu .ot-label{margin:8px 0 0}
+#top#top#top .keuze-rij{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#top#top#top .keuze-tradities{display:grid;gap:10px}
+#top#top#top .keuze-menu .btn-pill{display:flex;align-items:center;justify-content:center;min-height:52px;padding:10px 14px;font-size:14px!important;text-align:center}
+#top#top#top .keuze-menu .keuze-traditie{min-height:58px;font-size:15px!important}
+#top#top#top#top#top#top#top .keuze-kalender[aria-pressed="true"]{background:linear-gradient(color-mix(in srgb,var(--color-gold) 38%,transparent),color-mix(in srgb,var(--color-gold) 38%,transparent)),url(/images/ui/perkament.webp) center/cover!important;font-weight:600!important}
+@media(max-width:359px){#top#top#top .keuze-rij{grid-template-columns:1fr}}
+#top#top#top#top#top#top#top .keuze-menu .btn-pill{width:100%!important;max-width:none!important;justify-self:stretch!important;align-self:stretch!important}
+#top#top#top .exact-modal-frame:has(.keuze-menu){width:min(560px,calc(100vw - 28px))!important;max-width:560px!important;margin-block:auto}
+/* Bouw 139 — Oud/Nieuw op mobiel Vandaag: knoppen minstens 44 px hoog (aanraakdoel) */
+#top#top#top#top#top .vm-kalender button{min-height:44px!important;height:auto!important}
+/* Bouw 140 — alle vensters krijgen de sierkop; de bovenregel (datum, soort lezing, "Lees meer") staat klein onder de titel */
+#top#top#top#top .met-sierkop .sier-kop-onder{grid-area:3/1;position:relative;margin:6px 12px 10px;text-align:center;font-family:var(--font-titel);font-size:min(2.6cqw,13px);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--color-gold-deep)}
+html.lees-nacht #top#top#top#top .met-sierkop .sier-kop-onder{color:#d9b46a}
+/* Bouw 142 — leesbaarheid: Cormorant is dun en heeft een kleine x-hoogte; beschrijvende tekst daarom minstens 15 px
+   (rijen, kaarten, lijsten, tabellen). Kleine hoofdletterlabels (Cinzel) en chips blijven zoals ze zijn. */
+#top#top#top#top#top :is(.vm-rij-tekst small,.dienst-kaart-tekst,.dienst-kaart-tijd,.ornate-card p,.prayer-choice-card p:not(.ot-label),.ps-rij-onder,.mlr-onder,.mlr-links small,.mlr-tekst small,.bieb-rij-sub,.fasting-table-naam,.fasting-table-wanneer,.major-meta,.timeline-title,.exact-content li,.exact-content .text-sm:not(.ot-label):not(.btn-pill),.exact-content .text-xs:not(.ot-label):not(.btn-pill)){font-size:15px!important;line-height:1.38!important}
+@media(min-width:768px){#top#top#top#top#top :is(.ornate-card p,.dienst-kaart-tekst,.exact-content .text-sm:not(.ot-label):not(.btn-pill)){font-size:16px!important}}
+/* lange venstertitels (twee regels) lopen onder het kruis door in plaats van eroverheen; iets kleinere titel in vensters */
+#top#top#top#top#top .met-sierkop .sier-kop-binnen{grid-template-rows:auto auto}
+#top#top#top#top#top .met-sierkop .sier-kop-binnen>img{grid-area:1/1;align-self:start}
+#top#top#top#top#top#top#top .met-sierkop .sier-kop-titel{grid-area:1/1;align-self:end;margin:21cqw 9cqw 4.9cqw!important}
+#top#top#top#top#top .met-sierkop .sier-kop-onder{grid-area:2/1}
+#top#top#top#top#top#top .met-sierkop .sier-kop-titel{font-size:min(5.6cqw,36px)!important;line-height:1.12}
+/* Bouw 143 — Ademcyclus, gebedssnoer: de witte pillen (33/50/100, Eén terug, Opnieuw) in de gedrukte perkamentstijl */
+#top#top#top#top#top#top :is(.snoer-acties button,.snoer-keuze){background:var(--knop-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/knop-rand.png) 60 / 15px stretch!important;border-radius:0!important;box-shadow:0 3px 8px rgba(80,45,15,.1)!important;color:var(--color-ink)!important}
+#top#top#top#top#top#top .snoer-acties button{font-family:var(--font-titel)!important;font-weight:500!important;letter-spacing:.06em}
+#top#top#top#top#top#top .snoer-acties button:active{transform:translateY(1px)}
+#top#top#top#top#top#top .snoer-keuze button{border-radius:0!important;background:transparent!important;color:var(--color-ink)!important;font-family:var(--font-titel)!important}
+#top#top#top#top#top#top .snoer-keuze button[aria-pressed="true"]{background:color-mix(in srgb,var(--color-gold) 45%,transparent)!important;font-weight:600!important}
+/* Bouw 144 — overige knoppen op alle pagina's in de gedrukte perkamentstijl: kalenderpijlen en -keuzes, "Vandaag",
+   maand-, dag- en categorieknoppen van Heiligen en Feesten, de tekstknoppen bij Heiligen en Oud/Nieuw op Vandaag (mobiel).
+   Geselecteerd = een goudwas over het perkament (geen donkere vulling meer). */
+#top#top#top#top#top#top :is(.kal-knop,.kal-vandaag,.saints-text-link,.saints-month-grid button,.feast-month-grid button,.saints-days-grid button,.feast-day-grid button,.vm-kalender){
+  background:var(--knop-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/knop-rand.png) 60 / 15px stretch!important;border-radius:0!important;box-shadow:0 3px 8px rgba(80,45,15,.1)!important;color:var(--color-ink)!important}
+#top#top#top#top#top#top :is(.saints-days-grid button,.feast-day-grid button,.kal-knop){border-image-width:11px!important}
+#top#top#top#top#top#top :is(.kal-vandaag,.saints-text-link,.vm-kalender button){font-family:var(--font-titel)!important;font-weight:500!important;letter-spacing:.06em!important}
+#top#top#top#top#top#top :is(.kal-vandaag,.saints-month-grid button.active,.feast-month-grid button.active,.saints-days-grid button.active,.feast-day-grid button.active,.saints-category-grid>button.active,.saints-outline-button.active){background:linear-gradient(color-mix(in srgb,var(--color-gold) 40%,transparent),color-mix(in srgb,var(--color-gold) 40%,transparent)),url(/images/ui/perkament.webp) center/cover!important;color:var(--color-ink)!important;font-weight:600!important}
+#top#top#top#top#top#top .saints-category-grid>button.active>span{color:var(--color-ink-soft)!important}
+#top#top#top#top#top#top .vm-kalender button{border-radius:0!important;background:transparent!important;color:var(--color-ink)!important}
+#top#top#top#top#top#top .vm-kalender button.is-actief{background:color-mix(in srgb,var(--color-gold) 45%,transparent)!important;font-weight:600!important}
+#top#top#top#top#top#top :is(.kal-knop,.kal-vandaag,.saints-text-link,.saints-month-grid button,.feast-month-grid button,.saints-days-grid button,.feast-day-grid button):active{transform:translateY(1px)}
+/* Bouw 145 — knoppen in de vensters: dagnavigatie, delen, lezingen, "Meer heiligen …" en de leesbediening
+   (A+, A−, avond, bladwijzer, delen) in dezelfde gedrukte perkamentstijl, vierkant. */
+#top#top#top#top#top#top :is(.dag-navrij button,.dag-navrij a,.dag-lezing,.dag-meer summary,.leesbediening button,.leesbediening a){
+  background:var(--knop-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/knop-rand.png) 60 / 12px stretch!important;border-radius:0!important;box-shadow:0 3px 8px rgba(80,45,15,.1)!important;color:var(--color-ink)!important}
+#top#top#top#top#top#top :is(.leesbediening button,.leesbediening a,.dag-deel){border-image-width:10px!important}
+#top#top#top#top#top#top .leesbediening [aria-pressed="true"]{background:linear-gradient(color-mix(in srgb,var(--color-gold) 40%,transparent),color-mix(in srgb,var(--color-gold) 40%,transparent)),url(/images/ui/perkament.webp) center/cover!important}
+#top#top#top#top#top#top :is(.dag-navrij button,.dag-lezing,.dag-meer summary,.leesbediening button):active{transform:translateY(1px)}
+/* de balk onder het leesvenster: perkament in plaats van wit */
+#top#top#top#top .exact-modal-voet{background:transparent!important;border-top:1px solid var(--ot-rand)!important}
+#top#top#top#top#top#top .leesbediening :is(button,a) :is(span,i){background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+#top#top#top#top#top#top .leesbediening :is(button,a)::before,#top#top#top#top#top#top .leesbediening :is(button,a)::after{display:none!important}
+/* keuzemenu's (Heiligen, Feesten): de gedrukte rand om het hele vak, het menu zelf zonder eigen rand */
+#top#top#top#top#top#top#top .saints-select select{border:0!important;border-image:none!important;background:transparent!important;box-shadow:none!important;height:100%!important;min-height:44px!important;padding-right:28px}
+#top#top#top#top#top#top#top .saints-select svg{color:var(--color-gold-deep)!important}
+/* Bouw 146 — Gebeden: categorie- en gebedskaarten en de zoekbalk als panelen uit één oud gebedenboek (referentie
+   "Ochtendgebeden"): licht perkament met craquelé, dubbele donkerbruine/goud-okerkader en vier manuscript-hoekornamenten
+   (public/images/ui/kaart-rand.png, scripts/kaart-rand.mjs; 9-slice). Alle kaarten gelijk, geen kleurverschillen. */
+.exact-content:has(>#gebeden){--kaart-vlak:linear-gradient(rgba(252,244,224,.55),rgba(252,244,224,.55)),url(/images/ui/perkament.webp) center/cover;--kaart-rand:url(/images/ui/kaart-rand.png) 130 / 32px stretch}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst .vm-rij,.gebed-rij,.prayer-category-grid .ornate-card,.prayer-choice-card,.ot-zoek input){
+  background:var(--kaart-vlak)!important;border:2px solid transparent!important;border-image:var(--kaart-rand)!important;border-radius:3px!important;
+  box-shadow:0 1px 2px rgba(70,40,15,.12)!important;color:#3b2314!important;transition:transform .18s ease,filter .18s ease,background .18s ease}
+/* tekst vrij van de hoekornamenten */
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst .vm-rij,.gebed-rij){min-height:78px!important;padding:12px 30px 12px 36px!important;gap:10px}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.prayer-category-grid .ornate-card,.prayer-choice-card){padding:30px 40px!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.vm-rij-tekst b,.ornate-card h3,.prayer-choice-card h4){font-family:var(--font-display)!important;font-weight:600!important;color:#3b2314!important;text-transform:none!important;letter-spacing:.01em!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.vm-rij-tekst b){font-size:19px!important;line-height:1.15!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ornate-card h3{font-size:22px!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.vm-rij-tekst small,.ornate-card p,.prayer-choice-card .ot-label){font-family:var(--font-display)!important;color:#5c4330!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .pijl{color:#7d5218!important;font-size:26px!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ornate-card h3::after{display:none!important}
+/* zoekbalk: zelfde paneel, icoon in antiek goud, gedempte bruine plaatsaanduiding */
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input{min-height:64px!important;padding:0 40px 0 64px!important;font-family:var(--font-display)!important;font-size:18px!important;color:#3b2314!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input::placeholder{color:#7a6048!important}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek>svg{left:38px!important;width:20px!important;height:20px!important;color:#8a5a1e!important;z-index:1}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek>button{right:30px!important}
+/* hover (desktop): iets warmer perkament, kader iets duidelijker, 1 px omhoog */
+@media(hover:hover){#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst .vm-rij,.gebed-rij,.prayer-category-grid .ornate-card,.prayer-choice-card):hover{background:linear-gradient(rgba(245,222,170,.42),rgba(245,222,170,.42)),url(/images/ui/perkament.webp) center/cover!important;filter:contrast(1.06);transform:translateY(-1px)}}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst .vm-rij,.gebed-rij,.prayer-category-grid .ornate-card,.prayer-choice-card):active{transform:none}
+/* mobiel: compacter, ornamenten blijven */
+@media(max-width:767.98px){
+  .exact-content:has(>#gebeden){--kaart-rand:url(/images/ui/kaart-rand.png) 130 / 24px stretch}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst .vm-rij,.gebed-rij){min-height:70px!important;padding:10px 24px 10px 28px!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .vm-rij-tekst b{font-size:18px!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input{min-height:56px!important;padding-left:56px!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek>svg{left:30px!important}
+}
+/* web: categorieën als rijkaarten zoals de referentie, twee kolommen; de hele kaart is de knop, pijl rechts */
+@media(min-width:768px){
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .prayer-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px 20px!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .prayer-category-grid .ornate-card{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-content:center;column-gap:16px;min-height:112px!important;height:auto!important;padding:20px 40px 20px 44px!important;text-align:left!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .prayer-category-grid .ornate-card h3{grid-column:1;margin:0!important;text-align:left!important;font-size:24px!important;line-height:1.15!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .prayer-category-grid .ornate-card p{grid-column:1;margin:4px 0 0!important;text-align:left!important;font-size:17px!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .prayer-category-grid .ornate-card .btn-pill{display:none!important}
+  #top#top#top#top#top#top#top .exact-content:has(>#gebeden) .prayer-category-grid .ornate-card::after{content:"›"!important;display:block!important;position:static!important;grid-column:2;grid-row:1/3;align-self:center;font-family:var(--font-display);font-size:34px;line-height:1;color:#7d5218;background:none!important;border:0!important;inset:auto!important;width:auto!important;height:auto!important}
+}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .pijl{font-weight:600!important}
+@media(min-width:768px){#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .prayer-category-grid .ornate-card::after{transform:none!important;rotate:none!important;font-size:54px!important;font-weight:700!important;line-height:.6!important;opacity:1!important;color:#7d5218!important}}
+#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .pijl{font-size:36px!important;font-weight:700!important}
+/* Gebeden: zoekbalk een paar tinten donkerder perkament dan de kaarten, zodat hij zich duidelijk onderscheidt */
+#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input{background:linear-gradient(rgba(150,100,45,.26),rgba(150,100,45,.26)),url(/images/ui/perkament.webp) center/cover!important;box-shadow:inset 0 2px 6px rgba(70,40,15,.18)!important}
+#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input::placeholder{color:#5c4330!important}
+/* Bouw 147 — de manuscriptkaarten van Gebeden op alle pagina's: rijen, kaarten en tegels krijgen het dubbele kader met
+   de vier hoekornamenten (kaart-rand.png); zoekvelden en keuzemenu's hetzelfde kader op een donkerder perkament.
+   Kleine actieknoppen (pillen, maand- en dagknoppen) houden de eenvoudige gedrukte rand: daar passen geen hoekornamenten. */
+:root{--kaart-vlak:linear-gradient(rgba(252,244,224,.55),rgba(252,244,224,.55)),url(/images/ui/perkament.webp) center/cover;--veld-vlak:linear-gradient(rgba(150,100,45,.26),rgba(150,100,45,.26)),url(/images/ui/perkament.webp) center/cover}
+#top#top#top#top#top#top#top :is(.vm-rij,.ps-rij,.dienst-kaart,.ornate-card,.vandaag-item,.prayer-choice-card,.gebed-rij,.saints-category-grid>button){
+  background:var(--kaart-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/kaart-rand.png) 130 / 22px stretch!important;border-radius:3px!important;
+  box-shadow:0 1px 2px rgba(70,40,15,.12)!important;color:#3b2314!important;transition:transform .18s ease,filter .18s ease,background .18s ease}
+/* rijen: hoog genoeg voor de hoekornamenten, tekst ertussen */
+#top#top#top#top#top#top#top :is(.vm-rij,.ps-rij,.dienst-kaart-rij,.saints-category-grid>button){min-height:62px!important;padding:10px 24px 10px 28px!important}
+@media(max-width:767.98px){#top#top#top#top#top#top#top#top .ornate-card{min-height:66px!important;padding:12px 24px 12px 28px!important}}
+/* grote tegels en kaarten (web): ruimer kader */
+@media(min-width:768px){
+  #top#top#top#top#top#top#top :is(.ornate-card,.vandaag-item,.dienst-kaart:not(.dienst-kaart-rij),.prayer-choice-card){border-image:url(/images/ui/kaart-rand.png) 130 / 30px stretch!important}
+  #top#top#top#top#top#top#top#top :is(.ornate-card,.vandaag-item){padding:30px 38px!important}
+  #top#top#top#top#top#top#top#top .dienst-kaart:not(.dienst-kaart-rij){padding:22px 32px!important}
+}
+/* zoekvelden en keuzemenu's: zelfde kader, donkerder perkament */
+#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label,.saints-select,.ot-zoek input){
+  background:var(--veld-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/kaart-rand.png) 130 / 18px stretch!important;border-radius:3px!important;box-shadow:inset 0 2px 6px rgba(70,40,15,.18)!important;color:#3b2314!important}
+#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label){min-height:56px!important;padding-left:24px!important;padding-right:20px!important}
+#top#top#top#top#top#top#top .saints-select{min-height:56px!important;padding:0 22px!important}
+#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label,.ot-zoek) input::placeholder{color:#5c4330!important;opacity:1}
+/* hover (web): iets warmer, kader iets duidelijker, 1 px omhoog */
+@media(hover:hover){#top#top#top#top#top#top#top :is(.vm-rij,.ps-rij,.dienst-kaart,.ornate-card,.vandaag-item,.prayer-choice-card,.gebed-rij,.saints-category-grid>button):hover{background:linear-gradient(rgba(245,222,170,.42),rgba(245,222,170,.42)),url(/images/ui/perkament.webp) center/cover!important;filter:contrast(1.06);transform:translateY(-1px)}}
+#top#top#top#top#top#top#top .saints-category-grid>button.active{background:linear-gradient(color-mix(in srgb,var(--color-gold) 40%,transparent),color-mix(in srgb,var(--color-gold) 40%,transparent)),url(/images/ui/perkament.webp) center/cover!important}
+/* ook de lijstrijen (Feesten, Vasten-week), de heiligenrijen, de Paascyclus-uitklapper en de vastenvakjes */
+#top#top#top#top#top#top#top :is(.mlr,.bieb-rij,.ot-kaart,.fasting-food-item){
+  background:var(--kaart-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/kaart-rand.png) 130 / 22px stretch!important;border-radius:3px!important;
+  box-shadow:0 1px 2px rgba(70,40,15,.12)!important;color:#3b2314!important;transition:transform .18s ease,filter .18s ease,background .18s ease}
+#top#top#top#top#top#top#top :is(.mlr,.bieb-rij,.ot-kaart){min-height:62px!important;padding:10px 24px 10px 28px!important}
+#top#top#top#top#top#top#top .fasting-food-item{border-image-width:16px!important;padding:14px 10px!important}
+@media(hover:hover){#top#top#top#top#top#top#top :is(.mlr,.bieb-rij,.ot-kaart):hover{background:linear-gradient(rgba(245,222,170,.42),rgba(245,222,170,.42)),url(/images/ui/perkament.webp) center/cover!important;filter:contrast(1.06);transform:translateY(-1px)}}
+#top#top#top#top#top#top#top .v15-major-fast{background:var(--kaart-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/kaart-rand.png) 130 / 26px stretch!important;border-radius:3px!important;box-shadow:0 1px 2px rgba(70,40,15,.12)!important;color:#3b2314!important;padding:26px 30px!important}
+@media(hover:hover){#top#top#top#top#top#top#top .v15-major-fast:hover{background:linear-gradient(rgba(245,222,170,.42),rgba(245,222,170,.42)),url(/images/ui/perkament.webp) center/cover!important;filter:contrast(1.06);transform:translateY(-1px)}}
+/* Bouw 148 — Vandaag (alleen web): minder lege ruimte. Kleiner icoon dichter bij de datum, compactere dagkop en
+   kaarten zo hoog als hun inhoud. */
+@media(min-width:768px){
+  #top#top#top#top .vandaag-design-page{padding-top:18px!important;padding-bottom:28px!important}
+  #top#top#top#top .vandaag-paper{padding:4px 30px 22px!important}
+  #top#top#top#top .vandaag-dayhead{padding:8px 20px 10px!important}
+  #top#top#top#top .vandaag-dayhead>*{margin-top:2px!important;margin-bottom:0!important}
+  #top#top#top#top .vandaag-dayhead i{margin:4px auto!important}
+  #top#top#top#top .vandaag-list{margin-top:24px!important;gap:12px!important}
+  #top#top#top#top#top#top#top#top#top .vandaag-item{min-height:0!important;height:auto!important;padding:18px 34px!important;align-content:center}
+  #top#top#top#top .vandaag-item :is(h3,strong){margin-top:0!important}
+  #top#top#top#top .vandaag-paper>:last-child{margin-top:14px!important}
+}
+/* Bouw 149 — web: de sierkop scrollt mee weg (alleen op mobiel blijft hij vast staan) */
+@media(min-width:768px){#top#top#top#top#top#top .exact-content>section.sier-kop{position:relative!important;top:auto!important}}
+/* Bouw 150 — Vandaag (web): de lage sierkop zoals op de andere pagina's, in plaats van het icoon; scrolt mee weg */
+#top#top#top#top .vandaag-kop{display:flex;justify-content:center;height:200px;overflow:hidden;border-bottom:1px solid var(--ot-rand)}
+#top#top#top#top .vandaag-kop .sier-kop-binnen{width:100%;max-width:none;height:100%}
+#top#top#top#top .vandaag-kop img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top}
+#top#top#top#top#top .vandaag-kop .sier-kop-kruis{top:28%;width:70px;height:82px}
+#top#top#top#top#top .vandaag-kop .sier-kop-titel{top:auto;bottom:7%;font-size:30px!important}
+/* Bouw 151 — web: de sierkop dun (160 px) met de hele boog onvervormd zichtbaar (3 : 1, dus 480 px breed),
+   gecentreerd op het perkament. Kruis en titel schalen mee met de boog. Geldt voor alle pagina's en Vandaag. */
+@media(min-width:768px){
+  #top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop){height:auto!important;padding:8px 0 4px!important}
+  #top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop) .sier-kop-binnen{width:min(100%,480px)!important;max-width:480px!important;height:auto!important;margin:0 auto!important;container-type:inline-size}
+  #top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop) img{display:block!important;width:100%!important;height:auto!important;max-width:none!important;object-fit:contain!important}
+  #top#top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop) .sier-kop-kruis{top:18%!important;width:7.6cqw!important;height:9cqw!important}
+  #top#top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop) .sier-kop-titel{bottom:auto!important;top:50%!important;font-size:5.2cqw!important}
+}
+@media(min-width:768px){#top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop) img{-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(180deg,#000 82%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(180deg,#000 82%,transparent);mask-composite:intersect}}
+/* Bouw 152 — web: geen sierkop meer op de pagina's (ook niet op Vandaag). De paginatitel blijft als onzichtbare kop
+   voor schermlezers staan; mobiel houdt de sierkop. */
+@media(min-width:768px){#top#top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop){position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important;box-shadow:none!important}}
+/* Bouw 153 — kopbalk (web) naar de aangeleverde balk: donker verweerd leer met gouden lijnen (kopbalk-leer.webp, 9-slice)
+   en daaronder de blauwe bloemenband (kopbalk-band.webp, schaalt mee met de breedte). Zoals de referentie: alleen het
+   kruis als merkteken, de actieve pagina in goud met een sierlijn eronder, een dunne scheidingslijn voor de zoekknop. */
+@media(min-width:768px){
+  #top#top#top#top header.site-header{background:url(/images/ui/kopbalk-band.webp) left bottom/100% auto no-repeat;padding-bottom:1.9vw}
+  #top#top#top#top header.site-header>div.bg-bark{background:#3a1a0c!important;border:0 solid transparent!important;border-image:url(/images/ui/kopbalk-leer.webp) 18 14 16 14 fill / 7px 6px 6px 6px stretch!important;box-shadow:none!important}
+  #top#top#top#top header.site-header>div.bg-bark>div{min-height:70px!important}
+  #top#top#top#top .kop-merk>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  #top#top#top#top .kop-merk img{width:38px!important;height:46px!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+  #top#top#top#top header .kop-link{color:#f3e6c8!important}
+  #top#top#top#top header .kop-link:hover,#top#top#top#top header .kop-link.is-actief{color:#f0c55f!important}
+  #top#top#top#top header .kop-link.is-actief:after{content:"✣"!important;inset:auto 0 -6px!important;height:auto!important;font-size:11px;line-height:1;text-align:center;color:#e0b95a;background:linear-gradient(90deg,#e0b95a 0 38%,transparent 38% 62%,#e0b95a 62%) center/100% 1.5px no-repeat!important}
+  #top#top#top#top .kop-acties{position:relative;padding-left:clamp(16px,1.6vw,28px)}
+  #top#top#top#top .kop-acties::before{content:"";position:absolute;left:0;top:50%;height:38px;width:1px;transform:translateY(-50%);background:linear-gradient(transparent,#c9963a 20%,#c9963a 80%,transparent)}
+}
+/* Bouw 154 — Gebeden: zoekbalk lager, minder ruimte tussen zoekbalk en eerste categorie, omschrijvingen iets donkerder */
+#top#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input{min-height:52px!important;height:52px!important}
+#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst,.prayer-category-grid){margin-top:24px!important}
+#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.vm-rij-tekst small,.ornate-card p){color:#4a3020!important}
+@media(max-width:767.98px){
+  #top#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input{min-height:48px!important;height:48px!important}
+  #top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst,.prayer-category-grid){margin-top:14px!important}
+}

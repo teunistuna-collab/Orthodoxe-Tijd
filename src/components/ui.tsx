@@ -88,6 +88,11 @@ export function FeestTag({ feest }: { feest: Feest }) {
 }
 
 // De gouden hoekversiering (public/images/ui/hoeksier.svg, getekend voor linksboven); spiegelen met -scale-x-100 / -scale-y-100.
+/** Het kruis als teken in de tekst (in plaats van ☦): silhouet in de huidige tekstkleur. Opmaak: .kruis-teken in index.css. */
+export function KruisTeken() {
+  return <span className="kruis-teken" aria-hidden="true" />;
+}
+
 export function Hoeksier({ className = '' }: { className?: string }) {
   return <span aria-hidden="true" className={`hoeksier ${className}`} />;
 }

@@ -97,11 +97,11 @@ const PERIODS: Array<{ key: PeriodKey; label: string; short: string; iconSrc: st
 ];
 
 
-const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-01-Wat-is-het-kerkelijk-jaar.webp' },
-  { key: 'jaarcyclus', title: 'De jaarcyclus', intro: 'Het kerkelijk jaar bestaat uit perioden, feesten en vasten die ons stap voor stap meenemen in het heilshandelen van God.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-02-De-jaarcyclus.webp' },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het kerkelijk jaar vormt ons hart, richt onze blik op Christus en heiligt onze tijd, dagen en seizoenen.', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.webp' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?', iconSrc: '/images/ui/menu/01-Hoofdmenu-06-Zoek-een-datum.webp' },
+const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
+  { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.' },
+  { key: 'jaarcyclus', title: 'De jaarcyclus', intro: 'Het kerkelijk jaar bestaat uit perioden, feesten en vasten die ons stap voor stap meenemen in het heilshandelen van God.' },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het kerkelijk jaar vormt ons hart, richt onze blik op Christus en heiligt onze tijd, dagen en seizoenen.' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?' },
 ];
 
 
@@ -126,16 +126,13 @@ export default function Jaarcyclus() {
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro, iconSrc }) => (
+          {INFO_CARDS.map(({ key, title, intro }) => (
             <button
               key={key}
               type="button"
               onClick={() => setInfoOpen(key)}
               className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-              </div>
               <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
               <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
             </button>
@@ -147,7 +144,7 @@ export default function Jaarcyclus() {
 
   return (
     <>
-      <PageHero id="jaar" titel="Jaar" ondertitel="Het kerkelijk jaar" kop />
+      <PageHero id="jaar" titel="Jaar" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}
@@ -234,7 +231,6 @@ export default function Jaarcyclus() {
             {/* Tablet/mobiel: verticale tijdlijn */}
             <div className="mt-10 space-y-3 lg:hidden">
               {PERIODS.map((period) => {
-                const iconSrc = period.iconSrc;
                 return (
                   <button
                     key={`${period.key}-mobile`}
@@ -242,9 +238,6 @@ export default function Jaarcyclus() {
                     onClick={() => setPeriodOpen(period.key)}
                     className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
-                    <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
-                      <img loading="lazy" decoding="async" src={iconSrc} alt="" />
-                    </span>
                     <span className="min-w-0 flex-1">
                       <span className="dienst-kaart-titel font-display block">{period.label}</span>
                       {period.movable && <span className="dienst-kaart-tijd block">beweeglijk</span>}

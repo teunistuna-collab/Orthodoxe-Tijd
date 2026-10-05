@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ChevronRight, Search, Sparkles } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { usePaginaOpen } from '../lib/paginaOpen';
+import { KruisTeken } from './ui';
+import Cross from './Cross';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
-import { dagInfo, daysBetween, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
-import { DERTIEN } from '../lib/feesten';
-import { volgendeFeestDatum } from '../lib/overzicht';
+import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
 import { serviceConfig } from '../lib/etmaal';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
@@ -35,17 +35,6 @@ const UURMOMENTEN: Array<{ vanaf: number; tot: number; moment: UurMoment }> = [
   { vanaf: 18, tot: 21, moment: { naam: 'Vespers', psalm: 'Psalm 103:1', vers: 'kernvers van de avond', tekst: 'Zegen de Heer, mijn ziel. Heer, mijn God, hoe groot bent U.' } },
   { vanaf: 21, tot: 24, moment: { naam: 'Completen', psalm: 'Psalm 50:3', vers: 'kernvers voor de nacht', tekst: 'Ontferm U over mij, o God, volgens uw grote ontferming.' } },
 ];
-
-const UUR_ICONEN: Record<string, string> = {
-  Middernachtdienst: '/images/ui/menu/01-Hoofdmenu-09-Feesten.webp',
-  Metten: '/images/ui/menu/03-Etmaal-03-Metten.webp',
-  'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.webp',
-  'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.webp',
-  'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.webp',
-  'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.webp',
-  Vespers: '/images/ui/gebeden/07-Overledenen.webp',
-  Completen: '/images/ui/menu/03-Etmaal-05-Completen.webp',
-};
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
 
@@ -86,12 +75,6 @@ export default function Vandaag() {
   // Liturgische kleur van de dag: de ring rond het medaillon (mobiel) en het kruis in de dagkop (desktop).
   const kleur = liturgischeKleur(dag);
   const kleurHex = LITURGISCHE_KLEUREN[kleur].hex;
-  // Het eerstvolgende grote feest (Pascha en de twaalf), zelfde berekening als de Feesten-pagina; op de dag zelf staat het al in de titel.
-  const volgendFeest = useMemo(
-    () => DERTIEN.map((f) => ({ f, dagen: daysBetween(vandaag, volgendeFeestDatum(f, vandaag, mode)) })).sort((a, b) => a.dagen - b.dagen)[0],
-    [vandaag, mode],
-  );
-  const aftelTekst = volgendFeest && volgendFeest.dagen > 0 ? `${volgendFeest.dagen === 1 ? 'Morgen' : `Over ${volgendFeest.dagen} dagen`}: ${volgendFeest.f.naam}` : null;
   const kleurTekst = `Liturgische kleur van vandaag: ${kleur === 'wit' ? 'wit' : kleur} (${LITURGISCHE_KLEUREN[kleur].uitleg})`;
 
   // Mobiele opbouw (max-width: 767px): één kolom van zeven balken met dezelfde iconen, links en gebeurtenissen als de
@@ -100,15 +83,15 @@ export default function Vandaag() {
   const lezingRegel = lezingen.length ? lezingen.slice(0, 2).map((l) => vertaalRef(l.ref)).join(' · ') : roosterMelding(dag.ymd);
   const uurPsalmen = serviceConfig.find((s) => s.title === uurMoment.naam)?.psalms.map((p) => p.title.replace(/^Psalm /, '')) ?? [];
   const psalmRegel = uurPsalmen.length === 0 ? undefined : uurPsalmen.length === 1 ? `Psalm ${uurPsalmen[0]}` : `Psalmen ${uurPsalmen.slice(0, -1).join(', ')} en ${uurPsalmen[uurPsalmen.length - 1]}`;
-  const mobieleKnoppen: Array<{ key: string; titel: string; icoon: string; href: string; onClick?: () => void; onder?: string; nu?: boolean }> = [
-    { key: 'pijlgebed', titel: 'Pijlgebed', icoon: '/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp', href: '#adem', onder: '“Heer Jezus Christus, ontferm U over ons.”' },
-    { key: 'uur', titel: uurMoment.naam, icoon: UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.webp', href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })), onder: psalmRegel, nu: true },
-    { key: 'week', titel: 'Weekcyclus', icoon: '/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.webp', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }), onder: `${hoofdletter(dag.weekdagNaam)} · ${weekthema.titel}` },
-    { key: 'vasten', titel: 'Vasten vandaag', icoon: '/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.webp', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }), onder: dag.vasten.label },
-    { key: 'pascha', titel: 'Paschale cyclus', icoon: '/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp', href: '#pascha', onClick: () => openDagPascha(dag.ymd), onder: `${dag.seizoen}${dag.toon ? ` · Toon ${dag.toon}` : ''}` },
-    { key: 'lezingen', titel: 'Schriftlezingen', icoon: '/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp', href: '#kalender', onClick: () => openDagLezingen(dag.ymd), onder: lezingRegel },
-    { key: 'heiligen', titel: 'Heiligen van de dag', icoon: '/images/ui/menu/01-Hoofdmenu-10-Heiligen.webp', href: '#heiligen', onClick: () => openDagHeiligen(dag.ymd), onder: heilige ? heiligeTitel(heilige.naam) : undefined },
-    // "Vaders & moeders" (woestijnvaders en -moeders) komt terug zodra de verzameling er is; icoon: 01-Hoofdmenu-05-Woestijnvaders-en-moeders.webp
+  const mobieleKnoppen: Array<{ key: string; titel: string; href: string; onClick?: () => void; onder?: string; nu?: boolean }> = [
+    { key: 'pijlgebed', titel: 'Pijlgebed', href: '#adem', onder: '“Heer Jezus Christus, ontferm U over ons.”' },
+    { key: 'uur', titel: uurMoment.naam, href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })), onder: psalmRegel, nu: true },
+    { key: 'week', titel: 'Weekcyclus', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }), onder: `${hoofdletter(dag.weekdagNaam)} · ${weekthema.titel}` },
+    { key: 'vasten', titel: 'Vasten vandaag', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }), onder: dag.vasten.label },
+    { key: 'pascha', titel: 'Paschale cyclus', href: '#pascha', onClick: () => openDagPascha(dag.ymd), onder: `${dag.seizoen}${dag.toon ? ` · Toon ${dag.toon}` : ''}` },
+    { key: 'lezingen', titel: 'Schriftlezingen', href: '#kalender', onClick: () => openDagLezingen(dag.ymd), onder: lezingRegel },
+    { key: 'heiligen', titel: 'Heiligen van de dag', href: '#heiligen', onClick: () => openDagHeiligen(dag.ymd), onder: heilige ? heiligeTitel(heilige.naam) : undefined },
+    // "Vaders & moeders" (woestijnvaders en -moeders) komt terug zodra de verzameling er is
   ];
   const kerkelijkeRegel = mode === 'oud' ? `Kerkelijke datum: ${formatDag(dag.kerk)} (Juliaans)` : 'Nieuwe kalender (gereviseerd juliaans)';
 
@@ -116,17 +99,24 @@ export default function Vandaag() {
     <section id="vandaag" className="vandaag-design-page">
       <div className="vandaag-frame">
         <h1 className="sr-only">Vandaag</h1>
-        <div className="vandaag-cover"><picture className="contents"><source media="(max-width: 767.98px)" srcSet={LEEG} /><img fetchPriority={open ? 'high' : 'auto'} loading={open ? 'eager' : 'lazy'} src="/images/heroes/hero-vandaag.webp" alt="Orthodoxe gebedssfeer bij kaarslicht" /></picture></div>
+        {/* Web: dezelfde sierkop als op de andere pagina's (mobiel heeft het Christus-icoon, zie vandaag-mobiel) */}
+        <div className="sier-kop vandaag-kop">
+          <div className="sier-kop-binnen">
+            <picture className="contents"><source media="(max-width: 767.98px)" srcSet={LEEG} /><img fetchPriority={open ? 'high' : 'auto'} loading={open ? 'eager' : 'lazy'} src="/images/heroes/sier/boog-web.webp" alt="" width={2000} height={667} /></picture>
+            <span className="sier-kop-kruis" aria-hidden="true"><Cross className="h-full w-full" title="" /></span>
+            <p className="sier-kop-titel">Vandaag</p>
+          </div>
+        </div>
         <div className="vandaag-paper">
-          <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true" style={{ color: kleurHex }} title={kleurTekst}>☦</i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}{aftelTekst && <a href="#feesten" className="vandaag-aftel">{aftelTekst}</a>}</header>
+          <header className="vandaag-dayhead"><p>{hoofdletter(dag.weekdagNaam)}</p><h2>{formatDatum(dag.civil)}</h2>{mode === 'oud' && <span>({formatDag(dag.kerk)} · Juliaanse kalender)</span>}<i aria-hidden="true" style={{ color: kleurHex }} title={kleurTekst}><KruisTeken /></i><h3>{datumTitel}</h3>{!hoofdFeest && heilige?.titel && <small>{heilige.titel}</small>}{hoofdFeest?.kort && <small>{hoofdFeest.kort}</small>}</header>
           <div className="vandaag-list">
-            <a className="vandaag-item" href="#adem"><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-01-Pijlgebed.webp" alt=""/><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Naar pijlgebed ›</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#adem"><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Naar pijlgebed ›</span></div><ChevronRight/></a>
             {/* De kaart opent de dienst; de psalmverwijzing erin opent die psalm in het psalter (daarom geen <a> om het geheel). */}
-            <article className="vandaag-item vandaag-uur-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('a')) return; window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })); }} onKeyDown={(e)=>{ if (e.key==='Enter' && e.target===e.currentTarget) window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })); }}><img decoding="async" className="provided-menu-icon" src={UUR_ICONEN[uurMoment.naam] ?? '/images/ui/menu/03-Etmaal-05-Completen.webp'} alt=""/><div><b>{uurMoment.naam}</b><em>“{uurMoment.tekst}”</em><small><a href={`#psalmen/${uurMoment.psalm.match(/\d+/)?.[0]}`}>{uurMoment.psalm}</a> · Septuaginta</small><span className="btn-pill vandaag-cta">Naar {uurMoment.naam.toLowerCase()} ›</span></div><ChevronRight/></article>
-            <a className="vandaag-item" href="#week" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] } })); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-04-Weekcyclus.webp" alt=""/><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week ›</span></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#vasten" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: dag.ymd } })); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-02-Vasten-vandaag.webp" alt=""/><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten ›</span></div><ChevronRight/></a>
-            <a className="vandaag-item" href="#pascha" onClick={(e)=>{ e.preventDefault(); openDagPascha(dag.ymd); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp" alt=""/><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus ›</span></div><ChevronRight/></a>
-            <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; openDagLezingen(dag.ymd); }} onKeyDown={(e)=>{ if(e.key==='Enter') openDagLezingen(dag.ymd); }}><img decoding="async" className="provided-menu-icon" src="/images/ui/menu/01-Hoofdmenu-11-Schriftlezingen.webp" alt=""/><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>{roosterMelding(dag.ymd)}</span>}<span className="btn-pill vandaag-cta">Lees lezingen ›</span></div><ChevronRight aria-hidden="true"/></article>
+            <article className="vandaag-item vandaag-uur-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('a')) return; window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })); }} onKeyDown={(e)=>{ if (e.key==='Enter' && e.target===e.currentTarget) window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })); }}><div><b>{uurMoment.naam}</b><em>“{uurMoment.tekst}”</em><small><a href={`#psalmen/${uurMoment.psalm.match(/\d+/)?.[0]}`}>{uurMoment.psalm}</a> · Septuaginta</small><span className="btn-pill vandaag-cta">Naar {uurMoment.naam.toLowerCase()} ›</span></div><ChevronRight/></article>
+            <a className="vandaag-item" href="#week" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] } })); }}><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week ›</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#vasten" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: dag.ymd } })); }}><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten ›</span></div><ChevronRight/></a>
+            <a className="vandaag-item" href="#pascha" onClick={(e)=>{ e.preventDefault(); openDagPascha(dag.ymd); }}><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus ›</span></div><ChevronRight/></a>
+            <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; openDagLezingen(dag.ymd); }} onKeyDown={(e)=>{ if(e.key==='Enter') openDagLezingen(dag.ymd); }}><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>{roosterMelding(dag.ymd)}</span>}<span className="btn-pill vandaag-cta">Lees lezingen ›</span></div><ChevronRight aria-hidden="true"/></article>
             {/* "Vaders & moeders" komt terug zodra de verzameling spreuken er is (zie ook de mobiele knoppen hieronder). */}
           </div>
           <button type="button" onClick={()=>openDag(dag.ymd)} className="vandaag-main-button"><Sparkles/> Bekijk de volledige dag <ChevronRight/></button>
@@ -141,12 +131,6 @@ export default function Vandaag() {
 
         <div className="vm-medaillon" style={{ '--dag-kleur': kleurHex } as CSSProperties}>
           <span className="sr-only">{kleurTekst}</span>
-          <span className="vm-ring vm-ring-1" aria-hidden="true" />
-          <span className="vm-ring vm-ring-2" aria-hidden="true" />
-          <span className="vm-kruis vm-kruis-n" aria-hidden="true">✣</span>
-          <span className="vm-kruis vm-kruis-z" aria-hidden="true">✣</span>
-          <span className="vm-kruis vm-kruis-w" aria-hidden="true">✣</span>
-          <span className="vm-kruis vm-kruis-o" aria-hidden="true">✣</span>
           <picture className="contents">
             <source media="(min-width: 768px)" srcSet={LEEG} />
             <img decoding="async" loading={open ? 'eager' : 'lazy'} src="/images/Christus-afbeelding.webp" alt="Christus" />
@@ -157,21 +141,19 @@ export default function Vandaag() {
         <h2 className="vm-datum">{formatDatum(dag.civil)}</h2>
         <p className="vm-sier vm-sier-datum" aria-hidden="true"><span>✣</span></p>
         <p className="vm-kerk">{kerkelijkeRegel}</p>
-        {aftelTekst && <a href="#feesten" className="vm-aftel">{aftelTekst}</a>}
         <div className="vm-kalender" role="group" aria-label="Kalenderkeuze">
           <button type="button" aria-pressed={mode === 'oud'} className={mode === 'oud' ? 'is-actief' : undefined} onClick={() => setMode('oud')}>Oud · juliaans</button>
           <button type="button" aria-pressed={mode === 'nieuw'} className={mode === 'nieuw' ? 'is-actief' : undefined} onClick={() => setMode('nieuw')}>Nieuw · gregoriaans</button>
         </div>
 
         <div className="vm-lijst">
-          {mobieleKnoppen.map(({ key, titel, icoon, href, onClick, onder, nu }) => (
+          {mobieleKnoppen.map(({ key, titel, href, onClick, onder, nu }) => (
             <a
               key={key}
               className="vm-rij"
               href={href}
               onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
             >
-              <img decoding="async" className="vm-icoon" src={icoon} alt="" />
               <span className="vm-rij-tekst">
                 <b>
                   {titel}

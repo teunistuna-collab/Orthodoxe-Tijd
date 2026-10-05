@@ -55,11 +55,11 @@ type InfoKey = 'wat' | 'diensten' | 'betekenis' | 'praktisch';
 
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe etmaalcyclus.docx".
 
-const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.', iconSrc: '/images/ui/medaillons/Etmaal.webp' },
-  { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.', iconSrc: '/images/ui/menu/03-Etmaal-03-Metten.webp' },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.', iconSrc: '/images/ui/menu/02-Gebed-05-De-betekenis-in-ons-leven.webp' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.', iconSrc: '/images/ui/menu/02-Gebed-06-Praktisch.webp' },
+const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
+  { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.' },
+  { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.' },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.' },
 ];
 
 
@@ -117,7 +117,7 @@ export default function UrenCyclus() {
         if (!response.ok) throw new Error(`PDF is niet beschikbaar (${response.status})`);
 
         const [buffer, pdfjsLib] = await Promise.all([response.arrayBuffer(), pdfjsKlaar]);
-        const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+        const pdf = await pdfjsLib.getDocument({ data: buffer, verbosity: 0 }).promise;
         const pages: Array<Array<PdfLine>> = [];
 
         for (let pageIndex = 1; pageIndex <= pdf.numPages; pageIndex += 1) {
@@ -226,16 +226,13 @@ export default function UrenCyclus() {
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro, iconSrc }) => (
+          {INFO_CARDS.map(({ key, title, intro }) => (
             <button
               key={key}
               type="button"
               onClick={() => setInfoOpen(key)}
               className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-              </div>
               <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
               <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
             </button>
@@ -247,7 +244,7 @@ export default function UrenCyclus() {
 
   return (
     <>
-      <PageHero id="etmaal" titel="Etmaal" ondertitel="De gebeden van dag en nacht" kop />
+      <PageHero id="etmaal" titel="Etmaal" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}
@@ -345,8 +342,6 @@ export default function UrenCyclus() {
             {/* Tablet/mobiel: dezelfde kaartstijl als de dagen van de weekcyclus */}
             <div className="mt-10 space-y-3 lg:hidden">
               {serviceConfig.map((service, index) => {
-                const Icon = SERVICE_ICONS[service.title];
-                const imageIcon = SERVICE_IMAGE_ICONS[service.title];
                 return (
                   <button
                     key={`${service.title}-mobile-${index}`}
@@ -354,9 +349,6 @@ export default function UrenCyclus() {
                     onClick={() => openService(index)}
                     className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
-                    <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
-                      {imageIcon ? <img loading="lazy" decoding="async" src={imageIcon} alt="" /> : Icon ? <Icon className="h-6 w-6 text-gold-light" strokeWidth={1.4} /> : <Cross className="h-6 w-6 text-gold-light" />}
-                    </span>
                     <span className="min-w-0 flex-1">
                       <span className="dienst-kaart-titel font-display block">{service.title}</span>
                       <span className="dienst-kaart-tijd block">{service.time}</span>

@@ -16,11 +16,11 @@ type PeriodeKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | '
 
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe Paschale cyclus.docx".
 
-const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is Pascha?', intro: 'De Verrijzenis van Christus als het hart van het kerkelijk jaar en van ons leven.', iconSrc: '/images/ui/menu/06-Pascha-01-Wat-is-Pascha.webp' },
-  { key: 'cyclus', title: 'De Paschale cyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.', iconSrc: '/images/ui/menu/06-Pascha-02-De-paschale-cyclus.webp' },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Pascha vernieuwt de tijd, onze blik en ons bestaan.', iconSrc: '/images/ui/menu/06-Pascha-04-Gebeden.webp' },
-  { key: 'tradities', title: 'Tradities en viering', intro: 'De rijke schoonheid van de Paasdiensten en de Orthodoxe tradities.', iconSrc: '/images/ui/menu/06-Pascha-03-Tradities-en-vieringen.webp' },
+const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
+  { key: 'wat', title: 'Wat is Pascha?', intro: 'De Verrijzenis van Christus als het hart van het kerkelijk jaar en van ons leven.' },
+  { key: 'cyclus', title: 'De Paschale cyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.' },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Pascha vernieuwt de tijd, onze blik en ons bestaan.' },
+  { key: 'tradities', title: 'Tradities en viering', intro: 'De rijke schoonheid van de Paasdiensten en de Orthodoxe tradities.' },
 ];
 
 // De acht stappen van de Paschale cyclus voor het cirkeldiagram. De tekst van iedere stap komt letterlijk uit
@@ -66,7 +66,7 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
         "items": [
           "Schone Maandag — eerste dag van de Grote Vasten; ’s avonds de eerste Grote Completen met de Grote Canon van Andreas van Kreta.",
           "Zaterdag van H. Theodorus de Rekruut (koliva).",
-          "Eerste zondag — Zondag van de Orthodoxie: de overwinning van het orthodoxe geloof en de herstelling van de heilige iconen.",
+          "Eerste zondag — Zondag van de Orthodoxie: de overwinning van het Orthodoxe geloof en de herstelling van de heilige iconen.",
           "Zaterdag der Overledenen (2e week).",
           "Tweede zondag — Heilige Gregorius Palamas: het leven in Gods genade en het gebed van het hart.",
           "Zaterdag der Overledenen (3e week).",
@@ -194,7 +194,7 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
         "heading": "Pinksteren",
         "paragraphs": [
           "Vijftig dagen na Pascha viert de Kerk het heilige Pinksteren: de nederdaling van de Heilige Geest over de apostelen. Pinksteren is de vervulling van de Paschale beweging. De Verrijzenis opent het nieuwe leven; de Geest schenkt dit leven aan de Kerk en zendt haar uit in de wereld.",
-          "De maandag na Pinksteren is in de orthodoxe traditie bijzonder gewijd aan de Heilige Geest."
+          "De maandag na Pinksteren is in de Orthodoxe traditie bijzonder gewijd aan de Heilige Geest."
         ],
         "items": [
           "Pinksteren — vijftig dagen na Pascha daalt de Heilige Geest neer op de apostelen; de Kerk wordt geboren. Na de Liturgie volgen de Kniebuigingsvespers, waarbij voor het eerst sinds Pascha weer geknield wordt.",
@@ -205,7 +205,7 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
         "heading": "Allerheiligen en de overgang",
         "paragraphs": [
           "De eerste zondag na Pinksteren is de Zondag van Allerheiligen. Zij laat zien wat de gave van de Heilige Geest in mensen voortbrengt: heiligheid. De heiligen zijn de vruchten van Pascha en Pinksteren in het leven van de Kerk.",
-          "Na Allerheiligen begint de Apostelvasten. De begindatum daarvan beweegt mee met Pascha, terwijl het einde aan een vaste kalenderdatum verbonden is. Dit laat mooi zien hoe de Paschale en de vaste jaarcyclus elkaar in het orthodoxe kerkelijk jaar ontmoeten."
+          "Na Allerheiligen begint de Apostelvasten. De begindatum daarvan beweegt mee met Pascha, terwijl het einde aan een vaste kalenderdatum verbonden is. Dit laat mooi zien hoe de Paschale en de vaste jaarcyclus elkaar in het Orthodoxe kerkelijk jaar ontmoeten."
         ],
         "items": [
           "Zondag van Alle Heiligen — slot van het Pentecostarion: de vrucht van de Geest zijn alle heiligen. Daarna begint de Apostelvasten.",
@@ -285,16 +285,13 @@ export default function Pascha() {
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro, iconSrc }) => (
+          {INFO_CARDS.map(({ key, title, intro }) => (
             <button
               key={key}
               type="button"
               onClick={() => setInfoOpen(key)}
               className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-              </div>
               <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
               <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
             </button>
@@ -306,7 +303,7 @@ export default function Pascha() {
 
   return (
     <>
-      <PageHero id="pascha" titel="Pascha" ondertitel="Van het Kruis naar de Verrijzenis" kop />
+      <PageHero id="pascha" titel="Pascha" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}
@@ -397,9 +394,6 @@ export default function Pascha() {
                   onClick={() => setPeriodeOpen(periode.key)}
                   className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                 >
-                  <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
-                    <img loading="lazy" decoding="async" src={periode.iconSrc} alt="" />
-                  </span>
                   <span className="min-w-0 flex-1">
                     <span className="dienst-kaart-titel font-display block">{periode.label}</span>
                     <span className="dienst-kaart-tekst block">{periode.short}</span>
@@ -457,7 +451,7 @@ export default function Pascha() {
         quote="Christus is opgestaan uit de doden, door Zijn dood heeft Hij de dood vertreden, en aan hen in de graven heeft Hij het leven geschonken."
         citation="Uit de Paasvespers"
         eyebrow="Meer dan een datum"
-        text="Pascha is niet eenvoudig één feest tussen andere feesten. In de orthodoxe eredienst is de Verrijzenis van Christus het centrum waarnaar de voorbereiding wijst en vanwaar de vreugde van de daaropvolgende periode uitgaat — het middelpunt van de gehele beweeglijke liturgische cyclus."
+        text="Pascha is niet eenvoudig één feest tussen andere feesten. In de Orthodoxe eredienst is de Verrijzenis van Christus het centrum waarnaar de voorbereiding wijst en vanwaar de vreugde van de daaropvolgende periode uitgaat — het middelpunt van de gehele beweeglijke liturgische cyclus."
         buttonLabel="Ontdek de feesten"
         buttonHref="#feesten"
       />

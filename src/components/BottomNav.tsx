@@ -76,7 +76,7 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
           ))}
         </div>
       )}
-      <nav ref={navRef} className="bottom-nav" aria-label="Hoofdnavigatie">
+      <nav ref={navRef} className="bottom-nav" aria-label="Onderbalk">
         <ul>
           {ITEMS.map(({ id, label, Icon }) => {
             const groep = GROEPEN[id];

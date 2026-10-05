@@ -8,30 +8,26 @@ type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe ademcyclus.docx".
 
-const CARDS: Array<{ key: PopupKey; title: string; intro: string; iconSrc: string }> = [
+const CARDS: Array<{ key: PopupKey; title: string; intro: string }> = [
   {
     key: 'wat',
     title: 'Wat is de ademcyclus?',
     intro: 'Het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus.',
-    iconSrc: '/images/ui/menu/02-Gebed-01-Wat-is-de-ademcyclus.webp',
   },
   {
     key: 'jezusgebed',
     title: 'Het Jezusgebed',
     intro: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar — telkens opnieuw aangeroepen.',
-    iconSrc: '/images/ui/menu/02-Gebed-02-Het-Jezusgebed.webp',
   },
   {
     key: 'gebedskoord',
     title: 'Het gebedskoord',
     intro: 'De chotki helpt het gebed aandachtig te herhalen zonder de ademhaling tot een teller te maken.',
-    iconSrc: '/images/ui/menu/02-Gebed-03-Het-gebedskoord.webp',
   },
   {
     key: 'hart',
     title: 'Gebed van het hart',
     intro: 'Van de lippen, naar het verstand, tot een gebed dat het hart zelf doordringt.',
-    iconSrc: '/images/ui/menu/02-Gebed-04-Gebed-van-het-hart.webp',
   },
 ];
 
@@ -61,16 +57,13 @@ export default function Ademcyclus() {
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {CARDS.map(({ key, title, intro, iconSrc }) => (
+          {CARDS.map(({ key, title, intro }) => (
             <button
               key={key}
               type="button"
               onClick={() => setPopup(key)}
               className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-              </div>
               <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
               <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
             </button>
@@ -82,7 +75,7 @@ export default function Ademcyclus() {
 
   return (
     <>
-      <PageHero id="adem" titel="Ademcyclus" ondertitel="Het onophoudelijke gebed" citaat="„Bidt zonder ophouden”" kop />
+      <PageHero id="adem" titel="Ademcyclus" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}
@@ -90,7 +83,7 @@ export default function Ademcyclus() {
       {/* Het Jezusgebed */}
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink max-md:pt-4 max-md:pb-10 sm:py-24">
         <div className={CONTENT}>
-          <div className="mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:pt-6 sm:px-12 sm:py-16 lg:px-16">
+          <div className="vlak mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:pt-6 sm:px-12 sm:py-16 lg:px-16">
             <p className="ot-label text-center">Het Jezusgebed</p>
             <OrnamentRule className="mt-4 w-48" />
 
@@ -112,12 +105,12 @@ export default function Ademcyclus() {
                 </div>              </div>
 
               <div className="adem-in text-center lg:order-1">
-                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">Heer Jezus Christus,<br />Zoon van God.</p></div>
+                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">Heer Jezus Christus,</p></div>
                 <OrnamentRule className="mt-4 w-32" />
                 <p className="ot-label mt-4">Inademen</p>
               </div>
               <div className="adem-uit text-center lg:order-3">
-                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">ontferm U over mij,<br />zondaar.</p></div>
+                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">ontferm U over ons.</p></div>
                 <OrnamentRule className="mt-4 w-32" />
                 <p className="ot-label mt-4">Uitademen</p>
               </div>

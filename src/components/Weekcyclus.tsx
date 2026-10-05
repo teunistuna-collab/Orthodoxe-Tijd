@@ -99,11 +99,11 @@ const DAYS: Array<{ key: DayKey; label: string; short: string; iconSrc: string }
 ];
 
 
-const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string; iconSrc: string }> = [
-  { key: 'wat', title: 'Wat is de weekcyclus?', intro: 'De week is de ademhaling van het kerkelijk leven, geworteld in de Verrijzenis van Christus.', iconSrc: '/images/ui/menu/04-Week-01-Wat-is-de-weekcyclus.webp' },
-  { key: 'dagen', title: 'De dagen van de week', intro: 'Elke dag van de week heeft een eigen liturgisch karakter, lezingen en gedenkingen.', iconSrc: '/images/ui/menu/04-Week-02-De-dagen-van-de-week.webp' },
-  { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'De week vormt ons in het leven met Christus: van Verrijzenis tot verwachting.', iconSrc: '/images/ui/menu/04-Week-03-De-geestelijke-betekenis.webp' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?', iconSrc: '/images/ui/menu/02-Gebed-03-Het-gebedskoord.webp' },
+const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
+  { key: 'wat', title: 'Wat is de weekcyclus?', intro: 'De week is de ademhaling van het kerkelijk leven, geworteld in de Verrijzenis van Christus.' },
+  { key: 'dagen', title: 'De dagen van de week', intro: 'Elke dag van de week heeft een eigen liturgisch karakter, lezingen en gedenkingen.' },
+  { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'De week vormt ons in het leven met Christus: van Verrijzenis tot verwachting.' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?' },
 ];
 
 
@@ -138,16 +138,13 @@ export default function Weekcyclus() {
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro, iconSrc }) => (
+          {INFO_CARDS.map(({ key, title, intro }) => (
             <button
               key={key}
               type="button"
               onClick={() => setInfoOpen(key)}
               className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold-light">
-                <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-card-icon" />
-              </div>
               <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
               <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
             </button>
@@ -159,7 +156,7 @@ export default function Weekcyclus() {
 
   return (
     <>
-      <PageHero id="week" titel="Week" ondertitel="Van de Verrijzenis tot de Sabbat" kop />
+      <PageHero id="week" titel="Week" kop />
 
       {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
       {infoTegels('max-md:hidden')}
@@ -245,7 +242,6 @@ export default function Weekcyclus() {
             {/* Tablet/mobiel: verticale tijdlijn */}
             <div className="mt-10 space-y-3 lg:hidden">
               {DAYS.map((day) => {
-                const iconSrc = day.iconSrc;
                 return (
                   <button
                     key={`${day.key}-mobile`}
@@ -253,9 +249,6 @@ export default function Weekcyclus() {
                     onClick={() => setDayOpen(day.key)}
                     className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                   >
-                    <span className="dienst-kaart-medaillon flex shrink-0 items-center justify-center">
-                      <img loading="lazy" decoding="async" src={iconSrc} alt="" />
-                    </span>
                     <span className="min-w-0 flex-1">
                       <span className="dienst-kaart-titel font-display block">
                         {day.label}
@@ -278,7 +271,7 @@ export default function Weekcyclus() {
         quote="Dit is de dag die de Heer gemaakt heeft; laat ons juichen en ons verheugen."
         citation="Psalm 118:24"
         eyebrow="Meer dan een kalender"
-        text="De orthodoxe week is geen loutere opeenvolging van dagen. Zij begint in de vreugde van de Verrijzenis, voert de gelovige langs de hemelse machten, de Voorloper, het Kruis, de apostolische verkondiging en de gedachtenis van hen die in Christus ontslapen zijn, en opent zich vervolgens opnieuw naar de Dag des Heren. Zo wordt de tijd zelf opgenomen in het gebed van de Kerk."
+        text="De Orthodoxe week is geen loutere opeenvolging van dagen. Zij begint in de vreugde van de Verrijzenis, voert de gelovige langs de hemelse machten, de Voorloper, het Kruis, de apostolische verkondiging en de gedachtenis van hen die in Christus ontslapen zijn, en opent zich vervolgens opnieuw naar de Dag des Heren. Zo wordt de tijd zelf opgenomen in het gebed van de Kerk."
         buttonLabel="Ontdek de jaarcyclus"
         buttonHref="#jaar"
       />

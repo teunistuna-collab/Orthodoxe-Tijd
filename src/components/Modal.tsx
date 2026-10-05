@@ -4,6 +4,7 @@ import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
 import { houdFocusBinnen } from '../lib/focus';
 import Leesbediening, { type Deel } from './Leesbediening';
+import Cross from './Cross';
 
 type ModalProps = {
   open: boolean;
@@ -120,17 +121,21 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         aria-labelledby={titelId}
         ref={frameRef}
         tabIndex={-1}
-        className={`exact-modal-frame ${maxWidth}`}
+        className={`exact-modal-frame met-sierkop ${maxWidth}`}
         onClick={(event) => event.stopPropagation()}
         onKeyDown={houdFocusBinnen}
         {...veeg}
       >
-        <header className="exact-modal-titlebar">
+        {/* Sierkop zoals bovenaan de pagina's: boog met kruis, titel en (als die er is) de bovenregel eronder.
+            In de avondweergave de strak uitgesneden boog, zonder lichte perkamentrand. */}
+        <header className="exact-modal-titlebar sier-kop">
           <div className="exact-modal-nav exact-modal-nav-left">{leadingActions}</div>
-          <div className="exact-modal-heading">
-            <div className="exact-modal-heading-line"><span /> <b>✣</b> <span /></div>
-            {eyebrow && <p>{eyebrow}</p>}
-            <h2 id={titelId}>{title}</h2>
+          <div className="sier-kop-binnen">
+            <img className="kop-dag" src="/images/heroes/sier/boog.webp" alt="" width={1200} height={400} decoding="async" />
+            <img className="kop-nacht" src="/images/heroes/sier/boog-nacht.webp" alt="" width={1200} height={400} loading="lazy" decoding="async" />
+            <span className="sier-kop-kruis" aria-hidden="true"><Cross className="h-full w-full" title="" /></span>
+            <h2 id={titelId} className="sier-kop-titel">{title}</h2>
+            {eyebrow && <p className="sier-kop-onder">{eyebrow}</p>}
           </div>
           <div className="exact-modal-nav exact-modal-nav-right">
             {actions}

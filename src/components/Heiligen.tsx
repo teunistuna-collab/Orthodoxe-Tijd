@@ -78,7 +78,7 @@ export default function Heiligen() {
   );
 
   return <>
-    <PageHero id="heiligen" titel="Heiligen" ondertitel="Voorbeelden op onze weg" />
+    <PageHero id="heiligen" titel="Heiligen" />
     <section className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">
@@ -121,7 +121,7 @@ export default function Heiligen() {
 
         <section className="saints-categories bibliotheek">
           <div className="saints-rule-title"><h2>Heiligen naar categorie</h2></div>
-          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><span className="bieb-icoon bieb-embleem" aria-hidden="true"><img src="/images/ui/embleem.webp" alt="" loading="lazy" /></span><strong>{afbreekbaar(c[1])}</strong><span>{c[2]}</span></button>)}</div>
+          <div className="saints-category-grid">{categories.map(c=><button key={c[0]} onClick={()=>{setCategorie(c[0]);setWachtOpDag(false)}} className={categorie===c[0]?'active':''}><strong>{afbreekbaar(c[1])}</strong><span>{c[2]}</span></button>)}</div>
         </section>
 
         <section className="saints-lowlands">

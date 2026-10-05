@@ -32,9 +32,9 @@ export function FooterInhoud() {
           <li>Vastenregels naar het Typikon van Sabbas in zijn gangbare parochiële toepassing.</li>
           <li>Troparia en gebeden in eigen Nederlandse weergave.</li>
         </ul>
-        {/* Op mobiel is de footer verborgen; hier blijft de uitleg bereikbaar (Meer → Bronnen). */}
+        {/* Op mobiel is de footer verborgen; hier blijft het keuzemenu bereikbaar (Meer → Bronnen). */}
         <button type="button" onClick={openKalenderUitleg} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
-          Oud of nieuw? Uitleg over de kalenders
+          Kalender en traditie kiezen
         </button>
       </div>
     </div>
@@ -52,9 +52,9 @@ export default function Footer() {
             Bronnen & verwijzingen
           </a>
           <button type="button" onClick={openKalenderUitleg} className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
-            Oud of nieuw? Uitleg over de kalenders
+            Kalender en traditie kiezen
           </button>
-          <span>Gebouwd met liefde voor de Nederlandse orthodoxie.</span>
+          <span>Gebouwd met liefde voor de Nederlandse Orthodoxie.</span>
         </div>
       </div>
     </footer>
