@@ -1,4 +1,4 @@
-import { GEBEDEN, type Gebed } from './gebeden';
+import { GEBEDEN, GEBEDEN_ZICHTBAAR, type Gebed } from './gebeden';
 import { BEWEEGLIJKE_FEESTEN, DERTIEN, OVERIGE_VASTE, type Feest } from './feesten';
 import type { HeiligeMetDatum } from './heiligen';
 import { addDays, formatLang, formatMd, MAANDEN, MAANDEN_KORT, orthodoxPascha, utc, ymd, type Mode } from './kalender';
@@ -59,7 +59,7 @@ export function bouwIndex(ALLE_HEILIGEN: HeiligeMetDatum[]): ZoekIndex {
   }));
 
   return {
-    gebeden: GEBEDEN.map((g) => ({ waarde: g, sleutel: normaliseer(`${g.titel}|${g.wanneer}|${g.categorie}`), tekst: normaliseer(g.tekst) })),
+    gebeden: (GEBEDEN_ZICHTBAAR ? GEBEDEN : []).map((g) => ({ waarde: g, sleutel: normaliseer(`${g.titel}|${g.wanneer}|${g.categorie}`), tekst: normaliseer(g.tekst) })),
     feesten: [...feesten.values()].map((f) => ({ waarde: f, sleutel: normaliseer(`${f.naam}|${f.kort ?? ''}`) })),
     heiligen,
   };

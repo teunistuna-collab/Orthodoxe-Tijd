@@ -4,7 +4,6 @@ import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './
 import { JAAR_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
 import PageHero from './PageHero';
-import { Hoeksier } from './ui';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
 type InfoKey = 'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch';
@@ -153,10 +152,6 @@ export default function Jaarcyclus() {
       <section className="bg-parchment pb-16 sm:pb-20">
         <div className={CONTENT}>
           <div className="cyclus-paneel parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
-            <Hoeksier className="absolute top-6 left-6" />
-            <Hoeksier className="absolute top-6 right-6 -scale-x-100" />
-            <Hoeksier className="absolute bottom-6 left-6 -scale-y-100" />
-            <Hoeksier className="absolute right-6 bottom-6 -scale-x-100 -scale-y-100" />
 
             <div className="text-center">
               <h2 className="ot-sectietitel">De cyclus van het kerkelijk jaar</h2>

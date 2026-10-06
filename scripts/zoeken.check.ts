@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { bouwIndex, leesDatum, zoek } from '../src/lib/zoeken';
 import { utc, ymd } from '../src/lib/kalender';
 import { ALLE_HEILIGEN } from '../src/lib/heiligen';
+import { GEBEDEN_ZICHTBAAR } from '../src/lib/gebeden';
 
 const vandaag = utc(2026, 9, 25);
 const d = (s: string) => { const r = leesDatum(s, vandaag); return r && ymd(r.datum); };
@@ -24,7 +25,8 @@ const index = bouwIndex(ALLE_HEILIGEN);
 const titels = (q: string, groep: string) => zoek(q, index, vandaag, 'oud').find((g) => g.titel === groep)?.items.map((i) => i.titel) ?? [];
 assert.ok(titels('kruisverheffing', 'Feesten').length > 0, 'feest op naam');
 assert.ok(titels('jezusgebed', "Pagina's").includes('Adem'), 'pagina via trefwoord');
-assert.ok(titels('ochtend', 'Gebeden').length > 0, 'gebed op moment');
+// zolang de gebeden uit staan (GEBEDEN_ZICHTBAAR) vindt het zoeken er geen
+assert.ok(GEBEDEN_ZICHTBAAR ? titels('ochtend', 'Gebeden').length > 0 : titels('ochtend', 'Gebeden').length === 0, 'gebed op moment');
 assert.ok(titels('willibrord', 'Heiligen').length > 0, 'heilige uit de eigen lijst');
 assert.equal(zoek('a', index, vandaag, 'oud').length, 0, 'minimaal twee tekens');
 assert.deepEqual(titels('Psalm 50', 'Psalmen'), ['Psalm 50'], 'psalm op nummer');
@@ -39,6 +41,6 @@ const kruis = zoek('kruis', index, vandaag, 'oud').find((g) => g.titel === 'Fees
 assert.ok(kruis.soort === 'feest' && kruis.feest.id === 'kruisverheffing', `Kruisverheffing bovenaan: ${kruis.titel}`);
 // een gebed dat "kruis" alleen in de tekst heeft, komt na de feesten die zo heten
 const volgorde = zoek('kruis', index, vandaag, 'oud').map((g) => g.titel);
-assert.ok(volgorde.indexOf('Feesten') < volgorde.indexOf('Gebeden'), `groepvolgorde: ${volgorde.join(', ')}`);
+if (GEBEDEN_ZICHTBAAR) assert.ok(volgorde.indexOf('Feesten') < volgorde.indexOf('Gebeden'), `groepvolgorde: ${volgorde.join(', ')}`);
 
 console.log('zoeken: alle controles geslaagd');

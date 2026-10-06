@@ -4,12 +4,12 @@ import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import { useApp } from '../lib/context';
 import { PAASCYCLUS } from '../lib/feesten';
-import { addDays, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
-import { FeestTag, Hoeksier } from './ui';
+import { addDays, daysBetween, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
+import { FeestTag } from './ui';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
 
 type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
 type PeriodeKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | 'vijftig-dagen' | 'hemelvaart' | 'pinksteren';
@@ -278,12 +278,14 @@ export default function Pascha() {
     return out;
   }, [pascha]);
 
-  // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
-  const infoTegels = (zicht: string) => (
-    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20`}>
-      {/* Onzichtbare tussenkop: de tegels (h3) hangen zo onder een h2 voor schermlezers */}
-      <h2 className="sr-only">Achtergrond</h2>
+  const dagenTot = daysBetween(vandaag, pascha);
+
+  // De vier informatietegels als verdieping, na de cyclus (op alle schermen).
+  const infoTegels = (
+    <section className="pascha-verdieping orthodox-pattern parchment-pattern bg-parchment py-12 text-ink sm:py-16">
       <div className={CONTENT}>
+        <p className="opening-label text-center">Verdieping</p>
+        <h2 className="ot-sectietitel mt-1 mb-8 text-center">Over Pascha</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {INFO_CARDS.map(({ key, title, intro }) => (
             <button
@@ -303,23 +305,79 @@ export default function Pascha() {
 
   return (
     <>
-      <PageHero id="pascha" titel="Pascha" kop />
+      {/* Opening: het hoogfeest (Bouw 165). Groet en ondertitel komen uit de bestaande teksten (lib/feesten.ts, PASCHA). */}
+      <PaginaOpening
+        id="pascha"
+        soort="hoogfeest"
+        label="Het Feest der feesten"
+        titel="Pascha"
+        ondertitel="Van het Kruis naar de Verrijzenis"
+        beeld={{ src: '/images/Pascha-icoon.webp', alt: 'Icoon van de Verrijzenis: Christus haalt Adam en Eva uit het graf' }}
+      >
+        <p className="pascha-groet">„Christus is opgestaan!” <span>„Waarlijk opgestaan!”</span></p>
+      </PaginaOpening>
 
-      {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
-      {infoTegels('max-md:hidden')}
+      {/* Dit jaar: de datum van Pascha en de hele Paascyclus dag voor dag */}
+      <section className="pascha-nu bg-parchment">
+        <div className={CONTENT}>
+          <div className="pascha-nu-binnen">
+            <div className="pascha-nu-datum">
+              <p className="opening-label">Pascha {paaschaJaar}</p>
+              <p className="pascha-datum">{formatDatum(pascha)}</p>
+              <p className="pascha-aftel">{dagenTot === 0 ? 'Vandaag' : dagenTot === 1 ? 'Morgen' : `Over ${dagenTot} dagen`}</p>
+            </div>
+            <div className="pascha-nu-cyclus">
+              {/* De huidige Paascyclus, dag voor dag — ingeklapt onder een uitklapper */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setCyclusOpen((open) => !open)}
+                  aria-expanded={cyclusOpen}
+                  className="ot-kaart flex w-full items-center justify-between gap-3 rounded-xl border border-gold/40 bg-[#f8f1e3] px-5 py-4 text-left shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition hover:bg-gold-pale/40"
+                >
+                  <span>
+                    <span className="font-display block text-xl font-semibold text-ink sm:text-2xl">Paascyclus {paaschaJaar}</span>
+                    <span className="text-xs text-ink-mute">Pascha {formatDatum(pascha)} · alles wat van de Paasdatum afhangt, in volgorde</span>
+                  </span>
+                  <ChevronRight className={`h-5 w-5 shrink-0 text-gold-deep transition-transform ${cyclusOpen ? 'rotate-90' : ''}`} />
+                </button>
+                {cyclusOpen && (
+                  <ol className="thin-scroll mt-4 max-h-[420px] space-y-1 overflow-y-auto rounded-xl border border-gold/30 bg-[#faf3e2] p-3 pr-2">
+                    {PAASCYCLUS.map((f) => {
+                      const d = addDays(pascha, f.offset ?? 0);
+                      const isPascha = f.soort === 'pascha';
+                      const voorbij = d.getTime() < vandaag.getTime();
+                      return (
+                        <li key={f.id}>
+                          <button
+                            type="button"
+                            onClick={() => openDag(ymd(d))}
+                            className={`flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition hover:bg-gold-pale ${isPascha ? 'bg-wine text-gold-light hover:bg-wine' : ''} ${voorbij && !isPascha ? 'text-ink-mute' : ''}`}
+                          >
+                            <span className={`w-14 shrink-0 text-xs font-bold ${isPascha ? 'text-gold-light' : 'text-gold-deep'}`}>{formatKort(d)}</span>
+                            <span className={`flex-1 text-sm ${isPascha || f.groot ? 'font-bold' : ''}`}>{f.kort ?? f.naam}</span>
+                            {(f.groot || isPascha) && <FeestTag feest={f} />}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* De Paschale cyclus */}
       <section className="bg-parchment pb-16 sm:pb-20">
         <div className={CONTENT}>
-          <div className="cyclus-paneel parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
-            <Hoeksier className="absolute top-6 left-6" />
-            <Hoeksier className="absolute top-6 right-6 -scale-x-100" />
-            <Hoeksier className="absolute bottom-6 left-6 -scale-y-100" />
-            <Hoeksier className="absolute right-6 bottom-6 -scale-x-100 -scale-y-100" />
+          <div className="cyclus-paneel pascha-cyclus relative px-2 py-12 sm:px-10 lg:px-16">
 
             <div className="text-center">
+              <p className="opening-label">Van dood naar leven</p>
               <h2 className="ot-sectietitel">De Paschale cyclus</h2>
-              <p className="ot-label mt-2">Een liturgische reis van dood naar leven</p>
+              <p className="pascha-cyclus-onder">Een liturgische reis van dood naar leven</p>
             </div>
 
             {/* Desktop: cirkeldiagram */}
@@ -345,8 +403,8 @@ export default function Pascha() {
                 })}
               </svg>
 
-              <div className="absolute top-1/2 left-1/2 flex h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
+              <div className="absolute top-1/2 left-1/2 flex h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+                <img loading="lazy" decoding="async" src="/images/Pascha-icoon.webp" alt="Icoon van de Verrijzenis" className="pascha-ring-midden h-full w-full object-contain" />
               </div>
 
               {PERIODEN.map((periode, index) => {
@@ -363,7 +421,7 @@ export default function Pascha() {
                     onMouseEnter={() => setHovered(index)}
                     onMouseLeave={() => setHovered(null)}
                     style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
-                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
+                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}${periode.key === 'pascha' ? ' is-pascha' : ''}`}
                   >
                     <span className="etmaal-ring-badge">
                       <span
@@ -392,59 +450,22 @@ export default function Pascha() {
                   key={`${periode.key}-mobile`}
                   type="button"
                   onClick={() => setPeriodeOpen(periode.key)}
-                  className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+                  className={`pascha-rij group flex w-full items-center gap-4 text-left${periode.key === 'pascha' ? ' is-pascha' : ''}`}
                 >
                   <span className="min-w-0 flex-1">
-                    <span className="dienst-kaart-titel font-display block">{periode.label}</span>
-                    <span className="dienst-kaart-tekst block">{periode.short}</span>
+                    <span className="pascha-rij-titel block">{periode.label}</span>
+                    <span className="pascha-rij-tekst block">{periode.short}</span>
                   </span>
                   <span className="pijl" aria-hidden="true">›</span>
                 </button>
               ))}
             </div>
 
-            {/* De huidige Paascyclus, dag voor dag — ingeklapt onder een uitklapper */}
-            <div className="mx-auto mt-10 max-w-2xl border-t border-gold/25 pt-8">
-              <button
-                type="button"
-                onClick={() => setCyclusOpen((open) => !open)}
-                aria-expanded={cyclusOpen}
-                className="ot-kaart flex w-full items-center justify-between gap-3 rounded-xl border border-gold/40 bg-[#f8f1e3] px-5 py-4 text-left shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition hover:bg-gold-pale/40"
-              >
-                <span>
-                  <span className="font-display block text-xl font-semibold text-ink sm:text-2xl">Paascyclus {paaschaJaar}</span>
-                  <span className="text-xs text-ink-mute">Pascha {formatDatum(pascha)} · alles wat van de Paasdatum afhangt, in volgorde</span>
-                </span>
-                <ChevronRight className={`h-5 w-5 shrink-0 text-gold-deep transition-transform ${cyclusOpen ? 'rotate-90' : ''}`} />
-              </button>
-              {cyclusOpen && (
-                <ol className="thin-scroll mt-4 max-h-[420px] space-y-1 overflow-y-auto rounded-xl border border-gold/30 bg-[#faf3e2] p-3 pr-2">
-                  {PAASCYCLUS.map((f) => {
-                    const d = addDays(pascha, f.offset ?? 0);
-                    const isPascha = f.soort === 'pascha';
-                    const voorbij = d.getTime() < vandaag.getTime();
-                    return (
-                      <li key={f.id}>
-                        <button
-                          type="button"
-                          onClick={() => openDag(ymd(d))}
-                          className={`flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition hover:bg-gold-pale ${isPascha ? 'bg-wine text-gold-light hover:bg-wine' : ''} ${voorbij && !isPascha ? 'text-ink-mute' : ''}`}
-                        >
-                          <span className={`w-14 shrink-0 text-xs font-bold ${isPascha ? 'text-gold-light' : 'text-gold-deep'}`}>{formatKort(d)}</span>
-                          <span className={`flex-1 text-sm ${isPascha || f.groot ? 'font-bold' : ''}`}>{f.kort ?? f.naam}</span>
-                          {(f.groot || isPascha) && <FeestTag feest={f} />}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ol>
-              )}
-            </div>
           </div>
         </div>
       </section>
 
-      {infoTegels('md:hidden')}
+      {infoTegels}
 
       {/* Meer dan een datum */}
       <CycleTransition

@@ -84,7 +84,7 @@ export default function Ademcyclus() {
       <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink max-md:pt-4 max-md:pb-10 sm:py-24">
         <div className={CONTENT}>
           <div className="vlak mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:pt-6 sm:px-12 sm:py-16 lg:px-16">
-            <p className="ot-label text-center">Het Jezusgebed</p>
+            <p className="adem-titel text-center">Het Jezusgebed</p>
             <OrnamentRule className="mt-4 w-48" />
 
             {/* Christus-icoon met ringen en de twee korte gebeden ernaast */}
@@ -94,11 +94,7 @@ export default function Ademcyclus() {
                   <div className="adem-gloed" aria-hidden="true" />
                   <div className="adem-ring absolute -inset-3.5 rounded-full border border-gold/45 sm:-inset-5" />
                   <div className="adem-ring adem-ring-2 absolute -inset-7 rounded-full border border-gold/30 sm:-inset-10" />
-                  <div className="absolute -inset-9 rounded-full border border-dotted border-gold/40 sm:-inset-[60px]">
-                    {['top-0 left-1/2 -translate-x-1/2 -translate-y-1/2', 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2', 'left-0 top-1/2 -translate-x-1/2 -translate-y-1/2', 'right-0 top-1/2 translate-x-1/2 -translate-y-1/2'].map((plek) => (
-                      <span key={plek} aria-hidden="true" className={`absolute ${plek} flex h-6 w-6 items-center justify-center rounded-full bg-[#f8f1e3] text-[17px] leading-none text-gold-deep`}>✣</span>
-                    ))}
-                  </div>
+                  <div className="absolute -inset-9 rounded-full border border-dotted border-gold/40 sm:-inset-[60px]" />
                   <div className="relative z-[1] flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
                     <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
                   </div>

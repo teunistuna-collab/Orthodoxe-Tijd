@@ -85,13 +85,11 @@ export default function Kalender() {
 
       <section className="orthodox-pattern parchment-pattern bg-parchment py-12 text-ink max-md:py-5 sm:py-16">
         <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12">
-          <div className="kal-intro parchment-pattern relative overflow-hidden border border-gold/45 bg-[#f7edda] px-6 py-7 shadow-[0_16px_34px_rgba(56,31,14,0.13)] max-md:px-5 max-md:py-4 sm:px-14 sm:py-9">
-            <Hoeksier className="pointer-events-none absolute bottom-1.5 left-1.5 hidden sm:block -scale-y-100" />
-            <Hoeksier className="pointer-events-none absolute right-1.5 top-1.5 hidden -scale-x-100 sm:block" />
+          <div className="kal-intro relative px-6 py-7 max-md:px-1 max-md:py-2 sm:px-14 sm:py-9">
             <div className="relative grid gap-6 lg:grid-cols-[7fr_3fr] lg:items-center">
               <div>
                 <p className="ot-label">Leef mee met de liturgische tijd</p>
-                <h1 className="font-display mt-2 text-3xl font-semibold text-ink sm:text-4xl">De kalender van de Kerk</h1>
+                <h1 className="ot-titel font-display mt-2 text-3xl font-semibold sm:text-4xl">De kalender van de Kerk</h1>
                 <p className="mt-3 max-w-3xl text-sm leading-relaxed text-ink-soft sm:text-base">{aantalFeesten} feestdagen en {vastendagen} dagen met een vastenvoorschrift deze maand.<span className="max-md:hidden"> Elke dag is een ontmoeting met Christus door de heiligen, de feesten, de lezingen en de gebeden van de Kerk.</span></p>
               </div>
               <blockquote className="border-l border-gold/60 pl-5 font-display text-lg italic leading-relaxed text-ink-soft max-md:hidden">“In de tijd komt de Eeuwige ons tegemoet.”</blockquote>
@@ -218,7 +216,7 @@ export default function Kalender() {
 
             <aside className="relative hidden flex-col bg-[#f3e9d2]/70 lg:flex px-5 py-7 text-ink sm:px-7 sm:py-9">
               <p className="ot-label text-center">Details van de geselecteerde dag</p>
-              <h2 className="font-display mt-3 text-center text-2xl font-semibold leading-tight text-ink sm:text-3xl">{formatDatum(geselecteerd.civil)}</h2>
+              <h2 className="ot-titel font-display mt-3 text-center text-2xl font-semibold leading-tight sm:text-3xl">{formatDatum(geselecteerd.civil)}</h2>
               <p className="mt-1 text-center text-sm italic text-ink-soft">{formatDatum(geselecteerd.kerk)} · {mode === 'oud' ? 'Juliaanse kalender' : 'kerkelijke datum'}</p>
               <div className="mt-7 flex flex-1 flex-col">
                 <section className="cal-saints flex flex-1 flex-col">

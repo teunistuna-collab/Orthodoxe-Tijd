@@ -250,7 +250,7 @@ export default function Vasten() {
             <div className="flex flex-wrap items-end justify-between gap-4 text-center sm:text-left">
               <div className="mx-auto sm:mx-0">
                 <p className="ot-label">De vasten door het jaar</p>
-                <h2 className="font-display mt-2 text-2xl font-semibold text-ink sm:text-3xl">De vier grote vasten van {jaar}</h2>
+                <h2 className="ot-titel font-display mt-2 text-2xl font-semibold sm:text-3xl">De vier grote vasten van {jaar}</h2>
               </div>
               <div className="v17-year-selector mx-auto flex items-center sm:mx-0" role="group" aria-label="Jaar kiezen">
                 <button type="button" className="v17-year-arrow" onClick={() => setJaar(jaar - 1)} aria-label="Vorig jaar">‹</button>

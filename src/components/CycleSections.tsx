@@ -72,7 +72,7 @@ export function SectionHeader({ eyebrow, title, subtitle }: { eyebrow: string; t
   return (
     <div className="mb-8 text-center">
       <p className="ot-label">{eyebrow}</p>
-      <h2 className="font-display mt-2 text-3xl font-semibold text-ink sm:text-4xl">{title}</h2>
+      <h2 className="ot-titel font-display mt-2 text-3xl font-semibold sm:text-4xl">{title}</h2>
       {subtitle && <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-ink-soft">{subtitle}</p>}
     </div>
   );

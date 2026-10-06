@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Search, X } from 'lucide-react';
-import { GEBEDEN, type Gebed } from '../lib/gebeden';
+import { GEBEDEN, GEBEDEN_ZICHTBAAR, type Gebed } from '../lib/gebeden';
 import { LiturgicalPopup, CycleTransition } from './CycleSections';
 import { useFavorieten } from '../lib/favorieten';
 import PageHero from './PageHero';
@@ -92,7 +92,7 @@ export default function Gebeden() {
   // Deeplink (bijvoorbeeld gedeeld vanuit de pop-up): #gebeden/<id> opent dat gebed.
   useEffect(() => {
     const opHash = () => {
-      const g = GEBEDEN.find((x) => window.location.hash === `#gebeden/${x.id}`);
+      const g = GEBEDEN_ZICHTBAAR && GEBEDEN.find((x) => window.location.hash === `#gebeden/${x.id}`);
       if (g) setPopupGebed(g);
     };
     opHash();
@@ -131,15 +131,20 @@ export default function Gebeden() {
       <section className="gebed-intro orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">
         <div className={CONTENT}>
           <p className="ot-label ot-label-licht">Het gebedenboek</p>
-          <h2 className="font-display mt-3 text-3xl font-semibold text-gold-light sm:text-4xl">Het gebed van de Kerk</h2>
+          <h2 className="ot-titel font-display mt-3 text-3xl font-semibold sm:text-4xl">Het gebed van de Kerk</h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#d9c6a3] sm:text-lg">
             Morgengebeden, gebeden voor het slapengaan en gebeden door de dag, naar het Orthodox Gebedenboek volgens de
-            Russische traditie. Tik een gebed aan om het groot te lezen.
+            Russische traditie.{GEBEDEN_ZICHTBAAR && ' Tik een gebed aan om het groot te lezen.'}
           </p>
         </div>
       </section>
 
-      {/* Gebedscategorieën / overzicht */}
+      {/* Gebedscategorieën / overzicht; zolang de gebeden uit staan alleen de melding */}
+      {!GEBEDEN_ZICHTBAAR ? (
+        <section className="gebed-overzicht orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
+          <p className="gebed-binnenkort">De gebeden worden binnenkort toegevoegd.</p>
+        </section>
+      ) : (
       <section className="gebed-overzicht orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
         <div className={CONTENT}>
           <div className="mx-auto max-w-xl">
@@ -183,7 +188,7 @@ export default function Gebeden() {
               >
                 ← Terug naar categorieën
               </button>
-              <h3 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{huidigeCat.label}</h3>
+              <h3 className="ot-titel font-display text-2xl font-semibold sm:text-3xl">{huidigeCat.label}</h3>
               <p className="mt-2 text-sm text-ink-soft">{huidigeCat.omschrijving}</p>
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {huidigeCat.items.map((g) => (
@@ -203,7 +208,7 @@ export default function Gebeden() {
             <>
             {favorieteGebeden.length > 0 && (
               <div className="mt-10">
-                <h3 className="font-display text-2xl font-semibold text-ink sm:text-3xl">Jouw favorieten</h3>
+                <h3 className="ot-titel font-display text-2xl font-semibold sm:text-3xl">Jouw favorieten</h3>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {favorieteGebeden.map((g) => (
                     <PrayerCard key={g.id} g={g} onOpen={() => setPopupGebed(g)} />
@@ -243,6 +248,7 @@ export default function Gebeden() {
           )}
         </div>
       </section>
+      )}
 
       {/* Contemplatieve afsluiting */}
       <CycleTransition

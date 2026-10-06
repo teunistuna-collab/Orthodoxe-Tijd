@@ -1,16 +1,34 @@
 import { useMemo, useState } from 'react';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { DERTIEN, OVERIGE_VASTE } from '../lib/feesten';
-import { MAANDEN, MAANDEN_KORT, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum } from '../lib/kalender';
+import { BEWEEGLIJKE_FEESTEN, DERTIEN, OVERIGE_VASTE, type Feest } from '../lib/feesten';
+import { MAANDEN, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum } from '../lib/kalender';
 import { volgendeFeestDatum } from '../lib/overzicht';
-import { LiturgicalPopup } from './CycleSections';
-import { FEEST_HEILIGENJAAR } from '../lib/feestHeiligenjaar';
+import { ALLE_HEILIGEN } from '../lib/heiligen';
+import { FEEST_HEILIGENJAAR, GEKOPPELDE_FEESTTEKSTEN } from '../lib/feestHeiligenjaar';
 import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
-import { MobileListRow } from './ui';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
+import Modal from './Modal';
+
+// Feesten: het feestelijke hoofdstuk van het kerkboek (opmaak: index.css, Bouw 172). Volgorde: opening, het feest van
+// vandaag of het eerstvolgende grote feest, de grote feesten (het ene donkere vlak), vaste en beweeglijke feesten als
+// register, en daaronder alle feesten om te zoeken. Data en datums uitsluitend uit lib/feesten.ts en lib/overzicht.ts
+// (beweeglijke feesten via de Pascha-berekening); teksten van gekoppelde feesten uit het Heiligenjaar.
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
+
+// Feesten die het Heiligenjaar zelf als feest aanmerkt, niet aan een feest van de site gekoppeld zijn en geen twijfelgeval
+// uit de import zijn (bijvoorbeeld voorfeesten en de teruggave van een feest). Alleen in "Alle feesten", met hun eigen tekst.
+const HJ_FEESTEN: Feest[] = ALLE_HEILIGEN.filter((h) => h.type === 'feast' && !h.needsReview && !GEKOPPELDE_FEESTTEKSTEN.has(h.id)).map((h) => ({ id: h.id, naam: h.naam, soort: 'gedachtenis', md: h.md, rang: 2 }));
+const BEWEEGLIJK_OVERIG = BEWEEGLIJKE_FEESTEN.filter((f) => f.offset !== undefined && !DERTIEN.includes(f) && (f.rang ?? 0) >= 3);
+const IN_REGISTER = 8;
+
+type Item = { f: Feest; datum: Date; dagen: number };
+type Mode = ReturnType<typeof useApp>['mode'];
+
+/** De eerstvolgende datum van elk feest (lib/overzicht.ts), op volgorde. */
+const metDatum = (lijst: Feest[], vandaag: Date, mode: Mode): Item[] =>
+  lijst.map((f) => { const datum = volgendeFeestDatum(f, vandaag, mode); return { f, datum, dagen: daysBetween(vandaag, datum) }; }).sort((a, b) => a.dagen - b.dagen);
 
 export default function Feesten() {
   const { mode, vandaag } = useApp();
@@ -18,49 +36,199 @@ export default function Feesten() {
   const [zoek, setZoek] = useState('');
   const [maand, setMaand] = useState<number | null>(vandaag.getUTCMonth());
   const [dag, setDag] = useState<number | null>(null);
-  const [categorie, setCategorie] = useState<'alle'|'vast'|'beweeglijk'>('alle');
+  // "Alle vaste/beweeglijke feesten" klapt het register van die kolom helemaal uit.
+  const [heelVast, setHeelVast] = useState(false);
+  const [heelBeweeglijk, setHeelBeweeglijk] = useState(false);
 
-  const lijst = useMemo(() => DERTIEN.map(f => { const datum = volgendeFeestDatum(f,vandaag,mode); return {f,datum,dagen:daysBetween(vandaag,datum)}; }).sort((a,b)=>a.dagen-b.dagen), [vandaag,mode]);
-  const eerstvolgende = lijst[0];
-  const overige = useMemo(() => OVERIGE_VASTE.filter(f => (f.rang ?? 0) >= 3).map(f => { const datum=volgendeFeestDatum(f,vandaag,mode); return {f,datum,dagen:daysBetween(vandaag,datum)}; }).sort((a,b)=>a.dagen-b.dagen), [vandaag,mode]);
-  const alleItems = useMemo(() => [...lijst,...overige], [lijst,overige]);
-  const dagenInMaand = useMemo(() => maand===null ? [] : Array.from(new Set(alleItems.filter(x=>x.datum.getUTCMonth()===maand).map(x=>x.datum.getUTCDate()))).sort((a,b)=>a-b), [alleItems,maand]);
-  const alle = useMemo(() => alleItems.filter(({f,datum}) => { const q=zoek.trim().toLowerCase(); if(q && !f.naam.toLowerCase().includes(q)) return false; if(categorie==='vast' && f.offset!==undefined) return false; if(categorie==='beweeglijk' && f.offset===undefined) return false; if(!q && maand!==null && datum.getUTCMonth()!==maand) return false; if(!q && dag!==null && datum.getUTCDate()!==dag) return false; return true; }), [alleItems,zoek,maand,dag,categorie]);
-  const gekozen = open ? [...lijst,...overige].find(({f})=>f.id===open) : undefined;
-  // Feesten met een tekst uit het Heiligenjaar (lib/feestHeiligenjaar.ts) tonen alleen die tekst.
-  const hjTekst = useHeiligenjaarTekst(gekozen ? FEEST_HEILIGENJAAR[gekozen.f.id] : undefined);
+  const groot = useMemo(() => metDatum(DERTIEN, vandaag, mode), [vandaag, mode]);
+  const vast = useMemo(() => metDatum(OVERIGE_VASTE.filter((f) => (f.rang ?? 0) >= 3), vandaag, mode), [vandaag, mode]);
+  const beweeglijk = useMemo(() => metDatum(BEWEEGLIJK_OVERIG, vandaag, mode), [vandaag, mode]);
+  const hj = useMemo(() => metDatum(HJ_FEESTEN, vandaag, mode), [vandaag, mode]);
+  const alleItems = useMemo(() => [...groot, ...vast, ...beweeglijk, ...hj].sort((a, b) => a.dagen - b.dagen), [groot, vast, beweeglijk, hj]);
+  const eerstvolgende = groot[0];
 
-  return <>
-    <PageHero id="feesten" titel="Feesten" />
-    <section className="feasts-page bg-parchment py-12 text-ink sm:py-16"><div className={CONTENT}>
-      {/* Op mobiel staat "Ontdek alle feesten" (zoeken) bovenaan: flex-kolom met order-first; vanaf tablet de gewone volgorde. */}
-      <div className="vlak overflow-hidden border border-gold/45 bg-[#f7edda] shadow-[0_24px_55px_rgba(56,31,14,.16)] max-md:flex max-md:flex-col">
-        <section className="grid border-b border-gold/30 lg:grid-cols-[.8fr_1.2fr]">
-          <div className="bg-bark px-7 py-9 text-cream sm:px-10 sm:py-12"><p className="ot-label ot-label-licht">De feesten van de Kerk</p><h1 className="font-display mt-2 text-4xl text-gold-light sm:text-5xl">Licht in de tijd</h1><p className="mt-4 max-w-xl text-sm leading-7 text-[#d8c6a5]">Het kerkelijk jaar ontvouwt het leven van Christus en de Moeder Gods in vaste en beweeglijke feesten.</p></div>
-          <div className="px-7 py-9 sm:px-10 sm:py-12"><p className="ot-label">Eerstvolgende grote feest</p>{eerstvolgende && <><h2 className="font-display mt-2 text-3xl text-wine-deep">{eerstvolgende.f.naam}</h2><p className="mt-2 text-sm text-ink-soft"><strong>{formatLang(eerstvolgende.datum)}</strong>{eerstvolgende.dagen===0?' · vandaag':` · over ${eerstvolgende.dagen} dagen`}</p><p className="mt-4 max-w-2xl text-sm leading-6 text-ink-soft">{eerstvolgende.f.toelichting}</p></>}</div>
-        </section>
+  const dagenInMaand = useMemo(() => (maand === null ? [] : Array.from(new Set(alleItems.filter((x) => x.datum.getUTCMonth() === maand).map((x) => x.datum.getUTCDate()))).sort((a, b) => a - b)), [alleItems, maand]);
+  const alle = useMemo(
+    () =>
+      alleItems.filter(({ f, datum }) => {
+        const q = zoek.trim().toLowerCase();
+        if (q && !f.naam.toLowerCase().includes(q)) return false;
+        if (!q && maand !== null && datum.getUTCMonth() !== maand) return false;
+        if (!q && dag !== null && datum.getUTCDate() !== dag) return false;
+        return true;
+      }),
+    [alleItems, zoek, maand, dag],
+  );
 
-        <section className="border-b border-gold/30 px-6 py-9 sm:px-10 sm:py-12"><div className="text-center"><p className="ot-label">Pascha en de twaalf grote feesten</p><h2 className="font-display mt-2 text-4xl text-ink">De grote feesten</h2></div><div className="mlr-lijst feest-rijen mt-6 lg:hidden">{DERTIEN.map(f => { const item=lijst.find(x=>x.f.id===f.id)!; return <MobileListRow key={f.id} onClick={()=>setOpen(f.id)} links={<><b>{item.datum.getUTCDate()}</b><small>{MAANDEN_KORT[item.datum.getUTCMonth()]}</small><small>{item.datum.getUTCFullYear()}</small></>} titel={f.naam} onder={f.offset!==undefined?'Beweeglijk':`Vast · ${formatMd(f.md!)}`}/>})}</div><div className="feast-tiles mt-8 grid gap-px overflow-hidden border border-gold/30 bg-gold/30 max-lg:hidden md:grid-cols-2 xl:grid-cols-3">{DERTIEN.map(f => { const item=lijst.find(x=>x.f.id===f.id)!; return <button key={f.id} onClick={()=>setOpen(f.id)} className="ornate-card feast-tile group flex flex-col items-center text-center"><span className="ornate-side-ornaments" aria-hidden="true">❦ <b>✣</b> ❦</span><span className="feast-meta">{f.offset!==undefined?'Beweeglijk':`Vast · ${formatMd(f.md!)}`}</span><h3>{f.naam}</h3><p>{formatLang(item.datum)}</p></button>})}</div></section>
+  const gekozen = open ? alleItems.find(({ f }) => f.id === open) : undefined;
+  // Feesten met een tekst uit het Heiligenjaar (lib/feestHeiligenjaar.ts of zelf een Heiligenjaar-feest) tonen alleen die tekst.
+  const hjId = gekozen ? (FEEST_HEILIGENJAAR[gekozen.f.id] ?? (gekozen.f.id.startsWith('hj-') ? gekozen.f.id : undefined)) : undefined;
+  const hjTekst = useHeiligenjaarTekst(hjId);
+  const blader = (stap: number) => {
+    const i = alleItems.findIndex(({ f }) => f.id === open);
+    const volgende = alleItems[i + stap];
+    if (i !== -1 && volgende) setOpen(volgende.f.id);
+  };
 
-        <section className="grid border-b border-gold/30 max-md:border-b-0 lg:grid-cols-2"><div className="px-7 py-9 sm:px-10 lg:border-r lg:border-gold/30"><p className="ot-label">Één jaar — twee ritmes</p><h3 className="font-display mt-2 text-3xl">Vaste feesten</h3><p className="ot-tekst mt-3 text-sm leading-6 text-ink-soft">Deze gedachtenissen keren ieder kerkelijk jaar terug op dezelfde kerkelijke datum en worden door de jaarcyclus gedragen.</p><a href="#jaar" className="btn-pill cyclus-verder mt-5">Ontdek de jaarcyclus ›</a></div><div className="vlak bg-[#efe3cb]/55 px-7 py-9 sm:px-10"><p className="ot-label">Rond Pascha</p><h3 className="font-display mt-2 text-3xl">Beweeglijke feesten</h3><p className="ot-tekst mt-3 text-sm leading-6 text-ink-soft">De datum van Pascha bepaalt onder meer de Grote Week, Hemelvaart en Pinksteren. Deze data komen uit dezelfde centrale Pascha-berekening als de kalender.</p><a href="#pascha" className="btn-pill cyclus-verder mt-5">Ontdek de Paschacyclus ›</a></div></section>
+  // Pascha heeft een eigen pagina; de andere feesten openen als bladzijde.
+  const openFeest = (f: Feest) => (f.id === 'pascha' ? window.location.assign('#pascha') : setOpen(f.id));
+  const soortTekst = (f: Feest) => (f.id.startsWith('hj-') ? 'uit het Heiligenjaar' : f.offset !== undefined ? 'beweeglijk feest' : 'vaste gedachtenis');
 
-        <section className="feast-discover bibliotheek px-6 py-9 max-md:order-first max-md:border-b max-md:border-gold/30 sm:px-10 sm:py-12">
-          <div className="bieb-kop"><p className="ot-label">Door het kerkelijk jaar</p><h2 className="font-display mt-1 text-4xl">Ontdek alle feesten</h2><p className="mt-2 text-sm text-ink-soft">Zoek op naam, maand of soort en kies daarna desgewenst een dag.</p></div>
-          <div className="saints-search-row">
-            <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setDag(null)}} placeholder="Zoek een feest…" aria-label="Zoek een feest" /></label>
-            <div className="saints-select"><select aria-label="Maand" value={maand===null?'':maand} onChange={e=>{setMaand(e.target.value===''?null:Number(e.target.value));setDag(null)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
-            <div className="saints-select"><select aria-label="Categorie" value={categorie} onChange={e=>setCategorie(e.target.value as 'alle'|'vast'|'beweeglijk')}><option value="alle">Alle categorieën</option><option value="vast">Vaste feesten</option><option value="beweeglijk">Beweeglijke feesten</option></select><ChevronDown/></div>
-            <button type="button" onClick={()=>document.querySelector('.pagina:not(.pagina-verborgen) .bieb-lijst')?.scrollIntoView({behavior:'smooth',block:'center'})} className="saints-search-button">Zoeken ›</button>
+  const rij = ({ f, datum, dagen }: Item, onder?: string) => (
+    <li key={`${f.id}-${datum.toISOString()}`}>
+      <button type="button" className="fs-rij" onClick={() => openFeest(f)}>
+        <span className="fs-datum">
+          {formatDag(datum)}
+          {dagen === 0 && ' · vandaag'}
+        </span>
+        <span className="fs-rij-naam">{f.naam}</span>
+        {onder && <span className="fs-rij-onder">{onder}</span>}
+        <span className="fs-pijl" aria-hidden="true">
+          ›
+        </span>
+      </button>
+    </li>
+  );
+
+  return (
+    <>
+      <PaginaOpening id="feesten" label="Het kerkelijk jaar" titel="Feesten" ondertitel="Licht in de tijd" beeld={{ src: '/images/Moeder-Gods-icoon.webp', alt: 'Icoon van de Moeder Gods met het Kind' }}>
+        <p className="fs-intro">Het kerkelijk jaar ontvouwt het leven van Christus en de Moeder Gods in vaste en beweeglijke feesten.</p>
+      </PaginaOpening>
+
+      <section className="fs-pagina bg-parchment text-ink">
+        <div className={CONTENT}>
+          {/* Het feest van vandaag of het eerstvolgende grote feest: het rijkste blok van de pagina */}
+          {eerstvolgende && (
+            <article className="fs-nu">
+              {eerstvolgende.f.id === 'pascha' ? (
+                <img className="fs-nu-icoon" src="/images/Pascha-icoon.webp" alt="Icoon van de Verrijzenis" width={640} height={640} decoding="async" />
+              ) : (
+                <p className="fs-nu-datum" aria-hidden="true">
+                  <span>{eerstvolgende.datum.getUTCDate()}</span>
+                  {MAANDEN[eerstvolgende.datum.getUTCMonth()]}
+                </p>
+              )}
+              <div className="fs-nu-tekst">
+                <p className="opening-label">{eerstvolgende.dagen === 0 ? 'Feest van vandaag' : 'Eerstvolgend feest'}</p>
+                <h2 className="ot-titel fs-nu-naam">{eerstvolgende.f.naam}</h2>
+                <p className="fs-nu-wanneer">
+                  {formatLang(eerstvolgende.datum)}
+                  {eerstvolgende.dagen === 0 ? '' : eerstvolgende.dagen === 1 ? ' · morgen' : ` · over ${eerstvolgende.dagen} dagen`}
+                </p>
+                <span className="opening-sierlijn" aria-hidden="true" />
+                {eerstvolgende.f.toelichting && <p className="fs-nu-omschrijving">{eerstvolgende.f.toelichting}</p>}
+                <button type="button" className="fs-link" onClick={() => openFeest(eerstvolgende.f)}>
+                  {eerstvolgende.f.id === 'pascha' ? 'Naar de Pascha-pagina ›' : 'Lees meer ›'}
+                </button>
+              </div>
+            </article>
+          )}
+        </div>
+
+        {/* De grote feesten: het ene donkere vlak, als geïllustreerde inhoudsopgave in de volgorde van het kerkelijk jaar */}
+        <section className="fs-groot" aria-labelledby="fs-groot-titel">
+          <div className={CONTENT}>
+            <div className="fs-groot-kop">
+              <p className="opening-label">Pascha en de twaalf grote feesten</p>
+              <h2 id="fs-groot-titel">De grote feesten</h2>
+              <p className="fs-groot-citaat">In de feesten wordt niet alleen herinnerd wat geweest is: de Kerk treedt binnen in het heil dat Christus schenkt.</p>
+            </div>
+            <ol className="fs-groot-lijst">
+              {DERTIEN.map((f) => {
+                const { datum } = groot.find((x) => x.f.id === f.id)!;
+                return (
+                  <li key={f.id} className={f.id === 'pascha' ? 'is-pascha' : undefined}>
+                    <button type="button" onClick={() => openFeest(f)}>
+                      <span className="fs-datum">{f.offset !== undefined ? 'Beweeglijk' : formatMd(f.md!)}</span>
+                      <span className="fs-groot-naam">{f.naam}</span>
+                      <span className="fs-groot-wanneer">{f.id === 'pascha' ? `${formatLang(datum)} · naar de Pascha-pagina ›` : formatLang(datum)}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
-          <div className="saints-rule-title mt-8"><h2>Feesten per maand</h2><span>{alleItems.length}+ feesten</span></div>
-          <div className="feast-month-grid mt-4">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i);setDag(null);setZoek('')}} className={maand===i?'active':''}>{m}</button>)}</div>
-          {maand!==null && <><div className="saints-rule-title mt-8"><h2>Kies een dag in {MAANDEN[maand]}</h2><span>{dagenInMaand.length} dagen met feesten</span></div><div className="feast-day-grid mt-4">{dagenInMaand.map(d=><button key={d} onClick={()=>setDag(d)} className={dag===d?'active':''}>{d}</button>)}</div></>}
-          <div className="saints-rule-title mt-8"><h2>{dag!==null&&maand!==null?`${dag} ${MAANDEN[maand]}`:'Geselecteerde feesten'}</h2><span>{alle.length} resultaten</span></div>
-          <div className="bieb-lijst mt-4">{alle.slice(0,30).map(({f,datum,dagen})=>{ const datumTekst=`${MAANDEN[datum.getUTCMonth()]} ${datum.getUTCDate()}${dagen===0?' · vandaag':''}`; return <button key={`${f.id}-${datum.toISOString()}`} type="button" onClick={()=>setOpen(f.id)} aria-label={`${f.naam}, ${datum.getUTCDate()} ${MAANDEN[datum.getUTCMonth()]}${dagen===0?', vandaag':''}. Openen`} className="bieb-rij"><span className="bieb-rij-tekst"><span className="bieb-rij-datum">{datumTekst}</span><span className="bieb-rij-titel">{f.naam}</span><span className="bieb-rij-sub">{f.offset!==undefined?'beweeglijk feest':'vaste gedachtenis'}{mode==='oud'&&f.md?` · kerkelijk ${formatDag(kerkDatum(datum,mode))}`:''}</span></span><span className="bieb-rij-pijl" aria-hidden="true">›</span></button>})}</div>
         </section>
-      </div>
-    </div></section>
-    <section className="bg-bark py-12 text-cream"><div className={CONTENT}><div className="mx-auto max-w-3xl text-center"><p className="ot-label ot-label-licht">De tijd wordt geheiligd</p><p className="font-display mt-3 text-2xl italic text-[#e7d8ba]">In de feesten wordt niet alleen herinnerd wat geweest is: de Kerk treedt binnen in het heil dat Christus schenkt.</p></div></div></section>
-    <LiturgicalPopup open={!!gekozen} onClose={()=>setOpen(null)} content={gekozen ? (FEEST_HEILIGENJAAR[gekozen.f.id] ? {title:gekozen.f.naam, subtitle:formatLang(gekozen.datum), paragraphs: hjTekst ?? ['De tekst wordt geladen…']} : {title:gekozen.f.naam, subtitle:formatLang(gekozen.datum), highlight:gekozen.f.troparion, paragraphs:[gekozen.f.toelichting, ...(gekozen.f.traditie?[`Gebruiken: ${gekozen.f.traditie}`]:[])].filter((p): p is string => Boolean(p))}):null}/>
-  </>;
+
+        {/* Vaste en beweeglijke feesten naast elkaar, als register */}
+        <div className={CONTENT}>
+          <div className="fs-ritmes">
+            <p className="opening-label fs-ritmes-label">Eén jaar — twee ritmes</p>
+            <section className="fs-kolom" aria-labelledby="fs-vast-titel">
+              <h2 id="fs-vast-titel" className="ot-titel">Vaste feesten</h2>
+              <p className="fs-kolom-tekst">Deze gedachtenissen keren ieder kerkelijk jaar terug op dezelfde kerkelijke datum en worden door de jaarcyclus gedragen.</p>
+              <ol className="fs-register">{(heelVast ? vast : vast.slice(0, IN_REGISTER)).map((x) => rij(x))}</ol>
+              <p className="fs-links">
+                <button type="button" className="fs-link" aria-expanded={heelVast} onClick={() => setHeelVast(!heelVast)}>{heelVast ? 'Minder tonen ‹' : 'Alle vaste feesten ›'}</button>
+                <a className="fs-link" href="#jaar">Ontdek de jaarcyclus ›</a>
+              </p>
+            </section>
+            <section className="fs-kolom" aria-labelledby="fs-beweeglijk-titel">
+              <h2 id="fs-beweeglijk-titel" className="ot-titel">Beweeglijke feesten</h2>
+              <p className="fs-kolom-tekst">De datum van Pascha bepaalt onder meer de Grote Week, Hemelvaart en Pinksteren. Deze data komen uit dezelfde centrale Pascha-berekening als de kalender.</p>
+              <ol className="fs-register">{(heelBeweeglijk ? beweeglijk : beweeglijk.slice(0, IN_REGISTER)).map((x) => rij(x))}</ol>
+              <p className="fs-links">
+                <button type="button" className="fs-link" aria-expanded={heelBeweeglijk} onClick={() => setHeelBeweeglijk(!heelBeweeglijk)}>{heelBeweeglijk ? 'Minder tonen ‹' : 'Alle beweeglijke feesten ›'}</button>
+                <a className="fs-link" href="#pascha">Ontdek de Paschacyclus ›</a>
+              </p>
+            </section>
+          </div>
+
+          {/* Alle feesten: zoeken op naam, maand of soort */}
+          <section className="fs-alle feast-discover bibliotheek" aria-labelledby="fs-alle-titel">
+            <div className="fs-sectiekop">
+              <p className="opening-label">Door het kerkelijk jaar</p>
+              <h2 id="fs-alle-titel" className="ot-titel">Alle feesten</h2>
+            </div>
+            <div className="saints-search-row">
+              <label><Search /><input value={zoek} onChange={(e) => { setZoek(e.target.value); setDag(null); }} placeholder="Zoek een feest…" aria-label="Zoek een feest" /></label>
+            </div>
+            <div className="fs-maanden" role="group" aria-label="Maand">
+              {MAANDEN.map((m, i) => <button key={m} type="button" aria-pressed={maand === i} onClick={() => { setMaand(maand === i ? null : i); setDag(null); setZoek(''); }}>{m}</button>)}
+            </div>
+            {maand !== null && dagenInMaand.length > 0 && (
+              <div className="fs-dagen" role="group" aria-label={`Dag in ${MAANDEN[maand]}`}>
+                {dagenInMaand.map((d) => <button key={d} type="button" aria-pressed={dag === d} onClick={() => setDag(dag === d ? null : d)}>{d}</button>)}
+              </div>
+            )}
+            <p className="fs-aantal">{dag !== null && maand !== null ? `${dag} ${MAANDEN[maand]}` : maand !== null && !zoek.trim() ? hoofdletter(MAANDEN[maand]) : 'Gevonden'} · {alle.length} {alle.length === 1 ? 'feest' : 'feesten'}</p>
+            <ol className="fs-register">{alle.slice(0, 40).map((x) => rij(x, `${soortTekst(x.f)}${mode === 'oud' && x.f.md ? ` · kerkelijk ${formatDag(kerkDatum(x.datum, mode))}` : ''}`))}</ol>
+          </section>
+        </div>
+      </section>
+
+      {gekozen && (
+        <Modal
+          open
+          onClose={() => setOpen(null)}
+          eyebrow="Feest"
+          title={gekozen.f.naam}
+          centerTitle
+          maxWidth="max-w-3xl"
+          lezen
+          kopDatum={formatDag(gekozen.datum)}
+          kopNav
+          onVorige={() => blader(-1)}
+          onVolgende={() => blader(1)}
+          ondertitel={`${hoofdletter(formatLang(gekozen.datum))}${soortTekst(gekozen.f) === 'vaste gedachtenis' ? '' : ` · ${soortTekst(gekozen.f)}`}`}
+          inhoudSleutel={gekozen.f.id}
+        >
+          <div className="exact-popup-reading fs-lees">
+            {hjId ? (
+              <div className="exact-popup-prose">{(hjTekst ?? ['De tekst wordt geladen…']).map((p, i) => <p key={i}>{p}</p>)}</div>
+            ) : (
+              <>
+                {gekozen.f.troparion && <blockquote className="exact-popup-highlight">{gekozen.f.troparion}</blockquote>}
+                <div className="exact-popup-prose">
+                  {[gekozen.f.toelichting, gekozen.f.traditie && `Gebruiken: ${gekozen.f.traditie}`].filter((p): p is string => Boolean(p)).map((p, i) => <p key={i}>{p}</p>)}
+                  {!gekozen.f.toelichting && !gekozen.f.troparion && <p>Voor dit feest is nog geen tekst beschikbaar.</p>}
+                </div>
+              </>
+            )}
+          </div>
+        </Modal>
+      )}
+    </>
+  );
 }

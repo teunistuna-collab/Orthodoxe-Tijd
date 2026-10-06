@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
 import NaarBoven from './NaarBoven';
 import Modal from './Modal';
 import Leesbediening from './Leesbediening';
@@ -8,8 +8,8 @@ import { OPEN_DIENST_EVENT } from '../lib/events';
 import { useFavorieten } from '../lib/favorieten';
 import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 
-// Psalmen: een digitaal psalter. Desktop: lijst links, leesvenster rechts. Mobiel en tablet: de lijst op de pagina,
-// een psalm opent in het gewone leesvenster (Modal). Opmaak: Bouw 72 en 74 in index.css.
+// Psalmen: een digitaal psalter. Desktop: het register (zoeken, filters, lijst) links, leesvenster rechts. Mobiel en tablet:
+// het register op de pagina, een psalm opent in het gewone leesvenster (Modal). Opmaak: Bouw 72, 74 en 170 in index.css.
 // Alleen echte data: teksten uit public/data/psalmen.json, gebruik uit het etmaal (lib/etmaal.ts).
 
 // ponytail: introductietekst overgenomen uit de aangeleverde referentieontwerpen; nog door de redactie te bevestigen.
@@ -28,6 +28,7 @@ const FILTERS: [Filter, string][] = [
 // A–Z komt er pas bij als er gecontroleerde titels per psalm zijn.
 
 const LEESVENSTER_NAAST_LIJST = '(min-width: 1024px)';
+const MET_TEKST = PSALMEN.filter((p) => p.hasText).length;
 
 // Deep link: #psalmen/50 opent Psalm 50 (desktop in het leesvenster, mobiel als pop-up); te gebruiken vanaf Vandaag, Etmaal, zoeken.
 const psalmUitHash = () => {
@@ -78,7 +79,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   // Desktop: de lijst scrollt zelf naar de gekozen psalm als die buiten beeld staat (de pagina blijft staan).
   useEffect(() => {
     const el = lijstRef.current;
-    const rij = el?.querySelector<HTMLElement>('.ps-rij[aria-current]');
+    const rij = el?.querySelector<HTMLElement>('.psr-rij[aria-current]');
     if (!el || !rij || el.scrollHeight <= el.clientHeight) return;
     if (rij.offsetTop < el.scrollTop || rij.offsetTop + rij.offsetHeight > el.scrollTop + el.clientHeight) {
       el.scrollTop = rij.offsetTop - el.clientHeight / 2 + rij.offsetHeight / 2;
@@ -123,15 +124,20 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   }, []);
 
   const rij = (p: Psalm, onder?: string) => (
-    <button key={p.id} type="button" className={`ps-rij${p.hasText ? '' : ' is-zonder-tekst'}`} aria-current={p.septuagintNumber === gekozen ? 'true' : undefined} onClick={() => kies(p)}>
-      <span className="ps-nummer" aria-hidden="true">
+    <button key={p.id} type="button" className={`psr-rij${p.hasText ? '' : ' is-zonder-tekst'}`} aria-current={p.septuagintNumber === gekozen ? 'true' : undefined} onClick={() => kies(p)}>
+      <span className="psr-nr" aria-hidden="true">
         {p.septuagintNumber}
       </span>
-      <span className="ps-rij-tekst">
-        <span className="ps-rij-titel">{p.title}{!p.hasText && <> <span className="ps-rij-label">tekst volgt</span></>}</span>
-        {onder && <span className="ps-rij-onder">{onder}</span>}
+      <span className="psr-tekst">
+        <span className="psr-titel">
+          {p.title}
+          {!p.hasText && <span className="sr-only">, tekst wordt nog toegevoegd</span>}
+        </span>
+        {onder && <span className="psr-onder">{onder}</span>}
       </span>
-      <span className="ps-pijl pijl" aria-hidden="true">›</span>
+      <span className="psr-pijl" aria-hidden="true">
+        ›
+      </span>
     </button>
   );
 
@@ -147,113 +153,118 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
   const psalm = PSALMEN[gekozen - 1];
   const popupPsalm = popup !== null ? PSALMEN[popup - 1] : null;
+  const plek = lijst.findIndex((p) => p.septuagintNumber === popup);
 
   return (
     <>
-      <PageHero id="psalmen" titel="Psalmen" kop />
+      <PaginaOpening id="psalmen" label="Gebed van de Kerk" titel="Psalmen" ondertitel="De adem van de ziel">
+        <p className="psr-intro">
+          {INTRO} <span className="ps-intro-vervolg">{INTRO_VERVOLG}</span>
+        </p>
+      </PaginaOpening>
 
       <section className="ps-pagina parchment-pattern bg-parchment text-ink">
         <div className="ps-inhoud">
-          <div className="ps-intro ps-kader">
-            <span className="ps-sier" aria-hidden="true">
-              <i />✣<i />
-            </span>
-            <p>
-              {INTRO} <span className="ps-intro-vervolg">{INTRO_VERVOLG}</span>
-            </p>
-          </div>
-
-          <div className="ps-zoekrij">
-            <label className="ps-zoek">
-              <Search aria-hidden="true" />
-              <input type="search" value={zoek} onChange={(e) => setZoek(e.target.value)} placeholder={plaatshouder} aria-label="Zoek een psalm op nummer, woord of dienst" />
-            </label>
-          </div>
-
-          <div className="ps-filters" role="group" aria-label="Filter">
-            {FILTERS.map(([id, label]) => (
-              <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)}>
-                {label}
-              </button>
-            ))}
-          </div>
-
-          {filter === 'kathisma' && (
-            <div className="ps-kathismas ps-kies" role="group" aria-label="Kathisma">
-              {KATHISMATA.map((k) => (
-                <button key={k.nr} type="button" aria-pressed={k.nr === kathismaNr} aria-label={`Kathisma ${k.nr}`} onClick={() => setKathismaNr(k.nr)}>
-                  {k.nr}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {filter === 'themas' && (
-            <div className="ps-themas ps-kies" role="group" aria-label="Thema">
-              {THEMAS.map((t) => (
-                <button key={t.naam} type="button" aria-pressed={t === thema} onClick={() => setThema(t)}>
-                  {t.naam}
-                </button>
-              ))}
-            </div>
-          )}
-
           <div className="ps-psalter">
-            <div ref={lijstRef} className="ps-lijst">
-              {lijst.length === 0 &&
-                (filter === 'favorieten' && !zoek.trim() ? (
-                  <p className="ps-leeg">Nog geen favorieten. Tik bij een psalm op de bladwijzer om hem hier te bewaren.</p>
-                ) : (
-                  <p className="ps-leeg">Geen psalmen gevonden{zoek.trim() ? ` voor “${zoek.trim()}”` : ''}.</p>
+            <div className="psr-register">
+              <div className="psr-zoekrij">
+                <label className="ps-zoek">
+                  <Search aria-hidden="true" />
+                  <input type="search" value={zoek} onChange={(e) => setZoek(e.target.value)} placeholder={plaatshouder} aria-label="Zoek een psalm op nummer, woord of dienst" />
+                </label>
+              </div>
+
+              <div className="ps-filters" role="group" aria-label="Filter">
+                {FILTERS.map(([id, label]) => (
+                  <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)}>
+                    {label}
+                  </button>
                 ))}
+              </div>
+
               {filter === 'kathisma' && (
-                <div className="ps-groep">
-                  <h3>
-                    Kathisma {kathisma.nr} <span>Psalm {kathisma.van === kathisma.tot ? kathisma.van : `${kathisma.van}–${kathisma.tot}`}</span>
-                  </h3>
-                  {kathisma.noot && <h4>{kathisma.noot}</h4>}
+                <div className="ps-kathismas ps-kies" role="group" aria-label="Kathisma">
+                  {KATHISMATA.map((k) => (
+                    <button key={k.nr} type="button" aria-pressed={k.nr === kathismaNr} aria-label={`Kathisma ${k.nr}`} onClick={() => setKathismaNr(k.nr)}>
+                      {k.nr}
+                    </button>
+                  ))}
                 </div>
               )}
+
               {filter === 'themas' && (
-                <div className="ps-groep">
-                  <h3>
-                    {thema.naam} <span>{thema.psalmen.length} psalmen</span>
-                  </h3>
+                <div className="ps-themas ps-kies" role="group" aria-label="Thema">
+                  {THEMAS.map((t) => (
+                    <button key={t.naam} type="button" aria-pressed={t === thema} onClick={() => setThema(t)}>
+                      {t.naam}
+                    </button>
+                  ))}
                 </div>
               )}
-              {groepen
-                ? groepen.map((g) => (
-                    <section key={g.dienst} className="ps-groep" aria-label={g.dienst}>
-                      <h3>
-                        {g.dienst} <span>{g.tijd}</span>
-                      </h3>
-                      {g.delen.map((d) => (
-                        <Fragment key={d.onderdeel ?? ''}>
-                          {d.onderdeel && <h4>{d.onderdeel}</h4>}
-                          {d.psalmen.map((n) => rij(PSALMEN[n - 1]))}
-                        </Fragment>
-                      ))}
-                    </section>
-                  ))
-                : lijst.map((p) => {
-                    const verzen = filter === 'themas' ? thema.verzen?.[p.septuagintNumber] : undefined;
-                    return rij(p, verzen ? `Vers ${verzen}` : p.liturgicalUses.length ? `Etmaal · ${p.liturgicalUses.map((g) => g.dienst).join(', ')}` : undefined);
-                  })}
+
+              <p className="psr-noot">
+                {MET_TEKST} van de 150 psalmen hebben al tekst; de andere worden toegevoegd.
+              </p>
+
+              <div ref={lijstRef} className="ps-lijst psr-lijst">
+                {lijst.length === 0 &&
+                  (filter === 'favorieten' && !zoek.trim() ? (
+                    <p className="ps-leeg">Nog geen favorieten. Tik bij een psalm op de bladwijzer om hem hier te bewaren.</p>
+                  ) : (
+                    <p className="ps-leeg">Geen psalmen gevonden{zoek.trim() ? ` voor “${zoek.trim()}”` : ''}.</p>
+                  ))}
+                {filter === 'kathisma' && (
+                  <div className="ps-groep">
+                    <h3>
+                      Kathisma {kathisma.nr} <span>Psalm {kathisma.van === kathisma.tot ? kathisma.van : `${kathisma.van}–${kathisma.tot}`}</span>
+                    </h3>
+                    {kathisma.noot && <h4>{kathisma.noot}</h4>}
+                  </div>
+                )}
+                {filter === 'themas' && (
+                  <div className="ps-groep">
+                    <h3>
+                      {thema.naam} <span>{thema.psalmen.length} psalmen</span>
+                    </h3>
+                  </div>
+                )}
+                {groepen
+                  ? groepen.map((g) => (
+                      <section key={g.dienst} className="ps-groep" aria-label={g.dienst}>
+                        <h3>
+                          {g.dienst} <span>{g.tijd}</span>
+                        </h3>
+                        {g.delen.map((d) => (
+                          <Fragment key={d.onderdeel ?? ''}>
+                            {d.onderdeel && <h4>{d.onderdeel}</h4>}
+                            {d.psalmen.map((n) => rij(PSALMEN[n - 1]))}
+                          </Fragment>
+                        ))}
+                      </section>
+                    ))
+                  : lijst.map((p) => {
+                      const verzen = filter === 'themas' ? thema.verzen?.[p.septuagintNumber] : undefined;
+                      return rij(p, verzen ? `Vers ${verzen}` : p.liturgicalUses.length ? `Etmaal · ${p.liturgicalUses.map((g) => g.dienst).join(', ')}` : undefined);
+                    })}
+              </div>
             </div>
 
             {/* Desktop: leesvenster naast de lijst (op kleinere schermen verborgen, daar opent het leesvenster als pop-up) */}
-            <article className="ps-lezer ps-kader lees-vlak" aria-labelledby="ps-titel">
+            <article className="ps-lezer lees-vlak" aria-labelledby="ps-titel">
+              {psalm.hasText && (
+                <div className="psr-lees-bediening">
+                  <Leesbediening audioSrc={psalm.audioSrc} deel={{ titel: psalm.title, pad: `psalmen/${psalm.septuagintNumber}` }} />
+                </div>
+              )}
               <header className="ps-lezer-kop">
-                <span className="ps-sier" aria-hidden="true">
-                  <i />✣<i />
-                </span>
-                <h2 id="ps-titel">{psalm.title}</h2>
+                <p className="opening-label">Psalter</p>
+                <h2 id="ps-titel" className="ot-titel">
+                  {psalm.title}
+                </h2>
                 {psalm.masoreticNumber && <p>Psalm {psalm.masoreticNumber} in de Hebreeuwse nummering</p>}
-                <span className="ps-sier" aria-hidden="true">
-                  <i />✣<i />
-                </span>
+                <span className="opening-sierlijn" aria-hidden="true" />
               </header>
-              <PsalmLezer key={psalm.id} idVoorvoegsel="ps-pagina" psalm={psalm} tekst={teksten?.[gekozen]} laadFout={laadFout} bediening={psalm.hasText ? <Leesbediening audioSrc={psalm.audioSrc} deel={{ titel: psalm.title, pad: `psalmen/${psalm.septuagintNumber}` }} /> : undefined} />
+              <PsalmLezer key={psalm.id} idVoorvoegsel="ps-pagina" psalm={psalm} tekst={teksten?.[gekozen]} laadFout={laadFout} />
             </article>
           </div>
         </div>
@@ -272,12 +283,19 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           deel={{ titel: popupPsalm.title, pad: `psalmen/${popupPsalm.septuagintNumber}` }}
           onVorige={() => blader(-1)}
           onVolgende={() => blader(1)}
+          ondertitel={popupPsalm.masoreticNumber ? `Psalm ${popupPsalm.masoreticNumber} in de Hebreeuwse nummering` : undefined}
         >
-          {popupPsalm.masoreticNumber && <p className="ps-ondertitel">Psalm {popupPsalm.masoreticNumber} in de Hebreeuwse nummering</p>}
-          <span className="ps-sier ps-sier-popup" aria-hidden="true">
-            <i />✣<i />
-          </span>
           <PsalmLezer key={popupPsalm.id} idVoorvoegsel="ps-popup" psalm={popupPsalm} tekst={teksten?.[popupPsalm.septuagintNumber]} laadFout={laadFout} />
+          {/* Bladeren door de huidige lijst, onderaan het leesvenster */}
+          <nav className="psr-blader" aria-label="Bladeren door de psalmen">
+            <button type="button" onClick={() => blader(-1)} disabled={plek <= 0}>
+              ‹ Vorige
+            </button>
+            <span>{popupPsalm.title}</span>
+            <button type="button" onClick={() => blader(1)} disabled={plek === -1 || plek === lijst.length - 1}>
+              Volgende ›
+            </button>
+          </nav>
         </Modal>
       )}
       <NaarBoven />
@@ -286,7 +304,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 }
 
 /** Tabs en tekst van één psalm; gedeeld door het desktopvenster en het leesvenster op mobiel. */
-function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, bediening }: { psalm: Psalm; tekst?: PsalmTekst; laadFout: boolean; idVoorvoegsel: string; bediening?: ReactNode }) {
+function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; tekst?: PsalmTekst; laadFout: boolean; idVoorvoegsel: string }) {
   const [tab, setTab] = useState<'tekst' | 'themas' | 'gebruik'>('tekst');
   const id = (s: string) => `${idVoorvoegsel}-${s}`;
 
@@ -308,7 +326,6 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, bediening }: { psal
             </button>
           )}
         </div>
-        {bediening}
       </div>
 
       <div id={id('paneel')} role="tabpanel" aria-labelledby={id(`tab-${tab}`)} className="ps-paneel">

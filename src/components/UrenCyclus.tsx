@@ -9,7 +9,6 @@ import { ETMAAL_INFO } from '../lib/cyclusTeksten';
 import { ringVak } from '../lib/ringVak';
 import { serviceConfig, type PsalmMapping } from '../lib/etmaal';
 import PageHero from './PageHero';
-import { Hoeksier } from './ui';
 
 // De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
 let pdfjsLaden: Promise<typeof import('pdfjs-dist')> | null = null;
@@ -253,10 +252,6 @@ export default function UrenCyclus() {
       <section className="bg-parchment pb-16 sm:pb-20">
         <div className={CONTENT}>
           <div className="cyclus-paneel parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
-            <Hoeksier className="absolute top-6 left-6" />
-            <Hoeksier className="absolute top-6 right-6 -scale-x-100" />
-            <Hoeksier className="absolute bottom-6 left-6 -scale-y-100" />
-            <Hoeksier className="absolute right-6 bottom-6 -scale-x-100 -scale-y-100" />
 
             <div className="text-center">
               <h2 className="ot-sectietitel">De diensten van het etmaal</h2>

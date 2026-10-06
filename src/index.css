@@ -1645,16 +1645,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .ps-pagina{padding:18px 0 40px}
 .ps-inhoud{width:min(1240px,100%);margin:0 auto;padding:0 14px}
 
-.ps-kader{position:relative;border:1px solid rgba(184,134,40,.6);background:linear-gradient(180deg,#fbf5e7,#f5ead2);box-shadow:inset 0 0 0 3px #fbf5e7,inset 0 0 0 4px rgba(184,134,40,.26)}
-.ps-kader:before,.ps-kader:after{content:'❦';position:absolute;top:7px;color:#b88628;font-size:21px;line-height:1;pointer-events:none}
-.ps-kader:before{left:11px}
-.ps-kader:after{right:11px;transform:scaleX(-1)}
-.ps-sier{display:flex;align-items:center;justify-content:center;gap:10px;color:#b07d1f;font-size:13px;line-height:1}
-.ps-sier i{width:64px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,40,.8))}
-.ps-sier i:last-child{transform:scaleX(-1)}
 
-.ps-intro{padding:13px 38px 15px;text-align:center}
-.ps-intro p{max-width:66ch;margin:8px auto 0;font-family:var(--font-display);font-size:15.5px;line-height:1.45;color:#3a2a1c}
 
 .ps-zoekrij{margin-top:14px}
 .ps-zoek{display:flex;align-items:center;gap:9px;min-height:46px;padding:0 12px;border:1px solid rgba(176,126,37,.5);border-radius:6px;background:#fbf6ea;cursor:text}
@@ -1672,20 +1663,11 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 
 .ps-psalter{display:grid;gap:14px;margin-top:12px}
 .ps-lijst{display:flex;flex-direction:column;gap:7px}
-#top#top#top .ps-rij{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:52px;padding:5px 10px 5px 8px;border:1px solid rgba(176,126,37,.42);border-radius:4px;background:linear-gradient(180deg,#fbf6ea,#f3e8d0);text-align:left;color:#2b1d12;cursor:pointer;transition:border-color .15s,background-color .15s}
-#top#top#top .ps-rij[aria-current]{border-color:#9c6f22;background:linear-gradient(180deg,#f5e5c1,#eed9ad);box-shadow:inset 3px 0 0 #5a1716}
-.ps-nummer{display:flex;flex:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#6e1f1b,#3a0d0c);box-shadow:0 0 0 1px #c9a24a,0 0 0 3px #f6ecd6,0 0 0 4px rgba(184,134,40,.55);font-family:var(--font-display);font-size:15px;font-weight:600;line-height:1;color:#f3dfae}
-.ps-rij-tekst{display:flex;min-width:0;flex-direction:column;gap:1px}
-.ps-rij-titel{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.15;color:#2b1d12}
-.ps-rij-onder{overflow:hidden;font-family:var(--font-display);font-size:13.5px;line-height:1.25;white-space:nowrap;text-overflow:ellipsis;color:#6b5540}
-.ps-pijl{width:18px;height:18px;color:#7d5218}
-.is-zonder-tekst .ps-rij-titel{font-weight:500;color:#6b5540}
 .ps-leeg{margin:0;padding:12px 2px;font-family:var(--font-display);font-size:17px;font-style:italic;color:#6b5540}
 
 .ps-lezer{padding:14px 14px 18px}
 .ps-lezer-kop h2{margin:6px 0 0;font-family:var(--font-display);font-size:26px;font-weight:600;line-height:1.1;color:#2b1d12}
 .ps-lezer-kop p{margin:3px 0 0;font-family:var(--font-display);font-size:15px;font-style:italic;color:#5b402e}
-.ps-lezer-kop .ps-sier:last-child{display:none}
 .ps-tabs{display:flex;gap:24px;margin-top:10px;overflow-x:auto;border-bottom:1px solid rgba(184,134,40,.4);scrollbar-width:none}
 #top#top#top .ps-tabs button{position:relative;display:inline-flex;flex:none;align-items:center;min-height:42px;padding:0 2px;border:0;background:none;font-family:var(--font-display);font-size:16px;color:#5b402e;white-space:nowrap;cursor:pointer}
 #top#top#top .ps-tabs button[aria-selected=true]{font-weight:600;color:#5a1716}
@@ -1702,20 +1684,13 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .ps-gebruik li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;padding:8px 0;border-bottom:1px solid rgba(184,134,40,.25);font-family:var(--font-display);font-size:18px;color:#2b1d12}
 .ps-gebruik a{display:inline-flex;align-items:center;min-height:44px;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7d5218;text-decoration:none}
 
-/* mobiel en tablet: lijst en leesblok onder elkaar, rustig venster van vier psalmen */
-@media(max-width:340px){
-  .ps-intro{padding-left:30px;padding-right:30px}
-}
 @media(min-width:768px){
   .ps-pagina{padding:22px 0 56px}
   .ps-inhoud{padding:0 28px}
-  .ps-intro{padding:15px 60px 18px}
-  .ps-intro p{max-width:76ch;font-size:18px;line-height:1.5}
   .ps-zoekrij{margin-top:18px}
   .ps-lezer{padding:18px 28px 24px}
   .ps-lezer-kop{text-align:center}
   .ps-lezer-kop h2{font-size:30px}
-  .ps-lezer-kop .ps-sier:last-child{display:flex;margin-top:9px}
   .ps-vers{grid-template-columns:26px minmax(0,1fr)}
   .ps-vers p{font-size:19px}
 }
@@ -1723,11 +1698,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 @media(min-width:1024px){
   .ps-psalter{grid-template-columns:minmax(0,46fr) minmax(0,54fr);align-items:start;gap:22px;margin-top:16px}
   .ps-lijst{position:sticky;top:94px;max-height:calc(100vh - 118px);overflow-y:auto;padding:1px 6px 1px 1px;scrollbar-width:thin;scrollbar-color:rgba(184,134,40,.5) transparent}
-  #top#top#top .ps-rij{min-height:58px;gap:14px;padding:7px 12px 7px 10px}
-  #top#top#top .ps-rij:hover{border-color:#b88628}
-  .ps-nummer{width:40px;height:40px;font-size:17px}
-  .ps-rij-titel{font-size:18px}
-  .ps-rij-onder{font-size:14px}
   #top#top#top .ps-filters button{min-height:36px}
 }
 
@@ -1751,22 +1721,13 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .hoeksier{display:block;width:34px;height:34px;background:var(--hoeksier) no-repeat center/contain;opacity:.85;pointer-events:none}
 #top#top#top .vandaag-paper:before,#top#top#top .vandaag-paper:after,
 #top#top#top .v17-fasting-today:before,#top#top#top .v17-fasting-today:after,
-#top#top#top .ps-kader:before,#top#top#top .ps-kader:after,
 #top#top#top .exact-modal-vlak:before,#top#top#top .exact-modal-vlak:after{content:'';width:34px;height:34px;background:var(--hoeksier) no-repeat center/contain;font-size:0;opacity:.85}
-#top#top#top .ps-kader:before,#top#top#top .ps-kader:after{top:6px;width:30px;height:30px}
-#top#top#top .ps-kader:before{left:6px}
-#top#top#top .ps-kader:after{right:6px}
 #top#top#top .vandaag-paper:before,#top#top#top .vandaag-paper:after{top:14px;width:40px;height:40px}
 #top#top#top .v17-fasting-today:before,#top#top#top .v17-fasting-today:after{opacity:1}
 #top#top#top .exact-modal-vlak:before,#top#top#top .exact-modal-vlak:after{opacity:.7}
 /* De versiering hangt aan de niet-scrollende omhulling (Modal.tsx), zodat hij in de hoeken blijft staan terwijl de tekst scrolt */
 .exact-modal-vlak{position:relative;display:flex;flex-direction:column;min-height:0}
 #top#top#top .exact-modal-vlak:before,#top#top#top .exact-modal-vlak:after{z-index:1}
-@media(max-width:767.98px){
-  #top#top#top .ps-kader:before,#top#top#top .ps-kader:after{width:26px;height:26px;top:5px}
-  #top#top#top .ps-kader:before{left:5px}
-  #top#top#top .ps-kader:after{right:5px}
-}
 
 /* Bouw 74 — centrale leesbediening (components/Leesbediening.tsx, lib/leesvoorkeur.ts).
    Ronde knoppen A+ · A− · (audio, alleen psalmen) · avondweergave. Tikzone 44px, zichtbare cirkel 36px.
@@ -1804,7 +1765,6 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 @media(max-width:1023.98px){
   .ps-lezer{display:none!important}
 }
-.ps-ondertitel{margin:2px 0 0;text-align:center;font-family:var(--font-display);font-size:15px;font-style:italic;color:#5b402e}
 
 /* Bouw 75 — Psalmen: Etmaal-weergave per dienst, gouden lijn onder de kop in het leesvenster */
 .ps-groep{display:flex;flex-direction:column;gap:7px}
@@ -1812,7 +1772,6 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 .ps-groep h3{display:flex;align-items:baseline;gap:8px;margin:0;padding:2px 2px 0;font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7d5218}
 .ps-groep h3 span{font-weight:500;letter-spacing:.04em;color:#6b5540}
 .ps-groep h4{margin:3px 0 0;padding:0 2px;font-family:var(--font-display);font-size:15px;font-style:italic;font-weight:500;color:#5b402e}
-.ps-sier-popup{margin:8px 0 2px}
 
 /* Bouw 76 — deelknop (components/DeelKnop.tsx), links naar het psalter vanuit Etmaal en Vandaag */
 .dag-deel svg{width:18px;height:18px}
@@ -2109,7 +2068,6 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 /* één pijl */
 .pijl{flex:none;font-family:var(--font-body);font-size:28px;font-weight:500;line-height:1;color:var(--color-gold-deep);transition:transform .18s,color .18s}
 :is(button,a):is(:hover,:focus-visible)>.pijl{transform:translateX(3px)}
-#top#top#top .ps-pijl.pijl{width:auto;height:auto;font-size:24px}
 @media(max-width:767.98px){#top#top#top .vm-rij .pijl{font-size:24px}}
 @media(prefers-reduced-motion:reduce){.pijl{transition:none}}
 /* één zoekveld: Psalmen, Gebeden en de bibliotheek (Heiligen, Feesten) gelijk */
@@ -2425,7 +2383,7 @@ details[open]::details-content{height:auto}
 }
 
 /* Bouw 115 — Kalender, introductie (mobiel): sierhoekjes kleiner, zoals bij de cycluspanelen (Bouw 99); ze staan dicht bij de rand (Kalender.tsx) */
-@media(max-width:767.98px){#top#top#top .kal-intro>.hoeksier{width:26px;height:26px}}
+
 
 /* Bouw 116 — polijstronde
    1. Vasten, de vier grote vastenperiodes op mobiel: lichte rijen zoals alle andere knoppen (was nog donkere 2x2-tegels).
@@ -2476,10 +2434,6 @@ details[open]::details-content{height:auto}
   #top#top main .v17-year-arrow{flex:0 0 44px!important;min-width:44px!important}
   #top#top main button.inline-flex.order-1,#top#top main button.inline-flex.order-3{min-width:44px}
 }
-.ps-rij-label{display:inline-block;margin-left:8px;padding:0 7px;border:1px solid var(--ot-rand);border-radius:999px;vertical-align:2px;
-  font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.03em;line-height:1.5;color:var(--color-ink-soft)}
-#top#top#top#top .ps-rij.is-zonder-tekst .ps-nummer{opacity:.55}
-#top#top#top#top .ps-rij.is-zonder-tekst .ps-pijl{opacity:.45}
 #top#top#top#top .bibliotheek .saints-category-grid button strong{overflow-wrap:normal;word-break:normal;hyphens:manual}
 
 /* Bouw 119 — testrapport P3
@@ -2552,7 +2506,7 @@ main#inhoud:focus{outline:none}
 /* de kruisjes op de ring rond het Christus-icoon (Adem) staan nu direct op het perkament */
 #top#top#top .rounded-full.h-6.w-6[class*="bg-[#f8f1e3]"]{background:#f7e4bb url(/images/ui/perkament.webp) center/100% 100% fixed!important}
 /* ook de stroken in de kalender (maand/jaar-balk, legenda, onderste rij) en het introductievak bij Psalmen */
-#top#top#top#top :is(.kal-legenda,.ps-intro.ps-kader,.vlak [class*="bg-[#f3e9d2]"]){background-color:transparent!important;background-image:none!important;box-shadow:none!important}
+#top#top#top#top :is(.kal-legenda,.vlak [class*="bg-[#f3e9d2]"]){background-color:transparent!important;background-image:none!important;box-shadow:none!important}
 
 /* Bouw 125 — pop-ups: dezelfde perkamentachtergrond als de pagina. Het vel ligt op het vaste vlak van de pop-up
    (het leesvlak zelf scrolt en is doorzichtig); kaarten in de pop-up houden hun lichte vlak. In de avondweergave krijgt het leesvlak
@@ -2873,8 +2827,8 @@ html.lees-nacht #top#top .adem-gloed{background:radial-gradient(circle,rgba(214,
    scripts/sierlijn.mjs), op alle pagina's, web en mobiel. Verhouding 900 : 204, nooit uitgerekt. */
 :root{--sierlijn:url(/images/ui/sierlijn.webp) center/contain no-repeat}
 /* dividers als element: glyph en lijntjes weg, de sierlijn ervoor in de plaats */
-#top#top#top#top#top :is(.vm-sier,.cal-saints-rule,.ps-sier,.ornate-side-ornaments,.ademregel){display:block!important;width:min(210px,70%)!important;height:auto!important;aspect-ratio:900/204;margin-inline:auto!important;background:var(--sierlijn)!important;border:0!important;font-size:0!important;color:transparent!important;letter-spacing:0!important}
-#top#top#top#top#top :is(.vm-sier,.cal-saints-rule,.ps-sier,.ornate-side-ornaments,.ademregel)>*,#top#top#top#top#top :is(.vm-sier,.cal-saints-rule,.ps-sier)::before,#top#top#top#top#top :is(.vm-sier,.cal-saints-rule,.ps-sier)::after{display:none!important}
+#top#top#top#top#top :is(.vm-sier,.cal-saints-rule,.ornate-side-ornaments,.ademregel){display:block!important;width:min(210px,70%)!important;height:auto!important;aspect-ratio:900/204;margin-inline:auto!important;background:var(--sierlijn)!important;border:0!important;font-size:0!important;color:transparent!important;letter-spacing:0!important}
+#top#top#top#top#top :is(.vm-sier,.cal-saints-rule,.ornate-side-ornaments,.ademregel)>*,#top#top#top#top#top :is(.vm-sier,.cal-saints-rule)::before,#top#top#top#top#top :is(.vm-sier,.cal-saints-rule)::after{display:none!important}
 #top#top#top#top#top .vm-sier-datum{width:min(190px,60%)!important;margin-block:6px 4px!important}
 #top#top#top#top#top .cal-saints-rule{width:min(170px,70%)!important;margin-block:14px 8px!important}
 #top#top#top#top#top .ornate-side-ornaments{width:min(150px,70%)!important;margin-bottom:6px!important}
@@ -2896,7 +2850,7 @@ html.lees-nacht #top#top .adem-gloed{background:radial-gradient(circle,rgba(214,
    Bovenbalk: vorige · datum (bordeaux) · volgende · sluiten, blijft staan. Op het blad: sierbalk met kruismedaillon
    (public/images/ui/sierbalk.webp), klein label, titel in bordeaux, ondertitel, sierlijn; daaronder de leesbediening en de tekst.
    Het perkament is lichter dan op de pagina's, zodat venster en pagina te onderscheiden zijn. */
-:root{--pk-vlak:linear-gradient(rgba(255,251,240,.62),rgba(255,251,240,.62)),url(/images/ui/perkament.webp) center/cover;--pk-bordeaux:#7a1f1a}
+:root{--pk-vlak:linear-gradient(rgba(255,251,240,.62),rgba(255,251,240,.62)),url(/images/ui/perkament.webp) center/cover;--pk-bordeaux:var(--ot-titel)}
 #top#top#top#top .exact-modal-frame.pk{background:var(--pk-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/knop-rand.png) 60 / 14px stretch!important;box-shadow:0 24px 70px rgba(30,15,5,.55)!important;color:#2e1a0f}
 #top#top#top#top .pk .exact-modal-vlak{background:transparent!important}
 #top#top#top#top .pk .exact-modal-vlak::before,#top#top#top#top .pk .exact-modal-vlak::after{display:none!important}
@@ -2987,3 +2941,351 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Bouw 164 — nieuw hoekornament (public/images/ui/hoeksier.webp): de hoeken van de panelen iets groter en vol van kleur */
 #top#top#top#top :is(.hoeksier,.vm-hoek){width:56px!important;height:56px!important;opacity:1!important}
 @media(max-width:640px){#top#top#top#top :is(.hoeksier,.vm-hoek){width:44px!important;height:44px!important}}
+/* ============================================================================================================
+   Bouw 165 — Fase 1: een klein visueel systeem (zie DESIGN.md, Hiërarchie).
+   A opening · B primaire kaart (kaart-rand, alleen voor enkele belangrijke elementen) · C registerregel (tekst op een
+   dunne goudlijn, geen hoekornamenten) · D leesvlak · E donker anker · F sierlijn · G kleine knop (gedrukte rand).
+   Kleur is functioneel: rubriek-rood voor titels en namen, goud voor ornament en labels, chocolade/bordeaux als anker.
+   ============================================================================================================ */
+:root{--ot-titel:#7a1f1a;--ot-perkament:#F2E6C9;--ot-chocolade:#2E1A0F;--ot-bordeaux:#4B1E16;--ot-rubriek:var(--ot-titel);--ot-blauw:#0F2F4A;--ot-antiekgoud:#DAAF37;--ot-ivoor:#FBF6E9;--ot-tekst:#4a3020}
+
+/* A — openingen */
+#top#top#top#top .opening{position:relative;text-align:center;padding:30px 16px 22px}
+#top#top#top#top .opening-label{margin:0;font-family:var(--font-titel);font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--color-gold-deep)}
+#top#top#top#top .opening-titel{margin:4px 0 0;font-family:var(--font-display)!important;font-size:clamp(36px,5vw,56px)!important;font-weight:700!important;line-height:1.05;letter-spacing:.01em!important;text-transform:none!important;color:var(--ot-rubriek)}
+#top#top#top#top .opening-onder{margin:6px 0 0;font-family:var(--font-display);font-size:clamp(18px,2vw,22px);font-style:italic;color:var(--ot-tekst)}
+#top#top#top#top .opening-sierlijn{display:block;width:min(220px,60%);aspect-ratio:900/204;margin:12px auto 0;background:var(--sierlijn)}
+#top#top#top#top .opening-beeld{display:block;width:120px;height:120px;margin:0 auto 12px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(46,26,15,.35))}
+/* hoogfeest: zoals de dagkop van Vandaag, op het perkament; met beeld op het web naast de titel */
+@media(min-width:900px){
+  #top#top#top#top .opening-hoogfeest .opening-binnen:has(>.opening-beeld){display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:44px;max-width:860px;margin:0 auto;text-align:left}
+  #top#top#top#top .opening-hoogfeest .opening-beeld{margin:0}
+  #top#top#top#top .opening-hoogfeest .opening-binnen:has(>.opening-beeld) .opening-sierlijn{margin-left:0}
+}
+
+/* sitebreed: omschrijvingen beter leesbaar (donkerder; minstens 16 px op tablet/desktop) */
+#top#top#top#top#top#top :is(.ornate-card p,.dienst-kaart-tekst,.bieb-rij-sub,.feast-tile p,.v15-major-fast p,.cal-saints li,.mlr-onder,.vm-rij-tekst small,.ps-rij-onder,.saints-category-grid>button>span,.saints-today-panel p){color:var(--ot-tekst)!important}
+@media(min-width:768px){#top#top#top#top#top#top#top :is(.ornate-card p,.dienst-kaart-tekst,.bieb-rij-sub,.feast-tile p,.v15-major-fast p,.cal-saints li,.saints-today-panel p){font-size:16px!important}#top#top#top#top#top#top#top .saints-category-grid>button>span{font-size:15px!important}}
+
+/* sitebreed: geen lichte, moderne crème panelen meer — perkament met een dunne goudlijn */
+#top#top#top#top#top#top :is(.cal-saints,.v17-fasting-today,.v15-fasting-panel,.vasten-faq){background:transparent!important;background-image:none!important;border:1px solid rgba(154,106,31,.45)!important;box-shadow:none!important}
+
+/* ============================================================================================================
+   Bouw 165b — Pascha: het hart van het kerkelijk jaar
+   ============================================================================================================ */
+#top#top#top#top .pascha-groet{margin:14px 0 0;font-family:var(--font-display);font-size:clamp(20px,2.4vw,26px);font-weight:600;font-style:italic;color:var(--ot-ivoor)}
+#top#top#top#top .pascha-groet span{margin-left:.4em;color:var(--ot-antiekgoud)}
+/* dit jaar: datum (primair) en de Paascyclus dag voor dag (register) */
+#top#top#top#top .pascha-nu{padding:30px 0 6px}
+#top#top#top#top .pascha-nu-binnen{display:grid;gap:22px;max-width:980px;margin:0 auto}
+@media(min-width:900px){#top#top#top#top .pascha-nu-binnen{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:start;gap:40px}}
+#top#top#top#top .pascha-nu-datum{text-align:center;padding:22px 20px;background:var(--kaart-vlak);border:2px solid transparent;border-image:url(/images/ui/kaart-rand.png) 130 / 24px stretch}
+#top#top#top#top .pascha-datum{margin:6px 0 0;font-family:var(--font-display);font-size:clamp(28px,3.4vw,38px);font-weight:700;line-height:1.1;color:var(--ot-rubriek)}
+#top#top#top#top .pascha-aftel{margin:6px 0 0;font-family:var(--font-titel);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ot-tekst)}
+#top#top#top#top#top#top#top .pascha-nu-cyclus .ot-kaart{background:transparent!important;border:0!important;border-image:none!important;border-top:1px solid rgba(154,106,31,.45)!important;border-bottom:1px solid rgba(154,106,31,.45)!important;border-radius:0!important;box-shadow:none!important;padding:14px 4px!important}
+#top#top#top#top#top#top#top .pascha-nu-cyclus .ot-kaart::before,#top#top#top#top#top#top#top .pascha-nu-cyclus .ot-kaart::after{display:none!important}
+#top#top#top#top#top#top .pascha-nu-cyclus .ot-kaart .font-display{color:var(--ot-rubriek)!important}
+#top#top#top#top#top#top .pascha-nu-cyclus .ot-kaart .text-xs{font-size:15px!important;color:var(--ot-tekst)!important}
+#top#top#top#top#top#top .pascha-nu-cyclus ol{background:transparent!important;border:0!important;border-radius:0!important;padding:4px 0!important}
+#top#top#top#top#top#top .pascha-nu-cyclus ol button{border-radius:0!important;border-bottom:1px solid rgba(154,106,31,.25)!important}
+#top#top#top#top#top#top .pascha-nu-cyclus ol button.bg-wine{background:var(--ot-bordeaux)!important}
+/* de cyclus: rubriek-rood in plaats van goud, het Kruis in het midden, Pascha zelf als enige donkere kaart */
+#top#top#top#top .pascha-cyclus .ot-sectietitel{color:var(--ot-rubriek)!important}
+#top#top#top#top .pascha-cyclus-onder{margin:6px 0 0;font-family:var(--font-display);font-size:19px;font-style:italic;color:var(--ot-tekst)}
+#top#top#top#top .pascha-cyclus svg circle{stroke:var(--ot-rubriek);stroke-width:.45;opacity:.7}
+#top#top#top#top .pascha-cyclus svg line{stroke:var(--ot-rubriek)}
+#top#top#top#top#top#top#top#top .pascha-cyclus .etmaal-ring-badge>span.rounded-full{background:var(--ot-rubriek)!important;box-shadow:0 0 0 1px var(--ot-rubriek)!important}
+#top#top#top#top#top#top#top#top .pascha-cyclus .etmaal-ring-node .dienst-kaart{background:rgba(251,246,233,.55)!important;border:0!important;border-image:none!important;border-top:2px solid var(--ot-rubriek)!important;border-radius:0!important;box-shadow:0 1px 2px rgba(70,40,15,.12)!important;padding:10px 14px!important}
+#top#top#top#top#top#top#top#top .pascha-cyclus .etmaal-ring-node .dienst-kaart::before,#top#top#top#top#top#top#top#top .pascha-cyclus .etmaal-ring-node .dienst-kaart::after{display:none!important}
+#top#top#top#top#top#top#top .pascha-cyclus .dienst-kaart-titel{font-size:20px!important;font-weight:700!important;color:var(--ot-rubriek)!important}
+#top#top#top#top#top#top#top#top .pascha-cyclus .etmaal-ring-node.is-pascha .dienst-kaart{background:var(--ot-bordeaux)!important;border:1px solid var(--ot-antiekgoud)!important;border-top:1px solid var(--ot-antiekgoud)!important;padding:12px 18px!important}
+#top#top#top#top#top#top#top#top .pascha-cyclus .is-pascha .dienst-kaart-titel{color:var(--ot-antiekgoud)!important;font-size:24px!important}
+#top#top#top#top#top#top#top#top .pascha-cyclus .is-pascha .dienst-kaart-tekst{color:var(--ot-ivoor)!important}
+#top#top#top#top#top#top#top#top .pascha-cyclus .etmaal-ring-node.is-pascha .etmaal-ring-badge>span.rounded-full{width:20px!important;height:20px!important;background:var(--ot-antiekgoud)!important;box-shadow:0 0 0 2px var(--ot-bordeaux)!important}
+/* mobiel/tablet: de perioden als registerregels; Pascha als enige donkere regel */
+#top#top#top#top#top .pascha-rij{min-height:58px;padding:10px 6px;border:0;border-bottom:1px solid rgba(154,106,31,.45);background:none;cursor:pointer}
+#top#top#top#top#top .pascha-cyclus .space-y-3{border-top:1px solid rgba(154,106,31,.45)}
+#top#top#top#top#top .pascha-cyclus .space-y-3>:not(:last-child){margin-bottom:0!important}
+#top#top#top#top .pascha-rij-titel{font-family:var(--font-display);font-size:20px;font-weight:700;line-height:1.2;color:var(--ot-rubriek)}
+#top#top#top#top .pascha-rij-tekst{font-family:var(--font-display);font-size:16px;color:var(--ot-tekst)}
+#top#top#top#top#top .pascha-rij.is-pascha{margin-block:6px;padding:14px 16px;background:var(--ot-bordeaux);border:1px solid var(--ot-antiekgoud)}
+#top#top#top#top .pascha-rij.is-pascha .pascha-rij-titel{color:var(--ot-antiekgoud);font-size:22px}
+#top#top#top#top .pascha-rij.is-pascha .pascha-rij-tekst,#top#top#top#top .pascha-rij.is-pascha .pijl{color:var(--ot-ivoor)!important}
+#top#top#top#top .pascha-rij:hover:not(.is-pascha){background:rgba(218,175,55,.1)}
+#top#top#top#top .pascha-verdieping .ot-sectietitel{color:var(--ot-rubriek)!important}
+@media(max-width:767.98px){
+  #top#top#top#top .pascha-nu{padding:22px 0 0}
+  #top#top#top#top .pascha-cyclus{padding-top:28px!important;padding-bottom:28px!important}
+}
+
+/* ============================================================================================================
+   Bouw 166 — Vandaag (web): een voordeur. Links het Christus-icoon, rechts de dag; daaronder de dienst van nu en de
+   lezingen als de twee primaire kaarten, de overige vier als registerregels. Mobiel (vandaag-mobiel) blijft ongewijzigd.
+   ============================================================================================================ */
+@media(min-width:768px){
+  #top#top#top#top .vd-opening{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:clamp(28px,4vw,56px);max-width:900px;margin:18px auto 6px;padding:8px 0 22px;border-bottom:1px solid rgba(154,106,31,.45)}
+  #top#top#top#top .vd-icoon img{display:block;width:clamp(190px,18vw,250px);height:auto;filter:drop-shadow(0 8px 16px rgba(46,26,15,.3))}
+  #top#top#top#top#top#top#top .vd-dag{padding:0!important;text-align:left!important;background:none!important;border:0!important}
+  #top#top#top#top#top#top#top .vd-dag::after,#top#top#top#top#top#top#top .vd-dag::before{display:none!important;content:none!important}
+  #top#top#top#top#top#top#top .vd-dag .opening-sierlijn{margin:10px 0 0}
+  #top#top#top#top#top#top#top .vd-datum{margin:6px 0 0!important;font-family:var(--font-display)!important;font-size:clamp(38px,4.2vw,54px)!important;font-weight:700!important;line-height:1.05!important;letter-spacing:0!important;text-transform:none!important;color:var(--ot-rubriek)!important}
+  #top#top#top#top#top#top#top .vd-kerk{margin:4px 0 0!important;font-family:var(--font-display);font-size:19px!important;font-style:italic;color:var(--ot-tekst)!important}
+  #top#top#top#top#top#top#top .vd-titel{display:flex;align-items:center;gap:10px;margin:12px 0 0!important;font-family:var(--font-display);font-size:clamp(22px,2.2vw,28px)!important;font-weight:700;line-height:1.2;color:var(--ot-rubriek)!important}
+  #top#top#top#top#top#top#top .vd-titel i{display:inline-flex;flex:none;width:20px;height:24px;margin:0!important}
+  #top#top#top#top#top#top#top .vd-dag small{display:block;margin-top:2px;font-size:16px!important;color:var(--ot-tekst)!important}
+  #top#top#top#top#top#top#top .vd-vasten{margin:12px 0 0!important;font-family:var(--font-display);font-size:17px!important;color:var(--ot-tekst)!important}
+  #top#top#top#top#top#top#top .vd-vasten b{margin-right:8px;font-family:var(--font-titel);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--color-gold-deep)}
+  #top#top#top#top#top#top#top .vd-lijst{display:block!important;max-width:980px;margin:22px auto 0!important}
+  #top#top#top#top#top#top#top .vd-primair{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  #top#top#top#top#top#top#top#top .vd-primair .vandaag-item{min-height:0!important;padding:24px 30px!important}
+  #top#top#top#top#top#top#top#top .vd-primair .vandaag-item b{font-size:26px!important;color:var(--ot-rubriek)!important}
+  #top#top#top#top#top#top#top#top .vd-primair .vandaag-item :is(em,small){font-size:17px!important;color:var(--ot-tekst)!important}
+  #top#top#top#top#top#top#top .vd-register{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;margin-top:22px;border-top:1px solid rgba(154,106,31,.45)}
+  #top#top#top#top#top#top#top#top#top .vd-register .vd-rij{display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:66px!important;padding:12px 4px!important;background:none!important;border:0!important;border-image:none!important;border-bottom:1px solid rgba(154,106,31,.45)!important;border-radius:0!important;box-shadow:none!important;filter:none!important;transform:none!important}
+  #top#top#top#top#top#top#top#top#top .vd-register .vd-rij::before,#top#top#top#top#top#top#top#top#top .vd-register .vd-rij::after{display:none!important}
+  #top#top#top#top#top#top#top#top .vd-register .vd-rij>div{display:block!important;padding:0!important}
+  #top#top#top#top#top#top#top#top .vd-register .vd-rij b{display:block;font-size:20px!important;font-weight:700!important;color:var(--ot-rubriek)!important}
+  #top#top#top#top#top#top#top#top .vd-register .vd-rij :is(em,span:not(.vandaag-cta),small){display:block;margin-top:2px!important;font-size:16px!important;color:var(--ot-tekst)!important}
+  #top#top#top#top#top#top#top#top .vd-register .vd-rij .vandaag-cta{display:none!important}
+  #top#top#top#top#top#top#top#top .vd-register .vd-rij svg{flex:none;width:20px;height:20px;color:var(--color-gold-deep)}
+  #top#top#top#top#top#top#top#top#top .vd-register .vd-rij:hover{background:rgba(218,175,55,.1)!important}
+}
+/* opening: los van de oude regels voor de eerste sectie (bannerhoogte, donkere achtergrond, beeld op volle breedte) */
+#top#top#top#top#top .exact-content>section.opening{height:auto!important;min-height:0!important;overflow:visible!important;border-bottom:0!important}
+#top#top#top#top#top .exact-content>section.opening-rustig,#top#top#top#top#top .exact-content>section.opening-cyclisch{background:none!important}
+#top#top#top#top#top .exact-content>section.opening img.opening-beeld{width:clamp(110px,16vw,190px)!important;height:auto!important;max-width:190px;object-fit:contain!important}
+@media(max-width:767.98px){#top#top#top#top#top .exact-content>section.opening img.opening-beeld{width:118px!important}}
+/* Vandaag (web): de lezingen in de primaire kaart even groot als de rest */
+@media(min-width:768px){#top#top#top#top#top#top#top#top .vd-primair .vandaag-readings-item button span{font-size:17px!important;color:var(--ot-tekst)!important}}
+
+/* Bouw 167 — de gouden hoeken bovenaan elke pagina op mobiel, zoals op Vandaag (ExactPageFrame.tsx) */
+@media(min-width:768px){.pagina-hoek{display:none!important}}
+@media(max-width:767.98px){
+  #top#top#top#top .exact-frame{position:relative}
+  #top#top#top#top .pagina-hoek{z-index:3}
+}
+/* Psalmen: geen hoekornament in het introductiekader; de paginahoeken (Bouw 167) staan er al boven */
+/* Vasten vandaag: geen kader en geen hoekornamenten, het blok staat los op het perkament */
+#top#top#top#top#top#top#top .v17-fasting-today{border:0!important;background:none!important;background-image:none!important;box-shadow:none!important}
+#top#top#top#top#top#top#top .v17-fasting-today:before,#top#top#top#top#top#top#top .v17-fasting-today:after{content:none!important}
+
+/* Bouw 168 — Pascha-opening zoals de dagkop van Vandaag: geen vlak, het Verrijzenis-icoon (public/images/Pascha-icoon.webp)
+   groot en vrij op het perkament; op het web links naast de tekst, op mobiel erboven. De groet blijft staan. */
+#top#top#top#top#top#top .exact-content>section.opening-hoogfeest{margin:0!important;padding:18px 16px 22px!important;background:none!important;border:0!important;box-shadow:none!important}
+#top#top#top#top#top#top .exact-content>section.opening-hoogfeest img.opening-beeld{width:min(72vw,290px)!important;max-width:none!important;height:auto!important;margin:0 auto 14px!important;border-radius:0!important;box-shadow:none!important;filter:drop-shadow(0 8px 16px rgba(46,26,15,.3))}
+#top#top#top#top#top#top .opening-hoogfeest .pascha-groet{color:var(--ot-tekst)!important}
+#top#top#top#top#top#top .opening-hoogfeest .pascha-groet span{color:var(--ot-rubriek)!important}
+@media(min-width:768px){
+  #top#top#top#top#top#top .exact-content>section.opening-hoogfeest{padding:26px 16px 30px!important}
+  #top#top#top#top#top#top .opening-hoogfeest .opening-binnen:has(>.opening-beeld){max-width:900px;gap:clamp(28px,4vw,56px)}
+  #top#top#top#top#top#top .exact-content>section.opening-hoogfeest img.opening-beeld{width:clamp(190px,18vw,250px)!important;margin:0!important}
+}
+
+/* Feesten: geen sierlijn naast de tussenkoppen (per maand, dag, geselecteerde feesten) */
+#top#top#top#top#top#top#top .feast-discover .saints-rule-title::after{content:none!important;display:none!important}
+/* Vasten vandaag: kleinere voedselkaarten, groter vastensymbool */
+#top#top#top#top#top#top .v17-fasting-today .vasten-vandaag-status-icon{width:150px!important;height:150px!important}
+@media(min-width:768px){
+  #top#top#top#top#top#top .v17-fasting-today .fasting-food-grid{max-width:660px;margin-left:auto!important;margin-right:auto!important}
+  #top#top#top#top#top#top .v17-fasting-today .vasten-vandaag-status-icon{width:190px!important;height:190px!important}
+}
+/* Pascha op het web: het icoon staat in het midden van de ring, dus niet ook in de opening; de opening blijft gecentreerde tekst */
+@media(min-width:768px){
+  #top#top#top#top#top#top#top .exact-content>section.opening-hoogfeest img.opening-beeld{display:none!important}
+  #top#top#top#top#top#top#top .opening-hoogfeest .opening-binnen{display:block!important;text-align:center!important}
+  #top#top#top#top#top#top#top .opening-hoogfeest .opening-sierlijn{margin-left:auto!important;margin-right:auto!important}
+}
+/* Pascha: compactere datumkaart */
+#top#top#top#top#top .pascha-nu-datum{padding:12px 16px!important}
+#top#top#top#top#top .pascha-datum{margin:2px 0 0!important;font-size:clamp(24px,2.8vw,30px)!important}
+#top#top#top#top#top .pascha-aftel{margin:2px 0 0!important}
+/* Vandaag mobiel: de titel in hetzelfde rubriekrood als de Pascha-titel */
+#top#top#top#top#top#top#top .vandaag-mobiel .vm-titel{color:var(--ot-rubriek)!important}
+/* Adem: "Het Jezusgebed" in dezelfde letter en kleur als de titel Orthodoxe Tijd op Vandaag (vm-titel) */
+#top#top#top#top#top#top .adem-titel{margin:0;font-family:var(--font-titel)!important;font-size:30px!important;font-weight:500!important;line-height:1.05;letter-spacing:normal!important;text-transform:none!important;color:var(--ot-rubriek)!important}
+
+/* Bouw 169 — de primaire titelkleur (--ot-titel, de kleur van de datum op Vandaag web) voor belangrijke titels op het perkament:
+   paginatitels, sectietitels, de heilige of het feest van de dag, de titel van de geopende inhoud. Lopende tekst blijft chocolade,
+   labels goud/bruin, donkere vlakken houden ivoor/goud. Nieuwe titels krijgen de klasse ot-titel. */
+#top#top#top#top#top#top#top#top :is(.ot-titel,.ot-sectietitel,.saints-today-intro h1,.saints-feature-name,.bibliotheek .saints-rule-title h2,.bibliotheek .bieb-kop h2,.saints-lowlands h2){color:var(--ot-titel)!important}
+
+/* Bouw 170 — Psalmen als psalterregister (Psalmen.tsx). Geen kaart per psalm maar een regel: nummer, titel, eventueel
+   het gebruik in het etmaal, en één dunne goudbruine lijn. Bordeaux (--ot-titel) alleen voor de nummers, de gekozen regel,
+   de hoofdstukkoppen en de actieve tab. Desktop vanaf 1024px: register links (±34%), leesvenster rechts; kleiner: register,
+   een psalm opent in het leesvenster (Modal). */
+#top#top#top#top#top#top .opening .psr-intro{max-width:62ch;margin:12px auto 0;font-family:var(--font-display);font-size:17px;font-weight:400;line-height:1.5;color:var(--ot-tekst)}
+#top#top#top#top#top .exact-content>section.opening-rustig{padding-bottom:10px}
+.psr-register{min-width:0}
+/* zoeken: warm perkament met een dunne rand, geen gedrukte manuscripthoeken */
+#top#top#top#top#top#top#top#top#top .psr-zoekrij .ps-zoek{height:48px!important;min-height:48px!important;padding:0 14px!important;border:1px solid rgba(154,106,31,.55)!important;border-image:none!important;border-radius:2px!important;background:var(--veld-vlak)!important;box-shadow:inset 0 1px 3px rgba(70,40,15,.12)!important}
+#top#top#top#top#top#top#top#top#top .psr-zoekrij .ps-zoek{gap:10px!important}
+#top#top#top#top#top#top#top#top#top .psr-zoekrij .ps-zoek>svg{width:18px!important;height:18px!important}
+/* filters: boektabs; de actieve in bordeaux */
+#top#top#top#top#top .ps-filters.ps-filters{margin-top:6px}
+#top#top#top#top#top .ps-filters.ps-filters button{color:var(--ot-tekst)!important}
+#top#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]{color:var(--ot-titel)!important}
+#top#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]:after{background:var(--ot-titel)}
+#top#top#top#top#top#top :is(.ps-themas,.ps-kathismas).ps-kies button{min-height:40px!important;border:0!important;border-bottom:1px solid rgba(154,106,31,.35)!important;border-image:none!important;border-radius:0!important;background:none!important;box-shadow:none!important;font-size:16px!important;color:var(--ot-tekst)!important}
+#top#top#top#top#top#top :is(.ps-themas,.ps-kathismas).ps-kies button[aria-pressed=true]{border-bottom:2px solid var(--ot-titel)!important;font-weight:700;color:var(--ot-titel)!important}
+#top#top#top#top#top#top .ps-themas.ps-kies{gap:2px 14px}
+.psr-noot{margin:10px 2px 0;font-family:var(--font-display);font-size:15px;font-style:italic;line-height:1.4;color:#5c4330}
+/* het register */
+#top#top#top#top .psr-lijst{gap:0;margin-top:8px;border-top:1px solid rgba(154,106,31,.45)}
+#top#top#top#top#top#top#top .psr-rij{display:grid;grid-template-columns:40px minmax(0,1fr) 14px;align-items:center;gap:14px;width:100%;min-height:52px;margin:0;padding:6px 8px 6px 4px;border:0;border-bottom:1px solid rgba(154,106,31,.3);border-radius:0;background:none;box-shadow:none;text-align:left;cursor:pointer}
+.psr-nr{font-family:var(--font-display);font-size:22px;font-weight:700;line-height:1;text-align:right;color:var(--ot-titel);font-variant-numeric:lining-nums}
+.psr-tekst{display:flex;min-width:0;flex-direction:column;gap:1px}
+.psr-titel{font-family:var(--font-display);font-size:19px;font-weight:600;line-height:1.2;color:var(--ot-chocolade)}
+.psr-onder{overflow:hidden;font-family:var(--font-display);font-size:15px;line-height:1.3;white-space:nowrap;text-overflow:ellipsis;color:#5c4330}
+.psr-pijl{font-size:22px;line-height:1;color:var(--color-gold-deep)}
+@media(hover:hover){#top#top#top#top#top#top#top .psr-rij:hover{background:rgba(122,31,26,.045)}}
+#top#top#top#top#top#top#top .psr-rij[aria-current]{background:rgba(122,31,26,.075);box-shadow:inset 3px 0 0 var(--ot-titel)}
+#top#top#top#top#top#top#top .psr-rij[aria-current] .psr-titel{color:var(--ot-titel)}
+#top#top#top#top#top#top#top .psr-rij:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:-2px}
+/* hoofdstukken in het register (dienst van het etmaal, kathisma, thema) */
+#top#top#top#top#top .psr-lijst .ps-groep{gap:0}
+#top#top#top#top#top .psr-lijst .ps-groep+.ps-groep{margin-top:0}
+#top#top#top#top#top .psr-lijst .ps-groep h3{margin:18px 0 0;padding:0 2px 6px;border-bottom:1px solid rgba(154,106,31,.45);font-family:var(--font-titel);font-size:14px;font-weight:600;letter-spacing:.14em;color:var(--ot-titel)}
+#top#top#top#top#top .psr-lijst .ps-groep h3 span{font-family:var(--font-display);font-size:14px;letter-spacing:.04em;text-transform:none;color:#5c4330}
+#top#top#top#top#top .psr-lijst .ps-groep h4{margin:10px 0 2px;padding:0 2px;font-size:15px;color:#5c4330}
+#top#top#top#top#top .psr-lijst>.ps-groep:first-child h3{margin-top:10px}
+@media(min-width:1024px){
+  #top#top#top#top .ps-psalter{grid-template-columns:minmax(0,34fr) minmax(0,66fr);gap:0;margin-top:6px}
+  /* het register blijft staan en scrollt zelf; zoeken en filters bovenaan blijven bereikbaar */
+  #top#top#top#top .psr-register{position:sticky;top:94px;display:flex;max-height:calc(100vh - 110px);flex-direction:column;padding-right:24px;border-right:1px solid rgba(154,106,31,.45)}
+  #top#top#top#top .psr-register>*{flex-shrink:0}
+  #top#top#top#top .psr-register>.psr-lijst{flex:1 1 auto}
+  #top#top#top#top .psr-lijst{position:static;max-height:none;min-height:0;flex:1;overflow-y:auto;padding:0 4px 0 0}
+}
+
+/* Bouw 171 — Psalmen volgens het aangeleverde ontwerp: de titel in gewone letter, de actieve filter als klein bordeaux
+   vlak, een pijl op elke regel, en het leesvenster zonder kader direct op het perkament (kop links, bediening rechtsboven). */
+#top#top#top#top#top#top#top .exact-content>section#psalmen .opening-titel{font-family:var(--font-display)!important;font-size:clamp(42px,4.6vw,58px)!important;font-weight:600!important;letter-spacing:0!important;text-transform:none!important}
+#top#top#top#top#top#top .ps-filters.ps-filters{justify-content:flex-start;gap:2px}
+#top#top#top#top#top#top .ps-filters.ps-filters button{padding:0 11px!important;font-size:16px!important}
+#top#top#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]{background:linear-gradient(var(--ot-titel),var(--ot-titel)) center/100% 30px no-repeat!important;font-weight:600;color:var(--ot-ivoor)!important}
+#top#top#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]:after{display:none}
+@media(max-width:767.98px){#top#top#top#top#top#top .ps-filters.ps-filters button{padding:0 8px!important;font-size:15px!important}}
+/* verzen: nummer in een eigen kolom, tekst donker chocolade, geen apart vlak achter de tekst */
+#top#top#top#top#top .ps-verzen{max-width:68ch;margin:0;padding:0;background:none}
+#top#top#top#top#top .ps-vers{grid-template-columns:30px minmax(0,1fr);gap:10px;margin:0 0 12px}
+#top#top#top#top#top .ps-versnr{padding-top:4px;font-size:15px;text-align:left;color:var(--color-gold-deep)}
+#top#top#top#top#top .ps-vers p{color:var(--ot-chocolade)}
+@media(min-width:1024px){
+  #top#top#top#top#top#top .ps-lezer.lees-vlak{padding:2px 0 28px 44px!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important}
+  html.lees-nacht #top#top#top#top#top#top .ps-lezer.lees-vlak{background:var(--ot-ivoor)!important}
+  .psr-lees-bediening{display:flex;justify-content:flex-end}
+  #top#top#top#top#top#top .ps-lezer-kop{text-align:left}
+  #top#top#top#top#top#top .ps-lezer-kop h2{margin:4px 0 0;font-size:clamp(36px,3.2vw,46px);font-weight:600;line-height:1.1}
+  #top#top#top#top#top#top .ps-lezer-kop p:not(.opening-label){margin:6px 0 0;font-size:17px;color:var(--ot-tekst)}
+  #top#top#top#top#top#top .ps-lezer-kop .opening-sierlijn{margin:14px 0 0}
+  #top#top#top#top#top#top .ps-lezer .ps-tabrij{margin-top:18px}
+  #top#top#top#top#top .ps-vers p{font-size:20px}
+}
+/* Psalmen, leesvenster op mobiel en tablet: vorige · psalm · volgende onderaan, blijft in beeld tijdens het lezen */
+#top#top#top#top .psr-blader{position:sticky;bottom:-30px;z-index:2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin:18px -4px -30px;padding:2px 0 30px;border-top:1px solid rgba(154,106,31,.45);background:var(--pk-vlak)}
+#top#top#top#top .psr-blader button{min-height:44px;padding:0 6px;border:0;background:none;font-family:var(--font-display);font-size:16px;color:var(--ot-tekst);cursor:pointer}
+#top#top#top#top .psr-blader button:first-child{justify-self:start}
+#top#top#top#top .psr-blader button:last-child{justify-self:end}
+#top#top#top#top .psr-blader button:disabled{opacity:.35;cursor:default}
+#top#top#top#top .psr-blader span{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--ot-titel)}
+/* Psalmen: het leesvenster in warm perkament, bijna zoals de pagina (de andere vensters houden het lichtere vlak) */
+#top#top#top#top#top .exact-modal-frame.pk:has(.psr-blader){--pk-vlak:linear-gradient(rgba(255,248,232,.2),rgba(255,248,232,.2)),url(/images/ui/perkament.webp) center/cover}
+/* Psalmen: geen sierbalk boven in het leesvenster */
+#top#top#top#top#top#top .exact-modal-frame.pk:has(.psr-blader) .pk-sierbalk{display:none!important}
+/* Gebeden: melding zolang de gebeden uit staan (lib/gebeden.ts, GEBEDEN_ZICHTBAAR) */
+#top#top#top#top#top#top .gebed-binnenkort{margin:0 auto;padding:0 16px;text-align:center;font-family:var(--font-display);font-size:clamp(19px,2vw,22px);font-style:italic;color:var(--ot-tekst)}
+
+/* Bouw 172 — Feesten als feestelijk hoofdstuk (Feesten.tsx). Rijk: de opening en het feest van vandaag of het eerstvolgende
+   feest (manuscriptrand); middel: de sectiekoppen; rustig: registers zonder kaders of hoekversiering; één donker vlak: de
+   grote feesten. Bordeaux (--ot-titel) voor titels en feestnamen op perkament; ivoor en goud op het donkere vlak. */
+#top#top#top#top#top#top .exact-content>section#feesten .opening-sierlijn{width:min(300px,70%)}
+#top#top#top#top#top#top .opening .fs-intro{max-width:56ch;margin:12px auto 0;font-family:var(--font-display);font-size:18px;line-height:1.5;color:var(--ot-tekst)!important}
+.fs-pagina{padding:8px 0 48px}
+#top#top#top#top#top#top .fs-datum{font-family:var(--font-titel);font-size:13px;font-weight:600;letter-spacing:.14em;line-height:1.3;text-transform:uppercase;color:var(--color-gold-deep)!important}
+#top#top#top#top#top#top .fs-link{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:none;font-family:var(--font-titel);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--ot-titel)!important;cursor:pointer}
+#top#top#top#top#top#top .fs-link:hover{text-decoration:underline;text-underline-offset:4px}
+/* het feest van vandaag / het eerstvolgende feest */
+#top#top#top#top#top#top .fs-nu{display:grid;justify-items:center;gap:16px;max-width:1040px;margin:12px auto 0;padding:24px 20px 22px;text-align:center;background:var(--kaart-vlak);border:2px solid transparent;border-image:url(/images/ui/kaart-rand.png) 130 / 26px stretch}
+#top#top#top#top#top#top .fs-nu-datum{display:flex;flex-direction:column;align-items:center;margin:0;font-family:var(--font-titel);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-gold-deep)!important}
+#top#top#top#top#top#top .fs-nu-datum span{font-family:var(--font-display);font-size:clamp(68px,8vw,104px);font-weight:700;line-height:.95;letter-spacing:0;color:var(--ot-titel)}
+#top#top#top#top#top#top .fs-nu-icoon{width:min(52vw,220px);height:auto;filter:drop-shadow(0 8px 16px rgba(46,26,15,.3))}
+#top#top#top#top#top#top .fs-nu-naam{margin:4px 0 0;font-family:var(--font-display);font-size:clamp(28px,3.4vw,42px);font-weight:700;line-height:1.12;text-transform:none;letter-spacing:0}
+#top#top#top#top#top#top .fs-nu-wanneer{margin:6px 0 0;font-family:var(--font-display);font-size:17px;font-style:italic;color:var(--ot-tekst)!important}
+#top#top#top#top#top#top .fs-nu .opening-sierlijn{margin:12px auto 0}
+#top#top#top#top#top#top .fs-nu-omschrijving{max-width:62ch;margin:12px auto 0;font-family:var(--font-display);font-size:18px;line-height:1.55;color:var(--ot-chocolade)!important}
+#top#top#top#top#top#top .fs-nu .fs-link{margin-top:4px}
+@media(min-width:768px){
+  #top#top#top#top#top#top .fs-nu{grid-template-columns:minmax(180px,.34fr) minmax(0,1fr);align-items:center;justify-items:stretch;gap:44px;padding:36px 52px 32px;text-align:left}
+  #top#top#top#top#top#top .fs-nu-datum{padding-right:36px;border-right:1px solid rgba(154,106,31,.45)}
+  #top#top#top#top#top#top .fs-nu-icoon{justify-self:center}
+  #top#top#top#top#top#top .fs-nu :is(.opening-sierlijn,.fs-nu-omschrijving){margin-left:0}
+}
+/* de grote feesten: het donkere vlak */
+#top#top#top#top#top#top .fs-groot{margin:48px 0 0;padding:44px 0 46px;background:linear-gradient(rgba(46,26,15,.94),rgba(46,26,15,.94)),url(/images/ui/perkament.webp) center/cover;border-top:1px solid var(--ot-antiekgoud);border-bottom:1px solid var(--ot-antiekgoud)}
+#top#top#top#top#top#top .fs-groot-kop{text-align:center}
+#top#top#top#top#top#top .fs-groot-kop .opening-label{color:var(--ot-antiekgoud)!important}
+#top#top#top#top#top#top .fs-groot-kop h2{margin:6px 0 0;font-family:var(--font-display);font-size:clamp(30px,3.6vw,44px);font-weight:600;text-transform:none;letter-spacing:0;color:var(--ot-ivoor)!important}
+#top#top#top#top#top#top .fs-groot-citaat{max-width:56ch;margin:10px auto 0;font-family:var(--font-display);font-size:18px;font-style:italic;line-height:1.5;color:#e7d8ba!important}
+#top#top#top#top#top#top .fs-groot-lijst{display:grid;margin:28px 0 0;padding:0;list-style:none;border-top:1px solid rgba(218,175,55,.35)}
+#top#top#top#top#top#top .fs-groot-lijst li{border-bottom:1px solid rgba(218,175,55,.25)}
+#top#top#top#top#top#top .fs-groot-lijst button{display:grid;grid-template-columns:minmax(0,1fr);row-gap:2px;width:100%;min-height:44px;padding:12px 8px;border:0;border-radius:0;background:none;box-shadow:none;text-align:left;cursor:pointer}
+#top#top#top#top#top#top .fs-groot-lijst .fs-datum{color:var(--ot-antiekgoud)!important}
+#top#top#top#top#top#top .fs-groot-naam{font-family:var(--font-display);font-size:20px;font-weight:600;line-height:1.22;color:var(--ot-ivoor)!important}
+#top#top#top#top#top#top .fs-groot-wanneer{font-family:var(--font-display);font-size:15px;color:#d8c6a5!important}
+@media(hover:hover){#top#top#top#top#top#top .fs-groot-lijst button:hover{background:rgba(218,175,55,.08)}}
+#top#top#top#top#top#top .fs-groot-lijst button:focus-visible{outline:2px solid var(--ot-antiekgoud);outline-offset:-2px}
+#top#top#top#top#top#top .fs-groot-lijst li.is-pascha{grid-column:1/-1}
+#top#top#top#top#top#top .fs-groot-lijst .is-pascha .fs-groot-naam{font-size:23px}
+@media(min-width:768px){#top#top#top#top#top#top .fs-groot-lijst{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:44px}}
+@media(min-width:1180px){#top#top#top#top#top#top .fs-groot-lijst{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* vaste en beweeglijke feesten */
+#top#top#top#top#top#top .fs-ritmes{display:grid;gap:34px;margin-top:46px}
+#top#top#top#top#top#top .fs-ritmes-label{margin:0;text-align:center}
+#top#top#top#top#top#top .fs-kolom h2,#top#top#top#top#top#top .fs-sectiekop h2{margin:0;font-family:var(--font-display);font-size:clamp(28px,2.8vw,36px);font-weight:600;line-height:1.15;text-transform:none;letter-spacing:0}
+#top#top#top#top#top#top .fs-kolom-tekst{max-width:60ch;margin:8px 0 0;font-family:var(--font-display);font-size:17px;line-height:1.5;color:var(--ot-tekst)!important}
+#top#top#top#top#top#top .fs-links{display:flex;flex-wrap:wrap;gap:0 26px;margin:8px 0 0}
+@media(min-width:900px){
+  #top#top#top#top#top#top .fs-ritmes{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:0;row-gap:14px}
+  #top#top#top#top#top#top .fs-ritmes-label{grid-column:1/-1}
+  #top#top#top#top#top#top .fs-kolom:first-of-type{padding-right:40px}
+  #top#top#top#top#top#top .fs-kolom:last-of-type{padding-left:40px;border-left:1px solid rgba(154,106,31,.45)}
+}
+/* het register (ook bij alle feesten) */
+#top#top#top#top#top#top .fs-register{margin:16px 0 0;padding:0;list-style:none;border-top:1px solid rgba(154,106,31,.45)}
+#top#top#top#top#top#top .fs-register li{border-bottom:1px solid rgba(154,106,31,.3)}
+#top#top#top#top#top#top .fs-rij{display:grid;grid-template-columns:minmax(0,1fr) 14px;column-gap:12px;align-items:center;width:100%;min-height:52px;padding:9px 6px;border:0;border-radius:0;background:none;box-shadow:none;text-align:left;cursor:pointer}
+#top#top#top#top#top#top .fs-rij>span:not(.fs-pijl){grid-column:1}
+#top#top#top#top#top#top .fs-pijl{grid-column:2;grid-row:1/4;font-size:22px;line-height:1;color:var(--color-gold-deep)}
+#top#top#top#top#top#top .fs-rij-naam{font-family:var(--font-display);font-size:19px;font-weight:600;line-height:1.25;color:var(--ot-titel)!important}
+#top#top#top#top#top#top .fs-rij-onder{font-family:var(--font-display);font-size:15px;line-height:1.3;color:var(--ot-tekst)!important}
+@media(hover:hover){#top#top#top#top#top#top .fs-rij:hover{background:rgba(122,31,26,.045)}}
+#top#top#top#top#top#top .fs-rij:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:-2px}
+/* alle feesten */
+#top#top#top#top#top#top .fs-alle{margin-top:54px;padding-top:36px;border-top:1px solid rgba(154,106,31,.45)}
+#top#top#top#top#top#top .fs-sectiekop{margin-bottom:18px;text-align:center}
+#top#top#top#top#top#top .fs-maanden,#top#top#top#top#top#top .fs-dagen{display:flex;flex-wrap:wrap;gap:2px 4px;margin-top:16px}
+#top#top#top#top#top#top .fs-dagen{margin-top:4px}
+#top#top#top#top#top#top :is(.fs-maanden,.fs-dagen) button{min-height:40px;padding:0 10px;border:0;border-bottom:2px solid transparent;border-radius:0;background:none;box-shadow:none;font-family:var(--font-display);font-size:16px;text-transform:capitalize;color:var(--ot-tekst);cursor:pointer}
+#top#top#top#top#top#top :is(.fs-maanden,.fs-dagen) button[aria-pressed=true]{border-bottom-color:var(--ot-titel);font-weight:700;color:var(--ot-titel)}
+#top#top#top#top#top#top .fs-aantal{margin:20px 0 0;font-family:var(--font-titel);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-gold-deep)!important}
+/* Feesten: de feesttekst in het venster met prettige regellengte */
+#top#top#top#top#top#top .fs-lees .exact-popup-prose{max-width:680px;margin-inline:auto}
+/* Feesten: alleen het zoekveld, over de hele breedte (maand via de tabs eronder) */
+#top#top#top#top#top#top#top .fs-alle .saints-search-row{display:block!important}
+#top#top#top#top#top#top#top .fs-alle .saints-search-row>label{width:100%}
+/* Feesten: het icoon van de Moeder Gods boven de titel; het blok met het eerstvolgende feest compacter */
+#top#top#top#top#top#top#top .exact-content>section#feesten img.opening-beeld{width:clamp(120px,11vw,160px)!important;margin:0 auto 10px!important}
+#top#top#top#top#top#top#top .fs-nu{max-width:920px;gap:10px;padding:18px 18px 16px}
+#top#top#top#top#top#top#top .fs-nu-datum{font-size:13px}
+#top#top#top#top#top#top#top .fs-nu-datum span{font-size:clamp(48px,5vw,64px)}
+#top#top#top#top#top#top#top .fs-nu-naam{font-size:clamp(23px,2.4vw,30px)}
+#top#top#top#top#top#top#top .fs-nu-wanneer{margin-top:4px;font-size:16px}
+#top#top#top#top#top#top#top .fs-nu .opening-sierlijn{width:min(170px,50%);margin-top:8px}
+#top#top#top#top#top#top#top .fs-nu-omschrijving{margin-top:8px;font-size:17px;line-height:1.5}
+#top#top#top#top#top#top#top .fs-nu .fs-link{min-height:40px;margin-top:0}
+@media(min-width:768px){
+  #top#top#top#top#top#top#top .fs-nu{grid-template-columns:150px minmax(0,1fr);gap:32px;padding:24px 40px 18px}
+  #top#top#top#top#top#top#top .fs-nu-datum{padding-right:28px}
+}
+/* Feesten op het web: geen icoon in de opening (op mobiel wel) */
+@media(min-width:768px){#top#top#top#top#top#top#top#top .exact-content>section#feesten img.opening-beeld{display:none!important}}

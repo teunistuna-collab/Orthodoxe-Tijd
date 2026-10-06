@@ -11,6 +11,10 @@ export interface Gebed {
 const BRON = 'Aangeleverde PDF';
 const BRON_WORD = 'Aangeleverd Word-document';
 
+/** Tijdelijk uit: de gebeden worden opnieuw aangeleverd. Zolang dit false is toont de Gebeden-pagina "worden binnenkort
+ *  toegevoegd" en vindt het zoeken geen gebeden. Op true zetten brengt alles terug. */
+export const GEBEDEN_ZICHTBAAR = false;
+
 export const GEBEDEN: Gebed[] = [
   {
     id: 'inleidende-gebeden-pdf',
