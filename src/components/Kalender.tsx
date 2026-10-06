@@ -6,7 +6,7 @@ import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
 import { NIVEAUS, VASTEN_GROEPEN, vastenGroep, type VastenGroep } from '../lib/vasten';
 import { VastenSymbool, Hoeksier, KruisTeken } from './ui';
-import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
+import { eersteHeilige, heiligeTitel, heiligenVanDag as dagHeiligen } from '../lib/heiligenPopup';
 import PageHero from './PageHero';
 
 const TEKEN = { pascha: <KruisTeken />, groot: '✠', ander: '✦' };
@@ -69,7 +69,8 @@ export default function Kalender() {
   const vastendagen = inMaand.filter((c) => !['geen', 'vrij'].includes(c.vasten.niveau)).length;
   const geselecteerd = cellen.find((c) => c.ymd === geselecteerdeYmd) ?? cellen.find((c) => c.isVandaag) ?? cellen.find((c) => c.maand === cur.m) ?? cellen[0];
 
-  const heiligenVanDag = heiligen?.HEILIGEN[geselecteerd.kerkKey] ?? [];
+  // Heiligen en gedachtenissen van de gekozen dag uit de centrale lijst (zonder feesten; die staan bij de feesten)
+  const heiligenVanDag = dagHeiligen(geselecteerd.kerkKey, heiligen?.HEILIGEN, geselecteerd.ymd);
   const hoofdheilige = heiligenVanDag[0];
   const overigeHeiligen = heiligenVanDag.slice(1);
 

@@ -1,12 +1,10 @@
 import { GEBEDEN, type Gebed } from './gebeden';
 import { BEWEEGLIJKE_FEESTEN, DERTIEN, OVERIGE_VASTE, type Feest } from './feesten';
 import type { HeiligeMetDatum } from './heiligen';
-import { rangLabel, vertaalLeven, type HtcData } from './htc';
 import { addDays, formatLang, formatMd, MAANDEN, MAANDEN_KORT, orthodoxPascha, utc, ymd, type Mode } from './kalender';
 import { volgendeFeestDatum } from './overzicht';
 import { normaliseer, type Resultaat } from './heiligenPopup';
 import { PSALMEN, zoekPsalmen } from './psalmen';
-import { soortVan } from './heiligenSoort';
 
 // Centraal zoeken over bestaande inhoud: pagina's, psalmen, gebeden, feesten, heiligen en datums.
 // Losse, React-vrije logica, zodat een latere app dezelfde index kan gebruiken.
@@ -48,36 +46,17 @@ export interface ZoekIndex {
   heiligen: Ingang<Resultaat>[];
 }
 
-/** Bouwt de index één keer (en opnieuw zodra de heiligendata van holytrinityorthodox binnen is). */
-export function bouwIndex(htc: HtcData | null, ALLE_HEILIGEN: HeiligeMetDatum[]): ZoekIndex {
+/** Bouwt de index één keer (zodra de heiligenlijst geladen is). */
+export function bouwIndex(ALLE_HEILIGEN: HeiligeMetDatum[]): ZoekIndex {
   const feesten = new Map<string, Feest>();
   for (const f of [...DERTIEN, ...BEWEEGLIJKE_FEESTEN, ...OVERIGE_VASTE]) if (!feesten.has(f.id)) feesten.set(f.id, f);
 
-  // Zelfde samenvoeging als de Heiligen-pagina: eerst de eigen lijst, daarna de rest zonder dubbelen.
-  // Feesten die ook in de heiligenlijst van holytrinityorthodox staan ("De Verheffing van het Kruis") tonen we alleen bij Feesten.
-  const zonderLidwoord = (t: string) => normaliseer(t).replace(/^(de|het) /, '');
-  const feestNamen = new Set([...feesten.values()].map((f) => zonderLidwoord(f.naam)));
-  // Slotpunt weg, behalve bij een afkorting als "n.Chr."
-  const zonderPunt = (t: string) => t.trim().replace(/(?<!\.\S*)\.$/, '');
-  const heiligen: Ingang<Resultaat>[] = ALLE_HEILIGEN.filter((h) => !feestNamen.has(zonderLidwoord(zonderPunt(h.naam))) && soortVan(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`) === 'heilige').map((h) => {
-    const naam = zonderPunt(h.naam);
-    // Een titel die (bijna) de naam herhaalt, voegt niets toe als ondertitel.
-    const [n, t] = [normaliseer(naam), normaliseer(zonderPunt(h.titel ?? ''))];
-    const titel = t && !n.includes(t) && !t.includes(n) ? h.titel : undefined;
-    return { waarde: { ...h, naam, titel, bron: 'nl' as const }, sleutel: normaliseer(`${naam}|${titel ?? ''}`) };
-  });
-  if (htc) {
-    const gezien = new Set(ALLE_HEILIGEN.map((h) => `${h.md}|${normaliseer(h.ruwNaam ?? h.naam)}`));
-    for (const [md, d] of Object.entries(htc)) {
-      for (const [icon, tekst] of d.l ?? []) {
-        const naam = zonderPunt(vertaalLeven(tekst));
-        const sleutel = normaliseer(naam);
-        if (gezien.has(`${md}|${sleutel}`) || feestNamen.has(zonderLidwoord(naam)) || soortVan(tekst) !== 'heilige') continue;
-        gezien.add(`${md}|${sleutel}`);
-        heiligen.push({ waarde: { md, naam, kort: naam, bron: 'htc', rang: rangLabel(icon)?.rang }, sleutel });
-      }
-    }
-  }
+  // Heiligen en andere gedachtenissen uit het Heiligenjaar en de Heiligen van de Lage Landen; de feesten uit het
+  // Heiligenjaar zijn te vinden via de feesten van de site. Zoeken op de getoonde naam en op elke vetgedrukte naam.
+  const heiligen: Ingang<Resultaat>[] = ALLE_HEILIGEN.filter((h) => h.type !== 'feast').map((h) => ({
+    waarde: { ...h, bron: h.nl ? ('nl' as const) : ('hj' as const) },
+    sleutel: normaliseer([h.naam, h.titel, ...(h.namen ?? [])].join('|')),
+  }));
 
   return {
     gebeden: GEBEDEN.map((g) => ({ waarde: g, sleutel: normaliseer(`${g.titel}|${g.wanneer}|${g.categorie}`), tekst: normaliseer(g.tekst) })),
@@ -178,7 +157,7 @@ export function zoek(invoer: string, index: ZoekIndex, vandaag: Date, mode: Mode
       }),
     });
 
-  const heiligen = beste(q, index.heiligen, 8, (h) => h.naam, (h) => (h.bron === 'nl' ? 10 : 0) + (h.rang ?? 0));
+  const heiligen = beste(q, index.heiligen, 8, (h) => h.naam, (h) => (h.bron === 'nl' ? 10 : 0) + (h.type === 'saint' ? 1 : 0));
   if (heiligen.items.length) groepen.push({ titel: 'Heiligen', top: heiligen.top, items: heiligen.items.map((h) => ({ soort: 'heilige', titel: h.naam, onder: `${formatMd(h.md)}${h.titel ? ` · ${h.titel}` : ''}`, heilige: h })) });
 
   // Sterkste groep eerst; bij gelijke sterkte de vaste volgorde (datum, pagina's, gebeden, feesten, heiligen).

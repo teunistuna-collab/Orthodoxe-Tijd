@@ -20,7 +20,7 @@ assert.equal(d('31 februari'), null);
 assert.equal(d('6 ma'), null); // te kort voor een maand
 assert.equal(d('kruis'), null);
 
-const index = bouwIndex(null, ALLE_HEILIGEN);
+const index = bouwIndex(ALLE_HEILIGEN);
 const titels = (q: string, groep: string) => zoek(q, index, vandaag, 'oud').find((g) => g.titel === groep)?.items.map((i) => i.titel) ?? [];
 assert.ok(titels('kruisverheffing', 'Feesten').length > 0, 'feest op naam');
 assert.ok(titels('jezusgebed', "Pagina's").includes('Adem'), 'pagina via trefwoord');

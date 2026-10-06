@@ -2,15 +2,16 @@ import { useEffect, useMemo, useState } from 'react';
 import { BookOpenText, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { addDays, dagInfo, formatDag, formatLang, parseYmd, ymd } from '../lib/kalender';
-import { lezingSoort, rangLabel, roosterMelding, vertaalLeven, vertaalRef, vertaalTag } from '../lib/htc';
+import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
 import { NIVEAUS } from '../lib/vasten';
 import { FeestTag, VastenBadge } from './ui';
 import Modal from './Modal';
 import DeelKnop from './DeelKnop';
 import { vergrendelScroll } from '../lib/scrollLock';
-import { eersteHeilige, heiligeTitel, heiligenVanDag, hoortBijDag } from '../lib/heiligenPopup';
-import { isVastNotitie, soortVan } from '../lib/heiligenSoort';
+import { eersteHeilige, feestenUitHeiligenjaar, heiligeTitel, heiligenVanDag, type Resultaat } from '../lib/heiligenPopup';
+import { FEEST_HEILIGENJAAR, GEKOPPELDE_FEESTTEKSTEN } from '../lib/feestHeiligenjaar';
 import type { Heilige } from '../lib/heiligen';
+import HeiligePopup from './HeiligePopup';
 
 interface Props {
   ymd: string | null;
@@ -18,38 +19,25 @@ interface Props {
   onNavigate: (ymd: string) => void;
 }
 
-// Eigen (Nederlandstalige) heilige als kaartje; `los` = in het "Meer"-lijstje, anders met bovenmarge onder de kop.
-function HeiligeKaart({ h, los = false }: { h: Heilige; los?: boolean }) {
+// Heilige of gedachtenis als kaartje (tik = volledige tekst); `los` = in het "Meer"-lijstje, anders met bovenmarge onder de kop.
+function HeiligeKaart({ h, los = false, onOpen }: { h: Heilige; los?: boolean; onOpen: () => void }) {
   const kaart = (
-    <li className="dag-blok">
+    <li><button type="button" onClick={onOpen} className="dag-blok w-full text-left">
       <div className="flex items-baseline gap-2">
         <span className="font-display text-lg font-semibold">{h.naam}</span>
         {h.nl && <span className="rounded-sm bg-wine px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-gold-light uppercase">Lage Landen</span>}
       </div>
       {h.titel && h.titel !== h.naam && <div className="text-xs font-semibold text-gold-deep">{h.titel}</div>}
       {h.kort && h.kort !== h.naam && h.kort !== h.titel && <p className="mt-1 text-sm leading-relaxed text-ink-soft">{h.kort}</p>}
-    </li>
+      <span className="mt-1 block text-sm text-gold-deep">Lees ›</span>
+    </button></li>
   );
   return los ? kaart : <ul className="mt-3">{kaart}</ul>;
 }
 
-// Eén regel uit de heiligenlijst van holytrinityorthodox.com, met rangteken.
-function HtcRegel({ regel: [icon, tekst], origineel }: { regel: [string, string]; origineel: boolean }) {
-  const r = rangLabel(icon);
-  return (
-    <li className="flex gap-2">
-      <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${r && r.rang >= 4 ? 'bg-gold' : 'bg-parchment-4'}`} />
-      <span className={r && r.rang >= 5 ? 'font-semibold' : ''}>
-        {origineel ? tekst : vertaalLeven(tekst)}
-        {r && <span className="ml-1.5 text-[10px] font-bold tracking-wider text-gold-deep uppercase">{r.label}</span>}
-      </span>
-    </li>
-  );
-}
-
 export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Props) {
-  const { mode, vandaagYmd, htc, rooster, vraagRooster, heiligen, openLezing } = useApp();
-  const [origineel, setOrigineel] = useState(false);
+  const { mode, vandaagYmd, rooster, vraagRooster, heiligen, openLezing } = useApp();
+  const [leesFeest, setLeesFeest] = useState<Resultaat | null>(null);
 
   const dag = useMemo(() => (geselecteerd ? dagInfo(parseYmd(geselecteerd), mode, vandaagYmd) : null), [geselecteerd, mode, vandaagYmd]);
 
@@ -72,30 +60,23 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
     if (geselecteerd) vraagRooster(geselecteerd);
   }, [geselecteerd, vraagRooster]);
 
-  const htcDag = dag ? htc?.[dag.kerkKey] : undefined;
-  // Regels die aan het jaar van de bron gebonden zijn ("Zaterdag vóór …") alleen tonen in dat jaar (lib/heiligenPopup.ts).
-  // Zonder vastennotities (die staan in het vastenblok); echte heiligen eerst, dan feesten en iconen.
-  const heiligEerst = <T,>(lijst: T[], tekst: (x: T) => string) => [...lijst.filter((x) => soortVan(tekst(x)) === 'heilige'), ...lijst.filter((x) => soortVan(tekst(x)) !== 'heilige')];
-  const curated = dag
-    ? heiligEerst(
-        (heiligen?.HEILIGEN[dag.kerkKey] ?? []).filter((h) => hoortBijDag(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`, htcDag?.c, dag.ymd) && !isVastNotitie(`${h.ruwNaam ?? ''} ${h.naam}`)),
-        (h) => `${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`,
-      )
-    : [];
-  const htcRegels = dag ? heiligEerst((htcDag?.l ?? []).filter(([, tekst]) => hoortBijDag(tekst, htcDag?.c, dag.ymd) && !isVastNotitie(tekst)), ([, tekst]) => tekst) : [];
+  // Heiligen en gedachtenissen uit de centrale lijst (Heiligenjaar + Lage Landen), in de volgorde van de bron;
+  // feesten uit het Heiligenjaar die niet al als feest van de site op deze dag staan, komen bij de feesten.
+  const curated = dag ? heiligenVanDag(dag.kerkKey, heiligen?.HEILIGEN, dag.ymd) : [];
+  const extraFeesten = dag ? feestenUitHeiligenjaar(dag.kerkKey, heiligen?.HEILIGEN, dag.ymd).filter((f) => !GEKOPPELDE_FEESTTEKSTEN.has(f.id)) : [];
   const eerste = eersteHeilige(curated);
-  const eersteHtc = htcRegels.find(([, tekst]) => soortVan(tekst) === 'heilige');
   const lezingen = dag ? rooster?.[dag.ymd] ?? [] : [];
   const niveau = dag ? NIVEAUS[dag.vasten.niveau] : null;
 
   if (!dag || !niveau) return null;
 
   return (
+    <>
     <Modal
       open
       onClose={onClose}
       eyebrow={dag ? `${formatLang(dag.civil)}${mode === 'oud' ? ` · kerkelijk ${formatDag(dag.kerk)}` : ''}` : undefined}
-      title={dag ? dag.feesten[0]?.naam ?? (eerste ? heiligeTitel(eerste.naam) : eersteHtc ? vertaalLeven(eersteHtc[1]).replace(/\.$/, '') : 'Dag door het jaar') : ''}
+      title={dag ? dag.feesten[0]?.naam ?? (eerste ? heiligeTitel(eerste.naam) : 'Dag door het jaar') : ''}
       centerTitle
       maxWidth="max-w-4xl"
       onVorige={() => onNavigate(ymd(addDays(dag.civil, -1)))}
@@ -128,8 +109,8 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                 </p>
               </div>
 
-              {/* Feesten */}
-              {dag.feesten.length > 0 && (
+              {/* Feesten (logica en metadata uit lib/feesten.ts; tekst uit het Heiligenjaar waar gekoppeld) */}
+              {(dag.feesten.length > 0 || extraFeesten.length > 0) && (
                 <div>
                   <h3 className="ot-label dag-kop">Feesten & gedachtenissen</h3>
                   <ul className="mt-3 space-y-3">
@@ -139,62 +120,50 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                           <span className="font-display text-xl font-semibold">{f.naam}</span>
                           <FeestTag feest={f} />
                         </div>
-                        {f.toelichting && <p className="mt-2 text-sm leading-relaxed text-ink-soft">{f.toelichting}</p>}
-                        {f.traditie && <p className="mt-2 text-sm leading-relaxed text-ink-soft"><span className="font-bold text-gold-deep">Gebruik: </span>{f.traditie}</p>}
-                        {f.troparion && (
+                        {!FEEST_HEILIGENJAAR[f.id] && f.toelichting && <p className="mt-2 text-sm leading-relaxed text-ink-soft">{f.toelichting}</p>}
+                        {!FEEST_HEILIGENJAAR[f.id] && f.traditie && <p className="mt-2 text-sm leading-relaxed text-ink-soft"><span className="font-bold text-gold-deep">Gebruik: </span>{f.traditie}</p>}
+                        {!FEEST_HEILIGENJAAR[f.id] && f.troparion && (
                           <blockquote className="font-display mt-3 border-l-2 border-gold pl-3 text-[17px] leading-relaxed text-ink italic">
                             {f.troparion}
                             <span className="mt-1 block text-xs font-bold tracking-wider text-gold-deep uppercase not-italic">Troparion</span>
                           </blockquote>
                         )}
+                        {FEEST_HEILIGENJAAR[f.id] && (
+                          <button type="button" className="today-link mt-3" onClick={() => setLeesFeest({ id: FEEST_HEILIGENJAAR[f.id], md: dag.kerkKey, naam: f.naam, titel: '', kort: '', type: 'feast', bron: 'hj' })}>
+                            Uit het Heiligenjaar ›
+                          </button>
+                        )}
+                      </li>
+                    ))}
+                    {extraFeesten.map((f) => (
+                      <li key={f.id}>
+                        <button type="button" onClick={() => setLeesFeest(f)} className="dag-blok w-full text-left">
+                          <span className="font-display text-xl font-semibold">{f.naam}</span>
+                          <span className="mt-1 block text-sm text-gold-deep">Lees ›</span>
+                        </button>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {/* Heiligen */}
+              {/* Heiligen en andere gedachtenissen (Heiligenjaar en Heiligen van de Lage Landen) */}
               <div>
-                <div className="flex items-center justify-between">
-                  <h3 className="ot-label dag-kop">Heiligen van de dag</h3>
-                  {htcDag && (
-                    <button type="button" onClick={() => setOrigineel((v) => !v)} className="-mr-2 inline-flex min-h-11 items-center px-2 text-[11px] font-bold text-gold-deep underline-offset-2 hover:underline sm:min-h-0">
-                      {origineel ? 'Nederlands' : 'Origineel (EN)'}
-                    </button>
-                  )}
-                </div>
+                <h3 className="ot-label dag-kop">Heiligen van de dag</h3>
                 {/* Eén heilige zichtbaar, de rest onder "Meer", zodat de lezingen niet ver naar beneden verdwijnen */}
                 {curated.length > 0 ? (
-                  <HeiligeKaart h={curated[0]} />
-                ) : htcRegels.length > 0 ? (
-                  <ul className="mt-3 text-sm leading-snug"><HtcRegel regel={htcRegels[0]} origineel={origineel} /></ul>
+                  <HeiligeKaart h={curated[0]} onOpen={() => setLeesFeest(curated[0])} />
                 ) : (
-                  <p className="mt-2 text-sm text-ink-mute">{htc ? 'Geen gegevens voor deze dag.' : 'Heiligen worden geladen…'}</p>
+                  <p className="mt-2 text-sm text-ink-mute">{heiligen ? 'Geen gegevens voor deze dag.' : 'Heiligen worden geladen…'}</p>
                 )}
-                {(() => {
-                  const overigeEigen = curated.slice(1);
-                  // Regels van holytrinityorthodox.com die al als eigen (Nederlandse) heilige in de lijst staan, niet nog eens tonen
-                  const uniek = new Set(heiligenVanDag(dag.kerkKey, htc, heiligen?.HEILIGEN, dag.ymd, heiligen?.DUBBEL).filter((h) => h.bron === 'htc').map((h) => h.bronTekst));
-                  const htcUniek = htcRegels.filter(([, tekst]) => uniek.has(tekst));
-                  const overigeHtc = curated.length > 0 ? htcUniek : htcUniek.slice(1);
-                  const aantal = overigeEigen.length + overigeHtc.length;
-                  return aantal > 0 && (
-                    <details className="dag-meer mt-3">
-                      <summary>Meer heiligen en gedachtenissen ({aantal})</summary>
-                      {overigeEigen.length > 0 && (
-                        <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-                          {overigeEigen.map((h) => <HeiligeKaart key={h.naam} h={h} los />)}
-                        </ul>
-                      )}
-                      {overigeHtc.length > 0 && (
-                        <ul className="mt-3 space-y-1.5 text-sm leading-snug">
-                          {overigeHtc.map((regel, i) => <HtcRegel key={i} regel={regel} origineel={origineel} />)}
-                        </ul>
-                      )}
-                      <p className="mt-2 text-[11px] text-ink-mute">Bron: holytrinityorthodox.com · kerkelijke datum {formatDag(dag.kerk)} · vertaling automatisch</p>
-                    </details>
-                  );
-                })()}
+                {curated.length > 1 && (
+                  <details className="dag-meer mt-3">
+                    <summary>Meer heiligen en gedachtenissen ({curated.length - 1})</summary>
+                    <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+                      {curated.slice(1).map((h) => <HeiligeKaart key={h.id} h={h} los onOpen={() => setLeesFeest(h)} />)}
+                    </ul>
+                  </details>
+                )}
               </div>
 
               {/* Lezingen */}
@@ -235,5 +204,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
               </div>
             </div>
     </Modal>
+    <HeiligePopup heilige={leesFeest} onClose={() => setLeesFeest(null)} />
+    </>
   );
 }

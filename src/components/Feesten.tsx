@@ -5,6 +5,8 @@ import { DERTIEN, OVERIGE_VASTE } from '../lib/feesten';
 import { MAANDEN, MAANDEN_KORT, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum } from '../lib/kalender';
 import { volgendeFeestDatum } from '../lib/overzicht';
 import { LiturgicalPopup } from './CycleSections';
+import { FEEST_HEILIGENJAAR } from '../lib/feestHeiligenjaar';
+import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
 import { MobileListRow } from './ui';
 import PageHero from './PageHero';
 
@@ -25,6 +27,8 @@ export default function Feesten() {
   const dagenInMaand = useMemo(() => maand===null ? [] : Array.from(new Set(alleItems.filter(x=>x.datum.getUTCMonth()===maand).map(x=>x.datum.getUTCDate()))).sort((a,b)=>a-b), [alleItems,maand]);
   const alle = useMemo(() => alleItems.filter(({f,datum}) => { const q=zoek.trim().toLowerCase(); if(q && !f.naam.toLowerCase().includes(q)) return false; if(categorie==='vast' && f.offset!==undefined) return false; if(categorie==='beweeglijk' && f.offset===undefined) return false; if(!q && maand!==null && datum.getUTCMonth()!==maand) return false; if(!q && dag!==null && datum.getUTCDate()!==dag) return false; return true; }), [alleItems,zoek,maand,dag,categorie]);
   const gekozen = open ? [...lijst,...overige].find(({f})=>f.id===open) : undefined;
+  // Feesten met een tekst uit het Heiligenjaar (lib/feestHeiligenjaar.ts) tonen alleen die tekst.
+  const hjTekst = useHeiligenjaarTekst(gekozen ? FEEST_HEILIGENJAAR[gekozen.f.id] : undefined);
 
   return <>
     <PageHero id="feesten" titel="Feesten" />
@@ -57,6 +61,6 @@ export default function Feesten() {
       </div>
     </div></section>
     <section className="bg-bark py-12 text-cream"><div className={CONTENT}><div className="mx-auto max-w-3xl text-center"><p className="ot-label ot-label-licht">De tijd wordt geheiligd</p><p className="font-display mt-3 text-2xl italic text-[#e7d8ba]">In de feesten wordt niet alleen herinnerd wat geweest is: de Kerk treedt binnen in het heil dat Christus schenkt.</p></div></div></section>
-    <LiturgicalPopup open={!!gekozen} onClose={()=>setOpen(null)} content={gekozen ? {title:gekozen.f.naam, subtitle:formatLang(gekozen.datum), highlight:gekozen.f.troparion, paragraphs:[gekozen.f.toelichting, ...(gekozen.f.traditie?[`Gebruiken: ${gekozen.f.traditie}`]:[])].filter((p): p is string => Boolean(p))}:null}/>
+    <LiturgicalPopup open={!!gekozen} onClose={()=>setOpen(null)} content={gekozen ? (FEEST_HEILIGENJAAR[gekozen.f.id] ? {title:gekozen.f.naam, subtitle:formatLang(gekozen.datum), paragraphs: hjTekst ?? ['De tekst wordt geladen…']} : {title:gekozen.f.naam, subtitle:formatLang(gekozen.datum), highlight:gekozen.f.troparion, paragraphs:[gekozen.f.toelichting, ...(gekozen.f.traditie?[`Gebruiken: ${gekozen.f.traditie}`]:[])].filter((p): p is string => Boolean(p))}):null}/>
   </>;
 }

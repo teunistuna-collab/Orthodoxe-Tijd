@@ -2851,3 +2851,48 @@ html.lees-nacht #top#top#top#top .met-sierkop .sier-kop-onder{color:#d9b46a}
   #top#top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) .ot-zoek input{min-height:48px!important;height:48px!important}
   #top#top#top#top#top#top#top#top .exact-content:has(>#gebeden) :is(.gebed-lijst,.prayer-category-grid){margin-top:14px!important}
 }
+/* Bouw 155 — alle zoekbalken zoals die van Gebeden: donkerder perkament, manuscriptkader met hoekornamenten
+   (32 px web / 24 px mobiel), 52 / 48 px hoog, zoekicoon in antiek goud, Cormorant 18 px, gedempt bruine plaatsaanduiding.
+   Geldt voor Psalmen, Heiligen, Feesten en het zoekvenster van de site. */
+#top#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label,.zoek-veld){
+  display:flex!important;align-items:center!important;gap:12px!important;height:52px!important;min-height:52px!important;padding:0 40px 0 38px!important;
+  background:var(--veld-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/kaart-rand.png) 130 / 32px stretch!important;border-radius:3px!important;
+  box-shadow:inset 0 2px 6px rgba(70,40,15,.18)!important;color:#3b2314!important}
+#top#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label,.zoek-veld)>svg{flex:none!important;width:20px!important;height:20px!important;margin:0!important;color:#8a5a1e!important;stroke-width:1.75}
+#top#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label,.zoek-veld) input{flex:1;min-width:0;height:100%!important;min-height:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;font-family:var(--font-display)!important;font-size:18px!important;font-weight:400!important;color:#3b2314!important;caret-color:#7d5218}
+#top#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label,.zoek-veld) input::placeholder{color:#5c4330!important;opacity:1}
+#top#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label):focus-within{outline:none;filter:contrast(1.06)}
+/* zoekvenster van de site: de balk vrij in het donkere paneel, sluitknop in inkt */
+#top#top#top#top#top#top#top#top .zoek-veld{margin:14px 14px 10px!important;padding-right:10px!important}
+#top#top#top#top#top#top#top#top .zoek-veld .zoek-sluit{color:#5c4330!important}
+@media(max-width:767.98px){
+  #top#top#top#top#top#top#top#top :is(.ps-zoek,.saints-search-row>label,.zoek-veld){height:48px!important;min-height:48px!important;padding-left:30px!important;padding-right:26px!important;border-image-width:24px!important}
+  #top#top#top#top#top#top#top#top .zoek-veld{margin:10px 10px 8px!important;padding-right:6px!important}
+}
+/* Bouw 156 — mobiel: de tijdlijn "De heiliging van de tijd" onderaan de cycli-pagina's vervalt (de onderbalk leidt al naar de cycli) */
+@media(max-width:767.98px){#top#top#top#top .v15-cycle-timeline{display:none!important}}
+/* keuzemenu's naast de zoekbalk even hoog als die balk */
+#top#top#top#top#top#top#top#top .saints-select{height:52px!important;min-height:52px!important}
+@media(max-width:767.98px){#top#top#top#top#top#top#top#top .saints-select{height:48px!important;min-height:48px!important}}
+/* Bouw 157 — kopbalk (web): navigatie groter en duidelijker leesbaar op het donkere leer */
+@media(min-width:768px){
+  #top#top#top#top#top header .kop-link{font-size:clamp(16px,1.42vw,21px)!important;font-weight:600!important;letter-spacing:.015em!important;text-shadow:0 1px 2px rgba(0,0,0,.75)}
+  #top#top#top#top#top header .kop-link svg{width:16px!important;height:16px!important}
+}
+/* Bouw 158 — ook mobiel geen sierkop meer op de pagina's; de paginatitel blijft als onzichtbare kop voor schermlezers.
+   (De vensters houden hun boog.) */
+#top#top#top#top#top#top#top#top :is(.exact-content>section.sier-kop,.vandaag-kop){position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important;box-shadow:none!important}
+/* Bouw 159 — Heiligen, resultatenlijst (o.a. Lage Landen): gewone lijstrijen (geen kaartkader), wel beter leesbaar:
+   grotere, donkerdere tekst, een dunne goudlijn tussen de rijen en een duidelijke pijl */
+#top#top#top#top#top#top#top#top .saints-results-list button{display:flex!important;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:58px!important;padding:10px 4px!important;text-align:left;background:transparent!important;border:0!important;border-bottom:1px solid color-mix(in srgb,var(--color-gold-deep) 35%,transparent)!important;border-radius:0!important;box-shadow:none!important}
+#top#top#top#top#top#top#top#top .saints-results-list button strong{display:block;font-family:var(--font-display);font-size:19px!important;font-weight:600!important;line-height:1.2;color:#3b2314!important}
+#top#top#top#top#top#top#top#top .saints-results-list button small{display:block;margin-top:2px;font-family:var(--font-display);font-size:16px!important;line-height:1.3;color:#4a3020!important}
+#top#top#top#top#top#top#top#top .saints-results-list button b{font-family:var(--font-display);font-size:28px!important;font-weight:700;line-height:1;color:#7d5218!important}
+#top#top#top#top#top#top#top#top .saints-results-list time{display:block;margin:18px 0 2px!important;padding:0!important;font-family:var(--font-titel)!important;font-size:13px!important;font-weight:600!important;letter-spacing:.14em;color:#6b4418!important}
+@media(hover:hover){#top#top#top#top#top#top#top#top .saints-results-list button:hover{background:color-mix(in srgb,var(--color-gold) 10%,transparent)!important}}
+#top#top#top#top#top#top#top#top .saints-results-list>div,#top#top#top#top#top#top#top#top .saints-results-list>div>div{border:0!important;padding-bottom:0!important}
+/* Bouw 160 — Heiligen/Feesten: het dagvak ("Kies een dag in …") niet meer wit maar één met het perkament;
+   "Alle dagen" in de gedrukte knopstijl */
+#top#top#top#top#top#top#top :is(.saints-days-panel,.feast-days-panel){background:transparent!important;border:1px solid color-mix(in srgb,var(--color-gold-deep) 35%,transparent)!important;box-shadow:none!important}
+#top#top#top#top#top#top#top :is(.saints-days-panel,.feast-days-panel)>div:first-child>button{background:var(--knop-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/knop-rand.png) 60 / 11px stretch!important;border-radius:0!important;box-shadow:0 3px 8px rgba(80,45,15,.1)!important;color:var(--color-ink)!important;font-family:var(--font-titel)!important;font-weight:500!important;letter-spacing:.06em}
+#top#top#top#top#top#top#top :is(.saints-days-panel,.feast-days-panel)>div:first-child>button.active{background:linear-gradient(color-mix(in srgb,var(--color-gold) 40%,transparent),color-mix(in srgb,var(--color-gold) 40%,transparent)),url(/images/ui/perkament.webp) center/cover!important;font-weight:600!important}

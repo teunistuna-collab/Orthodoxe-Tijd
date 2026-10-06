@@ -2,7 +2,10 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { Search, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { formatLang } from '../lib/kalender';
-import { popupContent } from '../lib/heiligenPopup';
+import type { Resultaat } from '../lib/heiligenPopup';
+import HeiligePopup from './HeiligePopup';
+import { FEEST_HEILIGENJAAR } from '../lib/feestHeiligenjaar';
+import { laadVermelding } from '../lib/heiligenjaarTekst';
 import { bouwIndex, zoek, type ZoekTreffer } from '../lib/zoeken';
 import { vergrendelScroll } from '../lib/scrollLock';
 import { useTerugSluit } from '../lib/terug';
@@ -15,9 +18,10 @@ import type { Deel } from './Leesbediening';
 // Centraal zoekvenster: op desktop een donker paneel onder de kop, op mobiel schermvullend (Bouw 70 in index.css).
 // Openen via de zoekknop in de kop, "Zoeken" onder Meer, het vergrootglas op Vandaag (mobiel), of de toets / en Ctrl+K.
 export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpen: () => void; onClose: () => void }) {
-  const { htc, heiligen, vandaag, mode, openDag } = useApp();
+  const { heiligen, vandaag, mode, openDag } = useApp();
   const [invoer, setInvoer] = useState('');
   const [popup, setPopup] = useState<{ content: PopupInhoud; lezen: boolean; deel?: Deel } | null>(null);
+  const [heilige, setHeilige] = useState<Resultaat | null>(null);
   const invoerRef = useRef<HTMLInputElement | null>(null);
   const lijstRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,7 +46,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
     };
   }, [open, onClose]);
 
-  const index = useMemo(() => (open ? bouwIndex(htc, heiligen?.ALLE_HEILIGEN ?? []) : null), [open, htc, heiligen]);
+  const index = useMemo(() => (open ? bouwIndex(heiligen?.ALLE_HEILIGEN ?? []) : null), [open, heiligen]);
   const groepen = useMemo(() => (index ? zoek(invoer, index, vandaag, mode) : []), [index, invoer, vandaag, mode]);
 
   // Sneltoetsen: "/" (niet tijdens het typen in een veld) en Ctrl/Cmd+K.
@@ -79,11 +83,15 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
     else if (t.soort === 'gebed') setPopup({ lezen: true, deel: { titel: t.gebed.titel, pad: `gebeden/${t.gebed.id}` }, content: { title: t.gebed.titel, subtitle: t.gebed.wanneer, highlight: t.gebed.rubriek, paragraphs: t.gebed.tekst.split('\n\n') } });
     else if (t.soort === 'feest') {
       const f = t.feest;
+      const hjId = FEEST_HEILIGENJAAR[f.id];
+      // Feesten met een tekst uit het Heiligenjaar tonen alleen die tekst.
+      if (hjId) {
+        setPopup({ lezen: false, content: { title: f.naam, subtitle: formatLang(t.datum), paragraphs: ['De tekst wordt geladen…'] } });
+        laadVermelding(hjId).then((v) => setPopup((p) => (p?.content.title === f.naam ? { lezen: false, content: { title: f.naam, subtitle: formatLang(t.datum), paragraphs: v?.text ?? [] } } : p))).catch(() => {});
+        return;
+      }
       setPopup({ lezen: false, content: { title: f.naam, subtitle: formatLang(t.datum), highlight: f.troparion, paragraphs: [f.toelichting, ...(f.traditie ? [`Gebruiken: ${f.traditie}`] : [])].filter((p): p is string => Boolean(p)) } });
-    } else {
-      const c = popupContent(t.heilige);
-      if (c) setPopup({ lezen: false, content: c });
-    }
+    } else setHeilige(t.heilige);
   };
 
   // Pijltjes omhoog/omlaag lopen door het veld en de resultaten; Enter in het veld opent het eerste resultaat.
@@ -157,6 +165,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
         </div>
       )}
       <LiturgicalPopup lezen={popup?.lezen} open={popup !== null} onClose={() => setPopup(null)} content={popup?.content ?? null} deel={popup?.deel} />
+      <HeiligePopup heilige={heilige} onClose={() => setHeilige(null)} />
     </>
   );
 }

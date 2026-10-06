@@ -26,7 +26,7 @@ import PageHero from './components/PageHero';
 import ExactPageFrame from './components/ExactPageFrame';
 import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
 import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
-import { kerkjaarVan, laadDagen, laadRoosterJaar, type HtcData, type Rooster } from './lib/htc';
+import { kerkjaarVan, laadRoosterJaar, type Rooster } from './lib/htc';
 
 const MODE_KEY = 'orthodoxe-kalender-mode';
 
@@ -64,10 +64,8 @@ export default function App() {
   const [mode, setModeState] = useState<Mode>(leesMode);
   const [uitlegOpen, setUitlegOpen] = useState(moetUitlegTonen);
   const [vandaag, setVandaag] = useState(bepaalVandaag);
-  const [htc, setHtc] = useState<HtcData | null>(null);
   const [rooster, setRooster] = useState<Rooster | null>(null);
   const [heiligen, setHeiligen] = useState<HeiligenData | null>(null);
-  const [htcFout, setHtcFout] = useState(false);
   const [dagOpen, setDagOpen] = useState<string | null>(null);
   const [lezingenDag, setLezingenDag] = useState<string | null>(null);
   const [heiligenDag, setHeiligenDag] = useState<string | null>(null);
@@ -147,10 +145,9 @@ export default function App() {
         .catch(() => {});
   }, []);
 
-  // De heiligenlijst (±530 KB) en de Engelse dagdata van holytrinityorthodox.com (dagen.json, ±480 KB) pas laden als
-  // een weergave ze gebruikt. Vandaag gebruikt de heiligenlijst (titel van de dag, onderregel "H. …" op mobiel).
+  // De heiligenlijst (Heiligenjaar + Lage Landen, lib/heiligen.ts) pas laden als een weergave hem gebruikt.
+  // Vandaag gebruikt hem voor de titel van de dag en de onderregel "H. …" op mobiel.
   const heiligenGevraagd = useRef(false);
-  const htcGevraagd = useRef(false);
   useEffect(() => {
     const popup = dagOpen !== null || heiligenDag !== null || zoekOpen;
     if (!heiligenGevraagd.current && (popup || pagina === 'vandaag' || pagina === 'heiligen' || pagina === 'kalender')) {
@@ -158,15 +155,6 @@ export default function App() {
       import('./lib/heiligen')
         .then(setHeiligen)
         .catch(() => (heiligenGevraagd.current = false));
-    }
-    if (!htcGevraagd.current && (popup || pagina === 'heiligen')) {
-      htcGevraagd.current = true;
-      laadDagen()
-        .then(setHtc)
-        .catch(() => {
-          htcGevraagd.current = false;
-          setHtcFout(true);
-        });
     }
   }, [pagina, dagOpen, heiligenDag, zoekOpen]);
 
@@ -224,8 +212,8 @@ export default function App() {
   }, []);
 
   const ctx = useMemo(
-    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), htc, rooster, vraagRooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken }),
-    [mode, setMode, vandaag, htc, rooster, vraagRooster, heiligen, htcFout, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken],
+    () => ({ mode, setMode, vandaag, vandaagYmd: ymd(vandaag), rooster, vraagRooster, heiligen, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken }),
+    [mode, setMode, vandaag, rooster, vraagRooster, heiligen, openDag, openLezing, openKalenderUitleg, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken],
   );
 
   return (

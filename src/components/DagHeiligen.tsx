@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useApp } from '../lib/context';
 import { dagInfo, formatLang, parseYmd } from '../lib/kalender';
-import { heiligenVanDag, popupContent, type Resultaat } from '../lib/heiligenPopup';
-import { LiturgicalPopup } from './CycleSections';
+import { heiligenVanDag, type Resultaat } from '../lib/heiligenPopup';
+import HeiligePopup from './HeiligePopup';
 import Modal from './Modal';
 import { vergrendelScroll } from '../lib/scrollLock';
 
@@ -14,10 +14,10 @@ interface Props {
 // Pop-up met uitsluitend de heiligen en gedachtenissen van één dag. Een tik op een heilige opent zijn of haar
 // levensbeschrijving in dezelfde leespop-up als op de Heiligen-pagina.
 export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
-  const { mode, vandaagYmd, htc, heiligen: eigen } = useApp();
+  const { mode, vandaagYmd, heiligen: eigen } = useApp();
   const [gekozen, setGekozen] = useState<Resultaat | null>(null);
   const dag = useMemo(() => (gekozenDag ? dagInfo(parseYmd(gekozenDag), mode, vandaagYmd) : null), [gekozenDag, mode, vandaagYmd]);
-  const heiligen = useMemo(() => (dag ? heiligenVanDag(dag.kerkKey, htc, eigen?.HEILIGEN, dag.ymd, eigen?.DUBBEL) : []), [dag, htc, eigen]);
+  const heiligen = useMemo(() => (dag ? heiligenVanDag(dag.kerkKey, eigen?.HEILIGEN, dag.ymd) : []), [dag, eigen]);
 
   // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
           {heiligen.length > 0 ? (
             <ul className="grid gap-2">
               {heiligen.map((h, i) => (
-                <li key={`${h.naam}-${i}`}>
+                <li key={`${h.id}-${i}`}>
                   <button
                     type="button"
                     onClick={() => setGekozen(h)}
@@ -48,11 +48,11 @@ export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-ink-mute">{htc ? 'Voor deze dag zijn geen heiligen beschikbaar.' : 'Heiligen worden geladen…'}</p>
+            <p className="text-sm text-ink-mute">{eigen ? 'Voor deze dag zijn geen heiligen beschikbaar.' : 'Heiligen worden geladen…'}</p>
           )}
         </Modal>
       )}
-      <LiturgicalPopup open={!!gekozen} onClose={() => setGekozen(null)} content={popupContent(gekozen)} />
+      <HeiligePopup heilige={gekozen} onClose={() => setGekozen(null)} />
     </>
   );
 }

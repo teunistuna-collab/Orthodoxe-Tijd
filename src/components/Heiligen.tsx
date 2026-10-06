@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { rangLabel, vertaalLeven } from '../lib/htc';
 import { dagInfo, formatMd, hoofdletter, MAANDEN } from '../lib/kalender';
-import { LiturgicalPopup } from './CycleSections';
-import { heiligenVanDag, normaliseer, popupContent, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
-import { CATEGORIEEN, categorieenVan, soortVan } from '../lib/heiligenSoort';
+import HeiligePopup from './HeiligePopup';
+import { eersteHeilige, heiligenVanDag, normaliseer, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
+import { CATEGORIEEN, categorieenVan } from '../lib/heiligenSoort';
 import PageHero from './PageHero';
 import NaarBoven from './NaarBoven';
 
@@ -17,7 +16,7 @@ const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 function sorteerMd(a: string, b: string) { const [am, ad] = a.split('-').map(Number); const [bm, bd] = b.split('-').map(Number); return am - bm || ad - bd; }
 
 export default function Heiligen() {
-  const { mode, vandaag, vandaagYmd, htc, heiligen } = useApp();
+  const { mode, vandaag, vandaagYmd, heiligen, openDagHeiligen } = useApp();
   const dagVandaag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
   const [zoek, setZoek] = useState('');
   const [maand, setMaand] = useState<number | null>(null);
@@ -26,35 +25,22 @@ export default function Heiligen() {
   const [dag, setDag] = useState<number | null>(null);
   // Na een tik op een maandknop tonen we nog geen heiligen: eerst een dag (of "Alle dagen") kiezen.
   const [wachtOpDag, setWachtOpDag] = useState(false);
-  const [vandaagOpen, setVandaagOpen] = useState(false);
   const [geselecteerde, setGeselecteerde] = useState<Resultaat | null>(null);
 
-  const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, htc, heiligen?.HEILIGEN, dagVandaag.ymd, heiligen?.DUBBEL), [dagVandaag.kerkKey, dagVandaag.ymd, htc, heiligen]);
+  const heiligenVandaag = useMemo<Resultaat[]>(() => heiligenVanDag(dagVandaag.kerkKey, heiligen?.HEILIGEN, dagVandaag.ymd), [dagVandaag.kerkKey, dagVandaag.ymd, heiligen]);
 
   // Uitgelicht als "heilige van vandaag": de eerste echte heilige, geen voorfeest of icoon (die staan wel in de daglijst).
-  const uitgelicht = heiligenVandaag.find((h) => soortVan(tekstVoorIndeling(h)) === 'heilige') ?? heiligenVandaag[0];
+  const uitgelicht = (eersteHeilige(heiligenVandaag) as Resultaat | undefined) ?? heiligenVandaag[0];
 
   const resultaten = useMemo<Resultaat[]>(() => {
     const query = normaliseer(zoek.trim());
     const past = (md: string, tekst: string) => (maand === null || Number(md.split('-')[0]) === maand) && (dag === null || Number(md.split('-')[1]) === dag) && (!query || normaliseer(`${tekst} ${md} ${formatMd(md)}`).includes(query));
-    // Alleen heiligen: feesten, kalendernotities ("Zondag vóór …") en iconen horen bij de dag, niet in deze lijst.
-    const centraal: Resultaat[] = (heiligen?.ALLE_HEILIGEN ?? []).filter(h => past(h.md, `${h.naam} ${h.titel} ${h.kort}`) && (!alleenNl || h.nl) && soortVan(`${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`) === 'heilige').map(h => ({ ...h, bron: 'nl' }));
-    const basis = [...centraal];
-    if (htc && !alleenNl) {
-      const gezien = new Set(centraal.map(h => `${h.md}|${normaliseer(h.ruwNaam ?? h.naam)}`));
-      for (const [md, d] of Object.entries(htc)) {
-        if (!past(md, '')) continue;
-        for (const [icon, tekst] of d.l) {
-          if (soortVan(tekst) !== 'heilige') continue;
-          const naam = vertaalLeven(tekst).replace(/\.$/, '');
-          if (query && !normaliseer(naam).includes(query)) continue;
-          const sleutel = `${md}|${normaliseer(naam)}`;
-          if (!gezien.has(sleutel)) { gezien.add(sleutel); basis.push({ md, naam, kort: naam, bron: 'htc', rang: rangLabel(icon)?.rang, bronTekst: tekst }); }
-        }
-      }
-    }
+    // Alleen heiligen (Heiligenjaar en Lage Landen); feesten en andere gedachtenissen horen bij de dag, niet in deze lijst.
+    const basis: Resultaat[] = (heiligen?.ALLE_HEILIGEN ?? []).filter(h => h.type === 'saint' && past(h.md, `${h.naam} ${h.titel} ${(h.namen ?? []).join(' ')}`) && (!alleenNl || h.nl)).map(h => ({ ...h, bron: h.nl ? 'nl' : 'hj' }));
     return basis.filter(h => categorie === 'alle' || categorieenVan(tekstVoorIndeling(h)).includes(categorie)).sort((a,b) => sorteerMd(a.md,b.md) || a.naam.localeCompare(b.naam));
-  }, [alleenNl, htc, heiligen, maand, dag, zoek, categorie]);
+  }, [alleenNl, heiligen, maand, dag, zoek, categorie]);
+
+  const aantalHeiligen = useMemo(() => (heiligen?.ALLE_HEILIGEN ?? []).filter(h => h.type === 'saint').length, [heiligen]);
 
   const groepen = useMemo(() => {
     const map = new Map<string, Resultaat[]>();
@@ -95,7 +81,7 @@ export default function Heiligen() {
               {uitgelicht.titel && <p className="saints-feature-title">{uitgelicht.titel}</p>}
               <p className="saints-feature-date">{formatMd(dagVandaag.kerkKey)}</p>
               <p>{uitgelicht.kort || 'Lees meer over het leven en de gedachtenis van deze heilige.'}</p>
-              <div className="saints-feature-actions"><button onClick={()=>setGeselecteerde(uitgelicht)} className="saints-gold-button">Lees het leven ›</button>{heiligenVandaag.length>1&&<button onClick={()=>setVandaagOpen(true)} className="saints-text-link">Bekijk alle {heiligenVandaag.length} heiligen ›</button>}</div>
+              <div className="saints-feature-actions"><button onClick={()=>setGeselecteerde(uitgelicht)} className="saints-gold-button">Lees het leven ›</button>{heiligenVandaag.length>1&&<button onClick={()=>openDagHeiligen(dagVandaag.ymd)} className="saints-text-link">Bekijk alle {heiligenVandaag.length} heiligen ›</button>}</div>
             </> : <p>Voor deze dag is nog geen heilige beschikbaar.</p>}
           </div>
           <blockquote className="saints-side-quote">“Het doel van ons leven is de vergoddelijking door genade.”<span>✣</span></blockquote>
@@ -112,7 +98,7 @@ export default function Heiligen() {
         </section>
 
         <section className="saints-browser bibliotheek">
-          <div className="saints-rule-title"><h2>Heiligen per maand</h2><span>5000+ heiligen</span></div>
+          <div className="saints-rule-title"><h2>Heiligen per maand</h2><span>{aantalHeiligen} heiligen</span></div>
           <div className="saints-month-grid">{MAANDEN.map((m,i)=><button key={m} onClick={()=>{setMaand(i+1);setDag(null);setZoek('');setAlleenNl(false);setWachtOpDag(true)}} className={maand===i+1?'active':''}>{hoofdletter(m)}</button>)}</div>
           {maand && <div className="saints-days-panel"><div><p className="saints-kicker">Kies een dag in {MAANDEN[maand-1]}</p><button onClick={()=>{setDag(null);setWachtOpDag(false)}} className={!dag&&!wachtOpDag?'active':''}>Alle dagen</button></div><div className="saints-days-grid">{Array.from({length:dagenInMaand},(_,i)=>i+1).map(n=><button key={n} onClick={()=>{setDag(n);setAlleenNl(false);setWachtOpDag(false)}} className={dag===n?'active':''}>{n}</button>)}</div></div>}
         </section>
@@ -135,8 +121,7 @@ export default function Heiligen() {
       </div>
     </section>
     <section className="saints-ending"><div className={CONTENT}><h2>Een wolk van getuigen</h2><p>“Daarom ook, nu wij zo’n grote wolk van getuigen om ons heen hebben…”</p><span>Hebreeën 12:1</span></div></section>
-    <LiturgicalPopup open={vandaagOpen} onClose={()=>setVandaagOpen(false)} content={{title:`Heiligen van ${formatMd(dagVandaag.kerkKey)}`,subtitle:`${heiligenVandaag.length} gedachtenissen`,paragraphs:heiligenVandaag.map(h=>`${h.naam}${h.titel?` — ${h.titel}`:''}`)}}/>
-    <LiturgicalPopup open={!!geselecteerde} onClose={()=>setGeselecteerde(null)} content={popupContent(geselecteerde)}/>
+    <HeiligePopup heilige={geselecteerde} onClose={()=>setGeselecteerde(null)} />
     <NaarBoven />
   </>;
 }

@@ -3,3 +3,6 @@ dist/
 .env
 .env.*
 !.env.example
+# Heiligenjaar-bronarchief: de HTML-dagbestanden staan in git, de illustraties (89 MB) en zip-bestanden alleen lokaal
+source/heiligenjaar/heiligen/illustr/
+source/heiligenjaar/heiligen/*.zip

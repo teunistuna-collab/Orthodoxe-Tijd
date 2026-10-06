@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import type { Mode } from './kalender';
-import type { HtcData, Rooster } from './htc';
+import type { Rooster } from './htc';
 
 /** De heiligenlijst (src/lib/heiligen.ts, ±500 KB) wordt apart geladen zodat hij de eerste weergave niet ophoudt. */
 export type HeiligenData = typeof import('./heiligen');
@@ -17,14 +17,12 @@ export interface AppState {
   setMode: (m: Mode) => void;
   vandaag: Date;
   vandaagYmd: string;
-  htc: HtcData | null;
   /** Lezingsverwijzingen per burgerlijke datum (yyyy-mm-dd), over alle kerkjaren met een rooster. */
   rooster: Rooster | null;
   /** Laadt (eenmalig) het leesrooster van het kerkjaar van deze datum (yyyy-mm-dd). */
   vraagRooster: (ymd: string) => void;
   /** null zolang de heiligenlijst nog laadt. */
   heiligen: HeiligenData | null;
-  htcFout: boolean;
   openDag: (ymd: string) => void;
   openLezing: (l: LezingKeuze) => void;
   openKalenderUitleg: () => void;

@@ -1,58 +1,67 @@
 import type { Heilige } from './heiligen';
-import { getSaintEnrichment } from './saintEnrichment';
-import { rangLabel, vertaalLeven, type HtcData } from './htc';
-import { formatMd } from './kalender';
+import { formatMd, parseYmd } from './kalender';
 import { heiligeIcoon, lageLandenTekst } from './heiligenIconen';
-import { isVastNotitie, soortVan } from './heiligenSoort';
 
-// Gedeeld door de Heiligen-pagina en de pop-up "Heiligen van de dag" (Vandaag, mobiel).
+// Gedeeld door Vandaag, Kalender, de Heiligen-pagina en de pop-up "Heiligen van de dag". Eén bron: lib/heiligen.ts
+// (Heiligenjaar + Heiligen van de Lage Landen); de volledige teksten laadt lib/heiligenjaarTekst.ts per maand.
 
-export type Resultaat = { md: string; naam: string; ruwNaam?: string; titel?: string; kort?: string; nl?: boolean; bron: 'nl' | 'htc'; rang?: number; bronTekst?: string };
+export type Resultaat = Heilige & { md: string; bron: 'hj' | 'nl' };
 
-/** Alle tekst van een heilige (Nederlands en, bij holytrinityorthodox.com, de Engelse bron) voor lib/heiligenSoort.ts. */
-export const tekstVoorIndeling = (h: Resultaat) => `${h.bronTekst ?? ''} ${h.ruwNaam ?? ''} ${h.naam} ${h.titel ?? ''}`;
+/** Tekst voor de categorieën op de Heiligen-pagina: namen en het begin van de brontekst. */
+export const tekstVoorIndeling = (h: Resultaat) => `${h.opening ?? ''} ${h.naam} ${h.titel ?? ''}`;
 
 export function normaliseer(tekst: string) {
-  return tekst.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return tekst.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
-/** Inhoud van de leespop-up met de levensbeschrijving van één heilige. */
-export function popupContent(h: Resultaat | null) {
-  if (!h) return null;
-  const extra = getSaintEnrichment(h.ruwNaam ?? h.naam);
-  const meta = extra ? [extra.rang, extra.regio, extra.eeuw].filter(Boolean).join(' · ') : '';
-  const paragraphs = lageLandenTekst(h) ?? (extra?.leven ? [extra.leven] : (h.kort ? [h.kort] : ['Voor deze heilige is nog geen betrouwbare uitgebreide Nederlandse levensbeschrijving beschikbaar.']));
-  const icoon = heiligeIcoon(h);
-  return { title: h.naam, image: icoon ? { src: icoon.src, alt: icoon.alt } : undefined, subtitle: `${formatMd(h.md)}${h.titel ? ` · ${h.titel}` : ''}${meta ? ` · ${meta}` : ''}`, paragraphs };
+const metBron = (md: string) => (h: Heilige): Resultaat => ({ ...h, md, bron: h.nl ? 'nl' : 'hj' });
+
+/** Alle vermeldingen van één kerkelijke dag (sleutel zoals '9-7'); ymd is de getoonde burgerlijke dag.
+ *  Een jaar zonder 29 februari: de bron zegt dat die gedachtenis dan op 28 februari valt. */
+export function vermeldingenVanDag(kerkKey: string, eigen: Record<string, Heilige[]> | undefined, ymd: string): Resultaat[] {
+  const lijst = (eigen?.[kerkKey] ?? []).map(metBron(kerkKey));
+  if (kerkKey === '2-28') {
+    const jaar = parseYmd(ymd).getUTCFullYear();
+    const schrikkel = (jaar % 4 === 0 && jaar % 100 !== 0) || jaar % 400 === 0;
+    if (!schrikkel) lijst.push(...(eigen?.['2-29'] ?? []).map(metBron('2-29')));
+  }
+  return lijst;
 }
 
-/** Hoort deze regel bij de getoonde dag (ymd)? Aan een jaar gebonden regels ("Zaterdag vóór …", beweeglijke
- *  gedachtenissen) alleen als de dag in het jaar van de bron valt; bronDatum is de datum uit dagen.json (veld c). */
-export function hoortBijDag(tekst: string, bronDatum: string | undefined, ymd: string): boolean {
-  return bronDatum === ymd || soortVan(tekst) !== 'wisselend';
+/** Heiligen en andere gedachtenissen van de dag; de feesten van de dag staan apart (feestenUitHeiligenjaar, lib/kalender.ts). */
+export function heiligenVanDag(kerkKey: string, eigen: Record<string, Heilige[]> | undefined, ymd: string): Resultaat[] {
+  return vermeldingenVanDag(kerkKey, eigen, ymd).filter((h) => h.type !== 'feast');
 }
 
-const tekstVan = (h: Heilige) => `${h.ruwNaam ?? ''} ${h.naam} ${h.titel}`;
+/** De feesten die het Heiligenjaar op deze dag noemt. */
+export function feestenUitHeiligenjaar(kerkKey: string, eigen: Record<string, Heilige[]> | undefined, ymd: string): Resultaat[] {
+  return vermeldingenVanDag(kerkKey, eigen, ymd).filter((h) => h.type === 'feast');
+}
 
-/** De eerste echte heilige van een dag (geen feest, notitie of icoon), voor de titel van de dag. */
+/** De eerste heilige van een dag (geen feest of andere gedachtenis), voor de titel van de dag. */
 export function eersteHeilige(lijst: Heilige[] | undefined): Heilige | undefined {
-  return lijst?.find((h) => soortVan(tekstVan(h)) === 'heilige');
+  return lijst?.find((h) => h.type === 'saint');
 }
 
 /** "H." ervoor, behalve als de naam al met een aanduiding begint ("Profeet …", "Eerbiedwaardige …", "HH. …"). */
 export function heiligeTitel(naam: string): string {
-  return /^(h\.|hh\.|heilige|profe|apostel|martela|grootmartela|priestermartela|nieuwe|eerbiedwaardige|rechtvaardige|maagd|zalige|synaxis|gedachtenis|overbrenging|vinding|ontslaping|alle |belijder|dwaas)/i.test(naam) ? naam : `H. ${naam}`;
+  return /^(h\.|hh\.|heilige|profe|apostel|martela|grootmartela|priestermartela|nieuwe|eerbiedwaardige|rechtvaardige|maagd|zalige|synaxis|gedachtenis|overbrenging|vinding|ontslaping|alle |belijder|dwaas|\d)/i.test(naam) ? naam : `H. ${naam}`;
 }
 
-/** Alle heiligen en gedachtenissen van één kerkelijke dag (sleutel zoals '9-7'); ymd is de getoonde burgerlijke dag. */
-// dubbel = de uit de eigen lijst weggelaten dubbelen (DUBBEL in lib/heiligen.ts), zodat die ook uit de bronregels wegblijven.
-export function heiligenVanDag(kerkKey: string, htc: HtcData | null, eigen: Record<string, Heilige[]> | undefined, ymd: string, dubbel?: Record<string, string[]>): Resultaat[] {
-  const bronDatum = htc?.[kerkKey]?.c;
-  const curated: Resultaat[] = (eigen?.[kerkKey] ?? []).filter((h) => hoortBijDag(tekstVan(h), bronDatum, ymd) && !isVastNotitie(tekstVan(h))).map((h) => ({ ...h, md: kerkKey, bron: 'nl' }));
-  const gezien = new Set([...curated.map((h) => h.ruwNaam ?? h.naam), ...(dubbel?.[kerkKey] ?? [])].map(normaliseer));
-  const extra: Resultaat[] = (htc?.[kerkKey]?.l ?? [])
-    .filter(([, tekst]) => hoortBijDag(tekst, bronDatum, ymd) && !isVastNotitie(tekst))
-    .map(([icon, tekst]) => ({ md: kerkKey, naam: vertaalLeven(tekst).replace(/\.$/, ''), kort: vertaalLeven(tekst).replace(/\.$/, ''), bron: 'htc' as const, rang: rangLabel(icon)?.rang, bronTekst: tekst }))
-    .filter((h) => ![...gezien].some((g) => normaliseer(h.naam).includes(g) || g.includes(normaliseer(h.naam))));
-  return [...curated, ...extra];
+/** Inhoud van de leespop-up van één heilige. tekst = de volledige brontekst uit het Heiligenjaar (of null zolang die laadt).
+ *  Bij een Heilige van de Lage Landen eerst de eigen levensbeschrijving, daarna (als dezelfde persoon in het
+ *  Heiligenjaar staat) de tekst uit het Heiligenjaar. */
+export function popupContent(h: Resultaat | null, tekst: string[] | null) {
+  if (!h) return null;
+  const laden = ['De tekst wordt geladen…'];
+  const eigen = h.nl ? lageLandenTekst(h) ?? (h.kort ? [h.kort] : null) : null;
+  const icoon = heiligeIcoon(h);
+  return {
+    title: h.naam,
+    eyebrow: h.nl ? 'Heilige van de Lage Landen' : undefined,
+    image: icoon ? { src: icoon.src, alt: icoon.alt } : undefined,
+    subtitle: `${formatMd(h.md)}${h.titel && h.titel !== h.naam ? ` · ${h.titel}` : ''}`,
+    paragraphs: eigen ?? (h.nl && !h.heiligenjaar ? [] : tekst ?? laden),
+    ...(eigen && h.heiligenjaar ? { sections: [{ heading: 'Uit het Heiligenjaar', paragraphs: tekst ?? laden }] } : {}),
+  };
 }

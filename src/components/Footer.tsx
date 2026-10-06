@@ -26,8 +26,8 @@ export function FooterInhoud() {
       <div>
         <h3 className="text-sm font-bold tracking-widest text-gold-light uppercase">Bronnen & verwijzingen</h3>
         <ul className="mt-3 space-y-2 text-sm">
-          <li>Menologion en leesrooster: holytrinityorthodox.com (Juliaanse kalender, 2026 t/m 2035).</li>
-          <li>Aanvullende heiligenlevens en biografische gegevens: Orthodox Saint Finder (Cloud of Witnesses); verwerkt in eigen Nederlandse samenvattingen waar een betrouwbare koppeling beschikbaar is.</li>
+          <li>Heiligen en feestteksten: het Heiligenjaar, teksten samengesteld door archimandriet Adriaan (eeuwige gedachtenis), overgenomen met toestemming van het klooster St. Jan de Voorloper in Den Haag.</li>
+          <li>Leesrooster: holytrinityorthodox.com (Juliaanse kalender, 2026 t/m 2035).</li>
           <li>Pascha volgens de Alexandrijnse paasregel (Nicea 325) op de Juliaanse kalender.</li>
           <li>Vastenregels naar het Typikon van Sabbas in zijn gangbare parochiële toepassing.</li>
           <li>Troparia en gebeden in eigen Nederlandse weergave.</li>
