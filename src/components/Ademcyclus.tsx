@@ -37,7 +37,7 @@ const CONTENT = 'mx-auto w-full max-w-[1600px] px-4 sm:px-8 lg:px-12';
 // Dunne gouden lijn met een sierteken in het midden.
 function OrnamentRule({ className = '' }: { className?: string }) {
   return (
-    <div className={`mx-auto flex items-center gap-3 text-gold-deep ${className}`} aria-hidden="true">
+    <div className={`ademregel mx-auto flex items-center gap-3 text-gold-deep ${className}`} aria-hidden="true">
       <span className="h-px flex-1 bg-gold/50" />
       <span className="text-base leading-none">✣</span>
       <span className="h-px flex-1 bg-gold/50" />

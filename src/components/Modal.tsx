@@ -4,7 +4,6 @@ import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
 import { houdFocusBinnen } from '../lib/focus';
 import Leesbediening, { type Deel } from './Leesbediening';
-import Cross from './Cross';
 
 type ModalProps = {
   open: boolean;
@@ -25,6 +24,16 @@ type ModalProps = {
   leesAudio?: string;
   // Deelknop bij de leesbediening, met een deeplink naar deze inhoud.
   deel?: Deel;
+  /** Datum (of korte kop) midden in de bovenbalk, in bordeaux. */
+  kopDatum?: string;
+  /** Toon "← vorige" en "volgende →" in de bovenbalk (met onVorige/onVolgende). */
+  kopNav?: boolean;
+  vorigeLabel?: string;
+  volgendeLabel?: string;
+  /** Kleine regel onder de titel (bijv. de titel of functie van een heilige). */
+  ondertitel?: string;
+  /** Verandert deze waarde, dan springt het leesvlak terug naar boven (andere heilige in hetzelfde venster). */
+  inhoudSleutel?: string;
 };
 
 // Houdt het scherm aan zolang er een leesvenster (gebed, dienst, lezing, psalm) open staat.
@@ -55,7 +64,7 @@ function useSchermAan(open: boolean) {
   }, [open]);
 }
 
-export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false, leesAudio, deel }: ModalProps) {
+export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false, leesAudio, deel, kopDatum, kopNav = false, vorigeLabel = 'Vorige', volgendeLabel = 'Volgende', ondertitel, inhoudSleutel }: ModalProps) {
   const veeg = useSwipe(onVorige, onVolgende);
   const eigenId = useId();
   const titelId = labelledBy ?? eigenId;
@@ -111,6 +120,10 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
     };
   }, [open, lezen, leesSleutel]);
 
+  useEffect(() => {
+    papierRef.current?.scrollTo({ top: 0 });
+  }, [inhoudSleutel]);
+
   if (!open) return null;
 
   return (
@@ -121,30 +134,41 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         aria-labelledby={titelId}
         ref={frameRef}
         tabIndex={-1}
-        className={`exact-modal-frame met-sierkop ${maxWidth}`}
+        className={`exact-modal-frame pk ${maxWidth}`}
         onClick={(event) => event.stopPropagation()}
         onKeyDown={houdFocusBinnen}
         {...veeg}
       >
-        {/* Sierkop zoals bovenaan de pagina's: boog met kruis, titel en (als die er is) de bovenregel eronder.
-            In de avondweergave de strak uitgesneden boog, zonder lichte perkamentrand. */}
-        <header className="exact-modal-titlebar sier-kop">
-          <div className="exact-modal-nav exact-modal-nav-left">{leadingActions}</div>
-          <div className="sier-kop-binnen">
-            <img className="kop-dag" src="/images/heroes/sier/boog.webp" alt="" width={1200} height={400} decoding="async" />
-            <img className="kop-nacht" src="/images/heroes/sier/boog-nacht.webp" alt="" width={1200} height={400} loading="lazy" decoding="async" />
-            <span className="sier-kop-kruis" aria-hidden="true"><Cross className="h-full w-full" title="" /></span>
-            <h2 id={titelId} className="sier-kop-titel">{title}</h2>
-            {eyebrow && <p className="sier-kop-onder">{eyebrow}</p>}
+        {/* Bovenbalk (blijft staan bij scrollen): vorige · datum · volgende · sluiten */}
+        <header className="pk-kop">
+          <div className="pk-links">
+            {kopNav && onVorige ? <button type="button" className="pk-nav" onClick={onVorige} aria-label={vorigeLabel}><span aria-hidden="true">←</span> vorige</button> : leadingActions}
           </div>
-          <div className="exact-modal-nav exact-modal-nav-right">
+          <p className="pk-datum">{kopDatum}</p>
+          <div className="pk-rechts">
+            {kopNav && onVolgende && <button type="button" className="pk-nav" onClick={onVolgende} aria-label={volgendeLabel}>volgende <span aria-hidden="true">→</span></button>}
             {actions}
-            <button type="button" onClick={onClose} className="exact-modal-close" aria-label="Sluiten"><X /></button>
+            <button type="button" onClick={onClose} className="exact-modal-close pk-sluit" aria-label="Sluiten"><X /></button>
           </div>
         </header>
         <div className="exact-modal-vlak">
           {lezen && <span ref={balkRef} className="lees-voortgang" aria-hidden="true" />}
-          <div ref={papierRef} className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>{children}</div>
+          <div ref={papierRef} className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>
+            {/* Kop van het blad: sierbalk met kruis, label, titel, ondertitel en sierlijn (zie index.css, Bouw 163) */}
+            <div className="pk-titelblok">
+              <img className="pk-sierbalk" src="/images/ui/sierbalk.webp" alt="" width={1400} height={286} decoding="async" />
+              {eyebrow && <p className="pk-label">{eyebrow}</p>}
+              <h2 id={titelId} className="pk-titel">{title}</h2>
+              {ondertitel && <p className="pk-onder">{ondertitel}</p>}
+              <span className="pk-sierlijn" aria-hidden="true" />
+            </div>
+            {lezen && (
+              <div className="pk-lees">
+                <Leesbediening audioSrc={leesAudio} deel={deel} />
+              </div>
+            )}
+            {children}
+          </div>
           {lezen && hervat !== null && (
             <button
               type="button"
@@ -158,11 +182,6 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
             </button>
           )}
         </div>
-        {lezen && (
-          <div className="exact-modal-voet">
-            <Leesbediening audioSrc={leesAudio} deel={deel} />
-          </div>
-        )}
       </div>
     </div>
   );

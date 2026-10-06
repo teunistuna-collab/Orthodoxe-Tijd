@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BookOpenText, ChevronLeft, ChevronRight } from 'lucide-react';
+import { BookOpenText } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { addDays, dagInfo, formatDag, formatLang, parseYmd, ymd } from '../lib/kalender';
 import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
@@ -75,26 +75,18 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
     <Modal
       open
       onClose={onClose}
-      eyebrow={dag ? `${formatLang(dag.civil)}${mode === 'oud' ? ` · kerkelijk ${formatDag(dag.kerk)}` : ''}` : undefined}
+      kopNav
+      kopDatum={formatDag(dag.civil)}
+      vorigeLabel="Vorige dag"
+      volgendeLabel="Volgende dag"
+      eyebrow={`${formatLang(dag.civil)}${mode === 'oud' ? ` · kerkelijk ${formatDag(dag.kerk)}` : ''}`}
       title={dag ? dag.feesten[0]?.naam ?? (eerste ? heiligeTitel(eerste.naam) : 'Dag door het jaar') : ''}
       centerTitle
       maxWidth="max-w-4xl"
       onVorige={() => onNavigate(ymd(addDays(dag.civil, -1)))}
       onVolgende={() => onNavigate(ymd(addDays(dag.civil, 1)))}
-      actions={dag ? (
-        <>
-          {/* Op een smal scherm is in de titelbalk geen ruimte voor twee extra tikdoelen: daar staan ze in de balk onder de titel. */}
-          <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, -1)))} className="hidden rounded-full p-2 text-[#f0cf7b] hover:bg-white/10 sm:inline-block" aria-label="Vorige dag"><ChevronLeft className="h-5 w-5" /></button>
-          <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, 1)))} className="hidden rounded-full p-2 text-[#f0cf7b] hover:bg-white/10 sm:inline-block" aria-label="Volgende dag"><ChevronRight className="h-5 w-5" /></button>
-          <DeelKnop titel={formatLang(dag.civil)} pad={`kalender/${dag.ymd}`} className="dag-deel hidden rounded-full p-2 text-[#f0cf7b] hover:bg-white/10 sm:inline-block" />
-        </>
-      ) : undefined}
+      actions={<DeelKnop titel={formatLang(dag.civil)} pad={`kalender/${dag.ymd}`} className="dag-deel inline-flex min-h-11 min-w-11 items-center justify-center" />}
     >
-            <div className="dag-navrij mb-5 flex items-center justify-between gap-3 sm:hidden">
-              <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, -1)))} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] pl-2.5 pr-4 text-sm font-bold text-ink hover:border-gold"><ChevronLeft className="h-4 w-4" /> Vorige dag</button>
-              <DeelKnop titel={formatLang(dag.civil)} pad={`kalender/${dag.ymd}`} className="dag-deel inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-gold/40 bg-[#f8f1e3] text-ink hover:border-gold" />
-              <button type="button" onClick={() => onNavigate(ymd(addDays(dag.civil, 1)))} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-gold/40 bg-[#f8f1e3] pl-4 pr-2.5 text-sm font-bold text-ink hover:border-gold">Volgende dag <ChevronRight className="h-4 w-4" /></button>
-            </div>
             <div className="space-y-7">
               {/* Vasten */}
               <div className="dag-blok">

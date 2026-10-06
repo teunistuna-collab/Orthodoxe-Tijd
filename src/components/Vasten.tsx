@@ -8,7 +8,6 @@ import { LADDER, NIVEAUS } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
 import { MobileListRow, VastenBadge, VastenKleuren } from './ui';
 import Modal from './Modal';
-import Cross from './Cross';
 import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
 import PageHero from './PageHero';
 
@@ -72,17 +71,21 @@ const PERIODE_INFO: Record<string, { label: string; href: string; linkLabel: str
 };
 
 // Medaillon per weekdag: kruis op een vastendag, opkomende zon op een vrije dag.
-function WeekMedaillon({ vast }: { vast: boolean }) {
-  return vast ? (
-    <Cross className="h-9 w-9" />
-  ) : (
-    <svg viewBox="0 0 48 48" className="h-11 w-11" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-      <path d="M8 33h32" />
-      <path d="M15 33a9 9 0 0 1 18 0" />
-      <path d="M24 13v6M12.5 19l4 4M35.5 19l-4 4M7 27h5M36 27h5" />
-      <path d="M14 38h20" opacity=".55" />
-    </svg>
+// Voedselkaart (Vlees, Zuivel, Eieren, Vis, Olie, Wijn; scripts/voedselkaarten.mjs) met in de lege cirkel een vinkje
+// (toegestaan) of kruis (niet toegestaan). De naam staat al op de kaart; voor schermlezers staat hij er als tekst bij.
+function VoedselKaart({ label, toegestaan }: { label: string; toegestaan: boolean }) {
+  return (
+    <div className={`voedsel-kaart${toegestaan ? ' is-toegestaan' : ' is-niet'}`}>
+      <img src={`/images/ui/voeding/${label.toLowerCase()}.webp`} alt="" width={300} height={620} loading="lazy" decoding="async" />
+      <span className="voedsel-teken" aria-hidden="true">{toegestaan ? '✓' : '✕'}</span>
+      <span className="sr-only">{label}: {toegestaan ? 'toegestaan' : 'niet toegestaan'}</span>
+    </div>
   );
+}
+
+// Vastensymbool per dag: brood en olijven (vastendag) of vis, druiven en beker (geen vasten); scripts/vastensymbolen.mjs
+function WeekMedaillon({ vast }: { vast: boolean }) {
+  return <img src={vast ? '/images/ui/vasten.webp' : '/images/ui/vastenvrij.webp'} alt="" width={256} height={256} loading="lazy" decoding="async" className="vasten-symbool" />;
 }
 
 type FastingRij = { key: string; naam: string; wanneer: string; onClick?: () => void };
@@ -154,21 +157,17 @@ export default function Vasten() {
   const periodeGeopend = periodeOpen ? vastenP.find((p) => p.id === periodeOpen) : null;
 
   const onthoudingenVoor = (niveau: (typeof dagVandaag)['vasten']['niveau']) => [
-    { label: 'Vlees', toegestaan: ['vrij', 'geen'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-01-Vlees.webp' },
-    { label: 'Zuivel', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-02-Zuivel.webp' },
-    { label: 'Eieren', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-03-Eieren.webp' },
-    { label: 'Vis', toegestaan: ['vrij', 'geen', 'zuivel', 'vis'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-04-Vis.webp' },
-    { label: 'Olie', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-05-Olie.webp' },
-    { label: 'Wijn', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau), iconSrc: '/images/ui/menu/08-Voeding-06-Wijn.webp' },
+    { label: 'Vlees', toegestaan: ['vrij', 'geen'].includes(niveau) },
+    { label: 'Zuivel', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau) },
+    { label: 'Eieren', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau) },
+    { label: 'Vis', toegestaan: ['vrij', 'geen', 'zuivel', 'vis'].includes(niveau) },
+    { label: 'Olie', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau) },
+    { label: 'Wijn', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau) },
   ];
   const onthoudingen = geselecteerdeDagInfo ? onthoudingenVoor(geselecteerdeDagInfo.vasten.niveau) : [];
   const onthoudingenVandaag = onthoudingenVoor(dagVandaag.vasten.niveau);
-  const vastenVandaagAsset: Record<string, string> = {
-    vrij: '01-Vastenvrij.webp', geen: '../placeholders/vasten-geen-vasten.svg', zuivel: '03-Zuivel-toegestaan.webp', vis: '04-Vis-toegestaan.webp',
-    'wijn-olie': '05-Wijn-en-olie.webp', 'zonder-olie': '06-Gekookt-zonder-olie.webp', vastendag: '07-Vastendag.webp',
-    streng: '08-Strikt-vasten.webp', onthouding: '09-Volledige-onthouding.webp'
-  };
-  const vastenVandaagIcon = vastenVandaagAsset[dagVandaag.vasten.niveau] ?? '../placeholders/vasten-geen-vasten.svg';
+  // Symbool van vandaag: brood en olijven bij een vastendag, vis, druiven en beker als er niet gevast wordt.
+  const vastenVandaagIcon = ['vrij', 'geen'].includes(dagVandaag.vasten.niveau) ? '/images/ui/vastenvrij.webp' : '/images/ui/vasten.webp';
 
   const infoKaarten = (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -210,7 +209,7 @@ export default function Vasten() {
           {/* Vasten vandaag — donker inzetpaneel binnen dezelfde compositie */}
           <div className="v17-fasting-today provided-wide-frame orthodox-pattern rounded-2xl border border-gold/40 bg-[#1c130d] px-6 py-8 text-cream shadow-[0_20px_45px_rgba(0,0,0,0.35)] sm:px-10 sm:py-10">
             <p className="ot-label ot-label-licht text-center">Vasten vandaag</p>
-            <div className="mt-5 flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left"><img loading="lazy" decoding="async" src={`/images/ui/vasten-vandaag/${vastenVandaagIcon}`} alt="" className="vasten-vandaag-status-icon" />
+            <div className="mt-5 flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left"><img loading="lazy" decoding="async" src={vastenVandaagIcon} alt="" width={256} height={256} className="vasten-vandaag-status-icon" />
               <div>
                 <h2 className="font-display text-2xl font-semibold text-[#fbf3df] sm:text-3xl">
                   {/* Stip in de kleur van de kalender-legenda */}
@@ -225,17 +224,8 @@ export default function Vasten() {
               </div>
             </div>
             <div className="fasting-food-grid mt-6 border-t border-gold/20 pt-5">
-              {onthoudingenVandaag.map(({ label, toegestaan, iconSrc }) => (
-                <div key={label} className="fasting-food-item">
-                  <span className="fasting-food-icon">
-                    <img loading="lazy" decoding="async" src={iconSrc} alt="" className="h-full w-full object-contain" />
-                  </span>
-                  <span aria-hidden="true" className="fasting-food-status text-base leading-none font-semibold" style={{ color: toegestaan ? '#2f7a44' : '#a33a3a' }}>
-                    {toegestaan ? '✓' : '×'}
-                  </span>
-                  <span className="text-[10px] leading-tight text-[#d9c6a3] sm:text-xs">{label}</span>
-                  <span className="sr-only">{toegestaan ? 'toegestaan' : 'niet toegestaan'}</span>
-                </div>
+              {onthoudingenVandaag.map(({ label, toegestaan }) => (
+                <VoedselKaart key={label} label={label} toegestaan={toegestaan} />
               ))}
             </div>
           </div>
@@ -455,15 +445,8 @@ export default function Vasten() {
               <div>
                 <p className="ot-label mb-2">Toegestaan op deze dag</p>
                 <div className="fasting-food-grid">
-                  {onthoudingen.map(({ label, toegestaan, iconSrc }) => (
-                    <div key={label} className="fasting-food-item">
-                      <span className="fasting-food-icon">
-                        <img loading="lazy" decoding="async" src={iconSrc} alt="" className="h-full w-full object-contain" />
-                      </span>
-                      <span aria-hidden="true" className="text-base font-semibold leading-none" style={{ color: toegestaan ? '#4a7c59' : '#7b1e1e' }}>{toegestaan ? '✓' : '×'}</span>
-                      <span className="font-display text-[11px] leading-tight text-[#5c4d38] sm:text-sm">{label}</span>
-                      <span className="sr-only">{toegestaan ? 'toegestaan' : 'niet toegestaan'}</span>
-                    </div>
+                  {onthoudingen.map(({ label, toegestaan }) => (
+                    <VoedselKaart key={label} label={label} toegestaan={toegestaan} />
                   ))}
                 </div>
               </div>
