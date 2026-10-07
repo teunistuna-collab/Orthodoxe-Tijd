@@ -26,25 +26,29 @@ export interface Psalm {
   liturgicalUses: PsalmGebruik[];
   /** Aangeleverde opname (bijvoorbeeld /audio/psalmen/psalm-050.mp3). Zonder bestand: geen audioknop. */
   audioSrc?: string;
+  /** Podcastaflevering op Spotify (extern; opent in een nieuw venster). */
+  spotify?: string;
 }
 
 /**
  * Gecontroleerde gegevens per psalm, alleen invullen met aangeleverd materiaal:
  * - tekst: er is een Septuagint-tekst in public/data/psalmen.json (gemaakt met scripts/psalmen-uit-pdf.mjs);
  * - mt: Hebreeuws nummer uit de kopregel van de bron-PDF (Psalm 118 vermeldt er geen);
- * - audio: pad naar een aangeleverde opname in public/, bijvoorbeeld '/audio/psalmen/psalm-050.mp3'.
+ * - audio: pad naar een aangeleverde opname in public/, bijvoorbeeld '/audio/psalmen/psalm-050.mp3';
+ * - spotify: aflevering van de podcast "Psalmen van de Vroege Kerk" (NBG) over deze psalm, aangeleverd door de redactie.
  * scripts/psalmen.check.ts controleert dit tegen psalmen.json en of de audiobestanden echt bestaan.
  */
-export const PSALM_BRONNEN: Record<number, { tekst?: true; mt?: number; audio?: string }> = {
-  24: { tekst: true, mt: 25 },
-  50: { tekst: true, mt: 51 },
-  62: { tekst: true, mt: 63 },
-  84: { tekst: true, mt: 85 },
-  89: { tekst: true, mt: 90 },
-  90: { tekst: true, mt: 91 },
+const SPOTIFY = 'https://open.spotify.com/episode/';
+export const PSALM_BRONNEN: Record<number, { tekst?: true; mt?: number; audio?: string; spotify?: string }> = {
+  24: { tekst: true, mt: 25, spotify: SPOTIFY + '0NKuEgEoj22Zh19LJezfgo' },
+  50: { tekst: true, mt: 51, spotify: SPOTIFY + '4KurhPj7vA2GyMIz2fz077' },
+  62: { tekst: true, mt: 63, spotify: SPOTIFY + '5tq6vbtT4hJEyVW4z3Nu4D' },
+  84: { tekst: true, mt: 85, spotify: SPOTIFY + '4DShQW0DArd2zNMJ18gypx' },
+  89: { tekst: true, mt: 90, spotify: SPOTIFY + '4FgFvTxwWpFrED5Mh6Liud' },
+  90: { tekst: true, mt: 91, spotify: SPOTIFY + '5YMsHG3SUGN8Y7FrCDvdxo' },
   102: { tekst: true, mt: 103 },
-  103: { tekst: true, mt: 104 },
-  118: { tekst: true },
+  103: { tekst: true, mt: 104, spotify: SPOTIFY + '14xz55Rz248tCs0V2kK6zY' },
+  118: { tekst: true, spotify: SPOTIFY + '3XVIwDOok000qHWsBRik2W' },
   140: { tekst: true, mt: 141 },
 };
 
@@ -127,6 +131,7 @@ export const PSALMEN: Psalm[] = Array.from({ length: 150 }, (_, i) => {
     themes: THEMAS.filter((t) => t.psalmen.includes(n)).map((t) => (t.verzen?.[n] ? `${t.naam} (vers ${t.verzen[n]})` : t.naam)),
     liturgicalUses: GEBRUIK.get(n) ?? [],
     ...(bron.audio ? { audioSrc: bron.audio } : {}),
+    ...(bron.spotify ? { spotify: bron.spotify } : {}),
   };
 });
 

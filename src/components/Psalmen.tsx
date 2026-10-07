@@ -383,6 +383,11 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; t
               )}
             </div>
             <p className="ps-bron">Nederlandse vertaling naar de Septuagint.</p>
+            {psalm.spotify && (
+              <a className="ps-spotify" href={psalm.spotify} target="_blank" rel="noopener noreferrer">
+                Beluister de podcast „Psalmen van de Vroege Kerk” op Spotify ›
+              </a>
+            )}
           </>
         )}
       </div>

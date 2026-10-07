@@ -3526,3 +3526,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top .in-keuze:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:2px}
 #top#top#top#top#top#top#top#top .in-binnenkort{margin:12px 0 0;font-family:var(--font-display);font-size:17px;font-style:italic;line-height:1.5;color:var(--ot-tekst)}
 @media(min-width:768px){#top#top#top#top#top#top#top#top .in-keuzes{grid-template-columns:1fr 1fr}#top#top#top#top#top#top#top#top .in-vak{padding:24px 28px}}
+/* Psalmen: link naar de podcastaflevering op Spotify (extern) */
+#top#top#top#top#top#top .ps-spotify{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;font-family:var(--font-titel);font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ot-titel)}
+#top#top#top#top#top#top .ps-spotify:hover{text-decoration:underline;text-underline-offset:4px}
