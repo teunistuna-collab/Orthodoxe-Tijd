@@ -306,6 +306,9 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 /** Tabs en tekst van één psalm; gedeeld door het desktopvenster en het leesvenster op mobiel. */
 function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; tekst?: PsalmTekst; laadFout: boolean; idVoorvoegsel: string }) {
   const [tab, setTab] = useState<'tekst' | 'themas' | 'gebruik'>('tekst');
+  // De Spotify-speler pas laden na een tik (geen Spotify-cookies zolang niemand luistert).
+  const [speler, setSpeler] = useState(false);
+  const aflevering = psalm.spotify?.split('/episode/')[1];
   const id = (s: string) => `${idVoorvoegsel}-${s}`;
 
   return (
@@ -364,6 +367,22 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; t
           <p className="ps-leeg">{laadFout ? 'De tekst kon niet worden geladen.' : 'Tekst wordt geladen…'}</p>
         ) : (
           <>
+            {aflevering &&
+              (speler ? (
+                <iframe
+                  className="ps-speler"
+                  title={`Podcast over ${psalm.title} op Spotify`}
+                  src={`https://open.spotify.com/embed/episode/${aflevering}`}
+                  width="100%"
+                  height="80"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                />
+              ) : (
+                <button type="button" className="ps-spotify" onClick={() => setSpeler(true)}>
+                  Beluister de podcast „Psalmen van de Vroege Kerk” ›
+                </button>
+              ))}
             <div className="ps-verzen lees-tekst">
               {tekst.verzen.map((v, k) =>
                 v.kop ? (
@@ -383,11 +402,6 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; t
               )}
             </div>
             <p className="ps-bron">Nederlandse vertaling naar de Septuagint.</p>
-            {psalm.spotify && (
-              <a className="ps-spotify" href={psalm.spotify} target="_blank" rel="noopener noreferrer">
-                Beluister de podcast „Psalmen van de Vroege Kerk” op Spotify ›
-              </a>
-            )}
           </>
         )}
       </div>
