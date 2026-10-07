@@ -2,8 +2,11 @@ import { useState } from 'react';
 
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { JAAR_INFO } from '../lib/cyclusTeksten';
-import { ringVak } from '../lib/ringVak';
-import PageHero from './PageHero';
+import { useApp } from '../lib/context';
+import { DERTIEN } from '../lib/feesten';
+import { formatDag, formatDatum, kerkDatum } from '../lib/kalender';
+import { feestDatum, vastenPeriodes, volgendeFeestDatum } from '../lib/overzicht';
+import PaginaOpening from './PaginaOpening';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
 type InfoKey = 'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch';
@@ -86,13 +89,13 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
 };
 
-const PERIODS: Array<{ key: PeriodKey; label: string; short: string; iconSrc: string; movable: boolean }> = [
-  { key: 'kersttijd', label: 'Kersttijd', short: 'De komst van het Licht in de wereld', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-03-Kersttijd.webp', movable: false },
-  { key: 'openbaringstijd', label: 'Openbaringstijd', short: 'Christus wordt geopenbaard aan alle volken', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-04-Openbaringstijd.webp', movable: false },
-  { key: 'vastentijd', label: 'Vastentijd', short: 'Voorbereiding op het heilige Pascha', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-05-Vastentijd.webp', movable: true },
-  { key: 'passietijd', label: 'Passietijd', short: 'Het lijden van de Heer', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-06-Passietijd.webp', movable: true },
-  { key: 'paschatijd', label: 'Paschatijd', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.webp', movable: true },
-  { key: 'pinkstertijd', label: 'Pinkstertijd', short: 'De gave van de Heilige Geest', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-08-Pinkstertijd.webp', movable: true },
+const PERIODS: Array<{ key: PeriodKey; label: string; short: string; movable: boolean }> = [
+  { key: 'kersttijd', label: 'Kersttijd', short: 'De komst van het Licht in de wereld', movable: false },
+  { key: 'openbaringstijd', label: 'Openbaringstijd', short: 'Christus wordt geopenbaard aan alle volken', movable: false },
+  { key: 'vastentijd', label: 'Vastentijd', short: 'Voorbereiding op het heilige Pascha', movable: true },
+  { key: 'passietijd', label: 'Passietijd', short: 'Het lijden van de Heer', movable: true },
+  { key: 'paschatijd', label: 'Paschatijd', short: 'De Verrijzenis van Christus', movable: true },
+  { key: 'pinkstertijd', label: 'Pinkstertijd', short: 'De gave van de Heilige Geest', movable: true },
 ];
 
 
@@ -106,17 +109,21 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-const ring = ringVak(12);
-
-function polar(cx: number, cy: number, r: number, angleDeg: number) {
-  const rad = ((angleDeg - 90) * Math.PI) / 180;
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-}
 
 export default function Jaarcyclus() {
   const [periodOpen, setPeriodOpen] = useState<PeriodKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
+  const { mode, vandaag } = useApp();
+
+  // Waar zijn we nu: de lopende vasten- of vastenvrije periode, anders het laatste grote feest; en het komende grote feest.
+  const jaar = vandaag.getUTCFullYear();
+  const periodes = [jaar - 1, jaar, jaar + 1].flatMap((j) => vastenPeriodes(j, mode)).sort((a, b) => a.start.getTime() - b.start.getTime());
+  const lopend = periodes.find((p) => p.soort !== 'dag' && p.start <= vandaag && vandaag <= p.eind);
+  const vorigFeest = DERTIEN.flatMap((f) => [jaar - 1, jaar].map((j) => ({ f, d: feestDatum(f, j, mode) })))
+    .filter((x): x is { f: (typeof DERTIEN)[number]; d: Date } => !!x.d && x.d < vandaag)
+    .sort((a, b) => b.d.getTime() - a.d.getTime())[0];
+  const komend = DERTIEN.map((f) => ({ f, d: volgendeFeestDatum(f, vandaag, mode) })).sort((a, b) => a.d.getTime() - b.d.getTime())[0];
+  const periode = lopend ? lopend.naam : vorigFeest ? `Na het feest: ${vorigFeest.f.kort ?? vorigFeest.f.naam}` : null;
 
   // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
   const infoTegels = (zicht: string) => (
@@ -143,111 +150,77 @@ export default function Jaarcyclus() {
 
   return (
     <>
-      <PageHero id="jaar" titel="Jaar" kop />
+      <PaginaOpening id="jaar" soort="cyclisch" label="Het kerkelijk jaar" titel="Jaar" ondertitel="Het ritme van het kerkelijk jaar" beeld={{ src: '/images/jaar/rozet.webp', alt: 'Rozet van de seizoenen van het jaar' }}>
+        <p className="jr-intro">Het kerkelijk jaar is de weg van Christus in de tijd. In de feesten, de vasten en de gedachtenis van de heiligen wordt heel ons leven met Hem verenigd.</p>
+      </PaginaOpening>
 
-      {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
-      {infoTegels('max-md:hidden')}
-
-      {/* De cyclus van het kerkelijk jaar */}
-      <section className="bg-parchment pb-16 sm:pb-20">
+      {/* Waar zijn we nu, de grote bewegingen (vasten) en de twee cycli (Bouw 173) */}
+      <section className="jr-pagina bg-parchment text-ink">
         <div className={CONTENT}>
-          <div className="cyclus-paneel parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
-
-            <div className="text-center">
-              <h2 className="ot-sectietitel">De cyclus van het kerkelijk jaar</h2>
-              <p className="ot-label mt-2">Eén verhaal, het gehele jaar</p>
+          <section className="jr-nu jr-vak" aria-labelledby="jr-nu-titel">
+            <div className="jr-nu-kop">
+              <h2 id="jr-nu-titel">Waar zijn we nu?</h2>
             </div>
-
-            {/* Desktop: cirkeldiagram */}
-            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[650px] lg:block" style={ring.stijl}>
-              <svg viewBox={ring.viewBox} className="absolute inset-0 h-full w-full">
-                <circle cx="50" cy="50" r="30" fill="none" stroke="#c9a227" strokeWidth="0.35" opacity="0.75" />
-                {PERIODS.map((period, index) => {
-                  const angle = (360 / PERIODS.length) * index;
-                  const c = polar(50, 50, 15, angle);
-                  const p = polar(50, 50, 30, angle);
-                  return (
-                    <line
-                      key={`spoke-${period.key}`}
-                      x1={c.x}
-                      y1={c.y}
-                      x2={p.x}
-                      y2={p.y}
-                      stroke="#c9a227"
-                      strokeWidth="0.25"
-                      opacity={hovered === index ? 0.65 : 0.3}
-                    />
-                  );
-                })}
-              </svg>
-
-              <div className="absolute top-1/2 left-1/2 flex h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
+            <div className="jr-nu-datum">
+              <p className="jr-datum">{formatDatum(vandaag)}</p>
+              {mode === 'oud' && <p className="jr-kerk">{formatDag(kerkDatum(vandaag, mode))} (kerkelijke datum)</p>}
+            </div>
+            <dl className="jr-nu-info">
+              {periode && (
+                <div>
+                  <dt>Periode</dt>
+                  <dd>{periode}</dd>
+                </div>
+              )}
+              <div>
+                <dt>{komend.d.getTime() === vandaag.getTime() ? 'Feest van vandaag' : 'Komend feest'}</dt>
+                <dd>
+                  {komend.f.naam} · {formatDag(komend.d)}
+                </dd>
               </div>
+            </dl>
+          </section>
 
-              {PERIODS.map((period, index) => {
-                const angle = (360 / PERIODS.length) * index;
-                const pos = polar(50, 50, 30, angle);
-                const isActive = hovered === index;
-                const leftSide = pos.x < 50;
-                const iconSrc = period.iconSrc;
-
-                return (
-                  <button
-                    key={period.key}
-                    type="button"
-                    onClick={() => setPeriodOpen(period.key)}
-                    onMouseEnter={() => setHovered(index)}
-                    onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
-                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
-                  >
-                    <span className="etmaal-ring-badge">
-                      <span
-                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
-                          isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
-                        }`}
-                      >
-                        <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-cycle-icon" />
-                      </span>
-                    </span>
-                    <span className="etmaal-ring-text">
-                      <span className="dienst-kaart">
-                        <span className="dienst-kaart-titel font-display">{period.label}</span>
-                        {period.movable && <span className="dienst-kaart-tijd">beweeglijk</span>}
-                        <span className="dienst-kaart-tekst">{period.short}</span>
-                      </span>
-                    </span>
-                  </button>
-                );
-              })}
+          <section className="jr-bewegingen jr-vak" aria-labelledby="jr-bew-titel">
+            <div className="jr-bew-kop">
+              <h2 id="jr-bew-titel">De grote bewegingen</h2>
             </div>
-
-            {/* Tablet/mobiel: verticale tijdlijn */}
-            <div className="mt-10 space-y-3 lg:hidden">
-              {PERIODS.map((period) => {
-                return (
-                  <button
-                    key={`${period.key}-mobile`}
-                    type="button"
-                    onClick={() => setPeriodOpen(period.key)}
-                    className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="dienst-kaart-titel font-display block">{period.label}</span>
-                      {period.movable && <span className="dienst-kaart-tijd block">beweeglijk</span>}
-                      <span className="dienst-kaart-tekst block">{period.short}</span>
-                    </span>
-                    <span className="pijl" aria-hidden="true">›</span>
+            <ul className="jr-vasten jr-tijden">
+              {PERIODS.map((period) => (
+                <li key={period.key}>
+                  <button type="button" className="jr-vast" onClick={() => setPeriodOpen(period.key)}>
+                    <span className="jr-vast-naam">{period.label}</span>
+                    {period.movable && <span className="jr-vast-data">beweeglijk</span>}
+                    <span className="jr-vast-doel">{period.short}</span>
+                    <span className="jr-pijl" aria-hidden="true">›</span>
                   </button>
-                );
-              })}
-            </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <div className="jr-cycli">
+            <a href="#kalender" className="jr-cyclus jr-vak">
+              <img src="/images/jaar/vaste-cyclus.webp" alt="" width={232} height={200} loading="lazy" decoding="async" />
+              <span className="jr-cyclus-tekst">
+                <span className="jr-cyclus-label">Vaste cyclus</span>
+                <span className="jr-cyclus-uitleg">De vaste cyclus keert elk jaar terug. Hierin vieren we de Moeder Gods, de heiligen en de grote feesten.</span>
+                <span className="jr-link">Bekijk de kalender ›</span>
+              </span>
+            </a>
+            <a href="#pascha" className="jr-cyclus jr-vak">
+              <img src="/images/jaar/beweeglijke-cyclus.webp" alt="" width={248} height={200} loading="lazy" decoding="async" />
+              <span className="jr-cyclus-tekst">
+                <span className="jr-cyclus-label">Beweeglijke cyclus</span>
+                <span className="jr-cyclus-uitleg">De beweeglijke cyclus is verbonden met Pascha. De data van de Grote Vasten, de Apostelvasten en andere perioden volgen Pascha.</span>
+                <span className="jr-link">Ga naar Pascha ›</span>
+              </span>
+            </a>
           </div>
         </div>
       </section>
 
-      {infoTegels('md:hidden')}
+      {infoTegels('')}
 
       {/* Meer dan een kalender */}
       <CycleTransition

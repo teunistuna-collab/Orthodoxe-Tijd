@@ -1,14 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import { useApp } from '../lib/context';
 import { PAASCYCLUS } from '../lib/feesten';
-import { addDays, daysBetween, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
+import { addDays, formatDag, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
+import { vastenPeriodes } from '../lib/overzicht';
 import { FeestTag } from './ui';
-import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
-import { ringVak } from '../lib/ringVak';
 import PaginaOpening from './PaginaOpening';
 
 type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
@@ -216,41 +216,42 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
   }
 };
 
-// offsetRange = [eerste, laatste] dag t.o.v. Pascha die tot deze periode hoort (zie PAASCYCLUS in lib/feesten.ts).
-const PERIODEN: Array<{ key: PeriodeKey; label: string; short: string; iconSrc: string; offsetRange: [number, number] }> = [
-  { key: 'voorbereiding', label: 'Voorbereiding', short: 'Zondagen voor de Vasten', iconSrc: '/images/ui/menu/07-Vasten-01-Wat-is-vasten.webp', offsetRange: [-70, -49] },
-  { key: 'grote-vasten', label: 'Grote Vasten', short: 'Een weg van bekering', iconSrc: '/images/ui/menu/07-Vasten-02-Hoe-vasten-we.webp', offsetRange: [-48, -14] },
-  { key: 'goede-week', label: 'Goede Week', short: 'Lijden en liefde', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-06-Passietijd.webp', offsetRange: [-8, -1] },
-  { key: 'pascha', label: 'Pascha', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/06-Pascha-01-Wat-is-Pascha.webp', offsetRange: [0, 6] },
-  { key: 'vijftig-dagen', label: 'De Vijftig Dagen', short: 'Leven in het licht', iconSrc: '/images/ui/menu/01-Hoofdmenu-03-Paschale-cyclus.webp', offsetRange: [7, 38] },
-  { key: 'hemelvaart', label: 'Hemelvaart', short: 'Christus verheerlijkt', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-07-Paschatijd.webp', offsetRange: [39, 48] },
-  { key: 'pinksteren', label: 'Pinksteren en de heiligen', short: 'Pinksteren en Allerheiligen', iconSrc: '/images/ui/menu/05-Kerkelijk-jaar-08-Pinkstertijd.webp', offsetRange: [49, 63] },
+// De opbouw van de Paschacyclus in zes stappen (aangeleverd ontwerp). De popups gebruiken de bestaande teksten hierboven;
+// "Hemelvaart en Pinksteren" voegt de twee bestaande teksten samen. offsetRange = eerste en laatste dag t.o.v. Pascha.
+type StapKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | 'vijftig-dagen' | 'hemelvaart-pinksteren';
+const STAPPEN: Array<{ key: StapKey; label: string; short: string; offsetRange: [number, number] }> = [
+  { key: 'voorbereiding', label: 'Voorbereiding', short: 'Zondag van de Tollenaar en de Farizeeër tot de Vergevingszondag', offsetRange: [-70, -49] },
+  { key: 'grote-vasten', label: 'Grote Vasten', short: 'Innerlijke zuivering en omkeer', offsetRange: [-48, -9] },
+  { key: 'goede-week', label: 'Heilige Week', short: 'Met Christus mee naar het Kruis', offsetRange: [-8, -1] },
+  { key: 'pascha', label: 'Pascha', short: 'De Verrijzenis van Christus', offsetRange: [0, 6] },
+  { key: 'vijftig-dagen', label: 'Paastijd', short: 'Vijftig dagen van vreugde', offsetRange: [7, 38] },
+  { key: 'hemelvaart-pinksteren', label: 'Hemelvaart en Pinksteren', short: 'Volheid van de Geest en het nieuwe leven', offsetRange: [39, 63] },
 ];
-
-// Concrete data van dit jaar, per periode — dezelfde gedachtenissen als in de knop "De Paschale cyclus" en de
-// uitklapbare Paascyclus-lijst hieronder. Alleen de losse jaartallen (bijv. bij "Zielenzaterdag") worden elk jaar herberekend.
+const STAP_INHOUD: Record<StapKey, PopupInhoud> = {
+  voorbereiding: PERIODE_POPUPS.voorbereiding,
+  'grote-vasten': PERIODE_POPUPS['grote-vasten'],
+  'goede-week': PERIODE_POPUPS['goede-week'],
+  pascha: PERIODE_POPUPS.pascha,
+  'vijftig-dagen': PERIODE_POPUPS['vijftig-dagen'],
+  'hemelvaart-pinksteren': { ...PERIODE_POPUPS.hemelvaart, sections: [...(PERIODE_POPUPS.hemelvaart.sections ?? []), ...(PERIODE_POPUPS.pinksteren.sections ?? [])] },
+};
 
 /** "15 mrt – 18 apr", of "2 – 8 mei" wanneer begin en eind in dezelfde maand vallen. */
 function formatBereik(a: Date, b: Date): string {
   const begin = a.getUTCMonth() === b.getUTCMonth() ? String(a.getUTCDate()) : formatKort(a);
   return `${begin} – ${formatKort(b)}`;
 }
-
+/** "23 februari – 11 april", of "6 – 11 april". */
+function bereikLang(a: Date, b: Date): string {
+  return `${a.getUTCMonth() === b.getUTCMonth() ? a.getUTCDate() : formatDag(a)} – ${formatDag(b)}`;
+}
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-const ring = ringVak(12);
-
-function polar(cx: number, cy: number, r: number, angleDeg: number) {
-  const rad = ((angleDeg - 90) * Math.PI) / 180;
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-}
-
 export default function Pascha() {
-  const { vandaag, openDag } = useApp();
-  const [periodeOpen, setPeriodeOpen] = useState<PeriodeKey | null>(null);
+  const { vandaag, openDag, mode } = useApp();
+  const [stapOpen, setStapOpen] = useState<StapKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
   const [cyclusOpen, setCyclusOpen] = useState(false);
 
   // Vandaag kan een pop-up van deze pagina openen.
@@ -265,222 +266,136 @@ export default function Pascha() {
 
   const pascha = volgendePascha(vandaag);
   const paaschaJaar = pascha.getUTCFullYear();
+  const groteVasten = vastenPeriodes(paaschaJaar, mode).find((p) => p.id === 'grote-vasten');
 
-  // Geeft iedere periode-pop-up de datums van dit jaar mee als eyebrow naast de titel
-  // (dezelfde informatie als in de knop "De Paschale cyclus" hierboven, maar dan bij de titelbalk).
-  const periodeInhoud = useMemo(() => {
-    const out = {} as Record<PeriodeKey, PopupInhoud>;
-    for (const periode of PERIODEN) {
-      const [start, eind] = periode.offsetRange;
-      const datumTekst = formatBereik(addDays(pascha, start), addDays(pascha, eind));
-      out[periode.key] = { ...PERIODE_POPUPS[periode.key], eyebrow: datumTekst };
-    }
-    return out;
-  }, [pascha]);
-
-  const dagenTot = daysBetween(vandaag, pascha);
-
-  // De vier informatietegels als verdieping, na de cyclus (op alle schermen).
-  const infoTegels = (
-    <section className="pascha-verdieping orthodox-pattern parchment-pattern bg-parchment py-12 text-ink sm:py-16">
-      <div className={CONTENT}>
-        <p className="opening-label text-center">Verdieping</p>
-        <h2 className="ot-sectietitel mt-1 mb-8 text-center">Over Pascha</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setInfoOpen(key)}
-              className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-            >
-              <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
-              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  // Iedere stap-pop-up krijgt de datums van dit jaar als eyebrow.
+  const stapInhoud = {} as Record<StapKey, PopupInhoud>;
+  for (const stap of STAPPEN) {
+    const [start, eind] = stap.offsetRange;
+    stapInhoud[stap.key] = { ...STAP_INHOUD[stap.key], title: stap.label, eyebrow: formatBereik(addDays(pascha, start), addDays(pascha, eind)) };
+  }
 
   return (
     <>
-      {/* Opening: het hoogfeest (Bouw 165). Groet en ondertitel komen uit de bestaande teksten (lib/feesten.ts, PASCHA). */}
+      {/* Opening volgens het aangeleverde ontwerp (Bouw 175): icoon, titel, intro en het jaarvak met de data van dit Pascha */}
       <PaginaOpening
         id="pascha"
         soort="hoogfeest"
-        label="Het Feest der feesten"
+        label="De Paschacyclus"
         titel="Pascha"
-        ondertitel="Van het Kruis naar de Verrijzenis"
+        ondertitel="Van Vasten naar Verrijzenis"
         beeld={{ src: '/images/Pascha-icoon.webp', alt: 'Icoon van de Verrijzenis: Christus haalt Adam en Eva uit het graf' }}
       >
-        <p className="pascha-groet">„Christus is opgestaan!” <span>„Waarlijk opgestaan!”</span></p>
+        <p className="pc-intro">De Paschacyclus is het hart van het kerkelijk jaar. In deze periode gaan we met Christus mee in Zijn lijden, dood en verrijzenis, en vieren we de overwinning van het Leven.</p>
+        <aside className="pc-jaar jr-vak" aria-label={`Pascha ${paaschaJaar}`}>
+          <p className="pc-jaar-label">Pascha {paaschaJaar}</p>
+          <p className="pc-jaar-datum">{formatDatum(pascha)}</p>
+          <dl className="pc-jaar-lijst">
+            {groteVasten && (
+              <div>
+                <dt>Grote Vasten</dt>
+                <dd>{bereikLang(groteVasten.start, groteVasten.eind)}</dd>
+              </div>
+            )}
+            <div>
+              <dt>Heilige Week</dt>
+              <dd>{bereikLang(addDays(pascha, -6), addDays(pascha, -1))}</dd>
+            </div>
+            <div>
+              <dt>Pascha</dt>
+              <dd>{formatDatum(pascha)}</dd>
+            </div>
+            <div>
+              <dt>Paastijd</dt>
+              <dd>{bereikLang(pascha, addDays(pascha, 49))}</dd>
+            </div>
+          </dl>
+        </aside>
       </PaginaOpening>
 
-      {/* Dit jaar: de datum van Pascha en de hele Paascyclus dag voor dag */}
-      <section className="pascha-nu bg-parchment">
+      <section className="pc-pagina bg-parchment text-ink">
         <div className={CONTENT}>
-          <div className="pascha-nu-binnen">
-            <div className="pascha-nu-datum">
-              <p className="opening-label">Pascha {paaschaJaar}</p>
-              <p className="pascha-datum">{formatDatum(pascha)}</p>
-              <p className="pascha-aftel">{dagenTot === 0 ? 'Vandaag' : dagenTot === 1 ? 'Morgen' : `Over ${dagenTot} dagen`}</p>
-            </div>
-            <div className="pascha-nu-cyclus">
-              {/* De huidige Paascyclus, dag voor dag — ingeklapt onder een uitklapper */}
-              <div>
-                <button
-                  type="button"
-                  onClick={() => setCyclusOpen((open) => !open)}
-                  aria-expanded={cyclusOpen}
-                  className="ot-kaart flex w-full items-center justify-between gap-3 rounded-xl border border-gold/40 bg-[#f8f1e3] px-5 py-4 text-left shadow-[0_10px_24px_rgba(55,31,15,0.08)] transition hover:bg-gold-pale/40"
-                >
-                  <span>
-                    <span className="font-display block text-xl font-semibold text-ink sm:text-2xl">Paascyclus {paaschaJaar}</span>
-                    <span className="text-xs text-ink-mute">Pascha {formatDatum(pascha)} · alles wat van de Paasdatum afhangt, in volgorde</span>
-                  </span>
-                  <ChevronRight className={`h-5 w-5 shrink-0 text-gold-deep transition-transform ${cyclusOpen ? 'rotate-90' : ''}`} />
-                </button>
-                {cyclusOpen && (
-                  <ol className="thin-scroll mt-4 max-h-[420px] space-y-1 overflow-y-auto rounded-xl border border-gold/30 bg-[#faf3e2] p-3 pr-2">
-                    {PAASCYCLUS.map((f) => {
-                      const d = addDays(pascha, f.offset ?? 0);
-                      const isPascha = f.soort === 'pascha';
-                      const voorbij = d.getTime() < vandaag.getTime();
-                      return (
-                        <li key={f.id}>
-                          <button
-                            type="button"
-                            onClick={() => openDag(ymd(d))}
-                            className={`flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition hover:bg-gold-pale ${isPascha ? 'bg-wine text-gold-light hover:bg-wine' : ''} ${voorbij && !isPascha ? 'text-ink-mute' : ''}`}
-                          >
-                            <span className={`w-14 shrink-0 text-xs font-bold ${isPascha ? 'text-gold-light' : 'text-gold-deep'}`}>{formatKort(d)}</span>
-                            <span className={`flex-1 text-sm ${isPascha || f.groot ? 'font-bold' : ''}`}>{f.kort ?? f.naam}</span>
-                            {(f.groot || isPascha) && <FeestTag feest={f} />}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ol>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+          {/* De opbouw van de Paschacyclus */}
+          <section className="pc-opbouw jr-vak" aria-labelledby="pc-opbouw-titel">
+            <h2 id="pc-opbouw-titel" className="pc-kop">De opbouw van de Paschacyclus</h2>
+            <ul className="jr-vasten jr-tijden pc-stappen">
+              {STAPPEN.map((stap) => (
+                <li key={stap.key}>
+                  <button type="button" className="jr-vast" onClick={() => setStapOpen(stap.key)}>
+                    <span className="jr-vast-naam">{stap.label}</span>
+                    <span className="jr-vast-doel">{stap.short}</span>
+                    <span className="jr-pijl" aria-hidden="true">›</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-      {/* De Paschale cyclus */}
-      <section className="bg-parchment pb-16 sm:pb-20">
-        <div className={CONTENT}>
-          <div className="cyclus-paneel pascha-cyclus relative px-2 py-12 sm:px-10 lg:px-16">
-
-            <div className="text-center">
-              <p className="opening-label">Van dood naar leven</p>
-              <h2 className="ot-sectietitel">De Paschale cyclus</h2>
-              <p className="pascha-cyclus-onder">Een liturgische reis van dood naar leven</p>
-            </div>
-
-            {/* Desktop: cirkeldiagram */}
-            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[820px] lg:block" style={ring.stijl}>
-              <svg viewBox={ring.viewBox} className="absolute inset-0 h-full w-full">
-                <circle cx="50" cy="50" r="30" fill="none" stroke="#c9a227" strokeWidth="0.35" opacity="0.75" />
-                {PERIODEN.map((periode, index) => {
-                  const angle = (360 / PERIODEN.length) * index;
-                  const c = polar(50, 50, 15, angle);
-                  const p = polar(50, 50, 30, angle);
+          {/* De hele Paascyclus van dit jaar, dag voor dag — ingeklapt */}
+          <div className="pc-cyclus">
+            <button type="button" onClick={() => setCyclusOpen((open) => !open)} aria-expanded={cyclusOpen} className="pc-cyclus-knop">
+              <span>
+                <span className="pc-cyclus-titel">Paascyclus {paaschaJaar}</span>
+                <span className="pc-cyclus-onder">Alles wat van de Paasdatum afhangt, dag voor dag</span>
+              </span>
+              <ChevronRight className={`h-5 w-5 shrink-0 text-gold-deep transition-transform ${cyclusOpen ? 'rotate-90' : ''}`} />
+            </button>
+            {cyclusOpen && (
+              <ol className="thin-scroll pc-cyclus-lijst">
+                {PAASCYCLUS.map((f) => {
+                  const d = addDays(pascha, f.offset ?? 0);
+                  const isPascha = f.soort === 'pascha';
+                  const voorbij = d.getTime() < vandaag.getTime();
                   return (
-                    <line
-                      key={`spoke-${periode.key}`}
-                      x1={c.x}
-                      y1={c.y}
-                      x2={p.x}
-                      y2={p.y}
-                      stroke="#c9a227"
-                      strokeWidth="0.25"
-                      opacity={hovered === index ? 0.65 : 0.3}
-                    />
+                    <li key={f.id}>
+                      <button
+                        type="button"
+                        onClick={() => openDag(ymd(d))}
+                        className={`flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition hover:bg-gold-pale ${isPascha ? 'bg-wine text-gold-light hover:bg-wine' : ''} ${voorbij && !isPascha ? 'text-ink-mute' : ''}`}
+                      >
+                        <span className={`w-14 shrink-0 text-xs font-bold ${isPascha ? 'text-gold-light' : 'text-gold-deep'}`}>{formatKort(d)}</span>
+                        <span className={`flex-1 text-sm ${isPascha || f.groot ? 'font-bold' : ''}`}>{f.kort ?? f.naam}</span>
+                        {(f.groot || isPascha) && <FeestTag feest={f} />}
+                      </button>
+                    </li>
                   );
                 })}
-              </svg>
-
-              <div className="absolute top-1/2 left-1/2 flex h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-                <img loading="lazy" decoding="async" src="/images/Pascha-icoon.webp" alt="Icoon van de Verrijzenis" className="pascha-ring-midden h-full w-full object-contain" />
-              </div>
-
-              {PERIODEN.map((periode, index) => {
-                const angle = (360 / PERIODEN.length) * index;
-                const pos = polar(50, 50, 30, angle);
-                const isActive = hovered === index;
-                const leftSide = pos.x < 50;
-
-                return (
-                  <button
-                    key={periode.key}
-                    type="button"
-                    onClick={() => setPeriodeOpen(periode.key)}
-                    onMouseEnter={() => setHovered(index)}
-                    onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
-                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}${periode.key === 'pascha' ? ' is-pascha' : ''}`}
-                  >
-                    <span className="etmaal-ring-badge">
-                      <span
-                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
-                          isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
-                        }`}
-                      >
-                        <img loading="lazy" decoding="async" src={periode.iconSrc} alt="" className="provided-cycle-icon" />
-                      </span>
-                    </span>
-                    <span className="etmaal-ring-text">
-                      <span className="dienst-kaart">
-                        <span className="dienst-kaart-titel font-display">{periode.label}</span>
-                        <span className="dienst-kaart-tekst">{periode.short}</span>
-                      </span>
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Tablet/mobiel: verticale tijdlijn */}
-            <div className="mt-10 space-y-3 lg:hidden">
-              {PERIODEN.map((periode) => (
-                <button
-                  key={`${periode.key}-mobile`}
-                  type="button"
-                  onClick={() => setPeriodeOpen(periode.key)}
-                  className={`pascha-rij group flex w-full items-center gap-4 text-left${periode.key === 'pascha' ? ' is-pascha' : ''}`}
-                >
-                  <span className="min-w-0 flex-1">
-                    <span className="pascha-rij-titel block">{periode.label}</span>
-                    <span className="pascha-rij-tekst block">{periode.short}</span>
-                  </span>
-                  <span className="pijl" aria-hidden="true">›</span>
-                </button>
-              ))}
-            </div>
-
+              </ol>
+            )}
           </div>
+
+          {/* Pascha: de Verrijzenis van onze Heer, met het troparion en de verdieping */}
+          <section className="pc-feest" aria-labelledby="pc-feest-titel">
+            <h2 id="pc-feest-titel" className="pc-feest-titel">Pascha</h2>
+            <p className="pc-feest-onder">De Verrijzenis van onze Heer</p>
+            <p className="pc-feest-tekst">In de Nacht van Pascha vieren wij de Verrijzenis van Christus, Die door Zijn dood de dood heeft overwonnen en ons het eeuwige leven heeft geschonken.</p>
+            <p className="pascha-groet">„Christus is opgestaan!” <span>„Waarlijk opgestaan!”</span></p>
+            <div className="pc-feest-vakken">
+              <div className="pc-vak jr-vak">
+                <p className="pc-vak-label">Troparion</p>
+                <p className="pc-tropaar">{PERIODE_POPUPS.pascha.highlight}</p>
+              </div>
+              <nav className="pc-vak jr-vak" aria-label="Lees meer over Pascha">
+                <p className="pc-vak-label">Lees meer</p>
+                <ul className="pc-meer">
+                  {INFO_CARDS.map(({ key, title }) => (
+                    <li key={key}>
+                      <button type="button" onClick={() => setInfoOpen(key)}>
+                        {title} ›
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </section>
         </div>
       </section>
-
-      {infoTegels}
-
-      {/* Meer dan een datum */}
-      <CycleTransition
-        quote="Christus is opgestaan uit de doden, door Zijn dood heeft Hij de dood vertreden, en aan hen in de graven heeft Hij het leven geschonken."
-        citation="Uit de Paasvespers"
-        eyebrow="Meer dan een datum"
-        text="Pascha is niet eenvoudig één feest tussen andere feesten. In de Orthodoxe eredienst is de Verrijzenis van Christus het centrum waarnaar de voorbereiding wijst en vanwaar de vreugde van de daaropvolgende periode uitgaat — het middelpunt van de gehele beweeglijke liturgische cyclus."
-        buttonLabel="Ontdek de feesten"
-        buttonHref="#feesten"
-      />
 
       <TimeSanctificationTimeline current="pascha" />
 
       <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? PASCHA_INFO[infoOpen] : null} />
-      <LiturgicalPopup open={periodeOpen !== null} onClose={() => setPeriodeOpen(null)} content={periodeOpen ? periodeInhoud[periodeOpen] : null} />
+      <LiturgicalPopup open={stapOpen !== null} onClose={() => setStapOpen(null)} content={stapOpen ? stapInhoud[stapOpen] : null} />
     </>
   );
 }

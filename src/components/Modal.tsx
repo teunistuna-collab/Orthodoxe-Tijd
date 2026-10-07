@@ -154,9 +154,8 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         <div className="exact-modal-vlak">
           {lezen && <span ref={balkRef} className="lees-voortgang" aria-hidden="true" />}
           <div ref={papierRef} className={`exact-modal-paper${centerTitle ? ' exact-modal-centered' : ''}${lezen ? ' lees-vlak' : ''}`}>
-            {/* Kop van het blad: sierbalk met kruis, label, titel, ondertitel en sierlijn (zie index.css, Bouw 163) */}
+            {/* Kop van het blad: label, titel, ondertitel en sierlijn (zie index.css, Bouw 163) */}
             <div className="pk-titelblok">
-              <img className="pk-sierbalk" src="/images/ui/sierbalk.webp" alt="" width={1400} height={286} decoding="async" />
               {eyebrow && <p className="pk-label">{eyebrow}</p>}
               <h2 id={titelId} className="pk-titel">{title}</h2>
               {ondertitel && <p className="pk-onder">{ondertitel}</p>}

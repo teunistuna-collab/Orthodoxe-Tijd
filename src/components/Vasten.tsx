@@ -55,14 +55,6 @@ const INFO_POPUPS: Record<InfoKey, typeof VASTEN_POPUPS[InfoKey]> = {
   },
 };
 
-// Ronde iconen van de vier grote vasten (alleen zichtbaar op desktop, zie .major-icoon in index.css).
-const PERIODE_ICOON: Record<string, string> = {
-  'grote-vasten': '/images/ui/vasten-perioden/grote-vasten.webp',
-  apostelvasten: '/images/ui/vasten-perioden/apostelvasten.webp',
-  dormitionvasten: '/images/ui/vasten-perioden/dormitionvasten.webp',
-  kerstvasten: '/images/ui/vasten-perioden/kerstvasten.webp',
-};
-
 const PERIODE_INFO: Record<string, { label: string; href: string; linkLabel: string; beweeglijk: boolean }> = {
   'grote-vasten': { label: 'Grote Vasten', href: '#pascha', linkLabel: 'Bekijk de Paschale cyclus', beweeglijk: true },
   apostelvasten: { label: 'Apostelvasten', href: '#pascha', linkLabel: 'Bekijk de Paschale cyclus', beweeglijk: true },
@@ -244,9 +236,8 @@ export default function Vasten() {
           <GoldDivider />
 
           {/* De vasten door het jaar */}
-          <div className="vlak parchment-pattern relative overflow-hidden rounded-lg border border-gold/50 bg-[#f4ead6] px-6 py-10 shadow-[0_22px_52px_rgba(55,31,15,0.18)] sm:px-10 lg:px-14">
-            <span aria-hidden="true" className="hoeksier absolute left-4 top-4" />
-            <span aria-hidden="true" className="hoeksier absolute bottom-4 right-4 rotate-180" />
+          {/* Zelfde kader als "De grote bewegingen" op Jaar (index.css, Bouw 174): dubbele lijn, kolommen met een beeld per vasten */}
+          <div className="vlak jr-vak vs-kader">
             <div className="flex flex-wrap items-end justify-between gap-4 text-center sm:text-left">
               <div className="mx-auto sm:mx-0">
                 <p className="ot-label">De vasten door het jaar</p>
@@ -261,31 +252,22 @@ export default function Vasten() {
               </div>
             </div>
 
-            <div className="v15-major-fasts relative mt-8">
-              
+            <div className="vs-vasten">
               {grotevier.map((p) => {
                 const info = PERIODE_INFO[p.id];
                 return (
-                  <article key={p.id} className="v15-major-fast cursor-pointer" role="button" tabIndex={0} onClick={() => setPeriodeOpen(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPeriodeOpen(p.id); } }}>
-                    {PERIODE_ICOON[p.id] && <img className="major-icoon" src={PERIODE_ICOON[p.id]} alt="" loading="lazy" decoding="async" />}
-                    
-                    <div className="flex flex-wrap items-start justify-between gap-2 pl-3">
-                      <div>
-                        <h4 className="font-display text-xl font-semibold">{(info?.label ?? p.naam).replace(/(apostel|ontslapenis)(vasten)/i, '$1­$2')}</h4>
-                        <p className="major-meta">
-                          {formatDag(p.start)} – {formatDatum(p.eind)} · {p.dagen} dagen
-                        </p>
-                      </div>
-                      {info?.beweeglijk && <span className="major-badge">Beweeglijk</span>}
-                    </div>
-                    <p className="mt-4 pl-3 text-sm leading-relaxed text-ink-soft">{p.omschrijving}</p>
-                    <div className="major-actions">
-                      {info && (
-                        <a href={info.href} className="btn-pill">
-                          {info.linkLabel} ›
-                        </a>
-                      )}
-                    </div>
+                  <article key={p.id} className="vs-vast" role="button" tabIndex={0} onClick={() => setPeriodeOpen(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPeriodeOpen(p.id); } }}>
+                    <img src={`/images/jaar/${p.id}.webp`} alt="" width={464} height={272} loading="lazy" decoding="async" />
+                    <h4 className="vs-vast-naam">{(info?.label ?? p.naam).replace(/(apostel|ontslapenis)(vasten)/i, '$1­$2')}</h4>
+                    <p className="vs-vast-data">
+                      {formatDag(p.start)} – {formatDatum(p.eind)} · {p.dagen} dagen{info?.beweeglijk ? ' · beweeglijk' : ''}
+                    </p>
+                    <p className="vs-vast-tekst">{p.omschrijving}</p>
+                    {info && (
+                      <a href={info.href} className="jr-link" onClick={(e) => e.stopPropagation()}>
+                        {info.linkLabel} ›
+                      </a>
+                    )}
                   </article>
                 );
               })}
