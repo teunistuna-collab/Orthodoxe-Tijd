@@ -1,140 +1,114 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
 import Gebedssnoer from './Gebedssnoer';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
+// Adem volgens het aangeleverde ontwerp (index.css, Bouw 181): opening; twee gebedsinstrumenten naast elkaar (mee-ademen
+// met het Jezusgebed en het gebedssnoer); daaronder de vier verdiepingen als rustig register (op mobiel uitklapbaar).
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe ademcyclus.docx".
 
 const CARDS: Array<{ key: PopupKey; title: string; intro: string }> = [
-  {
-    key: 'wat',
-    title: 'Wat is de ademcyclus?',
-    intro: 'Het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus.',
-  },
-  {
-    key: 'jezusgebed',
-    title: 'Het Jezusgebed',
-    intro: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar — telkens opnieuw aangeroepen.',
-  },
-  {
-    key: 'gebedskoord',
-    title: 'Het gebedskoord',
-    intro: 'De chotki helpt het gebed aandachtig te herhalen zonder de ademhaling tot een teller te maken.',
-  },
-  {
-    key: 'hart',
-    title: 'Gebed van het hart',
-    intro: 'Van de lippen, naar het verstand, tot een gebed dat het hart zelf doordringt.',
-  },
+  { key: 'wat', title: 'Wat is de ademcyclus?', intro: 'Het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus.' },
+  { key: 'jezusgebed', title: 'Het Jezusgebed', intro: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar — telkens opnieuw aangeroepen.' },
+  { key: 'gebedskoord', title: 'Het gebedskoord', intro: 'De chotki helpt het gebed aandachtig te herhalen zonder de ademhaling tot een teller te maken.' },
+  { key: 'hart', title: 'Gebed van het hart', intro: 'Van de lippen, naar het verstand, tot een gebed dat het hart zelf doordringt.' },
 ];
 
+// Duur van één ademhaling (inademen + uitademen).
+const TEMPI = [
+  { id: 'rustig', label: 'Rustig', sec: 10 },
+  { id: 'normaal', label: 'Normaal', sec: 8 },
+  { id: 'langzaam', label: 'Langzaam', sec: 12 },
+] as const;
+type Tempo = (typeof TEMPI)[number]['id'];
 
-const CONTENT = 'mx-auto w-full max-w-[1600px] px-4 sm:px-8 lg:px-12';
-
-// Dunne gouden lijn met een sierteken in het midden.
-function OrnamentRule({ className = '' }: { className?: string }) {
-  return (
-    <div className={`ademregel mx-auto flex items-center gap-3 text-gold-deep ${className}`} aria-hidden="true">
-      <span className="h-px flex-1 bg-gold/50" />
-      <span className="text-base leading-none">✣</span>
-      <span className="h-px flex-1 bg-gold/50" />
-    </div>
-  );
-}
+const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
 export default function Ademcyclus() {
   const [popup, setPopup] = useState<PopupKey | null>(null);
-  // "Adem mee": de ringen rond het icoon zetten uit bij het inademen en krimpen bij het uitademen (8 s per ademhaling, index.css Bouw 97).
   const [meeAdemen, setMeeAdemen] = useState(false);
-
-  // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
-  const infoTegels = (zicht: string) => (
-    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20`}>
-      {/* Onzichtbare tussenkop: de tegels (h3) hangen zo onder een h2 voor schermlezers */}
-      <h2 className="sr-only">Achtergrond</h2>
-      <div className={CONTENT}>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {CARDS.map(({ key, title, intro }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setPopup(key)}
-              className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-            >
-              <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
-              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  const [tempo, setTempo] = useState<Tempo>('rustig');
+  const [openRegel, setOpenRegel] = useState<PopupKey | null>(null);
+  const sec = TEMPI.find((t) => t.id === tempo)!.sec;
 
   return (
     <>
-      <PageHero id="adem" titel="Ademcyclus" kop />
+      <PaginaOpening id="adem" soort="cyclisch" label="De ademcyclus" titel="Adem" ondertitel="Het onophoudelijke gebed" />
 
-      {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
-      {infoTegels('max-md:hidden')}
-
-      {/* Het Jezusgebed */}
-      <section className="orthodox-pattern parchment-pattern bg-parchment py-16 text-ink max-md:pt-4 max-md:pb-10 sm:py-24">
+      <section className="ad-pagina bg-parchment text-ink">
         <div className={CONTENT}>
-          <div className="vlak mx-auto w-full max-w-none rounded-2xl border border-gold/45 bg-[#f8f1e3] px-6 py-12 shadow-[0_30px_70px_rgba(40,22,14,0.16)] max-md:pt-6 sm:px-12 sm:py-16 lg:px-16">
-            <p className="adem-titel text-center">Het Jezusgebed</p>
-            <OrnamentRule className="mt-4 w-48" />
-
-            {/* Christus-icoon met ringen en de twee korte gebeden ernaast */}
-            <div className={`adem-ritme mx-auto mt-10 max-md:mt-0 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center${meeAdemen ? ' is-actief' : ''}`}>
-              <div className="col-span-2 flex flex-col items-center lg:order-2 lg:col-span-1">
-                <div className="relative m-9 h-[200px] w-[200px] shrink-0 max-[359px]:h-[160px] max-[359px]:w-[160px] sm:m-[60px] sm:h-[230px] sm:w-[230px]">
+          <div className="ad-panelen">
+            {/* Mee-ademen met het Jezusgebed: de ringen zetten uit bij het inademen en krimpen bij het uitademen */}
+            <div className="ad-paneel jr-vak">
+              {['lb', 'rb', 'lo', 'ro'].map((h) => <span key={h} className={`ad-hoek ad-hoek-${h}`} aria-hidden="true" />)}
+              <h2 className="ad-kop">Het Jezusgebed</h2>
+              <div className={`adem-ritme ad-ritme${meeAdemen ? ' is-actief' : ''}`} style={{ '--adem-duur': `${sec}s` } as CSSProperties}>
+                <div className="ad-icoon">
                   <div className="adem-gloed" aria-hidden="true" />
-                  <div className="adem-ring absolute -inset-3.5 rounded-full border border-gold/45 sm:-inset-5" />
-                  <div className="adem-ring adem-ring-2 absolute -inset-7 rounded-full border border-gold/30 sm:-inset-10" />
-                  <div className="absolute -inset-9 rounded-full border border-dotted border-gold/40 sm:-inset-[60px]" />
-                  <div className="relative z-[1] flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                    <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
-                  </div>
-                </div>              </div>
-
-              <div className="adem-in text-center lg:order-1">
-                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">Heer Jezus Christus,</p></div>
-                <OrnamentRule className="mt-4 w-32" />
-                <p className="ot-label mt-4">Inademen</p>
+                  <div className="adem-ring ad-ring-1" aria-hidden="true" />
+                  <div className="adem-ring adem-ring-2 ad-ring-2" aria-hidden="true" />
+                  <div className="ad-ring-3" aria-hidden="true" />
+                  <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
+                </div>
+                <div className="adem-in ad-regel">
+                  <p className="ad-gebed">Heer Jezus Christus,</p>
+                  <span className="opening-sierlijn" aria-hidden="true" />
+                  <p className="ad-adem">Inademen</p>
+                </div>
+                <div className="adem-uit ad-regel">
+                  <p className="ad-gebed">ontferm U over ons.</p>
+                  <span className="opening-sierlijn" aria-hidden="true" />
+                  <p className="ad-adem">Uitademen</p>
+                </div>
               </div>
-              <div className="adem-uit text-center lg:order-3">
-                <div className="flex min-h-[6.5rem] items-end justify-center sm:min-h-[7.5rem]"><p className="font-display text-2xl italic leading-snug text-ink-soft sm:text-[26px] lg:text-[22px] xl:text-[28px]">ontferm U over ons.</p></div>
-                <OrnamentRule className="mt-4 w-32" />
-                <p className="ot-label mt-4">Uitademen</p>
-              </div>
-            </div>
 
-            <div className="mt-8 flex justify-center">
-              <button type="button" onClick={() => setMeeAdemen((a) => !a)} aria-pressed={meeAdemen} className="btn-pill">
+              <button type="button" onClick={() => setMeeAdemen((a) => !a)} aria-pressed={meeAdemen} className="ad-start">
                 {meeAdemen ? 'Stoppen' : 'Adem mee'}
               </button>
+              <p className="sr-only" aria-live="polite">
+                {meeAdemen ? `Adem in bij de eerste regel, adem uit bij de tweede; ongeveer ${sec / 2} seconden elk.` : ''}
+              </p>
+              <p className="ad-tempo-label">Tempo</p>
+              <div className="ad-tempo" role="group" aria-label="Tempo">
+                {TEMPI.map((t) => (
+                  <button key={t.id} type="button" aria-pressed={tempo === t.id} onClick={() => setTempo(t.id)}>
+                    {t.label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <p className="sr-only" aria-live="polite">{meeAdemen ? 'Adem in bij de eerste regel, adem uit bij de tweede; ongeveer vier seconden elk.' : ''}</p>
 
-            <blockquote className="mx-auto mt-12 max-w-3xl text-center">
-              <p className="font-display text-xl leading-relaxed text-ink-soft italic sm:text-2xl">“Het Jezusgebed is een bron van barmhartigheid, een licht in het hart en een weg naar de stilte van God.”</p>
-              <footer className="mt-3 font-display text-lg text-ink-soft">— Heilige Silouan de Athoniet</footer>
-            </blockquote>
+            {/* Het gebedssnoer: het Jezusgebed tellen per knoop */}
+            <Gebedssnoer />
           </div>
+
+          {/* Verdieping: op het web vier rustige kolommen, op mobiel uitklapbare registerregels */}
+          <section className="ad-verdieping" aria-label="Verdieping">
+            {CARDS.map(({ key, title, intro }) => (
+              <div key={key} className="ad-onderdeel">
+                <button type="button" className="ad-onderdeel-kop" aria-expanded={openRegel === key} onClick={() => setOpenRegel(openRegel === key ? null : key)}>
+                  <h3>{title}</h3>
+                  <span className="ad-pijl" aria-hidden="true">›</span>
+                </button>
+                <div className={`ad-onderdeel-inhoud${openRegel === key ? ' is-open' : ''}`}>
+                  <p>{intro}</p>
+                  <button type="button" className="fs-link" onClick={() => setPopup(key)}>
+                    Lees meer ›
+                  </button>
+                </div>
+              </div>
+            ))}
+          </section>
+
+          <blockquote className="ad-citaat">
+            <p>“Het Jezusgebed is een bron van barmhartigheid, een licht in het hart en een weg naar de stilte van God.”</p>
+            <footer>— Heilige Silouan de Athoniet</footer>
+          </blockquote>
         </div>
       </section>
-
-      {/* Het gebedssnoer: het Jezusgebed tellen per knoop */}
-      <section className="orthodox-pattern parchment-pattern bg-parchment pb-16 text-ink sm:pb-24">
-        <div className={CONTENT}>
-          <Gebedssnoer />
-        </div>
-      </section>
-
-      {infoTegels('md:hidden')}
 
       {/* Quote + Van adem naar etmaal */}
       <CycleTransition
@@ -152,4 +126,3 @@ export default function Ademcyclus() {
     </>
   );
 }
-

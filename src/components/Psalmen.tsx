@@ -369,6 +369,7 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; t
           <>
             {aflevering &&
               (speler ? (
+                <div className="ps-speler-vak">
                 <iframe
                   className="ps-speler"
                   title={`Podcast over ${psalm.title} op Spotify`}
@@ -378,6 +379,11 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; t
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"
                 />
+                {/* Speelt de speler niet (bijvoorbeeld op een telefoon zonder Spotify-login in de browser), dan via de app */}
+                <a className="ps-spotify-app" href={psalm.spotify} target="_blank" rel="noopener noreferrer">
+                  Speelt hij niet? Open in Spotify ›
+                </a>
+                </div>
               ) : (
                 <button type="button" className="ps-spotify" onClick={() => setSpeler(true)}>
                   Beluister de podcast „Psalmen van de Vroege Kerk” ›

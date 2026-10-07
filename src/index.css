@@ -1826,15 +1826,6 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 .vm-vlam:after{content:"";position:absolute;left:50%;top:-10px;width:52px;height:52px;margin-left:-26px;border-radius:50%;background:radial-gradient(circle,rgba(255,196,92,.62),rgba(255,170,60,.22) 42%,transparent 70%);pointer-events:none;transform-origin:50% 62%;animation:vm-vlam 3.4s ease-in-out infinite}
 @keyframes vm-vlam{0%,100%{opacity:.72;transform:scale(1)}17%{opacity:.96;transform:scale(1.07) translateY(-1px)}33%{opacity:.66;transform:scale(.96)}51%{opacity:.9;transform:scale(1.04)}69%{opacity:.76;transform:scale(.99) translateY(1px)}84%{opacity:.94;transform:scale(1.06)}}
 
-.snoer{max-width:560px}
-.snoer-ring{position:relative;display:block;width:min(300px,100%);aspect-ratio:1;margin:22px auto 0;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;transition:transform .12s cubic-bezier(.2,.8,.2,1)}
-.snoer-ring:active{transform:scale(.985)}
-.snoer-ring svg{display:block;width:100%;height:100%}
-.snoer-draad{fill:none;stroke:rgba(138,90,30,.35);stroke-width:1}
-.snoer-knoop{fill:#f3e8d0;stroke:rgba(176,126,37,.75);stroke-width:1.2;transition:fill .25s ease-out,stroke .25s ease-out}
-.snoer-knoop.is-merk{fill:#ead8ae}
-.snoer-knoop.is-gebeden{fill:#5a1716;stroke:#b88628}
-.snoer-kruis{position:absolute;left:50%;top:calc(32 / 300 * 100%);width:22px;height:33px;margin:-17px 0 0 -11px;color:#7d5218}
 .snoer-telling{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
 .snoer-telling b{font-family:var(--font-display);font-size:58px;font-weight:600;line-height:1;color:#2b1d12;font-variant-numeric:lining-nums tabular-nums}
 .snoer-telling small{margin-top:4px;font-family:var(--font-body);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#6b5540}
@@ -1846,7 +1837,7 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 .snoer-acties{display:flex;gap:8px}
 #top#top#top .snoer-acties button{min-height:44px;padding:0 18px;border:1px solid rgba(176,126,37,.55);border-radius:999px;background:#fbf6ea;font-family:var(--font-display);font-size:16px;font-weight:600;color:#4a2b1d;cursor:pointer}
 #top#top#top .snoer-acties button:disabled{opacity:.45;cursor:default}
-@media(prefers-reduced-motion:reduce){.vm-vlam:after{animation:none}.snoer-ring,.snoer-knoop{transition:none}.snoer-ring:active{transform:none}}
+@media(prefers-reduced-motion:reduce){.vm-vlam:after{animation:none}}
 
 /* Bouw 81 — tijd en beweging: aftellen naar het volgende grote feest (Vandaag), één rustige overgang, leesvoortgang.
    Het ene vaste moment: een pop-up schuift zacht omhoog, de gouden lijnen in de kop tekenen zich uit en het ✣ bloeit op.
@@ -2456,7 +2447,6 @@ main#inhoud:focus{outline:none}
    zodat de liturgische kleur blijft werken. Het kruis is breder dan het oude (verhouding 0,83): iets meer breedte boven de titels. */
 .kruis-teken{display:inline-block;width:.83em;height:1em;vertical-align:-.14em;background:currentColor;
   -webkit-mask:url(/images/ui/kruis.webp) center/contain no-repeat;mask:url(/images/ui/kruis.webp) center/contain no-repeat}
-#top#top#top .snoer-kruis{width:28px;height:33px;margin:-17px 0 0 -14px}
 
 /* Bouw 121 — nieuw Christus-icoon (Pantocrator met eigen sierrand, scripts/christus-bron.png): overal in zijn geheel tonen.
    Geen ronde uitsnede en geen extra gouden rand meer om de afbeelding (die zou de eigen rand verdubbelen en de vier knoppen afknippen);
@@ -3607,3 +3597,167 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top .kl-legenda-knop{display:block;margin:10px auto 0;min-height:40px;padding:0 8px;border:0;background:none;font-family:var(--font-titel);font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ot-titel);cursor:pointer}
 @media(max-width:767.98px){#top#top#top#top#top#top#top#top .kl-legenda:not(.is-open){display:none}#top#top#top#top#top#top#top#top .kl-legenda{margin-top:4px}}
 @media(min-width:768px){#top#top#top#top#top#top#top#top .kl-legenda-knop{display:none}}
+/* Heiligen: geen sierlijn onder de tussenkoppen (per maand, naar categorie), ook op mobiel */
+#top#top#top#top#top#top#top#top :is(.saints-browser,.saints-categories) .saints-rule-title::after{content:none!important;display:none!important}
+#top#top#top#top#top#top .ps-speler-vak .ps-speler{margin-bottom:2px}
+#top#top#top#top#top#top .ps-spotify-app{display:inline-flex;align-items:center;min-height:40px;margin:0 0 10px;font-family:var(--font-display);font-size:15px;font-style:italic;text-decoration:underline;text-underline-offset:3px;color:var(--ot-tekst)}
+
+/* Bouw 181 — Adem volgens het aangeleverde ontwerp (Ademcyclus.tsx, Gebedssnoer.tsx): opening; twee gebedsinstrumenten
+   naast elkaar (mee-ademen en het gebedssnoer, rustige vakken met dubbele lijn); de verdieping als rustig register.
+   Het snoer is het aangeleverde beeld, altijd even groot; het getal staat in de open ruimte van het snoer. */
+#top#top#top#top#top#top#top#top .exact-content>section#adem .opening-titel{font-family:var(--font-display)!important;font-size:clamp(54px,7vw,100px)!important;font-weight:600!important;line-height:.95!important;letter-spacing:0!important;text-transform:none!important;color:var(--ot-titel)!important}
+#top#top#top#top#top#top#top#top .exact-content>section#adem .opening-onder{font-size:clamp(19px,2vw,26px)}
+#top#top#top#top#top#top#top#top .exact-content>section#adem .opening-sierlijn{width:150px}
+.ad-pagina{padding:4px 0 36px}
+#top#top#top#top#top#top#top#top .ad-panelen{display:grid;gap:16px;max-width:1240px;margin:0 auto}
+@media(min-width:900px){#top#top#top#top#top#top#top#top .ad-panelen{grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}}
+#top#top#top#top#top#top#top#top .ad-paneel{display:flex;flex-direction:column;align-items:center;max-width:none!important;margin:0!important;padding:18px 16px 20px;text-align:center}
+#top#top#top#top#top#top#top#top .ad-kop{margin:0;font-family:var(--font-titel);font-size:16px;font-weight:600;letter-spacing:.2em;line-height:1.3;text-transform:uppercase;color:var(--ot-chocolade)!important}
+/* mee-ademen */
+#top#top#top#top#top#top#top#top .ad-ritme{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px;width:100%;max-width:560px;margin-top:4px}
+#top#top#top#top#top#top#top#top .ad-icoon{position:relative;grid-column:1/-1;width:170px;aspect-ratio:1;margin:34px auto 26px}
+#top#top#top#top#top#top#top#top .ad-icoon img{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(46,26,15,.25))}
+#top#top#top#top#top#top#top#top .ad-icoon .adem-ring{position:absolute;border-radius:50%;pointer-events:none}
+#top#top#top#top#top#top#top#top .ad-ring-1{inset:-12px;border:1px solid rgba(154,106,31,.45)}
+#top#top#top#top#top#top#top#top .ad-ring-2{inset:-24px;border:1px solid rgba(154,106,31,.28)}
+#top#top#top#top#top#top#top#top .ad-ring-3{position:absolute;inset:-36px;border:1px dotted rgba(154,106,31,.35);border-radius:50%;pointer-events:none}
+#top#top#top#top#top#top#top#top .ad-ritme.is-actief :is(.adem-ring,.adem-in,.adem-uit,.adem-gloed){animation-duration:var(--adem-duur,8s)!important}
+#top#top#top#top#top#top#top#top .ad-regel{display:flex;flex-direction:column;align-items:center}
+#top#top#top#top#top#top#top#top .ad-gebed{display:flex;min-height:2.6em;align-items:flex-end;justify-content:center;margin:0;font-family:var(--font-display);font-size:clamp(20px,2vw,26px);font-style:italic;line-height:1.25;color:var(--ot-chocolade)!important}
+#top#top#top#top#top#top#top#top .ad-regel .opening-sierlijn{width:min(120px,80%);margin:6px auto 0}
+#top#top#top#top#top#top#top#top .ad-adem{margin:4px 0 0;font-family:var(--font-titel);font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--color-gold-deep)!important}
+#top#top#top#top#top#top#top#top .ad-start{min-height:48px;margin-top:16px;padding:0 42px;border:1px solid var(--ot-antiekgoud);border-radius:0;background:#5a1716;box-shadow:inset 0 0 0 2px #5a1716,inset 0 0 0 3px rgba(218,175,55,.55);font-family:var(--font-titel);font-size:16px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ot-ivoor);cursor:pointer}
+#top#top#top#top#top#top#top#top .ad-start[aria-pressed=true]{background:#3a0f0d}
+#top#top#top#top#top#top#top#top .ad-tempo-label{margin:14px 0 0;font-family:var(--font-titel);font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--color-gold-deep)!important}
+#top#top#top#top#top#top#top#top .ad-tempo{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:6px}
+#top#top#top#top#top#top#top#top .ad-tempo button{min-height:40px;min-width:88px;padding:0 14px;border:1px solid rgba(154,106,31,.6);border-radius:0;background:rgba(251,246,233,.5);font-family:var(--font-display);font-size:16px;color:var(--ot-chocolade);cursor:pointer}
+#top#top#top#top#top#top#top#top .ad-tempo button[aria-pressed=true]{border-color:#5a1716;background:#5a1716;color:var(--ot-ivoor)}
+/* het gebedssnoer */
+#top#top#top#top#top#top#top#top .snoer.ad-paneel{max-width:none}
+#top#top#top#top#top#top#top#top .snoer-beeld{position:relative;display:block;width:min(240px,64%);margin:14px auto 0;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+#top#top#top#top#top#top#top#top .snoer-beeld img{display:block;width:100%;height:auto;pointer-events:none;-webkit-user-drag:none}
+#top#top#top#top#top#top#top#top .snoer-beeld:active img{transform:scale(.992)}
+#top#top#top#top#top#top#top#top .snoer-beeld:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:6px}
+#top#top#top#top#top#top#top#top .snoer-beeld .snoer-telling{position:absolute;inset:auto;left:50%;top:37.2%;display:flex;width:52%;aspect-ratio:1;flex-direction:column;align-items:center;justify-content:center;transform:translate(-50%,-50%);pointer-events:none}
+#top#top#top#top#top#top#top#top .snoer-boog{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+#top#top#top#top#top#top#top#top .snoer-boog circle{fill:none;stroke:rgba(154,106,31,.22);stroke-width:1.2}
+#top#top#top#top#top#top#top#top .snoer-boog .is-voortgang{stroke:var(--ot-antiekgoud);stroke-width:2;stroke-linecap:round;transition:stroke-dashoffset .35s ease-out}
+#top#top#top#top#top#top#top#top .snoer-beeld .snoer-telling b{position:relative;font-size:clamp(40px,5vw,60px);color:var(--ot-chocolade)}
+#top#top#top#top#top#top#top#top .snoer-beeld .snoer-telling small{position:relative;font-family:var(--font-titel);font-size:12px;font-weight:600;letter-spacing:.16em;color:var(--ot-tekst)}
+#top#top#top#top#top#top#top#top .snoer-beeld .snoer-telling em{position:relative;margin-top:4px;font-size:14px;color:var(--ot-titel)}
+#top#top#top#top#top#top#top#top .snoer .snoer-bediening{flex-direction:column;gap:10px;margin-top:18px}
+#top#top#top#top#top#top#top#top .snoer-uitleg{margin:12px 0 0;font-family:var(--font-display);font-size:15px;line-height:1.4;color:var(--ot-tekst)}
+@media(prefers-reduced-motion:reduce){#top#top#top#top#top#top#top#top .snoer-boog .is-voortgang{transition:none}#top#top#top#top#top#top#top#top .snoer-beeld:active img{transform:none}}
+@media(min-width:900px){
+  #top#top#top#top#top#top#top#top .ad-paneel{padding:24px 28px 26px}
+  #top#top#top#top#top#top#top#top .ad-icoon{width:210px;margin:44px auto 32px}
+  #top#top#top#top#top#top#top#top .ad-ring-1{inset:-14px}#top#top#top#top#top#top#top#top .ad-ring-2{inset:-28px}#top#top#top#top#top#top#top#top .ad-ring-3{inset:-42px}
+  #top#top#top#top#top#top#top#top .snoer-beeld{width:min(290px,70%)}
+}
+/* verdieping: op het web vier kolommen, op mobiel uitklapbare regels */
+#top#top#top#top#top#top#top#top .ad-verdieping{max-width:1240px;margin:22px auto 0;border-top:1px solid rgba(154,106,31,.45)}
+#top#top#top#top#top#top#top#top .ad-onderdeel{border-bottom:1px solid rgba(154,106,31,.35)}
+#top#top#top#top#top#top#top#top .ad-onderdeel-kop{display:flex;width:100%;min-height:52px;align-items:center;justify-content:space-between;gap:10px;padding:8px 4px;border:0;background:none;text-align:left;cursor:pointer}
+#top#top#top#top#top#top#top#top .ad-onderdeel-kop h3{margin:0;font-family:var(--font-titel);font-size:14px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ot-titel)}
+#top#top#top#top#top#top#top#top .ad-pijl{font-size:22px;color:var(--color-gold-deep);transition:transform .2s ease}
+#top#top#top#top#top#top#top#top .ad-onderdeel-kop[aria-expanded=true] .ad-pijl{transform:rotate(90deg)}
+#top#top#top#top#top#top#top#top .ad-onderdeel-inhoud{display:none;padding:0 4px 12px}
+#top#top#top#top#top#top#top#top .ad-onderdeel-inhoud.is-open{display:block}
+#top#top#top#top#top#top#top#top .ad-onderdeel-inhoud p{margin:0;font-family:var(--font-display);font-size:17px;line-height:1.45;color:var(--ot-chocolade)}
+#top#top#top#top#top#top#top#top .ad-onderdeel-inhoud .fs-link{margin-top:4px}
+@media(min-width:900px){
+  #top#top#top#top#top#top#top#top .ad-verdieping{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid rgba(154,106,31,.45)}
+  #top#top#top#top#top#top#top#top .ad-onderdeel{padding:14px 18px 10px;border-bottom:0;text-align:center}
+  #top#top#top#top#top#top#top#top .ad-onderdeel+.ad-onderdeel{border-left:1px solid rgba(154,106,31,.35)}
+  #top#top#top#top#top#top#top#top .ad-onderdeel-kop{justify-content:center;min-height:0;padding:0;cursor:default;pointer-events:none}
+  #top#top#top#top#top#top#top#top .ad-pijl{display:none}
+  #top#top#top#top#top#top#top#top .ad-onderdeel-inhoud,#top#top#top#top#top#top#top#top .ad-onderdeel-inhoud.is-open{display:block;padding:8px 0 0}
+  #top#top#top#top#top#top#top#top .ad-onderdeel-inhoud p{font-size:16px}
+}
+#top#top#top#top#top#top#top#top .ad-citaat{max-width:720px;margin:26px auto 0;text-align:center}
+#top#top#top#top#top#top#top#top .ad-citaat p{margin:0;font-family:var(--font-display);font-size:clamp(18px,1.8vw,21px);font-style:italic;line-height:1.5;color:var(--ot-tekst)}
+#top#top#top#top#top#top#top#top .ad-citaat footer{margin-top:6px;font-family:var(--font-display);font-size:16px;color:var(--ot-tekst)}
+/* Adem: beide vakken dezelfde ondergrond; op het web een iets groter icoon en snoer zodat de vakken gevuld zijn */
+#top#top#top#top#top#top#top#top#top .snoer.ad-paneel.jr-vak{background:rgba(251,246,233,.3)!important;box-shadow:inset 0 0 0 4px rgba(242,230,201,.6),inset 0 0 0 5px rgba(154,106,31,.28)!important}
+@media(min-width:900px){
+  #top#top#top#top#top#top#top#top#top .ad-icoon{width:240px;margin:50px auto 38px}
+  #top#top#top#top#top#top#top#top#top .snoer-beeld{width:min(320px,72%)}
+}
+@media(min-width:900px){#top#top#top#top#top#top#top#top#top .ad-paneel{justify-content:center}#top#top#top#top#top#top#top#top#top .ad-paneel>.ad-kop{margin-bottom:auto}#top#top#top#top#top#top#top#top#top .ad-paneel>:last-child{margin-bottom:auto}}
+/* Adem: hoekornamenten in de twee vakken */
+#top#top#top#top#top#top#top#top .ad-paneel{position:relative}
+.ad-hoek{position:absolute;z-index:0;width:40px;height:40px;background:var(--hoeksier) no-repeat center/contain;pointer-events:none}
+.ad-hoek-lb{top:8px;left:8px}
+.ad-hoek-rb{top:8px;right:8px;transform:scaleX(-1)}
+.ad-hoek-lo{bottom:8px;left:8px;transform:scaleY(-1)}
+.ad-hoek-ro{bottom:8px;right:8px;transform:scale(-1)}
+@media(min-width:900px){.ad-hoek{width:56px;height:56px}}
+
+/* Bouw 182 — het gebedssnoer tastbaar (Gebedssnoer.tsx): het beeld draait een fractie om het midden van de ring bij elke
+   knoop (Web Animations, 340 ms); een kleine goudbruine markering bij de huidige knoop; het getal wisselt rustig; bij een
+   volle ronde licht het snoer één keer zacht op. Het beeld zelf blijft onveranderd. */
+.snoer-gloed{position:absolute;inset:-4% -6%;opacity:0;pointer-events:none;background:radial-gradient(ellipse 52% 40% at 50% 37%,rgba(218,175,55,0) 62%,rgba(205,150,60,.55) 78%,rgba(218,175,55,0) 96%)}
+#top#top#top#top#top#top#top#top .snoer-getal{position:relative;display:grid;place-items:center}
+#top#top#top#top#top#top#top#top .snoer-getal b{grid-area:1/1}
+#top#top#top#top#top#top#top#top .snoer-getal .is-oud{animation:snoer-getal-uit .26s ease-out forwards}
+#top#top#top#top#top#top#top#top .snoer-getal .is-nieuw{animation:snoer-getal-in .28s ease-out both}
+@keyframes snoer-getal-uit{to{opacity:0;transform:translateY(-10px)}}
+@keyframes snoer-getal-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#top#top#top#top#top#top#top#top .snoer-beeld{touch-action:pan-y}
+@media(prefers-reduced-motion:reduce){
+  #top#top#top#top#top#top#top#top .snoer-getal .is-oud{display:none}
+  #top#top#top#top#top#top#top#top .snoer-getal .is-nieuw{animation:none}
+}
+
+/* Bouw 183 — warm licht over het gebedssnoer (Gebedssnoer.tsx): een warme amberkleurige laag in mengmodus screen, in de
+   vorm van het snoer zelf (het beeld als masker), beperkt tot het gebeden deel met een kegelverloop vanuit het midden
+   van de ring en afgesneden onder de ring (het kruis blijft zwart). De zwarte structuur blijft zichtbaar; het beeld
+   zelf blijft onveranderd en het licht schaalt op elke breedte mee. */
+@property --tot{syntax:'<angle>';inherits:false;initial-value:0deg}
+@property --van{syntax:'<angle>';inherits:false;initial-value:0deg}
+.snoer-draaier{position:relative;display:block;isolation:isolate;transform-origin:49.9% 36.2%}
+#top#top#top#top#top#top#top#top .snoer-draaier>img{display:block;width:100%;height:auto}
+#top#top#top#top#top#top#top#top .snoer-licht{position:absolute;inset:0;pointer-events:none;background:rgb(150,100,44);mix-blend-mode:color-dodge;opacity:.8;
+  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-composite:source-in,source-in;mask-composite:intersect,intersect;transition:--tot .38s ease-out}
+#top#top#top#top#top#top#top#top .snoer-licht.is-actief{background:rgb(182,128,56);opacity:1;
+  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  transition:--tot .38s ease-out,--van .38s ease-out}
+#top#top#top#top#top#top#top#top .snoer-draaier.is-uitdoven .snoer-licht{transition-duration:1.2s;transition-timing-function:ease-in-out}
+
+@media(prefers-reduced-motion:reduce){#top#top#top#top#top#top#top#top .snoer-licht{transition:none}}
+
+/* Bouw 184 — het licht zoals in het voorbeeld: een warme gouden rand ACHTER de gebeden knopen (het silhouet van het snoer,
+   vervaagd), de knopen zelf blijven donker met slechts een warme zweem; de huidige knoop met iets sterkere rand. */
+#top#top#top#top#top#top#top#top#top .snoer-draaier>img{position:relative;z-index:1}
+#top#top#top#top#top#top#top#top#top .snoer-licht{z-index:2}
+#top#top#top#top#top#top#top#top#top .snoer-halo{position:absolute;inset:0;z-index:0;pointer-events:none;filter:blur(7px);opacity:.8}
+#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief{filter:blur(10px);opacity:.8}
+#top#top#top#top#top#top#top#top#top .snoer-halo>span{position:absolute;inset:0;background:rgb(236,176,72);
+  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-composite:source-in,source-in;mask-composite:intersect,intersect;transition:--tot .38s ease-out}
+#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief>span{background:rgb(250,196,92);
+  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
+  transition:--tot .38s ease-out,--van .38s ease-out}
+/* de knopen zelf: alleen een warme zweem, de zwarte structuur blijft */
+#top#top#top#top#top#top#top#top#top .snoer-licht{background:rgb(112,74,34)!important;opacity:.55!important}
+#top#top#top#top#top#top#top#top#top .snoer-licht.is-actief{background:rgb(140,96,44)!important;opacity:.8!important}
+#top#top#top#top#top#top#top#top#top .snoer-draaier.is-uitdoven .snoer-halo>span{transition-duration:1.2s;transition-timing-function:ease-in-out}
+@media(prefers-reduced-motion:reduce){#top#top#top#top#top#top#top#top#top .snoer-halo>span{transition:none}}
+/* Bouw 184b — het licht zoals in het voorbeeld: een warme gouden gloed om de gebeden knopen heen (lichter en warmer dan
+   het perkament, zodat het als licht leest en niet als schaduw), de knopen zelf houden hun zwarte structuur met een
+   lichte warme zweem; de huidige knoop met iets sterkere gloed. */
+#top#top#top#top#top#top#top#top#top#top .snoer-halo{filter:blur(5px);opacity:.95}
+#top#top#top#top#top#top#top#top#top#top .snoer-halo>span{background:rgb(246,184,66)}
+#top#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief{filter:blur(8px);opacity:1}
+#top#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief>span{background:rgb(255,204,104)}
+#top#top#top#top#top#top#top#top#top#top .snoer-licht{background:rgb(118,78,34)!important;mix-blend-mode:color-dodge;opacity:.5!important}
+#top#top#top#top#top#top#top#top#top#top .snoer-licht.is-actief{background:rgb(150,104,46)!important;opacity:.8!important}
+#top#top#top#top#top#top#top#top#top#top#top .snoer-halo{filter:blur(2px) drop-shadow(0 0 5px rgb(244,170,52)) drop-shadow(0 0 9px rgba(244,170,52,.75));opacity:1}
+#top#top#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief{filter:blur(3px) drop-shadow(0 0 7px rgb(255,196,92)) drop-shadow(0 0 14px rgba(255,190,80,.9))}

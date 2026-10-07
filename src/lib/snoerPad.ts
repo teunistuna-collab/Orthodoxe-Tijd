@@ -1,0 +1,36 @@
+// Hartlijn van het gebedssnoer in public/images/adem/gebedssnoer.webp, als percentages van de breedte en hoogte van het
+// beeld: 100 punten op gelijke afstand, beginnend bij de houten kraal onderaan en met de klok mee (eerst links omhoog).
+// Gemeten uit het beeld zelf (binnenrand van het snoer + halve knoopdikte); het beeld zelf blijft onveranderd.
+export const SNOER_PAD: ReadonlyArray<readonly [number, number]> = [
+  [49.9, 68.3], [46.9, 67.9], [44.1, 67.1], [41.6, 66.3], [39, 65.3], [36.1, 64.6], [33.9, 63.4], [31, 62.6], [28.7, 61.5], [26.5, 60.2],
+  [23.9, 59.1], [22, 57.7], [19.8, 56.4], [17.5, 55.2], [15.5, 53.7], [14, 52.1], [12.4, 50.5], [10.8, 48.9], [9.5, 47.2], [8.3, 45.5],
+  [7.4, 43.7], [6.6, 42], [5.8, 40.2], [5.8, 38.3], [5.6, 36.5], [5.5, 34.6], [5.7, 32.8], [6.2, 30.9], [7.7, 29.3], [8.5, 27.5],
+  [8.2, 25.7], [8.8, 24], [10.2, 22.3], [10.2, 20.5], [11.6, 18.9], [13.3, 17.3], [14.3, 15.6], [16.3, 14.2], [17.8, 12.6], [20.1, 11.3],
+  [22.4, 10.1], [24.5, 8.8], [27.2, 7.8], [29.6, 6.7], [32.5, 5.9], [35.3, 5.2], [38.3, 4.6], [41.3, 4.2], [44.3, 3.7], [47.4, 3.4],
+  [50.6, 3.4], [53.7, 3.5], [56.9, 3.7], [59.9, 4.1], [63, 4.6], [66, 5.1], [68.8, 5.9], [71.6, 6.7], [74.3, 7.7], [76.3, 9],
+  [78.8, 10.1], [80.8, 11.5], [82.5, 13], [84.7, 14.3], [85.8, 15.9], [87.4, 17.5], [88.5, 19.2], [90, 20.8], [90.9, 22.5], [91.8, 24.3],
+  [92, 26], [91.4, 27.8], [92.2, 29.6], [93.7, 31.2], [94.1, 33.1], [94.4, 34.9], [94.3, 36.8], [93.8, 38.6], [93.4, 40.5], [92.5, 42.3],
+  [91.9, 44.1], [91.1, 45.8], [89.7, 47.5], [88.9, 49.3], [87.2, 50.9], [85.5, 52.4], [84.1, 54], [81.9, 55.3], [80.6, 57], [78.3, 58.2],
+  [76, 59.5], [73.5, 60.6], [70.8, 61.5], [69, 63], [66.2, 63.9], [63.4, 64.7], [61.2, 65.9], [58.2, 66.4], [55.9, 67.6], [53, 68.2],
+];
+
+
+// Midden van de ring (waar ook de hartlijn vanuit gemeten is) en de verhouding van het beeld (720 × 1216).
+const MIDDEN = { x: 49.9, y: 36.18 };
+const BREED = 720;
+const HOOG = 1216;
+
+/** Hoek (in graden, met de klok mee vanaf de kraal onderaan) van punt f (0..1) langs het snoer; voor de gloed (conic-gradient). */
+export function snoerHoek(f: number): number {
+  if (f <= 0) return 0;
+  if (f >= 1) return 360;
+  const p = f * SNOER_PAD.length;
+  const i = Math.floor(p);
+  const [ax, ay] = SNOER_PAD[i % SNOER_PAD.length];
+  const [bx, by] = SNOER_PAD[(i + 1) % SNOER_PAD.length];
+  const x = ax + (bx - ax) * (p - i);
+  const y = ay + (by - ay) * (p - i);
+  // 0° = recht omhoog, met de klok mee (zoals conic-gradient); de kraal onderaan ligt op 180°.
+  const hoek = (Math.atan2(((x - MIDDEN.x) * BREED) / 100, ((MIDDEN.y - y) * HOOG) / 100) * 180) / Math.PI;
+  return (((hoek - 180) % 360) + 360) % 360 || (f > 0.5 ? 360 : 0);
+}

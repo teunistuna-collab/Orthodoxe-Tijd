@@ -188,14 +188,7 @@ export default function Vasten() {
     <>
       <PageHero id="vasten" titel="Vasten" kop />
 
-      {/* Informatiekaarten: vanaf tablet bovenaan; op mobiel onder "Vasten vandaag" (daar komen de meeste mensen voor) */}
-      <section className="max-md:hidden orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20">
-        <div className={CONTENT}>
-          {infoKaarten}
-        </div>
-      </section>
-
-      {/* Eén doorlopende compositie: vandaag → uitleg → jaarcyclus → week/uitzonderingen → gebed */}
+      {/* Volgorde: vasten vandaag → uitleg → het wekelijkse vasten → de vier grote vasten → praktisch → de vier informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern relative bg-parchment py-14 text-ink sm:py-20">
         <div className={CONTENT}>
           {/* Vasten vandaag — donker inzetpaneel binnen dezelfde compositie */}
@@ -221,7 +214,6 @@ export default function Vasten() {
               ))}
             </div>
           </div>
-          <div className="mt-10 md:hidden">{infoKaarten}</div>
 
           {/* Doorlopende verticale lijn verbindt het dagpaneel met de algemene uitleg — geen nieuwe pagina */}
           <div className="mx-auto mt-10 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">
@@ -231,47 +223,6 @@ export default function Vasten() {
               woensdag en vrijdag. Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet — het
               hoort samen met bekering, zelfbeheersing, liefde tot de naaste en de voorbereiding op de feesten van de Kerk.
             </p>
-          </div>
-
-          <GoldDivider />
-
-          {/* De vasten door het jaar */}
-          {/* Zelfde kader als "De grote bewegingen" op Jaar (index.css, Bouw 174): dubbele lijn, kolommen met een beeld per vasten */}
-          <div className="vlak jr-vak vs-kader">
-            <div className="flex flex-wrap items-end justify-between gap-4 text-center sm:text-left">
-              <div className="mx-auto sm:mx-0">
-                <p className="ot-label">De vasten door het jaar</p>
-                <h2 className="ot-titel font-display mt-2 text-2xl font-semibold sm:text-3xl">De vier grote vasten van {jaar}</h2>
-              </div>
-              <div className="v17-year-selector mx-auto flex items-center sm:mx-0" role="group" aria-label="Jaar kiezen">
-                <button type="button" className="v17-year-arrow" onClick={() => setJaar(jaar - 1)} aria-label="Vorig jaar">‹</button>
-                <span className="v17-year-current">{jaar}</span>
-                <span className="v17-year-divider">✣</span>
-                <span className="v17-year-next">{jaar + 1}</span>
-                <button type="button" className="v17-year-arrow" onClick={() => setJaar(jaar + 1)} aria-label="Volgend jaar">›</button>
-              </div>
-            </div>
-
-            <div className="vs-vasten">
-              {grotevier.map((p) => {
-                const info = PERIODE_INFO[p.id];
-                return (
-                  <article key={p.id} className="vs-vast" role="button" tabIndex={0} onClick={() => setPeriodeOpen(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPeriodeOpen(p.id); } }}>
-                    <img src={`/images/jaar/${p.id}.webp`} alt="" width={464} height={272} loading="lazy" decoding="async" />
-                    <h4 className="vs-vast-naam">{(info?.label ?? p.naam).replace(/(apostel|ontslapenis)(vasten)/i, '$1­$2')}</h4>
-                    <p className="vs-vast-data">
-                      {formatDag(p.start)} – {formatDatum(p.eind)} · {p.dagen} dagen{info?.beweeglijk ? ' · beweeglijk' : ''}
-                    </p>
-                    <p className="vs-vast-tekst">{p.omschrijving}</p>
-                    {info && (
-                      <a href={info.href} className="jr-link" onClick={(e) => e.stopPropagation()}>
-                        {info.linkLabel} ›
-                      </a>
-                    )}
-                  </article>
-                );
-              })}
-            </div>
           </div>
 
           <GoldDivider />
@@ -368,6 +319,47 @@ export default function Vasten() {
 
           <GoldDivider />
 
+          {/* De vasten door het jaar */}
+          {/* Zelfde kader als "De grote bewegingen" op Jaar (index.css, Bouw 174): dubbele lijn, kolommen met een beeld per vasten */}
+          <div className="vlak jr-vak vs-kader">
+            <div className="flex flex-wrap items-end justify-between gap-4 text-center sm:text-left">
+              <div className="mx-auto sm:mx-0">
+                <p className="ot-label">De vasten door het jaar</p>
+                <h2 className="ot-titel font-display mt-2 text-2xl font-semibold sm:text-3xl">De vier grote vasten van {jaar}</h2>
+              </div>
+              <div className="v17-year-selector mx-auto flex items-center sm:mx-0" role="group" aria-label="Jaar kiezen">
+                <button type="button" className="v17-year-arrow" onClick={() => setJaar(jaar - 1)} aria-label="Vorig jaar">‹</button>
+                <span className="v17-year-current">{jaar}</span>
+                <span className="v17-year-divider">✣</span>
+                <span className="v17-year-next">{jaar + 1}</span>
+                <button type="button" className="v17-year-arrow" onClick={() => setJaar(jaar + 1)} aria-label="Volgend jaar">›</button>
+              </div>
+            </div>
+
+            <div className="vs-vasten">
+              {grotevier.map((p) => {
+                const info = PERIODE_INFO[p.id];
+                return (
+                  <article key={p.id} className="vs-vast" role="button" tabIndex={0} onClick={() => setPeriodeOpen(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPeriodeOpen(p.id); } }}>
+                    <img src={`/images/jaar/${p.id}.webp`} alt="" width={464} height={272} loading="lazy" decoding="async" />
+                    <h4 className="vs-vast-naam">{(info?.label ?? p.naam).replace(/(apostel|ontslapenis)(vasten)/i, '$1­$2')}</h4>
+                    <p className="vs-vast-data">
+                      {formatDag(p.start)} – {formatDatum(p.eind)} · {p.dagen} dagen{info?.beweeglijk ? ' · beweeglijk' : ''}
+                    </p>
+                    <p className="vs-vast-tekst">{p.omschrijving}</p>
+                    {info && (
+                      <a href={info.href} className="jr-link" onClick={(e) => e.stopPropagation()}>
+                        {info.linkLabel} ›
+                      </a>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+
+          <GoldDivider />
+
           {/* FAQ / praktisch */}
           <div className="vlak parchment-pattern rounded-lg border border-gold/35 bg-[#f7edda]/75 px-5 py-7 shadow-[0_14px_34px_rgba(55,31,15,0.1)] sm:px-8 sm:py-9">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)]">
@@ -401,6 +393,11 @@ export default function Vasten() {
             </div>
           </div>
           </div>
+
+          <GoldDivider />
+
+          {/* De vier informatiekaarten */}
+          {infoKaarten}
         </div>
       </section>
 
