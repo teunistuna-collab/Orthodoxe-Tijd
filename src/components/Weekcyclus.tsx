@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
-import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
+import { useApp } from '../lib/context';
+import { addDays, bepaalToon, dagInfo, formatDag, ymd } from '../lib/kalender';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
-import { ringVak } from '../lib/ringVak';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
 
 type DayKey = 'zondag' | 'maandag' | 'dinsdag' | 'woensdag' | 'donderdag' | 'vrijdag' | 'zaterdag';
 type InfoKey = 'wat' | 'dagen' | 'betekenis' | 'praktisch';
@@ -87,36 +88,33 @@ const DAY_POPUPS: Record<DayKey, PopupContent> = {
   },
 };
 
-const DAYS: Array<{ key: DayKey; label: string; short: string; iconSrc: string }> = [
-  { key: 'zondag', label: 'Zondag', short: 'De Verrijzenis van Christus', iconSrc: '/images/ui/menu/04-Week-04-Zondag.webp' },
-  { key: 'maandag', label: 'Maandag', short: 'De engelen en hemelse machten', iconSrc: '/images/ui/menu/04-Week-05-Maandag.webp' },
-  { key: 'dinsdag', label: 'Dinsdag', short: 'Johannes de Voorloper', iconSrc: '/images/ui/menu/04-Week-06-Dinsdag.webp' },
-  { key: 'woensdag', label: 'Woensdag', short: 'Het verraad en het heilig Kruis', iconSrc: '/images/ui/menu/04-Week-07-Woensdag.webp' },
-  { key: 'donderdag', label: 'Donderdag', short: 'De apostelen en H. Nicolaas', iconSrc: '/images/ui/menu/04-Week-08-Donderdag.webp' },
-  { key: 'vrijdag', label: 'Vrijdag', short: 'De Kruisiging van de Heer', iconSrc: '/images/ui/menu/04-Week-09-Vrijdag.webp' },
-  { key: 'zaterdag', label: 'Zaterdag', short: 'De heiligen en ontslapenen', iconSrc: '/images/ui/menu/04-Week-10-Zaterdag.webp' },
+const DAYS: Array<{ key: DayKey; label: string; short: string }> = [
+  { key: 'zondag', label: 'Zondag', short: 'De Verrijzenis van Christus' },
+  { key: 'maandag', label: 'Maandag', short: 'De engelen en hemelse machten' },
+  { key: 'dinsdag', label: 'Dinsdag', short: 'Johannes de Voorloper' },
+  { key: 'woensdag', label: 'Woensdag', short: 'Het verraad en het heilig Kruis' },
+  { key: 'donderdag', label: 'Donderdag', short: 'De apostelen en H. Nicolaas' },
+  { key: 'vrijdag', label: 'Vrijdag', short: 'De Kruisiging van de Heer' },
+  { key: 'zaterdag', label: 'Zaterdag', short: 'De heiligen en ontslapenen' },
 ];
 
 
-const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
-  { key: 'wat', title: 'Wat is de weekcyclus?', intro: 'De week is de ademhaling van het kerkelijk leven, geworteld in de Verrijzenis van Christus.' },
-  { key: 'dagen', title: 'De dagen van de week', intro: 'Elke dag van de week heeft een eigen liturgisch karakter, lezingen en gedenkingen.' },
-  { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'De week vormt ons in het leven met Christus: van Verrijzenis tot verwachting.' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je de weekcyclus meeleven in je gebed, thuis en in de parochie?' },
+const INFO_CARDS: Array<{ key: InfoKey; title: string }> = [
+  { key: 'wat', title: 'Wat is de weekcyclus?' },
+  { key: 'dagen', title: 'De dagen van de week' },
+  { key: 'betekenis', title: 'De geestelijke betekenis' },
+  { key: 'praktisch', title: 'Praktisch' },
 ];
-
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-const ring = ringVak(12);
-
-function polar(cx: number, cy: number, r: number, angleDeg: number) {
-  const rad = ((angleDeg - 90) * Math.PI) / 180;
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-}
-
 export default function Weekcyclus() {
+  const { vandaag, mode, openDag } = useApp();
   const [dayOpen, setDayOpen] = useState<DayKey | null>(null);
+  const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
+  const vandaagKey = DAYS[vandaag.getUTCDay()].key;
+  const [gekozen, setGekozen] = useState<DayKey>(vandaagKey);
+  const detailRef = useRef<HTMLElement | null>(null);
 
   // Vandaag kan een pop-up van deze pagina openen.
   useEffect(() => {
@@ -127,149 +125,98 @@ export default function Weekcyclus() {
     window.addEventListener(OPEN_POPUP_EVENT, opPopup);
     return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
   }, []);
-  const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
 
-  // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
-  const infoTegels = (zicht: string) => (
-    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20`}>
-      {/* Onzichtbare tussenkop: de tegels (h3) hangen zo onder een h2 voor schermlezers */}
-      <h2 className="sr-only">Achtergrond</h2>
-      <div className={CONTENT}>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setInfoOpen(key)}
-              className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-            >
-              <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
-              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  // Deze week: zondag tot en met zaterdag rond vandaag; de toon uit de Oktoïch (lib/kalender.ts).
+  const toon = bepaalToon(vandaag);
+  const zondag = addDays(vandaag, -vandaag.getUTCDay());
+  const index = DAYS.findIndex((d) => d.key === gekozen);
+  const dag = DAYS[index];
+  const datum = addDays(zondag, index);
+  const info = dagInfo(datum, mode);
+  const tekst = DAY_POPUPS[gekozen];
+
+  const kies = (key: DayKey) => {
+    setGekozen(key);
+    // Op mobiel staat de uitleg onder de lijst: daarheen scrollen.
+    if (window.matchMedia('(max-width: 899.98px)').matches) detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <>
-      <PageHero id="week" titel="Week" kop />
+      {/* Opening volgens het aangeleverde ontwerp (Bouw 176): icoon, titel, intro en het vak met de toon van de week */}
+      <PaginaOpening id="week" soort="cyclisch" label="De liturgische week" titel="Week" ondertitel="Van zondag tot zaterdag" beeld={{ src: '/images/Week-icoon.webp', alt: 'Rondel met kerken in een landschap onder de sterren' }}>
+        <p className="pc-intro">De week is het ritme van de verrijzenis. Iedere dag heeft zijn eigen betekenis en plaatst ons in het heilsplan van Christus.</p>
+        <aside className="pc-jaar jr-vak" aria-label="Toon van de week">
+          <p className="pc-jaar-label">Toon van de week</p>
+          <p className="pc-jaar-datum">{toon ? `Toon ${toon}` : 'Geen toon'}</p>
+          <p className="wk-toon-tekst">
+            {toon
+              ? 'De toon van de week volgt de Octoëchos en biedt het liturgisch klankveld waarin we de gebeden van deze week bidden.'
+              : 'In de Heilige Week en de Lichte Week geldt geen toon van de week.'}
+          </p>
+        </aside>
+      </PaginaOpening>
 
-      {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
-      {infoTegels('max-md:hidden')}
-
-      {/* De dagen van de week */}
-      <section className="bg-parchment pb-16 sm:pb-20">
+      <section className="pc-pagina bg-parchment text-ink">
         <div className={CONTENT}>
-          <div className="cyclus-paneel parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
+          {/* Deze week: zeven dagen; vandaag gemarkeerd, de gekozen dag staat hieronder uitgelegd */}
+          <section className="pc-opbouw jr-vak" aria-labelledby="wk-week-titel">
+            <h2 id="wk-week-titel" className="pc-kop">Deze week</h2>
+            <ul className="jr-vasten jr-tijden wk-dagen">
+              {DAYS.map((d) => (
+                <li key={d.key}>
+                  <button type="button" className={`jr-vast${d.key === vandaagKey ? ' is-vandaag' : ''}`} aria-pressed={d.key === gekozen} onClick={() => kies(d.key)}>
+                    <span className="wk-dag">{d.label}</span>
+                    <span className="jr-vast-doel">{d.short}</span>
+                    {d.key === vandaagKey && <span className="wk-vandaag">Vandaag</span>}
+                    <span className="jr-pijl" aria-hidden="true">›</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-            <div className="text-center">
-              <h2 className="ot-sectietitel">De dagen van de week</h2>
-              <p className="ot-label mt-2">Een weg met Christus</p>
-            </div>
-
-            {/* Desktop: cirkeldiagram */}
-            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[820px] lg:block" style={ring.stijl}>
-              <svg viewBox={ring.viewBox} className="absolute inset-0 h-full w-full">
-                <circle cx="50" cy="50" r="30" fill="none" stroke="#c9a227" strokeWidth="0.35" opacity="0.75" />
-                {DAYS.map((day, index) => {
-                  const angle = (360 / DAYS.length) * index;
-                  const c = polar(50, 50, 15, angle);
-                  const p = polar(50, 50, 30, angle);
-                  return (
-                    <line
-                      key={`spoke-${day.key}`}
-                      x1={c.x}
-                      y1={c.y}
-                      x2={p.x}
-                      y2={p.y}
-                      stroke="#c9a227"
-                      strokeWidth="0.25"
-                      opacity={hovered === index ? 0.65 : 0.3}
-                    />
-                  );
-                })}
-              </svg>
-
-              <div className="absolute top-1/2 left-1/2 flex h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
+          {/* De gekozen dag */}
+          <section ref={detailRef} className="pc-feest wk-detail" aria-labelledby="wk-dag-titel">
+            <h2 id="wk-dag-titel" className="pc-feest-titel">{dag.label}</h2>
+            <p className="pc-feest-onder">{tekst.subtitle}</p>
+            <p className="pc-feest-tekst">{tekst.paragraphs[0]}</p>
+            <div className="pc-feest-vakken">
+              <div className="pc-vak jr-vak">
+                <p className="pc-vak-label">Thema's van de dag</p>
+                <p className="pc-tropaar">{tekst.highlight}</p>
+                <p className="pc-vak-label wk-vasten-label">Vasten · {formatDag(datum)}</p>
+                <p className="wk-vasten">
+                  {info.vasten.label}
+                  {info.vasten.periode ? ` · ${info.vasten.periode}` : ''}
+                </p>
               </div>
-
-              {DAYS.map((day, index) => {
-                const angle = (360 / DAYS.length) * index;
-                const pos = polar(50, 50, 30, angle);
-                const isActive = hovered === index;
-                const leftSide = pos.x < 50;
-                const iconSrc = day.iconSrc;
-
-                return (
-                  <button
-                    key={day.key}
-                    type="button"
-                    onClick={() => setDayOpen(day.key)}
-                    onMouseEnter={() => setHovered(index)}
-                    onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
-                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
-                  >
-                    <span className="etmaal-ring-badge">
-                      <span
-                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
-                          isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
-                        }`}
-                      >
-                        <img loading="lazy" decoding="async" src={iconSrc} alt="" className="provided-cycle-icon" />
-                      </span>
-                    </span>
-                    <span className="etmaal-ring-text">
-                      <span className="dienst-kaart">
-                        <span className="dienst-kaart-titel font-display">{day.label}</span>
-                        <span className="dienst-kaart-tekst">{day.short}</span>
-                      </span>
-                    </span>
-                  </button>
-                );
-              })}
+              <nav className="pc-vak jr-vak" aria-label="Lees meer">
+                <p className="pc-vak-label">Lees meer</p>
+                <ul className="pc-meer">
+                  <li>
+                    <button type="button" onClick={() => setDayOpen(gekozen)}>
+                      Meer over de {dag.label.toLowerCase()} ›
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" onClick={() => openDag(ymd(datum))}>
+                      {dag.label} {formatDag(datum)} in de kalender ›
+                    </button>
+                  </li>
+                  {INFO_CARDS.map(({ key, title }) => (
+                    <li key={key}>
+                      <button type="button" onClick={() => setInfoOpen(key)}>
+                        {title} ›
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
-
-            {/* Tablet/mobiel: verticale tijdlijn */}
-            <div className="mt-10 space-y-3 lg:hidden">
-              {DAYS.map((day) => {
-                return (
-                  <button
-                    key={`${day.key}-mobile`}
-                    type="button"
-                    onClick={() => setDayOpen(day.key)}
-                    className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="dienst-kaart-titel font-display block">
-                        {day.label}
-                      </span>
-                      <span className="dienst-kaart-tekst block">{day.short}</span>
-                    </span>
-                    <span className="pijl" aria-hidden="true">›</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          </section>
         </div>
       </section>
-
-      {infoTegels('md:hidden')}
-
-      {/* Meer dan een kalender */}
-      <CycleTransition
-        quote="Dit is de dag die de Heer gemaakt heeft; laat ons juichen en ons verheugen."
-        citation="Psalm 118:24"
-        eyebrow="Meer dan een kalender"
-        text="De Orthodoxe week is geen loutere opeenvolging van dagen. Zij begint in de vreugde van de Verrijzenis, voert de gelovige langs de hemelse machten, de Voorloper, het Kruis, de apostolische verkondiging en de gedachtenis van hen die in Christus ontslapen zijn, en opent zich vervolgens opnieuw naar de Dag des Heren. Zo wordt de tijd zelf opgenomen in het gebed van de Kerk."
-        buttonLabel="Ontdek de jaarcyclus"
-        buttonHref="#jaar"
-      />
 
       <TimeSanctificationTimeline current="week" />
 
