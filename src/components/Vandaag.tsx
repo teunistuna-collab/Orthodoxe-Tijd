@@ -155,7 +155,7 @@ export default function Vandaag() {
           {mobieleKnoppen.map(({ key, titel, href, onClick, onder, nu }) => (
             <a
               key={key}
-              className="vm-rij"
+              className={`vm-rij${nu ? ' is-nu' : ''}`}
               href={href}
               onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
             >
