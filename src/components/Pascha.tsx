@@ -18,13 +18,13 @@ type PeriodeKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | '
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
   { key: 'wat', title: 'Wat is Pascha?', intro: 'De Verrijzenis van Christus als het hart van het kerkelijk jaar en van ons leven.' },
-  { key: 'cyclus', title: 'De Paschale cyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.' },
+  { key: 'cyclus', title: 'De Paascyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.' },
   { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Pascha vernieuwt de tijd, onze blik en ons bestaan.' },
   { key: 'tradities', title: 'Tradities en viering', intro: 'De rijke schoonheid van de Paasdiensten en de Orthodoxe tradities.' },
 ];
 
-// De acht stappen van de Paschale cyclus voor het cirkeldiagram. De tekst van iedere stap komt letterlijk uit
-// dezelfde "De Paschale cyclus.docx" als de knop "De Paschale cyclus" hierboven (en voor Pascha zelf uit "Wat is Pascha?").
+// De acht stappen van de Paascyclus voor het cirkeldiagram. De tekst van iedere stap komt letterlijk uit
+// dezelfde "De Paschale cyclus.docx" als de knop "De Paascyclus" hierboven (en voor Pascha zelf uit "Wat is Pascha?").
 const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
   "voorbereiding": {
     "title": "Voorbereiding",
@@ -216,7 +216,7 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
   }
 };
 
-// De opbouw van de Paschacyclus in zes stappen (aangeleverd ontwerp). De popups gebruiken de bestaande teksten hierboven;
+// De opbouw van de Paascyclus in zes stappen (aangeleverd ontwerp). De popups gebruiken de bestaande teksten hierboven;
 // "Hemelvaart en Pinksteren" voegt de twee bestaande teksten samen. offsetRange = eerste en laatste dag t.o.v. Pascha.
 type StapKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | 'vijftig-dagen' | 'hemelvaart-pinksteren';
 const STAPPEN: Array<{ key: StapKey; label: string; short: string; offsetRange: [number, number] }> = [
@@ -281,12 +281,12 @@ export default function Pascha() {
       <PaginaOpening
         id="pascha"
         soort="hoogfeest"
-        label="De Paschacyclus"
+        label="De Paascyclus"
         titel="Pascha"
         ondertitel="Van Vasten naar Verrijzenis"
         beeld={{ src: '/images/Pascha-icoon.webp', alt: 'Icoon van de Verrijzenis: Christus haalt Adam en Eva uit het graf' }}
       >
-        <p className="pc-intro">De Paschacyclus is het hart van het kerkelijk jaar. In deze periode gaan we met Christus mee in Zijn lijden, dood en verrijzenis, en vieren we de overwinning van het Leven.</p>
+        <p className="pc-intro">De Paascyclus is het hart van het kerkelijk jaar. In deze periode gaan we met Christus mee in Zijn lijden, dood en verrijzenis, en vieren we de overwinning van het Leven.</p>
         <aside className="pc-jaar jr-vak" aria-label={`Pascha ${paaschaJaar}`}>
           <p className="pc-jaar-label">Pascha {paaschaJaar}</p>
           <p className="pc-jaar-datum">{formatDatum(pascha)}</p>
@@ -315,9 +315,9 @@ export default function Pascha() {
 
       <section className="pc-pagina bg-parchment text-ink">
         <div className={CONTENT}>
-          {/* De opbouw van de Paschacyclus */}
+          {/* De opbouw van de Paascyclus */}
           <section className="pc-opbouw jr-vak" aria-labelledby="pc-opbouw-titel">
-            <h2 id="pc-opbouw-titel" className="pc-kop">De opbouw van de Paschacyclus</h2>
+            <h2 id="pc-opbouw-titel" className="pc-kop">De opbouw van de Paascyclus</h2>
             <ul className="jr-vasten jr-tijden pc-stappen">
               {STAPPEN.map((stap) => (
                 <li key={stap.key}>

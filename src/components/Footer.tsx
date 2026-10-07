@@ -1,9 +1,7 @@
 import Cross from './Cross';
-import { useApp } from '../lib/context';
 
 // De bronnen staan op een eigen pagina (#bronnen, zie App.tsx); de footer linkt ernaar.
 export function FooterInhoud() {
-  const { openKalenderUitleg } = useApp();
   return (
     <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
       <div>
@@ -33,16 +31,15 @@ export function FooterInhoud() {
           <li>Troparia en gebeden in eigen Nederlandse weergave.</li>
         </ul>
         {/* Op mobiel is de footer verborgen; hier blijft het keuzemenu bereikbaar (Meer → Bronnen). */}
-        <button type="button" onClick={openKalenderUitleg} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
+        <a href="#instellingen" className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
           Kalender en traditie kiezen
-        </button>
+        </a>
       </div>
     </div>
   );
 }
 
 export default function Footer() {
-  const { openKalenderUitleg } = useApp();
   return (
     <footer className="site-voet orthodox-pattern bg-bark text-[#d9cbb0]">
       <div>
@@ -51,9 +48,9 @@ export default function Footer() {
           <a href="#bronnen" className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
             Bronnen & verwijzingen
           </a>
-          <button type="button" onClick={openKalenderUitleg} className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
-            Kalender en traditie kiezen
-          </button>
+          <a href="#instellingen" className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
+            Instellingen
+          </a>
           <span>Gebouwd met liefde voor de Nederlandse Orthodoxie.</span>
         </div>
       </div>

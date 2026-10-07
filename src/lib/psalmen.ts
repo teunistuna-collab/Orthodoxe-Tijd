@@ -1,4 +1,4 @@
-import { serviceConfig } from './etmaal';
+import { dienstVanHetUur, serviceConfig } from './etmaal';
 
 // Centrale psalmendata voor Psalmen, en later Vandaag, Etmaal, het zoeken, favorieten en de app.
 // Nummering: Septuagint (primair). Er wordt niets omgerekend of aangevuld zonder gecontroleerde bron.
@@ -132,12 +132,7 @@ export const PSALMEN: Psalm[] = Array.from({ length: 150 }, (_, i) => {
 
 /** Psalm van de dienst die nu aan de beurt is (dienst met het laatste begintijdstip vóór of op dit uur). */
 export function psalmVanHetUur(nu: Date): number {
-  const uur = nu.getHours();
-  const dienst = [...serviceConfig]
-    .map((d) => ({ d, start: Number(d.time.slice(0, 2)) }))
-    .filter((x) => x.start <= uur)
-    .sort((a, b) => b.start - a.start)[0]?.d ?? serviceConfig[0];
-  return Number(dienst.psalms[0].title.replace(/^Psalm /, ''));
+  return Number(dienstVanHetUur(nu).psalms[0].title.replace(/^Psalm /, ''));
 }
 
 /* ---------- Teksten (apart geladen, ±40 KB) ---------- */

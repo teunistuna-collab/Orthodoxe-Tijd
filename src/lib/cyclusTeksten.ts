@@ -1,6 +1,6 @@
 // Teksten voor de info-pop-ups van de cyclus-pagina's.
 // Ze komen letterlijk uit de Word-bestanden in "Website Map" (ademcyclus, etmaalcyclus, weekcyclus,
-// jaarcyclus en Paschale cyclus); per knop is het hoofdstuk gekozen dat bij de titel past.
+// jaarcyclus en Paascyclus); per knop is het hoofdstuk gekozen dat bij de titel past.
 // Interne notities uit de documenten (bijv. "Kern voor de website") zijn bewust niet opgenomen.
 
 export type PopupSectie = {
@@ -226,7 +226,7 @@ export const WEEK_INFO: Record<'wat' | 'dagen' | 'betekenis' | 'praktisch', Popu
     "title": "Wat is de weekcyclus?",
     "subtitle": "De heiliging van de week",
     "paragraphs": [
-      "Zoals het etmaal door de getijden wordt geheiligd, zo draagt ook iedere dag van de week een eigen kerkelijke gedachtenis. De week begint met de Dag des Heren, de zondag, en ontvouwt zich vanuit de Verrijzenis van Christus. De vaste thema’s van de week worden bezongen in de Octoechos (Oktoëchos) en worden telkens verweven met de heiligen en feesten van de kalender, de toon van de week en de beweeglijke Paschale cyclus."
+      "Zoals het etmaal door de getijden wordt geheiligd, zo draagt ook iedere dag van de week een eigen kerkelijke gedachtenis. De week begint met de Dag des Heren, de zondag, en ontvouwt zich vanuit de Verrijzenis van Christus. De vaste thema’s van de week worden bezongen in de Octoechos (Oktoëchos) en worden telkens verweven met de heiligen en feesten van de kalender, de toon van de week en de beweeglijke Paascyclus."
     ],
     "sections": []
   },
@@ -343,7 +343,7 @@ export const JAAR_INFO: Record<'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch',
       {
         "heading": "Twee jaarlijkse bewegingen",
         "paragraphs": [
-          "Het liturgische jaar bestaat uit twee nauw verweven bewegingen. De vaste jaarcyclus volgt kalenderdata die ieder jaar terugkeren. Daarnaast staat de beweeglijke Paschale cyclus, waarvan de data verschuiven met de datum van het heilige Pascha. Op iedere concrete dag kunnen beide cycli elkaar ontmoeten."
+          "Het liturgische jaar bestaat uit twee nauw verweven bewegingen. De vaste jaarcyclus volgt kalenderdata die ieder jaar terugkeren. Daarnaast staat de beweeglijke Paascyclus, waarvan de data verschuiven met de datum van het heilige Pascha. Op iedere concrete dag kunnen beide cycli elkaar ontmoeten."
         ],
         "table": {
           "head": [
@@ -356,7 +356,7 @@ export const JAAR_INFO: Record<'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch',
               "Vaste feesten, heiligen en gedachtenissen op kalenderdata; liturgisch vooral gedragen door het Menaion."
             ],
             [
-              "Paschale cyclus",
+              "Paascyclus",
               "Beweeglijke feesten en perioden rond Pascha; onder meer Triodion en Pentecostarion."
             ]
           ]
@@ -423,7 +423,7 @@ export const JAAR_INFO: Record<'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch',
       {
         "heading": "De vasten binnen het kerkelijk jaar",
         "paragraphs": [
-          "Ook het vasten ordent het jaar. De Orthodoxe Kerk kent vier grote vastenperioden: de Grote Vasten, de Apostelvasten, de vasten vóór de Geboorte van Christus en de vasten vóór de Ontslapenis van de Moeder Gods. Niet al deze perioden behoren uitsluitend tot de vaste jaarcyclus: de Grote Vasten en het begin van de Apostelvasten zijn afhankelijk van de Paschale cyclus. Daarnaast kent de Kerk vaste vastendagen en gewoonlijk de wekelijkse vasten op woensdag en vrijdag, met liturgische uitzonderingen en plaatselijke verschillen."
+          "Ook het vasten ordent het jaar. De Orthodoxe Kerk kent vier grote vastenperioden: de Grote Vasten, de Apostelvasten, de vasten vóór de Geboorte van Christus en de vasten vóór de Ontslapenis van de Moeder Gods. Niet al deze perioden behoren uitsluitend tot de vaste jaarcyclus: de Grote Vasten en het begin van de Apostelvasten zijn afhankelijk van de Paascyclus. Daarnaast kent de Kerk vaste vastendagen en gewoonlijk de wekelijkse vasten op woensdag en vrijdag, met liturgische uitzonderingen en plaatselijke verschillen."
         ]
       },
       {
@@ -458,7 +458,7 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
         ]
       },
       {
-        "heading": "Pascha en de Paschale cyclus",
+        "heading": "Pascha en de Paascyclus",
         "paragraphs": [
           "Daarom is Pascha niet eenvoudig één feest tussen andere feesten. In de Orthodoxe eredienst is de Verrijzenis van Christus het centrum waarnaar de voorbereiding wijst en vanwaar de vreugde van de daaropvolgende periode uitgaat."
         ]
@@ -472,14 +472,14 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
     ]
   },
   "cyclus": {
-    "title": "De Paschale cyclus",
+    "title": "De Paascyclus",
     "subtitle": "Van voorbereiding, door Kruis en graf, naar Verrijzenis en Pinksteren",
     "paragraphs": [],
     "sections": [
       {
-        "heading": "Wat is de Paschale cyclus?",
+        "heading": "Wat is de Paascyclus?",
         "paragraphs": [
-          "De Paschale cyclus is het beweeglijke deel van het Orthodoxe kerkelijk jaar dat zijn ordening ontvangt vanuit de datum van het heilige Pascha, de Verrijzenis van Christus. Omdat de datum van Pascha van jaar tot jaar verschuift, bewegen ook de perioden en gedachtenissen die ermee verbonden zijn mee.",
+          "De Paascyclus is het beweeglijke deel van het Orthodoxe kerkelijk jaar dat zijn ordening ontvangt vanuit de datum van het heilige Pascha, de Verrijzenis van Christus. Omdat de datum van Pascha van jaar tot jaar verschuift, bewegen ook de perioden en gedachtenissen die ermee verbonden zijn mee.",
           "De cyclus omvat niet alleen de Paasnacht zelf. Zij begint reeds in de voorbereiding op de Grote Vasten, voert door de veertigdagentijd en de Grote en Heilige Week, bereikt haar hoogtepunt in Pascha en gaat daarna verder door de veertig dagen tot Hemelvaart en de vijftig dagen tot Pinksteren. De eerste zondag na Pinksteren, Allerheiligen, vormt een belangrijke overgang naar het verdere kerkelijke jaar."
         ]
       },
@@ -579,7 +579,7 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
         "paragraphs": [
           "Vanuit Pascha worden veel beweeglijke onderdelen van het kerkelijk jaar geordend. De Paschadatum bepaalt onder meer de plaats van de voorbereidende zondagen, het begin van de Grote Vasten, Lazaruszaterdag, Palmzondag, de Grote en Heilige Week, de Lichte Week, Hemelvaart en Pinksteren.",
           "Ook de Apostelvasten wordt hierdoor beïnvloed: het begin hangt samen met Pinksteren en Allerheiligen, terwijl het einde aan de vaste gedachtenis van de heilige apostelen Petrus en Paulus verbonden is.",
-          "Daarnaast is de Paschale cyclus nauw verbonden met het liturgische leesrooster en met de boeken Triodion en Pentecostarion. Zo werkt de datum van Pascha door in veel meer dan alleen de datum van het Paasfeest."
+          "Daarnaast is de Paascyclus nauw verbonden met het liturgische leesrooster en met de boeken Triodion en Pentecostarion. Zo werkt de datum van Pascha door in veel meer dan alleen de datum van het Paasfeest."
         ]
       },
       {
@@ -598,12 +598,12 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
   },
   "betekenis": {
     "title": "De betekenis in ons leven",
-    "subtitle": "De geestelijke beweging van de Paschale cyclus",
+    "subtitle": "De geestelijke beweging van de Paascyclus",
     "paragraphs": [],
     "sections": [
       {
         "paragraphs": [
-          "De Paschale cyclus kan worden gezien als één geestelijke beweging:"
+          "De Paascyclus kan worden gezien als één geestelijke beweging:"
         ],
         "items": [
           "verlangen — Christus willen zien;",
@@ -631,10 +631,10 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
     "sections": [
       {
         "paragraphs": [
-          "De Paschale cyclus wordt allereerst in de liturgie van de Kerk beleefd, maar kan ook het dagelijkse gebedsleven thuis vormen. Niet door de volledige liturgische diensten zelfstandig na te bootsen, maar door het ritme van de Kerk bewust mee te leven."
+          "De Paascyclus wordt allereerst in de liturgie van de Kerk beleefd, maar kan ook het dagelijkse gebedsleven thuis vormen. Niet door de volledige liturgische diensten zelfstandig na te bootsen, maar door het ritme van de Kerk bewust mee te leven."
         ],
         "items": [
-          "Volg de zondagen en belangrijke dagen van de Paschale cyclus.",
+          "Volg de zondagen en belangrijke dagen van de Paascyclus.",
           "Lees de aangewezen Schriftlezingen en korte uitleg bij de dag.",
           "Laat het vasten samengaan met gebed, vergeving en concrete liefde tot de naaste.",
           "Neem waar mogelijk deel aan de diensten van de Grote Vasten, de Grote Week en Pascha.",

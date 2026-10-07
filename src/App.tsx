@@ -17,6 +17,7 @@ import DagHeiligen from './components/DagHeiligen';
 import DagPascha from './components/DagPascha';
 import LezingModal from './components/LezingModal';
 import KalenderUitleg from './components/KalenderUitleg';
+import Instellingen from './components/Instellingen';
 import Zoeken from './components/Zoeken';
 import { gaNaar } from './lib/navigatie';
 import Ademcyclus from './components/Ademcyclus';
@@ -43,7 +44,7 @@ const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
 const STANDAARD_TITEL = document.title;
 
-const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen'];
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen'];
 
 // "#psalmen/50" hoort bij de pagina "psalmen" (de Psalmenpagina opent zelf Psalm 50).
 function paginaUitHash(): string | null {
@@ -232,6 +233,7 @@ export default function App() {
           <div className={p('vasten')}><ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame></div>
           <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
           <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
+          <div className={p('instellingen')}><ExactPageFrame title="Instellingen"><Instellingen /></ExactPageFrame></div>
           <div className={p('psalmen')}><ExactPageFrame title="Psalmen"><Psalmen actief={pagina === 'psalmen'} /></ExactPageFrame></div>
           <div className={p('bronnen')}><div className="exact-content"><PageHero id="bronnen" titel="Bronnen" kop /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
         </main>

@@ -109,3 +109,13 @@ export const serviceConfig: ServiceMapping[] = [
     hoofdgedachtenis: 'De dood van Christus aan het Kruis',
   },
 ];
+
+/** De dienst die nu aan de beurt is: die met het laatste begintijdstip vóór of op dit uur (de tijden in serviceConfig). */
+export function dienstVanHetUur(nu: Date): ServiceMapping {
+  const uur = nu.getHours();
+  return (
+    [...serviceConfig]
+      .filter((d) => Number(d.time.slice(0, 2)) <= uur)
+      .sort((a, b) => Number(b.time.slice(0, 2)) - Number(a.time.slice(0, 2)))[0] ?? serviceConfig[0]
+  );
+}

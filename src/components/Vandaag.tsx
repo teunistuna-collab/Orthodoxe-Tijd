@@ -54,7 +54,7 @@ function huidigUurMoment(): UurMoment {
 
 export default function Vandaag() {
   const open = usePaginaOpen('vandaag');
-  const { mode, setMode, vandaag, vandaagYmd, rooster, heiligen, openDag, openLezing, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken } = useApp();
+  const { mode, vandaag, vandaagYmd, rooster, heiligen, openDag, openLezing, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken } = useApp();
   const [uurMoment, setUurMoment] = useState<UurMoment>(() => huidigUurMoment());
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function Vandaag() {
     { key: 'uur', titel: uurMoment.naam, href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })), onder: psalmRegel, nu: true },
     { key: 'week', titel: 'Weekcyclus', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }), onder: `${hoofdletter(dag.weekdagNaam)} · ${weekthema.titel}` },
     { key: 'vasten', titel: 'Vasten vandaag', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }), onder: dag.vasten.label },
-    { key: 'pascha', titel: 'Paschale cyclus', href: '#pascha', onClick: () => openDagPascha(dag.ymd), onder: `${dag.seizoen}${dag.toon ? ` · Toon ${dag.toon}` : ''}` },
+    { key: 'pascha', titel: 'Paascyclus', href: '#pascha', onClick: () => openDagPascha(dag.ymd), onder: `${dag.seizoen}${dag.toon ? ` · Toon ${dag.toon}` : ''}` },
     { key: 'lezingen', titel: 'Schriftlezingen', href: '#kalender', onClick: () => openDagLezingen(dag.ymd), onder: lezingRegel },
     { key: 'heiligen', titel: 'Heiligen van de dag', href: '#heiligen', onClick: () => openDagHeiligen(dag.ymd), onder: heilige ? heiligeTitel(heilige.naam) : undefined },
     // "Vaders & moeders" (woestijnvaders en -moeders) komt terug zodra de verzameling er is
@@ -124,7 +124,7 @@ export default function Vandaag() {
               <a className="vandaag-item vd-rij" href="#adem"><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Naar pijlgebed ›</span></div><ChevronRight/></a>
               <a className="vandaag-item vd-rij" href="#week" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] } })); }}><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week ›</span></div><ChevronRight/></a>
               <a className="vandaag-item vd-rij" href="#vasten" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: dag.ymd } })); }}><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten ›</span></div><ChevronRight/></a>
-              <a className="vandaag-item vd-rij" href="#pascha" onClick={(e)=>{ e.preventDefault(); openDagPascha(dag.ymd); }}><div><b>Paschale cyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus ›</span></div><ChevronRight/></a>
+              <a className="vandaag-item vd-rij" href="#pascha" onClick={(e)=>{ e.preventDefault(); openDagPascha(dag.ymd); }}><div><b>Paascyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus ›</span></div><ChevronRight/></a>
             </div>
             {/* "Vaders & moeders" komt terug zodra de verzameling spreuken er is (zie ook de mobiele knoppen hieronder). */}
           </div>
@@ -150,10 +150,6 @@ export default function Vandaag() {
         <h2 className="vm-datum">{formatDatum(dag.civil)}</h2>
         <p className="vm-sier vm-sier-datum" aria-hidden="true"><span>✣</span></p>
         <p className="vm-kerk">{kerkelijkeRegel}</p>
-        <div className="vm-kalender" role="group" aria-label="Kalenderkeuze">
-          <button type="button" aria-pressed={mode === 'oud'} className={mode === 'oud' ? 'is-actief' : undefined} onClick={() => setMode('oud')}>Oud · juliaans</button>
-          <button type="button" aria-pressed={mode === 'nieuw'} className={mode === 'nieuw' ? 'is-actief' : undefined} onClick={() => setMode('nieuw')}>Nieuw · gregoriaans</button>
-        </div>
 
         <div className="vm-lijst">
           {mobieleKnoppen.map(({ key, titel, href, onClick, onder, nu }) => (

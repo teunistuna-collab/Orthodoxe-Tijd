@@ -146,7 +146,7 @@ export default function Weekcyclus() {
       {/* Opening volgens het aangeleverde ontwerp (Bouw 176): icoon, titel, intro en het vak met de toon van de week */}
       <PaginaOpening id="week" soort="cyclisch" label="De liturgische week" titel="Week" ondertitel="Van zondag tot zaterdag" beeld={{ src: '/images/Week-icoon.webp', alt: 'Rondel met kerken in een landschap onder de sterren' }}>
         <p className="pc-intro">De week is het ritme van de verrijzenis. Iedere dag heeft zijn eigen betekenis en plaatst ons in het heilsplan van Christus.</p>
-        <aside className="pc-jaar jr-vak" aria-label="Toon van de week">
+        <aside className="pc-jaar wk-toon cyclus-nu" aria-label="Toon van de week">
           <p className="pc-jaar-label">Toon van de week</p>
           <p className="pc-jaar-datum">{toon ? `Toon ${toon}` : 'Geen toon'}</p>
           <p className="wk-toon-tekst">
@@ -165,7 +165,7 @@ export default function Weekcyclus() {
             <ul className="jr-vasten jr-tijden wk-dagen">
               {DAYS.map((d) => (
                 <li key={d.key}>
-                  <button type="button" className={`jr-vast${d.key === vandaagKey ? ' is-vandaag' : ''}`} aria-pressed={d.key === gekozen} onClick={() => kies(d.key)}>
+                  <button type="button" className={`jr-vast${d.key === vandaagKey ? ' cyclus-nu' : ''}`} aria-pressed={d.key === gekozen} onClick={() => kies(d.key)}>
                     <span className="wk-dag">{d.label}</span>
                     <span className="jr-vast-doel">{d.short}</span>
                     {d.key === vandaagKey && <span className="wk-vandaag">Vandaag</span>}

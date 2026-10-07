@@ -56,8 +56,8 @@ const INFO_POPUPS: Record<InfoKey, typeof VASTEN_POPUPS[InfoKey]> = {
 };
 
 const PERIODE_INFO: Record<string, { label: string; href: string; linkLabel: string; beweeglijk: boolean }> = {
-  'grote-vasten': { label: 'Grote Vasten', href: '#pascha', linkLabel: 'Bekijk de Paschale cyclus', beweeglijk: true },
-  apostelvasten: { label: 'Apostelvasten', href: '#pascha', linkLabel: 'Bekijk de Paschale cyclus', beweeglijk: true },
+  'grote-vasten': { label: 'Grote Vasten', href: '#pascha', linkLabel: 'Bekijk de Paascyclus', beweeglijk: true },
+  apostelvasten: { label: 'Apostelvasten', href: '#pascha', linkLabel: 'Bekijk de Paascyclus', beweeglijk: true },
   dormitionvasten: { label: 'Ontslapenisvasten', href: '#jaar', linkLabel: 'Bekijk de jaarcyclus', beweeglijk: false },
   kerstvasten: { label: 'Kerstvasten', href: '#jaar', linkLabel: 'Bekijk de jaarcyclus', beweeglijk: false },
 };

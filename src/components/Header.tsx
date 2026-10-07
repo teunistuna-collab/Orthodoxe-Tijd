@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Search } from 'lucide-react';
+import { ChevronDown, Search, Settings } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { KruisTeken } from './ui';
 
@@ -20,11 +20,6 @@ const PASCHA_NAV = SECTIES.find((s) => s.id === 'pascha')!;
 const NAV_TRAILING = SECTIES.slice(2).filter((s) => s.id !== 'pascha');
 
 
-const KALENDER_KEUZES = [
-  { id: 'oud', naam: 'Oud', toelichting: 'juliaans' },
-  { id: 'nieuw', naam: 'Nieuw', toelichting: 'gregoriaans' },
-] as const;
-
 const CYCLUS_ITEMS = [
   { id: 'adem', label: 'ADEM', kruis: true, description: 'Het Jezusgebed en korte gebeden', href: '#adem' },
   { id: 'etmaal', label: '◷ ETMAAL', description: 'De gebeden van dag en nacht', href: '#etmaal' },
@@ -34,7 +29,7 @@ const CYCLUS_ITEMS = [
 
 // Er staat één pagina tegelijk in beeld (App.tsx); de actieve link volgt die pagina.
 export default function Header({ pagina: actief }: { pagina: string }) {
-  const { mode, setMode, openZoeken } = useApp();
+  const { openZoeken } = useApp();
   const [cyclusOpen, setCyclusOpen] = useState(false);
   const cyclusRef = useRef<HTMLDivElement | null>(null);
   const cyclusSluitTimer = useRef<number | null>(null);
@@ -149,17 +144,10 @@ export default function Header({ pagina: actief }: { pagina: string }) {
               <Search aria-hidden="true" />
             </button>
 
-            <div className="kop-kalender" role="group" aria-label="Kalenderkeuze">
-              {KALENDER_KEUZES.map(({ id, naam, toelichting }) => (
-                <button key={id} type="button" aria-pressed={mode === id} title={`${naam} · ${toelichting}`} onClick={() => setMode(id)}>
-                  {naam}
-                </button>
-              ))}
-            </div>
-            {/* Smalle tablet: één knop met de huidige keuze; een tik wisselt naar de andere kalender. */}
-            <button type="button" className="kop-kalender-kort" onClick={() => setMode(mode === 'oud' ? 'nieuw' : 'oud')} aria-label={`Kalender: ${mode === 'oud' ? 'Oud (juliaans)' : 'Nieuw (gregoriaans)'}. Tik om te wisselen.`}>
-              {mode === 'oud' ? 'Oud' : 'Nieuw'}
-            </button>
+            {/* De kalender (en later de traditie) kies je op de pagina Instellingen */}
+            <a href="#instellingen" className={`kop-zoek kop-instellingen${actief === 'instellingen' ? ' is-actief' : ''}`} aria-label="Instellingen" title="Instellingen">
+              <Settings aria-hidden="true" />
+            </a>
           </div>
         </div>
       </div>

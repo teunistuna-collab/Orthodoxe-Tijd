@@ -1263,10 +1263,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   .vm-weekdag{margin:0;padding-left:.5em;font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.5em;text-transform:uppercase;color:#3a2a1c}
   .vm-datum{margin:1px 0 0;font-family:var(--font-display);font-size:clamp(19px,5.6vw,24px);font-weight:600;letter-spacing:.06em;text-transform:uppercase;line-height:1.1;color:#2b1d12}
   .vm-kerk{margin:3px 0 0;font-family:var(--font-display);font-size:14px;color:#3a2a1c}
-  .vm-kalender{display:inline-flex;margin-top:8px;padding:2px;border:1px solid rgba(184,134,40,.55);border-radius:999px;background:rgba(255,251,240,.6)}
   /* keuzeknop met een echte tikhoogte van 44px */
-  #top#top main .vm-kalender.vm-kalender.vm-kalender button{position:relative;min-height:44px!important;padding:0 16px;border:0;border-radius:999px;background:transparent;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6b4a22}
-  #top#top main .vm-kalender.vm-kalender.vm-kalender button.is-actief{background:#c9a227;color:#2b1707}
 
   .vm-kaars{display:flex;align-items:center;justify-content:center;gap:6px;max-width:340px;margin:6px auto 0}
   .vm-kaars img{width:78px;height:auto;flex:none}
@@ -1545,11 +1542,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top#top header .kop-link:hover,#top#top#top header .kop-link.is-actief{color:#f0cf7b}
 #top#top#top header .kop-link.is-actief:after{content:"";position:absolute;inset:auto 0 3px;height:1.5px;background:#e8cf7a}
 .kop-link svg{width:14px;height:14px;color:#cdb07a}
-.kop-link:focus-visible,.kop-merk:focus-visible,.kop-kalender button:focus-visible{outline:1px solid #e8cf7a;outline-offset:4px}
-.kop-kalender{display:flex;flex:none;gap:1px;padding:2px;border:1px solid rgba(201,162,39,.35);border-radius:999px}
-.kop-kalender button{padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:#cdb07a;transition:color .15s}
-.kop-kalender button:hover{color:#f0cf7b}
-.kop-kalender button[aria-pressed=true]{background:rgba(201,162,39,.85);color:#160b08}
+.kop-link:focus-visible,.kop-merk:focus-visible{outline:1px solid #e8cf7a;outline-offset:4px}
 /* krapper: eerst tussenruimte en tagline, pas daarna de navigatietekst */
 @media(max-width:1439.98px){
   .kop-naam{font-size:18px;letter-spacing:.13em}
@@ -1584,12 +1577,9 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .kop-acties{display:flex;flex:none;align-items:center;gap:6px}
 .kop-zoek{display:inline-flex;flex:none;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:0;border-radius:999px;background:none;color:#cdb07a;cursor:pointer;transition:color .15s}
 .kop-zoek:hover{color:#f0cf7b}
-.kop-zoek:focus-visible,.kop-kalender-kort:focus-visible{outline:1px solid #e8cf7a;outline-offset:2px}
+.kop-zoek:focus-visible{outline:1px solid #e8cf7a;outline-offset:2px}
 .kop-zoek svg{width:20px;height:20px;stroke-width:1.5}
-.kop-kalender-kort{display:none;flex:none;padding:4px 11px;border:1px solid rgba(201,162,39,.45);border-radius:999px;background:none;font-size:10.5px;font-weight:700;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:#f0cf7b;cursor:pointer}
 @media(max-width:899.98px){
-  .kop-kalender{display:none}
-  .kop-kalender-kort{display:inline-flex}
 }
 
 .zoek-achtergrond{position:fixed;inset:0;z-index:120;display:flex;justify-content:center;align-items:flex-start;padding:88px 16px 24px;background:rgba(12,6,3,.55)}
@@ -1826,7 +1816,6 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 /* Zeer smal scherm of 200% zoom (onder 300px): niets meer buiten beeld of over elkaar */
 @media(max-width:299.98px){
   .vm-titel{padding:0 44px;font-size:20px}
-  .vm-kalender{display:flex;flex-direction:column;border-radius:16px}
   .bottom-nav span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .dag-navrij{flex-wrap:wrap;justify-content:center}
 }
@@ -1903,9 +1892,6 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 }
 /* Vandaag mobiel: kleinere Oud/Nieuw-keuze; het tikvlak blijft via ::after 44px hoog */
 @media(max-width:767.98px){
-  .vm-kalender{margin-top:6px}
-  #top#top main .vm-kalender.vm-kalender.vm-kalender button{min-height:32px!important;height:32px;padding:0 11px;font-size:12px;letter-spacing:.03em}
-  #top#top main .vm-kalender.vm-kalender.vm-kalender button::after{content:"";position:absolute;inset:-6px 0}
 }
 
 /* Bouw 83 — paginabanners met echte tekst (PageHero.tsx). Alleen de --ot-kleuren en --hoeksier; geen losse kleuren.
@@ -2602,7 +2588,6 @@ html.lees-nacht #top#top .adem-gloed{background:radial-gradient(circle,rgba(214,
 #top#top#top#top#top#top#top .keuze-menu .btn-pill{width:100%!important;max-width:none!important;justify-self:stretch!important;align-self:stretch!important}
 #top#top#top .exact-modal-frame:has(.keuze-menu){width:min(560px,calc(100vw - 28px))!important;max-width:560px!important;margin-block:auto}
 /* Bouw 139 — Oud/Nieuw op mobiel Vandaag: knoppen minstens 44 px hoog (aanraakdoel) */
-#top#top#top#top#top .vm-kalender button{min-height:44px!important;height:auto!important}
 /* Bouw 140 — alle vensters krijgen de sierkop; de bovenregel (datum, soort lezing, "Lees meer") staat klein onder de titel */
 /* Bouw 142 — leesbaarheid: Cormorant is dun en heeft een kleine x-hoogte; beschrijvende tekst daarom minstens 15 px
    (rijen, kaarten, lijsten, tabellen). Kleine hoofdletterlabels (Cinzel) en chips blijven zoals ze zijn. */
@@ -2618,14 +2603,12 @@ html.lees-nacht #top#top .adem-gloed{background:radial-gradient(circle,rgba(214,
 /* Bouw 144 — overige knoppen op alle pagina's in de gedrukte perkamentstijl: kalenderpijlen en -keuzes, "Vandaag",
    maand-, dag- en categorieknoppen van Heiligen en Feesten, de tekstknoppen bij Heiligen en Oud/Nieuw op Vandaag (mobiel).
    Geselecteerd = een goudwas over het perkament (geen donkere vulling meer). */
-#top#top#top#top#top#top :is(.kal-knop,.kal-vandaag,.saints-text-link,.saints-month-grid button,.feast-month-grid button,.saints-days-grid button,.feast-day-grid button,.vm-kalender){
+#top#top#top#top#top#top :is(.kal-knop,.kal-vandaag,.saints-text-link,.saints-month-grid button,.feast-month-grid button,.saints-days-grid button,.feast-day-grid button){
   background:var(--knop-vlak)!important;border:2px solid transparent!important;border-image:url(/images/ui/knop-rand.png) 60 / 15px stretch!important;border-radius:0!important;box-shadow:0 3px 8px rgba(80,45,15,.1)!important;color:var(--color-ink)!important}
 #top#top#top#top#top#top :is(.saints-days-grid button,.feast-day-grid button,.kal-knop){border-image-width:11px!important}
-#top#top#top#top#top#top :is(.kal-vandaag,.saints-text-link,.vm-kalender button){font-family:var(--font-titel)!important;font-weight:500!important;letter-spacing:.06em!important}
+#top#top#top#top#top#top :is(.kal-vandaag,.saints-text-link){font-family:var(--font-titel)!important;font-weight:500!important;letter-spacing:.06em!important}
 #top#top#top#top#top#top :is(.kal-vandaag,.saints-month-grid button.active,.feast-month-grid button.active,.saints-days-grid button.active,.feast-day-grid button.active,.saints-category-grid>button.active,.saints-outline-button.active){background:linear-gradient(color-mix(in srgb,var(--color-gold) 40%,transparent),color-mix(in srgb,var(--color-gold) 40%,transparent)),url(/images/ui/perkament.webp) center/cover!important;color:var(--color-ink)!important;font-weight:600!important}
 #top#top#top#top#top#top .saints-category-grid>button.active>span{color:var(--color-ink-soft)!important}
-#top#top#top#top#top#top .vm-kalender button{border-radius:0!important;background:transparent!important;color:var(--color-ink)!important}
-#top#top#top#top#top#top .vm-kalender button.is-actief{background:color-mix(in srgb,var(--color-gold) 45%,transparent)!important;font-weight:600!important}
 #top#top#top#top#top#top :is(.kal-knop,.kal-vandaag,.saints-text-link,.saints-month-grid button,.feast-month-grid button,.saints-days-grid button,.feast-day-grid button):active{transform:translateY(1px)}
 /* Bouw 145 — knoppen in de vensters: dagnavigatie, delen, lezingen, "Meer heiligen …" en de leesbediening
    (A+, A−, avond, bladwijzer, delen) in dezelfde gedrukte perkamentstijl, vierkant. */
@@ -3355,7 +3338,7 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top .exact-content>section#jaar .opening .jr-intro,#top#top#top#top#top#top#top#top .exact-content>section#jaar .jr-intro{margin-top:14px}
 
 /* Bouw 175 — Pascha volgens het aangeleverde ontwerp (Pascha.tsx): opening met het icoon, de titel, de intro en het vak
-   "Pascha <jaar>" met de data; de opbouw van de Paschacyclus in zes stappen (zelfde kader als Jaar); de Paascyclus dag
+   "Pascha <jaar>" met de data; de opbouw van de Paascyclus in zes stappen (zelfde kader als Jaar); de Paascyclus dag
    voor dag; en het blok "Pascha" met het troparion en de verdieping. Alleen het ronde icoon als beeld. */
 /* opening */
 #top#top#top#top#top#top#top#top .exact-content>section#pascha .opening-titel{font-family:var(--font-display)!important;font-size:clamp(58px,8vw,124px)!important;font-weight:600!important;line-height:.95!important;letter-spacing:0!important;text-transform:none!important;color:var(--ot-titel)!important}
@@ -3441,3 +3424,105 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top .wk-detail .pc-feest-tekst{max-width:72ch;margin-left:0}
 #top#top#top#top#top#top#top#top .wk-vasten-label{margin-top:14px!important}
 #top#top#top#top#top#top#top#top .wk-vasten{margin:6px 0 0;font-family:var(--font-display);font-size:16px;line-height:1.4;color:var(--ot-chocolade)!important}
+/* Heiligen op mobiel: de tussenkoppen (per maand, naar categorie) en hun aantal gecentreerd */
+@media(max-width:767.98px){#top#top#top#top#top#top#top#top .saints-rule-title{justify-content:center!important;text-align:center!important}#top#top#top#top#top#top#top#top .saints-rule-title>*{flex-basis:100%!important;text-align:center!important}}
+@media(max-width:767.98px){#top#top#top#top#top#top#top#top .saints-section-head,#top#top#top#top#top#top#top#top .saints-section-head>*{text-align:center!important;margin-left:auto!important;margin-right:auto!important}}
+/* Heiligen: alleen het zoekveld en de knop (geen keuzelijsten voor maand en categorie) */
+#top#top#top#top#top#top#top#top .saints-search-row:not(:has(.saints-select)){grid-template-columns:minmax(0,1fr) auto!important}
+@media(max-width:767.98px){#top#top#top#top#top#top#top#top .saints-search-row:not(:has(.saints-select)){grid-template-columns:minmax(0,1fr)!important}}
+
+/* Bouw 177 — "Hier ben je nu" in de cycli: één gedeelde markering (.cyclus-nu) voor Etmaal (de dienst van nu), Week (vandaag)
+   en Jaar (de tijd van nu). Diep verweerd bordeaux op perkament, dunne antiekgouden lijnen, ivoor en goud als tekst,
+   een klein label "Nu" of "Vandaag" (.cyclus-nu-label of .wk-vandaag). Geen afgeronde hoeken, geen gloed. */
+#top#top#top#top#top#top#top#top#top .cyclus-nu{background:linear-gradient(rgba(84,24,19,.93),rgba(84,24,19,.93)),url(/images/ui/perkament.webp) center/cover!important;border:1px solid var(--ot-antiekgoud)!important;border-radius:0!important;box-shadow:inset 0 0 0 3px rgba(75,24,18,.95),inset 0 0 0 4px rgba(218,175,55,.45)!important}
+#top#top#top#top#top#top#top#top#top .cyclus-nu,#top#top#top#top#top#top#top#top#top .cyclus-nu *{color:var(--ot-ivoor)!important}
+#top#top#top#top#top#top#top#top#top .cyclus-nu :is(.jr-vast-naam,.wk-dag,.et-dienst-naam,.et-nu-titel,.cyclus-nu-label,.wk-vandaag,.jr-vast-data){color:var(--ot-antiekgoud)!important}
+#top#top#top#top#top#top#top#top#top .cyclus-nu .wk-vandaag{border-color:var(--ot-antiekgoud)!important}
+#top#top#top#top#top#top#top#top#top .cyclus-nu-label{margin:0;font-family:var(--font-titel);font-size:12px;font-weight:700;letter-spacing:.22em;line-height:1.3;text-transform:uppercase;color:var(--ot-antiekgoud)}
+@media(hover:hover){#top#top#top#top#top#top#top#top#top .cyclus-nu:hover{filter:brightness(1.06)}}
+
+/* Etmaal — opening: het wiel klein en ondersteunend (web ±310px, mobiel ±150px), titel, intro, de dienst van nu */
+#top#top#top#top#top#top#top#top#top .exact-content>section#etmaal .opening-titel{font-family:var(--font-display)!important;font-size:clamp(58px,8vw,116px)!important;font-weight:600!important;line-height:.95!important;letter-spacing:0!important;text-transform:none!important;color:var(--ot-titel)!important}
+#top#top#top#top#top#top#top#top#top .exact-content>section#etmaal .opening-onder{font-size:clamp(19px,2vw,26px)}
+#top#top#top#top#top#top#top#top#top .exact-content>section#etmaal .opening-sierlijn{width:170px;margin:10px auto 0}
+#top#top#top#top#top#top#top#top#top .exact-content>section#etmaal img.opening-beeld{width:150px!important;max-width:none!important;height:auto!important;margin:0 auto 10px!important;filter:drop-shadow(0 6px 12px rgba(46,26,15,.28))}
+#top#top#top#top#top#top#top#top#top .et-nu{display:grid;grid-template-columns:68px minmax(0,1fr);gap:12px 16px;align-items:center;max-width:620px;margin:18px auto 0;padding:16px 18px;text-align:left}
+#top#top#top#top#top#top#top#top#top .et-nu-beeld{width:68px;height:68px;border:2px solid var(--ot-antiekgoud);border-radius:50%;object-fit:cover}
+#top#top#top#top#top#top#top#top#top .et-nu-titel{margin:2px 0 0;font-family:var(--font-titel);font-size:24px;font-weight:600;letter-spacing:.06em;line-height:1.1;text-transform:uppercase}
+#top#top#top#top#top#top#top#top#top .et-nu-tijd{margin:2px 0 0;font-family:var(--font-display);font-size:22px}
+#top#top#top#top#top#top#top#top#top .et-nu-info{grid-column:1/-1;padding-top:10px;border-top:1px solid rgba(218,175,55,.4);font-family:var(--font-display);font-size:16px;line-height:1.4;text-align:center}
+#top#top#top#top#top#top#top#top#top .et-nu-info p{margin:0}
+#top#top#top#top#top#top#top#top#top .et-nu-link{min-height:42px;margin-top:10px;padding:0 16px;border:1px solid var(--ot-antiekgoud);border-radius:0;background:none;font-family:var(--font-titel);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+@media(min-width:1024px){
+  #top#top#top#top#top#top#top#top#top .exact-content>section#etmaal .opening-binnen{display:grid!important;grid-template-columns:310px minmax(0,1fr);align-items:center;gap:56px;max-width:1180px;margin:0 auto;text-align:center}
+  #top#top#top#top#top#top#top#top#top .exact-content>section#etmaal img.opening-beeld{width:310px!important;margin:0!important}
+  #top#top#top#top#top#top#top#top#top .opening .pc-intro{max-width:58ch}
+  #top#top#top#top#top#top#top#top#top .et-nu{grid-template-columns:96px minmax(0,.85fr) minmax(0,1.15fr);gap:0 22px;max-width:none;margin:22px 0 0;padding:18px 24px}
+  #top#top#top#top#top#top#top#top#top .et-nu-beeld{width:96px;height:96px}
+  #top#top#top#top#top#top#top#top#top .et-nu-info{grid-column:auto;padding:4px 0 4px 22px;border-top:0;border-left:1px solid rgba(218,175,55,.45);text-align:left}
+}
+
+/* Etmaal — de acht diensten: op het web een rij bogen van avond via nacht naar dag; op mobiel een verticale tijdlijn */
+.et-cyclus{padding:26px 0 30px}
+#top#top#top#top#top#top#top#top#top .et-kop{text-align:center!important}
+#top#top#top#top#top#top#top#top#top .et-diensten{position:relative;margin:14px 0 0;padding:0;list-style:none}
+#top#top#top#top#top#top#top#top#top .et-diensten::before{content:"";position:absolute;top:22px;bottom:22px;left:31px;width:1px;background:rgba(154,106,31,.55)}
+#top#top#top#top#top#top#top#top#top .et-dienst{position:relative;display:grid;grid-template-columns:48px 50px minmax(0,1fr) auto;align-items:center;column-gap:10px;width:100%;min-height:56px;margin:2px 0;padding:6px 10px 6px 8px;border:0;border-radius:0;background:none;box-shadow:none;text-align:left;cursor:pointer}
+#top#top#top#top#top#top#top#top#top .et-dienst-tijd{grid-row:1/3;grid-column:2;font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--ot-chocolade)}
+#top#top#top#top#top#top#top#top#top .et-dienst-naam{grid-column:3;font-family:var(--font-titel);font-size:15px;font-weight:700;letter-spacing:.06em;line-height:1.2;text-transform:uppercase;color:var(--ot-titel)}
+#top#top#top#top#top#top#top#top#top .et-dienst-deel{grid-column:3;font-family:var(--font-display);font-size:15px;line-height:1.25;color:var(--ot-tekst)}
+#top#top#top#top#top#top#top#top#top .et-dienst-psalm{display:none}
+#top#top#top#top#top#top#top#top#top .et-dienst .cyclus-nu-label{grid-row:1/3;grid-column:4;padding:2px 8px;border:1px solid var(--ot-antiekgoud)}
+@media(hover:hover){#top#top#top#top#top#top#top#top#top .et-dienst:not(.cyclus-nu):hover{background:rgba(122,31,26,.045)}}
+#top#top#top#top#top#top#top#top#top .et-dienst:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:-2px}
+@media(min-width:1024px){
+  #top#top#top#top#top#top#top#top#top .et-diensten{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;margin-top:18px;padding-top:26px}
+  #top#top#top#top#top#top#top#top#top .et-diensten::before{top:9px;bottom:auto;left:6%;right:6%;width:auto;height:1px}
+  #top#top#top#top#top#top#top#top#top .et-diensten>li{position:relative}
+  #top#top#top#top#top#top#top#top#top .et-diensten>li::before{content:"";position:absolute;top:-22px;left:50%;width:11px;height:11px;margin-left:-6px;border:1px solid var(--color-gold-deep);border-radius:50%;background:var(--ot-antiekgoud)}
+  #top#top#top#top#top#top#top#top#top .et-dienst{display:flex;height:100%;flex-direction:column;align-items:center;gap:2px;margin:0;padding:6px 6px 14px;text-align:center}
+  #top#top#top#top#top#top#top#top#top .et-dienst-naam{order:1;margin-top:10px;font-size:15px}
+  #top#top#top#top#top#top#top#top#top .et-dienst-tijd{order:2;font-size:17px}
+  #top#top#top#top#top#top#top#top#top .et-dienst-deel{order:3;margin-top:6px;padding-top:6px;border-top:1px solid rgba(154,106,31,.35);font-size:15px}
+  #top#top#top#top#top#top#top#top#top .cyclus-nu .et-dienst-deel{border-top-color:rgba(218,175,55,.45)}
+  #top#top#top#top#top#top#top#top#top .et-dienst-psalm{order:4;display:block;font-family:var(--font-display);font-size:14px;color:var(--ot-tekst)}
+  #top#top#top#top#top#top#top#top#top .et-dienst .cyclus-nu-label{order:5;margin-top:8px}
+}
+#top#top#top#top#top#top#top#top#top .et-meer{display:flex;flex-wrap:wrap;justify-content:center;gap:0 26px;margin-top:22px}
+#top#top#top#top#top#top#top#top#top .et-dienst-naam sup{font-family:var(--font-display);font-size:.72em;font-style:italic;text-transform:none;letter-spacing:0;vertical-align:.45em;line-height:0}
+
+/* Bouw 178 — de NU-markering met het aangeleverde kader (public/images/ui/nu-kader.webp): verweerd bordeaux met gouden rand
+   en hoekornamenten, uitgerekt met border-image (de hoeken blijven heel). Grote vlakken een bredere rand dan regels. */
+#top#top#top#top#top#top#top#top#top#top .cyclus-nu{background:none!important;box-shadow:none!important;border:2px solid transparent!important;border-image:url(/images/ui/nu-kader.webp) 130 fill / 26px stretch!important}
+#top#top#top#top#top#top#top#top#top#top .et-nu.cyclus-nu{border-image-width:64px!important;padding:26px 40px!important}
+#top#top#top#top#top#top#top#top#top#top :is(.et-dienst,.jr-vast).cyclus-nu{border-image-width:20px!important}
+@media(max-width:1023.98px){#top#top#top#top#top#top#top#top#top#top .et-nu.cyclus-nu{border-image-width:34px!important;padding:22px 22px!important}#top#top#top#top#top#top#top#top#top#top :is(.et-dienst,.jr-vast).cyclus-nu{border-image-width:14px!important}}
+/* Etmaal: de diensten zonder beeld — tijd, naam en dagdeel; op mobiel een tijdlijn met stippen */
+#top#top#top#top#top#top#top#top#top .et-dienst{grid-template-columns:28px 56px minmax(0,1fr) auto}
+#top#top#top#top#top#top#top#top#top .et-dienst::before{content:"";grid-row:1/3;grid-column:1;justify-self:center;width:11px;height:11px;border:1px solid var(--color-gold-deep);border-radius:50%;background:var(--ot-antiekgoud)}
+#top#top#top#top#top#top#top#top#top .et-diensten::before{left:21px}
+@media(min-width:1024px){
+  #top#top#top#top#top#top#top#top#top .et-dienst::before{display:none}
+  #top#top#top#top#top#top#top#top#top .et-dienst-naam{margin-top:4px}
+}
+/* Week: de toon van de week in het rode kader (zelfde als de NU-markering) */
+#top#top#top#top#top#top#top#top#top#top .wk-toon.cyclus-nu{border-image-width:48px!important;padding:26px 30px!important}
+#top#top#top#top#top#top#top#top#top#top .wk-toon :is(.pc-jaar-label,.pc-jaar-datum){color:var(--ot-antiekgoud)!important}
+#top#top#top#top#top#top#top#top#top#top .wk-toon .pc-jaar-datum{border-bottom-color:rgba(218,175,55,.45)}
+#top#top#top#top#top#top#top#top#top#top .wk-toon .wk-toon-tekst{color:var(--ot-ivoor)!important}
+@media(max-width:1023.98px){#top#top#top#top#top#top#top#top#top#top .wk-toon.cyclus-nu{border-image-width:34px!important;padding:22px 24px!important}}
+
+/* Bouw 179 — Instellingen: kalender (de gekozen in het rode kader) en traditie (volgt) */
+.in-pagina{padding:6px 0 40px}
+#top#top#top#top#top#top#top#top .in-vak{max-width:860px;margin:16px auto 0;padding:20px 18px}
+#top#top#top#top#top#top#top#top .in-keuzes{display:grid;gap:12px;margin-top:14px}
+#top#top#top#top#top#top#top#top .in-keuze{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:72px;padding:14px 18px;border:1px solid rgba(154,106,31,.45);border-radius:0;background:rgba(251,246,233,.35);text-align:left;cursor:pointer}
+#top#top#top#top#top#top#top#top .in-keuze-naam{font-family:var(--font-display);font-size:21px;font-weight:700;color:var(--ot-titel)}
+#top#top#top#top#top#top#top#top .in-keuze-uitleg{font-family:var(--font-display);font-size:16px;line-height:1.4;color:var(--ot-tekst)}
+#top#top#top#top#top#top#top#top .in-keuze .cyclus-nu-label{margin-top:4px}
+#top#top#top#top#top#top#top#top#top#top .in-keuze.cyclus-nu{border-image-width:22px!important;padding:18px 24px!important}
+#top#top#top#top#top#top#top#top#top#top .in-keuze.cyclus-nu .in-keuze-naam{color:var(--ot-antiekgoud)!important}
+@media(hover:hover){#top#top#top#top#top#top#top#top .in-keuze:not(.cyclus-nu):hover{background:rgba(122,31,26,.045)}}
+#top#top#top#top#top#top#top#top .in-keuze:focus-visible{outline:2px solid var(--color-gold-deep);outline-offset:2px}
+#top#top#top#top#top#top#top#top .in-binnenkort{margin:12px 0 0;font-family:var(--font-display);font-size:17px;font-style:italic;line-height:1.5;color:var(--ot-tekst)}
+@media(min-width:768px){#top#top#top#top#top#top#top#top .in-keuzes{grid-template-columns:1fr 1fr}#top#top#top#top#top#top#top#top .in-vak{padding:24px 28px}}

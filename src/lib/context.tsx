@@ -30,7 +30,7 @@ export interface AppState {
   openDagLezingen: (ymd: string) => void;
   /** Opent een pop-up met alleen de heiligen van de opgegeven dag (ymd). */
   openDagHeiligen: (ymd: string) => void;
-  /** Opent de pop-up "Paschale cyclus" voor de opgegeven dag (ymd). */
+  /** Opent de pop-up "Paascyclus" voor de opgegeven dag (ymd). */
   openDagPascha: (ymd: string) => void;
   /** Opent het centrale zoekvenster. */
   openZoeken: () => void;

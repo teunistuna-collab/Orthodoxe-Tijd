@@ -170,7 +170,7 @@ export default function Feesten() {
               <ol className="fs-register">{(heelBeweeglijk ? beweeglijk : beweeglijk.slice(0, IN_REGISTER)).map((x) => rij(x))}</ol>
               <p className="fs-links">
                 <button type="button" className="fs-link" aria-expanded={heelBeweeglijk} onClick={() => setHeelBeweeglijk(!heelBeweeglijk)}>{heelBeweeglijk ? 'Minder tonen ‹' : 'Alle beweeglijke feesten ›'}</button>
-                <a className="fs-link" href="#pascha">Ontdek de Paschacyclus ›</a>
+                <a className="fs-link" href="#pascha">Ontdek de Paascyclus ›</a>
               </p>
             </section>
           </div>

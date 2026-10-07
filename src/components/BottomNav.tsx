@@ -21,6 +21,7 @@ const GROEPEN: Record<string, Sub[]> = {
     { id: 'heiligen', label: 'Heiligen' },
     { id: 'feesten', label: 'Feesten' },
     { id: 'bronnen', label: 'Bronnen' },
+    { id: 'instellingen', label: 'Instellingen' },
   ],
 };
 

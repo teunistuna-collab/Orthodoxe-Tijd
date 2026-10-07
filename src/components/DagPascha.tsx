@@ -22,7 +22,7 @@ function Regel({ label, waarde, klein }: { label: string; waarde: string; klein?
   );
 }
 
-// Pop-up "Paschale cyclus" voor één dag: is het een dag uit de Paascyclus (zoals op de Pascha-pagina), dan tonen we welke;
+// Pop-up "Paascyclus" voor één dag: is het een dag uit de Paascyclus (zoals op de Pascha-pagina), dan tonen we welke;
 // anders het aantal dagen tot Pascha, de kerkelijke tijd (bijv. "11e week na Pinksteren") en de toon.
 export default function DagPascha({ ymd: gekozen, onClose }: Props) {
   const { mode, vandaagYmd } = useApp();
@@ -44,11 +44,11 @@ export default function DagPascha({ ymd: gekozen, onClose }: Props) {
   const totPascha = daysBetween(dag.civil, volgendePascha);
 
   return (
-    <Modal open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Paschale cyclus" centerTitle maxWidth="max-w-xl">
+    <Modal open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Paascyclus" centerTitle maxWidth="max-w-xl">
       {cyclusDagen.length > 0 ? (
         <div className="grid gap-3">
           {cyclusDagen.map((f) => (
-            <Regel key={f.id} label="Vandaag in de Paschale cyclus" waarde={f.naam} klein={positie} />
+            <Regel key={f.id} label="Vandaag in de Paascyclus" waarde={f.naam} klein={positie} />
           ))}
         </div>
       ) : (

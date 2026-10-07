@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { dagInfo, formatMd, hoofdletter, MAANDEN } from '../lib/kalender';
 import HeiligePopup from './HeiligePopup';
@@ -91,8 +91,6 @@ export default function Heiligen() {
           <div className="saints-section-head bieb-kop"><h2>Ontdek alle heiligen</h2><p>Zoek op naam, maand of categorie en laat u inspireren door hun leven.</p></div>
           <div className="saints-search-row">
             <label><Search/><input value={zoek} onChange={e=>{setZoek(e.target.value);setWachtOpDag(false)}} placeholder="Zoek een heilige…" aria-label="Zoek een heilige" /></label>
-            <div className="saints-select"><select aria-label="Maand" value={maand ?? ''} onChange={e=>{setMaand(e.target.value?Number(e.target.value):null);setDag(null);setAlleenNl(false);setWachtOpDag(false)}}><option value="">Alle maanden</option>{MAANDEN.map((m,i)=><option key={m} value={i+1}>{hoofdletter(m)}</option>)}</select><ChevronDown/></div>
-            <div className="saints-select"><select aria-label="Categorie" value={categorie} onChange={e=>{setCategorie(e.target.value);setWachtOpDag(false)}}><option value="alle">Alle categorieën</option>{categories.map(c=><option key={c[0]} value={c[0]}>{c[1]}</option>)}</select><ChevronDown/></div>
             <button type="button" onClick={()=>document.querySelector('.pagina:not(.pagina-verborgen) .saints-results')?.scrollIntoView({behavior:'smooth',block:'start'})} className="saints-search-button">Zoeken ›</button>
           </div>
         </section>

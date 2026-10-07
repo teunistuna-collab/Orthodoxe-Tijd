@@ -4,7 +4,7 @@ import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './
 import { JAAR_INFO } from '../lib/cyclusTeksten';
 import { useApp } from '../lib/context';
 import { DERTIEN } from '../lib/feesten';
-import { formatDag, formatDatum, kerkDatum } from '../lib/kalender';
+import { daysBetween, formatDag, formatDatum, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
 import { feestDatum, vastenPeriodes, volgendeFeestDatum } from '../lib/overzicht';
 import PaginaOpening from './PaginaOpening';
 
@@ -22,9 +22,9 @@ type PopupContent = {
 const VOORFEEST_NOOT =
   'De Kerk beleeft een groot feest vaak niet als één geïsoleerde dag. Belangrijke feesten kunnen liturgisch worden voorbereid door een voorfeest en vervolgens nog enige tijd worden voortgezet in een nafeest. Daardoor krijgt de gelovige tijd om het gevierde mysterie te ontvangen, te bezingen en opnieuw te overwegen.';
 
-// Gedeelde notitie: deze periode behoort tot de beweeglijke Paschale cyclus, niet tot de vaste jaarcyclus (bron: docx).
+// Gedeelde notitie: deze periode behoort tot de beweeglijke Paascyclus, niet tot de vaste jaarcyclus (bron: docx).
 const PASCHALE_NOOT =
-  'Deze periode behoort tot de beweeglijke Paschale cyclus, waarvan de data verschuiven met de datum van het heilige Pascha — en dus niet tot de vaste jaarcyclus. Niet al deze perioden behoren uitsluitend tot de vaste jaarcyclus: de Grote Vasten en het begin van de Apostelvasten zijn afhankelijk van de Paschale cyclus.';
+  'Deze periode behoort tot de beweeglijke Paascyclus, waarvan de data verschuiven met de datum van het heilige Pascha — en dus niet tot de vaste jaarcyclus. Niet al deze perioden behoren uitsluitend tot de vaste jaarcyclus: de Grote Vasten en het begin van de Apostelvasten zijn afhankelijk van de Paascyclus.';
 
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe jaarcyclus.docx".
 const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
@@ -54,7 +54,7 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
   vastentijd: {
     title: 'Vastentijd',
-    subtitle: 'Paschale cyclus — beweeglijk',
+    subtitle: 'Paascyclus — beweeglijk',
     paragraphs: [
       'De Orthodoxe Kerk kent vier grote vastenperioden: de Grote Vasten, de Apostelvasten, de vasten vóór de Geboorte van Christus en de vasten vóór de Ontslapenis van de Moeder Gods. Daarnaast kent de Kerk vaste vastendagen en gewoonlijk de wekelijkse vasten op woensdag en vrijdag, met liturgische uitzonderingen en plaatselijke verschillen.',
       PASCHALE_NOOT,
@@ -62,7 +62,7 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
   passietijd: {
     title: 'Passietijd',
-    subtitle: 'Paschale cyclus — beweeglijk',
+    subtitle: 'Paascyclus — beweeglijk',
     highlight: 'Palmzondag — Intocht van de Heer in Jeruzalem (beweeglijk)',
     paragraphs: [
       'Sommige van de Twaalf Grote Feesten behoren tot de vaste kalender, terwijl Palmzondag, Hemelvaart en Pinksteren door Pascha worden bepaald. Het heilige Pascha zelf staat boven deze twaalf als het Feest der feesten.',
@@ -71,19 +71,19 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
   paschatijd: {
     title: 'Paschatijd',
-    subtitle: 'Paschale cyclus — beweeglijk',
+    subtitle: 'Paascyclus — beweeglijk',
     highlight: 'Hemelvaart van de Heer — beweeglijk',
     paragraphs: [
-      'Het heilige Pascha zelf staat boven de Twaalf Grote Feesten als het Feest der feesten. De volledige, beweeglijke Paschacyclus — met onder meer de Grote Vasten, de Heilige Week en Hemelvaart — vind je op de Paschapagina.',
+      'Het heilige Pascha zelf staat boven de Twaalf Grote Feesten als het Feest der feesten. De volledige, beweeglijke Paascyclus — met onder meer de Grote Vasten, de Heilige Week en Hemelvaart — vind je op de Paschapagina.',
       PASCHALE_NOOT,
     ],
   },
   pinkstertijd: {
     title: 'Pinkstertijd',
-    subtitle: 'Paschale cyclus — beweeglijk',
+    subtitle: 'Paascyclus — beweeglijk',
     highlight: 'Pinksteren — neerdaling van de Heilige Geest (beweeglijk)',
     paragraphs: [
-      'Pinksteren, de neerdaling van de Heilige Geest, wordt door Pascha bepaald en behoort daarmee tot de beweeglijke Paschale cyclus.',
+      'Pinksteren, de neerdaling van de Heilige Geest, wordt door Pascha bepaald en behoort daarmee tot de beweeglijke Paascyclus.',
       PASCHALE_NOOT,
     ],
   },
@@ -109,11 +109,28 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
+// In welke tijd van het jaar we nu zitten. ponytail: eigen grenzen op basis van de feesten in de popups hierboven —
+// Kersttijd vanaf het kerkelijk nieuwjaar (1 september) tot Theofanie, Openbaringstijd tot het begin van de Triodion
+// (Pascha − 70), Vastentijd tot Lazaruszaterdag, Passietijd tot Pascha, Paschatijd tot Pinksteren, daarna Pinkstertijd
+// tot 31 augustus. Vaste grenzen in kerkelijke datums, beweeglijke via de Pascha-berekening.
+function huidigeTijd(vandaag: Date, mode: Mode): PeriodKey {
+  const kerk = kerkDatum(vandaag, mode);
+  const maand = kerk.getUTCMonth() + 1;
+  if (maand >= 9 || (maand === 1 && kerk.getUTCDate() < 6)) return 'kersttijd';
+  const offset = daysBetween(orthodoxPascha(vandaag.getUTCFullYear()), vandaag);
+  if (offset < -70) return 'openbaringstijd';
+  if (offset < -8) return 'vastentijd';
+  if (offset < 0) return 'passietijd';
+  if (offset < 49) return 'paschatijd';
+  return 'pinkstertijd';
+}
+
 
 export default function Jaarcyclus() {
   const [periodOpen, setPeriodOpen] = useState<PeriodKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const { mode, vandaag } = useApp();
+  const nu = huidigeTijd(vandaag, mode);
 
   // Waar zijn we nu: de lopende vasten- of vastenvrije periode, anders het laatste grote feest; en het komende grote feest.
   const jaar = vandaag.getUTCFullYear();
@@ -188,10 +205,11 @@ export default function Jaarcyclus() {
             <ul className="jr-vasten jr-tijden">
               {PERIODS.map((period) => (
                 <li key={period.key}>
-                  <button type="button" className="jr-vast" onClick={() => setPeriodOpen(period.key)}>
+                  <button type="button" className={`jr-vast${period.key === nu ? ' cyclus-nu' : ''}`} aria-current={period.key === nu ? 'true' : undefined} onClick={() => setPeriodOpen(period.key)}>
                     <span className="jr-vast-naam">{period.label}</span>
                     {period.movable && <span className="jr-vast-data">beweeglijk</span>}
                     <span className="jr-vast-doel">{period.short}</span>
+                    {period.key === nu && <span className="wk-vandaag">Nu</span>}
                     <span className="jr-pijl" aria-hidden="true">›</span>
                   </button>
                 </li>
@@ -228,7 +246,7 @@ export default function Jaarcyclus() {
         citation="Openbaring 21:5"
         eyebrow="Meer dan een kalender"
         text="Het kerkelijk jaar is niet slechts een opeenvolging van feesten, maar een levende weg waarin heel de geschiedenis wordt samengevat: van de schepping, door de menswording en het Kruis, naar de Verrijzenis en de toekomstige eeuwigheid."
-        buttonLabel="Ontdek de paschacyclus"
+        buttonLabel="Ontdek de paascyclus"
         buttonHref="#pascha"
       />
 

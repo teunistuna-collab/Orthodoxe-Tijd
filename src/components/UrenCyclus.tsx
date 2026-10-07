@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Bird, ChevronLeft, ChevronRight, Church, Moon, Star, Sun, Sunrise, Sunset } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Modal from './Modal';
-import Cross from './Cross';
 import { vergrendelScroll } from '../lib/scrollLock';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ETMAAL_INFO } from '../lib/cyclusTeksten';
-import { ringVak } from '../lib/ringVak';
-import { serviceConfig, type PsalmMapping } from '../lib/etmaal';
-import PageHero from './PageHero';
+import { dienstVanHetUur, serviceConfig, type PsalmMapping, type ServiceMapping } from '../lib/etmaal';
+import PaginaOpening from './PaginaOpening';
 
 // De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
 let pdfjsLaden: Promise<typeof import('pdfjs-dist')> | null = null;
@@ -35,16 +33,6 @@ type PdfLine = {
   text: string;
 };
 
-const ring = ringVak(13);
-
-function polar(cx: number, cy: number, r: number, angleDeg: number) {
-  const rad = ((angleDeg - 90) * Math.PI) / 180;
-  return {
-    x: cx + r * Math.cos(rad),
-    y: cy + r * Math.sin(rad),
-  };
-}
-
 const pdfTextCache = new Map<string, Array<Array<PdfLine>>>();
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
@@ -62,38 +50,35 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
 ];
 
 
-// Symbolische lijnicoon per dienst, gebaseerd op het schematische moment (bron: docx).
-// 'Zesde Uur' gebruikt het orthodoxe kruis-component in plaats van een lucide-icoon.
-const SERVICE_ICONS: Record<string, typeof Sun | null> = {
-  Vespers: Sunset,
-  Completen: Moon,
-  Middernachtdienst: Star,
-  Metten: Sunrise,
-  'Eerste Uur': Sun,
-  'Derde Uur': Bird,
-  'Zesde Uur': null,
-  'Negende Uur': Church,
-};
-const SERVICE_IMAGE_ICONS: Record<string, string | undefined> = {
-  Vespers: '/images/ui/gebeden/07-Overledenen.webp',
-  Completen: '/images/ui/menu/03-Etmaal-05-Completen.webp',
-  Middernachtdienst: '/images/ui/menu/01-Hoofdmenu-09-Feesten.webp',
-  Metten: '/images/ui/menu/03-Etmaal-03-Metten.webp',
-  'Eerste Uur': '/images/ui/menu/03-Etmaal-01-Ochtendgebeden.webp',
-  'Derde Uur': '/images/ui/menu/03-Etmaal-06-Derde-Uur.webp',
-  'Zesde Uur': '/images/ui/menu/03-Etmaal-07-Zesde-Uur.webp',
-  'Negende Uur': '/images/ui/menu/03-Etmaal-08-Negende-Uur.webp',
+// Beelden per dienst in public/images/etmaal (uitgesneden uit het aangeleverde ontwerp), van avond via nacht naar dag.
+const slug = (titel: string) => titel.toLowerCase().replace(/ /g, '-');
+// Korte namen en dagdelen uit het aangeleverde ontwerp.
+const KORT: Record<string, string> = { Middernachtdienst: 'Middernacht' };
+const UURNUMMER: Record<string, string> = { 'Eerste Uur': '1', 'Derde Uur': '3', 'Zesde Uur': '6', 'Negende Uur': '9' };
+const DAGDEEL: Record<string, string> = {
+  Vespers: 'Avond',
+  Completen: 'Einde van de dag',
+  Middernachtdienst: 'Nacht',
+  Metten: 'Naar de dageraad',
+  'Eerste Uur': 'Begin van de dag',
+  'Derde Uur': 'Ochtend',
+  'Zesde Uur': 'Middag',
+  'Negende Uur': 'Namiddag',
 };
 
 export default function UrenCyclus() {
   const [open, setOpen] = useState<number | null>(null);
   const [modalState, setModalState] = useState<ModalState | null>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const [pdf, setPdf] = useState<{ url: string; pages: Array<Array<PdfLine>>; status: 'error' | 'done' } | null>(null);
 
-  const activeIndex = hovered ?? open ?? 0;
-  const currentService = modalState !== null ? serviceConfig[modalState.serviceIndex] : serviceConfig[activeIndex];
+  const currentService = serviceConfig[modalState?.serviceIndex ?? open ?? 0];
+  // De dienst van nu volgt de klok; elke minuut opnieuw bekijken.
+  const [nu, setNu] = useState(() => new Date());
+  useEffect(() => {
+    const t = window.setInterval(() => setNu(new Date()), 60_000);
+    return () => window.clearInterval(t);
+  }, []);
   const currentPdfUrl = modalState?.selectedPsalm ? modalState.selectedPsalm.pdf : currentService?.pdf ?? '';
   const currentTitle = modalState?.selectedPsalm ? `${currentService.title} · ${modalState.selectedPsalm.title}` : currentService.title;
 
@@ -218,147 +203,58 @@ export default function UrenCyclus() {
     setModalState(null);
   };
 
-  // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
-  const infoTegels = (zicht: string) => (
-    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20`}>
-      {/* Onzichtbare tussenkop: de tegels (h3) hangen zo onder een h2 voor schermlezers */}
-      <h2 className="sr-only">Achtergrond</h2>
-      <div className={CONTENT}>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setInfoOpen(key)}
-              className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-            >
-              <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light">{title}</h3>
-              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  const nuDienst = dienstVanHetUur(nu);
+  const nuIndex = serviceConfig.indexOf(nuDienst);
+  const psalmRegel = (service: ServiceMapping) => service.psalms.map((p) => p.title).join(', ').replace(/, Psalm /g, ', ');
 
   return (
     <>
-      <PageHero id="etmaal" titel="Etmaal" kop />
-
-      {/* Informatiekaarten (op mobiel verderop, zie infoTegels) */}
-      {infoTegels('max-md:hidden')}
-
-      {/* De diensten van het etmaal */}
-      <section className="bg-parchment pb-16 sm:pb-20">
-        <div className={CONTENT}>
-          <div className="cyclus-paneel parchment-pattern relative overflow-hidden rounded-2xl border border-gold/40 bg-[#f8f1e3] px-6 py-14 shadow-[0_30px_70px_rgba(40,22,14,0.16)] sm:px-10 lg:px-16">
-
-            <div className="text-center">
-              <h2 className="ot-sectietitel">De diensten van het etmaal</h2>
-              <p className="ot-label mt-2">Een dag van gebed</p>
-            </div>
-
-            {/* Desktop: cirkeldiagram */}
-            <div className="relative mx-auto mt-12 hidden aspect-square w-full max-w-[820px] lg:block" style={ring.stijl}>
-              <svg viewBox={ring.viewBox} className="absolute inset-0 h-full w-full">
-                <circle cx="50" cy="50" r="30" fill="none" stroke="#c9a227" strokeWidth="0.35" opacity="0.75" />
-                {/* Kompasaccenten op de vier kardinale punten van de ring */}
-                {[0, 90, 180, 270].map((deg) => {
-                  const p = polar(50, 50, 30, deg);
-                  return <circle key={deg} cx={p.x} cy={p.y} r="0.9" fill="#c9a227" opacity="0.8" />;
-                })}
-                {serviceConfig.map((service, index) => {
-                  const angle = 22.5 + (360 / serviceConfig.length) * index;
-                  const p = polar(50, 50, 30, angle);
-                  const c = polar(50, 50, 15, angle);
-                  return (
-                    <line
-                      key={`spoke-${service.title}`}
-                      x1={c.x}
-                      y1={c.y}
-                      x2={p.x}
-                      y2={p.y}
-                      stroke="#c9a227"
-                      strokeWidth="0.25"
-                      opacity={activeIndex === index ? 0.65 : 0.3}
-                    />
-                  );
-                })}
-              </svg>
-
-              <div className="absolute top-1/2 left-1/2 flex h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-gold/60 shadow-[0_14px_36px_rgba(120,80,30,0.22)]">
-                <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" className="h-full w-full object-cover" />
-              </div>
-
-              {serviceConfig.map((service, index) => {
-                const angle = 22.5 + (360 / serviceConfig.length) * index;
-                const pos = polar(50, 50, 30, angle);
-                const isActive = activeIndex === index;
-                const leftSide = pos.x < 50;
-                const Icon = SERVICE_ICONS[service.title];
-                const imageIcon = SERVICE_IMAGE_ICONS[service.title];
-
-                const badge = (
-                  <span
-                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 bg-[#1c130d] text-gold-light transition-all ${
-                      isActive ? 'scale-110 border-gold shadow-[0_0_0_5px_rgba(201,162,39,0.22),0_0_20px_rgba(201,162,39,0.35)]' : 'border-gold/50'
-                    }`}
-                  >
-                    {imageIcon ? <img loading="lazy" decoding="async" src={imageIcon} alt="" className="h-14 w-14 object-contain" /> : Icon ? <Icon className="h-6 w-6" strokeWidth={1.4} /> : <Cross className="h-6 w-6" />}
-                  </span>
-                );
-
-                const text = (
-                  <span className="dienst-kaart">
-                    <span className="dienst-kaart-titel font-display">{service.title}</span>
-                    <span className="dienst-kaart-tijd">{service.time}</span>
-                    <span className="dienst-kaart-tekst">{service.hoofdgedachtenis}</span>
-                    <span className="btn-pill dienst-kaart-cta">Open dienst ›</span>
-                  </span>
-                );
-
-                return (
-                  <button
-                    key={`${service.title}-node-${index}`}
-                    type="button"
-                    onClick={() => openService(index)}
-                    onMouseEnter={() => setHovered(index)}
-                    onMouseLeave={() => setHovered(null)}
-                    style={{ left: `${pos.x}%`, top: ring.top(pos.y) }}
-                    className={`etmaal-ring-node absolute ${leftSide ? 'is-left' : 'is-right'}`}
-                  >
-                    <span className="etmaal-ring-badge">{badge}</span>
-                    <span className="etmaal-ring-text">{text}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Tablet/mobiel: dezelfde kaartstijl als de dagen van de weekcyclus */}
-            <div className="mt-10 space-y-3 lg:hidden">
-              {serviceConfig.map((service, index) => {
-                return (
-                  <button
-                    key={`${service.title}-mobile-${index}`}
-                    type="button"
-                    onClick={() => openService(index)}
-                    className="dienst-kaart dienst-kaart-rij group flex w-full items-center gap-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="dienst-kaart-titel font-display block">{service.title}</span>
-                      <span className="dienst-kaart-tijd block">{service.time}</span>
-                      <span className="dienst-kaart-tekst block">{service.hoofdgedachtenis}</span>
-                    </span>
-                    <span className="pijl" aria-hidden="true">›</span>
-                  </button>
-                );
-              })}
-            </div>
+      {/* Opening volgens de referentie (Bouw 177): het etmaalwiel, titel, intro en het bordeaux vlak met de dienst van nu */}
+      <PaginaOpening id="etmaal" soort="cyclisch" label="De gebeden van dag en nacht" titel="Etmaal" ondertitel="De uren van het gebed" beeld={{ src: '/images/Etmaal-wiel.webp', alt: 'Het etmaalwiel met de acht gebedsdiensten van avond tot namiddag' }}>
+        <p className="pc-intro">{INFO_CARDS[0].intro}</p>
+        <article className="et-nu cyclus-nu" aria-labelledby="et-nu-titel">
+          <img className="et-nu-beeld" src={`/images/etmaal/${slug(nuDienst.title)}.webp`} alt="" width={204} height={256} decoding="async" />
+          <div className="et-nu-kop">
+            <p className="cyclus-nu-label">Nu</p>
+            <h2 id="et-nu-titel" className="et-nu-titel">{nuDienst.title}</h2>
+            <p className="et-nu-tijd">{nuDienst.time}</p>
           </div>
+          <div className="et-nu-info">
+            <p>{nuDienst.hoofdgedachtenis}</p>
+            <p>{psalmRegel(nuDienst)}</p>
+            <button type="button" className="et-nu-link" onClick={() => openService(nuIndex)}>
+              Open {nuDienst.title.toLowerCase()} ›
+            </button>
+          </div>
+        </article>
+      </PaginaOpening>
+
+      {/* De acht diensten van avond tot namiddag: van licht naar duisternis en terug; de dienst van nu in bordeaux */}
+      <section className="et-cyclus bg-parchment text-ink" aria-labelledby="et-cyclus-titel">
+        <div className={CONTENT}>
+          <h2 id="et-cyclus-titel" className="pc-kop et-kop">De diensten van het etmaal</h2>
+          <ol className="et-diensten">
+            {serviceConfig.map((service, index) => (
+              <li key={service.title}>
+                <button type="button" className={`et-dienst${index === nuIndex ? ' cyclus-nu' : ''}`} aria-current={index === nuIndex ? 'true' : undefined} onClick={() => openService(index)}>
+                  <span className="et-dienst-tijd">{service.time}</span>
+                  <span className="et-dienst-naam">{UURNUMMER[service.title] ? <>{UURNUMMER[service.title]}<sup>e</sup> Uur</> : (KORT[service.title] ?? service.title)}</span>
+                  <span className="et-dienst-deel">{DAGDEEL[service.title]}</span>
+                  <span className="et-dienst-psalm">{psalmRegel(service)}</span>
+                  {index === nuIndex && <span className="cyclus-nu-label">Nu</span>}
+                </button>
+              </li>
+            ))}
+          </ol>
+          <nav className="et-meer" aria-label="Meer over het etmaal">
+            {INFO_CARDS.map(({ key, title }) => (
+              <button key={key} type="button" className="fs-link" onClick={() => setInfoOpen(key)}>
+                {title} ›
+              </button>
+            ))}
+          </nav>
         </div>
       </section>
-
-      {infoTegels('md:hidden')}
 
       {/* Meer dan een dagindeling */}
       <CycleTransition
