@@ -385,9 +385,15 @@ function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; t
                 </a>
                 </div>
               ) : (
-                <button type="button" className="ps-spotify" onClick={() => setSpeler(true)}>
-                  Beluister de podcast „Psalmen van de Vroege Kerk” ›
-                </button>
+                <>
+                  {/* Op een telefoon speelt de ingesloten Spotify-speler zonder Spotify-login alleen een voorbeeld: daar opent de knop de aflevering in de Spotify-app */}
+                  <a className="ps-spotify ps-spotify-mobiel" href={psalm.spotify} target="_blank" rel="noopener noreferrer">
+                    Beluister de podcast in Spotify ›
+                  </a>
+                  <button type="button" className="ps-spotify ps-spotify-web" onClick={() => setSpeler(true)}>
+                    Beluister de podcast „Psalmen van de Vroege Kerk” ›
+                  </button>
+                </>
               ))}
             <div className="ps-verzen lees-tekst">
               {tekst.verzen.map((v, k) =>

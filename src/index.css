@@ -3739,3 +3739,7 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top .snoer-masker circle{animation:snoer-licht-in .35s ease-out both}
 @keyframes snoer-licht-in{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){#top#top#top#top#top#top#top#top .snoer-masker circle{animation:none}}
+/* Psalmen: op touch-apparaten opent de podcastknop de Spotify-app; op computers de ingesloten speler */
+.ps-spotify-mobiel{display:none!important}
+@media(pointer:coarse){.ps-spotify-mobiel{display:inline-flex!important}.ps-spotify-web{display:none!important}}
+#top#top#top#top#top#top .ps-spotify-mobiel{text-decoration:none}
