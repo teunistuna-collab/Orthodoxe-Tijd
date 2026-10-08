@@ -216,7 +216,7 @@ export default function Vasten() {
           </div>
 
           {/* Doorlopende verticale lijn verbindt het dagpaneel met de algemene uitleg — geen nieuwe pagina */}
-          <div className="mx-auto mt-10 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">
+          <div className="md:hidden mx-auto mt-10 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">
             <p className="ot-label">Wat betekent vasten?</p>
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-ink-soft sm:text-lg">
               De Orthodoxe Kerk vast ongeveer de helft van het jaar: vier grote vastenperiodes, enkele strenge dagen en elke
@@ -318,6 +318,17 @@ export default function Vasten() {
           </div>
 
           <GoldDivider />
+
+          {/* Web: de uitleg na het wekelijkse vasten (op mobiel staat hij direct onder vasten vandaag) */}
+          <div className="max-md:hidden mx-auto mt-10 mb-12 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">
+            <p className="ot-label">Wat betekent vasten?</p>
+            <p className="mt-3 max-w-3xl text-base leading-relaxed text-ink-soft sm:text-lg">
+              De Orthodoxe Kerk vast ongeveer de helft van het jaar: vier grote vastenperiodes, enkele strenge dagen en elke
+              woensdag en vrijdag. Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet — het
+              hoort samen met bekering, zelfbeheersing, liefde tot de naaste en de voorbereiding op de feesten van de Kerk.
+            </p>
+          </div>
+
 
           {/* De vasten door het jaar */}
           {/* Zelfde kader als "De grote bewegingen" op Jaar (index.css, Bouw 174): dubbele lijn, kolommen met een beeld per vasten */}

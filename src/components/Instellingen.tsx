@@ -1,6 +1,7 @@
 import { useApp } from '../lib/context';
 import type { Mode } from '../lib/kalender';
 import PaginaOpening from './PaginaOpening';
+import { MAX_LENGTE, STANDAARD_PIJLGEBED, bewaarPijlgebed, useEigenPijlgebed } from '../lib/pijlgebed';
 
 // Instellingen: de kalender (oud of nieuw) en, later, de traditie. De gekozen kalender krijgt het rode kader
 // (cyclus-nu, zoals "nu" in de cycli). Opmaak: index.css, Bouw 179.
@@ -16,6 +17,7 @@ const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
 export default function Instellingen() {
   const { mode, setMode } = useApp();
+  const pijlgebed = useEigenPijlgebed();
   return (
     <>
       <PaginaOpening id="instellingen" label="Persoonlijk" titel="Instellingen" ondertitel="Uw kalender en traditie" />
@@ -31,6 +33,23 @@ export default function Instellingen() {
                   {mode === id && <span className="cyclus-nu-label">Gekozen</span>}
                 </button>
               ))}
+            </div>
+          </section>
+
+          <section className="in-vak jr-vak" aria-labelledby="in-pijlgebed">
+            <h2 id="in-pijlgebed" className="pc-kop">Pijlgebed</h2>
+            <p className="in-uitleg">Uw eigen korte gebed; het staat op Vandaag bij het pijlgebed. Leeg laten voor het standaardgebed.</p>
+            <label className="in-veld">
+              <span className="sr-only">Uw pijlgebed</span>
+              <textarea value={pijlgebed} onChange={(e) => bewaarPijlgebed(e.target.value)} placeholder={STANDAARD_PIJLGEBED} maxLength={MAX_LENGTE} rows={2} />
+            </label>
+            <div className="in-veld-voet">
+              <span>Wordt meteen bewaard, alleen op dit toestel.</span>
+              {pijlgebed && (
+                <button type="button" className="fs-link" onClick={() => bewaarPijlgebed('')}>
+                  Standaardgebed terugzetten
+                </button>
+              )}
             </div>
           </section>
 

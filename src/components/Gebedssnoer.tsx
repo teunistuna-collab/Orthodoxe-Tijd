@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
-import { snoerHoek } from '../lib/snoerPad';
+import { useEffect, useId, useRef, useState, type PointerEvent } from 'react';
+import { SNOER_PAD } from '../lib/snoerPad';
 
 // Gebedssnoer (tsjotki / komboskini): tel het Jezusgebed per knoop. De stand blijft op dit toestel bewaard.
 // Het snoer is het aangeleverde beeld (public/images/adem/gebedssnoer.webp), onveranderd en altijd even groot; 33/50/100
-// verandert alleen de telling. Het snoer staat stil; warm licht loopt mee: een gouden gloed achter de gebeden knopen en een
-// lichte warme zweem erop, de huidige knoop iets sterker (in de vorm van het snoer zelf, hoeken uit lib/snoerPad.ts).
+// verandert alleen de telling. Het snoer staat stil; warm licht loopt mee, zoals in "Interactive prayer rope.html": het beeld
+// staat drie keer in één SVG — twee gloedlagen erachter (gemaakt uit de omtrek van het snoer zelf: gouden kern + amber
+// halo) en het originele snoer ervoor. Welk deel gloeit bepaalt een masker langs de hartlijn (lib/snoerPad.ts); het
+// masker wordt nooit getekend, dus het licht volgt precies het touw.
 // Het getal wisselt rustig, met een korte zachte trilling waar het toestel dat kan. Ook te tellen door met vinger of muis
 // langs het snoer te gaan (draaien rond het midden). Opmaak: index.css, Bouw 181–184.
 
@@ -38,6 +40,12 @@ const tril = (patroon: number | number[]) => {
 };
 const rustig = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Afmeting van het snoerbeeld (viewBox) en straal van de maskerschijf langs de hartlijn (iets breder dan het touw).
+const B = 720;
+const H = 1216;
+const SCHIJF = 44;
+const punt = (i: number) => [(SNOER_PAD[i][0] * B) / 100, (SNOER_PAD[i][1] * H) / 100] as const;
+
 // Voortgangsboog rond het getal (viewBox 0 0 100 100).
 const BOOG = 2 * Math.PI * 46;
 // Midden van de ring in het beeld (percentages), voor het draaigebaar.
@@ -52,11 +60,9 @@ export default function Gebedssnoer() {
   const [bevestig, setBevestig] = useState(false);
   const [melding, setMelding] = useState('');
   const [oudGetal, setOudGetal] = useState<number | null>(null);
-  const beeldRef = useRef<HTMLSpanElement | null>(null);
-  const actiefRef = useRef<HTMLSpanElement | null>(null);
-  const haloRef = useRef<HTMLSpanElement | null>(null);
-  const [uitdoven, setUitdoven] = useState(false);
-  const gloedRef = useRef<HTMLSpanElement | null>(null);
+  const id = useId().replace(/:/g, '');
+  const actiefRef = useRef<SVGGElement | null>(null);
+  const gloedRef = useRef<SVGGElement | null>(null);
   const gebaar = useRef<{ hoek: number; som: number; telde: number; id: number } | null>(null);
   const negeerKlik = useRef(false);
   const { lengte, aantal, ronden } = stand;
@@ -88,8 +94,7 @@ export default function Gebedssnoer() {
   // De nieuwe knoop gloeit kort sterker op; het snoer zelf staat stil.
   const beweeg = (richting: 1 | -1) => {
     if (rustig() || richting < 0) return;
-    actiefRef.current?.animate([{ opacity: 1, filter: 'brightness(1.25)' }, { opacity: 1, filter: 'brightness(1)' }], { duration: 380, easing: 'ease-out' });
-    haloRef.current?.animate([{ opacity: 1 }, { opacity: 0.8 }], { duration: 400, easing: 'ease-out' });
+    actiefRef.current?.animate([{ opacity: 0 }, { opacity: 1, offset: 0.35 }, { opacity: 0.6 }], { duration: 900, easing: 'ease-out' });
   };
   const wissel = (nieuw: Stand) => {
     setOudGetal(standRef.current.aantal);
@@ -112,7 +117,7 @@ export default function Gebedssnoer() {
       tril([12, 60, 12]);
       setMelding(`Ronde ${ronden + 1} voltooid`);
       // Het hele snoer licht één keer zacht warm op en komt weer tot rust.
-      if (!rustig()) gloedRef.current?.animate([{ opacity: 0 }, { opacity: 0.55, offset: 0.35 }, { opacity: 0 }], { duration: 1800, easing: 'ease-in-out' });
+      if (!rustig()) gloedRef.current?.animate([{ opacity: 1, filter: 'brightness(1)' }, { opacity: 1, filter: 'brightness(1.35)', offset: 0.35 }, { opacity: 1, filter: 'brightness(1)' }], { duration: 2000, easing: 'ease-in-out' });
     } else {
       tril(8);
       if (nieuw % 10 === 0) setMelding(String(nieuw));
@@ -157,8 +162,14 @@ export default function Gebedssnoer() {
   };
 
   // Het verlichte deel loopt van de kraal onderaan tot en met de huidige knoop; de huidige knoop apart, iets sterker.
-  const lichtTot = aantal > 0 ? snoerHoek(aantal / lengte) : 0;
-  const actiefVan = aantal > 0 ? snoerHoek((aantal - 1) / lengte) : 0;
+  const n = SNOER_PAD.length;
+  const tot = Math.round((aantal / lengte) * n);
+  const van = aantal > 0 ? Math.min(tot - 1, Math.round(((aantal - 1) / lengte) * n)) : tot;
+  const schijven = (a: number, b: number) =>
+    Array.from({ length: Math.max(0, b - a) }, (_, k) => {
+      const [x, y] = punt(a + k);
+      return <circle key={a + k} cx={x} cy={y} r={SCHIJF} />;
+    });
 
   return (
     <div className="snoer ad-paneel jr-vak">
@@ -181,19 +192,54 @@ export default function Gebedssnoer() {
         onPointerCancel={omhoog}
         aria-label={`Gebed tellen: ${aantal} van ${lengte}${ronden ? `, ronde ${ronden + 1}` : ''}`}
       >
-        <span ref={beeldRef} className={`snoer-draaier${uitdoven ? ' is-uitdoven' : ''}`}>
-          {/* Warm licht achter het snoer: het silhouet van de gebeden knopen, vervaagd tot een gouden rand eromheen */}
-          <span className="snoer-halo" aria-hidden="true">
-            <span style={{ '--tot': `${lichtTot}deg` } as CSSProperties} />
-          </span>
-          <span ref={haloRef} className="snoer-halo is-actief" aria-hidden="true">
-            <span style={{ '--van': `${actiefVan}deg`, '--tot': `${lichtTot}deg` } as CSSProperties} />
-          </span>
-          <img src="/images/adem/gebedssnoer.webp" alt="" width={720} height={1216} draggable={false} decoding="async" />
-          <span className="snoer-licht" aria-hidden="true" style={{ '--tot': `${lichtTot}deg` } as CSSProperties} />
-          <span ref={actiefRef} className="snoer-licht is-actief" aria-hidden="true" style={{ '--van': `${actiefVan}deg`, '--tot': `${lichtTot}deg` } as CSSProperties} />
-          <span ref={gloedRef} className="snoer-gloed" aria-hidden="true" />
-        </span>
+        <svg className="snoer-svg" viewBox={`0 0 ${B} ${H}`} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <image id={`${id}-beeld`} href="/images/adem/gebedssnoer.webp" x="0" y="0" width={B} height={H} />
+            <mask id={`${id}-licht`} maskUnits="userSpaceOnUse" x={-120} y={-120} width={B + 240} height={H + 240}>
+              <g fill="#fff" className="snoer-masker">
+                {schijven(0, tot)}
+                {vol && <rect x="0" y={H * 0.7} width={B} height={H * 0.3} />}
+              </g>
+            </mask>
+            <mask id={`${id}-actief`} maskUnits="userSpaceOnUse" x={-120} y={-120} width={B + 240} height={H + 240}>
+              <g fill="#fff">{schijven(van, tot)}</g>
+            </mask>
+            <filter id={`${id}-gloed`} x="-25%" y="-15%" width="150%" height="130%" colorInterpolationFilters="sRGB">
+              <feMorphology in="SourceAlpha" operator="dilate" radius="7" result="vorm" />
+              <feFlood floodColor="#E8A33D" result="goud" />
+              <feComposite in="goud" in2="vorm" operator="in" result="kern" />
+              <feGaussianBlur in="kern" stdDeviation="9" result="kernZacht" />
+              <feFlood floodColor="#D98220" floodOpacity="0.75" result="amber" />
+              <feComposite in="amber" in2="vorm" operator="in" result="haloVorm" />
+              <feGaussianBlur in="haloVorm" stdDeviation="24" result="halo" />
+              <feMerge>
+                <feMergeNode in="halo" />
+                <feMergeNode in="halo" />
+                <feMergeNode in="kernZacht" />
+              </feMerge>
+            </filter>
+            <filter id={`${id}-actiefgloed`} x="-30%" y="-20%" width="160%" height="140%" colorInterpolationFilters="sRGB">
+              <feMorphology in="SourceAlpha" operator="dilate" radius="9" result="vorm" />
+              <feFlood floodColor="#FFD27A" result="licht" />
+              <feComposite in="licht" in2="vorm" operator="in" result="kern" />
+              <feGaussianBlur in="kern" stdDeviation="11" result="kernZacht" />
+              <feFlood floodColor="#E8A33D" floodOpacity="0.8" result="goud" />
+              <feComposite in="goud" in2="vorm" operator="in" result="haloVorm" />
+              <feGaussianBlur in="haloVorm" stdDeviation="28" result="halo" />
+              <feMerge>
+                <feMergeNode in="halo" />
+                <feMergeNode in="kernZacht" />
+              </feMerge>
+            </filter>
+          </defs>
+          <g ref={gloedRef} filter={`url(#${id}-gloed)`} opacity="1">
+            <use href={`#${id}-beeld`} mask={`url(#${id}-licht)`} />
+          </g>
+          <g ref={actiefRef} filter={`url(#${id}-actiefgloed)`} opacity="0.6">
+            <use href={`#${id}-beeld`} mask={`url(#${id}-actief)`} />
+          </g>
+          <use href={`#${id}-beeld`} />
+        </svg>
         <span className="snoer-telling" aria-hidden="true">
           <svg className="snoer-boog" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="46" />
@@ -252,8 +298,6 @@ export default function Gebedssnoer() {
                 setBevestig(false);
                 setVorige(stand);
                 setOudGetal(null);
-                setUitdoven(true);
-                window.setTimeout(() => setUitdoven(false), 1300);
                 setStand({ lengte, aantal: 0, ronden: 0 });
               }}
             >

@@ -112,7 +112,7 @@ export default function Ademcyclus() {
 
       {/* Quote + Van adem naar etmaal */}
       <CycleTransition
-        quote="De Heere Jezus is het midden van het gebed, het vasteland van de geest en het licht van de ziel."
+        quote="De Heer Jezus is het midden van het gebed, het vasteland van de geest en het licht van de ziel."
         citation="Monastieke traditie"
         eyebrow="Van adem naar etmaal"
         text="Wat in de adem begint als de voortdurende gedachtenis aan Christus, krijgt in de etmaalcyclus zijn vaste gestalte: de gebeden die de Kerk door dag en nacht heen bidt."

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ChevronRight, Search, Sparkles } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { usePaginaOpen } from '../lib/paginaOpen';
+import { usePijlgebed } from '../lib/pijlgebed';
 import { KruisTeken } from './ui';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
@@ -55,6 +56,7 @@ function huidigUurMoment(): UurMoment {
 export default function Vandaag() {
   const open = usePaginaOpen('vandaag');
   const { mode, vandaag, vandaagYmd, rooster, heiligen, openDag, openLezing, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken } = useApp();
+  const pijlgebed = usePijlgebed();
   const [uurMoment, setUurMoment] = useState<UurMoment>(() => huidigUurMoment());
 
   useEffect(() => {
@@ -83,7 +85,7 @@ export default function Vandaag() {
   const uurPsalmen = serviceConfig.find((s) => s.title === uurMoment.naam)?.psalms.map((p) => p.title.replace(/^Psalm /, '')) ?? [];
   const psalmRegel = uurPsalmen.length === 0 ? undefined : uurPsalmen.length === 1 ? `Psalm ${uurPsalmen[0]}` : `Psalmen ${uurPsalmen.slice(0, -1).join(', ')} en ${uurPsalmen[uurPsalmen.length - 1]}`;
   const mobieleKnoppen: Array<{ key: string; titel: string; href: string; onClick?: () => void; onder?: string; nu?: boolean }> = [
-    { key: 'pijlgebed', titel: 'Pijlgebed', href: '#adem', onder: '“Heer Jezus Christus, ontferm U over ons.”' },
+    { key: 'pijlgebed', titel: 'Pijlgebed', href: '#adem', onder: `“${pijlgebed}”` },
     { key: 'uur', titel: uurMoment.naam, href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })), onder: psalmRegel, nu: true },
     { key: 'week', titel: 'Weekcyclus', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }), onder: `${hoofdletter(dag.weekdagNaam)} · ${weekthema.titel}` },
     { key: 'vasten', titel: 'Vasten vandaag', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }), onder: dag.vasten.label },
@@ -121,7 +123,7 @@ export default function Vandaag() {
               <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; openDagLezingen(dag.ymd); }} onKeyDown={(e)=>{ if(e.key==='Enter') openDagLezingen(dag.ymd); }}><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>{roosterMelding(dag.ymd)}</span>}<span className="btn-pill vandaag-cta">Lees lezingen ›</span></div><ChevronRight aria-hidden="true"/></article>
             </div>
             <div className="vd-register">
-              <a className="vandaag-item vd-rij" href="#adem"><div><b>Pijlgebed</b><em>“Heer Jezus Christus, ontferm U over ons.”</em><span className="btn-pill vandaag-cta">Naar pijlgebed ›</span></div><ChevronRight/></a>
+              <a className="vandaag-item vd-rij" href="#adem"><div><b>Pijlgebed</b><em>“{pijlgebed}”</em><span className="btn-pill vandaag-cta">Naar pijlgebed ›</span></div><ChevronRight/></a>
               <a className="vandaag-item vd-rij" href="#week" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] } })); }}><div><b>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</b><span>{weekthema.titel}</span><span className="btn-pill vandaag-cta">Bekijk de week ›</span></div><ChevronRight/></a>
               <a className="vandaag-item vd-rij" href="#vasten" onClick={(e)=>{ e.preventDefault(); window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: dag.ymd } })); }}><div><b>Vasten vandaag</b><span>{dag.vasten.label}</span>{dag.vasten.periode && <small>{dag.vasten.periode}</small>}<span className="btn-pill vandaag-cta">Bekijk vasten ›</span></div><ChevronRight/></a>
               <a className="vandaag-item vd-rij" href="#pascha" onClick={(e)=>{ e.preventDefault(); openDagPascha(dag.ymd); }}><div><b>Paascyclus</b><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><span className="btn-pill vandaag-cta">Bekijk cyclus ›</span></div><ChevronRight/></a>

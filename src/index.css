@@ -3696,7 +3696,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Bouw 182 — het gebedssnoer tastbaar (Gebedssnoer.tsx): het beeld draait een fractie om het midden van de ring bij elke
    knoop (Web Animations, 340 ms); een kleine goudbruine markering bij de huidige knoop; het getal wisselt rustig; bij een
    volle ronde licht het snoer één keer zacht op. Het beeld zelf blijft onveranderd. */
-.snoer-gloed{position:absolute;inset:-4% -6%;opacity:0;pointer-events:none;background:radial-gradient(ellipse 52% 40% at 50% 37%,rgba(218,175,55,0) 62%,rgba(205,150,60,.55) 78%,rgba(218,175,55,0) 96%)}
 #top#top#top#top#top#top#top#top .snoer-getal{position:relative;display:grid;place-items:center}
 #top#top#top#top#top#top#top#top .snoer-getal b{grid-area:1/1}
 #top#top#top#top#top#top#top#top .snoer-getal .is-oud{animation:snoer-getal-uit .26s ease-out forwards}
@@ -3709,58 +3708,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top#top#top#top#top .snoer-getal .is-nieuw{animation:none}
 }
 
-/* Bouw 183 — warm licht over het gebedssnoer (Gebedssnoer.tsx): een warme amberkleurige laag in mengmodus screen, in de
-   vorm van het snoer zelf (het beeld als masker), beperkt tot het gebeden deel met een kegelverloop vanuit het midden
-   van de ring en afgesneden onder de ring (het kruis blijft zwart). De zwarte structuur blijft zichtbaar; het beeld
-   zelf blijft onveranderd en het licht schaalt op elke breedte mee. */
-@property --tot{syntax:'<angle>';inherits:false;initial-value:0deg}
-@property --van{syntax:'<angle>';inherits:false;initial-value:0deg}
-.snoer-draaier{position:relative;display:block;isolation:isolate;transform-origin:49.9% 36.2%}
-#top#top#top#top#top#top#top#top .snoer-draaier>img{display:block;width:100%;height:auto}
-#top#top#top#top#top#top#top#top .snoer-licht{position:absolute;inset:0;pointer-events:none;background:rgb(150,100,44);mix-blend-mode:color-dodge;opacity:.8;
-  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  -webkit-mask-composite:source-in,source-in;mask-composite:intersect,intersect;transition:--tot .38s ease-out}
-#top#top#top#top#top#top#top#top .snoer-licht.is-actief{background:rgb(182,128,56);opacity:1;
-  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  transition:--tot .38s ease-out,--van .38s ease-out}
-#top#top#top#top#top#top#top#top .snoer-draaier.is-uitdoven .snoer-licht{transition-duration:1.2s;transition-timing-function:ease-in-out}
-
-@media(prefers-reduced-motion:reduce){#top#top#top#top#top#top#top#top .snoer-licht{transition:none}}
-
-/* Bouw 184 — het licht zoals in het voorbeeld: een warme gouden rand ACHTER de gebeden knopen (het silhouet van het snoer,
-   vervaagd), de knopen zelf blijven donker met slechts een warme zweem; de huidige knoop met iets sterkere rand. */
-#top#top#top#top#top#top#top#top#top .snoer-draaier>img{position:relative;z-index:1}
-#top#top#top#top#top#top#top#top#top .snoer-licht{z-index:2}
-#top#top#top#top#top#top#top#top#top .snoer-halo{position:absolute;inset:0;z-index:0;pointer-events:none;filter:blur(7px);opacity:.8}
-#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief{filter:blur(10px);opacity:.8}
-#top#top#top#top#top#top#top#top#top .snoer-halo>span{position:absolute;inset:0;background:rgb(236,176,72);
-  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,#000 0deg var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  -webkit-mask-composite:source-in,source-in;mask-composite:intersect,intersect;transition:--tot .38s ease-out}
-#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief>span{background:rgb(250,196,92);
-  -webkit-mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  mask-image:url(/images/adem/gebedssnoer.webp),conic-gradient(from 180deg at 49.9% 36.18%,transparent 0deg var(--van),#000 var(--van) var(--tot),transparent var(--tot)),linear-gradient(#000 0 72.5%,transparent 72.5%);
-  transition:--tot .38s ease-out,--van .38s ease-out}
-/* de knopen zelf: alleen een warme zweem, de zwarte structuur blijft */
-#top#top#top#top#top#top#top#top#top .snoer-licht{background:rgb(112,74,34)!important;opacity:.55!important}
-#top#top#top#top#top#top#top#top#top .snoer-licht.is-actief{background:rgb(140,96,44)!important;opacity:.8!important}
-#top#top#top#top#top#top#top#top#top .snoer-draaier.is-uitdoven .snoer-halo>span{transition-duration:1.2s;transition-timing-function:ease-in-out}
-@media(prefers-reduced-motion:reduce){#top#top#top#top#top#top#top#top#top .snoer-halo>span{transition:none}}
-/* Bouw 184b — het licht zoals in het voorbeeld: een warme gouden gloed om de gebeden knopen heen (lichter en warmer dan
-   het perkament, zodat het als licht leest en niet als schaduw), de knopen zelf houden hun zwarte structuur met een
-   lichte warme zweem; de huidige knoop met iets sterkere gloed. */
-#top#top#top#top#top#top#top#top#top#top .snoer-halo{filter:blur(5px);opacity:.95}
-#top#top#top#top#top#top#top#top#top#top .snoer-halo>span{background:rgb(246,184,66)}
-#top#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief{filter:blur(8px);opacity:1}
-#top#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief>span{background:rgb(255,204,104)}
-#top#top#top#top#top#top#top#top#top#top .snoer-licht{background:rgb(118,78,34)!important;mix-blend-mode:color-dodge;opacity:.5!important}
-#top#top#top#top#top#top#top#top#top#top .snoer-licht.is-actief{background:rgb(150,104,46)!important;opacity:.8!important}
-#top#top#top#top#top#top#top#top#top#top#top .snoer-halo{filter:blur(2px) drop-shadow(0 0 5px rgb(244,170,52)) drop-shadow(0 0 9px rgba(244,170,52,.75));opacity:1}
-#top#top#top#top#top#top#top#top#top#top#top .snoer-halo.is-actief{filter:blur(3px) drop-shadow(0 0 7px rgb(255,196,92)) drop-shadow(0 0 14px rgba(255,190,80,.9))}
 
 /* Bouw 185 — Vandaag mobiel volgens het aangeleverde ontwerp: de dienst van nu met bordeaux titel, een bordeaux "Nu"-label
    met gouden rand en kleine sierpuntjes, en een gouden lijn om de regel. */
@@ -3772,3 +3719,23 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top#top#top#top#top .vandaag-mobiel .vm-nu::before{left:-13px}
   #top#top#top#top#top#top#top#top .vandaag-mobiel .vm-nu::after{right:-13px}
 }
+/* Instellingen: het eigen pijlgebed */
+#top#top#top#top#top#top#top#top .in-uitleg{margin:10px 0 0;font-family:var(--font-display);font-size:17px;line-height:1.45;color:var(--ot-tekst)}
+#top#top#top#top#top#top#top#top .in-veld textarea{display:block;width:100%;min-height:64px;margin-top:10px;padding:10px 14px;border:1px solid rgba(154,106,31,.6);border-radius:0;background:rgba(251,246,233,.65);font-family:var(--font-display);font-size:19px;font-style:italic;line-height:1.4;color:var(--ot-chocolade);resize:vertical}
+#top#top#top#top#top#top#top#top .in-veld textarea::placeholder{color:#7a6048;opacity:1}
+#top#top#top#top#top#top#top#top .in-veld textarea:focus{outline:2px solid var(--color-gold-deep);outline-offset:1px}
+#top#top#top#top#top#top#top#top .in-veld-voet{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;margin-top:4px;font-family:var(--font-display);font-size:15px;color:var(--ot-tekst)}
+/* Vasten vandaag (web): symbool en tekst dicht bij elkaar in het midden, minder lege ruimte erboven */
+@media(min-width:640px){
+  #top#top#top#top#top#top#top#top .v17-fasting-today{padding-top:4px!important;padding-bottom:8px!important}
+  #top#top#top#top#top#top#top#top .v17-fasting-today>div.mt-5{justify-content:center!important;gap:40px!important;margin-top:10px!important}
+  #top#top#top#top#top#top#top#top .v17-fasting-today .fasting-food-grid{margin-top:14px!important}
+}
+#top#top#top#top#top#top#top#top section:has(>div>.v17-fasting-today){padding-top:18px!important}
+
+/* Bouw 186 — gebedssnoer met de lichttechniek van "Interactive prayer rope.html" (Gebedssnoer.tsx): één SVG met het beeld
+   drie keer; de gloed volgt de omtrek van het touw. Nieuwe knopen komen rustig op. */
+#top#top#top#top#top#top#top#top .snoer-svg{display:block;width:100%;height:auto;overflow:visible}
+#top#top#top#top#top#top#top#top .snoer-masker circle{animation:snoer-licht-in .35s ease-out both}
+@keyframes snoer-licht-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#top#top#top#top#top#top#top#top .snoer-masker circle{animation:none}}

@@ -15,22 +15,3 @@ export const SNOER_PAD: ReadonlyArray<readonly [number, number]> = [
 ];
 
 
-// Midden van de ring (waar ook de hartlijn vanuit gemeten is) en de verhouding van het beeld (720 × 1216).
-const MIDDEN = { x: 49.9, y: 36.18 };
-const BREED = 720;
-const HOOG = 1216;
-
-/** Hoek (in graden, met de klok mee vanaf de kraal onderaan) van punt f (0..1) langs het snoer; voor de gloed (conic-gradient). */
-export function snoerHoek(f: number): number {
-  if (f <= 0) return 0;
-  if (f >= 1) return 360;
-  const p = f * SNOER_PAD.length;
-  const i = Math.floor(p);
-  const [ax, ay] = SNOER_PAD[i % SNOER_PAD.length];
-  const [bx, by] = SNOER_PAD[(i + 1) % SNOER_PAD.length];
-  const x = ax + (bx - ax) * (p - i);
-  const y = ay + (by - ay) * (p - i);
-  // 0° = recht omhoog, met de klok mee (zoals conic-gradient); de kraal onderaan ligt op 180°.
-  const hoek = (Math.atan2(((x - MIDDEN.x) * BREED) / 100, ((MIDDEN.y - y) * HOOG) / 100) * 180) / Math.PI;
-  return (((hoek - 180) % 360) + 360) % 360 || (f > 0.5 ? 360 : 0);
-}
