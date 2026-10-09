@@ -252,8 +252,8 @@ export default function Gebeden() {
 
       {/* Contemplatieve afsluiting */}
       <CycleTransition
-        quote="De Heer Jezus is het midden van het gebed, het vasteland van de geest en het licht van de ziel."
-        citation="Monastieke traditie"
+        quote="Er is geen noodzaak om veel woorden te gebruiken. Zeg: Heer, zoals U wilt en zoals U weet, ontferm U."
+        citation="Abba Macarius de Grote"
         eyebrow="Gebed als leven"
         text="De ademcyclus is geen afzonderlijke liturgische cyclus van de Kerk, maar het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus, die zich met iedere ademhaling kan verbinden."
         buttonLabel="Ontdek de ademcyclus"

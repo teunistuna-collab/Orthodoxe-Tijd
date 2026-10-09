@@ -104,16 +104,16 @@ export default function Ademcyclus() {
           </section>
 
           <blockquote className="ad-citaat">
-            <p>“Het Jezusgebed is een bron van barmhartigheid, een licht in het hart en een weg naar de stilte van God.”</p>
-            <footer>— Heilige Silouan de Athoniet</footer>
+            <p>“Ga, zit in je cel, en je cel zal je alles leren.”</p>
+            <footer>— Abba Mozes de Ethiopiër</footer>
           </blockquote>
         </div>
       </section>
 
       {/* Quote + Van adem naar etmaal */}
       <CycleTransition
-        quote="De Heer Jezus is het midden van het gebed, het vasteland van de geest en het licht van de ziel."
-        citation="Monastieke traditie"
+        quote="Er is geen noodzaak om veel woorden te gebruiken. Zeg: Heer, zoals U wilt en zoals U weet, ontferm U."
+        citation="Abba Macarius de Grote"
         eyebrow="Van adem naar etmaal"
         text="Wat in de adem begint als de voortdurende gedachtenis aan Christus, krijgt in de etmaalcyclus zijn vaste gestalte: de gebeden die de Kerk door dag en nacht heen bidt."
         buttonLabel="Ontdek de etmaalcyclus"

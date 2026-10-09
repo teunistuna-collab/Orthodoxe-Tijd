@@ -84,7 +84,7 @@ export default function Heiligen() {
               <div className="saints-feature-actions"><button onClick={()=>setGeselecteerde(uitgelicht)} className="saints-gold-button">Lees het leven ›</button>{heiligenVandaag.length>1&&<button onClick={()=>openDagHeiligen(dagVandaag.ymd)} className="saints-text-link">Bekijk alle {heiligenVandaag.length} heiligen ›</button>}</div>
             </> : <p>Voor deze dag is nog geen heilige beschikbaar.</p>}
           </div>
-          <blockquote className="saints-side-quote">“Het doel van ons leven is de vergoddelijking door genade.”<span>✣</span></blockquote>
+          <blockquote className="saints-side-quote">“Ik zag alle strikken die de vijand over de wereld had uitgespreid en vroeg: Wie kan daaraan ontkomen? Toen hoorde ik een stem antwoorden: Nederigheid.”<cite>— Abba Antonius de Grote</cite><span>✣</span></blockquote>
         </section>
 
         <section className="saints-discover bibliotheek">
@@ -111,7 +111,7 @@ export default function Heiligen() {
         <section className="saints-lowlands">
           <div className="saints-lowlands-map"><img loading="lazy" decoding="async" src="/images/decor/lage-landen.webp" alt="Kaart van de Lage Landen" /></div>
           <div><h2>Heiligen van de Lage Landen</h2><p className="ot-tekst">Ontdek de heiligen die verbonden zijn met de Nederlanden, België en omliggende gebieden.</p><p className="ot-tekst">Van Willibrord en Servatius tot Lambertus en Bavo — onze streken hebben een rijke geschiedenis van heilige mannen en vrouwen.</p><button onClick={()=>{const nieuw=!alleenNl;setAlleenNl(nieuw);setMaand(null);setDag(null);setCategorie('alle');setZoek('');setWachtOpDag(false)}} className={`saints-outline-button ${alleenNl?'active':''}`}>{alleenNl?'Deselecteer Heiligen van de Lage Landen ×':'Bekijk alle heiligen van de Lage Landen ›'}</button></div>
-          <blockquote>“Ook in onze streken heeft de Heer Zijn getuigen doen opstaan.”<span>✣</span></blockquote>
+          <blockquote>“Ons leven en onze dood liggen bij onze naaste. Als wij onze broeder winnen, winnen wij God.”<cite>— Abba Antonius de Grote</cite><span>✣</span></blockquote>
         </section>
 
         {toonResultaten && alleenLageLanden && resultatenBlok}
