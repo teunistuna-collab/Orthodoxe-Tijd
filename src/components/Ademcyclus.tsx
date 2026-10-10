@@ -2,6 +2,7 @@ import { useState, type CSSProperties } from 'react';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
 import PaginaOpening from './PaginaOpening';
+import Verdieping from './Verdieping';
 import Gebedssnoer from './Gebedssnoer';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
@@ -31,7 +32,6 @@ export default function Ademcyclus() {
   const [popup, setPopup] = useState<PopupKey | null>(null);
   const [meeAdemen, setMeeAdemen] = useState(false);
   const [tempo, setTempo] = useState<Tempo>('rustig');
-  const [openRegel, setOpenRegel] = useState<PopupKey | null>(null);
   const sec = TEMPI.find((t) => t.id === tempo)!.sec;
 
   return (
@@ -86,22 +86,7 @@ export default function Ademcyclus() {
           </div>
 
           {/* Verdieping: op het web vier rustige kolommen, op mobiel uitklapbare registerregels */}
-          <section className="ad-verdieping" aria-label="Verdieping">
-            {CARDS.map(({ key, title, intro }) => (
-              <div key={key} className="ad-onderdeel">
-                <button type="button" className="ad-onderdeel-kop" aria-expanded={openRegel === key} onClick={() => setOpenRegel(openRegel === key ? null : key)}>
-                  <h3>{title}</h3>
-                  <span className="ad-pijl" aria-hidden="true">›</span>
-                </button>
-                <div className={`ad-onderdeel-inhoud${openRegel === key ? ' is-open' : ''}`}>
-                  <p>{intro}</p>
-                  <button type="button" className="fs-link" onClick={() => setPopup(key)}>
-                    Lees meer ›
-                  </button>
-                </div>
-              </div>
-            ))}
-          </section>
+          <Verdieping items={CARDS} onOpen={setPopup} />
         </div>
       </section>
 

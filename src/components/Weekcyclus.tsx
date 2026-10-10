@@ -5,6 +5,7 @@ import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { useApp } from '../lib/context';
 import { addDays, bepaalToon, dagInfo, formatDag, ymd } from '../lib/kalender';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
+import Verdieping from './Verdieping';
 import PaginaOpening from './PaginaOpening';
 
 type DayKey = 'zondag' | 'maandag' | 'dinsdag' | 'woensdag' | 'donderdag' | 'vrijdag' | 'zaterdag';
@@ -204,16 +205,10 @@ export default function Weekcyclus() {
                       {dag.label} {formatDag(datum)} in de kalender ›
                     </button>
                   </li>
-                  {INFO_CARDS.map(({ key, title }) => (
-                    <li key={key}>
-                      <button type="button" onClick={() => setInfoOpen(key)}>
-                        {title} ›
-                      </button>
-                    </li>
-                  ))}
                 </ul>
               </nav>
             </div>
+            <Verdieping items={INFO_CARDS.map((c) => ({ ...c, intro: WEEK_INFO[c.key]?.subtitle }))} onOpen={setInfoOpen} />
           </section>
         </div>
       </section>

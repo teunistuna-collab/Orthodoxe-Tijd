@@ -9,6 +9,7 @@ import { vastenPeriodes } from '../lib/overzicht';
 import { FeestTag } from './ui';
 import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
+import Verdieping from './Verdieping';
 import PaginaOpening from './PaginaOpening';
 
 type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
@@ -375,19 +376,8 @@ export default function Pascha() {
                 <p className="pc-vak-label">Troparion</p>
                 <p className="pc-tropaar">{PERIODE_POPUPS.pascha.highlight}</p>
               </div>
-              <nav className="pc-vak jr-vak" aria-label="Lees meer over Pascha">
-                <p className="pc-vak-label">Lees meer</p>
-                <ul className="pc-meer">
-                  {INFO_CARDS.map(({ key, title }) => (
-                    <li key={key}>
-                      <button type="button" onClick={() => setInfoOpen(key)}>
-                        {title} ›
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
             </div>
+            <Verdieping items={INFO_CARDS} onOpen={setInfoOpen} />
           </section>
         </div>
       </section>

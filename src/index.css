@@ -3898,3 +3898,10 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek-rb{top:3px;right:3px;background-position:right -3.2px top -3.2px}
 #top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek-lo{bottom:3px;left:3px;background-position:left -3.2px bottom -3.2px}
 #top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek-ro{bottom:3px;right:3px;background-position:right -3.2px bottom -3.2px}
+
+/* Bouw 195 — audit M2: één taal voor "geselecteerd".
+   Nu (dienst, dag, periode): het NU-kader (.cyclus-nu). Keuze van de gebruiker (tempo, aantal, categorie, dienst/psalm):
+   het kader van vandaag in de kalender. Tabs en filters: een onderstreping, zoals de navigatie en de Feesten-maanden. */
+#top#top#top#top#top#top#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]{background:none!important;box-shadow:inset 0 -2px 0 var(--ot-titel)!important;font-weight:700;color:var(--ot-titel)!important}
+#top#top#top#top#top#top#top#top#top#top .etmaal-popup-keuze .btn-pill{border:0!important;border-image:none!important;background:rgba(251,246,233,.5)!important;box-shadow:inset 0 0 0 1px rgba(154,106,31,.6)!important;color:var(--ot-chocolade)!important}
+#top#top#top#top#top#top#top#top#top#top .etmaal-popup-keuze .btn-pill.is-actief{background:rgba(251,246,233,.45)!important;box-shadow:inset 0 0 0 2px var(--ot-titel),inset 0 0 0 4px rgba(218,175,55,.7)!important;color:var(--ot-chocolade)!important}

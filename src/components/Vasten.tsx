@@ -9,6 +9,7 @@ import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
 import { MobileListRow, VastenBadge, VastenKleuren } from './ui';
 import Modal from './Modal';
 import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
+import Verdieping from './Verdieping';
 import PaginaOpening from './PaginaOpening';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
@@ -162,26 +163,17 @@ export default function Vasten() {
   const vastenVandaagIcon = ['vrij', 'geen'].includes(dagVandaag.vasten.niveau) ? '/images/ui/vastenvrij.webp' : '/images/ui/vasten.webp';
 
   const infoKaarten = (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {(
+    <Verdieping
+      items={
         [
           { key: 'wat', title: 'Wat is vasten?', intro: 'Het typikon en de orde van de Kerk door het jaar heen.' },
           { key: 'hoe', title: 'Hoe vasten we?', intro: 'De ladder van het vasten, van vrij tot volledige onthouding.' },
           { key: 'periodes', title: 'Vastenperioden', intro: 'Vier grote vasten, verweven met feesten en uitzonderingen.' },
           { key: 'betekenis', title: 'De geestelijke betekenis', intro: 'Vasten als gebed, bekering en liefde tot de naaste.' },
         ] as const
-      ).map(({ key, title, intro }) => (
-        <button
-          key={key}
-          type="button"
-          onClick={() => setInfoOpen(key)}
-          className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-        >
-          <h3 className="font-display mt-5 text-xl font-semibold text-gold-light uppercase">{title}</h3>
-          <p className="mt-2 flex-1 text-sm leading-relaxed text-[#d9c6a3]">{intro}</p>
-        </button>
-      ))}
-    </div>
+      }
+      onOpen={setInfoOpen}
+    />
   );
 
   return (

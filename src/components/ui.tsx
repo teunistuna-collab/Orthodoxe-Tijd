@@ -42,7 +42,7 @@ export function VastenBadge({ regel, size = 'md', showLabel = true }: { regel: V
   const pad = size === 'sm' ? 'px-2 py-0.5 text-[11px]' : size === 'lg' ? 'px-4 py-1.5 text-sm' : 'px-3 py-1 text-xs';
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full font-bold tracking-wide ${pad}`}
+      className={`inline-flex items-center gap-1.5 font-bold tracking-wide ${pad}`}
       style={{ background: n.zacht, color: n.tekst, border: `1px solid color-mix(in srgb, ${n.kleur} 20%, transparent)` }}
     >
       {vastenGroep(regel.niveau) ? <VastenSymbool groep={vastenGroep(regel.niveau)!} className={size === 'lg' ? 'h-4 w-4' : 'h-3 w-3'} /> : <span className="inline-block h-2 w-2 rounded-full" style={{ background: n.kleur }} />}

@@ -6,6 +6,7 @@ import { useApp } from '../lib/context';
 import { DERTIEN } from '../lib/feesten';
 import { daysBetween, formatDag, formatDatum, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
 import { feestDatum, vastenPeriodes, volgendeFeestDatum } from '../lib/overzicht';
+import Verdieping from './Verdieping';
 import PaginaOpening from './PaginaOpening';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
@@ -148,19 +149,7 @@ export default function Jaarcyclus() {
       {/* Onzichtbare tussenkop: de tegels (h3) hangen zo onder een h2 voor schermlezers */}
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {INFO_CARDS.map(({ key, title, intro }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setInfoOpen(key)}
-              className="ornate-card group flex min-h-[240px] flex-col px-7 py-8 text-left"
-            >
-              <h3 className="font-display mt-6 text-[20px] font-semibold text-gold-light uppercase">{title}</h3>
-              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[#d9c6a3] sm:text-base">{intro}</p>
-            </button>
-          ))}
-        </div>
+        <Verdieping items={INFO_CARDS} onOpen={setInfoOpen} />
       </div>
     </section>
   );

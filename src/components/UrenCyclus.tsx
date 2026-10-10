@@ -8,6 +8,7 @@ import { ETMAAL_INFO } from '../lib/cyclusTeksten';
 import { dienstVanHetUur, serviceConfig, type PsalmMapping, type ServiceMapping } from '../lib/etmaal';
 import PaginaOpening from './PaginaOpening';
 import { PsalmLezer } from './Psalmen';
+import Verdieping from './Verdieping';
 import { PSALMEN, laadPsalmTeksten, type PsalmTeksten } from '../lib/psalmen';
 
 // De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
@@ -256,13 +257,7 @@ export default function UrenCyclus() {
               </li>
             ))}
           </ol>
-          <nav className="et-meer" aria-label="Meer over het etmaal">
-            {INFO_CARDS.map(({ key, title }) => (
-              <button key={key} type="button" className="fs-link" onClick={() => setInfoOpen(key)}>
-                {title} ›
-              </button>
-            ))}
-          </nav>
+          <Verdieping items={INFO_CARDS} onOpen={setInfoOpen} />
         </div>
       </section>
 
