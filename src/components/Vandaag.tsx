@@ -145,6 +145,7 @@ export default function Vandaag() {
         <p className="vm-sier vm-sier-datum" aria-hidden="true"><span>✣</span></p>
 
         <section className="vdm-moment" aria-labelledby="vdm-moment-kop">
+          {['lb', 'rb', 'lo', 'ro'].map((hoek) => <span key={hoek} className={`vdm-hoek vdm-hoek-${hoek}`} aria-hidden="true" />)}
           <h3 id="vdm-moment-kop" className="vdm-label">Pijlgebed</h3>
           <a className="vdm-moment-knop" href="#adem">
             <span className="vdm-gebed">“{pijlgebed}”</span>

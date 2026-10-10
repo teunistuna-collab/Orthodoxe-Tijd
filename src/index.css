@@ -3889,3 +3889,12 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-uur .vm-nu{padding:1px 11px;font-size:11px}
 #top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-psalm{margin-top:0;font-size:15px;line-height:1.25}
 #top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-moment{padding-bottom:12px}#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-uur .vdm-pijl{right:8px}
+/* Vandaag (mobiel): het kader van het pijlgebed-paneel verzacht. Een fijne lijn in antiekgoud (als de lijnen naast
+   "Deze dag") in plaats van de donkere rand, geen slagschaduw. De vier hoekornamenten blijven: uitsneden van het
+   originele kaart-rand.png (alleen de bloemhoek, zonder de donkere rand), ±20% kleiner en iets zachter. */
+#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-moment{position:relative;border:1px solid color-mix(in srgb,var(--ot-gold) 70%,transparent);border-image:none;box-shadow:none;padding:13px 15px 13px}
+#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek{position:absolute;width:18px;height:18px;background:url(/images/ui/kaart-rand.png) no-repeat;background-size:64px 64px;opacity:.72;filter:saturate(.8);pointer-events:none}
+#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek-lb{top:3px;left:3px;background-position:left -3.2px top -3.2px}
+#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek-rb{top:3px;right:3px;background-position:right -3.2px top -3.2px}
+#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek-lo{bottom:3px;left:3px;background-position:left -3.2px bottom -3.2px}
+#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-hoek-ro{bottom:3px;right:3px;background-position:right -3.2px bottom -3.2px}
