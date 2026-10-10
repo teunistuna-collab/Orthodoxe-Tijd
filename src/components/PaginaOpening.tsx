@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { usePaginaOpen } from '../lib/paginaOpen';
 
 // Opening van een pagina, als het begin van een hoofdstuk in een kerkboek (index.css, Bouw 165). Drie soorten:
 // - rustig: label, titel, ondertitel, kleine sierlijn (Adem, Gebeden, Psalmen);
@@ -17,10 +18,12 @@ type Props = {
 };
 
 export default function PaginaOpening({ id, soort = 'rustig', label, titel, ondertitel, beeld, children }: Props) {
+  // Het medaillon van de open pagina laadt meteen; dat van verborgen pagina's pas als ze geopend worden.
+  const open = usePaginaOpen(id);
   return (
     <section id={id} className={`opening opening-${soort}`}>
       <div className="opening-binnen">
-        {beeld && <img className="opening-beeld" src={beeld.src} alt={beeld.alt} width={192} height={192} decoding="async" />}
+        {beeld && <img className="opening-beeld" src={beeld.src} alt={beeld.alt} width={192} height={192} loading={open ? 'eager' : 'lazy'} fetchPriority={open ? 'high' : 'auto'} decoding="async" />}
         <div className="opening-tekst">
           {label && <p className="opening-label">{label}</p>}
           <h1 className="opening-titel">{titel}</h1>

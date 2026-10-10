@@ -23,7 +23,7 @@ import { gaNaar } from './lib/navigatie';
 import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
-import PageHero from './components/PageHero';
+import PaginaOpening from './components/PaginaOpening';
 import ExactPageFrame from './components/ExactPageFrame';
 import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
 import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
@@ -235,7 +235,7 @@ export default function App() {
           <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
           <div className={p('instellingen')}><ExactPageFrame title="Instellingen"><Instellingen /></ExactPageFrame></div>
           <div className={p('psalmen')}><ExactPageFrame title="Psalmen"><Psalmen actief={pagina === 'psalmen'} /></ExactPageFrame></div>
-          <div className={p('bronnen')}><div className="exact-content"><PageHero id="bronnen" titel="Bronnen" kop /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
+          <div className={p('bronnen')}><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
         </main>
         <Footer />
         <BottomNav pagina={pagina} />

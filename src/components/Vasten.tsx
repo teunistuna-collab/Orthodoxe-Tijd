@@ -9,7 +9,7 @@ import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
 import { MobileListRow, VastenBadge, VastenKleuren } from './ui';
 import Modal from './Modal';
 import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -186,7 +186,7 @@ export default function Vasten() {
 
   return (
     <>
-      <PageHero id="vasten" titel="Vasten" kop />
+      <PaginaOpening id="vasten" label="Vasten en onthouding" titel="Vasten" ondertitel="Voorbereiding op de feesten" />
 
       {/* Volgorde: vasten vandaag → uitleg → het wekelijkse vasten → de vier grote vasten → praktisch → de vier informatiekaarten */}
       <section className="orthodox-pattern parchment-pattern relative bg-parchment py-14 text-ink sm:py-20">

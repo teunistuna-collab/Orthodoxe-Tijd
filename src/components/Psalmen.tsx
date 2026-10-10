@@ -8,6 +8,9 @@ import { OPEN_DIENST_EVENT } from '../lib/events';
 import { useFavorieten } from '../lib/favorieten';
 import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 
+// De psalmteksten (±12 KB gecomprimeerd) meteen bij het starten ophalen, niet pas als het psalter of een dienst ze vraagt.
+laadPsalmTeksten().catch(() => {});
+
 // Psalmen: een digitaal psalter. Desktop: het register (zoeken, filters, lijst) links, leesvenster rechts. Mobiel en tablet:
 // het register op de pagina, een psalm opent in het gewone leesvenster (Modal). Opmaak: Bouw 72, 74 en 170 in index.css.
 // Alleen echte data: teksten uit public/data/psalmen.json, gebruik uit het etmaal (lib/etmaal.ts).
@@ -304,7 +307,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 }
 
 /** Tabs en tekst van één psalm; gedeeld door het desktopvenster en het leesvenster op mobiel. */
-function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; tekst?: PsalmTekst; laadFout: boolean; idVoorvoegsel: string }) {
+export function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel }: { psalm: Psalm; tekst?: PsalmTekst; laadFout: boolean; idVoorvoegsel: string }) {
   const [tab, setTab] = useState<'tekst' | 'themas' | 'gebruik'>('tekst');
   // De Spotify-speler pas laden na een tik (geen Spotify-cookies zolang niemand luistert).
   const [speler, setSpeler] = useState(false);

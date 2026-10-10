@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import { ChevronRight, Search, Sparkles } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { usePaginaOpen } from '../lib/paginaOpen';
@@ -78,22 +78,13 @@ export default function Vandaag() {
   const kleurHex = LITURGISCHE_KLEUREN[kleur].hex;
   const kleurTekst = `Liturgische kleur van vandaag: ${kleur === 'wit' ? 'wit' : kleur} (${LITURGISCHE_KLEUREN[kleur].uitleg})`;
 
-  // Mobiele opbouw (max-width: 767px): één kolom van zeven balken met dezelfde iconen, links en gebeurtenissen als de
-  // lijst hierboven. Onder elke titel staat meteen het antwoord van vandaag; de dienst van dit moment krijgt "Nu".
+  // Mobiele opbouw (max-width: 767px), volgens het goedgekeurde ontwerp: het gebed van dit moment (pijlgebed en het
+  // uurgebed van nu) in één paneel, daaronder "Deze dag" (weekcyclus, vasten, paascyclus), de lezingen en de heiligen.
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
-  const lezingRegel = lezingen.length ? lezingen.slice(0, 2).map((l) => vertaalRef(l.ref)).join(' · ') : roosterMelding(dag.ymd);
+  const lezingRegels = lezingen.length ? lezingen.slice(0, 2).map((l) => vertaalRef(l.ref)) : [roosterMelding(dag.ymd)];
   const uurPsalmen = serviceConfig.find((s) => s.title === uurMoment.naam)?.psalms.map((p) => p.title.replace(/^Psalm /, '')) ?? [];
   const psalmRegel = uurPsalmen.length === 0 ? undefined : uurPsalmen.length === 1 ? `Psalm ${uurPsalmen[0]}` : `Psalmen ${uurPsalmen.slice(0, -1).join(', ')} en ${uurPsalmen[uurPsalmen.length - 1]}`;
-  const mobieleKnoppen: Array<{ key: string; titel: string; href: string; onClick?: () => void; onder?: string; nu?: boolean }> = [
-    { key: 'pijlgebed', titel: 'Pijlgebed', href: '#adem', onder: `“${pijlgebed}”` },
-    { key: 'uur', titel: uurMoment.naam, href: '#etmaal', onClick: () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })), onder: psalmRegel, nu: true },
-    { key: 'week', titel: 'Weekcyclus', href: '#week', onClick: () => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] }), onder: `${hoofdletter(dag.weekdagNaam)} · ${weekthema.titel}` },
-    { key: 'vasten', titel: 'Vasten vandaag', href: '#vasten', onClick: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }), onder: dag.vasten.label },
-    { key: 'pascha', titel: 'Paascyclus', href: '#pascha', onClick: () => openDagPascha(dag.ymd), onder: `${dag.seizoen}${dag.toon ? ` · Toon ${dag.toon}` : ''}` },
-    { key: 'lezingen', titel: 'Schriftlezingen', href: '#kalender', onClick: () => openDagLezingen(dag.ymd), onder: lezingRegel },
-    { key: 'heiligen', titel: 'Heiligen van de dag', href: '#heiligen', onClick: () => openDagHeiligen(dag.ymd), onder: heilige ? heiligeTitel(heilige.naam) : undefined },
-    // "Vaders & moeders" (woestijnvaders en -moeders) komt terug zodra de verzameling er is
-  ];
+  const kerkKort = mode === 'oud' ? `${formatDag(dag.kerk)} · Juliaanse kalender` : 'Nieuwe kalender (gereviseerd juliaans)';
   const kerkelijkeRegel = mode === 'oud' ? `Kerkelijke datum: ${formatDag(dag.kerk)} (Juliaans)` : 'Nieuwe kalender (gereviseerd juliaans)';
 
   return (
@@ -150,28 +141,62 @@ export default function Vandaag() {
 
         <p className="vm-weekdag">{dag.weekdagNaam}</p>
         <h2 className="vm-datum">{formatDatum(dag.civil)}</h2>
+        <p className="vm-kerk">{kerkKort}</p>
         <p className="vm-sier vm-sier-datum" aria-hidden="true"><span>✣</span></p>
-        <p className="vm-kerk">{kerkelijkeRegel}</p>
 
-        <div className="vm-lijst">
-          {mobieleKnoppen.map(({ key, titel, href, onClick, onder, nu }) => (
-            <a
-              key={key}
-              className={`vm-rij${nu ? ' is-nu' : ''}`}
-              href={href}
-              onClick={onClick ? (e) => { e.preventDefault(); onClick(); } : undefined}
-            >
-              <span className="vm-rij-tekst">
-                <b>
-                  {titel}
-                  {nu && <span className="vm-nu">Nu</span>}
-                </b>
-                {onder && <small>{onder}</small>}
-              </span>
-              <span className="pijl" aria-hidden="true">›</span>
-            </a>
-          ))}
+        <section className="vdm-moment" aria-labelledby="vdm-moment-kop">
+          <h3 id="vdm-moment-kop" className="vdm-label">Pijlgebed</h3>
+          <a className="vdm-moment-knop" href="#adem">
+            <span className="vdm-gebed">“{pijlgebed}”</span>
+          </a>
+          <span className="vdm-streep" aria-hidden="true"><i>✣</i></span>
+          <VmLink className="vdm-moment-knop vdm-uur" href="#etmaal" onClick={() => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam }))}>
+            <b>
+              {uurMoment.naam}
+              <span className="vm-nu">Nu</span>
+            </b>
+            {psalmRegel && <span className="vdm-psalm">{psalmRegel}</span>}
+            <ChevronRight className="vdm-pijl" aria-hidden="true" />
+          </VmLink>
+        </section>
+
+        <h3 className="vdm-kop"><span>Deze dag</span></h3>
+        <div className="vdm-raster">
+          <VmLink className="vdm-vlak" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>
+            <span className="vdm-label">Weekcyclus</span>
+            <b>{hoofdletter(dag.weekdagNaam)}</b>
+            <span>{weekthema.titel}</span>
+          </VmLink>
+          <VmLink className="vdm-vlak" href="#vasten" onClick={() => openPopup({ pagina: 'vasten', sleutel: dag.ymd })}>
+            <span className="vdm-label">Vasten vandaag</span>
+            <b>{dag.vasten.label}</b>
+            {dag.vasten.periode && <span>{dag.vasten.periode}</span>}
+          </VmLink>
+          <VmLink className="vdm-vlak vdm-breed" href="#pascha" onClick={() => openDagPascha(dag.ymd)}>
+            <span className="vdm-tekst">
+              <span className="vdm-label">Paascyclus</span>
+              <span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span>
+            </span>
+            <ChevronRight className="vdm-pijl" aria-hidden="true" />
+          </VmLink>
         </div>
+
+        <span className="vdm-streep" aria-hidden="true"><i>✣</i></span>
+        <VmLink className="vdm-vlak vdm-breed" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}>
+          <span className="vdm-tekst">
+            <span className="vdm-label">Schriftlezingen</span>
+            {lezingRegels.map((r) => <span key={r} className="vdm-regel">{r}</span>)}
+          </span>
+          <ChevronRight className="vdm-pijl" aria-hidden="true" />
+        </VmLink>
+        <span className="vdm-streep" aria-hidden="true"><i>✣</i></span>
+        <VmLink className="vdm-vlak vdm-breed" href="#heiligen" onClick={() => openDagHeiligen(dag.ymd)}>
+          <span className="vdm-tekst">
+            <span className="vdm-label">Heiligen van de dag</span>
+            <span className="vdm-regel">{heilige ? heiligeTitel(heilige.naam) : 'Bekijk de heiligen van vandaag'}</span>
+          </span>
+          <ChevronRight className="vdm-pijl" aria-hidden="true" />
+        </VmLink>
 
         <div className="vm-kaars" aria-hidden="true">
           <span className="vm-kaars-lijn"><i>✣</i></span>
@@ -180,5 +205,14 @@ export default function Vandaag() {
         </div>
       </div>
     </section>
+  );
+}
+
+/** Link met een eigen actie (pop-up); zonder JavaScript of met een nieuwe tab gewoon naar de pagina. */
+function VmLink({ className, href, onClick, children }: { className: string; href: string; onClick: () => void; children: ReactNode }) {
+  return (
+    <a className={className} href={href} onClick={(e) => { if (e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); onClick(); }}>
+      {children}
+    </a>
   );
 }

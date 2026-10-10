@@ -102,11 +102,6 @@ export default function Ademcyclus() {
               </div>
             ))}
           </section>
-
-          <blockquote className="ad-citaat">
-            <p>“Ga, zit in je cel, en je cel zal je alles leren.”</p>
-            <footer>— Abba Mozes de Ethiopiër</footer>
-          </blockquote>
         </div>
       </section>
 

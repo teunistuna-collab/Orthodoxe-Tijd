@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState, type PointerEvent } from 'react';
 import { SNOER_PAD } from '../lib/snoerPad';
+import { usePaginaOpen } from '../lib/paginaOpen';
 
 // Gebedssnoer (tsjotki / komboskini): tel het Jezusgebed per knoop. De stand blijft op dit toestel bewaard.
 // Het snoer is het aangeleverde beeld (public/images/adem/gebedssnoer.webp), onveranderd en altijd even groot; 33/50/100
@@ -55,6 +56,8 @@ const MIN_GRADEN = 12;
 const MAX_PER_GEBAAR = 10;
 
 export default function Gebedssnoer() {
+  // Het snoerbeeld (±120 KB) pas laden als de Adem-pagina open is; daarna staat het in de browsercache.
+  const ademOpen = usePaginaOpen('adem');
   const [stand, setStand] = useState<Stand>(lees);
   const [vorige, setVorige] = useState<Stand | null>(null);
   const [bevestig, setBevestig] = useState(false);
@@ -194,7 +197,7 @@ export default function Gebedssnoer() {
       >
         <svg className="snoer-svg" viewBox={`0 0 ${B} ${H}`} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
           <defs>
-            <image id={`${id}-beeld`} href="/images/adem/gebedssnoer.webp" x="0" y="0" width={B} height={H} />
+            <image id={`${id}-beeld`} href={ademOpen ? '/images/adem/gebedssnoer.webp' : undefined} x="0" y="0" width={B} height={H} />
             <mask id={`${id}-licht`} maskUnits="userSpaceOnUse" x={-120} y={-120} width={B + 240} height={H + 240}>
               <g fill="#fff" className="snoer-masker">
                 {schijven(0, tot)}

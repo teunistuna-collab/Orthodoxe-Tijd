@@ -102,7 +102,7 @@ export default function Feesten() {
           {eerstvolgende && (
             <article className="fs-nu">
               {eerstvolgende.f.id === 'pascha' ? (
-                <img className="fs-nu-icoon" src="/images/Pascha-icoon.webp" alt="Icoon van de Verrijzenis" width={640} height={640} decoding="async" />
+                <img className="fs-nu-icoon" src="/images/Pascha-icoon.webp" alt="Icoon van de Verrijzenis" width={640} height={640} loading="lazy" decoding="async" />
               ) : (
                 <p className="fs-nu-datum" aria-hidden="true">
                   <span>{eerstvolgende.datum.getUTCDate()}</span>

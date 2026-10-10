@@ -5,7 +5,7 @@ import { dagInfo, formatMd, hoofdletter, MAANDEN } from '../lib/kalender';
 import HeiligePopup from './HeiligePopup';
 import { eersteHeilige, heiligenVanDag, normaliseer, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
 import { CATEGORIEEN, categorieenVan } from '../lib/heiligenSoort';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
 import NaarBoven from './NaarBoven';
 
 // Lange samenstellingen mogen alleen op de woordgrens afbreken (met streepje), niet midden in het woord: Klooster-heiligen.
@@ -64,13 +64,13 @@ export default function Heiligen() {
   );
 
   return <>
-    <PageHero id="heiligen" titel="Heiligen" />
+    <PaginaOpening id="heiligen" label="Het heiligenjaar" titel="Heiligen" ondertitel="Getuigen van Christus" />
     <section className="saints-refined">
       <div className={CONTENT}>
         <section className="saints-today-panel">
           <div className="saints-today-intro">
             <p className="saints-kicker">Heiligen van vandaag</p>
-            <h1>Vandaag gedenken wij</h1>
+            <h2>Vandaag gedenken wij</h2>
             <p className="saints-date-line">{formatMd(dagVandaag.kerkKey)} <span>(kerkelijke kalender)</span></p>
             <p>Op deze dag bewaart de Kerk de gedachtenis van hen die Christus gevolgd hebben. Hun leven herinnert ons aan het licht van Christus.</p>
           </div>

@@ -7,6 +7,8 @@ import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './
 import { ETMAAL_INFO } from '../lib/cyclusTeksten';
 import { dienstVanHetUur, serviceConfig, type PsalmMapping, type ServiceMapping } from '../lib/etmaal';
 import PaginaOpening from './PaginaOpening';
+import { PsalmLezer } from './Psalmen';
+import { PSALMEN, laadPsalmTeksten, type PsalmTeksten } from '../lib/psalmen';
 
 // De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
 let pdfjsLaden: Promise<typeof import('pdfjs-dist')> | null = null;
@@ -79,7 +81,15 @@ export default function UrenCyclus() {
     const t = window.setInterval(() => setNu(new Date()), 60_000);
     return () => window.clearInterval(t);
   }, []);
-  const currentPdfUrl = modalState?.selectedPsalm ? modalState.selectedPsalm.pdf : currentService?.pdf ?? '';
+  // Een psalm komt uit het psalter (psalmen.json, ±40 KB, met de podcast) in plaats van uit de PDF: veel sneller dan pdf.js.
+  const psalmNr = modalState?.selectedPsalm ? Number(modalState.selectedPsalm.title.replace('Psalm ', '')) : null;
+  const [psalmTeksten, setPsalmTeksten] = useState<PsalmTeksten | null>(null);
+  const [psalmFout, setPsalmFout] = useState(false);
+  useEffect(() => {
+    if (psalmNr === null || psalmTeksten) return;
+    laadPsalmTeksten().then(setPsalmTeksten, () => setPsalmFout(true));
+  }, [psalmNr, psalmTeksten]);
+  const currentPdfUrl = modalState?.selectedPsalm ? '' : currentService?.pdf ?? '';
   const currentTitle = modalState?.selectedPsalm ? `${currentService.title} · ${modalState.selectedPsalm.title}` : currentService.title;
 
   // PDF-tekst: uit de cache, of het geladen resultaat zolang het bij de huidige url hoort; anders nog aan het laden.
@@ -213,7 +223,7 @@ export default function UrenCyclus() {
       <PaginaOpening id="etmaal" soort="cyclisch" label="De gebeden van dag en nacht" titel="Etmaal" ondertitel="De uren van het gebed" beeld={{ src: '/images/Etmaal-wiel.webp', alt: 'Het etmaalwiel met de acht gebedsdiensten van avond tot namiddag' }}>
         <p className="pc-intro">{INFO_CARDS[0].intro}</p>
         <article className="et-nu cyclus-nu" aria-labelledby="et-nu-titel">
-          <img className="et-nu-beeld" src={`/images/etmaal/${slug(nuDienst.title)}.webp`} alt="" width={204} height={256} decoding="async" />
+          <img className="et-nu-beeld" src={`/images/etmaal/${slug(nuDienst.title)}.webp`} alt="" width={204} height={256} loading="lazy" decoding="async" />
           <div className="et-nu-kop">
             <p className="cyclus-nu-label">Nu</p>
             <h2 id="et-nu-titel" className="et-nu-titel">{nuDienst.title}</h2>
@@ -326,7 +336,12 @@ export default function UrenCyclus() {
               </a>
             )}
 
-            {(pdfStatus === 'loading' || pdfStatus === 'idle') && <p className="etmaal-pdf-melding">De tekst wordt geladen…</p>}
+            {psalmNr !== null && (
+              <div className="etmaal-psalm">
+                <PsalmLezer psalm={PSALMEN[psalmNr - 1]} tekst={psalmTeksten?.[psalmNr]} laadFout={psalmFout} idVoorvoegsel={`etmaal-psalm-${psalmNr}`} />
+              </div>
+            )}
+            {psalmNr === null && (pdfStatus === 'loading' || pdfStatus === 'idle') && <p className="etmaal-pdf-melding">De tekst wordt geladen…</p>}
             {pdfStatus === 'error' && (
               <p className="etmaal-pdf-melding">
                 De tekst kon niet worden geladen.{' '}

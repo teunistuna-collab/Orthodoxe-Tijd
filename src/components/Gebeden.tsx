@@ -3,7 +3,7 @@ import { Search, X } from 'lucide-react';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR, type Gebed } from '../lib/gebeden';
 import { LiturgicalPopup, CycleTransition } from './CycleSections';
 import { useFavorieten } from '../lib/favorieten';
-import PageHero from './PageHero';
+import PaginaOpening from './PaginaOpening';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -123,21 +123,12 @@ export default function Gebeden() {
 
   return (
     <>
-      {/* Proef: sierkop (alleen de boog, gemaakt met scripts/sierkop.mjs; kruis en titel als echte elementen) in plaats van de fotobanner. Hij blijft bovenaan
-          staan tijdens het scrollen; de inhoud schuift eronder door. Opmaak: index.css, Bouw 126. */}
-      <PageHero id="gebeden" titel="Gebeden" kop />
-
-      {/* Introductie */}
-      <section className="gebed-intro orthodox-pattern bg-bark py-16 text-center text-cream sm:py-20">
-        <div className={CONTENT}>
-          <p className="ot-label ot-label-licht">Het gebedenboek</p>
-          <h2 className="ot-titel font-display mt-3 text-3xl font-semibold sm:text-4xl">Het gebed van de Kerk</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#d9c6a3] sm:text-lg">
-            Morgengebeden, gebeden voor het slapengaan en gebeden door de dag, naar het Orthodox Gebedenboek volgens de
-            Russische traditie.{GEBEDEN_ZICHTBAAR && ' Tik een gebed aan om het groot te lezen.'}
-          </p>
-        </div>
-      </section>
+      <PaginaOpening id="gebeden" label="Het gebedenboek" titel="Gebeden" ondertitel="Het gebed van de Kerk">
+        <p className="psr-intro">
+          Morgengebeden, gebeden voor het slapengaan en gebeden door de dag, naar het Orthodox Gebedenboek volgens de
+          Russische traditie.{GEBEDEN_ZICHTBAAR && ' Tik een gebed aan om het groot te lezen.'}
+        </p>
+      </PaginaOpening>
 
       {/* Gebedscategorieën / overzicht; zolang de gebeden uit staan alleen de melding */}
       {!GEBEDEN_ZICHTBAAR ? (
