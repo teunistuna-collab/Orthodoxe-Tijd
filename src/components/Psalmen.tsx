@@ -109,6 +109,10 @@ export default function Psalmen({ actief }: { actief: boolean }) {
     [groepen, filter, kathisma, thema, zoek, teksten, favorieten],
   );
 
+  const raster = filter === 'alle' && !zoek.trim();
+  // Het raster in drie delen van vijftig; begint bij het deel met de psalm van het uur.
+  const [blok, setBlok] = useState(() => Math.floor((psalmVanHetUur(new Date()) - 1) / 50));
+
   const kies = (p: Psalm) => {
     zelfGekozen.current = true;
     setGekozen(p.septuagintNumber);
@@ -209,7 +213,27 @@ export default function Psalmen({ actief }: { actief: boolean }) {
                 {MET_TEKST} van de 150 psalmen hebben al tekst; de andere worden toegevoegd.
               </p>
 
-              <div ref={lijstRef} className="ps-lijst psr-lijst">
+              {/* Mobiel en tablet: "Alle" als raster van 150 nummers (zoals de kalender) in plaats van 150 rijen; desktop houdt de lijst */}
+              {raster && (
+                <div className="ps-filters psr-blokken" role="group" aria-label="Psalmen per vijftig">
+                  {[0, 1, 2].map((b) => (
+                    <button key={b} type="button" aria-pressed={blok === b} onClick={() => setBlok(b)}>
+                      {b * 50 + 1}–{b * 50 + 50}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {raster && (
+                <div className="psr-raster" role="group" aria-label={`Psalm ${blok * 50 + 1} tot ${blok * 50 + 50}`}>
+                  {PSALMEN.slice(blok * 50, blok * 50 + 50).map((p) => (
+                    <button key={p.id} type="button" className={`psr-cel${p.hasText ? ' heeft-tekst' : ''}`} aria-current={p.septuagintNumber === gekozen ? 'true' : undefined} aria-label={`${p.title}${p.hasText ? '' : ', tekst wordt nog toegevoegd'}`} onClick={() => kies(p)}>
+                      {p.septuagintNumber}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div ref={lijstRef} className={`ps-lijst psr-lijst${raster ? ' heeft-raster' : ''}`}>
                 {lijst.length === 0 &&
                   (filter === 'favorieten' && !zoek.trim() ? (
                     <p className="ps-leeg">Nog geen favorieten. Tik bij een psalm op de bladwijzer om hem hier te bewaren.</p>
