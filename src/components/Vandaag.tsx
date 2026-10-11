@@ -6,7 +6,7 @@ import { usePijlgebed } from '../lib/pijlgebed';
 import { KruisTeken } from './ui';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, formatDatum, hoofdletter } from '../lib/kalender';
-import { serviceConfig } from '../lib/etmaal';
+import { dienstVanHetUur } from '../lib/etmaal';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
@@ -15,26 +15,6 @@ import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 // mobiel, het mobiele Christusmedaillon (±185 KB) niet op desktop. <picture class="contents"> verandert de opmaak niet.
 const LEEG = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-
-type UurMoment = {
-  naam: string;
-  psalm: string;
-  vers: string;
-  tekst: string;
-};
-
-// De kernverzen hieronder komen uit de reeds aangeleverde Septuaginta-psalmteksten
-// in public/data/pdfs. Geen NBV/NBV21-psalmtekst gebruiken voor dit onderdeel.
-const UURMOMENTEN: Array<{ vanaf: number; tot: number; moment: UurMoment }> = [
-  { vanaf: 0, tot: 5, moment: { naam: 'Middernachtdienst', psalm: 'Psalm 118:12', vers: 'kernvers van de nacht', tekst: 'Gezegend bent U, Heer, leer mij uw voorschriften.' } },
-  { vanaf: 5, tot: 8, moment: { naam: 'Metten', psalm: 'Psalm 62:2', vers: 'kernvers van de vroege morgen', tekst: 'God, mijn God, vroeg in de ochtend zoek ik U, mijn ziel dorst naar U.' } },
-  { vanaf: 8, tot: 10, moment: { naam: 'Eerste Uur', psalm: 'Psalm 89:1', vers: 'kernvers van het eerste uur', tekst: 'Heer, U bent voor ons een toevlucht geweest, van generatie op generatie.' } },
-  { vanaf: 10, tot: 12, moment: { naam: 'Derde Uur', psalm: 'Psalm 24:4–5', vers: 'kernvers van het derde uur', tekst: 'Heer, maak mij uw wegen bekend en leer mij uw paden.' } },
-  { vanaf: 12, tot: 15, moment: { naam: 'Zesde Uur', psalm: 'Psalm 90:2', vers: 'kernvers van het zesde uur', tekst: 'U bent mijn beschermer en mijn toevlucht, mijn God, op U stel ik mijn hoop.' } },
-  { vanaf: 15, tot: 18, moment: { naam: 'Negende Uur', psalm: 'Psalm 84:8', vers: 'kernvers van het negende uur', tekst: 'Toon ons, Heer, uw barmhartigheid en schenk ons uw verlossing.' } },
-  { vanaf: 18, tot: 21, moment: { naam: 'Vespers', psalm: 'Psalm 103:1', vers: 'kernvers van de avond', tekst: 'Zegen de Heer, mijn ziel. Heer, mijn God, hoe groot bent U.' } },
-  { vanaf: 21, tot: 24, moment: { naam: 'Completen', psalm: 'Psalm 50:3', vers: 'kernvers voor de nacht', tekst: 'Ontferm U over mij, o God, volgens uw grote ontferming.' } },
-];
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
 
@@ -48,19 +28,14 @@ const WEEKTHEMAS: Record<number, { titel: string; uitleg: string }> = {
   6: { titel: 'Alle heiligen en de ontslapenen', uitleg: 'Zaterdag is verbonden met rust, de ontslapenen en de verwachting van de Verrijzenis.' },
 };
 
-function huidigUurMoment(): UurMoment {
-  const uur = new Date().getHours();
-  return UURMOMENTEN.find((item) => uur >= item.vanaf && uur < item.tot)?.moment ?? UURMOMENTEN[0].moment;
-}
-
 export default function Vandaag() {
   const open = usePaginaOpen('vandaag');
   const { mode, vandaag, vandaagYmd, rooster, heiligen, openDag, openLezing, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken } = useApp();
   const pijlgebed = usePijlgebed();
-  const [uurMoment, setUurMoment] = useState<UurMoment>(() => huidigUurMoment());
+  const [uurMoment, setUurMoment] = useState(() => dienstVanHetUur(new Date()));
 
   useEffect(() => {
-    const update = () => setUurMoment(huidigUurMoment());
+    const update = () => setUurMoment(dienstVanHetUur(new Date()));
     update();
     const timer = window.setInterval(update, 60_000);
     return () => window.clearInterval(timer);
@@ -82,7 +57,9 @@ export default function Vandaag() {
   // uurgebed van nu) in één paneel, daaronder "Deze dag" (weekcyclus, vasten, paascyclus), de lezingen en de heiligen.
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
   const lezingRegels = lezingen.length ? lezingen.slice(0, 2).map((l) => vertaalRef(l.ref)) : [roosterMelding(dag.ymd)];
-  const uurPsalmen = serviceConfig.find((s) => s.title === uurMoment.naam)?.psalms.map((p) => p.title.replace(/^Psalm /, '')) ?? [];
+  const uurPsalmen = uurMoment.psalms.map((p) => p.title.replace(/^Psalm /, ''));
+  // Kernvers van de dienst, zoals in de Etmaal-cyclus ("Psalm Kernvers: 50:12" → "Psalm 50:12").
+  const kernversRef = uurMoment.kernvers.reference.replace('Psalm Kernvers:', 'Psalm');
   const psalmRegel = uurPsalmen.length === 0 ? undefined : uurPsalmen.length === 1 ? `Psalm ${uurPsalmen[0]}` : `Psalmen ${uurPsalmen.slice(0, -1).join(', ')} en ${uurPsalmen[uurPsalmen.length - 1]}`;
   const kerkKort = mode === 'oud' ? `${formatDag(dag.kerk)} · Juliaanse kalender` : 'Nieuwe kalender (gereviseerd juliaans)';
   const kerkelijkeRegel = mode === 'oud' ? `Kerkelijke datum: ${formatDag(dag.kerk)} (Juliaans)` : 'Nieuwe kalender (gereviseerd juliaans)';
@@ -110,7 +87,7 @@ export default function Vandaag() {
           <div className="vandaag-list vd-lijst">
             <div className="vd-primair">
               {/* De kaart opent de dienst; de psalmverwijzing erin opent die psalm in het psalter (daarom geen <a> om het geheel). */}
-              <article className="vandaag-item vandaag-uur-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('a')) return; window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })); }} onKeyDown={(e)=>{ if (e.key==='Enter' && e.target===e.currentTarget) window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam })); }}><div><b>{uurMoment.naam}</b><em>“{uurMoment.tekst}”</em><small><a href={`#psalmen/${uurMoment.psalm.match(/\d+/)?.[0]}`}>{uurMoment.psalm}</a> · Septuaginta</small><span className="btn-pill vandaag-cta">Naar {uurMoment.naam.toLowerCase()} ›</span></div><ChevronRight/></article>
+              <article className="vandaag-item vandaag-uur-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('a')) return; window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title })); }} onKeyDown={(e)=>{ if (e.key==='Enter' && e.target===e.currentTarget) window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title })); }}><div><b>{uurMoment.title}</b><em>“{uurMoment.kernvers.verses.join(' ')}”</em><small><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a> · Septuaginta</small><span className="btn-pill vandaag-cta">Naar {uurMoment.title.toLowerCase()} ›</span></div><ChevronRight/></article>
               <article className="vandaag-item vandaag-readings-item" role="link" tabIndex={0} onClick={(e)=>{ if ((e.target as HTMLElement).closest('button')) return; openDagLezingen(dag.ymd); }} onKeyDown={(e)=>{ if(e.key==='Enter') openDagLezingen(dag.ymd); }}><div><b>Schriftlezingen</b>{lezingen.length ? lezingen.slice(0,2).map((l,i)=>{const refNl=vertaalRef(l.ref); const soort=lezingSoort(refNl); return <button key={`${l.ref}-${i}`} type="button" onClick={()=>openLezing({ref:l.ref,tag:l.tag,julianKey:dag.julianKey,civil:vandaag})}><span>{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'} · {refNl}</span></button>}) : <span>{roosterMelding(dag.ymd)}</span>}<span className="btn-pill vandaag-cta">Lees lezingen ›</span></div><ChevronRight aria-hidden="true"/></article>
             </div>
             <div className="vd-register">
@@ -151,9 +128,9 @@ export default function Vandaag() {
             <span className="vdm-gebed">“{pijlgebed}”</span>
           </a>
           <span className="vdm-streep" aria-hidden="true"><i>✣</i></span>
-          <VmLink className="vdm-moment-knop vdm-uur" href="#etmaal" onClick={() => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.naam }))}>
+          <VmLink className="vdm-moment-knop vdm-uur" href="#etmaal" onClick={() => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }))}>
             <b>
-              {uurMoment.naam}
+              {uurMoment.title}
               <span className="vm-nu">Nu</span>
             </b>
             {psalmRegel && <span className="vdm-psalm">{psalmRegel}</span>}
@@ -167,11 +144,13 @@ export default function Vandaag() {
             <span className="vdm-label">Weekcyclus</span>
             <b>{hoofdletter(dag.weekdagNaam)}</b>
             <span>{weekthema.titel}</span>
+            <ChevronRight className="vdm-pijl" aria-hidden="true" />
           </VmLink>
           <VmLink className="vdm-vlak" href="#vasten" onClick={() => openPopup({ pagina: 'vasten', sleutel: dag.ymd })}>
             <span className="vdm-label">Vasten vandaag</span>
             <b>{dag.vasten.label}</b>
             {dag.vasten.periode && <span>{dag.vasten.periode}</span>}
+            <ChevronRight className="vdm-pijl" aria-hidden="true" />
           </VmLink>
           <VmLink className="vdm-vlak vdm-breed" href="#pascha" onClick={() => openDagPascha(dag.ymd)}>
             <span className="vdm-tekst">

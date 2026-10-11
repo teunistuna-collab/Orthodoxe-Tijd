@@ -11,7 +11,7 @@ const KALENDERS: { id: Mode; naam: string; uitleg: string }[] = [
   { id: 'nieuw', naam: 'Nieuwe kalender', uitleg: 'Gereviseerd juliaans: de vaste feesten op de burgerlijke datum; Pascha blijft juliaans.' },
 ];
 
-const TRADITIES = ['Koptisch Orthodox', 'Syrisch Orthodox', 'Oosters Orthodox'];
+const TRADITIES = ['Oosters Orthodox', 'Koptisch Orthodox', 'Syrisch Orthodox'];
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 

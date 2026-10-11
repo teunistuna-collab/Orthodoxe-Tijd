@@ -3937,3 +3937,23 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Psalmen (mobiel en tablet): onder "Alle" drie knoppen 1–50, 51–100, 101–150; het raster toont dat deel */
 #top#top#top#top#top#top#top#top .psr-blokken{display:none!important}
 @media(max-width:1023.98px){#top#top#top#top#top#top#top#top .psr-blokken{display:flex!important;justify-content:center!important;gap:6px;margin-top:8px}}
+/* Psalmen: rij zonder het rode nummer ervoor (de titel "Psalm n" noemt het al) */
+#top#top#top#top#top#top#top#top .psr-rij{grid-template-columns:minmax(0,1fr) 14px;padding-left:12px}
+/* Psalmen: de keuzeknoppen onder Kathisma en Thema's gelijk aan de knoppen onder Alle (1–50 …) en de filters:
+   15px, geen lijn onder elke knop, de gekozen knop vet in bordeaux met een onderstreping, 44px hoog */
+#top#top#top#top#top#top#top#top#top :is(.ps-themas,.ps-kathismas).ps-kies button{min-height:44px!important;border:0!important;background:none!important;box-shadow:none!important;font-family:var(--font-display)!important;font-size:15px!important;font-weight:500!important;color:var(--ot-tekst)!important}
+#top#top#top#top#top#top#top#top#top :is(.ps-themas,.ps-kathismas).ps-kies button[aria-pressed=true]{box-shadow:inset 0 -2px 0 var(--ot-titel)!important;font-weight:700!important;color:var(--ot-titel)!important}
+#top#top#top#top#top#top#top#top#top .ps-kathismas.ps-kies button{font-variant-numeric:normal!important}
+
+/* Bouw 198 — Vandaag: overal hetzelfde pijltje, geen sierlijnen tussen de kaarten maar één rustige tussenruimte.
+   Kleuren ongewijzigd. */
+#top#top#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-vlak{position:relative}
+#top#top#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-uur .vdm-pijl{right:6px}
+#top#top#top#top#top#top#top#top#top#top#top .vandaag-mobiel .vdm-raster .vdm-pijl{position:absolute;right:6px;bottom:6px;width:18px;height:18px}
+#top#top#top#top#top#top#top#top#top#top#top .vandaag-mobiel>.vdm-streep{display:none}
+#top#top#top#top#top#top#top#top#top#top#top .vandaag-mobiel>.vdm-vlak{margin-top:10px}
+@media(min-width:768px){
+  #top#top#top#top#top#top#top#top#top#top#top .vd-primair .vandaag-item>svg,#top#top#top#top#top#top#top#top#top#top#top .vd-register .vd-rij svg{display:block!important;width:20px;height:20px;color:var(--color-gold-deep)}
+  #top#top#top#top#top#top#top#top#top#top#top .vd-register{margin-top:18px;border-top:0!important;column-gap:18px;row-gap:10px}
+  #top#top#top#top#top#top#top#top#top#top#top .vd-register .vd-rij{min-height:0!important;padding:12px 14px 12px 18px!important;border:1px solid color-mix(in srgb,var(--ot-gold) 45%,transparent)!important;border-radius:3px!important}
+}

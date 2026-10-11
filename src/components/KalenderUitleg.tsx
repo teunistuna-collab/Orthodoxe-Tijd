@@ -9,7 +9,7 @@ const KALENDERS: { id: Mode; label: string }[] = [
   { id: 'nieuw', label: 'Nieuw · gregoriaans' },
 ];
 
-const TRADITIES = ['Koptisch Orthodox', 'Syrisch Orthodox', 'Oosters Orthodox'];
+const TRADITIES = ['Oosters Orthodox', 'Koptisch Orthodox', 'Syrisch Orthodox'];
 
 // Keuzemenu bij het eerste bezoek (daarna op te roepen via de voettekst): de kalender (Oud/Nieuw, zoals de schakelaar
 // in de koptekst) en de traditie. Elke traditieknop sluit het menu en gaat naar Vandaag.

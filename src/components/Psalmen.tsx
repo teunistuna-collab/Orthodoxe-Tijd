@@ -132,9 +132,6 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
   const rij = (p: Psalm, onder?: string) => (
     <button key={p.id} type="button" className={`psr-rij${p.hasText ? '' : ' is-zonder-tekst'}`} aria-current={p.septuagintNumber === gekozen ? 'true' : undefined} onClick={() => kies(p)}>
-      <span className="psr-nr" aria-hidden="true">
-        {p.septuagintNumber}
-      </span>
       <span className="psr-tekst">
         <span className="psr-titel">
           {p.title}
