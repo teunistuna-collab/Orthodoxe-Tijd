@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
-import { ChevronRight, Search, Sparkles } from 'lucide-react';
+import { ChevronRight, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { usePijlgebed } from '../lib/pijlgebed';
@@ -121,7 +121,7 @@ export default function Vandaag() {
             </div>
             {/* "Vaders & moeders" komt terug zodra de verzameling spreuken er is (zie ook de mobiele knoppen hieronder). */}
           </div>
-          <button type="button" onClick={()=>openDag(dag.ymd)} className="vandaag-main-button"><Sparkles/> Bekijk de volledige dag <ChevronRight/></button>
+          <button type="button" onClick={()=>openDag(dag.ymd)} className="vandaag-main-button">Bekijk de volledige dag <ChevronRight/></button>
         </div>
       </div>
 

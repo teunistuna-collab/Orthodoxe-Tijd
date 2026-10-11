@@ -3905,3 +3905,13 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top#top#top#top#top#top .ps-filters.ps-filters button[aria-pressed=true]{background:none!important;box-shadow:inset 0 -2px 0 var(--ot-titel)!important;font-weight:700;color:var(--ot-titel)!important}
 #top#top#top#top#top#top#top#top#top#top .etmaal-popup-keuze .btn-pill{border:0!important;border-image:none!important;background:rgba(251,246,233,.5)!important;box-shadow:inset 0 0 0 1px rgba(154,106,31,.6)!important;color:var(--ot-chocolade)!important}
 #top#top#top#top#top#top#top#top#top#top .etmaal-popup-keuze .btn-pill.is-actief{background:rgba(251,246,233,.45)!important;box-shadow:inset 0 0 0 2px var(--ot-titel),inset 0 0 0 4px rgba(218,175,55,.7)!important;color:var(--ot-chocolade)!important}
+
+/* Bouw 196 — audit M3 en M6.
+   M3 Drie soorten knoppen: primair (dubbele beeldrand, kapitalen), tekstlink (kapitalen met ›) en icoonknop (vierkant,
+   44px, beeldrand zoals de werkbalk van het psalter). Alle primaire knoppen en tekstlinks minstens 44px hoog. */
+#top#top#top#top#top#top#top#top#top#top :is(.btn-pill,.vandaag-main-button,.saints-gold-button,.saints-text-link,.saints-outline-button,.saints-search-button,.cyclus-verder){min-height:44px!important}
+#top#top#top#top#top#top#top#top#top#top :is(.fs-link,.jr-link){min-height:44px}
+#top#top#top#top#top#top#top#top#top#top .kl-knop{border:2px solid transparent;border-image:url(/images/ui/knop-rand.png) 60 / 12px stretch;background:var(--knop-vlak,rgba(251,246,233,.5));box-shadow:0 3px 8px rgba(80,45,15,.1)}
+/* M6 Heiligen (desktop): het zijcitaat een leesbare kolom in plaats van ±110px, met rechte hoeken */
+@media(min-width:1001px){#top#top#top#top#top#top#top#top#top#top .saints-today-panel{grid-template-columns:1fr 1.25fr minmax(240px,.8fr)!important}}
+#top#top#top#top#top#top#top#top#top#top .saints-side-quote{border-radius:0;padding:22px 20px}
