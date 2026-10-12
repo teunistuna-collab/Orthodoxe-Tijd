@@ -43,12 +43,12 @@ export default function Footer() {
   return (
     <footer className="site-voet orthodox-pattern bg-bark text-[#d9cbb0]">
       <div>
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-[#9b8b70] sm:flex-row sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-[13px] text-[#cdbd9f] sm:flex-row sm:px-6">
           <span>✠ Eer aan God voor alles.</span>
-          <a href="#bronnen" className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
+          <a href="#bronnen" className="inline-flex min-h-11 items-center px-2 text-[13px] font-semibold uppercase tracking-[.14em] text-gold-light [font-family:var(--font-titel)] hover:text-cream">
             Bronnen & verwijzingen
           </a>
-          <a href="#instellingen" className="inline-flex min-h-11 items-center px-2 font-semibold text-gold-light underline underline-offset-2 hover:text-cream">
+          <a href="#instellingen" className="inline-flex min-h-11 items-center px-2 text-[13px] font-semibold uppercase tracking-[.14em] text-gold-light [font-family:var(--font-titel)] hover:text-cream">
             Instellingen
           </a>
           <span>Gebouwd met liefde voor de Nederlandse Orthodoxie.</span>

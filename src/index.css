@@ -3957,3 +3957,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top#top#top#top#top#top#top#top .vd-register{margin-top:18px;border-top:0!important;column-gap:18px;row-gap:10px}
   #top#top#top#top#top#top#top#top#top#top#top .vd-register .vd-rij{min-height:0!important;padding:12px 14px 12px 18px!important;border:1px solid color-mix(in srgb,var(--ot-gold) 45%,transparent)!important;border-radius:3px!important}
 }
+
+/* Bouw 199 — audit L6: Lage Landen zonder afgeronde hoeken, net als de rest van de site. */
+#top#top#top#top#top#top#top#top .saints-lowlands{border-radius:0!important}

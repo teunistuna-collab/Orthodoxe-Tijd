@@ -244,6 +244,8 @@ export function vertaalTag(tag: string, refNl: string): string {
     .replace(/^Epistle, /, 'Apostellezing, ')
     .replace(/^Gospel, /, 'Evangelie, ')
     .replace(/Theotokos/, 'Moeder Gods')
+    // Bronfout in het rooster: "Repose of the John the Theologian".
+    .replace(/^Repose of the John /, 'Repose of John ')
     .replace(/^Departed$/, 'Overledenen')
     .replace(/^Saints$/, 'Heiligen')
     .replace(/^Saint$/, 'Heilige')

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { WEEKDAGEN_KORT, dagInfo, formatDag, formatDatum, formatKort, weekRond, ymd } from '../lib/kalender';
+import { WEEKDAGEN_KORT, dagInfo, formatDag, formatDatum, formatKort, hoofdletter, weekRond, ymd } from '../lib/kalender';
 import { vastenPeriodes } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
@@ -417,10 +417,12 @@ export default function Vasten() {
       {geselecteerdeDagInfo && (
         <Modal open={Boolean(geselecteerdeDagInfo)} onClose={() => setGeselecteerdeDag(null)} eyebrow="Vasteninformatie" title={formatDatum(geselecteerdeDagInfo.civil)} centerTitle maxWidth="max-w-2xl">
             <div className="space-y-3">
-              <div className="ot-label">{geselecteerdeDagInfo.weekdagNaam}</div>
               <VastenBadge regel={geselecteerdeDagInfo.vasten} size="lg" />
               <div>
-                <h3 className="font-display text-2xl font-semibold text-ink">{geselecteerdeDagInfo.weekdagNaam}</h3>
+                {/* De weekdag alleen als het vastenlabel hem nog niet noemt ("Vrijdag — vastendag"). */}
+                {!geselecteerdeDagInfo.vasten.label.toLowerCase().startsWith(geselecteerdeDagInfo.weekdagNaam.toLowerCase()) && (
+                  <h3 className="font-display text-2xl font-semibold text-ink">{hoofdletter(geselecteerdeDagInfo.weekdagNaam)}</h3>
+                )}
                 <p className="mt-1 font-display text-lg italic leading-relaxed text-ink-soft">{geselecteerdeDagInfo.vasten.detail}</p>
               </div>
               <div className="gold-rule my-5" />
