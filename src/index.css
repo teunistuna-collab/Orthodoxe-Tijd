@@ -3960,3 +3960,13 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 
 /* Bouw 199 — audit L6: Lage Landen zonder afgeronde hoeken, net als de rest van de site. */
 #top#top#top#top#top#top#top#top .saints-lowlands{border-radius:0!important}
+
+/* Bouw 200 — Feesten: de datum van het eerstvolgende feest in het ronde ornamentkader. */
+#top#top#top#top#top#top#top#top .fs-nu-datum{box-sizing:border-box;justify-content:center;flex:none;width:clamp(150px,16vw,180px);aspect-ratio:1;padding:0;background:url(/images/decor/datum-kader.webp) center/contain no-repeat;font-size:12px;letter-spacing:.14em}
+#top#top#top#top#top#top#top#top .fs-nu-datum span{font-size:clamp(44px,4.6vw,56px)}
+@media(min-width:768px){
+  #top#top#top#top#top#top#top#top .fs-nu{grid-template-columns:auto minmax(0,1fr)}
+  #top#top#top#top#top#top#top#top .fs-nu-datum{border-right:0}
+}
+#top#top#top#top#top#top#top#top .fs-nu-datum{padding-bottom:16px;letter-spacing:.1em}
+@media(max-width:767.98px){#top#top#top#top#top#top#top#top .fs-nu-datum{padding-bottom:13px}}
