@@ -208,7 +208,7 @@ section[id] {
   color: #7d5218;
   transition: color .18s ease, transform .18s ease;
 }
-.today-link:hover { color: #5a2424; transform: translateX(2px); }
+.today-link:hover { color:#0b1b2a; transform: translateX(2px); }
 
 /* Heiligen & Feesten — één rustig digitaal menologion/feestboek */
 .saints-page,.feasts-page{background-image:radial-gradient(circle at 50% 0%,rgba(201,162,39,.10),transparent 32%),linear-gradient(180deg,#f5ecdb 0%,#faf6ec 48%,#efe3cb 100%)}
@@ -248,12 +248,12 @@ main > section[id] > img {
 .today-page{background:radial-gradient(circle at 50% 0%,rgba(201,162,39,.11),transparent 31%),linear-gradient(180deg,#160b08 0%,#24130d 48%,#160b08 100%);padding:54px 20px 72px}
 .today-shell{width:min(1320px,100%);margin:0 auto}.today-heading{text-align:center;margin:0 auto 28px;max-width:900px}.today-heading p{font-size:10px;font-weight:800;letter-spacing:.34em;color:#e8cf7a}.today-heading h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.8rem);font-weight:500;line-height:1.04;margin:10px 0 18px;color:#f4ecda}.today-heading span,.today-desert span{display:block;width:105px;height:1px;margin:auto;background:linear-gradient(90deg,transparent,#c9a227,transparent)}
 .today-book{overflow:hidden;border:1px solid rgba(201,162,39,.58);border-radius:10px;background:#f5ecd9;color:#2b1d12;box-shadow:0 34px 80px rgba(0,0,0,.38),inset 0 0 0 6px rgba(255,253,246,.35);background-image:radial-gradient(circle at 8% 8%,rgba(201,162,39,.08),transparent 25%),radial-gradient(circle at 92% 85%,rgba(90,36,36,.05),transparent 30%)}
-.today-book>section{border-bottom:1px solid rgba(138,90,30,.28)}.today-book>section:last-child{border-bottom:0}.today-opening{display:grid;grid-template-columns:1fr 1fr}.today-opening>article{padding:48px 52px}.today-arrow-prayer{border-right:1px solid rgba(138,90,30,.28)}.today-arrow-prayer blockquote{font-family:var(--font-display);font-size:clamp(2.25rem,4vw,4rem);font-weight:500;line-height:1.02;color:#3b1515;margin:20px 0}.today-copy{font-size:15px;line-height:1.7;color:#6b5b45;max-width:650px}.today-kicker{font-size:10px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:.25em!important;text-transform:uppercase!important;color:#7d5218!important;margin:0!important}.today-link{display:inline-block;margin-top:18px;border:0;background:none;padding:0;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7d5218;cursor:pointer;text-decoration:none}.today-link:hover{color:#5a2424}
-.today-hour{background:rgba(239,227,203,.55)}.today-hour-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.today-hour-head h2,.today-week-theme h2,.today-fast-row h2,.today-date-row h2,.today-pascha h2{font-family:var(--font-display);font-weight:500}.today-hour-head h2{font-size:2.35rem;margin:7px 0 0}.today-hour-head>span{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7d5218;border:1px solid rgba(138,90,30,.35);padding:7px 11px;border-radius:999px;background:#fffaf0}.today-hour blockquote{font-family:var(--font-display);font-size:clamp(1.65rem,2.6vw,2.6rem);font-style:italic;line-height:1.15;color:#5a2424;border-left:2px solid #c9a227;padding-left:22px;margin:28px 0 12px}.today-source{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#9b8b70}
+.today-book>section{border-bottom:1px solid rgba(138,90,30,.28)}.today-book>section:last-child{border-bottom:0}.today-opening{display:grid;grid-template-columns:1fr 1fr}.today-opening>article{padding:48px 52px}.today-arrow-prayer{border-right:1px solid rgba(138,90,30,.28)}.today-arrow-prayer blockquote{font-family:var(--font-display);font-size:clamp(2.25rem,4vw,4rem);font-weight:500;line-height:1.02;color:#0b1b2a;margin:20px 0}.today-copy{font-size:15px;line-height:1.7;color:#6b5b45;max-width:650px}.today-kicker{font-size:10px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:.25em!important;text-transform:uppercase!important;color:#7d5218!important;margin:0!important}.today-link{display:inline-block;margin-top:18px;border:0;background:none;padding:0;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7d5218;cursor:pointer;text-decoration:none}.today-link:hover{color:#0b1b2a}
+.today-hour{background:rgba(239,227,203,.55)}.today-hour-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.today-hour-head h2,.today-week-theme h2,.today-fast-row h2,.today-date-row h2,.today-pascha h2{font-family:var(--font-display);font-weight:500}.today-hour-head h2{font-size:2.35rem;margin:7px 0 0}.today-hour-head>span{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7d5218;border:1px solid rgba(138,90,30,.35);padding:7px 11px;border-radius:999px;background:#fffaf0}.today-hour blockquote{font-family:var(--font-display);font-size:clamp(1.65rem,2.6vw,2.6rem);font-style:italic;line-height:1.15;color:#0b1b2a;border-left:2px solid #c9a227;padding-left:22px;margin:28px 0 12px}.today-source{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#9b8b70}
 .today-week-row,.today-date-row{display:grid;grid-template-columns:220px 1fr auto;align-items:stretch}.today-day-name{background:#24130d;color:#f4ecda;padding:32px 36px;display:flex;flex-direction:column;justify-content:center}.today-day-name p{font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#e8cf7a}.today-day-name strong{font-family:var(--font-display);font-size:2.2rem;font-weight:500;color:#e8cf7a;margin-top:4px}.today-week-theme{padding:30px 42px}.today-week-theme h2{font-size:2rem;margin:6px 0}.today-week-theme>p:last-child{font-size:14px;color:#6b5b45;line-height:1.55}.today-week-row>.today-link,.today-date-row>.today-link{align-self:center;margin:0 36px}
-.today-fast-row{display:grid;grid-template-columns:minmax(270px,.8fr) minmax(300px,1.4fr) auto;gap:34px;align-items:center;padding:30px 42px;background:linear-gradient(90deg,rgba(90,36,36,.08),rgba(201,162,39,.06))}.today-fast-row h2{font-size:2rem;color:#5a2424;margin:6px 0 0}.today-fast-period{font-size:11px;color:#7d5218;margin-top:4px}.today-fast-row>.today-link{margin:0}
-.today-date-row{padding:0}.today-date-block{padding:32px 36px;background:#efe3cb}.today-date-block h2{font-size:1.8rem;color:#5a2424;margin:7px 0 3px}.today-date-block>p:last-child{font-size:11px;color:#9b8b70}.today-saint-block{padding:30px 42px}.today-saint-block h2{font-size:2rem;margin:0 0 4px}.today-saint-block p{font-size:14px;color:#7d5218}.today-saint-block small{display:block;color:#9b8b70;margin-top:7px}
-.today-pascha{display:grid;grid-template-columns:.85fr 1.15fr}.today-pascha>article{padding:42px 48px}.today-pascha>article:first-child{background:rgba(239,227,203,.55);border-right:1px solid rgba(138,90,30,.28)}.today-pascha h2{font-size:2.4rem;color:#5a2424;line-height:1.08;margin:10px 0}.today-readings>div{margin-top:13px;border-top:1px solid rgba(138,90,30,.24)}.today-readings button{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;border:0;border-bottom:1px solid rgba(138,90,30,.2);background:transparent;padding:12px 0;cursor:pointer;color:#2b1d12}.today-readings button small{display:block;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7d5218}.today-readings button strong{display:block;font-family:var(--font-display);font-size:1.35rem;font-weight:500;margin-top:2px}.today-readings button b{color:#7d5218}
+.today-fast-row{display:grid;grid-template-columns:minmax(270px,.8fr) minmax(300px,1.4fr) auto;gap:34px;align-items:center;padding:30px 42px;background:linear-gradient(90deg,rgba(90,36,36,.08),rgba(201,162,39,.06))}.today-fast-row h2{font-size:2rem;color:#0b1b2a;margin:6px 0 0}.today-fast-period{font-size:11px;color:#7d5218;margin-top:4px}.today-fast-row>.today-link{margin:0}
+.today-date-row{padding:0}.today-date-block{padding:32px 36px;background:#efe3cb}.today-date-block h2{font-size:1.8rem;color:#0b1b2a;margin:7px 0 3px}.today-date-block>p:last-child{font-size:11px;color:#9b8b70}.today-saint-block{padding:30px 42px}.today-saint-block h2{font-size:2rem;margin:0 0 4px}.today-saint-block p{font-size:14px;color:#7d5218}.today-saint-block small{display:block;color:#9b8b70;margin-top:7px}
+.today-pascha{display:grid;grid-template-columns:.85fr 1.15fr}.today-pascha>article{padding:42px 48px}.today-pascha>article:first-child{background:rgba(239,227,203,.55);border-right:1px solid rgba(138,90,30,.28)}.today-pascha h2{font-size:2.4rem;color:#0b1b2a;line-height:1.08;margin:10px 0}.today-readings>div{margin-top:13px;border-top:1px solid rgba(138,90,30,.24)}.today-readings button{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;border:0;border-bottom:1px solid rgba(138,90,30,.2);background:transparent;padding:12px 0;cursor:pointer;color:#2b1d12}.today-readings button small{display:block;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#7d5218}.today-readings button strong{display:block;font-family:var(--font-display);font-size:1.35rem;font-weight:500;margin-top:2px}.today-readings button b{color:#7d5218}
 .today-desert{text-align:center;padding:42px 28px!important;background:#24130d;color:#f4ecda}.today-desert>p:first-child{font-size:10px;font-weight:800;letter-spacing:.3em;color:#e8cf7a}.today-desert h2{font-family:var(--font-display);font-size:2.5rem;font-weight:500;color:#e8cf7a;margin:8px 0 15px}.today-desert>p:last-child{max-width:720px;margin:17px auto 0;color:#d9c6a3;font-size:14px;line-height:1.65}
 @media(max-width:900px){.today-page{padding:36px 14px 50px}.today-opening,.today-pascha{grid-template-columns:1fr}.today-arrow-prayer,.today-pascha>article:first-child{border-right:0;border-bottom:1px solid rgba(138,90,30,.28)}.today-opening>article,.today-pascha>article{padding:32px 26px}.today-week-row,.today-date-row,.today-fast-row{grid-template-columns:1fr}.today-week-theme,.today-saint-block,.today-fast-row{padding:26px}.today-week-row>.today-link,.today-date-row>.today-link{margin:0 26px 26px}.today-fast-row{gap:8px}.today-fast-row>.today-link{margin-top:10px}.today-date-block{padding:26px}.today-hour-head{flex-direction:column}.today-hero img{max-height:430px}}
 
@@ -265,7 +265,7 @@ main > section[id] > img {
 
 .vandaag-paper{position:relative;padding:0 22px 24px;background-color:#f5ecd8;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.09),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.07),transparent 30%);box-shadow:inset 0 0 35px rgba(103,66,27,.08)}
 .vandaag-paper:before,.vandaag-paper:after{content:'❦';position:absolute;color:rgba(164,118,41,.3);font-size:40px}.vandaag-paper:before{left:10px;top:15px}.vandaag-paper:after{right:10px;bottom:14px;transform:rotate(180deg)}
-.vandaag-dayhead{text-align:center;padding:22px 20px 19px;border-bottom:1px solid rgba(138,91,35,.25)}.vandaag-dayhead p{font-family:var(--font-display);font-size:17px;margin:0;color:#3b2518}.vandaag-dayhead h2{font-family:var(--font-display);font-size:23px;font-weight:500;margin:1px 0;color:#321b13}.vandaag-dayhead>span{font-size:10px;color:#7e674f}.vandaag-dayhead i{display:block;font-style:normal;color:#b58226;font-size:22px;margin:9px 0 3px}.vandaag-dayhead h3{font-family:var(--font-display);font-size:21px;font-weight:500;margin:0;color:#3a1d16}.vandaag-dayhead small{display:block;margin-top:3px;color:#72533b;font-size:11px}
+.vandaag-dayhead{text-align:center;padding:22px 20px 19px;border-bottom:1px solid rgba(138,91,35,.25)}.vandaag-dayhead p{font-family:var(--font-display);font-size:17px;margin:0;color:#3b2518}.vandaag-dayhead h2{font-family:var(--font-display);font-size:23px;font-weight:500;margin:1px 0;color:#321b13}.vandaag-dayhead>span{font-size:10px;color:#7e674f}.vandaag-dayhead i{display:block;font-style:normal;color:#b58226;font-size:22px;margin:9px 0 3px}.vandaag-dayhead h3{font-family:var(--font-display);font-size:21px;font-weight:500;margin:0;color:#0b1b2a}.vandaag-dayhead small{display:block;margin-top:3px;color:#72533b;font-size:11px}
 .vandaag-list{position:relative;z-index:1}.vandaag-item{display:grid;grid-template-columns:31px 1fr 20px;gap:12px;align-items:center;min-height:67px;padding:11px 6px;border-bottom:1px solid rgba(138,91,35,.2)}.vandaag-item>svg:first-child{width:21px;height:21px;color:#a87825;stroke-width:1.5}.vandaag-item>div{min-width:0}.vandaag-item b{display:block;font-family:var(--font-display);font-size:15px;font-weight:600;color:#352117}.vandaag-item span,.vandaag-item em,.vandaag-item small{display:block;margin-top:2px;line-height:1.32;color:#5e4938}.vandaag-item span{font-size:12px}.vandaag-item em{font-family:var(--font-display);font-size:14px}.vandaag-item small{font-size:9px;color:#8a725b}.vandaag-item>a{display:flex;color:#a87825}.vandaag-item>a svg,.vandaag-muted-chevron{width:16px;height:16px;stroke-width:1.5}.vandaag-readings-item button{border:0;background:none;padding:1px 0;display:block;cursor:pointer;text-align:left;color:#5e4938;font-family:inherit}.vandaag-readings-item button:hover span{color:#8b5e18}.vandaag-muted-chevron{color:#b9a88f}
 .vandaag-main-button{position:relative;z-index:1;margin:19px auto 0;display:flex;align-items:center;justify-content:center;gap:9px;min-width:290px;border:1px solid #a77c2d;border-radius:3px;background:linear-gradient(180deg,#4a2b12,#261309);box-shadow:inset 0 1px rgba(255,235,175,.2),0 4px 10px rgba(48,25,11,.2);padding:12px 20px;color:#f3dda0;font-family:var(--font-display);font-size:12px;letter-spacing:.13em;text-transform:uppercase;cursor:pointer}.vandaag-main-button svg{width:14px;height:14px}.vandaag-main-button:hover{filter:brightness(1.12)}
 @media(min-width:980px){.vandaag-design-page{padding-top:38px}.vandaag-frame{width:min(820px,100%)}.vandaag-paper{padding-left:38px;padding-right:38px}.vandaag-item{min-height:70px}}
@@ -281,7 +281,7 @@ main > section[id] > img {
 .exact-content>section:not(:first-child)>div{width:100%!important;max-width:none!important;padding-left:38px!important;padding-right:38px!important;margin-left:0!important;margin-right:0!important}
 .exact-content .rounded-2xl,.exact-content .rounded-xl,.exact-content .rounded-lg,.exact-content .rounded-md{border-radius:2px!important}
 .exact-content [class*="shadow-"]{box-shadow:none!important}.exact-content [class*="max-w-"]{max-width:100%!important}
-.exact-content h1,.exact-content h2,.exact-content h3{font-family:var(--font-display);font-weight:500}.exact-content h2{color:#3a1d16}.exact-content h3{color:#4a2b1d}
+.exact-content h1,.exact-content h2,.exact-content h3{font-family:var(--font-display);font-weight:500}.exact-content h2{color:#0b1b2a}.exact-content h3{color:#4a2b1d}
 .exact-content button,.exact-content a{transition:filter .15s ease,color .15s ease}.exact-content button:hover,.exact-content a:hover{filter:brightness(1.08)}
 .exact-content .bg-bark,.exact-content .bg-bark-soft,.exact-content .bg-wine-deep{border-color:rgba(213,169,72,.45)!important}
 .exact-content svg{stroke-width:1.5}.exact-content [class*="text-gold"] svg,.exact-content svg[class*="text-gold"]{color:#a87825}
@@ -291,8 +291,8 @@ main > section[id] > img {
 .exact-modal-backdrop{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(17,8,6,.88);backdrop-filter:blur(5px)}
 .exact-modal-frame{width:min(820px,calc(100vw - 28px));max-width:820px!important;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(213,169,72,.82);border-radius:0;background:#1a0e09;box-shadow:0 28px 80px rgba(0,0,0,.58)}.exact-modal-close{display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:7px;cursor:pointer}.exact-modal-close svg{width:18px;height:18px;stroke-width:1.4}
 .exact-modal-paper{position:relative;min-height:0;overflow-y:auto;padding:32px 38px 38px;background-color:#f5ecd8;background-image:radial-gradient(circle at 10% 5%,rgba(193,145,48,.09),transparent 27%),radial-gradient(circle at 92% 92%,rgba(111,61,30,.07),transparent 30%);box-shadow:inset 0 0 35px rgba(103,66,27,.08);color:#352117}.exact-modal-vlak:before,.exact-modal-vlak:after{content:'❦';position:absolute;pointer-events:none;color:rgba(164,118,41,.24);font-size:34px}.exact-modal-vlak:before{left:10px;top:9px}.exact-modal-vlak:after{right:10px;bottom:8px;transform:rotate(180deg)}
-.exact-modal-paper h1,.exact-modal-paper h2,.exact-modal-paper h3,.exact-modal-paper h4{font-family:var(--font-display);font-weight:500;color:#3a1d16}.exact-modal-paper p{line-height:1.65}.exact-modal-paper svg{stroke-width:1.5}.exact-modal-paper .rounded-2xl,.exact-modal-paper .rounded-xl,.exact-modal-paper .rounded-lg,.exact-modal-paper .rounded-md{border-radius:2px!important}.exact-modal-paper [class*="shadow-"]{box-shadow:none!important}.exact-modal-paper [class*="bg-white"]{background:rgba(255,250,240,.42)!important}.exact-modal-paper [class*="bg-parchment"]{background:rgba(239,227,203,.48)!important}.exact-modal-paper button:not(.exact-modal-close),.exact-modal-paper a{border-radius:2px!important}
-.exact-modal-paper .gold-rule{height:1px!important;background:linear-gradient(90deg,transparent,rgba(168,120,37,.62),transparent)!important}.exact-modal-paper blockquote{font-family:var(--font-display);color:#5a2424}
+.exact-modal-paper h1,.exact-modal-paper h2,.exact-modal-paper h3,.exact-modal-paper h4{font-family:var(--font-display);font-weight:500;color:#0b1b2a}.exact-modal-paper p{line-height:1.65}.exact-modal-paper svg{stroke-width:1.5}.exact-modal-paper .rounded-2xl,.exact-modal-paper .rounded-xl,.exact-modal-paper .rounded-lg,.exact-modal-paper .rounded-md{border-radius:2px!important}.exact-modal-paper [class*="shadow-"]{box-shadow:none!important}.exact-modal-paper [class*="bg-white"]{background:rgba(255,250,240,.42)!important}.exact-modal-paper [class*="bg-parchment"]{background:rgba(239,227,203,.48)!important}.exact-modal-paper button:not(.exact-modal-close),.exact-modal-paper a{border-radius:2px!important}
+.exact-modal-paper .gold-rule{height:1px!important;background:linear-gradient(90deg,transparent,rgba(168,120,37,.62),transparent)!important}.exact-modal-paper blockquote{font-family:var(--font-display);color:#0b1b2a}
 .exact-popup-reading{position:relative;z-index:1;max-width:660px;margin:0 auto}.exact-popup-subtitle{text-align:center;margin:0 0 20px!important;font-size:9px!important;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#7d5218}.exact-popup-highlight{margin:0 0 24px;padding:16px 20px;border-top:1px solid rgba(138,91,35,.28);border-bottom:1px solid rgba(138,91,35,.28);text-align:center;font-size:20px;line-height:1.35;font-style:italic;background:rgba(239,227,203,.42)}.exact-popup-prose{font-size:15px;line-height:1.75;color:#5e4938}.exact-popup-prose p{margin:0 0 16px}.exact-popup-prose p:last-child{margin-bottom:0}
 @media(max-width:640px){.exact-modal-backdrop{padding:7px;align-items:stretch}.exact-modal-frame{width:100%;max-height:calc(100vh - 14px);margin:auto}.exact-modal-paper{padding:27px 18px 30px}.exact-modal-vlak:before,.exact-modal-vlak:after{font-size:26px}.exact-popup-highlight{font-size:18px;padding:14px 10px}}
 
@@ -342,7 +342,7 @@ header>nav>div{justify-content:center}
 
 /* Perkament: leesbare tekst sitebreed. */
 .exact-content section:not(.bg-bark):not([class*="bg-bark"]) p:not([class*="text-gold"]),.exact-content section:not(.bg-bark):not([class*="bg-bark"]) li,.exact-content section:not(.bg-bark):not([class*="bg-bark"]) span.text-ink-soft{color:#5b402e!important;opacity:1!important}
-.exact-content section:not(.bg-bark):not([class*="bg-bark"]) blockquote{color:#6a2c24!important;opacity:1!important}
+.exact-content section:not(.bg-bark):not([class*="bg-bark"]) blockquote{color:#0b1b2a!important;opacity:1!important}
 .exact-content .text-ink-mute{color:#72533b!important;opacity:1!important}
 
 /* Vandaag: medailloniconen en volledig klikbare regels. */
@@ -424,7 +424,7 @@ header>div.bg-bark>div{position:relative}
 #vasten .bg-\[\#e3efe4\],#vasten .bg-\[\#f1d6d6\]{background:radial-gradient(circle at 50% 12%,rgba(160,98,29,.13),transparent 44%),linear-gradient(145deg,#2d190f,#190c08)!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.62)!important;color:#f1e4cc!important;min-height:300px!important}
 #vasten .bg-\[\#e3efe4\] h4,#vasten .bg-\[\#f1d6d6\] h4{color:#f2dfb7!important;text-align:center!important;text-transform:uppercase!important;letter-spacing:.06em!important}
 #vasten .grid-cols-7>button{background:#f7ecd7!important;border:1px solid rgba(166,117,36,.42)!important;color:#4c2e20!important;min-height:118px!important;box-shadow:inset 0 -3px 0 rgba(167,119,37,.12)!important}
-#vasten .grid-cols-7>button[class*="bg-[#f5dddd]"]{background:#ead8d0!important;color:#6b241f!important}
+#vasten .grid-cols-7>button[class*="bg-[#f5dddd]"]{background:#ead8d0!important;color:#0b1b2a!important}
 #vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
 #vasten .fasting-step{height:235px!important;min-height:235px!important;max-height:235px!important;padding:22px 18px!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(213,169,72,.55)!important;overflow:hidden!important}
 #vasten .fasting-step>div:nth-child(2){font-size:14px!important;line-height:1.4!important}#vasten .fasting-step>div:nth-child(3){font-size:12px!important;line-height:1.5!important}
@@ -499,7 +499,7 @@ header>nav>div{justify-content:space-between!important}
 
 /* Transition/read-more parchment sections: content text must never behave like a watermark. */
 .exact-content section:not([class*="bg-bark"]) .font-display.italic,
-.exact-content section:not([class*="bg-bark"]) blockquote{color:#6d3528!important;opacity:1!important}
+.exact-content section:not([class*="bg-bark"]) blockquote{color:#0b1b2a!important;opacity:1!important}
 .exact-content section:not([class*="bg-bark"]) p{color:#583b2b!important;opacity:1!important}
 .exact-content section:not([class*="bg-bark"]) [class*="text-gold-light"]{color:#9b681d!important;opacity:1!important}
 
@@ -516,7 +516,7 @@ header>nav>div{justify-content:space-between!important}
 .feasts-page section.grid>div.bg-bark{padding-top:44px!important;padding-bottom:44px!important;text-align:center}
 .feasts-page section.grid>div.bg-bark h1{color:#efd27d!important}
 .feasts-page section.grid>div.bg-bark p{color:#eadcc0!important}
-#feesten~section:last-of-type .font-display,.feasts-page+section .font-display{color:#6d3528!important;opacity:1!important}
+#feesten~section:last-of-type .font-display,.feasts-page+section .font-display{color:#0b1b2a!important;opacity:1!important}
 
 /* v14 — Heiligen rebuilt to the approved editorial reference */
 .saints-refined{background:radial-gradient(circle at 50% 0%,rgba(199,145,35,.08),transparent 35%),linear-gradient(#241108,#32190b);padding:0 0 34px;color:#f4ead5}
@@ -612,7 +612,7 @@ header>nav>div{justify-content:space-between!important}
 /* v16 — refinement round: warmer, calmer, more editorial */
 /* 1. Weekly fasting overview: warm Orthodoxe Tijd treatment */
 #vasten .v15-week-day{border:1px solid rgba(176,126,37,.52)!important;background:linear-gradient(145deg,#fbf2df,#f0e1c5)!important;color:#4a2a19!important;box-shadow:inset 0 0 0 3px rgba(255,250,238,.65),0 5px 14px rgba(72,40,15,.06)!important}
-#vasten .v15-week-day.is-fast{background:linear-gradient(145deg,#f4e4d7,#ead1c7)!important;border-color:#a95a4d!important;color:#6b211d!important}
+#vasten .v15-week-day.is-fast{background:linear-gradient(145deg,#f4e4d7,#ead1c7)!important;border-color:#a95a4d!important;color:#0b1b2a!important}
 #vasten .v15-week-day.is-today{box-shadow:inset 0 0 0 2px #c89a35,0 5px 14px rgba(72,40,15,.08)!important}
 #vasten .v15-fasting-panel{position:relative;background:radial-gradient(circle at 50% 0,rgba(209,165,72,.08),transparent 45%),linear-gradient(145deg,#2d180f,#1a0c08)!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.48),0 10px 24px rgba(55,29,11,.14)!important;padding:28px!important}
 #vasten .v15-fasting-panel:before,#vasten .v15-fasting-panel:after{position:absolute;color:#c49332;font-size:20px;line-height:1}#vasten .v15-fasting-panel:before{content:"⌜";left:10px;top:9px}#vasten .v15-fasting-panel:after{content:"⌟";right:10px;bottom:9px}
@@ -675,7 +675,7 @@ header>nav>div{justify-content:space-between!important}
 
 /* Weekly fasting information: warmer, framed, no pastel/dashboard feel. */
 #vasten .v15-week-day{border:1px solid #b98a36!important;background:linear-gradient(145deg,#fbf2df,#efe0c3)!important;box-shadow:inset 0 0 0 3px rgba(255,250,238,.7),0 5px 12px rgba(69,37,13,.07)!important}
-#vasten .v15-week-day.is-fast{background:linear-gradient(145deg,#ead8c5,#dec3ad)!important;border-color:#8c493d!important;color:#64261f!important}
+#vasten .v15-week-day.is-fast{background:linear-gradient(145deg,#ead8c5,#dec3ad)!important;border-color:#8c493d!important;color:#0b1b2a!important}
 #vasten .v15-fasting-panel{border:2px solid #a97720!important;background:linear-gradient(145deg,#2d180f,#190b08)!important;color:#f0dfbf!important}.v15-fasting-panel *{opacity:1!important}.v15-fasting-panel li span{color:#eadcc2!important}.v15-fasting-panel h4{color:#efcf82!important}
 
 /* Fasting ladder: ALL nine cards use the dimensions of the former largest card. */
@@ -789,11 +789,11 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 
 /* Heiligen: dagcirkels krijgen donkere, grotere cijfers op ivoor; geselecteerd omgekeerd. */
 .saints-days-grid{display:flex!important;flex-wrap:wrap!important;gap:12px!important}
-.saints-days-grid button{width:52px!important;height:52px!important;flex:0 0 52px!important;border-radius:50%!important;border:2px solid #c49332!important;background:#f6edda!important;color:#4a2115!important;font-family:var(--font-display)!important;font-size:16px!important;font-weight:700!important;opacity:1!important;box-shadow:inset 0 0 0 3px #fff8e8,inset 0 0 0 4px rgba(196,147,50,.42)!important}
+.saints-days-grid button{width:52px!important;height:52px!important;flex:0 0 52px!important;border-radius:50%!important;border:2px solid #c49332!important;background:#f6edda!important;color:#0b1b2a!important;font-family:var(--font-display)!important;font-size:16px!important;font-weight:700!important;opacity:1!important;box-shadow:inset 0 0 0 3px #fff8e8,inset 0 0 0 4px rgba(196,147,50,.42)!important}
 .saints-days-grid button:hover,.saints-days-grid button.active{background:#35180e!important;color:#f3d27a!important;border-color:#d2a244!important}
 
 /* Cycli: citeerregels op lichte ondergronden leesbaar. */
-#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote{color:#5a2a22!important;opacity:1!important}
+#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote{color:#0b1b2a!important;opacity:1!important}
 #adem .bg-parchment cite,#etmaal .bg-parchment cite,#week .bg-parchment cite,#jaar .bg-parchment cite,#pascha .bg-parchment cite{color:#8a5b20!important;opacity:1!important}
 
 /* Bouw 21 — definitieve gebedskaarten */
@@ -863,7 +863,7 @@ nav a:hover .orthodox-nav-mark,nav button:hover .orthodox-nav-mark{color:#efc969
 /* Bouw 23 — secties met klasse bg-bark worden door ".exact-content > section:not(:first-child)" crème gemaakt;
    hun (lichte) tekst moet daar donker zijn. Donkere kaarten erin behouden hun gouden tekst (hogere specificiteit hierboven). */
 .exact-content > section:not(:first-child)[class*="bg-bark"] :is(p,li,.text-ink-soft){color:#583b2b!important;opacity:1!important}
-.exact-content > section:not(:first-child)[class*="bg-bark"] :is(blockquote,.font-display.italic){color:#6d3528!important;opacity:1!important}
+.exact-content > section:not(:first-child)[class*="bg-bark"] :is(blockquote,.font-display.italic){color:#0b1b2a!important;opacity:1!important}
 .exact-content > section:not(:first-child)[class*="bg-bark"] :is([class*="text-gold-light"],a.border){color:#7d5218!important}
 .exact-content > section:not(:first-child)[class*="bg-bark"] :is([class*="text-cream"],h1,h2,h3){color:#2b1d12!important}
 
@@ -1433,7 +1433,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top#top .mlr{display:flex!important;width:100%;min-height:56px;align-items:center!important;justify-content:flex-start!important;gap:12px;padding:9px 6px;border:0;border-bottom:1px solid rgba(169,119,32,.25);border-radius:0;background:transparent;text-align:left;color:#2b1d12;box-shadow:none;transform:none}
 #top#top .mlr:hover,#top#top .mlr:focus-visible{background:rgba(201,162,39,.09)}
 #top#top#top .mlr.is-today{background:linear-gradient(90deg,rgba(238,215,155,.55),rgba(238,215,155,.15))}
-#top#top .mlr-links{display:flex;flex:0 0 50px;flex-direction:column;align-items:center;gap:1px;font-family:var(--font-display);line-height:1.05;color:#5a2424}
+#top#top .mlr-links{display:flex;flex:0 0 50px;flex-direction:column;align-items:center;gap:1px;font-family:var(--font-display);line-height:1.05;color:#0b1b2a}
 #top#top .mlr-links b{font-size:22px;font-weight:600}
 #top#top .mlr-links small{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7d5218}
 #top#top .mlr-icoon{display:grid;flex:0 0 auto;place-items:center}
@@ -1660,7 +1660,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .ps-lezer-kop p{margin:3px 0 0;font-family:var(--font-display);font-size:15px;font-style:italic;color:#5b402e}
 .ps-tabs{display:flex;gap:24px;margin-top:10px;overflow-x:auto;border-bottom:1px solid rgba(184,134,40,.4);scrollbar-width:none}
 #top#top#top .ps-tabs button{position:relative;display:inline-flex;flex:none;align-items:center;min-height:42px;padding:0 2px;border:0;background:none;font-family:var(--font-display);font-size:16px;color:#5b402e;white-space:nowrap;cursor:pointer}
-#top#top#top .ps-tabs button[aria-selected=true]{font-weight:600;color:#5a1716}
+#top#top#top .ps-tabs button[aria-selected=true]{font-weight:600;color:#0b1b2a}
 #top#top#top .ps-tabs button[aria-selected=true]:after{content:"";position:absolute;right:0;bottom:-1px;left:0;height:2px;background:#5a1716}
 .ps-paneel{padding-top:12px}
 .ps-verzen{max-width:64ch;padding:2px 4px;border-radius:4px;background:#f7eedb}
@@ -1829,7 +1829,7 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 .snoer-telling{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
 .snoer-telling b{font-family:var(--font-display);font-size:58px;font-weight:600;line-height:1;color:#2b1d12;font-variant-numeric:lining-nums tabular-nums}
 .snoer-telling small{margin-top:4px;font-family:var(--font-body);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#6b5540}
-.snoer-telling em{margin-top:8px;font-family:var(--font-display);font-size:16px;font-style:italic;color:#5a1716}
+.snoer-telling em{margin-top:8px;font-family:var(--font-display);font-size:16px;font-style:italic;color:#0b1b2a}
 .snoer-bediening{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 18px;margin-top:22px}
 .snoer-keuze{display:inline-flex;padding:2px;border:1px solid rgba(184,134,40,.55);border-radius:999px;background:rgba(255,251,240,.6)}
 #top#top#top .snoer-keuze button{min-width:52px;min-height:44px;padding:0 14px;border:0;border-radius:999px;background:transparent;font-family:var(--font-display);font-size:17px;font-weight:600;color:#4a2b1d;cursor:pointer}
@@ -2900,7 +2900,7 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top .voedsel-kaart{container-type:inline-size}
 #top#top#top#top .voedsel-teken{font-size:24cqw}
 #top#top#top#top .is-toegestaan .voedsel-teken{color:#2f6b3c}
-#top#top#top#top .is-niet .voedsel-teken{color:#8b1e1a}
+#top#top#top#top .is-niet .voedsel-teken{color:#0b1b2a}
 #top#top#top#top .is-niet img{filter:saturate(.75)}
 /* leesvensters op het web: ongeveer 900 px breed (zoals de referentie), sierbalk niet breder dan 640 px */
 @media(min-width:641px){
@@ -2918,7 +2918,7 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
    dunne goudlijn, geen hoekornamenten) · D leesvlak · E donker anker · F sierlijn · G kleine knop (gedrukte rand).
    Kleur is functioneel: rubriek-rood voor titels en namen, goud voor ornament en labels, chocolade/bordeaux als anker.
    ============================================================================================================ */
-:root{--ot-titel:#7a1f1a;--ot-perkament:#F2E6C9;--ot-chocolade:#2E1A0F;--ot-bordeaux:#4B1E16;--ot-rubriek:var(--ot-titel);--ot-blauw:#0F2F4A;--ot-antiekgoud:#DAAF37;--ot-ivoor:#FBF6E9;--ot-tekst:#4a3020}
+:root{--ot-titel:#0b1b2a;--ot-perkament:#F2E6C9;--ot-chocolade:#2E1A0F;--ot-bordeaux:#4B1E16;--ot-rubriek:var(--ot-titel);--ot-blauw:#0F2F4A;--ot-antiekgoud:#DAAF37;--ot-ivoor:#FBF6E9;--ot-tekst:#4a3020}
 
 /* A — openingen */
 #top#top#top#top .opening{position:relative;text-align:center;padding:30px 16px 22px}
@@ -3974,3 +3974,17 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Bouw 201 — Feesten: in de kaart van het eerstvolgende feest een subtiele gouden lijn in plaats van het sierornament. */
 #top#top#top#top#top#top#top#top#top .fs-nu .opening-sierlijn{width:min(140px,40%);height:1px;aspect-ratio:auto;margin:14px auto 4px;background:color-mix(in srgb,var(--ot-gold) 55%,transparent)}
 @media(min-width:768px){#top#top#top#top#top#top#top#top#top .fs-nu .opening-sierlijn{margin:14px 0 4px}}
+
+/* Bouw 202 — Onderbalk en het Cycli/Meer-blad overal nachtblauw met gedempt goud (startpagina-pakket). */
+#top .bottom-nav{background:linear-gradient(180deg,#10243a,#0b1b2a);border-top-color:rgba(172,121,47,.55)}
+#top .bottom-nav svg{color:#d9cdb4}
+#top#top#top .bottom-nav :is(a,button){color:#e6dcc8}
+#top#top#top .bottom-nav .is-actief,#top .bottom-nav .is-actief svg{color:#e0b765}
+#top .bottom-nav .is-actief:after{background:#c9a04e}
+#top .bottom-nav-blad{background:#0b1b2a;border-color:rgba(172,121,47,.55)}
+#top .bottom-nav-blad :is(a,button){color:#e6dcc8}
+#top .bottom-nav-blad a.is-actief{color:#e0b765}
+#top .bottom-nav-blad a.is-actief:after{background:#c9a04e}
+
+/* Bouw 203 — alle paginatitels in het nachtblauw van de onderbalk. */
+#top#top#top#top#top#top#top#top#top#top#top .opening-titel{color:#0b1b2a!important}

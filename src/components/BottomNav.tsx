@@ -1,6 +1,5 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { BookOpen, CalendarDays, Ellipsis, History, House } from 'lucide-react';
-import { useApp } from '../lib/context';
+import { useEffect, useRef, useState } from 'react';
+import { BookOpen, CalendarDays, History, House, Menu } from 'lucide-react';
 
 // Onderbalk voor mobiel (max-width: 767px). Op desktop is hij verborgen via CSS en blijft de bestaande koptekst in gebruik.
 // Gebruikt dezelfde ankers als de koptekst.
@@ -15,27 +14,22 @@ const GROEPEN: Record<string, Sub[]> = {
     { id: 'jaar', label: 'Jaar' },
     { id: 'pascha', label: 'Pascha' },
   ],
-  meer: [
-    { id: 'psalmen', label: 'Psalmen' },
-    { id: 'vasten', label: 'Vasten' },
-    { id: 'heiligen', label: 'Heiligen' },
-    { id: 'feesten', label: 'Feesten' },
-    { id: 'bronnen', label: 'Bronnen' },
-    { id: 'instellingen', label: 'Instellingen' },
-  ],
 };
+
+// Meer opent de pagina Verdieping (#meer, Meer.tsx); op die pagina en de pagina's die je daar opent licht Meer op.
+// Pascha staat onder Cycli.
+const MEER = ['meer', 'gebeden', 'vasten', 'heiligen', 'feesten', 'instellingen', 'bronnen'];
 
 const ITEMS = [
   { id: 'vandaag', label: 'Vandaag', Icon: House },
   { id: 'kalender', label: 'Kalender', Icon: CalendarDays },
   { id: 'cycli', label: 'Cycli', Icon: History },
-  { id: 'gebeden', label: 'Gebeden', Icon: BookOpen },
-  { id: 'meer', label: 'Meer', Icon: Ellipsis },
+  { id: 'psalmen', label: 'Psalmen', Icon: BookOpen },
+  { id: 'meer', label: 'Meer', Icon: Menu },
 ];
 
 // Op mobiel staat er één pagina tegelijk in beeld; de actieve knop volgt die pagina.
 export default function BottomNav({ pagina: actief }: { pagina: string }) {
-  const { openZoeken } = useApp();
   const [open, setOpen] = useState<string | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
@@ -61,19 +55,11 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
   return (
     <>
       {open && (
-        <div ref={sheetRef} className={`bottom-nav-blad${open === 'meer' ? ' is-meer' : ''}`} role="menu" aria-label={open === 'cycli' ? 'Cycli' : 'Meer'}>
-          {/* Meer: Psalmen, Vasten, Heiligen, Feesten, Zoeken, Bronnen */}
+        <div ref={sheetRef} className="bottom-nav-blad" role="menu" aria-label="Cycli">
           {GROEPEN[open].map((item) => (
-            <Fragment key={item.id}>
-              {item.id === 'bronnen' && (
-                <button type="button" role="menuitem" onClick={() => { setOpen(null); openZoeken(); }}>
-                  Zoeken
-                </button>
-              )}
-              <a href={`#${item.id}`} role="menuitem" className={actief === item.id ? 'is-actief' : undefined} onClick={() => setOpen(null)}>
-                {item.label}
-              </a>
-            </Fragment>
+            <a key={item.id} href={`#${item.id}`} role="menuitem" className={actief === item.id ? 'is-actief' : undefined} onClick={() => setOpen(null)}>
+              {item.label}
+            </a>
           ))}
         </div>
       )}
@@ -81,7 +67,7 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
         <ul>
           {ITEMS.map(({ id, label, Icon }) => {
             const groep = GROEPEN[id];
-            const on = groep ? groep.some((s) => s.id === actief) : actief === id;
+            const on = groep ? groep.some((s) => s.id === actief) : id === 'meer' ? MEER.includes(actief) : actief === id;
             const inhoud = (
               <>
                 <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
@@ -95,7 +81,7 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
                     {inhoud}
                   </button>
                 ) : (
-                  <a href={`#${id}`} className={on ? 'is-actief' : undefined} aria-current={on ? 'page' : undefined} onClick={() => setOpen(null)}>
+                  <a href={`#${id}`} className={on ? 'is-actief' : undefined} aria-current={actief === id ? 'page' : undefined} onClick={() => setOpen(null)}>
                     {inhoud}
                   </a>
                 )}

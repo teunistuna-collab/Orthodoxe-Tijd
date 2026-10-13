@@ -11,6 +11,7 @@ import Vasten from './components/Vasten';
 import Pascha from './components/Pascha';
 import Heiligen from './components/Heiligen';
 import Gebeden from './components/Gebeden';
+import Meer from './components/Meer';
 import DagModal from './components/DagModal';
 import DagLezingen from './components/DagLezingen';
 import DagHeiligen from './components/DagHeiligen';
@@ -44,11 +45,13 @@ const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
 const STANDAARD_TITEL = document.title;
 
-const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen'];
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer'];
 
 // "#psalmen/50" hoort bij de pagina "psalmen" (de Psalmenpagina opent zelf Psalm 50).
 function paginaUitHash(): string | null {
   const id = decodeURIComponent(window.location.hash.slice(1)).split('/')[0];
+  // Verdieping (#meer) hoort bij de mobiele onderbalk; op het web staat alles al in de kopbalk.
+  if (id === 'meer' && window.matchMedia('(min-width: 768px)').matches) return null;
   return PAGINAS.includes(id) ? id : null;
 }
 
@@ -134,7 +137,7 @@ export default function App() {
 
   // De tabtitel volgt de pagina (handig bij delen, bladwijzers en voor schermlezers).
   useEffect(() => {
-    document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${hoofdletter(pagina)} — Orthodoxe Tijd`;
+    document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${pagina === 'meer' ? 'Verdieping' : hoofdletter(pagina)} — Orthodoxe Tijd`;
   }, [pagina]);
 
   // Leesrooster: het huidige en het volgende kerkjaar meteen, andere jaren pas als je er een datum uit opent.
@@ -233,6 +236,7 @@ export default function App() {
           <div className={p('vasten')}><ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame></div>
           <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
           <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
+          <div className={p('meer')}><Meer /></div>
           <div className={p('instellingen')}><ExactPageFrame title="Instellingen"><Instellingen /></ExactPageFrame></div>
           <div className={p('psalmen')}><ExactPageFrame title="Psalmen"><Psalmen actief={pagina === 'psalmen'} /></ExactPageFrame></div>
           <div className={p('bronnen')}><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
