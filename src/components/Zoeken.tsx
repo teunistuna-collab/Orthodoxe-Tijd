@@ -8,6 +8,7 @@ import { FEEST_HEILIGENJAAR } from '../lib/feestHeiligenjaar';
 import { laadVermelding } from '../lib/heiligenjaarTekst';
 import { bouwIndex, zoek, type ZoekTreffer } from '../lib/zoeken';
 import { vergrendelScroll } from '../lib/scrollLock';
+import './popup.css';
 import { useTerugSluit } from '../lib/terug';
 import { houdFocusBinnen } from '../lib/focus';
 import { gaNaar } from '../lib/navigatie';

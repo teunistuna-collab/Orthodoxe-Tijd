@@ -62,6 +62,8 @@
 .vg-zoek svg { width: 24px; height: 24px; stroke-width: 1.6; filter: drop-shadow(0 1px 4px rgba(0, 0, 0, .6)); }
 
 .vg-christus { width: clamp(220px, 62cqw, 280px); height: auto; margin-top: 2px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .45)); }
+/* Feesticoon (Pascha, Geboorte): in exact dezelfde box als het Christusicoon (640 : 633), helemaal zichtbaar, zonder filter */
+.vg-christus.vg-feesticoon { aspect-ratio: 640 / 633; object-fit: contain; filter: none; }
 .vg-datum { margin-top: 14px !important; font-family: var(--font-titel); font-size: clamp(19px, 5.4cqw, 26px); font-weight: 500; line-height: 1.2; letter-spacing: .14em; color: #f3dca6 !important; text-transform: uppercase; color: #ecd39b; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
 /* Verdieping: de titel in EB Garamond; overschrijft de algemene koppenregel (index.css: alle h1 in Cinzel). */
 #top#top#top#top#top#top#top .vg-titel { font-family: var(--font-lees) !important; }
@@ -392,3 +394,12 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   :is(#week, #jaar) .vg-kop .vg-jaarwiel { display: none; }
   :is(#week, #jaar) .vg-kop { min-height: clamp(180px, 50cqw, 260px); }
 }
+
+/* Feesttijd op Vandaag: begroeting en feestlink in de bestaande rijstijl (gouden lijnen, transparant) */
+.vg-feest { margin: 14px 0 22px; text-align: center; }
+.vg-feest-groet { margin: 6px 0 0; font-family: var(--font-lees); font-size: clamp(24px, 6.6cqw, 30px); font-weight: 500; line-height: 1.2; color: var(--inkt); }
+.vg-feest-groet span { display: block; font-style: italic; color: var(--gedempt); }
+.vg-feest-rij { margin-top: 14px; text-align: left; }
+.vg-feest-symbool { display: flex; align-items: center; justify-content: center; color: var(--goud); }
+.vg-feest-symbool svg { width: 30px; height: 30px; }
+.vg-feest-sub { margin: 0 0 4px; font-size: 15px; font-style: italic; color: var(--gedempt); }

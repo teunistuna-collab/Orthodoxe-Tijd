@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ChevronRight, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
+import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { BEWEEGLIJKE_FEESTEN, DERTIEN, OVERIGE_VASTE, type Feest } from '../lib/feesten';
 import { MAANDEN, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum } from '../lib/kalender';
 import { volgendeFeestDatum } from '../lib/overzicht';
@@ -34,6 +35,15 @@ const metDatum = (lijst: Feest[], vandaag: Date, mode: Mode): Item[] =>
 export default function Feesten() {
   const { mode, vandaag } = useApp();
   const [open, setOpen] = useState<string | null>(null);
+  // Vandaag (feesttijd) kan het venster van een feest openen, bijvoorbeeld de Geboorte van Christus.
+  useEffect(() => {
+    const opPopup = (event: Event) => {
+      const { pagina, sleutel } = (event as CustomEvent<OpenPopupDetail>).detail;
+      if (pagina === 'feesten') setOpen(sleutel);
+    };
+    window.addEventListener(OPEN_POPUP_EVENT, opPopup);
+    return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
+  }, []);
   const [zoek, setZoek] = useState('');
   const [maand, setMaand] = useState<number | null>(vandaag.getUTCMonth());
   const [dag, setDag] = useState<number | null>(null);

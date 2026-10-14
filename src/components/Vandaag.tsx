@@ -1,16 +1,17 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { BookOpen, ChevronRight, Search } from 'lucide-react';
+import { BookOpen, ChevronRight, Search, Star } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { usePijlgebed } from '../lib/pijlgebed';
 import { KruisTeken, VastenSymbool } from './ui';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
-import { dagInfo, daysBetween, formatDag, hoofdletter, orthodoxPascha } from '../lib/kalender';
+import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
 import { INITIALEN, dienstVanHetUur } from '../lib/etmaal';
 import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { vastenGroep } from '../lib/vasten';
+import { feestVoorDag } from '../lib/feestdagen';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -48,10 +49,10 @@ export default function Vandaag() {
   // De eerste echte heilige van de dag (geen voorfeest, "Zaterdag vóór …" of icoon).
   const heilige = eersteHeilige(heiligen?.HEILIGEN[dag.kerkKey]);
   const kleur = liturgischeKleur(dag);
-  // Van Pascha tot het einde van de Paastijd (Pinksteren, Pascha + 49, zoals op de Paschapagina) staat in de kop het
-  // icoon van de Verrijzenis in plaats van het Christusicoon; elk jaar opnieuw volgens de Paschaberekening.
-  const naPascha = daysBetween(orthodoxPascha(vandaag.getUTCFullYear()), vandaag);
-  const paastijd = naPascha >= 0 && naPascha <= 49;
+  // Feestdagen (lib/feestdagen.ts): tijdens Pascha en de Geboorte van Christus vervangt het feesticoon het Christusicoon
+  // in de kop, met de begroeting en een feestlink eronder. Bij een dagwisseling of andere kalenderkeuze opnieuw bepaald.
+  const feest = useMemo(() => feestVoorDag(vandaag, mode), [vandaag, mode]);
+  const feestNaam = feest?.id === 'pascha' ? 'De Verrijzenis van onze Heer' : 'De Geboorte van onze Heer Jezus Christus';
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));
   // Kernvers van de dienst, zoals in de Etmaal-cyclus ("Psalm Kernvers: 50:12" → "Psalm 50:12").
@@ -88,12 +89,46 @@ export default function Vandaag() {
           </a>
           <button type="button" onClick={openZoeken} className="vg-zoek" aria-label="Zoeken"><Search aria-hidden="true" /></button>
         </div>
-        <img className="vg-christus" src={paastijd ? '/images/Pascha-icoon.webp' : '/images/Christus-afbeelding.webp'} alt={paastijd ? 'Icoon van de Verrijzenis' : 'Christus'} width={640} height={paastijd ? 640 : 633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+        {/* Feesticoon op de plek en in de maat van het Christusicoon: helemaal zichtbaar (contain), zonder filter */}
+        {feest ? (
+          <img className="vg-christus vg-feesticoon" src={feest.beeld} alt={feest.alt} width={feest.breedte} height={feest.hoogte} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+        ) : (
+          <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+        )}
         <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time></h1>
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>
 
       <div className="vg-papier">
+        {/* Feesttijd: de begroeting en de link naar het feest, in de stijl van de andere rijen op Vandaag */}
+        {feest && (
+          <section className="vg-feest" aria-labelledby="vg-feest-kop">
+            <h2 id="vg-feest-kop" className="vg-label">{feest.fase === 'dag' ? 'Vandaag vieren wij' : 'In deze feesttijd vieren wij'}</h2>
+            <p className="vg-feest-groet">
+              {feest.groet}
+              <span>{feest.antwoord}</span>
+            </p>
+            <div className="vg-lezingen vg-feest-rij">
+              {feest.id === 'pascha' ? <span className="vg-boek vg-feest-symbool" aria-hidden="true"><KruisTeken /></span> : <Star className="vg-boek" aria-hidden="true" />}
+              <div>
+                {/* Pascha: naar de Paschapagina; Geboorte: het venster van het feest (Feesten) boven deze pagina */}
+                {feest.id === 'pascha' ? (
+                  <a className="vg-rij vg-rij-kop" href="#pascha">
+                    <span>{feest.linkLabel}</span>
+                    <ChevronRight aria-hidden="true" />
+                  </a>
+                ) : (
+                  <Actie className="vg-rij vg-rij-kop" href="#feesten" onClick={() => openPopup({ pagina: 'feesten', sleutel: 'kerstmis' })}>
+                    <span>{feest.linkLabel}</span>
+                    <ChevronRight aria-hidden="true" />
+                  </Actie>
+                )}
+                <p className="vg-feest-sub">{feestNaam}</p>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* B. Het pijlgebed: het eigen pijlgebed uit Instellingen, anders het standaardgebed; de tekst linkt naar Instellingen. */}
         <section className="vg-gebed" aria-labelledby="vg-gebed-kop">
           <h2 id="vg-gebed-kop" className="vg-label">Het pijlgebed</h2>

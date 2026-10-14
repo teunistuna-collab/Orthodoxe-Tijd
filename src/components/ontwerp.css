@@ -293,3 +293,7 @@
 .ot-psalmen .vg-papier > * { margin-left: auto !important; margin-right: auto !important; }
 .ot-psalmen .ot-psalmraster { max-width: 640px; }
 .ot-psalmen .ot-ps-legenda { justify-content: center; }
+
+/* Psalmlezer in de avondweergave: het leesvlak krijgt een vlakke achtergrond die mee omkeert (donker), anders staat de
+   omgekeerde, lichte tekst op het lichte papyrus */
+html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-vlak { background: #f5e6c8 !important; }

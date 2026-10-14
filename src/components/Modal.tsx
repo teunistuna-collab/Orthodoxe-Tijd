@@ -4,6 +4,7 @@ import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
 import { houdFocusBinnen } from '../lib/focus';
 import Leesbediening, { type Deel } from './Leesbediening';
+import './popup.css';
 
 type ModalProps = {
   open: boolean;
