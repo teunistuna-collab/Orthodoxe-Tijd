@@ -12,6 +12,7 @@ import { letterBeeld } from '../lib/letters';
 import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 import './Vandaag.css';
 import './ontwerp.css';
+import './psalmen-knoppen.css';
 
 // De psalmteksten (±12 KB gecomprimeerd) meteen bij het starten ophalen, niet pas als het psalter of een dienst ze vraagt.
 laadPsalmTeksten().catch(() => {});
@@ -150,7 +151,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
     return (
       <section id="psalmen" className="vg ot-redesign ot-lezer">
         <div className="ot-lezer-strook" aria-hidden="true">
-          <BannerBeeld naam="psalmen-adem-banner" open={open} />
+          <BannerBeeld naam="psalmen-banner" open={open} />
         </div>
         <article className="vg-papier ot-inhoud lees-vlak ot-lezer-vlak" aria-labelledby="ps-lezer-titel">
           <div className="ot-lezer-bediening">
@@ -180,61 +181,63 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   return (
     <>
       <section id="psalmen" className="vg ot-redesign ot-psalmen">
-        <NisKop open={open} balk achter={<BannerBeeld naam="psalmen-adem-banner" open={open} />} />
+        <NisKop open={open} balk achter={<BannerBeeld naam="psalmen-banner" open={open} />} />
         <div className="vg-papier ot-inhoud">
-          <div className="ot-ps-kop">
-            <img className="ot-ps-p" src={letterBeeld("P")} alt="" width={400} height={400} decoding="async" />
-            {/* De P is de versierde beginletter: zichtbaar staat er "salter", schermlezers lezen "Psalter" */}
-            <h1 className="ot-titel"><span className="sr-only">Psalter</span><span aria-hidden="true">salter</span></h1>
-          </div>
-          <Sierlijn />
+          <h1 className="sr-only">Psalter</h1>
 
           <label className="ot-zoekveld">
             <Search aria-hidden="true" />
             <input type="search" value={zoek} onChange={(e) => setZoek(e.target.value)} placeholder="Zoek een psalm, woord of dienst" aria-label="Zoek een psalm op nummer, woord of dienst" />
           </label>
 
-          <div className="ot-segmenten" role="group" aria-label="Filter">
-            {FILTERS.map(([id, label]) => (
-              <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)}>
-                {label}
-              </button>
-            ))}
-          </div>
-
-          {filter === 'kathisma' && (
-            <div className="ot-segmenten ot-segmenten-klein" role="group" aria-label="Kathisma">
-              {KATHISMATA.map((k) => (
-                <button key={k.nr} type="button" aria-pressed={k.nr === kathismaNr} aria-label={`Kathisma ${k.nr}`} onClick={() => setKathismaNr(k.nr)}>
-                  {k.nr}
+          {/* Bediening volgens het pakket "Psalmen tabbladen en boekrollen" (psalmen-knoppen.css): perkamenten tabbladen
+              voor de filters, boekrollen voor de delen van vijftig. Zelfde state, filters en aantallen als hiervoor. */}
+          <section className="psalm-controls" aria-label="Psalmen selecteren">
+            <div className="pc-filters" role="group" aria-label="Psalmfilter">
+              {FILTERS.map(([id, label]) => (
+                <button key={id} type="button" className="pc-tab" aria-pressed={filter === id} onClick={() => setFilter(id)}>
+                  {label}
                 </button>
               ))}
             </div>
-          )}
 
-          {filter === 'themas' && (
-            <div className="ot-segmenten" role="group" aria-label="Thema">
-              {THEMAS.map((t) => (
-                <button key={t.naam} type="button" aria-pressed={t === thema} onClick={() => setThema(t)}>
-                  {t.naam}
-                </button>
-              ))}
-            </div>
-          )}
+            {filter === 'kathisma' && (
+              <div className="ot-segmenten ot-segmenten-klein" role="group" aria-label="Kathisma">
+                {KATHISMATA.map((k) => (
+                  <button key={k.nr} type="button" aria-pressed={k.nr === kathismaNr} aria-label={`Kathisma ${k.nr}`} onClick={() => setKathismaNr(k.nr)}>
+                    {k.nr}
+                  </button>
+                ))}
+              </div>
+            )}
 
-          <p className="ot-ps-noot">
-            {MET_TEKST} van de {AANTAL} psalmen hebben al tekst; de andere worden toegevoegd.
-          </p>
+            {filter === 'themas' && (
+              <div className="ot-segmenten" role="group" aria-label="Thema">
+                {THEMAS.map((t) => (
+                  <button key={t.naam} type="button" aria-pressed={t === thema} onClick={() => setThema(t)}>
+                    {t.naam}
+                  </button>
+                ))}
+              </div>
+            )}
 
-          {raster ? (
-            <>
-              <div className="ot-segmenten" role="group" aria-label="Psalmen per vijftig">
+            <p className="pc-note">
+              {MET_TEKST} van de {AANTAL} psalmen hebben al tekst{MET_TEKST < AANTAL ? '; de andere worden toegevoegd.' : '.'}
+            </p>
+
+            {raster && (
+              <div className="pc-ranges" role="group" aria-label="Psalmreeks">
                 {BLOKKEN.map((b, i) => (
-                  <button key={b.van} type="button" aria-pressed={blok === i} onClick={() => setBlok(i)}>
+                  <button key={b.van} type="button" className="pc-scroll" aria-label={`Psalmen ${b.van} tot en met ${b.tot}`} aria-pressed={blok === i} onClick={() => setBlok(i)}>
                     {b.van} – {b.tot}
                   </button>
                 ))}
               </div>
+            )}
+          </section>
+
+          {raster ? (
+            <>
               <div className="ot-psalmraster" role="group" aria-label={`Psalm ${BLOKKEN[blok].van} tot ${BLOKKEN[blok].tot}`}>
                 {PSALMEN.slice(BLOKKEN[blok].van - 1, BLOKKEN[blok].tot).map((p) => (
                   <button key={p.id} type="button" className={p.hasText ? 'heeft-tekst' : undefined} aria-label={`${p.title}${p.hasText ? '' : ', tekst wordt nog toegevoegd'}`} onClick={() => kies(p)}>
@@ -421,10 +424,9 @@ export function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, ontwerp }: {
                         return (
                           <span key={j} className="ot-eerste-regel">
                             <span className="sr-only">{tekstStart}</span>
-                            <span aria-hidden="true">
-                              <img className="ot-vers-initiaal" src={beeld} alt="" width={400} height={400} decoding="async" />
-                              {tekstStart.slice(1)}
-                            </span>
+                            <img className="ot-vers-initiaal" src={beeld} alt="" width={400} height={400} decoding="async" />
+                            {/* De rest van het woord sluit op de voetlijn van de letter aan, zoals de dienst op Vandaag */}
+                            <span className="ot-vers-rest" aria-hidden="true">{tekstStart.slice(1)}</span>
                           </span>
                         );
                       })}

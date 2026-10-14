@@ -300,7 +300,18 @@ export default function Pascha() {
           uitzicht, de datum van het komende Pascha en de zes stappen van de Paascyclus als tijdlijn, met hun begin- en
           einddatum uit de bestaande berekening. Elke stap opent de bestaande uitleg. */}
       <section id="pascha" className="vg ot-redesign ot-pascha">
-        <NisKop open={open} balk terug="#cycli" achter={<BannerBeeld naam="pascha-banner" open={open} />} />
+        <NisKop
+          open={open}
+          balk
+          terug="#cycli"
+          achter={
+            <picture>
+              {/* Mobiel: het lege graf bij zonsopgang; web: de bestaande Pascha-banner */}
+              <source media="(max-width: 767px)" srcSet="/images/ontwerp/pascha-mobiel-banner-800.webp 800w, /images/ontwerp/pascha-mobiel-banner-1255.webp 1255w" sizes="100vw" width={1255} height={638} />
+              <BannerBeeld naam="pascha-banner" open={open} />
+            </picture>
+          }
+        />
         <div className="vg-papier ot-inhoud">
           <h1 className="ot-titel">Naar Pascha</h1>
           <p className="ot-pc-datum">{formatDatum(pascha)}</p>

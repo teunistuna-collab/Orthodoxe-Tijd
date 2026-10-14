@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react';
 import NisKop from './NisKop';
+import { BannerBeeld } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import './Vandaag.css';
 
@@ -19,9 +20,8 @@ export default function Cycli() {
   const open = usePaginaOpen('cycli');
   return (
     <section id="cycli" className="vg vg-cycli">
-      <NisKop open={open} balk>
-        <img className="vg-ritmewiel" src="/images/cycli/ritmewiel.svg" alt="" aria-hidden="true" width={300} height={300} />
-      </NisKop>
+      {/* Banner: de zonnewijzer in het gewelf (public/images/ontwerp/cycli-banner-*.webp) */}
+      <NisKop open={open} balk achter={<BannerBeeld naam="cycli-banner" open={open} />} />
       <div className="vg-papier vg-cy">
         <h1 className="vg-cy-titel">Cycli</h1>
         <img className="vg-sierlijn vg-cy-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />

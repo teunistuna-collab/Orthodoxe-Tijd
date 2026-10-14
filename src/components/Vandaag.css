@@ -185,7 +185,10 @@
 @media (prefers-reduced-motion: no-preference) { .vg-verd-rij { transition: background-color .15s; } }
 
 /* ---------- Cycli (#cycli, Cycli.tsx): ritmewiel in de kop, titel en vijf omlijste ingangen op papyrus ---------- */
-.vg-cycli .vg-kop { padding-bottom: calc(var(--boog) * .55); }
+/* Cycli (alleen mobiel): de zonnewijzer-banner (3 : 1) begint onder de balk met merk en zoekknop */
+.vg-cycli .vg-kop { height: clamp(200px, 56cqw, 300px); padding: 0; }
+.vg-cycli .vg-kop-achter { background: #0d1a2b; }
+.vg-cycli .vg-kop-achter img { margin-top: 44px; height: calc(100% - 44px); object-position: 50% 45%; }
 .vg-ritmewiel { width: clamp(200px, 58cqw, 270px); height: auto; margin: -4px 0 4px; filter: drop-shadow(0 0 6px rgba(7, 18, 29, .8)); }
 .vg-cy { text-align: center; padding-bottom: 28px; }
 #top#top#top#top#top#top#top .vg-cy-titel { font-family: var(--font-lees) !important; }
@@ -380,4 +383,10 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   /* Wiel of icoon (Cycli, Week, Jaar) vult de hoogte van de nis, boven de sierboog */
   .vg:not(#vandaag) .vg-kop:has(.vg-ritmewiel) { padding-bottom: 22px; }
   .vg:not(#vandaag) .vg-ritmewiel { width: auto; height: 196px; margin: 0; }
+}
+
+/* Week en Jaar op mobiel: geen icoon in de kop, alleen het gewelf met de kaarsen */
+@media (max-width: 767px) {
+  :is(#week, #jaar) .vg-kop .vg-jaarwiel { display: none; }
+  :is(#week, #jaar) .vg-kop { min-height: clamp(180px, 50cqw, 260px); }
 }

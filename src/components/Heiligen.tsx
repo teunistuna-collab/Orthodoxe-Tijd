@@ -103,7 +103,7 @@ export default function Heiligen() {
 
   return (
     <section id="heiligen" className="vg vg-heiligen">
-      <NisKop titel="De heiligen" open={open} />
+      <NisKop titel="De Heiligen" open={open} />
       <div className="vg-papier">
         {titel ? (
           <>

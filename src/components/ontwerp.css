@@ -105,7 +105,7 @@
 
 /* ---------- Pascha ---------- */
 .ot-pascha .ot-pc-datum { margin: 2px 0 0; font-family: var(--font-lees); font-size: clamp(30px, 8.5cqw, 38px); font-weight: 500; line-height: 1.1; text-align: center; color: var(--ot-inkt); }
-.ot-pascha .vg-kop-achter .ot-banner { object-position: 50% 58%; }
+.ot-pascha .vg-kop-achter .ot-banner { object-position: 40% 60%; } /* mobiel: het graf met de weggerolde steen in beeld */
 @media (min-width: 768px) { #pascha.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 52%; } }
 
 /* ---------- Feesten ---------- */
@@ -118,6 +118,7 @@
 /* Alleen de kop schuift naast de bloemenrand; de rest gebruikt de volle breedte */
 .ot-feesten .ot-fs-kop { padding-left: 9cqw; text-align: center; }
 .ot-feesten .ot-fs-icoon { display: block; width: min(150px, 42%); height: auto; margin: 6px auto 0; }
+@media (max-width: 767px) { .ot-feesten .ot-fs-icoon { display: none; } } /* mobiel: zonder icoon */
 .ot-feesten .ot-fs-intro { max-width: 30em; margin: 10px auto 0; font-family: var(--font-lees); font-size: 18px; line-height: 1.45; color: var(--ot-gedempt); }
 .ot-feesten .ot-fs-label { margin: 0; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-align: center; text-transform: uppercase; color: var(--ot-goud); }
 .ot-feesten .ot-fs-titel { margin: 2px 0 6px; font-family: var(--font-lees); font-size: clamp(28px, 7.6cqw, 34px); font-weight: 500; line-height: 1.1; text-align: center; color: var(--ot-inkt); }
@@ -191,13 +192,15 @@
 
 /* ---------- Psalmen: overzicht ---------- */
 .ot-psalmen .vg-kop { height: clamp(150px, 40cqw, 240px); }
-.ot-psalmen .vg-kop-achter .ot-banner { object-position: 50% 30%; }
-@media (min-width: 768px) { #psalmen.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 35%; } }
-.ot-psalmen .ot-ps-kop { --p: clamp(84px, 24cqw, 112px); --t: clamp(48px, 14cqw, 64px); display: flex; align-items: flex-start; justify-content: center; gap: 4px; margin-top: 4px; }
+.ot-psalmen .vg-kop-achter .ot-banner { object-position: 50% 45%; }
+/* Mobiel: het icoon van David begint onder de balk (merk en zoekknop), zodat zijn hoofd vrij blijft */
+@media (max-width: 767px) {
+  .ot-psalmen .vg-kop { height: clamp(220px, 62cqw, 300px); }
+  .ot-psalmen .vg-kop-achter { background: #0d1a2b; }
+  .ot-psalmen .vg-kop-achter .ot-banner { margin-top: 44px; height: calc(100% - 44px); object-position: 50% 30%; }
+}
+@media (min-width: 768px) { #psalmen.ot-redesign.vg .vg-kop { height: 33.333cqw; } #psalmen.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 50%; } } /* web: het hele icoon van David (beeld 3 : 1) */
 /* "salter" op de voetlijn van de P: het tekstblok zakt tot de onderkant van de letter */
-.ot-psalmen .ot-ps-kop > h1 { margin-top: calc(var(--p) * .86 - var(--t) * .8); }
-.ot-psalmen .ot-ps-p { flex: none; width: var(--p); height: auto; object-fit: contain; pointer-events: none; }
-.ot-psalmen .ot-ps-kop .ot-titel { margin-bottom: 0; font-size: var(--t); line-height: .95; text-align: left; }
 .ot-redesign .ot-zoekveld { display: flex; align-items: center; gap: 10px; min-height: 48px; margin: 16px 0 12px; padding: 0 14px; border: 1px solid rgba(167, 118, 52, .55); border-radius: 8px; background: rgba(255, 250, 238, .6); }
 .ot-redesign .ot-zoekveld svg { flex: none; width: 20px; height: 20px; color: var(--ot-inkt); }
 .ot-redesign .ot-zoekveld input { flex: 1; min-width: 0; min-height: 46px; border: 0; background: none; font: inherit; font-family: var(--font-lees); font-size: 18px; color: var(--ot-inkt); outline: none; }
@@ -208,7 +211,6 @@
 #top#top#top main .ot-redesign .ot-segmenten button { display: inline-flex; flex: 1 1 0; align-items: center; justify-content: center; min-width: 0; line-height: 1.15; text-align: center; min-height: 44px !important; padding: 4px 8px; border: 1px solid rgba(167, 118, 52, .45); border-radius: 7px; background: rgba(226, 205, 165, .45); font: inherit; font-family: var(--font-lees); font-size: 17px; color: var(--ot-inkt); cursor: pointer; }
 #top#top#top main .ot-redesign .ot-segmenten button[aria-pressed="true"] { border-color: #6e0b13; background: linear-gradient(180deg, #991320, #740d15); color: #fff3db; }
 #top#top#top main .ot-redesign .ot-segmenten-klein button { min-width: 0; font-size: 15px; }
-.ot-psalmen .ot-ps-noot { margin: 0 0 10px; font-size: 14px; color: var(--ot-gedempt); }
 .ot-psalmen .ot-psalmraster { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
 #top#top#top main .ot-psalmen .ot-psalmraster button { position: relative; display: flex; align-items: center; justify-content: center; min-height: 46px !important; padding: 0; border: 1px solid rgba(167, 118, 52, .4); border-radius: 7px; background: rgba(255, 250, 238, .55); font: inherit; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt); cursor: pointer; }
 .ot-psalmen .ot-psalmraster button:hover { background: rgba(255, 248, 229, .9); }
@@ -242,7 +244,11 @@
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-versnr { padding-top: 7px; font-family: var(--font-lees); font-size: 15px; color: var(--ot-rood); }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { font-family: var(--font-lees); font-size: clamp(21px, 5.6cqw, 25px); line-height: 1.5; color: var(--ot-inkt); }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-stasis { color: var(--ot-goud); }
-#top#top#top#top#top#top .ot-lezer .ot-vers-initiaal { float: left; width: 3.3em; height: 3.3em; margin: 6px 10px 0 0; border-radius: 3px; pointer-events: none; }
+/* Beginletter als op Vandaag: de letter zweeft links, de rest van het woord staat er direct tegenaan op de voetlijn
+   (het letterpaneel loopt tot ±86 % van de hoogte; de rechterrand van het beeld is transparant, vandaar de negatieve marge) */
+#top#top#top#top#top#top .ot-lezer .ot-vers-initiaal { float: left; width: 6em; height: 6em; margin: 2px -.35em 0 -4px; shape-outside: inset(0 6% 0 0); shape-margin: 3px; object-fit: contain; pointer-events: none; }
+#top#top#top#top#top#top .ot-lezer .ot-vers-rest { display: block; padding-top: 4em; }
+#top#top#top#top#top#top .ot-lezer .ot-eerste-regel ~ span { clear: left; } /* volgende regels onder de letter, uitgelijnd met de rest */
 #top#top#top#top#top#top .ot-lezer .ot-vers-letter { display: flex; align-items: center; justify-content: center; border: 2px solid var(--ot-goud); background: linear-gradient(180deg, #991320, #740d15); font-family: var(--font-titel); font-size: 2.2em; line-height: 1; color: #f3dca4; }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { display: flow-root; }
 .ot-lezer .ps-bron { text-align: center; }
@@ -277,3 +283,12 @@
 #top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-acties button + button { border-left: 1px solid var(--ot-lijn) !important; }
 .ot-adem .snoer-acties svg { width: 20px; height: 20px; color: var(--ot-goud); }
 .ot-adem .snoer-uitleg { text-align: center; }
+
+/* Pascha: "Paascyclus <jaar>" gecentreerd (pijl blijft rechts) en een maat groter */
+#top#top#top#top#top#top#top#top#top .pc-cyclus-knop > span:first-child { flex: 1; padding-left: 32px; text-align: center; }
+#top#top#top#top#top#top#top#top#top .pc-cyclus-titel { font-size: 22px; }
+
+/* Psalmen: alle blokken (zoeken, filters, delen, raster, lijst, verder lezen) als één kolom in het midden */
+.ot-psalmen .vg-papier > * { margin-left: auto !important; margin-right: auto !important; }
+.ot-psalmen .ot-psalmraster { max-width: 640px; }
+.ot-psalmen .ot-ps-legenda { justify-content: center; }
