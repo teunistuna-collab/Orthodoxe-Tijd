@@ -1,11 +1,24 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { BookOpen, ChevronRight, Moon, Search, Sun, X } from 'lucide-react';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR, type Gebed } from '../lib/gebeden';
 import { LiturgicalPopup, CycleTransition } from './CycleSections';
 import { useFavorieten } from '../lib/favorieten';
-import PaginaOpening from './PaginaOpening';
+import ExactPageFrame from './ExactPageFrame';
+import NisKop from './NisKop';
+import { BannerBeeld, Sierlijn } from './onderdelen';
+import { HANDEN, KRUIS } from './symbolen';
+import { usePaginaOpen } from '../lib/paginaOpen';
+import './Vandaag.css';
+import './ontwerp.css';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
+
+// De drie soorten gebeden bovenaan de pagina (categorieën uit CATEGORIEN hieronder).
+const SOORTEN = [
+  { cat: 'ochtend', titel: 'Ochtendgebeden', onder: 'Begin de dag met gebed.', symbool: <Sun strokeWidth={1.3} /> },
+  { cat: 'avond', titel: 'Avondgebeden', onder: 'Sluit de dag in gebed af.', symbool: <Moon strokeWidth={1.3} /> },
+  { cat: 'dag', titel: 'Gebeden door de dag', onder: 'Korte gebeden voor verschillende momenten.', symbool: KRUIS },
+];
 
 const CAT_LABEL: Record<Gebed['categorie'], string> = {
   ochtend: 'Morgengebeden',
@@ -100,6 +113,13 @@ export default function Gebeden() {
     return () => window.removeEventListener('hashchange', opHash);
   }, []);
 
+  const open = usePaginaOpen('gebeden');
+  const overzichtRef = useRef<HTMLElement>(null);
+  const openCategorie = (cat: string) => {
+    setActieveCat(cat);
+    requestAnimationFrame(() => overzichtRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+
   const zoekterm = zoek.trim().toLowerCase();
   const gezocht = useMemo(
     () =>
@@ -123,20 +143,66 @@ export default function Gebeden() {
 
   return (
     <>
-      <PaginaOpening id="gebeden" label="Het gebedenboek" titel="Gebeden" ondertitel="Het gebed van de Kerk">
+      {/* Bovenkant volgens het overdrachtspakket (referentie gebeden-psalmen-adem.png, paneel 1): de kop met het open boek,
+          de titel, het gebedssymbool, de drie soorten gebeden (zolang de gebeden niet zichtbaar zijn eerlijk "Binnenkort",
+          zonder schijnbaar werkende link) en de wegen naar de Psalmen en het Jezusgebed. */}
+      <section id="gebeden" className="vg ot-redesign ot-gebeden">
+        <NisKop open={open} balk achter={<BannerBeeld naam="gebeden-banner" open={open} />} />
+        <div className="vg-papier ot-inhoud">
+          <h1 className="ot-titel">Een moment<br />van gebed</h1>
+          <Sierlijn />
+          <span className="ot-gb-symbool" aria-hidden="true">{HANDEN}</span>
+          {!GEBEDEN_ZICHTBAAR && <p className="ot-gb-melding">De gebeden worden binnenkort toegevoegd.</p>}
+          <ul className="ot-gb-soorten">
+            {SOORTEN.map(({ cat, titel, onder, symbool }) => (
+              <li key={cat}>
+                {GEBEDEN_ZICHTBAAR ? (
+                  <button type="button" className="ot-rij ot-gb-kaart" onClick={() => openCategorie(cat)}>
+                    <span className="ot-rij-symbool" aria-hidden="true">{symbool}</span>
+                    <span className="ot-rij-tekst"><b>{titel}</b><span>{onder}</span></span>
+                    <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+                  </button>
+                ) : (
+                  <div className="ot-rij ot-gb-kaart is-binnenkort">
+                    <span className="ot-rij-symbool" aria-hidden="true">{symbool}</span>
+                    <span className="ot-rij-tekst"><b>{titel}</b><span>{onder}</span></span>
+                    <span className="ot-badge">Binnenkort</span>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+          <ul className="ot-register ot-gb-verder">
+            <li>
+              <a className="ot-rij" href="#psalmen">
+                <span className="ot-rij-symbool" aria-hidden="true"><BookOpen strokeWidth={1.3} /></span>
+                <span className="ot-rij-tekst"><b>Lees een psalm</b><span>Vind troost in de Psalmen.</span></span>
+                <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+              </a>
+            </li>
+            <li>
+              <a className="ot-rij" href="#adem">
+                <span className="ot-rij-symbool" aria-hidden="true">{KRUIS}</span>
+                <span className="ot-rij-tekst"><b>Het Jezusgebed</b><span>Een eenvoudig en diep gebed.</span></span>
+                <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <ExactPageFrame title="Gebeden">
+      {/* Uit de vroegere opening: de inleiding over het gebedenboek */}
+      <div className="ot-gb-intro">
         <p className="psr-intro">
           Morgengebeden, gebeden voor het slapengaan en gebeden door de dag, naar het Orthodox Gebedenboek volgens de
           Russische traditie.{GEBEDEN_ZICHTBAAR && ' Tik een gebed aan om het groot te lezen.'}
         </p>
-      </PaginaOpening>
+      </div>
 
       {/* Gebedscategorieën / overzicht; zolang de gebeden uit staan alleen de melding */}
-      {!GEBEDEN_ZICHTBAAR ? (
-        <section className="gebed-overzicht orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
-          <p className="gebed-binnenkort">De gebeden worden binnenkort toegevoegd.</p>
-        </section>
-      ) : (
-      <section className="gebed-overzicht orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
+      {GEBEDEN_ZICHTBAAR && (
+      <section ref={overzichtRef} className="gebed-overzicht orthodox-pattern parchment-pattern bg-parchment py-14 text-ink sm:py-20">
         <div className={CONTENT}>
           <div className="mx-auto max-w-xl">
             <div className="ot-zoek relative">
@@ -250,6 +316,7 @@ export default function Gebeden() {
         buttonLabel="Ontdek de ademcyclus"
         buttonHref="#adem"
       />
+      </ExactPageFrame>
 
       <LiturgicalPopup lezen open={popupGebed !== null} onClose={() => setPopupGebed(null)} content={popupContent} deel={popupGebed ? { titel: popupGebed.titel, pad: `gebeden/${popupGebed.id}` } : undefined} />
     </>

@@ -1,0 +1,279 @@
+/* Vernieuwde pagina's volgens het overdrachtspakket (Kalender, Pascha, Feesten, Vasten, Gebeden, Psalmen, Adem).
+   Alles hangt onder .ot-redesign: geen globale body-, button-, h1-, nav- of root-stijlen. De kop (NisKop) en het
+   papyrus komen uit Vandaag.css (.vg); dit bestand voegt alleen de opbouw van deze pagina's toe. */
+.ot-redesign {
+  --ot-inkt: #091c2c;
+  --ot-rood: #850d17;
+  --ot-goud: #a66c27;
+  --ot-lijn: rgba(167, 118, 52, .55);
+  --ot-gedempt: #5d5040;
+  color: var(--ot-inkt);
+}
+.ot-redesign :focus-visible { outline: 3px solid #066b95; outline-offset: 3px; }
+
+/* Kop met een illustratie uit het pakket: op mobiel ongeveer de verhouding van de referentie (± 2 : 1). */
+.ot-redesign .vg-kop { height: clamp(200px, 54cqw, 320px); padding-top: 0; padding-bottom: 0; }
+.ot-redesign .vg-kop-achter .ot-banner { object-position: 50% 60%; }
+
+.ot-redesign .ot-inhoud { padding-top: 10px; padding-bottom: 32px; }
+.ot-redesign .ot-tekstknop { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; border: 0; background: none; font: inherit; font-size: 16px; color: var(--ot-inkt); cursor: pointer; }
+
+/* Maandnavigatie */
+.ot-redesign .ot-maandnav { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 4px; }
+.ot-redesign .ot-maandnav h2 { margin: 0; font-family: var(--font-lees); font-size: clamp(27px, 7.4cqw, 32px); font-weight: 500; line-height: 1.1; text-align: center; color: var(--ot-inkt); }
+.ot-redesign .ot-maandnav button { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: none; color: var(--ot-goud); cursor: pointer; }
+.ot-redesign .ot-maandnav svg { width: 28px; height: 28px; stroke-width: 1.6; }
+.ot-redesign .ot-naar-vandaag { display: flex; margin: 0 auto; }
+
+/* ---------- Kalender ---------- */
+.ot-kalender .ot-raster { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-top: 8px; border-top: 1px solid var(--ot-lijn); border-left: 1px solid var(--ot-lijn); }
+.ot-kalender .ot-weekdag { padding: 8px 0 6px; border-right: 1px solid var(--ot-lijn); border-bottom: 1px solid var(--ot-lijn); font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-align: center; text-transform: uppercase; color: var(--ot-inkt); }
+.ot-kalender .ot-cel { position: relative; aspect-ratio: 1 / .92; min-width: 0; border-right: 1px solid var(--ot-lijn); border-bottom: 1px solid var(--ot-lijn); }
+#top#top#top main .ot-kalender button.ot-cel { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 44px !important; padding: 0; border-top: 0; border-left: 0; border-radius: 0; background: none; font: inherit; color: var(--ot-inkt); cursor: pointer; }
+.ot-kalender .ot-cel-nr { font-family: var(--font-lees); font-size: clamp(17px, 4.8cqw, 21px); line-height: 1; font-variant-numeric: lining-nums; }
+/* Liturgische kleur van de dag: een dun streepje onderaan de cel */
+.ot-kalender .ot-cel[style]::before { content: ""; position: absolute; left: 22%; right: 22%; bottom: 3px; height: 3px; border-radius: 2px; background: var(--lit); opacity: .8; }
+.ot-kalender .ot-cel-tekens { position: absolute; top: 2px; right: 3px; display: flex; align-items: center; gap: 1px; color: var(--ot-goud); font-size: 10px; line-height: 1; }
+.ot-kalender .ot-vastenteken { width: 10px; height: 10px; }
+.ot-kalender .ot-teken.is-groot { color: var(--ot-rood); }
+.ot-kalender .ot-cel:hover:not(.is-gekozen) { background: rgba(255, 248, 229, .55); }
+/* Vandaag: een stip onder het cijfer; gekozen: bordeaux vlak met lichte cijfers (vandaag blijft dan herkenbaar aan de stip) */
+.ot-kalender .ot-cel.is-vandaag .ot-cel-nr::after, .ot-kalender .ot-stip { content: ""; display: block; width: 5px; height: 5px; margin: 4px auto 0; border-radius: 50%; background: var(--ot-rood); }
+.ot-kalender .ot-stip { display: inline-block; margin: 0 6px 1px 0; }
+#top#top#top main .ot-kalender button.ot-cel.is-gekozen { z-index: 1; border-radius: 3px; background: linear-gradient(180deg, #9a1a24, var(--ot-rood)); box-shadow: 0 0 0 1px #c49b62, 0 2px 6px rgba(80, 20, 10, .25); color: #fff3d9; }
+.ot-kalender .ot-cel.is-gekozen .ot-cel-tekens { color: #f0d79c; }
+.ot-kalender .ot-cel.is-gekozen.is-vandaag .ot-cel-nr::after { background: #fff3d9; }
+.ot-kalender .ot-legenda { display: grid; gap: 10px 24px; margin-top: 4px; font-size: 15px; color: var(--ot-gedempt); }
+.ot-kalender .ot-legenda ul { display: grid; gap: 6px; }
+.ot-kalender .ot-legenda li { display: flex; align-items: center; gap: 8px; }
+.ot-kalender .ot-legenda small { font-size: 14px; }
+.ot-kalender .ot-staal { flex: none; width: 18px; height: 4px; border-radius: 2px; background: var(--lit, transparent); outline: 1px solid var(--ot-lijn); }
+.ot-kalender .ot-gekozen-staal { width: 16px; height: 16px; border-radius: 3px; background: var(--ot-rood); }
+
+/* De gekozen dag */
+.ot-redesign .ot-dagtitel { margin: 22px 0 0; font-family: var(--font-lees); font-size: clamp(26px, 7cqw, 32px); font-weight: 500; line-height: 1.15; text-align: center; color: var(--ot-inkt); }
+.ot-redesign .ot-sierlijn { width: min(52%, 220px); margin: 6px auto 4px; }
+.ot-redesign .ot-kerkdatum { margin: 0 0 6px; font-size: 15px; text-align: center; color: var(--ot-gedempt); }
+
+/* Registerrijen: symbool, titel en samenvatting, pijl; de hele rij is klikbaar */
+.ot-redesign .ot-register li + li { border-top: 1px solid var(--ot-lijn); }
+.ot-redesign .ot-register { border-top: 1px solid var(--ot-lijn); border-bottom: 1px solid var(--ot-lijn); }
+#top#top#top main .ot-redesign button.ot-rij { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 64px !important; padding: 10px 2px; border: 0; border-radius: 0; background: none; font: inherit; color: var(--ot-inkt); text-align: left; cursor: pointer; }
+.ot-redesign .ot-rij:hover { background: rgba(255, 248, 229, .5); }
+.ot-redesign .ot-rij-symbool { flex: none; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; color: var(--ot-goud); }
+.ot-redesign .ot-rij-symbool svg { width: 100%; height: 100%; }
+.ot-redesign .ot-rij-symbool .ot-rij-vasten { width: 34px; height: 34px; stroke-width: 1.1; }
+.ot-redesign .ot-rij-teken { font-size: 34px; line-height: 1; }
+.ot-redesign .ot-rij-tekst { flex: 1; min-width: 0; }
+.ot-redesign .ot-rij-tekst b { display: block; font-family: var(--font-lees); font-size: 21px; font-weight: 500; line-height: 1.15; }
+.ot-redesign .ot-rij-tekst > span { display: block; margin-top: 3px; font-size: 16px; line-height: 1.3; color: var(--ot-gedempt); }
+.ot-redesign .ot-lezing { display: block; }
+.ot-redesign .ot-rij-pijl { flex: none; width: 20px; height: 20px; color: #7a5a2a; stroke-width: 1.6; }
+
+/* Breed: maand en dag naast elkaar; leesbreedte beperkt */
+@container (min-width: 820px) {
+  .ot-redesign .ot-twee { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 0 44px; align-items: start; }
+  .ot-redesign .ot-twee > * { max-width: none; }
+  .ot-redesign .ot-twee .ot-dagtitel { margin-top: 6px; }
+}
+/* Op web: dezelfde kophoogte als de andere pagina's (Vandaag.css), met het boek en de kaars in beeld. */
+@media (min-width: 768px) {
+  #kalender.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 55%; }
+}
+
+/* ---------- Gedeeld: titel, actieknop, tijdlijn ---------- */
+.ot-redesign .ot-titel { margin: 6px 0 0; font-family: var(--font-lees); font-size: clamp(36px, 10cqw, 46px); font-weight: 500; line-height: 1.05; letter-spacing: -.01em; text-align: center; color: var(--ot-inkt); }
+#top#top#top#top#top#top#top .ot-redesign .ot-titel { font-family: var(--font-lees) !important; }
+.ot-redesign .ot-knoprij { display: flex; justify-content: center; margin-top: 18px; }
+.ot-redesign .ot-actie { display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-height: 48px; padding: 10px 28px; border: 1px solid #9b4a29; border-radius: 9px; background: linear-gradient(180deg, #991320, #740d15); box-shadow: inset 0 1px rgba(255, 220, 190, .2), 0 3px 6px rgba(87, 39, 17, .2); font: inherit; font-size: 19px; color: #fff3db !important; text-decoration: none; cursor: pointer; }
+.ot-redesign .ot-actie.is-omlijnd { background: none; box-shadow: none; border-color: var(--ot-goud); color: var(--ot-rood) !important; }
+.ot-redesign .ot-actie:hover { filter: brightness(1.08); }
+.ot-redesign .ot-nu { display: inline-flex; margin-left: 8px; padding: 1px 8px; border: 1px solid currentColor; border-radius: 999px; font-family: var(--font-titel); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; vertical-align: 4px; opacity: .85; }
+
+/* Verticale tijdlijn: medaillon, dunne lijn met knoop, titel en periode, pijl */
+.ot-redesign .ot-tijdlijn { position: relative; margin: 10px 0 0; }
+.ot-redesign .ot-tijdlijn::before { content: ""; position: absolute; top: 18px; bottom: 18px; left: 76px; width: 1px; background: var(--ot-goud); opacity: .7; }
+#top#top#top main .ot-redesign .ot-tl-rij button { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 64px !important; padding: 5px 2px; border: 0; border-radius: 0; background: none; font: inherit; color: var(--ot-inkt); text-align: left; cursor: pointer; }
+.ot-redesign .ot-tl-rij + .ot-tl-rij button { border-top: 1px solid rgba(167, 118, 52, .3); }
+.ot-redesign .ot-tl-rij button:hover { background: rgba(255, 248, 229, .5); }
+.ot-redesign .ot-tl-medaillon { flex: none; display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; border: 1.5px solid #c79b55; border-radius: 50%; background: radial-gradient(circle at 40% 35%, color-mix(in srgb, var(--ot-fase) 78%, #fff), var(--ot-fase) 70%); box-shadow: 0 2px 5px rgba(60, 30, 10, .25); }
+.ot-redesign .ot-tl-medaillon img { width: 34px; height: 34px; }
+.ot-redesign .ot-tl-knoop { position: relative; z-index: 1; flex: none; width: 11px; height: 11px; border: 1px solid #a57736; border-radius: 50%; background: var(--ot-fase); }
+.ot-redesign .ot-tl-tekst { flex: 1; min-width: 0; }
+.ot-redesign .ot-tl-tekst b { display: block; font-family: var(--font-lees); font-size: 21px; font-weight: 500; line-height: 1.15; }
+.ot-redesign .ot-tl-tekst > span { display: block; margin-top: 2px; font-size: 16px; color: var(--ot-gedempt); }
+
+/* ---------- Pascha ---------- */
+.ot-pascha .ot-pc-datum { margin: 2px 0 0; font-family: var(--font-lees); font-size: clamp(30px, 8.5cqw, 38px); font-weight: 500; line-height: 1.1; text-align: center; color: var(--ot-inkt); }
+.ot-pascha .vg-kop-achter .ot-banner { object-position: 50% 58%; }
+@media (min-width: 768px) { #pascha.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 52%; } }
+
+/* ---------- Feesten ---------- */
+.ot-feesten { position: relative; }
+/* Zonder nis: alleen de donkere balk met merk en zoekknop bovenaan (op web staat de kopbalk van de site erboven) */
+.ot-redesign .ot-strook { position: relative; z-index: 2; padding: 0 var(--rand); background: linear-gradient(180deg, #10243a, #0b1b2a); color: var(--ivoor); }
+/* Bloemenrand boven en links: decoratie, nooit over de tekst */
+.ot-feesten .ot-bloemen { position: absolute; top: 52px; left: 0; z-index: 0; width: 100%; height: auto; pointer-events: none; user-select: none; }
+.ot-feesten .vg-papier { position: relative; z-index: 1; padding-top: 25cqw; }
+/* Alleen de kop schuift naast de bloemenrand; de rest gebruikt de volle breedte */
+.ot-feesten .ot-fs-kop { padding-left: 9cqw; text-align: center; }
+.ot-feesten .ot-fs-icoon { display: block; width: min(150px, 42%); height: auto; margin: 6px auto 0; }
+.ot-feesten .ot-fs-intro { max-width: 30em; margin: 10px auto 0; font-family: var(--font-lees); font-size: 18px; line-height: 1.45; color: var(--ot-gedempt); }
+.ot-feesten .ot-fs-label { margin: 0; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-align: center; text-transform: uppercase; color: var(--ot-goud); }
+.ot-feesten .ot-fs-titel { margin: 2px 0 6px; font-family: var(--font-lees); font-size: clamp(28px, 7.6cqw, 34px); font-weight: 500; line-height: 1.1; text-align: center; color: var(--ot-inkt); }
+#top#top#top#top#top#top#top .ot-feesten .ot-fs-titel { font-family: var(--font-lees) !important; }
+.ot-feesten .ot-fs-blok { margin-top: 34px; }
+.ot-feesten .ot-fs-citaat, .ot-feesten .ot-fs-tekst { max-width: 34em; margin: 0 auto 12px; font-family: var(--font-lees); font-size: 17px; font-style: italic; line-height: 1.45; text-align: center; color: var(--ot-gedempt); }
+.ot-feesten .ot-fs-tekst { font-style: normal; text-align: left; }
+/* Eerstvolgend feest: datum of icoon, naam, wanneer, toelichting en de knop */
+.ot-feesten .ot-fs-nu { display: grid; justify-items: center; margin-top: 30px; padding: 22px 18px 24px; border: 1px solid var(--ot-goud); border-radius: 6px; outline: 1px solid var(--ot-goud); outline-offset: 3px; background: rgba(255, 250, 238, .45); text-align: center; }
+.ot-feesten .ot-fs-nu-datum { display: grid; place-items: center; width: 96px; height: 96px; margin: 0 0 10px; border: 1.5px solid #c79b55; border-radius: 50%; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ot-goud); align-content: center; }
+.ot-feesten .ot-fs-nu-datum span { font-family: var(--font-lees); font-size: 38px; font-weight: 500; line-height: 1; letter-spacing: 0; color: var(--ot-inkt); }
+.ot-feesten .ot-fs-nu-icoon { width: 120px; height: auto; margin-bottom: 10px; }
+.ot-feesten .ot-fs-nu .ot-dagtitel { margin-top: 4px; }
+.ot-feesten .ot-fs-wanneer { margin: 4px 0 0; font-size: 16px; color: var(--ot-gedempt); }
+.ot-feesten .ot-fs-omschrijving { max-width: 34em; margin: 12px 0 16px; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--ot-inkt); }
+/* Registerrijen: datum in een smalle kolom links */
+.ot-feesten .ot-fs-datum { flex: none; width: 76px; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; color: var(--ot-goud); }
+.ot-feesten .ot-rij.is-pascha .ot-fs-datum, .ot-feesten .ot-rij.is-pascha b { color: var(--ot-rood); }
+.ot-feesten .ot-rij-tekst b { font-size: 19px; }
+.ot-feesten .ot-fs-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 12px; margin: 4px 0 0; }
+.ot-feesten .ot-fs-links .ot-tekstknop { color: var(--ot-rood); text-decoration: none; }
+.ot-feesten .ot-fs-ritmes > section + section { margin-top: 26px; }
+.ot-feesten .ot-fs-aantal { margin: 4px 0 6px; font-size: 14px; color: var(--ot-gedempt); }
+@container (min-width: 820px) {
+  .ot-feesten .ot-fs-ritmes { grid-template-columns: 1fr 1fr; }
+  .ot-feesten .ot-fs-ritmes > section + section { margin-top: 0; }
+  .ot-feesten .ot-fs-maanden { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+.ot-redesign .ot-kop { margin: 4px 0 4px; font-family: var(--font-lees); font-size: 22px; font-weight: 500; color: var(--ot-inkt); }
+/* Tijdlijn met alleen bolletjes (zonder medaillon) */
+.ot-redesign .ot-tijdlijn-stip::before { left: 8.5px; }
+.ot-redesign .ot-tijdlijn-stip .ot-tl-knoop { width: 16px; height: 16px; margin-left: 1px; border-color: rgba(120, 80, 30, .5); }
+.ot-redesign .ot-tijdlijn-stip .ot-tl-tekst b { font-size: 18px; }
+.ot-redesign .ot-tijdlijn-stip .ot-tl-tekst > span { font-size: 18px; color: var(--ot-inkt); }
+@media (min-width: 768px) {
+  .ot-redesign .ot-strook { display: none; }
+  .ot-feesten .ot-bloemen { top: 0; width: 620px; }
+  .ot-feesten .vg-papier { padding-top: 96px; }
+  .ot-feesten .ot-fs-kop { padding-left: 40px; }
+}
+
+/* ---------- Vasten ---------- */
+.ot-vasten .vg-kop-achter .ot-banner { object-position: 60% 62%; }
+@media (min-width: 768px) { #vasten.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 55% 60%; } }
+.ot-vasten .ot-vs-status { display: block; width: 64px; height: 64px; margin: 4px auto 0; }
+.ot-vasten .ot-vs-label { margin-top: 2px; text-align: center; }
+.ot-vasten .ot-vs-toegestaan { margin: 0; font-size: 18px; text-align: center; }
+.ot-vasten .ot-vs-detail { max-width: 34em; margin: 4px auto 0; font-size: 16px; line-height: 1.45; text-align: center; color: var(--ot-gedempt); }
+.ot-vasten .ot-vs-periode { margin: 6px 0 0; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-align: center; text-transform: uppercase; color: var(--ot-goud); }
+.ot-vasten .ot-kop { margin-top: 20px; }
+.ot-vasten .ot-vs-spijzen { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin: 8px 0 0; padding: 0; border: 0; }
+.ot-vasten .ot-rij-symbool img { width: 100%; height: 100%; object-fit: contain; }
+/* De zes bestaande voedselkaarten in één rij, zoals in de referentie (overschrijft de 3 kolommen op mobiel uit index.css) */
+#top#top#top#top#top#top .ot-vasten .fasting-food-grid.ot-vs-spijzen { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; gap: 5px !important; }
+
+/* ---------- Gebeden ---------- */
+.ot-gebeden .vg-kop-achter .ot-banner { object-position: 45% 62%; }
+@media (min-width: 768px) { #gebeden.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 60%; } }
+.ot-gebeden .ot-titel { margin-top: 10px; }
+.ot-gebeden .ot-gb-symbool { display: block; width: 52px; height: 52px; margin: 6px auto 0; color: var(--ot-goud); }
+.ot-gebeden .ot-gb-symbool svg { width: 100%; height: 100%; }
+.ot-gebeden .ot-gb-melding { max-width: 20em; margin: 8px auto 14px; font-size: 20px; line-height: 1.3; text-align: center; color: var(--ot-gedempt); }
+.ot-gebeden .ot-gb-soorten { display: grid; gap: 8px; margin-bottom: 14px; }
+.ot-redesign .ot-gb-kaart { padding: 10px 12px !important; border: 1px solid rgba(167, 118, 52, .45) !important; border-radius: 8px !important; background: rgba(255, 248, 229, .45) !important; box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .7); }
+.ot-redesign div.ot-rij { display: flex; align-items: center; gap: 16px; min-height: 64px; color: var(--ot-inkt); }
+.ot-redesign .ot-gb-kaart.is-binnenkort .ot-rij-symbool { opacity: .85; }
+.ot-redesign .ot-badge { flex: none; padding: 4px 9px; border-radius: 5px; background: rgba(167, 118, 52, .2); font-size: 13px; color: var(--ot-inkt); }
+.ot-redesign a.ot-rij { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 10px 2px; color: var(--ot-inkt) !important; text-decoration: none; }
+.ot-redesign a.ot-rij:hover { background: rgba(255, 248, 229, .5); }
+.ot-gb-intro { max-width: 640px; margin: 24px auto 0; padding: 0 16px; text-align: center; }
+
+/* ---------- Psalmen: overzicht ---------- */
+.ot-psalmen .vg-kop { height: clamp(150px, 40cqw, 240px); }
+.ot-psalmen .vg-kop-achter .ot-banner { object-position: 50% 30%; }
+@media (min-width: 768px) { #psalmen.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 35%; } }
+.ot-psalmen .ot-ps-kop { --p: clamp(84px, 24cqw, 112px); --t: clamp(48px, 14cqw, 64px); display: flex; align-items: flex-start; justify-content: center; gap: 4px; margin-top: 4px; }
+/* "salter" op de voetlijn van de P: het tekstblok zakt tot de onderkant van de letter */
+.ot-psalmen .ot-ps-kop > h1 { margin-top: calc(var(--p) * .86 - var(--t) * .8); }
+.ot-psalmen .ot-ps-p { flex: none; width: var(--p); height: auto; border-radius: 3px; box-shadow: 0 2px 6px rgba(60, 30, 10, .25); pointer-events: none; }
+.ot-psalmen .ot-ps-kop .ot-titel { margin-bottom: 0; font-size: var(--t); line-height: .95; text-align: left; }
+.ot-redesign .ot-zoekveld { display: flex; align-items: center; gap: 10px; min-height: 48px; margin: 16px 0 12px; padding: 0 14px; border: 1px solid rgba(167, 118, 52, .55); border-radius: 8px; background: rgba(255, 250, 238, .6); }
+.ot-redesign .ot-zoekveld svg { flex: none; width: 20px; height: 20px; color: var(--ot-inkt); }
+.ot-redesign .ot-zoekveld input { flex: 1; min-width: 0; min-height: 46px; border: 0; background: none; font: inherit; font-family: var(--font-lees); font-size: 18px; color: var(--ot-inkt); outline: none; }
+.ot-redesign .ot-zoekveld:focus-within { outline: 3px solid #066b95; outline-offset: 2px; }
+/* Segmenten (filters, kathisma's, thema's, delen van vijftig): gekozen in bordeaux */
+.ot-redesign .ot-segmenten { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; margin: 0 0 10px; }
+.ot-redesign .ot-segmenten-klein { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
+#top#top#top main .ot-redesign .ot-segmenten button { display: inline-flex; flex: 1 1 0; align-items: center; justify-content: center; min-width: 0; line-height: 1.15; text-align: center; min-height: 44px !important; padding: 4px 8px; border: 1px solid rgba(167, 118, 52, .45); border-radius: 7px; background: rgba(226, 205, 165, .45); font: inherit; font-family: var(--font-lees); font-size: 17px; color: var(--ot-inkt); cursor: pointer; }
+#top#top#top main .ot-redesign .ot-segmenten button[aria-pressed="true"] { border-color: #6e0b13; background: linear-gradient(180deg, #991320, #740d15); color: #fff3db; }
+#top#top#top main .ot-redesign .ot-segmenten-klein button { min-width: 0; font-size: 15px; }
+.ot-psalmen .ot-ps-noot { margin: 0 0 10px; font-size: 14px; color: var(--ot-gedempt); }
+.ot-psalmen .ot-psalmraster { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+#top#top#top main .ot-psalmen .ot-psalmraster button { position: relative; display: flex; align-items: center; justify-content: center; min-height: 46px !important; padding: 0; border: 1px solid rgba(167, 118, 52, .4); border-radius: 7px; background: rgba(255, 250, 238, .55); font: inherit; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt); cursor: pointer; }
+.ot-psalmen .ot-psalmraster button:hover { background: rgba(255, 248, 229, .9); }
+.ot-psalmen .ot-psalmraster button.heeft-tekst::after, .ot-psalmen .ot-ps-stip { content: ""; position: absolute; right: 5px; top: 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--ot-goud); }
+.ot-psalmen .ot-ps-legenda { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; font-size: 13px; color: var(--ot-gedempt); }
+.ot-psalmen .ot-ps-stip { position: static; display: inline-block; }
+.ot-psalmen .ot-ps-lijst { margin-top: 4px; }
+.ot-redesign .ot-verder { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; margin: 22px 0 0; padding: 14px 18px; border: 1px solid var(--ot-goud); border-radius: 6px; outline: 1px solid var(--ot-goud); outline-offset: 3px; background: rgba(255, 250, 238, .45); }
+.ot-redesign .ot-verder-label { font-family: var(--font-lees); font-size: 16px; color: var(--ot-rood); }
+.ot-redesign .ot-verder p { margin: 0; font-family: var(--font-lees); font-size: 26px; line-height: 1.1; color: var(--ot-inkt); }
+.ot-psalmen .ot-ps-intro { max-width: 36em; margin: 24px auto 0; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; text-align: center; color: var(--ot-gedempt); }
+
+/* ---------- Psalmen: lezer (#psalmen/N) ---------- */
+.ot-lezer-strook { position: relative; height: clamp(44px, 12cqw, 72px); overflow: hidden; }
+.ot-lezer-strook .ot-banner { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; pointer-events: none; }
+.ot-lezer-vlak { padding-top: 6px; }
+.ot-lezer .ot-lezer-bediening { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ot-lezer .ot-terug { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding-right: 8px; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt) !important; text-decoration: none; }
+.ot-lezer .ot-terug svg { width: 24px; height: 24px; stroke-width: 1.6; }
+/* Leesbediening als losse iconen, zoals in de referentie */
+#top#top#top#top#top#top#top#top .ot-lezer .leesbediening :is(button, a) { width: 40px !important; height: 44px !important; min-height: 44px !important; background: none !important; border: 0 !important; border-image: none !important; box-shadow: none !important; color: var(--ot-inkt); }
+#top#top#top#top#top#top#top#top .ot-lezer .leesbediening :is(button, a)::before, #top#top#top#top#top#top#top#top .ot-lezer .leesbediening :is(button, a)::after { display: none !important; }
+#top#top#top#top#top#top#top#top .ot-lezer .leesbediening [aria-pressed="true"] { color: var(--ot-rood) !important; background: none !important; }
+.ot-lezer .ot-lezer-kop { margin-top: 6px; text-align: center; }
+#top#top#top#top#top#top#top .ot-lezer .ot-lezer-kop h1 { margin: 0; font-family: var(--font-titel) !important; font-size: 18px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ot-inkt); }
+.ot-lezer .ot-lezer-kop p { margin: 2px 0 0; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--ot-gedempt); }
+.ot-lezer .ps-tabrij, .ot-lezer .ps-tabs { justify-content: center; }
+/* Verzen: groot, versnummers in bordeaux in een smalle kolom, op web beperkt tot een prettige leesbreedte */
+#top#top#top#top#top#top .ot-lezer .ot-verzen { max-width: 36em; margin: 14px auto 0; padding: 0; background: none; }
+#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers { grid-template-columns: 22px minmax(0, 1fr); gap: 10px; margin: 0 0 18px; }
+#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-versnr { padding-top: 7px; font-family: var(--font-lees); font-size: 15px; color: var(--ot-rood); }
+#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { font-family: var(--font-lees); font-size: clamp(21px, 5.6cqw, 25px); line-height: 1.5; color: var(--ot-inkt); }
+#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-stasis { color: var(--ot-goud); }
+#top#top#top#top#top#top .ot-lezer .ot-vers-initiaal { float: left; width: 3.3em; height: 3.3em; margin: 6px 10px 0 0; border-radius: 3px; pointer-events: none; }
+#top#top#top#top#top#top .ot-lezer .ot-vers-letter { display: flex; align-items: center; justify-content: center; border: 2px solid var(--ot-goud); background: linear-gradient(180deg, #991320, #740d15); font-family: var(--font-titel); font-size: 2.2em; line-height: 1; color: #f3dca4; }
+#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { display: flow-root; }
+.ot-lezer .ps-bron { text-align: center; }
+.ot-lezer .ot-lezer-blader { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; }
+.ot-lezer .ot-lezer-blader .ot-actie { flex: 1 1 0; max-width: 260px; gap: 8px; padding: 10px 12px; font-size: 17px; white-space: nowrap; }
+.ot-lezer .ot-lezer-blader .ot-actie svg { width: 20px; height: 20px; }
+@container (min-width: 640px) { .ot-psalmen .ot-psalmraster { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
+
+/* ---------- Adem ---------- */
+/* Titel midden in de donkere kop (NisKop met titel): hoogte volgt de inhoud */
+.ot-adem .vg-kop.vg-niskop { height: auto; padding-top: 0; padding-bottom: calc(var(--boog) * .75 + 22px); }
+.ot-adem .vg-niskop .vg-titel { margin-top: clamp(6px, 3cqw, 20px); }
+.ot-adem .vg-kop-achter .ot-banner { object-position: 50% 25%; }
+@media (min-width: 768px) { #adem.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 30%; } }
+.ot-adem .ot-ad-onder { position: relative; margin: 0; font-family: var(--font-lees); font-size: 20px; text-align: center; color: var(--ivoor, #f3e6c8); text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+.ot-adem .ot-ad-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 480px; margin: 4px auto 14px; }
+#top#top#top main .ot-adem .ot-ad-tabs button { display: flex; align-items: center; justify-content: center; min-height: 48px !important; padding: 0 8px; border: 1px solid rgba(167, 118, 52, .45); border-radius: 7px; background: rgba(226, 205, 165, .45); font: inherit; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt); cursor: pointer; }
+#top#top#top main .ot-adem .ot-ad-tabs button[aria-selected="true"] { border-color: #6e0b13; background: linear-gradient(180deg, #991320, #740d15); color: #fff3db; }
+/* De panelen liggen direct op het papier (geen kader) */
+#top#top#top#top#top#top#top#top#top .ot-adem .ad-paneel { padding: 0; border: 0; background: none !important; box-shadow: none !important; }
+.ot-adem [hidden] { display: none !important; }
+.ot-adem .snoer-kies { margin: 0 0 8px; font-family: var(--font-lees); font-size: 18px; text-align: center; color: var(--ot-inkt); }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze { justify-content: center; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button { min-width: 88px; border-radius: 7px !important; box-shadow: none !important; font-family: var(--font-lees) !important; font-size: 19px; color: var(--ot-inkt) !important; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button[aria-pressed="true"] { border-color: #6e0b13 !important; background: linear-gradient(180deg, #991320, #740d15) !important; color: #fff3db !important; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button[aria-pressed="true"]::before { content: none; }
+.ot-adem .snoer-gebed { margin: 14px 0 0; font-family: var(--font-lees); font-size: clamp(24px, 6.6cqw, 30px); line-height: 1.15; text-align: center; color: var(--ot-inkt); }
+.ot-adem .snoer-verder { margin-top: 14px; min-width: min(260px, 80%); }
+.ot-adem .snoer-verder svg { width: 22px; height: 22px; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-acties { gap: 0; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-acties button { gap: 8px; padding: 0 22px; border: 0 !important; background: none !important; box-shadow: none !important; font-family: var(--font-lees) !important; font-size: 18px; letter-spacing: 0 !important; text-transform: none; font-weight: 400 !important; color: var(--ot-inkt) !important; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-acties button + button { border-left: 1px solid var(--ot-lijn) !important; }
+.ot-adem .snoer-acties svg { width: 20px; height: 20px; color: var(--ot-goud); }
+.ot-adem .snoer-uitleg { text-align: center; }

@@ -1,14 +1,20 @@
 import { useState, type CSSProperties } from 'react';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
-import PaginaOpening from './PaginaOpening';
+import ExactPageFrame from './ExactPageFrame';
+import NisKop from './NisKop';
+import { BannerBeeld } from './onderdelen';
+import { usePaginaOpen } from '../lib/paginaOpen';
+import './Vandaag.css';
+import './ontwerp.css';
 import Verdieping from './Verdieping';
 import Gebedssnoer from './Gebedssnoer';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
-// Adem volgens het aangeleverde ontwerp (index.css, Bouw 181): opening; twee gebedsinstrumenten naast elkaar (mee-ademen
-// met het Jezusgebed en het gebedssnoer); daaronder de vier verdiepingen als rustig register (op mobiel uitklapbaar).
+// Adem volgens het overdrachtspakket (referentie gebeden-psalmen-adem.png, paneel 4): donkere kop met titel; twee tabs
+// (mee-ademen met het Jezusgebed, het gebedssnoer); daaronder de vier verdiepingen als rustig register (op mobiel
+// uitklapbaar), het citaat van Macarius en de cyclusweg.
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe ademcyclus.docx".
 
 const CARDS: Array<{ key: PopupKey; title: string; intro: string }> = [
@@ -33,18 +39,28 @@ export default function Ademcyclus() {
   const [meeAdemen, setMeeAdemen] = useState(false);
   const [tempo, setTempo] = useState<Tempo>('rustig');
   const sec = TEMPI.find((t) => t.id === tempo)!.sec;
+  const open = usePaginaOpen('adem');
+  // Beide instrumenten blijven gemonteerd (hidden), zodat mee-ademen en de snoerstand niet verspringen bij het wisselen.
+  const [tab, setTab] = useState<'jezusgebed' | 'snoer'>('jezusgebed');
+  const TABS = [['jezusgebed', 'Jezusgebed'], ['snoer', 'Gebedssnoer']] as const;
 
   return (
     <>
-      <PaginaOpening id="adem" soort="cyclisch" label="De ademcyclus" titel="Adem" ondertitel="Het onophoudelijke gebed" />
-
-      <section className="ad-pagina bg-parchment text-ink">
-        <div className={CONTENT}>
-          <div className="ad-panelen">
+      <section id="adem" className="vg ot-redesign ot-adem">
+        <NisKop open={open} balk terug="#cycli" titel="Adem" achter={<BannerBeeld naam="psalmen-adem-banner" open={open} />}>
+          <p className="ot-ad-onder">Het onophoudelijke gebed</p>
+        </NisKop>
+        <div className="vg-papier ot-inhoud">
+          <div className="ot-ad-tabs" role="tablist" aria-label="Gebed">
+            {TABS.map(([id, label]) => (
+              <button key={id} type="button" role="tab" id={`ad-tab-${id}`} aria-controls={`ad-paneel-${id}`} aria-selected={tab === id} onClick={() => setTab(id)}>
+                {label}
+              </button>
+            ))}
+          </div>
             {/* Mee-ademen met het Jezusgebed: de ringen zetten uit bij het inademen en krimpen bij het uitademen */}
-            <div className="ad-paneel jr-vak">
-              {['lb', 'rb', 'lo', 'ro'].map((h) => <span key={h} className={`ad-hoek ad-hoek-${h}`} aria-hidden="true" />)}
-              <h2 className="ad-kop">Het Jezusgebed</h2>
+            <div className="ad-paneel" role="tabpanel" id="ad-paneel-jezusgebed" aria-labelledby="ad-tab-jezusgebed" hidden={tab !== 'jezusgebed'}>
+              <h2 className="sr-only">Het Jezusgebed</h2>
               <div className={`adem-ritme ad-ritme${meeAdemen ? ' is-actief' : ''}`} style={{ '--adem-duur': `${sec}s` } as CSSProperties}>
                 <div className="ad-icoon">
                   <div className="adem-gloed" aria-hidden="true" />
@@ -82,13 +98,19 @@ export default function Ademcyclus() {
             </div>
 
             {/* Het gebedssnoer: het Jezusgebed tellen per knoop */}
+          <div role="tabpanel" id="ad-paneel-snoer" aria-labelledby="ad-tab-snoer" hidden={tab !== 'snoer'}>
             <Gebedssnoer />
           </div>
+        </div>
+      </section>
 
+      <ExactPageFrame title="Adem">
+      <div className="ad-pagina bg-parchment text-ink">
+        <div className={CONTENT}>
           {/* Verdieping: op het web vier rustige kolommen, op mobiel uitklapbare registerregels */}
           <Verdieping items={CARDS} onOpen={setPopup} />
         </div>
-      </section>
+      </div>
 
       {/* Quote + Van adem naar etmaal */}
       <CycleTransition
@@ -101,6 +123,7 @@ export default function Ademcyclus() {
       />
 
       <TimeSanctificationTimeline current="adem" />
+      </ExactPageFrame>
 
       <LiturgicalPopup open={popup !== null} onClose={() => setPopup(null)} content={popup ? ADEM_POPUPS[popup] : null} />
     </>

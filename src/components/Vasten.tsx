@@ -1,16 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
-import { ChevronDown, Info } from 'lucide-react';
+import { ChevronDown, ChevronRight, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { WEEKDAGEN_KORT, dagInfo, formatDag, formatDatum, formatKort, hoofdletter, weekRond, ymd } from '../lib/kalender';
+import { dagInfo, formatDag, formatDatum, formatKort, hoofdletter, ymd } from '../lib/kalender';
 import { vastenPeriodes } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
-import { MobileListRow, VastenBadge, VastenKleuren } from './ui';
+import { VastenBadge } from './ui';
 import Modal from './Modal';
 import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
 import Verdieping from './Verdieping';
-import PaginaOpening from './PaginaOpening';
+import ExactPageFrame from './ExactPageFrame';
+import NisKop from './NisKop';
+import { ActieKnop, BannerBeeld, Sierlijn } from './onderdelen';
+import { usePaginaOpen } from '../lib/paginaOpen';
+import './Vandaag.css';
+import './ontwerp.css';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -76,11 +81,6 @@ function VoedselKaart({ label, toegestaan }: { label: string; toegestaan: boolea
   );
 }
 
-// Vastensymbool per dag: brood en olijven (vastendag) of vis, druiven en beker (geen vasten); scripts/vastensymbolen.mjs
-function WeekMedaillon({ vast }: { vast: boolean }) {
-  return <img src={vast ? '/images/ui/vasten.webp' : '/images/ui/vastenvrij.webp'} alt="" width={256} height={256} loading="lazy" decoding="async" className="vasten-symbool" />;
-}
-
 type FastingRij = { key: string; naam: string; wanneer: string; onClick?: () => void };
 
 // Donker vastenpaneel met naam + datum per regel. Mobiel staat de datum onder de naam, vanaf sm ernaast.
@@ -119,6 +119,7 @@ function FastingTable({ titel, rijen, noot }: { titel: string; rijen: FastingRij
 
 export default function Vasten() {
   const { mode, vandaag, vandaagYmd } = useApp();
+  const open = usePaginaOpen('vasten');
   const [jaar, setJaar] = useState(vandaag.getUTCFullYear());
   // Op mobiel starten alle vragen dicht (compacter); op desktop staat de eerste open.
   const [openFaq, setOpenFaq] = useState<number | null>(() => (window.matchMedia('(min-width: 768px)').matches ? 0 : null));
@@ -140,7 +141,6 @@ export default function Vasten() {
   const niveauVandaag = NIVEAUS[dagVandaag.vasten.niveau];
 
   const periodes = useMemo(() => vastenPeriodes(jaar, mode), [jaar, mode]);
-  const week = useMemo(() => weekRond(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
 
   const vastenP = periodes.filter((p) => p.soort === 'vasten');
   const grotevier = ['grote-vasten', 'apostelvasten', 'dormitionvasten', 'kerstvasten'].map((id) => vastenP.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => Boolean(p));
@@ -178,35 +178,57 @@ export default function Vasten() {
 
   return (
     <>
-      <PaginaOpening id="vasten" label="Vasten en onthouding" titel="Vasten" ondertitel="Voorbereiding op de feesten" />
+      {/* Bovenkant volgens het overdrachtspakket (referentie kalender-pascha-feesten-vasten.png, paneel 4): de vasten van
+          vandaag met de bestaande voedselkaarten, de week met de vastenkleuren en de vier grote vasten met hun bestaande
+          iconen. Alle gegevens uit lib/vasten.ts en lib/overzicht.ts; elke dag en periode opent het bestaande venster. */}
+      <section id="vasten" className="vg ot-redesign ot-vasten">
+        <NisKop open={open} balk achter={<BannerBeeld naam="vasten-banner" open={open} />} />
+        <div className="vg-papier ot-inhoud">
+          <img className="ot-vs-status" src={vastenVandaagIcon} alt="" width={256} height={256} decoding="async" />
+          <p className="vg-label ot-vs-label">Vandaag</p>
+          <h1 className="ot-titel">{dagVandaag.vasten.label}</h1>
+          <Sierlijn />
+          <p className="ot-vs-toegestaan">{niveauVandaag.toegestaan}</p>
+          <p className="ot-vs-detail">{dagVandaag.vasten.detail}</p>
+          {dagVandaag.vasten.periode && <p className="ot-vs-periode">{dagVandaag.vasten.periode}</p>}
 
-      {/* Volgorde: vasten vandaag → uitleg → het wekelijkse vasten → de vier grote vasten → praktisch → de vier informatiekaarten */}
-      <section className="orthodox-pattern parchment-pattern relative bg-parchment py-14 text-ink sm:py-20">
-        <div className={CONTENT}>
-          {/* Vasten vandaag — donker inzetpaneel binnen dezelfde compositie */}
-          <div className="v17-fasting-today provided-wide-frame orthodox-pattern rounded-2xl border border-gold/40 bg-[#1c130d] px-6 py-8 text-cream shadow-[0_20px_45px_rgba(0,0,0,0.35)] sm:px-10 sm:py-10">
-            <p className="ot-label ot-label-licht text-center">Vasten vandaag</p>
-            <div className="mt-5 flex flex-col items-center gap-5 text-center sm:flex-row sm:justify-between sm:text-left"><img loading="lazy" decoding="async" src={vastenVandaagIcon} alt="" width={256} height={256} className="vasten-vandaag-status-icon" />
-              <div>
-                <h2 className="font-display text-2xl font-semibold text-[#fbf3df] sm:text-3xl">
-                  {/* Stip in de kleur van de kalender-legenda */}
-                  <span aria-hidden="true" className="mr-2.5 inline-block h-3 w-3 -translate-y-0.5 rounded-full align-middle" style={{ background: niveauVandaag.kleur, boxShadow: `0 0 0 3px color-mix(in srgb, ${niveauVandaag.kleur} 28%, transparent)` }} />
-                  {dagVandaag.vasten.label}
-                </h2>
-                <p className="mt-2 text-sm text-[#d9c6a3] sm:text-base">{niveauVandaag.toegestaan}</p>
-                <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#bfa982]">{dagVandaag.vasten.detail}</p>
-                {dagVandaag.vasten.periode && (
-                  <p className="ot-label ot-label-licht mt-2">{dagVandaag.vasten.periode}</p>
-                )}
+          <div className="ot-twee">
+            <div>
+              <h2 className="ot-kop">Toegestane spijzen vandaag</h2>
+              <div className="fasting-food-grid ot-vs-spijzen">
+                {onthoudingenVandaag.map(({ label, toegestaan }) => (
+                  <VoedselKaart key={label} label={label} toegestaan={toegestaan} />
+                ))}
               </div>
+
             </div>
-            <div className="fasting-food-grid mt-6 border-t border-gold/20 pt-5">
-              {onthoudingenVandaag.map(({ label, toegestaan }) => (
-                <VoedselKaart key={label} label={label} toegestaan={toegestaan} />
-              ))}
+
+            <div>
+              <h2 className="ot-kop">De vier grote vasten</h2>
+              <ul className="ot-register">
+                {grotevier.map((p) => (
+                  <li key={p.id}>
+                    <button type="button" className="ot-rij" onClick={() => setPeriodeOpen(p.id)}>
+                      <span className="ot-rij-symbool" aria-hidden="true"><img src={`/images/ui/vasten-perioden/${p.id}.webp`} alt="" width={96} height={96} loading="lazy" decoding="async" /></span>
+                      <span className="ot-rij-tekst">
+                        <b>{PERIODE_INFO[p.id]?.label ?? p.naam}</b>
+                        <span>{formatDag(p.start)} – {formatDatum(p.eind)}{PERIODE_INFO[p.id]?.beweeglijk ? ' · beweeglijk' : ''}</span>
+                      </span>
+                      <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="ot-knoprij"><ActieKnop omlijnd onClick={() => setInfoOpen('wat')}>Meer over vasten</ActieKnop></div>
             </div>
           </div>
+        </div>
+      </section>
 
+      <ExactPageFrame title="Vasten">
+      {/* Volgorde: uitleg → het wekelijkse vasten → de vier grote vasten → praktisch → de vier informatiekaarten */}
+      <div className="orthodox-pattern parchment-pattern relative bg-parchment py-14 text-ink sm:py-20">
+        <div className={CONTENT}>
           {/* Doorlopende verticale lijn verbindt het dagpaneel met de algemene uitleg — geen nieuwe pagina */}
           <div className="md:hidden mx-auto mt-10 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">
             <p className="ot-label">Wat betekent vasten?</p>
@@ -231,66 +253,6 @@ export default function Vasten() {
             <a href="#week" className="btn-pill cyclus-verder mt-3">
               Ontdek de weekcyclus ›
             </a>
-
-            {/* Deze week (levend voorbeeld, geen hardgecodeerde status) */}
-            <div className="mt-6 border-t border-gold/25 pt-6">
-              <div className="flex flex-wrap items-end justify-between gap-3">
-                <div>
-                  <p className="ot-label">Deze week</p>
-                  <h4 className="font-display mt-1 text-xl font-semibold text-ink">
-                    {formatKort(week[0].civil)} – {formatDatum(week[6].civil)}
-                  </h4>
-                </div>
-                <p className="text-xs text-ink-mute">Tik een dag voor het volledige dagdetail.</p>
-              </div>
-              <div className="mlr-lijst week-rijen mt-4">
-                {week.map((d) => {
-                  const n = NIVEAUS[d.vasten.niveau];
-                  const vast = d.vasten.niveau !== 'vrij' && d.vasten.niveau !== 'geen';
-                  return (
-                    <MobileListRow
-                      key={d.ymd}
-                      onClick={() => setGeselecteerdeDag(d.ymd)}
-                      className={`${vast ? 'is-fast' : ''} ${d.isVandaag ? 'is-today' : ''}`}
-                      style={{ ['--niveau' as string]: n.kleur }}
-                      links={<><small>{WEEKDAGEN_KORT[d.weekdag]}</small><b>{d.dag}</b></>}
-                      icoon={<span className="week-dag-medaillon"><WeekMedaillon vast={vast} /></span>}
-                      titel={d.vasten.niveau === 'geen' ? n.label : n.kort}
-                      rechts={<span className="week-dag-balk" aria-hidden="true" />}
-                    />
-                  );
-                })}
-              </div>
-              <div className="week-dagen">
-                {week.map((d) => {
-                  const n = NIVEAUS[d.vasten.niveau];
-                  const vast = d.vasten.niveau !== 'vrij' && d.vasten.niveau !== 'geen';
-                  return (
-                    <button
-                      key={d.ymd}
-                      type="button"
-                      onClick={() => setGeselecteerdeDag(d.ymd)}
-                      className={`week-dag ${vast ? 'is-fast' : ''} ${d.isVandaag ? 'is-today' : ''}`}
-                      style={{ ['--niveau' as string]: n.kleur }}
-                    >
-                      <span className="week-dag-naam">{WEEKDAGEN_KORT[d.weekdag]}</span>
-                      <span className="week-dag-nummer">{d.dag}</span>
-                      <span className="week-dag-medaillon" aria-hidden="true">
-                        <WeekMedaillon vast={vast} />
-                      </span>
-                      <span className="week-dag-balk" />
-                      <span className="week-dag-label">{n.kort}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Kleurlegenda (alleen mobiel): dezelfde kleuren als in de kalender en bij "Vasten vandaag" */}
-              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-gold/30 bg-[#f3e9d2] px-4 py-3 text-[11px] font-semibold text-ink-soft min-[641px]:hidden">
-                <span className="text-[10px] font-bold tracking-widest text-gold-deep uppercase">Legenda</span>
-                <VastenKleuren actief={dagVandaag.vasten.niveau} />
-              </div>
-            </div>
 
             {/* Vastenvrije periodes en strenge losse vastendagen — direct aansluitend, geen los dashboard */}
             <div className="mt-8 grid gap-4 border-t border-gold/25 pt-6 lg:grid-cols-2">
@@ -402,7 +364,7 @@ export default function Vasten() {
           {/* De vier informatiekaarten */}
           {infoKaarten}
         </div>
-      </section>
+      </div>
 
       {/* Vasten en gebed */}
       <CycleTransition
@@ -413,6 +375,7 @@ export default function Vasten() {
         buttonLabel="Naar gebeden"
         buttonHref="#gebeden"
       />
+      </ExactPageFrame>
 
       {geselecteerdeDagInfo && (
         <Modal open={Boolean(geselecteerdeDagInfo)} onClose={() => setGeselecteerdeDag(null)} eyebrow="Vasteninformatie" title={formatDatum(geselecteerdeDagInfo.civil)} centerTitle maxWidth="max-w-2xl">

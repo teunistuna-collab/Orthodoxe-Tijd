@@ -5,12 +5,16 @@ import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { useApp } from '../lib/context';
 import { PAASCYCLUS } from '../lib/feesten';
 import { addDays, formatDag, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
-import { vastenPeriodes } from '../lib/overzicht';
 import { FeestTag } from './ui';
 import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
 import Verdieping from './Verdieping';
-import PaginaOpening from './PaginaOpening';
+import ExactPageFrame from './ExactPageFrame';
+import NisKop from './NisKop';
+import { BannerBeeld, Sierlijn, TijdlijnRij } from './onderdelen';
+import { usePaginaOpen } from '../lib/paginaOpen';
+import './Vandaag.css';
+import './ontwerp.css';
 
 type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
 type PeriodeKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | 'vijftig-dagen' | 'hemelvaart' | 'pinksteren';
@@ -249,11 +253,26 @@ function bereikLang(a: Date, b: Date): string {
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
+// Lijnsymbool en kleur per stap op de tijdlijn (public/images/ontwerp/pascha-*.svg, uit het overdrachtspakket): paars
+// voor de voorbereiding en de Grote Vasten, rood voor de Heilige Week en Pascha, goud voor de Paastijd en Pinksteren.
+const PAARS = '#592655';
+const ROOD = '#850d17';
+const GOUD = '#a66c27';
+const STAP_SYMBOOL: Record<StapKey, { beeld: string; kleur: string }> = {
+  voorbereiding: { beeld: 'pascha-voorbereiding', kleur: PAARS },
+  'grote-vasten': { beeld: 'pascha-grote-vasten', kleur: PAARS },
+  'goede-week': { beeld: 'pascha-goede-week', kleur: ROOD },
+  pascha: { beeld: 'pascha-kruis', kleur: ROOD },
+  'vijftig-dagen': { beeld: 'pascha-paastijd', kleur: GOUD },
+  'hemelvaart-pinksteren': { beeld: 'pascha-pinksteren', kleur: GOUD },
+};
+
 export default function Pascha() {
-  const { vandaag, openDag, mode } = useApp();
+  const { vandaag, openDag } = useApp();
   const [stapOpen, setStapOpen] = useState<StapKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const [cyclusOpen, setCyclusOpen] = useState(false);
+  const open = usePaginaOpen('pascha');
 
   // Vandaag kan een pop-up van deze pagina openen.
   useEffect(() => {
@@ -267,7 +286,6 @@ export default function Pascha() {
 
   const pascha = volgendePascha(vandaag);
   const paaschaJaar = pascha.getUTCFullYear();
-  const groteVasten = vastenPeriodes(paaschaJaar, mode).find((p) => p.id === 'grote-vasten');
 
   // Iedere stap-pop-up krijgt de datums van dit jaar als eyebrow.
   const stapInhoud = {} as Record<StapKey, PopupInhoud>;
@@ -278,63 +296,42 @@ export default function Pascha() {
 
   return (
     <>
-      {/* Opening volgens het aangeleverde ontwerp (Bouw 175): icoon, titel, intro en het jaarvak met de data van dit Pascha */}
-      <PaginaOpening
-        id="pascha"
-        soort="hoogfeest"
-        label="De Paascyclus"
-        titel="Pascha"
-        ondertitel="Van Vasten naar Verrijzenis"
-        beeld={{ src: '/images/Pascha-icoon.webp', alt: 'Icoon van de Verrijzenis: Christus haalt Adam en Eva uit het graf' }}
-      >
-        <p className="pc-intro">De Paascyclus is het hart van het kerkelijk jaar. In deze periode gaan we met Christus mee in Zijn lijden, dood en verrijzenis, en vieren we de overwinning van het Leven.</p>
-        <aside className="pc-jaar jr-vak" aria-label={`Pascha ${paaschaJaar}`}>
-          <p className="pc-jaar-label">Pascha {paaschaJaar}</p>
-          <p className="pc-jaar-datum">{formatDatum(pascha)}</p>
-          <dl className="pc-jaar-lijst">
-            {groteVasten && (
-              <div>
-                <dt>Grote Vasten</dt>
-                <dd>{bereikLang(groteVasten.start, groteVasten.eind)}</dd>
-              </div>
-            )}
-            <div>
-              <dt>Heilige Week</dt>
-              <dd>{bereikLang(addDays(pascha, -6), addDays(pascha, -1))}</dd>
-            </div>
-            <div>
-              <dt>Pascha</dt>
-              <dd>{formatDatum(pascha)}</dd>
-            </div>
-            <div>
-              <dt>Paastijd</dt>
-              <dd>{bereikLang(pascha, addDays(pascha, 49))}</dd>
-            </div>
-          </dl>
-        </aside>
-      </PaginaOpening>
+      {/* Bovenkant volgens het overdrachtspakket (referentie kalender-pascha-feesten-vasten.png, paneel 2): de boog met
+          uitzicht, de datum van het komende Pascha en de zes stappen van de Paascyclus als tijdlijn, met hun begin- en
+          einddatum uit de bestaande berekening. Elke stap opent de bestaande uitleg. */}
+      <section id="pascha" className="vg ot-redesign ot-pascha">
+        <NisKop open={open} balk terug="#cycli" achter={<BannerBeeld naam="pascha-banner" open={open} />} />
+        <div className="vg-papier ot-inhoud">
+          <h1 className="ot-titel">Naar Pascha</h1>
+          <p className="ot-pc-datum">{formatDatum(pascha)}</p>
+          <Sierlijn />
+          <ol className="ot-tijdlijn">
+            {STAPPEN.map((stap) => {
+              const [start, eind] = stap.offsetRange;
+              const van = addDays(pascha, start);
+              const tot = addDays(pascha, eind);
+              return (
+                <TijdlijnRij
+                  key={stap.key}
+                  beeld={<img src={`/images/ontwerp/${STAP_SYMBOOL[stap.key].beeld}.svg`} alt="" width={64} height={64} />}
+                  kleur={STAP_SYMBOOL[stap.key].kleur}
+                  titel={stap.label}
+                  onder={`${bereikLang(van, tot)} ${tot.getUTCFullYear()}`}
+                  nu={vandaag.getTime() >= van.getTime() && vandaag.getTime() <= tot.getTime()}
+                  onClick={() => setStapOpen(stap.key)}
+                />
+              );
+            })}
+          </ol>
+        </div>
+      </section>
 
-      <section className="pc-pagina bg-parchment text-ink">
+      <ExactPageFrame title="Pascha">
+      <div className="pc-pagina bg-parchment text-ink">
         <div className={CONTENT}>
-          {/* De opbouw van de Paascyclus */}
-          <section className="pc-opbouw jr-vak" aria-labelledby="pc-opbouw-titel">
-            <h2 id="pc-opbouw-titel" className="pc-kop">De opbouw van de Paascyclus</h2>
-            <ul className="jr-vasten jr-tijden pc-stappen">
-              {STAPPEN.map((stap) => (
-                <li key={stap.key}>
-                  <button type="button" className="jr-vast" onClick={() => setStapOpen(stap.key)}>
-                    <span className="jr-vast-naam">{stap.label}</span>
-                    <span className="jr-vast-doel">{stap.short}</span>
-                    <span className="jr-pijl" aria-hidden="true">›</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-
           {/* De hele Paascyclus van dit jaar, dag voor dag — ingeklapt */}
           <div className="pc-cyclus">
-            <button type="button" onClick={() => setCyclusOpen((open) => !open)} aria-expanded={cyclusOpen} className="pc-cyclus-knop">
+            <button type="button" onClick={() => setCyclusOpen((o) => !o)} aria-expanded={cyclusOpen} className="pc-cyclus-knop">
               <span>
                 <span className="pc-cyclus-titel">Paascyclus {paaschaJaar}</span>
                 <span className="pc-cyclus-onder">Alles wat van de Paasdatum afhangt, dag voor dag</span>
@@ -380,9 +377,10 @@ export default function Pascha() {
             <Verdieping items={INFO_CARDS} onOpen={setInfoOpen} />
           </section>
         </div>
-      </section>
+      </div>
 
       <TimeSanctificationTimeline current="pascha" />
+      </ExactPageFrame>
 
       <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? PASCHA_INFO[infoOpen] : null} />
       <LiturgicalPopup open={stapOpen !== null} onClose={() => setStapOpen(null)} content={stapOpen ? stapInhoud[stapOpen] : null} />

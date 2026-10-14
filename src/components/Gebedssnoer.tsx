@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState, type PointerEvent } from 'react';
+import { ArrowRight, RotateCcw, Undo2 } from 'lucide-react';
 import { SNOER_PAD } from '../lib/snoerPad';
 import { usePaginaOpen } from '../lib/paginaOpen';
 
@@ -175,9 +176,16 @@ export default function Gebedssnoer() {
     });
 
   return (
-    <div className="snoer ad-paneel jr-vak">
-      {['lb', 'rb', 'lo', 'ro'].map((h) => <span key={h} className={`ad-hoek ad-hoek-${h}`} aria-hidden="true" />)}
-      <h2 className="ad-kop">Het gebedssnoer</h2>
+    <div className="snoer ad-paneel">
+      <h2 className="sr-only">Het gebedssnoer</h2>
+      <p className="snoer-kies">Kies een aantal gebeden</p>
+      <div className="snoer-keuze" role="group" aria-label="Aantal knopen">
+        {LENGTES.map((n) => (
+          <button key={n} type="button" aria-pressed={lengte === n} onClick={() => setStand({ lengte: n, aantal: Math.min(aantal, n), ronden })}>
+            {n}
+          </button>
+        ))}
+      </div>
 
       <button
         type="button"
@@ -266,17 +274,18 @@ export default function Gebedssnoer() {
         {melding}
       </p>
 
+      <p className="snoer-gebed">
+        Heer Jezus Christus,
+        <br />
+        ontferm U over ons.
+      </p>
+      <button type="button" className="ot-actie snoer-verder" onClick={tel}>
+        Bid verder <ArrowRight aria-hidden="true" />
+      </button>
       <div className="snoer-bediening">
-        <div className="snoer-keuze" role="group" aria-label="Aantal knopen">
-          {LENGTES.map((n) => (
-            <button key={n} type="button" aria-pressed={lengte === n} onClick={() => setStand({ lengte: n, aantal: Math.min(aantal, n), ronden })}>
-              {n}
-            </button>
-          ))}
-        </div>
         <div className="snoer-acties">
           <button type="button" onClick={terug} disabled={aantal === 0}>
-            Eén terug
+            <Undo2 aria-hidden="true" /> Eén terug
           </button>
           {vorige ? (
             <button
@@ -304,7 +313,7 @@ export default function Gebedssnoer() {
                 setStand({ lengte, aantal: 0, ronden: 0 });
               }}
             >
-              {bevestig ? 'Zeker? Opnieuw' : 'Opnieuw'}
+              <RotateCcw aria-hidden="true" /> {bevestig ? 'Zeker? Opnieuw' : 'Opnieuw'}
             </button>
           )}
         </div>

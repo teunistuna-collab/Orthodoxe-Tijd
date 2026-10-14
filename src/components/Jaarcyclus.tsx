@@ -1,13 +1,18 @@
 import { useState } from 'react';
+import { CalendarDays, ChevronRight, Moon } from 'lucide-react';
 
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { JAAR_INFO } from '../lib/cyclusTeksten';
 import { useApp } from '../lib/context';
 import { DERTIEN } from '../lib/feesten';
-import { daysBetween, formatDag, formatDatum, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
+import { daysBetween, formatDag, formatDatum, hoofdletter, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
 import { feestDatum, vastenPeriodes, volgendeFeestDatum } from '../lib/overzicht';
 import Verdieping from './Verdieping';
-import PaginaOpening from './PaginaOpening';
+import ExactPageFrame from './ExactPageFrame';
+import NisKop from './NisKop';
+import { letterBeeld } from '../lib/letters';
+import { usePaginaOpen } from '../lib/paginaOpen';
+import './Vandaag.css';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
 type InfoKey = 'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch';
@@ -131,7 +136,9 @@ export default function Jaarcyclus() {
   const [periodOpen, setPeriodOpen] = useState<PeriodKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const { mode, vandaag } = useApp();
+  const open = usePaginaOpen('jaar');
   const nu = huidigeTijd(vandaag, mode);
+  const nuPeriode = PERIODS.find((p) => p.key === nu) ?? PERIODS[0];
 
   // Waar zijn we nu: de lopende vasten- of vastenvrije periode, anders het laatste grote feest; en het komende grote feest.
   const jaar = vandaag.getUTCFullYear();
@@ -145,7 +152,7 @@ export default function Jaarcyclus() {
 
   // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
   const infoTegels = (zicht: string) => (
-    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment py-16 text-ink sm:py-20`}>
+    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment pt-6 pb-16 text-ink sm:pt-8 sm:pb-20`}>
       {/* Onzichtbare tussenkop: de tegels (h3) hangen zo onder een h2 voor schermlezers */}
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
@@ -156,77 +163,75 @@ export default function Jaarcyclus() {
 
   return (
     <>
-      <PaginaOpening id="jaar" soort="cyclisch" label="Het kerkelijk jaar" titel="Jaar" ondertitel="Het ritme van het kerkelijk jaar" beeld={{ src: '/images/jaar/rozet.webp', alt: 'Rozet van de seizoenen van het jaar' }}>
-        <p className="jr-intro">Het kerkelijk jaar is de weg van Christus in de tijd. In de feesten, de vasten en de gedachtenis van de heiligen wordt heel ons leven met Hem verenigd.</p>
-      </PaginaOpening>
-
-      {/* Waar zijn we nu, de grote bewegingen (vasten) en de twee cycli (Bouw 173) */}
-      <section className="jr-pagina bg-parchment text-ink">
-        <div className={CONTENT}>
-          <section className="jr-nu jr-vak" aria-labelledby="jr-nu-titel">
-            <div className="jr-nu-kop">
-              <h2 id="jr-nu-titel">Waar zijn we nu?</h2>
-            </div>
-            <div className="jr-nu-datum">
-              <p className="jr-datum">{formatDatum(vandaag)}</p>
-              {mode === 'oud' && <p className="jr-kerk">{formatDag(kerkDatum(vandaag, mode))} (kerkelijke datum)</p>}
-            </div>
-            <dl className="jr-nu-info">
-              {periode && (
-                <div>
-                  <dt>Periode</dt>
-                  <dd>{periode}</dd>
+      {/* Bovenkant volgens het pakket Etmaal, Week en Jaar (paneel 4): het jaarwiel, de tijd van nu met zijn
+          beginletter, de zes tijden van het jaar als tijdlijn en de vaste en beweeglijke feesten. */}
+      <section id="jaar" className="vg vg-jaar">
+        <NisKop open={open} balk terug="#cycli">
+          <img className="vg-ritmewiel vg-jaarwiel" src="/images/jaar/rozet.webp" alt="" aria-hidden="true" width={800} height={770} />
+        </NisKop>
+        <div className="vg-papier vg-cy">
+          <h1 className="vg-cy-titel">Het kerkelijk jaar</h1>
+          <img className="vg-sierlijn vg-cy-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
+          {/* Zoals Etmaal en Week: mobiel eerst de tijd van nu met de feesten, dan de tijdlijn; op web de tijdlijn links */}
+          <div className="vg-et-twee vg-wk-twee vg-jr-twee">
+            <div className="vg-wk-rechts">
+              <section className="vg-uur vg-wk-dag vg-jr-nu" aria-labelledby="jr-nu-kop">
+                <p className="vg-label">Waar zijn we nu?</p>
+                {/* Versierde beginletter (zoals Week en Etmaal), de rest van de naam sluit er direct op aan */}
+                <div className="vg-et-naam">
+                  <img className="vg-initiaal" src={letterBeeld(nuPeriode.label)} alt="" width={400} height={400} decoding="async" />
+                  <h2 id="jr-nu-kop" className="vg-dienst"><span className="sr-only">{nuPeriode.label}</span><span aria-hidden="true">{nuPeriode.label.slice(1)}</span></h2>
                 </div>
-              )}
-              <div>
-                <dt>{komend.d.getTime() === vandaag.getTime() ? 'Feest van vandaag' : 'Komend feest'}</dt>
-                <dd>
-                  {komend.f.naam} · {formatDag(komend.d)}
-                </dd>
-              </div>
-            </dl>
-          </section>
-
-          <section className="jr-bewegingen jr-vak" aria-labelledby="jr-bew-titel">
-            <div className="jr-bew-kop">
-              <h2 id="jr-bew-titel">De grote bewegingen</h2>
-            </div>
-            <ul className="jr-vasten jr-tijden">
-              {PERIODS.map((period) => (
-                <li key={period.key}>
-                  <button type="button" className={`jr-vast${period.key === nu ? ' cyclus-nu' : ''}`} aria-current={period.key === nu ? 'true' : undefined} onClick={() => setPeriodOpen(period.key)}>
-                    <span className="jr-vast-naam">{period.label}</span>
-                    {period.movable && <span className="jr-vast-data">beweeglijk</span>}
-                    <span className="jr-vast-doel">{period.short}</span>
-                    {period.key === nu && <span className="wk-vandaag">Nu</span>}
-                    <span className="jr-pijl" aria-hidden="true">›</span>
+                <p className="vg-label vg-wk-thema">{nuPeriode.short}</p>
+              </section>
+              <img className="vg-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
+              <ul className="vg-cy-lijst">
+                <li>
+                  <button type="button" className="vg-cy-kaart" onClick={() => setPeriodOpen(nuPeriode.key)}>
+                    <span className="vg-verd-symbool"><CalendarDays strokeWidth={1.3} aria-hidden="true" /></span>
+                    <span className="vg-verd-tekst">
+                      <b>{hoofdletter(formatDatum(vandaag))}</b>
+                      <span>{[periode, mode === 'oud' ? `${formatDag(kerkDatum(vandaag, mode))} (kerkelijke datum)` : null].filter(Boolean).join(' · ')}</span>
+                    </span>
+                    <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
                   </button>
                 </li>
-              ))}
-            </ul>
-          </section>
-
-          <div className="jr-cycli">
-            <a href="#kalender" className="jr-cyclus jr-vak">
-              <img src="/images/jaar/vaste-cyclus.webp" alt="" width={232} height={200} loading="lazy" decoding="async" />
-              <span className="jr-cyclus-tekst">
-                <span className="jr-cyclus-label">Vaste cyclus</span>
-                <span className="jr-cyclus-uitleg">De vaste cyclus keert elk jaar terug. Hierin vieren we de Moeder Gods, de heiligen en de grote feesten.</span>
-                <span className="jr-link">Bekijk de kalender ›</span>
-              </span>
-            </a>
-            <a href="#pascha" className="jr-cyclus jr-vak">
-              <img src="/images/jaar/beweeglijke-cyclus.webp" alt="" width={248} height={200} loading="lazy" decoding="async" />
-              <span className="jr-cyclus-tekst">
-                <span className="jr-cyclus-label">Beweeglijke cyclus</span>
-                <span className="jr-cyclus-uitleg">De beweeglijke cyclus is verbonden met Pascha. De data van de Grote Vasten, de Apostelvasten en andere perioden volgen Pascha.</span>
-                <span className="jr-link">Ga naar Pascha ›</span>
-              </span>
-            </a>
+                <li>
+                  <a className="vg-cy-kaart" href="#feesten">
+                    <span className="vg-verd-symbool"><Moon strokeWidth={1.3} aria-hidden="true" /></span>
+                    <span className="vg-verd-tekst">
+                      <b>{komend.d.getTime() === vandaag.getTime() ? 'Feest van vandaag' : 'Komend feest'}</b>
+                      <span>{komend.f.naam} · {formatDag(komend.d)}</span>
+                    </span>
+                    <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
+                  </a>
+                </li>
+              </ul>
+              <nav className="vg-jr-feesten" aria-label="Feesten">
+                <a href="#feesten"><CalendarDays strokeWidth={1.3} aria-hidden="true" /><span>Vaste feesten</span><ChevronRight aria-hidden="true" /></a>
+                <a href="#pascha"><Moon strokeWidth={1.3} aria-hidden="true" /><span>Beweeglijke feesten</span><ChevronRight aria-hidden="true" /></a>
+              </nav>
+            </div>
+            <div className="vg-et-links">
+              <p className="vg-label">De seizoenen van het heil</p>
+              {/* De zes tijden van het jaar als tijdlijn; de tijd van nu als bordeaux pil; elke tijd opent zijn venster */}
+              <ol className="vg-et-lijn vg-wk-lijn vg-jr-lijn" aria-label="De tijden van het kerkelijk jaar">
+                {PERIODS.map((period) => (
+                  <li key={period.key}>
+                    <button type="button" className={period.key === nu ? 'is-actief' : undefined} aria-current={period.key === nu ? 'true' : undefined} onClick={() => setPeriodOpen(period.key)}>
+                      <span className="vg-wk-naam">{period.label}{period.key === nu && <span className="sr-only"> (nu)</span>}</span>
+                      <span>{period.short}{period.movable ? ' · beweeglijk' : ''}</span>
+                      <ChevronRight aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </div>
       </section>
 
+      <ExactPageFrame title="Jaar">
       {infoTegels('')}
 
       {/* Meer dan een kalender */}
@@ -240,6 +245,7 @@ export default function Jaarcyclus() {
       />
 
       <TimeSanctificationTimeline current="jaar" />
+      </ExactPageFrame>
 
       <LiturgicalPopup open={periodOpen !== null} onClose={() => setPeriodOpen(null)} content={periodOpen ? PERIOD_POPUPS[periodOpen] : null} />
       <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? JAAR_INFO[infoOpen] : null} />

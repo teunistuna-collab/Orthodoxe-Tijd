@@ -5,9 +5,9 @@ import { usePaginaOpen } from '../lib/paginaOpen';
 import { usePijlgebed } from '../lib/pijlgebed';
 import { KruisTeken, VastenSymbool } from './ui';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
-import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
-import { dienstVanHetUur } from '../lib/etmaal';
-import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
+import { dagInfo, daysBetween, formatDag, hoofdletter, orthodoxPascha } from '../lib/kalender';
+import { INITIALEN, dienstVanHetUur } from '../lib/etmaal';
+import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
 import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { vastenGroep } from '../lib/vasten';
@@ -23,18 +23,6 @@ const WEEKTHEMAS: Record<number, { titel: string; uitleg: string }> = {
   4: { titel: 'De heilige apostelen en de heilige Nicolaas', uitleg: 'Donderdag gedenkt de Kerk de heilige apostelen en de heilige Nicolaas van Myra: verkondiging, herderschap en trouw aan Christus.' },
   5: { titel: 'Het lijden en Kruis van Christus', uitleg: 'Vrijdag gedenkt de Kruisiging en het vrijwillige lijden van de Heer.' },
   6: { titel: 'Alle heiligen en de ontslapenen', uitleg: 'Zaterdag is verbonden met rust, de ontslapenen en de verwachting van de Verrijzenis.' },
-};
-
-// Versierde initiaal per dienst (startpagina-pakket, implementatie/diensten.json); sleutel = title in lib/etmaal.ts.
-const INITIALEN: Record<string, string> = {
-  Vespers: 'vespers-V',
-  Completen: 'completen-C',
-  Middernachtdienst: 'middernacht-M',
-  Metten: 'metten-M',
-  'Eerste Uur': 'eerste-uur-E',
-  'Derde Uur': 'derde-uur-D',
-  'Zesde Uur': 'zesde-uur-Z',
-  'Negende Uur': 'negende-uur-N',
 };
 
 const BEELD = '/images/vandaag';
@@ -54,11 +42,16 @@ export default function Vandaag() {
 
   const dag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
   const weekthema = WEEKTHEMAS[dag.weekdag];
-  const lezingen = rooster?.[dag.ymd];
+  // Op Vandaag alleen de lezingen van de paascyclus; alle lezingen van de dag staan achter "Lezingen van vandaag".
+  const lezingen = rooster?.[dag.ymd]?.filter(isPaascyclus);
   const hoofdFeest = dag.feesten[0];
   // De eerste echte heilige van de dag (geen voorfeest, "Zaterdag vóór …" of icoon).
   const heilige = eersteHeilige(heiligen?.HEILIGEN[dag.kerkKey]);
   const kleur = liturgischeKleur(dag);
+  // Van Pascha tot het einde van de Paastijd (Pinksteren, Pascha + 49, zoals op de Paschapagina) staat in de kop het
+  // icoon van de Verrijzenis in plaats van het Christusicoon; elk jaar opnieuw volgens de Paschaberekening.
+  const naPascha = daysBetween(orthodoxPascha(vandaag.getUTCFullYear()), vandaag);
+  const paastijd = naPascha >= 0 && naPascha <= 49;
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));
   // Kernvers van de dienst, zoals in de Etmaal-cyclus ("Psalm Kernvers: 50:12" → "Psalm 50:12").
@@ -67,6 +60,19 @@ export default function Vandaag() {
   const kerkelijkeDatum = mode === 'oud' ? `${formatDag(dag.kerk)} · Juliaanse kalender` : 'Nieuwe kalender (gereviseerd juliaans)';
   const heiligenRegel = hoofdFeest?.naam ?? (heilige ? heiligeTitel(heilige.naam) : heiligen ? 'Bekijk de heiligen van vandaag' : 'Heiligen worden geladen…');
   const groep = vastenGroep(dag.vasten.niveau);
+  const lezingRij = (l: HtcLezingRef, i: number) => {
+    const ref = vertaalRef(l.ref);
+    const soort = lezingSoort(ref);
+    return (
+      <li key={`${l.ref}-${i}`}>
+        <button type="button" className="vg-rij" onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: vandaag })}>
+          <span className="sr-only">{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'}: </span>
+          {ref}
+          <ChevronRight aria-hidden="true" />
+        </button>
+      </li>
+    );
+  };
 
   return (
     <section id="vandaag" className="vg">
@@ -82,55 +88,55 @@ export default function Vandaag() {
           </a>
           <button type="button" onClick={openZoeken} className="vg-zoek" aria-label="Zoeken"><Search aria-hidden="true" /></button>
         </div>
-        <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+        <img className="vg-christus" src={paastijd ? '/images/Pascha-icoon.webp' : '/images/Christus-afbeelding.webp'} alt={paastijd ? 'Icoon van de Verrijzenis' : 'Christus'} width={640} height={paastijd ? 640 : 633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
         <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time></h1>
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>
 
       <div className="vg-papier">
-        {/* B. Het Jezusgebed: het eigen pijlgebed uit Instellingen, anders het standaardgebed. */}
+        {/* B. Het pijlgebed: het eigen pijlgebed uit Instellingen, anders het standaardgebed; de tekst linkt naar Instellingen. */}
         <section className="vg-gebed" aria-labelledby="vg-gebed-kop">
-          <h2 id="vg-gebed-kop" className="vg-label">Het Jezusgebed</h2>
-          <a href="#adem" className="vg-gebed-tekst">{pijlgebed}</a>
+          <h2 id="vg-gebed-kop" className="vg-label">Het pijlgebed</h2>
+          <a href="#instellingen" className="vg-gebed-tekst" title="Pijlgebed aanpassen in Instellingen">{pijlgebed}</a>
           <img className="vg-sierlijn" src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} />
         </section>
 
-        {/* C. Het gebedsuur van nu (lib/etmaal.ts), met de versierde initiaal van die dienst. */}
-        <section className="vg-uur" aria-labelledby="vg-uur-kop">
-          {initiaal && <img className="vg-initiaal" src={`${BEELD}/${initiaal}.webp`} alt="" width={280} height={280} decoding="async" />}
-          <div className="vg-uur-tekst">
-            <h2 id="vg-uur-kop" className="vg-label">Dit gebedsuur</h2>
-            <p className="vg-dienst">{uurMoment.title}</p>
-            <blockquote className="vg-kernvers">“{uurMoment.kernvers.verses.join(' ')}”</blockquote>
-            <p className="vg-bron"><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a></p>
-            <Actie className="vg-knop" href="#etmaal" onClick={openDienst}>Open het gebed <span aria-hidden="true">→</span></Actie>
-          </div>
+        {/* C. Het gebedsuur van nu (lib/etmaal.ts). De versierde initiaal is de eerste letter van de dienstnaam,
+            de rest van de naam sluit er direct op aan; de tekst eronder loopt om de initiaal heen, als in een gebedenboek. */}
+        <section className={`vg-uur${uurMoment.title.length > 12 ? ' vg-uur-lang' : ''}`} aria-labelledby="vg-uur-kop">
+          <h2 id="vg-uur-kop" className="vg-label">Dit gebedsuur</h2>
+          {initiaal && <img className="vg-initiaal" src={initiaal} alt="" width={280} height={280} decoding="async" />}
+          <p className="vg-dienst">
+            {initiaal ? <><span className="sr-only">{uurMoment.title}</span><span aria-hidden="true">{uurMoment.title.slice(1)}</span></> : uurMoment.title}
+          </p>
+          <blockquote className="vg-kernvers">“{uurMoment.kernvers.verses.join(' ')}”</blockquote>
+          <p className="vg-bron"><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a></p>
+          <Actie className="vg-knop" href="#etmaal" onClick={openDienst}>Open het gebed <span aria-hidden="true">→</span></Actie>
         </section>
 
         {/* D. Lezingen, heiligen en vasten van vandaag, uit het leesrooster en de dagdata. */}
         <section className="vg-lezingen" aria-labelledby="vg-lezingen-kop">
           <BookOpen className="vg-boek" aria-hidden="true" />
           <div>
-            <h2 id="vg-lezingen-kop"><Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}>Lezingen van vandaag<ChevronRight aria-hidden="true" /></Actie></h2>
+            <h2 id="vg-lezingen-kop"><Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}><span>Lezingen van vandaag</span><ChevronRight aria-hidden="true" /></Actie></h2>
             <ul>
               {lezingen === undefined ? (
                 <li className="vg-leeg">{rooster ? roosterMelding(dag.ymd) : 'Lezingen worden geladen…'}</li>
               ) : lezingen.length === 0 ? (
-                <li className="vg-leeg">{roosterMelding(dag.ymd)}</li>
+                <li className="vg-leeg">Vandaag geen lezingen uit de paascyclus.</li>
               ) : (
-                lezingen.map((l, i) => {
-                  const ref = vertaalRef(l.ref);
-                  const soort = lezingSoort(ref);
-                  return (
-                    <li key={`${l.ref}-${i}`}>
-                      <button type="button" className="vg-rij" onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: vandaag })}>
-                        <span className="sr-only">{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'}: </span>
-                        {ref}
-                        <ChevronRight aria-hidden="true" />
-                      </button>
+                <>
+                  {lezingen.slice(0, 2).map(lezingRij)}
+                  {/* Meer dan twee lezingen (bijvoorbeeld verschoven lezingen): de rest klapt uit. */}
+                  {lezingen.length > 2 && (
+                    <li>
+                      <details className="vg-meer-lezingen">
+                        <summary className="vg-rij">Nog {lezingen.length - 2} lezingen<ChevronRight aria-hidden="true" /></summary>
+                        <ul>{lezingen.slice(2).map(lezingRij)}</ul>
+                      </details>
                     </li>
-                  );
-                })
+                  )}
+                </>
               )}
             </ul>
           </div>

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { CalendarDays, ChevronRight } from 'lucide-react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
@@ -6,7 +7,12 @@ import { useApp } from '../lib/context';
 import { addDays, bepaalToon, dagInfo, formatDag, ymd } from '../lib/kalender';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
 import Verdieping from './Verdieping';
-import PaginaOpening from './PaginaOpening';
+import ExactPageFrame from './ExactPageFrame';
+import NisKop from './NisKop';
+import { letterBeeld } from '../lib/letters';
+import { HANDEN } from './symbolen';
+import { usePaginaOpen } from '../lib/paginaOpen';
+import './Vandaag.css';
 
 type DayKey = 'zondag' | 'maandag' | 'dinsdag' | 'woensdag' | 'donderdag' | 'vrijdag' | 'zaterdag';
 type InfoKey = 'wat' | 'dagen' | 'betekenis' | 'praktisch';
@@ -109,13 +115,16 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string }> = [
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
+// Dagkeuze van maandag tot zondag; de versierde initiaal van de dag (zelfde letters als de diensten, lib/etmaal.ts).
+const MA_ZO: DayKey[] = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'];
+
 export default function Weekcyclus() {
   const { vandaag, mode, openDag } = useApp();
   const [dayOpen, setDayOpen] = useState<DayKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const vandaagKey = DAYS[vandaag.getUTCDay()].key;
   const [gekozen, setGekozen] = useState<DayKey>(vandaagKey);
-  const detailRef = useRef<HTMLElement | null>(null);
+  const open = usePaginaOpen('week');
 
   // Vandaag kan een pop-up van deze pagina openen.
   useEffect(() => {
@@ -136,84 +145,79 @@ export default function Weekcyclus() {
   const info = dagInfo(datum, mode);
   const tekst = DAY_POPUPS[gekozen];
 
-  const kies = (key: DayKey) => {
-    setGekozen(key);
-    // Op mobiel staat de uitleg onder de lijst: daarheen scrollen.
-    if (window.matchMedia('(max-width: 899.98px)').matches) detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const naarKalender = () => openDag(ymd(datum));
 
   return (
     <>
-      {/* Opening volgens het aangeleverde ontwerp (Bouw 176): icoon, titel, intro en het vak met de toon van de week */}
-      <PaginaOpening id="week" soort="cyclisch" label="De liturgische week" titel="Week" ondertitel="Van zondag tot zaterdag" beeld={{ src: '/images/Week-icoon.webp', alt: 'Rondel met kerken in een landschap onder de sterren' }}>
-        <p className="pc-intro">De week is het ritme van de verrijzenis. Iedere dag heeft zijn eigen betekenis en plaatst ons in het heilsplan van Christus.</p>
-        <aside className="pc-jaar wk-toon cyclus-nu" aria-label="Toon van de week">
-          <p className="pc-jaar-label">Toon van de week</p>
-          <p className="pc-jaar-datum">{toon ? `Toon ${toon}` : 'Geen toon'}</p>
-          <p className="wk-toon-tekst">
-            {toon
-              ? 'De toon van de week volgt de Octoëchos en biedt het liturgisch klankveld waarin we de gebeden van deze week bidden.'
-              : 'In de Heilige Week en de Lichte Week geldt geen toon van de week.'}
-          </p>
-        </aside>
-      </PaginaOpening>
+      {/* Bovenkant volgens het pakket Etmaal, Week en Jaar (paneel 3): de dagkeuze, de dag met zijn initiaal en drie
+          ingangen. Gekozen dag blijft staan tot "Terug naar vandaag". */}
+      <section id="week" className="vg vg-week">
+        <NisKop open={open} balk terug="#cycli">
+          <img className="vg-ritmewiel vg-jaarwiel" src="/images/Week-icoon.webp" alt="" aria-hidden="true" width={640} height={640} />
+        </NisKop>
+        <div className="vg-papier vg-cy">
+          <h1 className="vg-cy-titel">Week</h1>
+          <img className="vg-sierlijn vg-cy-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
+          {/* Zoals Etmaal: mobiel eerst de gekozen dag, dan de tijdlijn; op web de tijdlijn links en de dag ernaast */}
+          <div className="vg-et-twee vg-wk-twee">
+            <div className="vg-wk-rechts">
+              <section className="vg-uur vg-wk-dag" aria-labelledby="wk-dag-titel" aria-live="polite">
+                <img className="vg-initiaal" src={letterBeeld(dag.label)} alt="" width={280} height={280} decoding="async" />
+                <h2 id="wk-dag-titel" className="vg-dienst">
+                  <span className="sr-only">{dag.label}</span>
+                  <span aria-hidden="true">{dag.label.slice(1)}</span>
+                </h2>
+                <p className="vg-label vg-wk-thema">{tekst.subtitle}</p>
+              </section>
+              <img className="vg-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
 
-      <section className="pc-pagina bg-parchment text-ink">
-        <div className={CONTENT}>
-          {/* Deze week: zeven dagen; vandaag gemarkeerd, de gekozen dag staat hieronder uitgelegd */}
-          <section className="pc-opbouw jr-vak" aria-labelledby="wk-week-titel">
-            <h2 id="wk-week-titel" className="pc-kop">Deze week</h2>
-            <ul className="jr-vasten jr-tijden wk-dagen">
-              {DAYS.map((d) => (
-                <li key={d.key}>
-                  <button type="button" className={`jr-vast${d.key === vandaagKey ? ' cyclus-nu' : ''}`} aria-pressed={d.key === gekozen} onClick={() => kies(d.key)}>
-                    <span className="wk-dag">{d.label}</span>
-                    <span className="jr-vast-doel">{d.short}</span>
-                    {d.key === vandaagKey && <span className="wk-vandaag">Vandaag</span>}
-                    <span className="jr-pijl" aria-hidden="true">›</span>
+              <ul className="vg-cy-lijst">
+                <li>
+                  <button type="button" className="vg-cy-kaart" onClick={() => setDayOpen(gekozen)}>
+                    <span className="vg-verd-symbool">{HANDEN}</span>
+                    <span className="vg-verd-tekst"><b>Thema van de dag</b><span>{tekst.highlight}</span></span>
+                    <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
+                  </button>
+                </li>
+                <li>
+                  <button type="button" className="vg-cy-kaart" onClick={naarKalender}>
+                    <span className="vg-verd-symbool"><CalendarDays strokeWidth={1.3} aria-hidden="true" /></span>
+                    <span className="vg-verd-tekst"><b>{dag.label} {formatDag(datum)}</b><span>{info.vasten.label}{toon ? ` · Toon ${toon}` : ''}</span></span>
+                    <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div className="vg-et-links">
+              <p className="vg-label">De dagen met de Heer</p>
+            {/* De zeven dagen als tijdlijn, zoals de diensten op Etmaal: dag en thema, de gekozen dag als bordeaux pil */}
+            <ol className="vg-et-lijn vg-wk-lijn" aria-label="Kies een dag">
+              {MA_ZO.map((key) => (
+                <li key={key}>
+                  <button type="button" className={key === gekozen ? 'is-actief' : undefined} aria-pressed={key === gekozen} aria-current={key === vandaagKey ? 'date' : undefined} onClick={() => setGekozen(key)}>
+                    <span className="vg-wk-naam">{key.charAt(0).toUpperCase() + key.slice(1)}{key === vandaagKey && <span className="sr-only"> (vandaag)</span>}</span>
+                    <span>{DAY_POPUPS[key].subtitle}</span>
+                    <ChevronRight aria-hidden="true" />
                   </button>
                 </li>
               ))}
-            </ul>
-          </section>
-
-          {/* De gekozen dag */}
-          <section ref={detailRef} className="pc-feest wk-detail" aria-labelledby="wk-dag-titel">
-            <h2 id="wk-dag-titel" className="pc-feest-titel">{dag.label}</h2>
-            <p className="pc-feest-onder">{tekst.subtitle}</p>
-            <p className="pc-feest-tekst">{tekst.paragraphs[0]}</p>
-            <div className="pc-feest-vakken">
-              <div className="pc-vak jr-vak">
-                <p className="pc-vak-label">Thema's van de dag</p>
-                <p className="pc-tropaar">{tekst.highlight}</p>
-                <p className="pc-vak-label wk-vasten-label">Vasten · {formatDag(datum)}</p>
-                <p className="wk-vasten">
-                  {info.vasten.label}
-                  {info.vasten.periode ? ` · ${info.vasten.periode}` : ''}
-                </p>
-              </div>
-              <nav className="pc-vak jr-vak" aria-label="Lees meer">
-                <p className="pc-vak-label">Lees meer</p>
-                <ul className="pc-meer">
-                  <li>
-                    <button type="button" onClick={() => setDayOpen(gekozen)}>
-                      Meer over de {dag.label.toLowerCase()} ›
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" onClick={() => openDag(ymd(datum))}>
-                      {dag.label} {formatDag(datum)} in de kalender ›
-                    </button>
-                  </li>
-                </ul>
-              </nav>
+            </ol>
+            {gekozen !== vandaagKey && (
+              <button type="button" className="vg-link vg-et-volg" onClick={() => setGekozen(vandaagKey)}>Terug naar vandaag ›</button>
+            )}
             </div>
-            <Verdieping items={INFO_CARDS.map((c) => ({ ...c, intro: WEEK_INFO[c.key]?.subtitle }))} onOpen={setInfoOpen} />
-          </section>
+          </div>
         </div>
       </section>
 
+      <ExactPageFrame title="Week">
+        <div className="pc-pagina bg-parchment text-ink">
+          <div className={CONTENT}>
+            <Verdieping items={INFO_CARDS.map((c) => ({ ...c, intro: WEEK_INFO[c.key]?.subtitle }))} onOpen={setInfoOpen} />
+          </div>
+        </div>
       <TimeSanctificationTimeline current="week" />
+      </ExactPageFrame>
 
       <LiturgicalPopup open={dayOpen !== null} onClose={() => setDayOpen(null)} content={dayOpen ? DAY_POPUPS[dayOpen] : null} />
       <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? WEEK_INFO[infoOpen] : null} />

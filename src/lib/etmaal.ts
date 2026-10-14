@@ -1,6 +1,8 @@
 // Diensten van het etmaal met hun psalmen: de enige bron voor Etmaal, Vandaag en Psalmen.
 // Verplaatst uit UrenCyclus.tsx, inhoud ongewijzigd.
 
+import { letterBeeld } from './letters';
+
 export type PsalmMapping = {
   title: string;
   pdf: string;
@@ -119,3 +121,6 @@ export function dienstVanHetUur(nu: Date): ServiceMapping {
       .sort((a, b) => Number(b.time.slice(0, 2)) - Number(a.time.slice(0, 2)))[0] ?? serviceConfig[0]
   );
 }
+
+/** Versierde initiaal per dienst: de eerste letter van de dienstnaam uit het alfabet (lib/letters.ts). */
+export const INITIALEN: Record<string, string | undefined> = Object.fromEntries(serviceConfig.map((s) => [s.title, letterBeeld(s.title)]));

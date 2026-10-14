@@ -3988,3 +3988,7 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 
 /* Bouw 203 — alle paginatitels in het nachtblauw van de onderbalk. */
 #top#top#top#top#top#top#top#top#top#top#top .opening-titel{color:#0b1b2a!important}
+
+/* Bouw 204 — de achtergrond van alle pagina's: het lichte papyrus van Vandaag (public/images/vandaag/papyrus-licht.webp). */
+#top#top#top{background-color:#f5e6c8}
+#top#top#top::before{background:#f5e6c8 url(/images/vandaag/papyrus-licht.webp) center top/cover no-repeat}

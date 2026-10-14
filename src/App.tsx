@@ -12,6 +12,7 @@ import Pascha from './components/Pascha';
 import Heiligen from './components/Heiligen';
 import Gebeden from './components/Gebeden';
 import Meer from './components/Meer';
+import Cycli from './components/Cycli';
 import DagModal from './components/DagModal';
 import DagLezingen from './components/DagLezingen';
 import DagHeiligen from './components/DagHeiligen';
@@ -25,7 +26,6 @@ import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
 import PaginaOpening from './components/PaginaOpening';
-import ExactPageFrame from './components/ExactPageFrame';
 import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
 import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
 import { kerkjaarVan, laadRoosterJaar, type Rooster } from './lib/htc';
@@ -45,13 +45,13 @@ const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
 const STANDAARD_TITEL = document.title;
 
-const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer'];
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer', 'cycli'];
 
 // "#psalmen/50" hoort bij de pagina "psalmen" (de Psalmenpagina opent zelf Psalm 50).
 function paginaUitHash(): string | null {
   const id = decodeURIComponent(window.location.hash.slice(1)).split('/')[0];
-  // Verdieping (#meer) hoort bij de mobiele onderbalk; op het web staat alles al in de kopbalk.
-  if (id === 'meer' && window.matchMedia('(min-width: 768px)').matches) return null;
+  // Verdieping (#meer) en Cycli (#cycli) horen bij de mobiele onderbalk; op het web staat alles al in de kopbalk.
+  if ((id === 'meer' || id === 'cycli') && window.matchMedia('(min-width: 768px)').matches) return null;
   return PAGINAS.includes(id) ? id : null;
 }
 
@@ -110,7 +110,8 @@ export default function App() {
       const doel = link?.getAttribute('href')?.slice(1);
       if (!doel || !PAGINAS.includes(doel.split('/')[0])) return;
       e.preventDefault();
-      if (doel === huidige.current) window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Zelfde adres: naar boven. Binnen een pagina (#psalmen/50 → #psalmen) wel het adres wisselen.
+      if (doel === window.location.hash.slice(1)) window.scrollTo({ top: 0, behavior: 'smooth' });
       else gaNaar(doel);
     };
     window.addEventListener('hashchange', opHash);
@@ -226,19 +227,20 @@ export default function App() {
         <Header pagina={pagina} />
         <main id="inhoud" tabIndex={-1}>
           <div className={p('vandaag')}><Vandaag /></div>
-          <div className={p('kalender')}><ExactPageFrame title="Kalender"><Kalender /></ExactPageFrame></div>
-          <div className={p('adem')}><ExactPageFrame title="Adem"><Ademcyclus /></ExactPageFrame></div>
-          <div className={p('etmaal')}><ExactPageFrame title="Etmaal"><UrenCyclus /></ExactPageFrame></div>
-          <div className={p('week')}><ExactPageFrame title="Week"><Weekcyclus /></ExactPageFrame></div>
-          <div className={p('jaar')}><ExactPageFrame title="Jaar"><Jaarcyclus /></ExactPageFrame></div>
-          <div className={p('pascha')}><ExactPageFrame title="Pascha"><Pascha /></ExactPageFrame></div>
-          <div className={p('gebeden')}><ExactPageFrame title="Gebeden"><Gebeden /></ExactPageFrame></div>
-          <div className={p('vasten')}><ExactPageFrame title="Vasten"><Vasten /></ExactPageFrame></div>
-          <div className={p('heiligen')}><ExactPageFrame title="Heiligen"><Heiligen /></ExactPageFrame></div>
-          <div className={p('feesten')}><ExactPageFrame title="Feesten"><Feesten /></ExactPageFrame></div>
+          <div className={p('kalender')}><Kalender /></div>
+          <div className={p('adem')}><Ademcyclus /></div>
+          <div className={p('etmaal')}><UrenCyclus /></div>
+          <div className={p('week')}><Weekcyclus /></div>
+          <div className={p('jaar')}><Jaarcyclus /></div>
+          <div className={p('pascha')}><Pascha /></div>
+          <div className={p('gebeden')}><Gebeden /></div>
+          <div className={p('vasten')}><Vasten /></div>
+          <div className={p('heiligen')}><Heiligen /></div>
+          <div className={p('feesten')}><Feesten /></div>
           <div className={p('meer')}><Meer /></div>
-          <div className={p('instellingen')}><ExactPageFrame title="Instellingen"><Instellingen /></ExactPageFrame></div>
-          <div className={p('psalmen')}><ExactPageFrame title="Psalmen"><Psalmen actief={pagina === 'psalmen'} /></ExactPageFrame></div>
+          <div className={p('cycli')}><Cycli /></div>
+          <div className={p('instellingen')}><Instellingen /></div>
+          <div className={p('psalmen')}><Psalmen actief={pagina === 'psalmen'} /></div>
           <div className={p('bronnen')}><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
         </main>
         <Footer />

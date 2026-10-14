@@ -84,6 +84,13 @@ export function laadRoosterJaar(jaar: number): Promise<Rooster> {
   return p;
 }
 
+/** Lezing uit de paascyclus (Triodion, Pentecostarion en de weken na Pinksteren). Het rooster geeft die zonder
+ *  tag of met de tag tussen haakjes ("(6th Hour)", "(Epistle)", "(3rd Matins Gospel)"); lezingen van de vaste
+ *  kalender (heiligen en feesten: "Saint", "Theotokos", "Matins Gospel", …) hebben een tag zonder haakjes. */
+export function isPaascyclus(l: HtcLezingRef): boolean {
+  return l.tag === '' || /^\(.*\)$/.test(l.tag);
+}
+
 /** Tekst als er voor een datum geen lezingen zijn: nog aan het laden, echt geen lezingen, of buiten het rooster. */
 export function roosterMelding(ymd: string): string {
   if (ymd < EERSTE_DATUM) return 'Het leesrooster begint op 1 januari 2026.';

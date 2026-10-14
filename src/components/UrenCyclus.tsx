@@ -5,8 +5,9 @@ import { vergrendelScroll } from '../lib/scrollLock';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ETMAAL_INFO } from '../lib/cyclusTeksten';
-import { dienstVanHetUur, serviceConfig, type PsalmMapping, type ServiceMapping } from '../lib/etmaal';
-import PaginaOpening from './PaginaOpening';
+import { dienstVanHetUur, serviceConfig, type PsalmMapping } from '../lib/etmaal';
+import EtmaalOverzicht from './EtmaalOverzicht';
+import ExactPageFrame from './ExactPageFrame';
 import { PsalmLezer } from './Psalmen';
 import Verdieping from './Verdieping';
 import { PSALMEN, laadPsalmTeksten, type PsalmTeksten } from '../lib/psalmen';
@@ -52,22 +53,6 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
   { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.' },
 ];
 
-
-// Beelden per dienst in public/images/etmaal (uitgesneden uit het aangeleverde ontwerp), van avond via nacht naar dag.
-const slug = (titel: string) => titel.toLowerCase().replace(/ /g, '-');
-// Korte namen en dagdelen uit het aangeleverde ontwerp.
-const KORT: Record<string, string> = { Middernachtdienst: 'Middernacht' };
-const UURNUMMER: Record<string, string> = { 'Eerste Uur': '1', 'Derde Uur': '3', 'Zesde Uur': '6', 'Negende Uur': '9' };
-const DAGDEEL: Record<string, string> = {
-  Vespers: 'Avond',
-  Completen: 'Einde van de dag',
-  Middernachtdienst: 'Nacht',
-  Metten: 'Naar de dageraad',
-  'Eerste Uur': 'Begin van de dag',
-  'Derde Uur': 'Ochtend',
-  'Zesde Uur': 'Middag',
-  'Negende Uur': 'Namiddag',
-};
 
 export default function UrenCyclus() {
   const [open, setOpen] = useState<number | null>(null);
@@ -216,50 +201,19 @@ export default function UrenCyclus() {
 
   const nuDienst = dienstVanHetUur(nu);
   const nuIndex = serviceConfig.indexOf(nuDienst);
-  const psalmRegel = (service: ServiceMapping) => service.psalms.map((p) => p.title).join(', ').replace(/, Psalm /g, ', ');
 
   return (
     <>
-      {/* Opening volgens de referentie (Bouw 177): het etmaalwiel, titel, intro en het bordeaux vlak met de dienst van nu */}
-      <PaginaOpening id="etmaal" soort="cyclisch" label="De gebeden van dag en nacht" titel="Etmaal" ondertitel="De uren van het gebed" beeld={{ src: '/images/Etmaal-wiel.webp', alt: 'Het etmaalwiel met de acht gebedsdiensten van avond tot namiddag' }}>
-        <p className="pc-intro">{INFO_CARDS[0].intro}</p>
-        <article className="et-nu cyclus-nu" aria-labelledby="et-nu-titel">
-          <img className="et-nu-beeld" src={`/images/etmaal/${slug(nuDienst.title)}.webp`} alt="" width={204} height={256} loading="lazy" decoding="async" />
-          <div className="et-nu-kop">
-            <p className="cyclus-nu-label">Nu</p>
-            <h2 id="et-nu-titel" className="et-nu-titel">{nuDienst.title}</h2>
-            <p className="et-nu-tijd">{nuDienst.time}</p>
-          </div>
-          <div className="et-nu-info">
-            <p>{nuDienst.hoofdgedachtenis}</p>
-            <p>{psalmRegel(nuDienst)}</p>
-            <button type="button" className="et-nu-link" onClick={() => openService(nuIndex)}>
-              Open {nuDienst.title.toLowerCase()} ›
-            </button>
-          </div>
-        </article>
-      </PaginaOpening>
+      {/* Bovenkant volgens het pakket Etmaal, Week en Jaar: banner van de dienst, tijdlijn en het gebedsuur */}
+      <EtmaalOverzicht nuIndex={nuIndex} onOpen={openService} />
 
-      {/* De acht diensten van avond tot namiddag: van licht naar duisternis en terug; de dienst van nu in bordeaux */}
-      <section className="et-cyclus bg-parchment text-ink" aria-labelledby="et-cyclus-titel">
+      {/* Daaronder de bestaande verdieping, overgang en tijdlijn, in het gewone paginakader */}
+      <ExactPageFrame title="Etmaal">
+      <div className="et-cyclus bg-parchment text-ink">
         <div className={CONTENT}>
-          <h2 id="et-cyclus-titel" className="pc-kop et-kop">De diensten van het etmaal</h2>
-          <ol className="et-diensten">
-            {serviceConfig.map((service, index) => (
-              <li key={service.title}>
-                <button type="button" className={`et-dienst${index === nuIndex ? ' cyclus-nu' : ''}`} aria-current={index === nuIndex ? 'true' : undefined} onClick={() => openService(index)}>
-                  <span className="et-dienst-tijd">{service.time}</span>
-                  <span className="et-dienst-naam">{UURNUMMER[service.title] ? <>{UURNUMMER[service.title]}<sup>e</sup> Uur</> : (KORT[service.title] ?? service.title)}</span>
-                  <span className="et-dienst-deel">{DAGDEEL[service.title]}</span>
-                  <span className="et-dienst-psalm">{psalmRegel(service)}</span>
-                  {index === nuIndex && <span className="cyclus-nu-label">Nu</span>}
-                </button>
-              </li>
-            ))}
-          </ol>
           <Verdieping items={INFO_CARDS} onOpen={setInfoOpen} />
         </div>
-      </section>
+      </div>
 
       {/* Meer dan een dagindeling */}
       <CycleTransition
@@ -272,6 +226,7 @@ export default function UrenCyclus() {
       />
 
       <TimeSanctificationTimeline current="etmaal" />
+      </ExactPageFrame>
 
       <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? ETMAAL_INFO[infoOpen] : null} />
 
