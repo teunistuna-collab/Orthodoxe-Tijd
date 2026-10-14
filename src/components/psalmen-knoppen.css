@@ -24,3 +24,12 @@
 #top#top#top#top#top#top#top main .psalm-controls .pc-tab{min-height:56px!important}
 #top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:68px!important;border:0!important;border-image:none!important;box-shadow:none!important}
 @media(max-width:540px){#top#top#top#top#top#top#top main .psalm-controls .pc-tab{min-height:49px!important}#top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:58px!important}}
+
+/* Filterknoppen in de stijl van de kaarten op Cycli (.vg-cy-kaart): dun goud kader, dubbele binnenlijn, ruitjes op twee hoeken */
+.psalm-controls .pc-filters{gap:8px;border-bottom:0}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab{position:relative;border:1px solid #b99455!important;border-radius:3px!important;background:rgba(255,244,219,.17)!important;box-shadow:inset 0 0 0 3px rgba(246,231,201,.9),inset 0 0 0 4px rgba(197,165,117,.33)!important;padding:10px 12px!important;isolation:auto}
+.psalm-controls .pc-tab:before,.psalm-controls .pc-tab:after,.psalm-controls .pc-tab[aria-pressed=true]:after{content:"";position:absolute;width:6px;height:6px;border:1px solid #b99455;background:var(--papyrus,#f5e6c8);transform:rotate(45deg);font-size:0;color:transparent}
+.psalm-controls .pc-tab:before{left:-4px;top:-4px}
+.psalm-controls .pc-tab:after,.psalm-controls .pc-tab[aria-pressed=true]:after{left:auto;right:-4px;top:auto;bottom:-4px}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab:hover{background:rgba(255,251,236,.5)!important}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab[aria-pressed=true]{border-color:#a77234!important;background:linear-gradient(130deg,#9b1925,#710d16)!important;box-shadow:inset 0 0 0 3px rgba(122,16,26,.9),inset 0 0 0 4px rgba(230,188,109,.55)!important;color:#fff2d6}

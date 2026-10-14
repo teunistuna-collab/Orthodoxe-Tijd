@@ -105,6 +105,7 @@
 
 /* ---------- Pascha ---------- */
 .ot-pascha .ot-pc-datum { margin: 2px 0 0; font-family: var(--font-lees); font-size: clamp(30px, 8.5cqw, 38px); font-weight: 500; line-height: 1.1; text-align: center; color: var(--ot-inkt); }
+.ot-pascha .ot-pc-nog { margin: 2px 0 6px; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .14em; text-align: center; text-transform: uppercase; color: var(--ot-rood); }
 .ot-pascha .vg-kop-achter .ot-banner { object-position: 40% 60%; } /* mobiel: het graf met de weggerolde steen in beeld */
 @media (min-width: 768px) { #pascha.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 52%; } }
 

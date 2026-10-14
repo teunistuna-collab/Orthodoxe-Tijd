@@ -83,6 +83,8 @@
 /* Label, letterpaneel, kernvers, psalm en knop delen één linkerlijn: die van het letterpaneel. */
 .vg-uur { --lijn: calc(var(--ini) * .27 - 6px); }
 .vg-uur .vg-label { margin-left: var(--lijn) !important; }
+#vandaag .vg-uur > .vg-label { margin-left: 0 !important; text-align: center; } /* Vandaag: "Dit gebedsuur" gecentreerd */
+@media (max-width: 767px) { #etmaal .vg-uur > .vg-label, #jaar .vg-uur > .vg-label:not(.vg-wk-thema) { justify-self: center; margin-left: 0 !important; text-align: center; } } /* Etmaal en Jaar mobiel: "Dit gebedsuur" / "Waar zijn we nu?" gecentreerd */
 .vg-uur :is(.vg-kernvers, .vg-bron, .vg-knop) { clear: left; margin-left: var(--lijn) !important; }
 .vg-uur .vg-kernvers { margin-top: 12px !important; padding-left: 12px; border-left: 1.5px solid rgba(172, 121, 47, .55); }
 .vg-uur .vg-bron { padding-left: 13.5px; }

@@ -4,7 +4,7 @@ import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import { useApp } from '../lib/context';
 import { PAASCYCLUS } from '../lib/feesten';
-import { addDays, formatDag, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
+import { addDays, daysBetween, formatDag, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
 import { FeestTag } from './ui';
 import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
@@ -258,13 +258,14 @@ const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 const PAARS = '#592655';
 const ROOD = '#850d17';
 const GOUD = '#a66c27';
-const STAP_SYMBOOL: Record<StapKey, { beeld: string; kleur: string }> = {
-  voorbereiding: { beeld: 'pascha-voorbereiding', kleur: PAARS },
-  'grote-vasten': { beeld: 'pascha-grote-vasten', kleur: PAARS },
-  'goede-week': { beeld: 'pascha-goede-week', kleur: ROOD },
-  pascha: { beeld: 'pascha-kruis', kleur: ROOD },
-  'vijftig-dagen': { beeld: 'pascha-paastijd', kleur: GOUD },
-  'hemelvaart-pinksteren': { beeld: 'pascha-pinksteren', kleur: GOUD },
+// Liturgische kleur per stap: het bolletje op de tijdlijn.
+const STAP_KLEUR: Record<StapKey, string> = {
+  voorbereiding: PAARS,
+  'grote-vasten': PAARS,
+  'goede-week': ROOD,
+  pascha: ROOD,
+  'vijftig-dagen': GOUD,
+  'hemelvaart-pinksteren': GOUD,
 };
 
 export default function Pascha() {
@@ -286,6 +287,7 @@ export default function Pascha() {
 
   const pascha = volgendePascha(vandaag);
   const paaschaJaar = pascha.getUTCFullYear();
+  const dagenTotPascha = daysBetween(vandaag, pascha);
 
   // Iedere stap-pop-up krijgt de datums van dit jaar als eyebrow.
   const stapInhoud = {} as Record<StapKey, PopupInhoud>;
@@ -316,7 +318,9 @@ export default function Pascha() {
           <h1 className="ot-titel">Naar Pascha</h1>
           <p className="ot-pc-datum">{formatDatum(pascha)}</p>
           <Sierlijn />
-          <ol className="ot-tijdlijn">
+          {/* Aftellen tot Pascha (volgendePascha geeft op Paaszondag zelf die dag) */}
+          <p className="ot-pc-nog">{dagenTotPascha === 0 ? 'Vandaag is het Pascha' : `Nog ${dagenTotPascha} ${dagenTotPascha === 1 ? 'dag' : 'dagen'}`}</p>
+          <ol className="ot-tijdlijn ot-tijdlijn-stip">
             {STAPPEN.map((stap) => {
               const [start, eind] = stap.offsetRange;
               const van = addDays(pascha, start);
@@ -324,8 +328,7 @@ export default function Pascha() {
               return (
                 <TijdlijnRij
                   key={stap.key}
-                  beeld={<img src={`/images/ontwerp/${STAP_SYMBOOL[stap.key].beeld}.svg`} alt="" width={64} height={64} />}
-                  kleur={STAP_SYMBOOL[stap.key].kleur}
+                  kleur={STAP_KLEUR[stap.key]}
                   titel={stap.label}
                   onder={`${bereikLang(van, tot)} ${tot.getUTCFullYear()}`}
                   nu={vandaag.getTime() >= van.getTime() && vandaag.getTime() <= tot.getTime()}
