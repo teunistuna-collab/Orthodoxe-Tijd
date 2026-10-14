@@ -196,7 +196,7 @@
 .ot-psalmen .ot-ps-kop { --p: clamp(84px, 24cqw, 112px); --t: clamp(48px, 14cqw, 64px); display: flex; align-items: flex-start; justify-content: center; gap: 4px; margin-top: 4px; }
 /* "salter" op de voetlijn van de P: het tekstblok zakt tot de onderkant van de letter */
 .ot-psalmen .ot-ps-kop > h1 { margin-top: calc(var(--p) * .86 - var(--t) * .8); }
-.ot-psalmen .ot-ps-p { flex: none; width: var(--p); height: auto; border-radius: 3px; box-shadow: 0 2px 6px rgba(60, 30, 10, .25); pointer-events: none; }
+.ot-psalmen .ot-ps-p { flex: none; width: var(--p); height: auto; object-fit: contain; pointer-events: none; }
 .ot-psalmen .ot-ps-kop .ot-titel { margin-bottom: 0; font-size: var(--t); line-height: .95; text-align: left; }
 .ot-redesign .ot-zoekveld { display: flex; align-items: center; gap: 10px; min-height: 48px; margin: 16px 0 12px; padding: 0 14px; border: 1px solid rgba(167, 118, 52, .55); border-radius: 8px; background: rgba(255, 250, 238, .6); }
 .ot-redesign .ot-zoekveld svg { flex: none; width: 20px; height: 20px; color: var(--ot-inkt); }
