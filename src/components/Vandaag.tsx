@@ -131,91 +131,97 @@ export default function Vandaag() {
           </section>
         )}
 
-        {/* B. Het pijlgebed: het eigen pijlgebed uit Instellingen, anders het standaardgebed; de tekst linkt naar Instellingen. */}
-        <section className="vg-gebed" aria-labelledby="vg-gebed-kop">
-          <h2 id="vg-gebed-kop" className="vg-label">Het pijlgebed</h2>
-          <a href="#instellingen" className="vg-gebed-tekst" title="Pijlgebed aanpassen in Instellingen">{pijlgebed}</a>
-          <img className="vg-sierlijn" src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} />
-        </section>
+        {/* Twee kolommen vanaf 1024 px (Vandaag.css): links het gebed, rechts de daginformatie. Daaronder gewone blokken. */}
+        <div className="vg-kolommen">
+          <div className="vg-kol">
+            {/* B. Het pijlgebed: het eigen pijlgebed uit Instellingen, anders het standaardgebed; de tekst linkt naar Instellingen. */}
+            <section className="vg-gebed" aria-labelledby="vg-gebed-kop">
+              <h2 id="vg-gebed-kop" className="vg-label">Het pijlgebed</h2>
+              <a href="#instellingen" className="vg-gebed-tekst" title="Pijlgebed aanpassen in Instellingen">{pijlgebed}</a>
+              <img className="vg-sierlijn" src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} />
+            </section>
 
-        {/* C. Het gebedsuur van nu (lib/etmaal.ts). De versierde initiaal is de eerste letter van de dienstnaam,
-            de rest van de naam sluit er direct op aan; de tekst eronder loopt om de initiaal heen, als in een gebedenboek. */}
-        <section className={`vg-uur${uurMoment.title.length > 12 ? ' vg-uur-lang' : ''}`} aria-labelledby="vg-uur-kop">
-          <h2 id="vg-uur-kop" className="vg-label">Dit gebedsuur</h2>
-          {initiaal && <img className="vg-initiaal" src={initiaal} alt="" width={280} height={280} decoding="async" />}
-          <p className="vg-dienst">
-            {initiaal ? <><span className="sr-only">{uurMoment.title}</span><span aria-hidden="true">{uurMoment.title.slice(1)}</span></> : uurMoment.title}
-          </p>
-          <blockquote className="vg-kernvers">“{uurMoment.kernvers.verses.join(' ')}”</blockquote>
-          <p className="vg-bron"><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a></p>
-          <Actie className="vg-knop" href="#etmaal" onClick={openDienst}>Open het gebed <span aria-hidden="true">→</span></Actie>
-        </section>
-
-        {/* D. Lezingen, heiligen en vasten van vandaag, uit het leesrooster en de dagdata. */}
-        <section className="vg-lezingen" aria-labelledby="vg-lezingen-kop">
-          <BookOpen className="vg-boek" aria-hidden="true" />
-          <div>
-            <h2 id="vg-lezingen-kop"><Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}><span>Lezingen van vandaag</span><ChevronRight aria-hidden="true" /></Actie></h2>
-            <ul>
-              {lezingen === undefined ? (
-                <li className="vg-leeg">{rooster ? roosterMelding(dag.ymd) : 'Lezingen worden geladen…'}</li>
-              ) : lezingen.length === 0 ? (
-                <li className="vg-leeg">Vandaag geen lezingen uit de paascyclus.</li>
-              ) : (
-                <>
-                  {lezingen.slice(0, 2).map(lezingRij)}
-                  {/* Meer dan twee lezingen (bijvoorbeeld verschoven lezingen): de rest klapt uit. */}
-                  {lezingen.length > 2 && (
-                    <li>
-                      <details className="vg-meer-lezingen">
-                        <summary className="vg-rij">Nog {lezingen.length - 2} lezingen<ChevronRight aria-hidden="true" /></summary>
-                        <ul>{lezingen.slice(2).map(lezingRij)}</ul>
-                      </details>
-                    </li>
-                  )}
-                </>
-              )}
-            </ul>
+            {/* C. Het gebedsuur van nu (lib/etmaal.ts). De versierde initiaal is de eerste letter van de dienstnaam,
+                de rest van de naam sluit er direct op aan; de tekst eronder loopt om de initiaal heen, als in een gebedenboek. */}
+            <section className={`vg-uur${uurMoment.title.length > 12 ? ' vg-uur-lang' : ''}`} aria-labelledby="vg-uur-kop">
+              <h2 id="vg-uur-kop" className="vg-label">Dit gebedsuur</h2>
+              {initiaal && <img className="vg-initiaal" src={initiaal} alt="" width={280} height={280} decoding="async" />}
+              <p className="vg-dienst">
+                {initiaal ? <><span className="sr-only">{uurMoment.title}</span><span aria-hidden="true">{uurMoment.title.slice(1)}</span></> : uurMoment.title}
+              </p>
+              <blockquote className="vg-kernvers">“{uurMoment.kernvers.verses.join(' ')}”</blockquote>
+              <p className="vg-bron"><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a></p>
+              <Actie className="vg-knop" href="#etmaal" onClick={openDienst}>Open het gebed <span aria-hidden="true">→</span></Actie>
+            </section>
           </div>
-        </section>
+          <div className="vg-kol">
+            {/* D. Lezingen, heiligen en vasten van vandaag, uit het leesrooster en de dagdata. */}
+            <section className="vg-lezingen" aria-labelledby="vg-lezingen-kop">
+              <BookOpen className="vg-boek" aria-hidden="true" />
+              <div>
+                <h2 id="vg-lezingen-kop"><Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}><span>Lezingen van vandaag</span><ChevronRight aria-hidden="true" /></Actie></h2>
+                <ul>
+                  {lezingen === undefined ? (
+                    <li className="vg-leeg">{rooster ? roosterMelding(dag.ymd) : 'Lezingen worden geladen…'}</li>
+                  ) : lezingen.length === 0 ? (
+                    <li className="vg-leeg">Vandaag geen lezingen uit de paascyclus.</li>
+                  ) : (
+                    <>
+                      {lezingen.slice(0, 2).map(lezingRij)}
+                      {/* Meer dan twee lezingen (bijvoorbeeld verschoven lezingen): de rest klapt uit. */}
+                      {lezingen.length > 2 && (
+                        <li>
+                          <details className="vg-meer-lezingen">
+                            <summary className="vg-rij">Nog {lezingen.length - 2} lezingen<ChevronRight aria-hidden="true" /></summary>
+                            <ul>{lezingen.slice(2).map(lezingRij)}</ul>
+                          </details>
+                        </li>
+                      )}
+                    </>
+                  )}
+                </ul>
+              </div>
+            </section>
 
-        <div className="vg-duo">
-          {/* De hele vlakken zijn klikbaar: de link in de kop strekt zich uit over het vlak (CSS). */}
-          <section className="vg-ingang">
-            <span className="vg-ingang-icoon" aria-hidden="true"><KruisTeken /></span>
-            <div>
-              <h2><Actie className="vg-ingang-link" href="#heiligen" onClick={() => openDagHeiligen(dag.ymd)}>Heiligen van <span className="vg-nw">vandaag<ChevronRight aria-hidden="true" /></span></Actie></h2>
-              <p className="vg-sub">{heiligenRegel}</p>
+            <div className="vg-duo">
+              {/* De hele vlakken zijn klikbaar: de link in de kop strekt zich uit over het vlak (CSS). */}
+              <section className="vg-ingang">
+                <span className="vg-ingang-icoon" aria-hidden="true"><KruisTeken /></span>
+                <div>
+                  <h2><Actie className="vg-ingang-link" href="#heiligen" onClick={() => openDagHeiligen(dag.ymd)}>Heiligen van <span className="vg-nw">vandaag<ChevronRight aria-hidden="true" /></span></Actie></h2>
+                  <p className="vg-sub">{heiligenRegel}</p>
+                </div>
+              </section>
+              <section className="vg-ingang">
+                <span className="vg-ingang-icoon" aria-hidden="true"><VastenSymbool groep={groep ?? 'vis'} className="vg-vis" /></span>
+                <div>
+                  <h2><Actie className="vg-ingang-link" href="#vasten" onClick={() => openPopup({ pagina: 'vasten', sleutel: dag.ymd })}>Vasten <span className="vg-nw">vandaag<ChevronRight aria-hidden="true" /></span></Actie></h2>
+                  <p className="vg-sub">{dag.vasten.label}{dag.vasten.periode ? ` · ${dag.vasten.periode}` : ''}</p>
+                </div>
+              </section>
             </div>
-          </section>
-          <section className="vg-ingang">
-            <span className="vg-ingang-icoon" aria-hidden="true"><VastenSymbool groep={groep ?? 'vis'} className="vg-vis" /></span>
-            <div>
-              <h2><Actie className="vg-ingang-link" href="#vasten" onClick={() => openPopup({ pagina: 'vasten', sleutel: dag.ymd })}>Vasten <span className="vg-nw">vandaag<ChevronRight aria-hidden="true" /></span></Actie></h2>
-              <p className="vg-sub">{dag.vasten.label}{dag.vasten.periode ? ` · ${dag.vasten.periode}` : ''}</p>
-            </div>
-          </section>
-        </div>
 
-        {/* Overige daginformatie (weekcyclus, kerkelijke datum, paascyclus), compact om uit te klappen. */}
-        <div className="vg-meer">
-          <details>
-            <summary><span>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</span><span className="vg-waarde">{weekthema.titel}</span><ChevronRight aria-hidden="true" /></summary>
-            <p>{weekthema.uitleg}</p>
-            <Actie className="vg-link" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>Bekijk de week ›</Actie>
-          </details>
-          <details>
-            <summary><span>Kerkelijke datum</span><span className="vg-waarde">{kerkelijkeDatum}</span><ChevronRight aria-hidden="true" /></summary>
-            <p>
-              <i className="vg-kleur" style={{ background: LITURGISCHE_KLEUREN[kleur].hex }} aria-hidden="true" />
-              Liturgische kleur: {kleur} ({LITURGISCHE_KLEUREN[kleur].uitleg})
-            </p>
-            <button type="button" className="vg-link" onClick={() => openDag(dag.ymd)}>Bekijk de volledige dag ›</button>
-          </details>
-          <details>
-            <summary><span>Paascyclus</span><span className="vg-waarde">{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><ChevronRight aria-hidden="true" /></summary>
-            <Actie className="vg-link" href="#pascha" onClick={() => openDagPascha(dag.ymd)}>Bekijk de cyclus ›</Actie>
-          </details>
+            {/* Overige daginformatie (weekcyclus, kerkelijke datum, paascyclus), compact om uit te klappen. */}
+            <div className="vg-meer">
+              <details>
+                <summary><span>Weekcyclus · {hoofdletter(dag.weekdagNaam)}</span><span className="vg-waarde">{weekthema.titel}</span><ChevronRight aria-hidden="true" /></summary>
+                <p>{weekthema.uitleg}</p>
+                <Actie className="vg-link" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>Bekijk de week ›</Actie>
+              </details>
+              <details>
+                <summary><span>Kerkelijke datum</span><span className="vg-waarde">{kerkelijkeDatum}</span><ChevronRight aria-hidden="true" /></summary>
+                <p>
+                  <i className="vg-kleur" style={{ background: LITURGISCHE_KLEUREN[kleur].hex }} aria-hidden="true" />
+                  Liturgische kleur: {kleur} ({LITURGISCHE_KLEUREN[kleur].uitleg})
+                </p>
+                <button type="button" className="vg-link" onClick={() => openDag(dag.ymd)}>Bekijk de volledige dag ›</button>
+              </details>
+              <details>
+                <summary><span>Paascyclus</span><span className="vg-waarde">{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><ChevronRight aria-hidden="true" /></summary>
+                <Actie className="vg-link" href="#pascha" onClick={() => openDagPascha(dag.ymd)}>Bekijk de cyclus ›</Actie>
+              </details>
+            </div>
+          </div>
         </div>
       </div>
 

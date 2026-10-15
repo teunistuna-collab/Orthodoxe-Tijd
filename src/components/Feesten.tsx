@@ -109,7 +109,11 @@ export default function Feesten() {
           Alle feesten en datums uit lib/feesten.ts en lib/overzicht.ts (beweeglijke feesten via de Pascha-berekening). */}
       <section id="feesten" className="vg ot-redesign ot-feesten">
         <div className="ot-strook"><KopBalk /></div>
-        <img className="ot-bloemen" src="/images/ontwerp/feesten-bloemen-800.webp" srcSet="/images/ontwerp/feesten-bloemen-800.webp 800w, /images/ontwerp/feesten-bloemen-1536.webp 1536w" sizes="(min-width: 768px) 960px, 100vw" alt="" aria-hidden="true" width={1536} height={1024} decoding="async" />
+        {/* Web: eigen brede banner (bloemenrand rondom, 3 : 1); mobiel: de bloemenhoek */}
+        <picture>
+          <source media="(min-width: 768px)" srcSet="/images/ontwerp/feesten-banner-web.webp" width={2000} height={667} />
+          <img className="ot-bloemen" src="/images/ontwerp/feesten-bloemen-800.webp" srcSet="/images/ontwerp/feesten-bloemen-800.webp 800w, /images/ontwerp/feesten-bloemen-1536.webp 1536w" sizes="(min-width: 768px) 960px, 100vw" alt="" aria-hidden="true" width={1536} height={1024} decoding="async" />
+        </picture>
         <div className="vg-papier ot-inhoud">
           <div className="ot-fs-kop">
             <h1 className="ot-titel">De feesten</h1>

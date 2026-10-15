@@ -156,9 +156,13 @@
 .ot-redesign .ot-tijdlijn-stip .ot-tl-tekst > span { font-size: 18px; color: var(--ot-inkt); }
 @media (min-width: 768px) {
   .ot-redesign .ot-strook { display: none; }
-  .ot-feesten .ot-bloemen { top: 0; width: 620px; }
-  .ot-feesten .vg-papier { padding-top: 96px; }
-  .ot-feesten .ot-fs-kop { padding-left: 40px; }
+  .ot-feesten .ot-bloemen { top: 0; width: 100%; } /* web: de brede banner met bloemenrand (Feesten.tsx <picture>) */
+  .ot-feesten .vg-papier { padding-top: 11cqw; }
+  .ot-feesten .ot-fs-kop { padding-left: 0; }
+  /* Titel en icoon binnen het kader van de banner (3 : 1, dus 33,3cqw hoog); de inleiding eronder, onder de kaderlijn:
+     marge = bannerhoogte − bovenruimte (11cqw) − titel en sierlijn (± 97 px) − icoon */
+  .ot-feesten .ot-fs-icoon { width: clamp(40px, 7cqw, 110px); margin-top: 4px; }
+  .ot-feesten .ot-fs-intro { margin-top: max(12px, calc(23cqw - 83px - clamp(40px, 7cqw, 110px))); }
 }
 
 /* ---------- Vasten ---------- */
@@ -328,3 +332,54 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-v
 /* Web: elk blok op het perkament staat in het midden (de pagina's zijn breder dan de leeskolom van 640 px);
    eigen marges boven en onder blijven, alleen links en rechts automatisch */
 @media (min-width: 768px) { .vg.ot-redesign .vg-papier > * { margin-left: auto; margin-right: auto; } }
+
+/* ---------- Desktop (vanaf 1024 px) ----------
+   Alleen hier: onder 1024 px (mobiel en tablet) verandert niets. Per pagina een bredere, gecentreerde container waar
+   kolommen helpen; lopende tekst houdt zijn leesbreedte. */
+@media (min-width: 1024px) {
+  /* Kalender: de maand vult zijn kolom (meer ruimte), kleinere tussenruimte, beide kolommen bovenaan */
+  #kalender.vg .vg-papier.ot-twee { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); column-gap: 56px; padding-inline: max(var(--rand), calc((100% - 1120px) / 2)); }
+  #kalender.vg .ot-twee > * { max-width: none; margin-left: 0; margin-right: 0; }
+
+  /* Pascha: titel, datum en aftelling links als één blok, de tijdlijn ernaast */
+  #pascha.vg .vg-papier { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 1fr repeat(4, auto) 1fr; column-gap: 64px; padding-inline: max(var(--rand), calc((100% - 960px) / 2)); }
+  #pascha.vg .vg-papier > * { grid-column: 1; max-width: none; }
+  #pascha.vg .vg-papier > .ot-titel { grid-row: 2; }
+  #pascha.vg .vg-papier > .ot-pc-datum { grid-row: 3; }
+  #pascha.vg .vg-papier > .vg-sierlijn { grid-row: 4; }
+  #pascha.vg .vg-papier > .ot-pc-nog { grid-row: 5; }
+  #pascha.vg .vg-papier > .vg-pc-lijn { grid-column: 2; grid-row: 1 / -1; align-self: center; margin-top: 0; }
+
+  /* Gebeden: de drie soorten naast elkaar, de verwijzingen eronder in twee kolommen */
+  #gebeden.vg .vg-papier > :is(.ot-gb-soorten, .ot-gb-verder) { max-width: 1000px; }
+  #gebeden .ot-gb-soorten { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  #top#top#top main #gebeden .ot-gb-kaart { flex-direction: column; justify-content: flex-start; gap: 8px; height: 100%; padding: 18px 16px !important; text-align: center; }
+  #gebeden .ot-gb-kaart .ot-rij-tekst { flex: none; }
+  #gebeden .ot-gb-verder { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
+  #gebeden .ot-gb-verder li + li { border-top: 0; }
+
+  /* Vasten: spijzen en de grote vasten in twee gelijke kolommen, breder */
+  #vasten.vg .vg-papier > .ot-twee { max-width: 1000px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 64px; }
+
+  /* Psalmen: zoeken, filters, boekrollen en nummers in één bredere container; de inleiding op leesbreedte */
+  #psalmen.ot-psalmen .vg-papier > * { max-width: 880px; }
+  #psalmen.ot-psalmen .vg-papier > .ot-ps-intro { max-width: 36em; }
+  #psalmen.ot-psalmen .ot-psalmraster { max-width: 880px; }
+  #top#top#top main #psalmen.ot-psalmen .ot-psalmraster button { min-height: 54px !important; }
+
+  /* Psalmlezer: balk, titel, tabs, tekst en vorige/volgende op één leeskolom */
+  #psalmen.ot-lezer .vg-papier > * { max-width: 680px; }
+  #top#top#top#top#top#top#top .ot-lezer .ot-verzen { max-width: none; }
+  #psalmen.ot-lezer .ot-lezer-blader { max-width: 680px; }
+
+  /* Adem: rustig in het midden; de tabs even breed als het ritme eronder */
+  #adem .ot-ad-tabs { max-width: 560px; }
+
+  /* Feesten: het eerstvolgende feest en de komende feesten naast
+     elkaar; de vaste en beweeglijke feesten in twee kolommen over de volle breedte */
+  #feesten.vg .vg-papier { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 56px; align-items: start; padding-inline: max(var(--rand), calc((100% - 1120px) / 2)); }
+  #feesten.vg .vg-papier > * { grid-column: 1 / -1; width: 100%; }
+  #feesten.vg .vg-papier > .ot-fs-nu { grid-column: 1; max-width: none; margin-top: 34px; }
+  #feesten.vg .vg-papier > .ot-fs-nu + .ot-fs-blok { grid-column: 2; max-width: none; }
+  #feesten.vg .vg-papier > div.ot-fs-blok { max-width: none; }
+}

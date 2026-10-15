@@ -448,3 +448,40 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   .vg-et-twee .vg-label { text-align: center; }
   .vg-et-twee .vg-et-lijn { max-width: 420px; margin: 14px auto 0; }
 }
+
+/* ---------- Desktop (vanaf 1024 px) ----------
+   Alleen hier: onder 1024 px (mobiel en tablet) verandert niets. De inhoud krijgt per pagina een bredere container
+   (max. 1120 px, gecentreerd) waar kolommen helpen; lopende tekst blijft op leesbreedte (640 px). */
+@media (min-width: 1024px) {
+  /* Vandaag: links het gebed (pijlgebed + gebedsuur), rechts de daginformatie (lezingen, heiligen, vasten, cycli) */
+  #vandaag .vg-papier > .vg-kolommen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 72px; align-items: start; max-width: 1120px; }
+  #vandaag .vg-kol > .vg-lezingen { margin-top: 10px; }
+
+  /* Etmaal: de brede banner (40cqw) wordt op grote schermen te hoog; begrensd, met maan en kerk in beeld */
+  #etmaal.vg-etmaal .vg-kop { height: min(40cqw, 440px); }
+  /* Etmaal, Week, Jaar: tijdlijn en gekozen onderdeel als één gecentreerd, evenwichtig blok */
+  .vg-et-twee { justify-content: center; }
+  #etmaal .vg-et-twee { grid-template-columns: max-content minmax(0, 560px); column-gap: 88px; }
+  .vg-et-twee.vg-wk-twee { grid-template-columns: minmax(0, 400px) minmax(0, 600px); column-gap: 64px; }
+
+  /* Heiligen: zoekveld, maanden, Lage Landen en categorieën in één kolom van dezelfde breedte; de maandweergave
+     (terug, titel, uitleg, lijst) op dezelfde lijn */
+  #heiligen.vg .vg-papier > * { max-width: 800px; margin-left: auto !important; margin-right: auto !important; }
+  #heiligen .vg-hl-maanden { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  /* Heiligen van de Lage Landen: tekst links, de hele kaart rechts (eigen kolom, niet afgesneden, niet achter de
+     tekst). De kaart in haar eigen goudbruin: het beeld dient zelf als luminantiemasker, zodat de donkere achtergrond
+     wegvalt en alleen de lichte kaart en de rank op het perkament staan; de randen lopen zacht af. */
+  #heiligen .vg-hl-ll { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); grid-template-rows: auto auto auto 1fr; column-gap: 32px; align-items: start; padding: 20px 20px 22px 24px; }
+  #heiligen .vg-hl-ll > :not(.vg-hl-ll-kaart) { grid-column: 1; max-width: none; }
+  #heiligen .vg-hl-ll > .vg-knop { justify-self: start; }
+  #heiligen .vg-hl-ll-kaart { position: static; grid-column: 2; grid-row: 1 / -1; align-self: center; width: 100%; height: auto; max-height: 240px; object-fit: contain; opacity: 1; filter: brightness(.85) contrast(1.35); mix-blend-mode: normal;
+    -webkit-mask: none; mask: url('/images/decor/lage-landen.webp') center / contain no-repeat luminance, linear-gradient(to right, transparent, #000 6%, #000 94%, transparent) alpha, linear-gradient(transparent, #000 3%, #000 97%, transparent) alpha; mask-composite: intersect; }
+  #heiligen.vg .vg-papier > .vg-hl-terug { display: flex; width: max-content; margin-left: max(0px, calc((100% - 800px) / 2)) !important; }
+
+  /* Instellingen: één formulierkolom; de keuzes en de toelichting lijnen uit met de tekst naast de symbolen */
+  #instellingen.vg .vg-papier > * { max-width: 640px; margin-left: auto !important; margin-right: auto !important; }
+  #instellingen.vg .vg-papier > :is(.vg-vk-keuzes, .vg-vk-noot) { max-width: 580px; margin-left: calc((100% - 640px) / 2 + 60px) !important; margin-right: auto !important; }
+
+  /* Bronnen: tussenkoppen op de donkere achtergrond in licht goud (index.css maakte ze donkerbruin) */
+  #top .exact-content .bg-bark h3.text-gold-light { color: #dfbd75; }
+}

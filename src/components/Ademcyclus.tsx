@@ -105,7 +105,7 @@ export default function Ademcyclus() {
       </section>
 
       <ExactPageFrame title="Adem">
-      <div className="ad-pagina bg-parchment text-ink">
+      <div className="ad-pagina text-ink">
         <div className={CONTENT}>
           {/* Verdieping: op het web vier rustige kolommen, op mobiel uitklapbare registerregels */}
           <Verdieping items={CARDS} onOpen={setPopup} />
