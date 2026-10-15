@@ -24,7 +24,7 @@
 #top#top#top#top#top#top#top#top#top .pk-titelblok { margin: 14px 0 8px; }
 #top#top#top#top#top#top#top#top#top .pk-label { font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .14em; color: #0b1b2a; }
 #top#top#top#top#top#top#top#top#top .pk .pk-titel { margin-top: 4px; font-family: var(--font-lees) !important; font-size: clamp(30px, 7vw, 42px) !important; font-weight: 500 !important; color: #0b1b2a !important; }
-#top#top#top#top#top#top#top#top#top .pk-onder { font-family: var(--font-lees); font-size: clamp(17px, 2vw, 20px); font-style: italic; color: #6a5a48; }
+#top#top#top#top#top#top#top#top#top .pk-onder { font-family: var(--font-lees); font-size: clamp(17px, 2vw, 20px); font-style: italic; color: #5d5040; }
 #top#top#top#top#top#top#top#top#top .pk-sierlijn { width: min(240px, 60%); aspect-ratio: 480 / 40; margin: 8px auto 0; background: url('/images/vandaag/sierlijn.svg') center / contain no-repeat; }
 
 /* ---------- Tekst ---------- */
@@ -88,7 +88,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-pa
 #top#top#top#top#top#top#top#top#top#top .zoek-veld input { height: 44px !important; padding: 0 6px !important; font-family: var(--font-lees); font-size: 19px; color: #fff2d6 !important; caret-color: #dfbd75; }
 #top#top#top#top#top#top#top#top#top .zoek-veld input::placeholder { color: rgba(255, 242, 214, .6); }
 #top#top#top#top#top#top#top#top#top#top .zoek-sluit { color: #fff2d6 !important; background: none !important; border: 0 !important; box-shadow: none !important; }
-#top#top#top#top#top#top#top#top#top .zoek-hint { color: #6a5a48; }
+#top#top#top#top#top#top#top#top#top .zoek-hint { color: #5d5040; }
 /* Resultaten als rijen met dunne gouden lijnen */
 #top#top#top#top#top#top#top#top#top .zoek-groep h2 { font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #ac792f; }
 #top#top#top#top#top#top#top#top#top .zoek-groep li + li button { border-top: 1px solid rgba(172, 121, 47, .3); }
@@ -96,5 +96,5 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-pa
 #top#top#top#top#top#top#top#top#top .zoek-groep button:is(:hover, :focus-visible) { border-left-color: #850d17; background: rgba(255, 251, 236, .55); }
 #top#top#top#top#top#top#top#top#top .zoek-titel { font-family: var(--font-lees); font-weight: 500; color: #0b1b2a; }
 #top#top#top#top#top#top#top#top#top .zoek-groep button:is(:hover, :focus-visible) .zoek-titel { color: #850d17; }
-#top#top#top#top#top#top#top#top#top .zoek-onder { color: #6a5a48; }
+#top#top#top#top#top#top#top#top#top .zoek-onder { color: #5d5040; }
 @media (max-width: 767px) { #top#top#top#top#top#top#top#top#top .zoek-achtergrond { background: #f5e6c8; } #top#top#top#top#top#top#top#top#top .zoek-paneel { border: 0; border-radius: 0; } }

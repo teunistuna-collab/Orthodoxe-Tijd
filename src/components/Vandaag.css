@@ -1,14 +1,29 @@
 /* Vandaag — startpagina volgens referentie/startpagina-doelbeeld.png (startpagina-pakket).
    Alles hangt onder .vg, zodat andere pagina's niet veranderen. */
 .vg {
+  /* Gedeelde stijlwaarden van alle pagina's (.vg). Kleuren: één inkt voor titels en tekst, één gedempte kleur voor
+     secundaire tekst, twee lijnsterktes en de kaartrand. Typografie: vaste maten per soort tekst. */
   --nachtblauw: #0b1b2a;
-  --inkt: #17202b;
+  --inkt: var(--nachtblauw);
   --papyrus: #f5e6c8;
   --ivoor: #fff2d6;
   --bordeaux: #841c22;
   --goud: #ac792f;
   --goud-licht: #dfbd75;
-  --gedempt: #6a5a48;
+  --gedempt: #5d5040;
+  --goud-pijl: #7a5a2a;
+  --lijn: rgba(172, 121, 47, .55);
+  --lijn-zacht: rgba(172, 121, 47, .3);
+  --kaartrand: #b99455;
+  --t-titel: clamp(42px, 11.5cqw, 52px);
+  --t-sectie: clamp(24px, 6.6cqw, 28px);
+  --t-kaart: 25px;
+  --t-rij: 20px;
+  --t-tekst: 17px;
+  --t-klein: 16px;
+  --t-label: 13px;
+  --t-link: 16px;
+  --t-knop: 19px;
   --rand: clamp(20px, 5.6vw, 32px);
   --boog: 14cqw; /* hoogte van de sierboog: viewBox 1000 × 140 */
   container-type: inline-size;
@@ -71,12 +86,12 @@
 
 /* ---------- Papyrus ---------- */
 .vg-papier { padding: 6px var(--rand) 0; }
-.vg-label { font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--nachtblauw); }
+.vg-label { font-family: var(--font-titel); font-size: var(--t-label); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--nachtblauw); }
 
 /* B. Het Jezusgebed */
 .vg-gebed { text-align: center; padding-top: 10px; }
 .vg-gebed-tekst { display: block; max-width: 22ch; margin: 6px auto 0; font-size: clamp(27px, 7.4cqw, 34px); font-weight: 500; line-height: 1.12; letter-spacing: -.005em; color: var(--inkt) !important; text-wrap: balance; }
-.vg-sierlijn { display: block; width: min(62%, 250px); height: auto; margin: 10px auto 4px; }
+.vg-sierlijn { display: block; width: min(60%, 220px); height: auto; margin: 8px auto 8px; }
 
 /* C. Dit gebedsuur */
 /* --ini: breedte van de initiaal. Het letterpaneel beslaat in elk beeld 27–84 % van de breedte en 22–86 % van de hoogte
@@ -88,55 +103,55 @@
 #vandaag .vg-uur > .vg-label { margin-left: 0 !important; text-align: center; } /* Vandaag: "Dit gebedsuur" gecentreerd */
 @media (max-width: 767px) { #etmaal .vg-uur > .vg-label, #jaar .vg-uur > .vg-label:not(.vg-wk-thema) { justify-self: center; margin-left: 0 !important; text-align: center; } } /* Etmaal en Jaar mobiel: "Dit gebedsuur" / "Waar zijn we nu?" gecentreerd */
 .vg-uur :is(.vg-kernvers, .vg-bron, .vg-knop) { clear: left; margin-left: var(--lijn) !important; }
-.vg-uur .vg-kernvers { margin-top: 12px !important; padding-left: 12px; border-left: 1.5px solid rgba(172, 121, 47, .55); }
+.vg-uur .vg-kernvers { margin-top: 12px !important; padding-left: 12px; border-left: 1.5px solid var(--lijn); }
 .vg-uur .vg-bron { padding-left: 13.5px; }
 .vg-initiaal { float: left; width: var(--ini); height: auto; margin: 2px 0 2px -6px; shape-outside: inset(0 15% 0 0); shape-margin: 3px; object-fit: contain; }
 /* De rest van de naam staat op de onderrand van de letter, zodat "V" + "espers" als één woord leest. */
 .vg-dienst { margin-top: calc(var(--ini) * .8 - .8em) !important; font-size: calc(var(--ini) * .3); font-weight: 500; line-height: 1; color: var(--inkt); }
 .vg-uur-lang .vg-dienst { font-size: calc(var(--ini) * .19); } /* Middernachtdienst */
 .vg-kernvers { margin-top: 6px !important; font-size: 18px; font-style: italic; line-height: 1.3; color: #2a2620; }
-.vg-bron { margin-top: 2px !important; font-size: 16px; color: var(--gedempt); }
+.vg-bron { margin-top: 2px !important; font-size: var(--t-klein); color: var(--gedempt); }
 .vg-bron a { text-decoration: underline !important; text-decoration-color: rgba(172, 121, 47, .45) !important; text-underline-offset: 3px; }
 .vg-knop { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 12px; padding: 8px 20px; border: 1px solid #a3542a; border-radius: 7px; background: linear-gradient(180deg, #96242a, var(--bordeaux) 55%, #6c161b); box-shadow: inset 0 1px rgba(255, 220, 180, .22), 0 3px 8px rgba(80, 20, 10, .25); font-size: 19px; color: var(--ivoor) !important; }
 .vg-knop:hover { filter: brightness(1.08); }
 
 /* D. Lezingen, heiligen, vasten */
-.vg-lezingen { display: grid; grid-template-columns: 36px 1fr; gap: 0 12px; margin-top: 18px; padding: 10px 0 6px; border-top: 1px solid rgba(172, 121, 47, .7); border-bottom: 1px solid rgba(172, 121, 47, .7); }
+.vg-lezingen { display: grid; grid-template-columns: 36px 1fr; gap: 0 12px; margin-top: 18px; padding: 10px 0 6px; border-top: 1px solid var(--lijn); border-bottom: 1px solid var(--lijn); }
 .vg-boek { width: 36px; height: 36px; margin-top: 2px; color: var(--goud); stroke-width: 1.2; }
 .vg-rij { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; padding: 0; border: 0; background: none; font: inherit; font-size: 17px; color: var(--inkt); text-align: left; cursor: pointer; }
-.vg-rij svg { flex: none; width: 18px; height: 18px; color: #7a5a2a; stroke-width: 1.8; }
+.vg-rij svg { flex: none; width: 18px; height: 18px; color: var(--goud-pijl); stroke-width: 1.8; }
 .vg-rij-kop { font-size: 17px; font-weight: 500; }
 /* De lezingen zelf als de subtekst bij Weekcyclus (.vg-waarde). */
-.vg-lezingen li .vg-rij { font-size: 16px; color: var(--gedempt); }
-/* Smallere regels dan de algemene 44 px voor knoppen (index.css); de hele breedte blijft aanklikbaar. */
-#top#top#top main .vg-lezingen li .vg-rij { min-height: 36px !important; }
-.vg-lezingen li { border-top: 1px solid rgba(172, 121, 47, .3); padding-left: 2px; }
+.vg-lezingen li .vg-rij { font-size: var(--t-klein); color: var(--gedempt); }
+/* Lezingregels: zelfde klikhoogte (44 px) als de andere rijen; de hele breedte is aanklikbaar. */
+#top#top#top main .vg-lezingen li .vg-rij { min-height: 44px !important; }
+.vg-lezingen li { border-top: 1px solid var(--lijn-zacht); padding-left: 2px; }
 .vg-leeg { min-height: 44px; display: flex; align-items: center; font-size: 16px; font-style: italic; color: var(--gedempt); }
 
-.vg-duo { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid rgba(172, 121, 47, .4); }
+.vg-duo { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--lijn); }
 .vg-nw { white-space: nowrap; }
 .vg-ingang { position: relative; display: grid; grid-template-columns: 26px 1fr; gap: 0 8px; padding: 14px 4px 14px 0; }
-.vg-ingang + .vg-ingang { padding-left: 14px; border-left: 1px solid rgba(172, 121, 47, .55); }
+.vg-ingang + .vg-ingang { padding-left: 14px; border-left: 1px solid var(--lijn); }
 .vg-ingang-icoon { display: flex; justify-content: center; padding-top: 3px; color: var(--goud); font-size: 30px; line-height: 1; }
 .vg-vis { width: 32px; height: 32px; stroke-width: 1.1; }
 .vg-ingang h2 { font-size: 18px; font-weight: 500; line-height: 1.2; }
 .vg-ingang-link { display: inline; }
 .vg-ingang-link:after { content: ""; position: absolute; inset: 0; } /* hele vlak klikbaar */
-.vg-ingang-link svg { display: inline-block; width: 16px; height: 16px; margin-left: 4px; vertical-align: -2px; color: #7a5a2a; stroke-width: 1.8; }
+.vg-ingang-link svg { display: inline-block; width: 16px; height: 16px; margin-left: 4px; vertical-align: -2px; color: var(--goud-pijl); stroke-width: 1.8; }
 .vg-ingang-link:focus-visible { outline: none; }
 .vg-ingang:has(.vg-ingang-link:focus-visible) { outline: 3px solid var(--goud); outline-offset: -2px; }
-.vg-sub { margin-top: 4px !important; font-size: 16px; line-height: 1.3; color: var(--gedempt); }
+.vg-sub { margin-top: 4px !important; font-size: var(--t-klein); line-height: 1.35; color: var(--gedempt); }
 
 /* Overige daginformatie */
-.vg-meer details { border-bottom: 1px solid rgba(172, 121, 47, .3); }
+.vg-meer details { border-bottom: 1px solid var(--lijn-zacht); }
 .vg-meer summary { display: flex !important; width: 100%; align-items: baseline; flex-wrap: wrap; gap: 0 10px; min-height: 44px; padding: 11px 26px 9px 0; position: relative; cursor: pointer; list-style: none; font-size: 17px; }
 .vg-meer summary::-webkit-details-marker { display: none; }
 .vg-meer summary > span:first-child { font-weight: 500; color: var(--inkt); }
-.vg-meer .vg-waarde { font-size: 16px; color: var(--gedempt); }
-.vg-meer summary svg { position: absolute; right: 2px; top: 14px; width: 16px; height: 16px; color: #7a5a2a; transition: transform .2s; }
+.vg-meer .vg-waarde { font-size: var(--t-klein); color: var(--gedempt); }
+.vg-meer summary svg { position: absolute; right: 2px; top: 13px; width: 18px; height: 18px; color: var(--goud-pijl); transition: transform .2s; }
 .vg-meer details[open] summary svg { transform: rotate(90deg); }
-.vg-meer details > :not(summary) { margin: 0 0 12px !important; font-size: 16px; line-height: 1.5; color: #3b3328; }
-.vg-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; font: inherit; font-size: 16px; color: var(--nachtblauw) !important; cursor: pointer; }
+.vg-meer details > :not(summary) { margin: 0 0 12px !important; font-size: var(--t-klein); line-height: 1.5; color: var(--inkt); }
+.vg-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; font: inherit; font-size: var(--t-link); color: var(--nachtblauw) !important; cursor: pointer; }
 .vg-kleur { display: inline-block; width: 11px; height: 11px; margin-right: 7px; border: 1px solid rgba(23, 32, 43, .35); border-radius: 50%; vertical-align: 0; }
 
 /* ---------- E. Stilte ---------- */
@@ -154,13 +169,13 @@
 /* ---------- Breedte ---------- */
 @media (max-width: 350px) {
   .vg-duo { grid-template-columns: 1fr; }
-  .vg-ingang + .vg-ingang { padding-left: 0; border-left: 0; border-top: 1px solid rgba(172, 121, 47, .4); }
+  .vg-ingang + .vg-ingang { padding-left: 0; border-left: 0; border-top: 1px solid var(--lijn); }
   .vg-stilte { flex-direction: column; align-items: center; }
   .vg-stilte-tekst { position: static; width: auto; margin-bottom: 8px; }
 }
 /* Vanaf 768px staat de vaste kopbalk van de site (merk, navigatie, zoeken) erboven. */
 @media (min-width: 768px) {
-  .vg { margin-block: 28px; border: 1px solid rgba(172, 121, 47, .6); box-shadow: 0 24px 60px rgba(40, 24, 10, .25); }
+  .vg { margin-block: 28px; border: 1px solid var(--lijn); box-shadow: 0 24px 60px rgba(40, 24, 10, .25); }
   .vg-balk { visibility: hidden; min-height: 28px; }
   .vg-papier, .vg-stilte-tekst { --rand: 64px; }
   .vg-stilte-tekst { font-size: 22px; }
@@ -172,19 +187,19 @@
 /* ---------- Verdieping (#meer, Meer.tsx): dezelfde kop, daaronder klikbare regels op papyrus ---------- */
 .vg-niskop .vg-titel { font-size: clamp(38px, 10.6cqw, 56px); }
 .vg-niskop { padding-top: clamp(56px, 15cqw, 90px); padding-bottom: calc(var(--boog) * .75 + clamp(36px, 9cqw, 56px)); } /* titel midden in de nis */
-.vg-verd-sierlijn { width: min(46%, 190px); margin: 4px auto 0; }
+.vg-verd-sierlijn { width: min(60%, 220px); margin: 6px auto 0; }
 .vg-verd-lijst { padding-top: 4px; padding-bottom: 28px; }
-.vg-verd-lijst li + li { border-top: 1px solid rgba(172, 121, 47, .45); }
+.vg-verd-lijst li + li { border-top: 1px solid var(--lijn-zacht); }
 .vg-verd-rij { display: flex; align-items: center; gap: 18px; min-height: 78px; padding: 12px 0; }
 .vg-verd-rij:hover { background: rgba(255, 247, 226, .3); }
 .vg-verd-symbool { flex: none; display: flex; width: 44px; height: 44px; color: var(--goud); }
 .vg-verd-symbool svg { width: 100%; height: 100%; }
 .vg-verd-tekst { flex: 1; min-width: 0; }
-.vg-verd-tekst b { display: block; font-size: 25px; font-weight: 500; line-height: 1.15; color: var(--inkt); }
-.vg-verd-tekst span { display: block; margin-top: 3px; font-size: 17px; line-height: 1.3; color: #3a3a3a; }
-.vg-verd-pijl { flex: none; width: 20px; height: 20px; color: #7a5a2a; stroke-width: 1.6; }
+.vg-verd-tekst b { display: block; font-size: var(--t-kaart); font-weight: 500; line-height: 1.15; color: var(--inkt); }
+.vg-verd-tekst span { display: block; margin-top: 3px; font-size: var(--t-klein); line-height: 1.35; color: var(--gedempt); }
+.vg-verd-pijl { flex: none; width: 18px; height: 18px; color: var(--goud-pijl); stroke-width: 1.8; }
 .vg-verd-scheiding { display: flex; align-items: center; gap: 12px; margin: 4px 0 !important; color: var(--goud); }
-.vg-verd-scheiding:before, .vg-verd-scheiding:after { content: ""; flex: 1; height: 1px; background: rgba(172, 121, 47, .75); }
+.vg-verd-scheiding:before, .vg-verd-scheiding:after { content: ""; flex: 1; height: 1px; background: var(--lijn); }
 @media (max-width: 370px) { .vg-verd-rij { gap: 14px; } .vg-verd-tekst b { font-size: 23px; } .vg-verd-tekst span { font-size: 16px; } }
 @media (prefers-reduced-motion: no-preference) { .vg-verd-rij { transition: background-color .15s; } }
 
@@ -196,14 +211,14 @@
 .vg-ritmewiel { width: clamp(200px, 58cqw, 270px); height: auto; margin: -4px 0 4px; filter: drop-shadow(0 0 6px rgba(7, 18, 29, .8)); }
 .vg-cy { text-align: center; padding-bottom: 28px; }
 #top#top#top#top#top#top#top .vg-cy-titel { font-family: var(--font-lees) !important; }
-.vg-cy-titel { margin-top: 4px !important; font-size: clamp(42px, 11.5cqw, 52px); font-weight: 500; line-height: 1.05; color: var(--inkt); }
+.vg-cy-titel { margin-top: 4px !important; font-size: var(--t-titel); font-weight: 500; line-height: 1.05; overflow-wrap: anywhere; color: var(--inkt); }
 #top#top#top#top#top#top#top :is(#etmaal, #week, #jaar) .vg-cy-titel, #top#top#top#top#top#top#top #week .vg-papier > .vg-label { margin-left: auto !important; margin-right: auto !important; } /* Etmaal en Week: titel en ondertitel midden boven/onder de sierlijn */
-.vg-cy-sierlijn { width: min(42%, 170px); margin: 2px auto 2px; }
+.vg-cy-sierlijn { width: min(60%, 220px); margin: 6px auto 8px; }
 .vg-cy-intro { max-width: 26em; margin: 6px auto 16px !important; font-size: 18px; line-height: 1.32; }
 .vg-cy-lijst { display: grid; gap: 10px; text-align: left; }
-.vg-cy-kaart { position: relative; display: flex; align-items: center; gap: 14px; min-height: 80px; padding: 7px 14px 7px 9px; border: 1px solid #b99455; border-radius: 3px; background: rgba(255, 244, 219, .17); box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .9), inset 0 0 0 4px rgba(197, 165, 117, .33); }
+.vg-cy-kaart { position: relative; display: flex; align-items: center; gap: 14px; min-height: 80px; padding: 7px 14px 7px 9px; border: 1px solid var(--kaartrand); border-radius: 3px; background: rgba(255, 244, 219, .17); box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .9), inset 0 0 0 4px rgba(197, 165, 117, .33); }
 /* kleine ruitjes op twee hoeken van het kader */
-.vg-cy-kaart:before, .vg-cy-kaart:after { content: ""; position: absolute; width: 6px; height: 6px; border: 1px solid #b99455; background: var(--papyrus); transform: rotate(45deg); }
+.vg-cy-kaart:before, .vg-cy-kaart:after { content: ""; position: absolute; width: 6px; height: 6px; border: 1px solid var(--kaartrand); background: var(--papyrus); transform: rotate(45deg); }
 .vg-cy-kaart:before { left: -4px; top: -4px; }
 .vg-cy-kaart:after { right: -4px; bottom: -4px; }
 .vg-cy-kaart:hover { background: rgba(255, 251, 236, .5); }
@@ -228,14 +243,14 @@
 .vg-hl-maanden { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .vg-hl-maanden a { display: flex; align-items: center; justify-content: space-between; gap: 2px; min-height: 48px; padding: 0 6px 0 clamp(8px, 3cqw, 14px); border: 1px solid rgba(172, 121, 47, .55); border-radius: 4px; background: rgba(255, 249, 235, .45); box-shadow: inset 0 0 0 2px rgba(246, 231, 201, .8); font-size: clamp(15px, 4.3cqw, 17px); color: var(--inkt); }
 .vg-hl-maanden a:hover { background: rgba(255, 251, 236, .8); }
-.vg-hl-maanden svg { flex: none; width: 16px; height: 16px; color: #7a5a2a; stroke-width: 1.8; }
-.vg-hl-ll { position: relative; overflow: hidden; padding: 20px 18px 22px; border: 1px solid rgba(172, 121, 47, .55); border-radius: 4px; background: rgba(255, 249, 235, .45); box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .8); }
+.vg-hl-maanden svg { flex: none; width: 18px; height: 18px; color: var(--goud-pijl); stroke-width: 1.8; }
+.vg-hl-ll { position: relative; overflow: hidden; padding: 20px 18px 22px; border: 1px solid var(--lijn); border-radius: 4px; background: rgba(255, 249, 235, .45); box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .8); }
 .vg-hl-ll > :not(.vg-hl-ll-kaart) { position: relative; max-width: 72%; }
 /* De bestaande kaart (licht op donker) omgekeerd tot een bruine gravure op het papyrus, met zachte randen. */
 .vg-hl-ll-kaart { position: absolute; right: -18px; bottom: -6px; width: 56%; height: auto; opacity: .55; filter: invert(1) sepia(1) saturate(.7) brightness(1.05); mix-blend-mode: multiply; -webkit-mask: radial-gradient(closest-side, #000 65%, transparent); mask: radial-gradient(closest-side, #000 65%, transparent); pointer-events: none; }
-.vg-hl-ll h2 { font-size: 25px; font-weight: 500; line-height: 1.15; color: var(--inkt); }
-.vg-hl-ll-namen { margin-top: 4px !important; font-size: 18px; color: #3a3a3a; }
-.vg-hl-ll p:not(.vg-hl-ll-namen) { margin-top: 8px !important; font-size: 16px; line-height: 1.4; color: #3b3328; }
+.vg-hl-ll h2 { font-size: var(--t-kaart); font-weight: 500; line-height: 1.15; color: var(--inkt); }
+.vg-hl-ll-namen { margin-top: 4px !important; font-size: 18px; color: var(--gedempt); }
+.vg-hl-ll p:not(.vg-hl-ll-namen) { margin-top: 8px !important; font-size: var(--t-klein); line-height: 1.4; color: var(--inkt); }
 .vg-hl-ll .vg-knop { max-width: none; margin-top: 16px; font-size: 17px; }
 .vg-hl-ll .vg-knop svg { width: 18px; height: 18px; }
 .vg-hl-categorieen { margin-top: 24px; }
@@ -247,28 +262,28 @@
 .vg-hl-kop { font-size: 30px; font-weight: 500; line-height: 1.1; color: var(--inkt); }
 .vg-hl-uitleg { margin: 4px 0 8px !important; font-size: 16px; color: var(--gedempt); }
 .vg-hl-leeg { margin: 12px 0 !important; font-size: 17px; font-style: italic; line-height: 1.4; color: var(--gedempt); }
-.vg-hl-dagen > li { padding: 10px 0 4px; border-top: 1px solid rgba(172, 121, 47, .45); }
+.vg-hl-dagen > li { padding: 10px 0 4px; border-top: 1px solid var(--lijn-zacht); }
 .vg-hl-dagen h3 { margin: 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #850d17; }
 .vg-hl-rij { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; padding: 6px 0; border: 0; background: none; font: inherit; text-align: left; color: var(--inkt); cursor: pointer; }
 .vg-hl-rij b { display: block; font-size: 18px; font-weight: 500; line-height: 1.25; }
 .vg-hl-rij b + span { display: block; margin-top: 2px; font-size: 15px; line-height: 1.3; color: var(--gedempt); }
-.vg-hl-rij svg { flex: none; width: 16px; height: 16px; color: #7a5a2a; stroke-width: 1.8; }
+.vg-hl-rij svg { flex: none; width: 18px; height: 18px; color: var(--goud-pijl); stroke-width: 1.8; }
 
 /* ---------- Jouw voorkeuren (#instellingen, Instellingen.tsx) ---------- */
 .vg-voorkeuren .vg-papier { padding-bottom: 32px; }
 .vg-vk-vak { display: grid; grid-template-columns: 44px 1fr; gap: 0 16px; padding-top: 8px; }
 .vg-vk-symbool { display: flex; width: 40px; height: 40px; margin-top: 2px; color: var(--goud); }
 .vg-vk-symbool svg { width: 100%; height: 100%; }
-.vg-vk-vak h2 { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; font-size: 25px; font-weight: 500; line-height: 1.15; color: var(--inkt); }
-.vg-vk-vak p { margin-top: 4px !important; font-size: 17px; line-height: 1.35; color: #3b3328; }
+.vg-vk-vak h2 { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; font-size: var(--t-kaart); font-weight: 500; line-height: 1.15; color: var(--inkt); }
+.vg-vk-vak p { margin-top: 4px !important; font-size: var(--t-klein); line-height: 1.35; color: var(--gedempt); }
 .vg-vk-veld { display: block; margin-top: 12px; }
 #top#top#top main .vg-vk-veld textarea { display: block; width: 100%; min-height: 64px; padding: 12px 14px; border: 1px solid rgba(172, 121, 47, .55) !important; border-radius: 4px; background: rgba(255, 249, 235, .6) !important; font: inherit; font-size: 18px; line-height: 1.35; color: var(--inkt); resize: vertical; }
 .vg-vk-voet { display: flex; align-items: center; gap: 8px; font-size: 15px !important; color: var(--gedempt) !important; }
 .vg-vk-voet svg { width: 16px; height: 16px; }
 .vg-vk-teller { margin-left: auto; font-variant-numeric: tabular-nums; }
-.vg-vk-keuzes { margin: 12px 0 0; padding: 4px 14px; border: 1px solid rgba(172, 121, 47, .45); border-radius: 4px; background: rgba(255, 249, 235, .45); }
+.vg-vk-keuzes { margin: 12px 0 0; padding: 4px 14px; border: 1px solid var(--lijn); border-radius: 4px; background: rgba(255, 249, 235, .45); }
 .vg-vk-keuze { display: flex; align-items: flex-start; gap: 14px; min-height: 44px; padding: 12px 0; cursor: pointer; }
-.vg-vk-keuze + .vg-vk-keuze { border-top: 1px solid rgba(172, 121, 47, .3); }
+.vg-vk-keuze + .vg-vk-keuze { border-top: 1px solid var(--lijn-zacht); }
 .vg-vk-keuze input { flex: none; appearance: none; width: 24px; height: 24px; margin: 2px 0 0; border: 1.5px solid #8a6a40; border-radius: 50%; background: rgba(255, 249, 235, .8); cursor: pointer; }
 .vg-vk-keuze input:checked { border-color: var(--bordeaux); background: radial-gradient(circle, var(--bordeaux) 0 5px, transparent 5.5px); box-shadow: 0 0 0 3px rgba(132, 28, 34, .15); }
 .vg-vk-keuze b { display: block; font-size: 19px; font-weight: 500; line-height: 1.2; color: var(--inkt); }
@@ -301,7 +316,7 @@
 .vg-et-lijn:before { content: ""; position: absolute; left: 16px; top: 6px; bottom: 6px; width: 2.5px; margin-left: -1.25px; border-radius: 2px; background: #a8752c; }
 .vg-et-lijn li + li { margin-top: 4px; }
 /* Overschrijft de algemene mobiele knopregel (inline-flex) en de kleine tijd-opmaak uit index.css. */
-#top#top#top main .vg-et-lijn button { display: grid; min-height: 34px !important; }
+#top#top#top main .vg-et-lijn button { display: grid; min-height: 44px !important; }
 #top#top#top main .vg-et-lijn time { font-size: inherit !important; }
 .vg-et-lijn button { position: relative; display: grid; grid-template-columns: 32px 76px 1fr 18px; align-items: center; width: 100%; padding: 0 12px 0 0; border: 0; border-radius: 999px; background: none; font: inherit; font-size: 18px; color: var(--inkt); text-align: left; cursor: pointer; }
 .vg-et-lijn button:before { content: ""; justify-self: center; width: 15px; height: 15px; border: 2.5px solid #a8752c; border-radius: 50%; background: var(--papyrus); }
@@ -333,11 +348,11 @@
 /* Jaar: in de tijdlijn een bredere kolom voor de namen */
 .vg-jr-lijn button { grid-template-columns: 32px 132px 1fr 18px; }
 .vg-jr-twee .vg-jr-feesten { margin-top: 14px; }
-.vg-jr-feesten { display: grid; grid-template-columns: 1fr 1fr; margin-top: 8px; border-top: 1px solid rgba(172, 121, 47, .6); }
+.vg-jr-feesten { display: grid; grid-template-columns: 1fr 1fr; margin-top: 8px; border-top: 1px solid var(--lijn); }
 .vg-jr-feesten a { display: flex; align-items: center; gap: 8px; min-height: 56px; padding: 0 6px; font-size: 17px; color: var(--inkt); }
-.vg-jr-feesten a + a { border-left: 1px solid rgba(172, 121, 47, .55); padding-left: 12px; }
+.vg-jr-feesten a + a { border-left: 1px solid var(--lijn); padding-left: 12px; }
 .vg-jr-feesten svg:first-child { flex: none; width: 26px; height: 26px; color: var(--goud); }
-.vg-jr-feesten svg:last-child { flex: none; width: 16px; height: 16px; margin-left: auto; color: #7a5a2a; }
+.vg-jr-feesten svg:last-child { flex: none; width: 18px; height: 18px; margin-left: auto; color: var(--goud-pijl); }
 button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: left; cursor: pointer; }
 .vg-verd-tekst .vg-et-nu { display: inline-flex; margin: 0 0 0 8px; font-size: 10px; color: var(--inkt); vertical-align: 4px; }
 @media (max-width: 420px) { .vg-jr-feesten a { gap: 6px; font-size: 16px; } .vg-jr-feesten a + a { padding-left: 8px; } }
@@ -420,3 +435,16 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   81% { opacity: .9; transform: translate(-50%, -53%) scale(1.03, 1.05); }
 }
 @media (prefers-reduced-motion: reduce) { .kaarsgloed i { animation: none; opacity: .8; } }
+
+/* Kaars bij "Een moment van stilte": dezelfde flakkerende gloed op de vlam (vlam op ±50 % / 22 % van het beeld) */
+.vg-lamp-vlam { position: absolute; left: 50%; top: 22%; z-index: 1; width: 34%; height: 46%; border-radius: 50%; transform: translate(-50%, -52%); background: radial-gradient(ellipse at 50% 50%, rgba(255, 214, 130, .55), rgba(255, 170, 70, .28) 32%, rgba(255, 150, 60, .1) 55%, transparent 72%); pointer-events: none; animation: kaars-flakker 2.9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .vg-lamp-vlam { animation: none; opacity: .8; } }
+
+/* Etmaal, Week en Jaar op tabletbreedte (768–1023 px): twee kolommen worden te smal voor de titel met beginletter;
+   dan zoals op mobiel onder elkaar (eerst de keuze, dan de tijdlijn). Vanaf 1024 px naast elkaar. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .vg-et-twee { display: block !important; margin-top: 14px !important; }
+  .vg-et-twee > .vg-et-links { margin-top: 26px; }
+  .vg-et-twee .vg-label { text-align: center; }
+  .vg-et-twee .vg-et-lijn { max-width: 420px; margin: 14px auto 0; }
+}

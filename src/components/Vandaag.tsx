@@ -225,6 +225,8 @@ export default function Vandaag() {
         <span className="vg-lamp">
           <span className="vg-lampgloed" aria-hidden="true" />
           <img src="/images/decor/kaars.webp" alt="" width={220} height={200} loading="lazy" decoding="async" />
+          {/* Flakkerende gloed op de vlam, zoals bij de kaarsen in de banners (Kaarsgloed) */}
+          <i className="vg-lamp-vlam" aria-hidden="true" />
         </span>
         <p className="vg-stilte-tekst">Een moment van stilte.<img src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} /></p>
       </div>
