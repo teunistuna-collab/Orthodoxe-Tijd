@@ -194,12 +194,13 @@
 /* ---------- Psalmen: overzicht ---------- */
 .ot-psalmen .vg-kop { height: clamp(150px, 40cqw, 240px); }
 .ot-psalmen .vg-kop-achter .ot-banner { object-position: 50% 45%; }
-/* Mobiel: het icoon van David begint onder de balk (merk en zoekknop), zodat zijn hoofd vrij blijft */
+/* Mobiel: het kerkgewelf van Verdieping met het icoon van David in het midden, onder de balk; op web de brede banner */
 @media (max-width: 767px) {
-  .ot-psalmen .vg-kop { height: clamp(220px, 62cqw, 300px); }
-  .ot-psalmen .vg-kop-achter { background: #0d1a2b; }
-  .ot-psalmen .vg-kop-achter .ot-banner { margin-top: 44px; height: calc(100% - 44px); object-position: 50% 30%; }
+  .ot-psalmen .vg-kop { height: auto; padding: 0 0 calc(var(--boog) * .75 + 14px); }
+  .ot-psalmen .vg-kop-achter .ot-banner { object-position: 50% 30%; }
+  .ot-psalmen .ot-ps-icoon { position: relative; display: block; width: auto; height: clamp(170px, 50cqw, 230px); margin: 2px auto 0; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .45)); }
 }
+@media (min-width: 768px) { .ot-psalmen .ot-ps-icoon { display: none; } }
 @media (min-width: 768px) { #psalmen.ot-redesign.vg .vg-kop { height: 33.333cqw; } #psalmen.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 50%; } } /* web: het hele icoon van David (beeld 3 : 1) */
 /* "salter" op de voetlijn van de P: het tekstblok zakt tot de onderkant van de letter */
 .ot-redesign .ot-zoekveld { display: flex; align-items: center; gap: 10px; min-height: 48px; margin: 16px 0 12px; padding: 0 14px; border: 1px solid rgba(167, 118, 52, .55); border-radius: 8px; background: rgba(255, 250, 238, .6); }
@@ -225,25 +226,15 @@
 .ot-psalmen .ot-ps-intro { max-width: 36em; margin: 24px auto 0; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; text-align: center; color: var(--ot-gedempt); }
 
 /* ---------- Psalmen: lezer (#psalmen/N) ---------- */
-.ot-lezer-strook { position: relative; height: clamp(44px, 12cqw, 72px); overflow: hidden; }
-.ot-lezer-strook .ot-banner { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; pointer-events: none; }
-.ot-lezer-vlak { padding-top: 6px; }
-.ot-lezer .ot-lezer-bediening { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.ot-lezer .ot-terug { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding-right: 8px; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt) !important; text-decoration: none; }
-.ot-lezer .ot-terug svg { width: 24px; height: 24px; stroke-width: 1.6; }
-/* Leesbediening als losse iconen, zoals in de referentie */
-#top#top#top#top#top#top#top#top .ot-lezer .leesbediening :is(button, a) { width: 40px !important; height: 44px !important; min-height: 44px !important; background: none !important; border: 0 !important; border-image: none !important; box-shadow: none !important; color: var(--ot-inkt); }
-#top#top#top#top#top#top#top#top .ot-lezer .leesbediening :is(button, a)::before, #top#top#top#top#top#top#top#top .ot-lezer .leesbediening :is(button, a)::after { display: none !important; }
-#top#top#top#top#top#top#top#top .ot-lezer .leesbediening [aria-pressed="true"] { color: var(--ot-rood) !important; background: none !important; }
 .ot-lezer .ot-lezer-kop { margin-top: 6px; text-align: center; }
 #top#top#top#top#top#top#top .ot-lezer .ot-lezer-kop h1 { margin: 0; font-family: var(--font-titel) !important; font-size: 18px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ot-inkt); }
 .ot-lezer .ot-lezer-kop p { margin: 2px 0 0; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--ot-gedempt); }
 .ot-lezer .ps-tabrij, .ot-lezer .ps-tabs { justify-content: center; }
 /* Verzen: groot, versnummers in bordeaux in een smalle kolom, op web beperkt tot een prettige leesbreedte */
-#top#top#top#top#top#top .ot-lezer .ot-verzen { max-width: 36em; margin: 14px auto 0; padding: 0; background: none; }
-#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers { grid-template-columns: 22px minmax(0, 1fr); gap: 10px; margin: 0 0 18px; }
+#top#top#top#top#top#top .ot-lezer .ot-verzen { max-width: 65ch; margin: 14px auto 0; padding: 0; background: none; font-size: clamp(21px, 5.6cqw, 24px); }
+#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers { grid-template-columns: 22px minmax(0, 1fr); gap: 10px; margin: 0 0 .9em; scroll-margin-top: 64px; }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-versnr { padding-top: 7px; font-family: var(--font-lees); font-size: 15px; color: var(--ot-rood); }
-#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { font-family: var(--font-lees); font-size: clamp(21px, 5.6cqw, 25px); line-height: 1.5; color: var(--ot-inkt); }
+#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { font-family: var(--font-lees); font-size: 1em; line-height: 1.65; color: var(--ot-inkt); }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-stasis { color: var(--ot-goud); }
 /* Beginletter als op Vandaag: de letter zweeft links, de rest van het woord staat er direct tegenaan op de voetlijn
    (het letterpaneel loopt tot ±86 % van de hoogte; de rechterrand van het beeld is transparant, vandaar de negatieve marge) */
@@ -253,9 +244,6 @@
 #top#top#top#top#top#top .ot-lezer .ot-vers-letter { display: flex; align-items: center; justify-content: center; border: 2px solid var(--ot-goud); background: linear-gradient(180deg, #991320, #740d15); font-family: var(--font-titel); font-size: 2.2em; line-height: 1; color: #f3dca4; }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { display: flow-root; }
 .ot-lezer .ps-bron { text-align: center; }
-.ot-lezer .ot-lezer-blader { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; }
-.ot-lezer .ot-lezer-blader .ot-actie { flex: 1 1 0; max-width: 260px; gap: 8px; padding: 10px 12px; font-size: 17px; white-space: nowrap; }
-.ot-lezer .ot-lezer-blader .ot-actie svg { width: 20px; height: 20px; }
 @container (min-width: 640px) { .ot-psalmen .ot-psalmraster { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
 
 /* ---------- Adem ---------- */
@@ -297,3 +285,42 @@
 /* Psalmlezer in de avondweergave: het leesvlak krijgt een vlakke achtergrond die mee omkeert (donker), anders staat de
    omgekeerde, lichte tekst op het lichte papyrus */
 html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-vlak { background: #f5e6c8 !important; }
+
+/* ---------- Psalmlezer: compacte balk, Meer-menu, vorige/volgende ---------- */
+.ot-lezer-vlak { padding-top: 0; }
+/* Balk bovenaan; op mobiel blijft hij staan bij scrollen (daar is geen sitekop), op web staat de sitekop al vast */
+.ot-lezer .ot-lezer-balk { position: relative; z-index: 3; display: flex; align-items: center; gap: 4px; min-height: 52px; margin: 0 calc(var(--rand) * -1); padding: 2px calc(var(--rand) - 6px); border-bottom: 1px solid rgba(172, 121, 47, .45); background: #f5e6c8 url('/images/vandaag/papyrus-licht.webp') center top / 100vw auto; }
+@media (max-width: 767px) { .ot-lezer .ot-lezer-balk { position: sticky; top: 0; } }
+/* Web: bij hervatten of een verslink komt het vers onder de vaste sitekop (±97 px) in beeld */
+@media (min-width: 768px) { #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers { scroll-margin-top: 120px; } }
+/* .vg knipt met overflow: hidden, waardoor plakken niet werkt; clip knipt hetzelfde zonder scrollvak (alleen de lezer) */
+.vg.ot-lezer { overflow: clip; }
+.ot-lezer .ot-terug { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; padding: 0 6px 0 0; font-family: var(--font-lees); font-size: 18px; color: var(--ot-inkt) !important; text-decoration: none; }
+.ot-lezer .ot-terug svg { width: 22px; height: 22px; stroke-width: 1.6; }
+.ot-lezer .ot-lezer-nr { flex: 1; min-width: 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-align: center; text-transform: uppercase; white-space: nowrap; color: var(--ot-inkt); }
+.ot-lezer .ot-lezer-knoppen { display: flex; align-items: center; }
+#top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-knoppen > button,
+#top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-meer > summary { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; min-height: 44px !important; padding: 0; border: 0 !important; border-image: none !important; border-radius: 6px; background: none !important; box-shadow: none !important; color: var(--ot-inkt); cursor: pointer; list-style: none; }
+.ot-lezer .ot-lezer-meer > summary::-webkit-details-marker { display: none; }
+.ot-lezer .ot-lezer-knoppen svg { width: 20px; height: 20px; stroke-width: 1.6; }
+.ot-lezer .ot-lezer-knoppen > button:disabled { opacity: .35; cursor: default; }
+.ot-lezer .ot-lezer-knoppen > button[aria-pressed="true"] { color: var(--ot-rood); }
+.ot-lezer .ot-lezer-knoppen > button[aria-pressed="true"] svg { fill: currentColor; }
+.ot-lezer .ot-lb-a { font-family: var(--font-lees); font-size: 17px; line-height: 1; }
+.ot-lezer .ot-lb-a.is-groot { font-size: 21px; }
+.ot-lezer .ot-lb-a sup { font-size: .55em; }
+.ot-lezer :is(.ot-lezer-knoppen > button, .ot-lezer-meer > summary, .ot-terug, .ot-lezer-menu button, .ot-lezer-blader a):focus-visible { outline: 3px solid #066b95; outline-offset: 2px; }
+/* Meer: avondweergave, audio, delen */
+.ot-lezer .ot-lezer-meer { position: relative; }
+.ot-lezer .ot-lezer-menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 5; display: grid; min-width: 210px; padding: 6px; border: 1px solid rgba(172, 121, 47, .7); border-radius: 4px; background: #f5e6c8 url('/images/vandaag/papyrus-licht.webp') center top / 600px auto; box-shadow: 0 10px 28px rgba(6, 14, 24, .25); }
+#top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-menu button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px !important; padding: 0 10px; border: 0 !important; border-image: none !important; border-radius: 3px; background: none !important; box-shadow: none !important; font-family: var(--font-lees); font-size: 17px; text-align: left; color: var(--ot-inkt); cursor: pointer; }
+.ot-lezer .ot-lezer-menu button + button { border-top: 1px solid rgba(172, 121, 47, .3) !important; }
+.ot-lezer .ot-lezer-menu button:hover { background: rgba(255, 251, 236, .6) !important; }
+.ot-lezer .ot-lezer-menu button[aria-pressed="true"] { color: var(--ot-rood); }
+.ot-lezer .ot-lezer-menu svg { width: 18px; height: 18px; flex: none; stroke-width: 1.6; color: var(--ot-goud); }
+/* Vorige / volgende: rustige rijen met dunne gouden lijnen */
+.ot-lezer .ot-lezer-blader { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; max-width: 65ch; margin: 26px auto 0; }
+.ot-lezer .ot-lezer-blader a { display: flex; align-items: center; gap: 6px; min-height: 52px; padding: 0 4px; border-top: 1px solid rgba(172, 121, 47, .55); border-bottom: 1px solid rgba(172, 121, 47, .55); font-family: var(--font-lees); font-size: 18px; color: var(--ot-inkt) !important; text-decoration: none; }
+.ot-lezer .ot-lezer-blader a.is-volgende { justify-content: flex-end; }
+.ot-lezer .ot-lezer-blader a:hover { background: rgba(255, 251, 236, .5); }
+.ot-lezer .ot-lezer-blader svg { width: 18px; height: 18px; stroke-width: 1.6; color: #7a5a2a; }

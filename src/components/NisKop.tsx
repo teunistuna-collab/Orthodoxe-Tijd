@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ChevronLeft, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
+import Kaarsgloed from './Kaarsgloed';
 
 // De kerkelijke kop van Verdieping, De heiligen, Jouw voorkeuren en de cycluspagina's: de nis (kerk-header, of een
 // eigen beeld via `achter`) met de sierboog naar het papyrus. Met `titel` staat de titel midden in de nis; met `balk`
@@ -13,6 +14,7 @@ export default function NisKop({ titel, open, balk, terug, achter, children }: P
     <div className={`vg-kop${titel ? ' vg-niskop' : ''}`}>
       <div className="vg-kop-achter" aria-hidden="true">
         {achter ?? <img src="/images/vandaag/kerk-header-800.webp" srcSet="/images/vandaag/kerk-header-800.webp 800w, /images/vandaag/kerk-header-1536.webp 1536w" sizes="(min-width: 960px) 960px, 100vw" alt="" width={1536} height={1024} loading={open ? 'eager' : 'lazy'} decoding="async" />}
+        <Kaarsgloed />
       </div>
       {balk && <KopBalk terug={terug} />}
       {titel && (

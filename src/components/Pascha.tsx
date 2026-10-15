@@ -11,7 +11,7 @@ import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
 import Verdieping from './Verdieping';
 import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
-import { BannerBeeld, Sierlijn, TijdlijnRij } from './onderdelen';
+import { BannerBeeld, Sierlijn } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import './Vandaag.css';
 import './ontwerp.css';
@@ -255,18 +255,6 @@ const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
 // Lijnsymbool en kleur per stap op de tijdlijn (public/images/ontwerp/pascha-*.svg, uit het overdrachtspakket): paars
 // voor de voorbereiding en de Grote Vasten, rood voor de Heilige Week en Pascha, goud voor de Paastijd en Pinksteren.
-const PAARS = '#592655';
-const ROOD = '#850d17';
-const GOUD = '#a66c27';
-// Liturgische kleur per stap: het bolletje op de tijdlijn.
-const STAP_KLEUR: Record<StapKey, string> = {
-  voorbereiding: PAARS,
-  'grote-vasten': PAARS,
-  'goede-week': ROOD,
-  pascha: ROOD,
-  'vijftig-dagen': GOUD,
-  'hemelvaart-pinksteren': GOUD,
-};
 
 export default function Pascha() {
   const { vandaag, openDag } = useApp();
@@ -288,6 +276,13 @@ export default function Pascha() {
   const pascha = volgendePascha(vandaag);
   const paaschaJaar = pascha.getUTCFullYear();
   const dagenTotPascha = daysBetween(vandaag, pascha);
+  // De stappen met hun datums van dit jaar; uitgelicht is de stap van nu, anders de eerstvolgende.
+  const stappen = STAPPEN.map((stap) => {
+    const van = addDays(pascha, stap.offsetRange[0]);
+    const tot = addDays(pascha, stap.offsetRange[1]);
+    return { stap, van, tot, nu: vandaag.getTime() >= van.getTime() && vandaag.getTime() <= tot.getTime() };
+  });
+  const uitgelichteStap = (stappen.find((s) => s.nu) ?? stappen.find((s) => s.van.getTime() > vandaag.getTime()))?.stap.key;
 
   // Iedere stap-pop-up krijgt de datums van dit jaar als eyebrow.
   const stapInhoud = {} as Record<StapKey, PopupInhoud>;
@@ -320,22 +315,18 @@ export default function Pascha() {
           <Sierlijn />
           {/* Aftellen tot Pascha (volgendePascha geeft op Paaszondag zelf die dag) */}
           <p className="ot-pc-nog">{dagenTotPascha === 0 ? 'Vandaag is het Pascha' : `Nog ${dagenTotPascha} ${dagenTotPascha === 1 ? 'dag' : 'dagen'}`}</p>
-          <ol className="ot-tijdlijn ot-tijdlijn-stip">
-            {STAPPEN.map((stap) => {
-              const [start, eind] = stap.offsetRange;
-              const van = addDays(pascha, start);
-              const tot = addDays(pascha, eind);
-              return (
-                <TijdlijnRij
-                  key={stap.key}
-                  kleur={STAP_KLEUR[stap.key]}
-                  titel={stap.label}
-                  onder={`${bereikLang(van, tot)} ${tot.getUTCFullYear()}`}
-                  nu={vandaag.getTime() >= van.getTime() && vandaag.getTime() <= tot.getTime()}
-                  onClick={() => setStapOpen(stap.key)}
-                />
-              );
-            })}
+          {/* De stappen naar Pascha als tijdlijn, zoals de diensten op Etmaal: periode en naam; de stap van nu (of de
+              eerstvolgende) als bordeaux pil. Elke stap opent zijn venster. */}
+          <ol className="vg-et-lijn vg-wk-lijn vg-pc-lijn" aria-label="De weg naar Pascha">
+            {stappen.map(({ stap, van, tot, nu }) => (
+              <li key={stap.key}>
+                <button type="button" className={stap.key === uitgelichteStap ? 'is-actief' : undefined} aria-current={nu ? 'true' : undefined} aria-label={`${stap.label}, ${bereikLang(van, tot)} ${tot.getUTCFullYear()}${nu ? ' (nu)' : ''}`} onClick={() => setStapOpen(stap.key)}>
+                  <span className="vg-wk-naam">{formatKort(van)} – {formatKort(tot)}</span>
+                  <span>{stap.label}</span>
+                  <ChevronRight aria-hidden="true" />
+                </button>
+              </li>
+            ))}
           </ol>
         </div>
       </section>

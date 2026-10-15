@@ -12,6 +12,7 @@ import { eersteHeilige, heiligeTitel } from '../lib/heiligenPopup';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { vastenGroep } from '../lib/vasten';
 import { feestVoorDag } from '../lib/feestdagen';
+import Kaarsgloed from './Kaarsgloed';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -81,6 +82,7 @@ export default function Vandaag() {
       <div className="vg-kop">
         <div className="vg-kop-achter" aria-hidden="true">
           <img src={`${BEELD}/kerk-header-800.webp`} srcSet={`${BEELD}/kerk-header-800.webp 800w, ${BEELD}/kerk-header-1536.webp 1536w`} sizes="(min-width: 960px) 960px, 100vw" alt="" width={1536} height={1024} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+          <Kaarsgloed />
         </div>
         <div className="vg-balk">
           <a href="#vandaag" className="vg-merk">

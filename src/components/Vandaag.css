@@ -326,6 +326,10 @@
 .vg-wk-dag { margin-top: 18px; text-align: left; }
 .vg-wk-dag .vg-wk-thema { clear: none; margin: 4px 0 0 !important; }
 /* Jaar: zes tijden met medaillon, onderaan de feesten */
+/* Pascha: de periode (datums) in de eerste kolom, de naam ernaast */
+.vg-pc-lijn button { grid-template-columns: 32px 122px 1fr 18px; }
+.vg-pc-lijn .vg-wk-naam { font-variant-numeric: tabular-nums; }
+.vg-pc-lijn button > span:not(.vg-wk-naam) { font-size: 1em; }
 /* Jaar: in de tijdlijn een bredere kolom voor de namen */
 .vg-jr-lijn button { grid-template-columns: 32px 132px 1fr 18px; }
 .vg-jr-twee .vg-jr-feesten { margin-top: 14px; }
@@ -403,3 +407,16 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 .vg-feest-symbool { display: flex; align-items: center; justify-content: center; color: var(--goud); }
 .vg-feest-symbool svg { width: 30px; height: 30px; }
 .vg-feest-sub { margin: 0 0 4px; font-size: 15px; font-style: italic; color: var(--gedempt); }
+
+/* Kaarsgloed (Kaarsgloed.tsx): een zachte, onregelmatig flakkerende gloed op de kaarsvlammen in de banners */
+.kaarsgloed { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.kaarsgloed i { position: absolute; width: calc(var(--d) * 2.6); height: calc(var(--d) * 3.3); border-radius: 50%; transform: translate(-50%, -52%); background: radial-gradient(ellipse at 50% 50%, rgba(255, 230, 170, .95), rgba(255, 192, 105, .55) 20%, rgba(255, 150, 60, .2) 46%, transparent 70%); mix-blend-mode: screen; animation: kaars-flakker var(--duur, 3s) ease-in-out var(--vertraging, 0s) infinite; will-change: opacity, transform; }
+@keyframes kaars-flakker {
+  0%, 100% { opacity: .78; transform: translate(-50%, -52%) scale(1); }
+  14% { opacity: .92; transform: translate(-50%, -53%) scale(1.04, 1.07); }
+  27% { opacity: .7; transform: translate(-50%, -51%) scale(.97, .95); }
+  46% { opacity: 1; transform: translate(-50%, -54%) scale(1.06, 1.1); }
+  63% { opacity: .76; transform: translate(-50%, -52%) scale(.99); }
+  81% { opacity: .9; transform: translate(-50%, -53%) scale(1.03, 1.05); }
+}
+@media (prefers-reduced-motion: reduce) { .kaarsgloed i { animation: none; opacity: .8; } }

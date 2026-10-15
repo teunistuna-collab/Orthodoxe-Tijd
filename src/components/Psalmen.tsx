@@ -1,14 +1,16 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { BookOpen, Bookmark, ChevronLeft, ChevronRight, MoreHorizontal, Pause, Search, Volume2 } from 'lucide-react';
 import NaarBoven from './NaarBoven';
-import Leesbediening from './Leesbediening';
+import DeelKnop from './DeelKnop';
 import NisKop from './NisKop';
-import { ActieKnop, BannerBeeld, Sierlijn } from './onderdelen';
+import { ActieKnop, Sierlijn } from './onderdelen';
 import { OPEN_DIENST_EVENT } from '../lib/events';
-import { useFavorieten } from '../lib/favorieten';
+import { useFavorieten, wisselFavoriet } from '../lib/favorieten';
 import { gaNaar } from '../lib/navigatie';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { letterBeeld } from '../lib/letters';
+import { useLeesvoorkeur, vergroot, verklein, wisselNacht } from '../lib/leesvoorkeur';
+import { usePsalmAudio } from '../lib/psalmAudio';
 import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 import './Vandaag.css';
 import './ontwerp.css';
@@ -20,7 +22,8 @@ laadPsalmTeksten().catch(() => {});
 // Psalmen volgens het overdrachtspakket (referentie gebeden-psalmen-adem.png, panelen 2 en 3):
 // - #psalmen: het overzicht (kop met sterrengewelf, de P met het aantal psalmen, zoeken, alle filters, de nummers per
 //   vijftig of de lijst, "Verder lezen" met de laatst geopende psalm);
-// - #psalmen/50: de lezer als eigen weergave (terug, leesbediening, tabs, alle verzen, vorige/volgende psalm).
+// - #psalmen/50: de lezer als eigen weergave (compacte balk, tabs, alle verzen, vorige/volgende psalm);
+//   #psalmen/50/12 opent op vers 12 (ook "Ga verder" gebruikt dit, met het laatst gelezen vers).
 // Alleen echte data: teksten uit public/data/psalmen.json, gebruik uit het etmaal (lib/etmaal.ts).
 
 // ponytail: introductietekst overgenomen uit de aangeleverde referentieontwerpen; nog door de redactie te bevestigen.
@@ -52,10 +55,23 @@ const leesLaatst = () => {
   }
 };
 
-// Deep link: #psalmen/50 opent Psalm 50 in de lezer; te gebruiken vanaf Vandaag, Etmaal, zoeken.
+// Leesplek binnen de laatst geopende psalm: het eerste zichtbare vers ("50:12"), zodat hervatten ook bij een andere
+// schermbreedte of tekstgrootte klopt. Alleen op dit toestel; ongeldig of ontbrekend = gewoon bovenaan beginnen.
+const LEESPLEK = 'psalmen-leesplek';
+const leesPlek = () => {
+  try {
+    const [nr, vers] = (localStorage.getItem(LEESPLEK) ?? '').split(':').map(Number);
+    return nr >= 1 && nr <= AANTAL && vers >= 1 ? { nr, vers } : null;
+  } catch {
+    return null;
+  }
+};
+
+// Deep link: #psalmen/50 opent Psalm 50 in de lezer (bovenaan), #psalmen/50/12 op vers 12. Vanaf Vandaag, Etmaal, zoeken.
 const psalmUitHash = () => {
-  const n = Number(/^#psalmen\/(\d+)$/.exec(window.location.hash)?.[1]);
-  return n >= 1 && n <= AANTAL ? n : null;
+  const m = /^#psalmen\/(\d+)(?:\/(\d+))?$/.exec(window.location.hash);
+  const nr = Number(m?.[1]);
+  return nr >= 1 && nr <= AANTAL ? { nr, vers: Number(m?.[2]) || null } : null;
 };
 
 export default function Psalmen({ actief }: { actief: boolean }) {
@@ -63,6 +79,9 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const [teksten, setTeksten] = useState<PsalmTeksten | null>(null);
   const [laadFout, setLaadFout] = useState(false);
   const [lezen, setLezen] = useState(psalmUitHash);
+  // Scrollpositie van het overzicht, om na de lezer op dezelfde plek terug te komen.
+  const overzichtY = useRef<number | null>(null);
+  const lezenRef = useRef(lezen);
   const [laatst, setLaatst] = useState(leesLaatst);
   const [zoek, setZoek] = useState('');
   const [filter, setFilter] = useState<Filter>('alle');
@@ -87,21 +106,30 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   useEffect(() => {
     const opHash = () => {
       const n = psalmUitHash();
+      // Van het overzicht naar een psalm: de plek in het overzicht onthouden (de pagina staat dan nog op het overzicht).
+      const overzichtZichtbaar = !document.getElementById('psalmen')?.closest('.pagina')?.classList.contains('pagina-verborgen');
+      if (n && !lezenRef.current && overzichtZichtbaar) overzichtY.current = window.scrollY;
+      lezenRef.current = n;
       setLezen(n);
       if (n) {
         try {
-          localStorage.setItem(LAATST, String(n));
+          localStorage.setItem(LAATST, String(n.nr));
         } catch {
           /* geen opslag */
         }
-        setLaatst(n);
-        window.scrollTo({ top: 0, behavior: 'instant' });
+        setLaatst(n.nr);
       }
     };
     opHash();
     window.addEventListener('hashchange', opHash);
     return () => window.removeEventListener('hashchange', opHash);
   }, []);
+
+  useLayoutEffect(() => {
+    if (lezen || overzichtY.current === null || window.location.hash !== '#psalmen') return;
+    window.scrollTo({ top: overzichtY.current, behavior: 'instant' });
+    overzichtY.current = null;
+  }, [lezen]);
 
   // Etmaal zonder zoekterm: gegroepeerd per dienst, in de volgorde van het etmaal.
   const groepen = filter === 'etmaal' && !zoek.trim() ? ETMAAL_GROEPEN : null;
@@ -146,42 +174,24 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   );
 
   // De lezer: één psalm als eigen weergave.
-  if (lezen) {
-    const psalm = PSALMEN[lezen - 1];
-    return (
-      <section id="psalmen" className="vg ot-redesign ot-lezer">
-        <div className="ot-lezer-strook" aria-hidden="true">
-          <BannerBeeld naam="psalmen-banner" open={open} />
-        </div>
-        <article className="vg-papier ot-inhoud lees-vlak ot-lezer-vlak" aria-labelledby="ps-lezer-titel">
-          <div className="ot-lezer-bediening">
-            <a className="ot-terug" href="#psalmen"><ChevronLeft aria-hidden="true" /><span>Psalmen</span></a>
-            {psalm.hasText && <Leesbediening audioSrc={psalm.audioSrc} deel={{ titel: psalm.title, pad: `psalmen/${psalm.septuagintNumber}` }} />}
-          </div>
-          <header className="ot-lezer-kop">
-            <h1 id="ps-lezer-titel">{psalm.title}</h1>
-            <p>Septuagint (NL){psalm.masoreticNumber ? ` · Psalm ${psalm.masoreticNumber} in de Hebreeuwse nummering` : ''}</p>
-            <Sierlijn />
-          </header>
-          <PsalmLezer key={psalm.id} idVoorvoegsel="ps-lezer" psalm={psalm} tekst={teksten?.[lezen]} laadFout={laadFout} ontwerp />
-          <Sierlijn />
-          <nav className="ot-lezer-blader" aria-label="Bladeren door de psalmen">
-            {lezen > 1 ? (
-              <a className="ot-actie is-omlijnd" href={`#psalmen/${lezen - 1}`}><ChevronLeft aria-hidden="true" /><span>Vorige psalm</span></a>
-            ) : <span />}
-            {lezen < AANTAL ? (
-              <a className="ot-actie" href={`#psalmen/${lezen + 1}`}><span>Volgende psalm</span><ChevronRight aria-hidden="true" /></a>
-            ) : <span />}
-          </nav>
-        </article>
-      </section>
-    );
-  }
+  if (lezen) return <Lezer key={lezen.nr} nr={lezen.nr} vers={lezen.vers} tekst={teksten?.[lezen.nr]} laadFout={laadFout} />;
 
   return (
     <>
       <section id="psalmen" className="vg ot-redesign ot-psalmen">
-        <NisKop open={open} balk achter={<BannerBeeld naam="psalmen-banner" open={open} />} />
+        {/* Mobiel: de kop van Verdieping (kerkgewelf) met het icoon van David in het midden; web: de brede banner met David */}
+        <NisKop
+          open={open}
+          balk
+          achter={
+            <picture>
+              <source media="(min-width: 768px)" srcSet="/images/ontwerp/psalmen-banner-800.webp 800w, /images/ontwerp/psalmen-banner-1536.webp 1536w" sizes="1360px" width={1536} height={512} />
+              <img className="ot-banner ot-ps-gewelf" src="/images/vandaag/kerk-header-800.webp" srcSet="/images/vandaag/kerk-header-800.webp 800w, /images/vandaag/kerk-header-1536.webp 1536w" sizes="100vw" alt="" width={1536} height={1024} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+            </picture>
+          }
+        >
+          <img className="ot-ps-icoon" src="/images/psalmen/david-icoon.webp" alt="Icoon van de heilige profeet en koning David" width={600} height={726} decoding="async" />
+        </NisKop>
         <div className="vg-papier ot-inhoud">
           <h1 className="sr-only">Psalter</h1>
 
@@ -291,14 +301,19 @@ export default function Psalmen({ actief }: { actief: boolean }) {
             </div>
           )}
 
-          {/* Verder lezen: de laatst geopende psalm; zonder leesgeschiedenis de psalm van dit uur */}
-          <aside className="ot-verder" aria-label={laatst ? 'Verder lezen' : 'Psalm van dit uur'}>
-            <div>
-              <span className="ot-verder-label">{laatst ? 'Verder lezen' : 'Psalm van dit uur'}</span>
-              <p>{PSALMEN[(laatst ?? uurPsalm) - 1].title}</p>
-            </div>
-            <ActieKnop href={`#psalmen/${laatst ?? uurPsalm}`}>Open de psalm</ActieKnop>
-          </aside>
+          {/* Verder lezen: alleen met echte leesgeschiedenis op dit toestel; hervat op het laatst gelezen vers */}
+          {laatst && (() => {
+            const plek = leesPlek();
+            return (
+              <aside className="ot-verder" aria-label="Verder lezen">
+                <div>
+                  <span className="ot-verder-label">Verder lezen</span>
+                  <p>{PSALMEN[laatst - 1].title}</p>
+                </div>
+                <ActieKnop href={plek?.nr === laatst ? `#psalmen/${laatst}/${plek.vers}` : `#psalmen/${laatst}`}>Ga verder</ActieKnop>
+              </aside>
+            );
+          })()}
           <p className="ot-ps-intro">
             {INTRO} {INTRO_VERVOLG}
           </p>
@@ -306,6 +321,112 @@ export default function Psalmen({ actief }: { actief: boolean }) {
       </section>
       <NaarBoven />
     </>
+  );
+}
+
+/** De psalm als eigen leesweergave: compacte balk, tabs en tekst (PsalmLezer), vorige/volgende psalm. Hervat op `vers`
+ *  (verslink of "Ga verder") en houdt tijdens het lezen het eerste zichtbare vers bij. */
+function Lezer({ nr, vers, tekst, laadFout }: { nr: number; vers: number | null; tekst?: PsalmTekst; laadFout: boolean }) {
+  const psalm = PSALMEN[nr - 1];
+  const pad = `psalmen/${nr}`;
+  const { nacht, min, max } = useLeesvoorkeur();
+  const bewaard = useFavorieten().includes(pad);
+  const audio = usePsalmAudio(psalm.hasText ? psalm.audioSrc : undefined);
+  const vlakRef = useRef<HTMLElement | null>(null);
+  const balkRef = useRef<HTMLDivElement | null>(null);
+  const meerRef = useRef<HTMLDetailsElement | null>(null);
+
+  // Openen: bovenaan, of bij een vers (zodra de tekst er is). Vóór het tekenen, dus zonder zichtbaar verspringen.
+  // Nogmaals vlak voor het tekenen: bij een paginawissel zet App.tsx daarna nog de onthouden scrollpositie van de pagina.
+  useLayoutEffect(() => {
+    const plaats = () => {
+      const doel = vers ? document.getElementById(`ps-vers-${vers}`) : null;
+      if (doel) doel.scrollIntoView({ block: 'start', behavior: 'instant' });
+      else if (!vers || tekst || laadFout || !psalm.hasText) window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+    plaats();
+    const frame = requestAnimationFrame(plaats);
+    return () => cancelAnimationFrame(frame);
+  }, [vers, tekst, laadFout, psalm.hasText]);
+
+  // Leesplek bijhouden: pas na het openen (het herstel telt niet als lezen), gedempt, het eerste vers onder de balk.
+  useEffect(() => {
+    if (!tekst) return;
+    let timer = 0;
+    const opScroll = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        // Bovenrand van het leesbare deel: onder de plakkende balk (mobiel) of de vaste sitekop (web)
+        const rand = Math.max(balkRef.current?.getBoundingClientRect().bottom ?? 0, document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0, 0) + 8;
+        const zichtbaar = [...(vlakRef.current?.querySelectorAll<HTMLElement>('[id^="ps-vers-"]') ?? [])].find((v) => v.getBoundingClientRect().bottom > rand);
+        if (!zichtbaar) return;
+        try {
+          localStorage.setItem(LEESPLEK, `${nr}:${zichtbaar.id.slice('ps-vers-'.length)}`);
+        } catch {
+          /* geen opslag */
+        }
+      }, 250);
+    };
+    const start = window.setTimeout(() => window.addEventListener('scroll', opScroll, { passive: true }), 400);
+    return () => {
+      window.clearTimeout(start);
+      window.clearTimeout(timer);
+      window.removeEventListener('scroll', opScroll);
+    };
+  }, [nr, tekst]);
+
+  // Het "Meer"-menu sluit met Escape (focus terug op de knop) en bij een klik ernaast.
+  useEffect(() => {
+    const buiten = (e: MouseEvent) => {
+      if (meerRef.current?.open && !meerRef.current.contains(e.target as Node)) meerRef.current.open = false;
+    };
+    document.addEventListener('click', buiten);
+    return () => document.removeEventListener('click', buiten);
+  }, []);
+
+  return (
+    <section id="psalmen" className="vg ot-redesign ot-lezer">
+      <article ref={vlakRef} className="vg-papier ot-inhoud lees-vlak ot-lezer-vlak" aria-labelledby="ps-lezer-titel">
+        <div ref={balkRef} className="ot-lezer-balk" role="toolbar" aria-label="Leesbediening">
+          <a className="ot-terug" href="#psalmen"><ChevronLeft aria-hidden="true" /><span>Psalmen</span></a>
+          <span className="ot-lezer-nr" aria-hidden="true">Psalm {nr}</span>
+          <div className="ot-lezer-knoppen">
+            <button type="button" onClick={verklein} disabled={min} aria-label="Tekst verkleinen" title="Tekst verkleinen"><span className="ot-lb-a">A<sup>−</sup></span></button>
+            <button type="button" onClick={vergroot} disabled={max} aria-label="Tekst vergroten" title="Tekst vergroten"><span className="ot-lb-a is-groot">A<sup>+</sup></span></button>
+            <button type="button" onClick={() => wisselFavoriet(pad)} aria-pressed={bewaard} aria-label="Bewaren bij favorieten" title={bewaard ? 'Bewaard bij favorieten' : 'Bewaren bij favorieten'}><Bookmark aria-hidden="true" /></button>
+            <details
+              ref={meerRef}
+              className="ot-lezer-meer"
+              onKeyDown={(e) => {
+                if (e.key === 'Escape' && meerRef.current?.open) {
+                  meerRef.current.open = false;
+                  meerRef.current.querySelector('summary')?.focus();
+                }
+              }}
+            >
+              <summary aria-label="Meer leesopties" title="Meer leesopties"><MoreHorizontal aria-hidden="true" /></summary>
+              <div className="ot-lezer-menu">
+                <button type="button" onClick={wisselNacht} aria-pressed={nacht}><BookOpen aria-hidden="true" /><span>Avondweergave</span></button>
+                {audio.beschikbaar && (
+                  <button type="button" onClick={audio.wissel}>{audio.speelt ? <Pause aria-hidden="true" /> : <Volume2 aria-hidden="true" />}<span>{audio.speelt ? 'Audio pauzeren' : 'Audio afspelen'}</span></button>
+                )}
+                <DeelKnop titel={psalm.title} pad={pad} label />
+              </div>
+            </details>
+          </div>
+        </div>
+        <header className="ot-lezer-kop">
+          <h1 id="ps-lezer-titel">{psalm.title}</h1>
+          <p>Septuagint (NL){psalm.masoreticNumber ? ` · Psalm ${psalm.masoreticNumber} in de Hebreeuwse nummering` : ''}</p>
+          <Sierlijn />
+        </header>
+        <PsalmLezer idVoorvoegsel="ps-lezer" psalm={psalm} tekst={tekst} laadFout={laadFout} ontwerp />
+        <nav className="ot-lezer-blader" aria-label="Bladeren door de psalmen">
+          {nr > 1 ? <a href={`#psalmen/${nr - 1}`}><ChevronLeft aria-hidden="true" /><span>Vorige psalm</span></a> : <span />}
+          {nr < AANTAL ? <a href={`#psalmen/${nr + 1}`} className="is-volgende"><span>Volgende psalm</span><ChevronRight aria-hidden="true" /></a> : <span />}
+        </nav>
+      </article>
+    </section>
   );
 }
 
@@ -411,7 +532,7 @@ export function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, ontwerp }: {
                     {v.kop}
                   </p>
                 ) : (
-                  <div key={k} className="ps-vers">
+                  <div key={k} className="ps-vers" id={ontwerp && v.n ? `ps-vers-${v.n}` : undefined}>
                     <span className="ps-versnr">{v.n ?? ''}</span>
                     <p>
                       {v.regels.map((r, j) => {
