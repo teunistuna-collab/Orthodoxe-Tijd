@@ -94,8 +94,8 @@
 .vg-sierlijn { display: block; width: min(60%, 220px); height: auto; margin: 8px auto 8px; }
 
 /* C. Dit gebedsuur */
-/* --ini: breedte van de initiaal. Het letterpaneel beslaat in elk beeld 27–84 % van de breedte en 22–86 % van de hoogte
-   (initialen/*.png); de rest is bloemrank en transparantie. Daarop zijn de marges hieronder afgestemd. */
+/* --ini: breedte van de initiaal. De letter staat in elk beeld binnen 27–84 % van de breedte en 22–86 % van de hoogte,
+   rechts en onder uitgelijnd (lib/letters.ts); de rest is transparant. Daarop zijn de marges hieronder afgestemd. */
 .vg-uur { --ini: clamp(140px, 40cqw, 180px); display: flow-root; margin-top: 10px; }
 /* Label, letterpaneel, kernvers, psalm en knop delen één linkerlijn: die van het letterpaneel. */
 .vg-uur { --lijn: calc(var(--ini) * .27 - 6px); }

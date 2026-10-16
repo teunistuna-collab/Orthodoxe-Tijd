@@ -300,7 +300,17 @@
 
 /* Psalmlezer in de avondweergave: het leesvlak krijgt een vlakke achtergrond die mee omkeert (donker), anders staat de
    omgekeerde, lichte tekst op het lichte papyrus */
-html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-vlak { background: #f5e6c8 !important; }
+/* Avondweergave gelijk aan gebeden en heiligenlevens (popup.css): nachtblauw (#0e1722) met de omgekeerde, lichte tekst.
+   Het leesvlak is doorzichtig; de vaste leesbalk ligt binnen het omgekeerde vlak, dus krijgt de kleur die na het
+   omkeren (invert + hue-rotate) precies dat nachtblauw geeft. */
+html.lees-nacht #top#top#top#top#top#top#top#top .vg.ot-lezer { background: #0e1722 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-vlak { background: transparent !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-balk { background: #e1eaf4 !important; }
+/* Actieve avondknop: goud na het omkeren (zoals in popup.css), zonder vulling */
+html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-knoppen > button[aria-label="Avondweergave"][aria-pressed="true"] { color: #856620 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-knoppen > button[aria-label="Avondweergave"][aria-pressed="true"] svg { fill: none; }
+/* Smalle telefoons: de balk heeft nu drie leesknoppen; "Psalm N" staat ook direct eronder, dus hier weggelaten */
+@media (max-width: 419.98px) { .ot-lezer .ot-lezer-nr { visibility: hidden; } }
 
 /* ---------- Psalmlezer: compacte balk, Meer-menu, vorige/volgende ---------- */
 .ot-lezer-vlak { padding-top: 0; }

@@ -87,7 +87,7 @@ export const ADEM_POPUPS: Record<'wat' | 'jezusgebed' | 'gebedskoord' | 'hart', 
     "sections": [
       {
         "paragraphs": [
-          "Het onophoudelijke gebed begint eenvoudig. Het gebed wordt uitgesproken met de lippen, vervolgens stiller en aandachtiger in het verstand, en de Orthodoxe geestelijke schrijvers spreken uiteindelijk over het ‘gebed van het hart’: een toestand waarin de gedachtenis aan God het innerlijke leven steeds dieper doordringt. Dit is geen prestatie die door een ademritme kan worden afgedwongen, maar een gave die wordt gezocht in nederigheid, bekering en het sacramentele en liturgische leven van de Kerk."
+          "Het onophoudelijke gebed begint eenvoudig. Het gebed wordt uitgesproken met de lippen, vervolgens stiller en aandachtiger in het hart, en de Orthodoxe geestelijke schrijvers spreken uiteindelijk over het ‘gebed van het hart’: een toestand waarin de gedachtenis aan God het innerlijke leven steeds dieper doordringt. Dit is geen prestatie die door een ademritme kan worden afgedwongen, maar een gave die wordt gezocht in nederigheid, bekering en het sacramentele en liturgische leven van de Kerk."
         ]
       },
       {

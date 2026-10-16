@@ -390,8 +390,10 @@ function Lezer({ nr, vers, tekst, laadFout }: { nr: number; vers: number | null;
           <a className="ot-terug" href="#psalmen"><ChevronLeft aria-hidden="true" /><span>Psalmen</span></a>
           <span className="ot-lezer-nr" aria-hidden="true">Psalm {nr}</span>
           <div className="ot-lezer-knoppen">
-            <button type="button" onClick={verklein} disabled={min} aria-label="Tekst verkleinen" title="Tekst verkleinen"><span className="ot-lb-a">A<sup>−</sup></span></button>
+            {/* Zelfde volgorde als de leesbediening van gebeden en heiligenlevens (Leesbediening.tsx): A+ · A− · avondweergave */}
             <button type="button" onClick={vergroot} disabled={max} aria-label="Tekst vergroten" title="Tekst vergroten"><span className="ot-lb-a is-groot">A<sup>+</sup></span></button>
+            <button type="button" onClick={verklein} disabled={min} aria-label="Tekst verkleinen" title="Tekst verkleinen"><span className="ot-lb-a">A<sup>−</sup></span></button>
+            <button type="button" onClick={wisselNacht} aria-pressed={nacht} aria-label="Avondweergave" title="Avondweergave"><BookOpen aria-hidden="true" /></button>
             <button type="button" onClick={() => wisselFavoriet(pad)} aria-pressed={bewaard} aria-label="Bewaren bij favorieten" title={bewaard ? 'Bewaard bij favorieten' : 'Bewaren bij favorieten'}><Bookmark aria-hidden="true" /></button>
             <details
               ref={meerRef}
@@ -405,7 +407,6 @@ function Lezer({ nr, vers, tekst, laadFout }: { nr: number; vers: number | null;
             >
               <summary aria-label="Meer leesopties" title="Meer leesopties"><MoreHorizontal aria-hidden="true" /></summary>
               <div className="ot-lezer-menu">
-                <button type="button" onClick={wisselNacht} aria-pressed={nacht}><BookOpen aria-hidden="true" /><span>Avondweergave</span></button>
                 {audio.beschikbaar && (
                   <button type="button" onClick={audio.wissel}>{audio.speelt ? <Pause aria-hidden="true" /> : <Volume2 aria-hidden="true" />}<span>{audio.speelt ? 'Audio pauzeren' : 'Audio afspelen'}</span></button>
                 )}
