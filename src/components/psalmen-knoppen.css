@@ -5,13 +5,13 @@
 .psalm-controls *{box-sizing:border-box}
 .psalm-controls .pc-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;border-bottom:1px solid #b78a4977;padding:0 0 0;margin:0}
 .psalm-controls .pc-tab{position:relative;flex:1 1 110px;min-height:56px;padding:12px 15px 17px;border:1px solid #bd945d;border-bottom:0;border-radius:13px 13px 2px 2px;background:linear-gradient(105deg,#fff7e5aa,#e9ce9e55),repeating-linear-gradient(10deg,#9b682805 0 1px,transparent 1px 4px);box-shadow:inset 0 1px #fff9e6;color:var(--pc-ink);font:inherit;font-size:18px;cursor:pointer;isolation:isolate}
-.psalm-controls .pc-tab[aria-pressed=true]{color:#fff2d6;border-color:#a77234;background:linear-gradient(130deg,#9b1925,#710d16);box-shadow:inset 0 1px #d7866544}
+.psalm-controls .pc-tab[aria-pressed=true]{color:var(--ivoor);border-color:#a77234;background:linear-gradient(130deg,#9b1925,#710d16);box-shadow:inset 0 1px #d7866544}
 .psalm-controls .pc-tab[aria-pressed=true]:after{content:'◆';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);color:#e6bc6d;font-size:8px;line-height:10px}
 .psalm-controls .pc-note{margin:18px 0 20px;text-align:center;color:#75624b;font-size:14px;line-height:1.5}
 /* Reeksen 1–50, 51–100, 101–150: tekstkoppen op een dunne gouden lijn; de gekozen reeks in bordeaux met een streep eronder */
 .psalm-controls .pc-ranges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 14px;border-bottom:1px solid rgba(172,121,47,.55)}
-.psalm-controls .pc-scroll{position:relative;justify-self:center;margin-bottom:-1px;background:none;color:var(--inkt,#0b1b2a);min-width:0;padding:8px 10px 9px;font:inherit;font-size:22px;line-height:1.2;white-space:nowrap;cursor:pointer;transition:color .15s}
-.psalm-controls .pc-scroll:hover,.psalm-controls .pc-scroll[aria-pressed=true]{color:#850d17}
+.psalm-controls .pc-scroll{position:relative;justify-self:center;margin-bottom:-1px;background:none;color:var(--inkt,var(--nachtblauw));min-width:0;padding:8px 10px 9px;font:inherit;font-size:22px;line-height:1.2;white-space:nowrap;cursor:pointer;transition:color .15s}
+.psalm-controls .pc-scroll:hover,.psalm-controls .pc-scroll[aria-pressed=true]{color:var(--bordeaux-diep)}
 .psalm-controls button:focus-visible{outline:3px solid #176587;outline-offset:4px}
 @media(hover:hover){.psalm-controls button:hover{filter:brightness(1.05)}.psalm-controls button[aria-pressed=false]:hover{color:#7d1521}}
 .psalm-controls button:disabled{opacity:.5;cursor:default;filter:none}
@@ -24,17 +24,17 @@
 #top#top#top#top#top#top#top main .psalm-controls :is(.pc-tab,.pc-scroll){display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--font-lees)!important;letter-spacing:0!important;text-transform:none!important;box-sizing:border-box}
 #top#top#top#top#top#top#top main .psalm-controls .pc-tab{min-height:56px!important}
 #top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:50px!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;border-image:none!important;box-shadow:none!important}
-#top#top#top#top#top#top#top main .psalm-controls .pc-scroll[aria-pressed=true]{border-bottom-color:#850d17!important}
+#top#top#top#top#top#top#top main .psalm-controls .pc-scroll[aria-pressed=true]{border-bottom-color:var(--bordeaux-diep)!important}
 @media(max-width:540px){#top#top#top#top#top#top#top main .psalm-controls .pc-tab{min-height:49px!important}#top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:46px!important}}
 
 /* Filterknoppen in de stijl van de kaarten op Cycli (.vg-cy-kaart): dun goud kader, dubbele binnenlijn, ruitjes op twee hoeken */
 .psalm-controls .pc-filters{gap:8px;border-bottom:0}
-#top#top#top#top#top#top#top main .psalm-controls .pc-tab{position:relative;border:1px solid #b99455!important;border-radius:3px!important;background:rgba(255,244,219,.17)!important;box-shadow:inset 0 0 0 3px rgba(246,231,201,.9),inset 0 0 0 4px rgba(197,165,117,.33)!important;padding:10px 12px!important;isolation:auto}
-.psalm-controls .pc-tab:before,.psalm-controls .pc-tab:after,.psalm-controls .pc-tab[aria-pressed=true]:after{content:"";position:absolute;width:6px;height:6px;border:1px solid #b99455;background:var(--papyrus,#f5e6c8);transform:rotate(45deg);font-size:0;color:transparent}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab{position:relative;border:1px solid var(--kaartrand)!important;border-radius:3px!important;background:rgba(255,244,219,.17)!important;box-shadow:inset 0 0 0 3px rgba(246,231,201,.9),inset 0 0 0 4px rgba(197,165,117,.33)!important;padding:10px 12px!important;isolation:auto}
+.psalm-controls .pc-tab:before,.psalm-controls .pc-tab:after,.psalm-controls .pc-tab[aria-pressed=true]:after{content:"";position:absolute;width:6px;height:6px;border:1px solid var(--kaartrand);background:var(--papyrus,var(--papyrus));transform:rotate(45deg);font-size:0;color:transparent}
 .psalm-controls .pc-tab:before{left:-4px;top:-4px}
 .psalm-controls .pc-tab:after,.psalm-controls .pc-tab[aria-pressed=true]:after{left:auto;right:-4px;top:auto;bottom:-4px}
 #top#top#top#top#top#top#top main .psalm-controls .pc-tab:hover{background:rgba(255,251,236,.5)!important}
-#top#top#top#top#top#top#top main .psalm-controls .pc-tab[aria-pressed=true]{border-color:#a77234!important;background:linear-gradient(130deg,#9b1925,#710d16)!important;box-shadow:inset 0 0 0 3px rgba(122,16,26,.9),inset 0 0 0 4px rgba(230,188,109,.55)!important;color:#fff2d6}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab[aria-pressed=true]{border-color:#a77234!important;background:linear-gradient(130deg,#9b1925,#710d16)!important;box-shadow:inset 0 0 0 3px rgba(122,16,26,.9),inset 0 0 0 4px rgba(230,188,109,.55)!important;color:var(--ivoor)}
 /* Mobiel: de vijf filters op één rij (in plaats van 3 + 2), smaller ingepakt; past het niet (grote letters), dan schuift de rij */
 @media(max-width:540px){.psalm-controls .pc-filters{flex-wrap:nowrap;overflow-x:auto;gap:5px;margin:0 -5px;padding:5px;scrollbar-width:none}.psalm-controls .pc-filters::-webkit-scrollbar{display:none}#top#top#top#top#top#top#top main .psalm-controls .pc-tab{flex:1 0 auto;padding:10px 7px!important;font-size:15px}}
 @media(max-width:370px){#top#top#top#top#top#top#top main .psalm-controls .pc-tab{padding:10px 6px!important;font-size:14px}}

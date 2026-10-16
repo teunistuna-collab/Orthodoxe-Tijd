@@ -1,20 +1,26 @@
 /* Vandaag — startpagina volgens referentie/startpagina-doelbeeld.png (startpagina-pakket).
    Alles hangt onder .vg, zodat andere pagina's niet veranderen. */
-.vg {
-  /* Gedeelde stijlwaarden van alle pagina's (.vg). Kleuren: één inkt voor titels en tekst, één gedempte kleur voor
-     secundaire tekst, twee lijnsterktes en de kaartrand. Typografie: vaste maten per soort tekst. */
+:root {
+  /* Gedeelde kleuren van de hele site, ook voor vensters en het zoekvenster (die staan buiten .vg). Eén inkt voor titels
+     en tekst, één gedempte kleur voor secundaire tekst, twee lijnsterktes en de kaartrand. */
   --nachtblauw: #0b1b2a;
+  --nacht-vlak: #0e1722; /* venster en psalmlezer in de avondweergave */
   --inkt: var(--nachtblauw);
   --papyrus: #f5e6c8;
   --ivoor: #fff2d6;
   --bordeaux: #841c22;
+  --bordeaux-diep: #850d17; /* actieve tekst, links en pijlen */
   --goud: #ac792f;
   --goud-licht: #dfbd75;
   --gedempt: #5d5040;
-  --goud-pijl: #7a5a2a;
+  --goud-pijl: #7a5a2a; /* donker goud: tekst en pijlen op perkament */
   --lijn: rgba(172, 121, 47, .55);
   --lijn-zacht: rgba(172, 121, 47, .3);
   --kaartrand: #b99455;
+  --focus: #066b95;
+}
+.vg {
+  /* Typografie van de pagina's: vaste maten per soort tekst (cqw: ten opzichte van de paginabreedte). */
   --t-titel: clamp(42px, 11.5cqw, 52px);
   --t-sectie: clamp(24px, 6.6cqw, 28px);
   --t-kaart: 25px;
@@ -100,14 +106,17 @@
 /* Label, letterpaneel, kernvers, psalm en knop delen één linkerlijn: die van het letterpaneel. */
 .vg-uur { --lijn: calc(var(--ini) * .27 - 6px); }
 .vg-uur .vg-label { margin-left: var(--lijn) !important; }
+/* Zonder beginletter (lib/letters.ts) geen inspringing en geen ruimte voor de letter */
+.vg-uur:not(:has(.vg-initiaal)) { --lijn: 0px; }
+.vg-initiaal + .vg-dienst { margin-top: calc(var(--ini) * .8 - .8em) !important; }
 #vandaag .vg-uur > .vg-label { margin-left: 0 !important; text-align: center; } /* Vandaag: "Dit gebedsuur" gecentreerd */
-@media (max-width: 767px) { #etmaal .vg-uur > .vg-label, #jaar .vg-uur > .vg-label:not(.vg-wk-thema) { justify-self: center; margin-left: 0 !important; text-align: center; } } /* Etmaal en Jaar mobiel: "Dit gebedsuur" / "Waar zijn we nu?" gecentreerd */
+@media (max-width: 767.98px) { #etmaal .vg-uur > .vg-label, #jaar .vg-uur > .vg-label:not(.vg-wk-thema) { justify-self: center; margin-left: 0 !important; text-align: center; } } /* Etmaal en Jaar mobiel: "Dit gebedsuur" / "Waar zijn we nu?" gecentreerd */
 .vg-uur :is(.vg-kernvers, .vg-bron, .vg-knop) { clear: left; margin-left: var(--lijn) !important; }
 .vg-uur .vg-kernvers { margin-top: 12px !important; padding-left: 12px; border-left: 1.5px solid var(--lijn); }
 .vg-uur .vg-bron { padding-left: 13.5px; }
 .vg-initiaal { float: left; width: var(--ini); height: auto; margin: 2px 0 2px -6px; shape-outside: inset(0 15% 0 0); shape-margin: 3px; object-fit: contain; }
 /* De rest van de naam staat op de onderrand van de letter, zodat "V" + "espers" als één woord leest. */
-.vg-dienst { margin-top: calc(var(--ini) * .8 - .8em) !important; font-size: calc(var(--ini) * .3); font-weight: 500; line-height: 1; color: var(--inkt); }
+.vg-dienst { margin-top: 4px !important; font-size: calc(var(--ini) * .3); font-weight: 500; line-height: 1; color: var(--inkt); }
 .vg-uur-lang .vg-dienst { font-size: calc(var(--ini) * .19); } /* Middernachtdienst */
 .vg-kernvers { margin-top: 6px !important; font-size: 18px; font-style: italic; line-height: 1.3; color: #2a2620; }
 .vg-bron { margin-top: 2px !important; font-size: var(--t-klein); color: var(--gedempt); }
@@ -237,9 +246,11 @@
 
 /* ---------- De heiligen (#heiligen, Heiligen.tsx) ---------- */
 .vg-heiligen .vg-papier { padding-bottom: 28px; }
+/* Bronnen: tussenkoppen op de donkere achtergrond in licht goud (index.css maakte ze donkerbruin: contrast 1,5 : 1) */
+#top .exact-content .bg-bark h3.text-gold-light { color: var(--goud-licht, var(--goud-licht)); }
 /* Mobiel: de banner met het icoon van Christus de Wijnstok helemaal in beeld (beeld 3 : 2), zonder titel erover; de titel
    blijft voor schermlezers (en in de tab) bestaan */
-@media (max-width: 767px) {
+@media (max-width: 767.98px) {
   #heiligen .vg-niskop { height: 66.667cqw; min-height: 0; padding: 0; }
   #heiligen .vg-niskop .vg-titel { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   #heiligen .vg-niskop .vg-verd-sierlijn { display: none; }
@@ -280,7 +291,7 @@
 .vg-hl-uitleg { margin: 4px 0 8px !important; font-size: 16px; color: var(--gedempt); }
 .vg-hl-leeg { margin: 12px 0 !important; font-size: 17px; font-style: italic; line-height: 1.4; color: var(--gedempt); }
 .vg-hl-dagen > li { padding: 10px 0 4px; border-top: 1px solid var(--lijn-zacht); }
-.vg-hl-dagen h3 { margin: 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #850d17; }
+.vg-hl-dagen h3 { margin: 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--bordeaux-diep); }
 .vg-hl-rij { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; padding: 6px 0; border: 0; background: none; font: inherit; text-align: left; color: var(--inkt); cursor: pointer; }
 .vg-hl-rij b { display: block; font-size: 18px; font-weight: 500; line-height: 1.25; }
 .vg-hl-rij b + span { display: block; margin-top: 2px; font-size: 15px; line-height: 1.3; color: var(--gedempt); }
@@ -325,9 +336,9 @@
 @media (prefers-reduced-motion: reduce) { .vg-kop-achter .vg-et-banner { transition: none; } }
 .vg-etmaal .vg-kop-achter:after { background: linear-gradient(rgba(6, 14, 24, .45), transparent 26%); }
 /* Kalender mobiel: het boek in de banner is licht; bovenin iets donkerder zodat merk en zoekknop leesbaar zijn */
-@media (max-width: 767px) { #kalender .vg-kop-achter:after { background: linear-gradient(rgba(6, 14, 24, .72), rgba(6, 14, 24, .35) 22%, transparent 42%); } }
+@media (max-width: 767.98px) { #kalender .vg-kop-achter:after { background: linear-gradient(rgba(6, 14, 24, .72), rgba(6, 14, 24, .35) 22%, transparent 42%); } }
 /* Jaar mobiel: het thema onder de beginletter gecentreerd en in evenwichtige regels, zoals de rest van dit blok */
-@media (max-width: 767px) { #jaar .vg-uur > .vg-wk-thema { text-align: center; text-wrap: balance; } }
+@media (max-width: 767.98px) { #jaar .vg-uur > .vg-wk-thema { text-align: center; text-wrap: balance; } }
 .vg-jaarwiel { width: clamp(210px, 60cqw, 290px); border-radius: 50%; margin-top: 0; }
 /* Rest van de pagina (verdieping, overgang, tijdlijn) in het gewone kader: zonder de hoekornamenten bovenaan. */
 .vg + .exact-design-page .pagina-hoek { display: none; }
@@ -432,7 +443,7 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 }
 
 /* Week en Jaar op mobiel: geen icoon in de kop, alleen het gewelf met de kaarsen */
-@media (max-width: 767px) {
+@media (max-width: 767.98px) {
   :is(#week, #jaar) .vg-kop .vg-jaarwiel { display: none; }
   :is(#week, #jaar) .vg-kop { min-height: clamp(180px, 50cqw, 260px); }
 }
@@ -465,7 +476,7 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 
 /* Etmaal, Week en Jaar op tabletbreedte (768–1023 px): twee kolommen worden te smal voor de titel met beginletter;
    dan zoals op mobiel onder elkaar (eerst de keuze, dan de tijdlijn). Vanaf 1024 px naast elkaar. */
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1023.98px) {
   .vg-et-twee { display: block !important; margin-top: 14px !important; }
   .vg-et-twee > .vg-et-links { margin-top: 26px; }
   .vg-et-twee .vg-label { text-align: center; }
@@ -505,6 +516,4 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   #instellingen.vg .vg-papier > * { max-width: 640px; margin-left: auto !important; margin-right: auto !important; }
   #instellingen.vg .vg-papier > :is(.vg-vk-keuzes, .vg-vk-noot) { max-width: 580px; margin-left: calc((100% - 640px) / 2 + 60px) !important; margin-right: auto !important; }
 
-  /* Bronnen: tussenkoppen op de donkere achtergrond in licht goud (index.css maakte ze donkerbruin) */
-  #top .exact-content .bg-bark h3.text-gold-light { color: #dfbd75; }
 }

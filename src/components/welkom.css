@@ -2,38 +2,38 @@
    kalender en traditie naast elkaar met een gouden scheidingslijn, en "Verder naar vandaag" in nachtblauw.
    De #top-reeks overschrijft de algemene knop- en labelregels uit index.css. */
 .ku-achter { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(6, 14, 24, .62); backdrop-filter: blur(6px); }
-.ku-venster { position: relative; width: min(780px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 34px 48px 28px; border: 1px solid rgba(172, 121, 47, .7); border-radius: 4px; background: #f5e6c8 url('/images/vandaag/papyrus-licht.webp') center top / cover; box-shadow: 0 24px 60px rgba(6, 14, 24, .5), inset 0 0 0 6px rgba(246, 231, 201, .55), inset 0 0 0 7px rgba(172, 121, 47, .45); text-align: center; color: #0b1b2a; outline: none; }
+.ku-venster { position: relative; width: min(780px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 34px 48px 28px; border: 1px solid rgba(172, 121, 47, .7); border-radius: 4px; background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / cover; box-shadow: 0 24px 60px rgba(6, 14, 24, .5), inset 0 0 0 6px rgba(246, 231, 201, .55), inset 0 0 0 7px rgba(172, 121, 47, .45); text-align: center; color: var(--nachtblauw); outline: none; }
 .ku-hoek { position: absolute; width: 46px; height: auto; pointer-events: none; }
 .ku-hoek-lb { top: 10px; left: 10px; }
 .ku-hoek-rb { top: 10px; right: 10px; transform: scaleX(-1); }
 .ku-hoek-lo { bottom: 10px; left: 10px; transform: scaleY(-1); }
 .ku-hoek-ro { right: 10px; bottom: 10px; transform: scale(-1, -1); }
-#top#top#top#top#top#top#top#top .ku-sluit { position: absolute; top: 16px; right: 18px; z-index: 1; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; min-height: 44px !important; padding: 0; border: 0 !important; border-radius: 50%; background: none !important; box-shadow: none !important; color: #0b1b2a !important; cursor: pointer; }
+#top#top#top#top#top#top#top#top .ku-sluit { position: absolute; top: 16px; right: 18px; z-index: 1; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; min-height: 44px !important; padding: 0; border: 0 !important; border-radius: 50%; background: none !important; box-shadow: none !important; color: var(--nachtblauw) !important; cursor: pointer; }
 .ku-sluit svg { width: 26px; height: 26px; stroke-width: 1.6; }
 .ku-kruis { display: block; width: 34px; height: auto; margin: 0 auto; }
-.ku-merk { margin: 8px 0 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: #7a5a2a; }
-#top#top#top#top#top#top#top .ku-titel { margin: 10px 0 0; font-family: var(--font-lees) !important; font-size: clamp(40px, 7vw, 54px); font-weight: 500; line-height: 1; letter-spacing: 0; text-transform: none; color: #0b1b2a; }
+.ku-merk { margin: 8px 0 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--goud-pijl); }
+#top#top#top#top#top#top#top .ku-titel { margin: 10px 0 0; font-family: var(--font-lees) !important; font-size: clamp(40px, 7vw, 54px); font-weight: 500; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--nachtblauw); }
 .ku-onder { margin: 8px 0 0; font-family: var(--font-lees); font-size: clamp(18px, 2.6vw, 23px); font-style: italic; line-height: 1.3; color: #6b4a22; }
 .ku-sierlijn { display: block; width: min(60%, 260px); height: auto; margin: 14px auto 20px; }
 
 .ku-kolommen { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 30px; align-items: start; text-align: left; }
 .ku-groep { min-width: 0; margin: 0; padding: 0; border: 0; }
-.ku-groep legend { width: 100%; margin: 0 0 12px; padding: 0; font-family: var(--font-lees); font-size: 28px; font-weight: 500; line-height: 1.1; text-align: center; color: #0b1b2a; }
+.ku-groep legend { width: 100%; margin: 0 0 12px; padding: 0; font-family: var(--font-lees); font-size: 28px; font-weight: 500; line-height: 1.1; text-align: center; color: var(--nachtblauw); }
 .ku-scheiding { position: relative; align-self: stretch; width: 1px; margin-top: 8px; background: rgba(172, 121, 47, .6); }
-.ku-scheiding::after { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; background: #ac792f; transform: translate(-50%, -50%) rotate(45deg); }
-.ku-keuze { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 8px 16px; border: 1px solid rgba(172, 121, 47, .55); border-radius: 3px; background: rgba(255, 250, 238, .3); font-family: var(--font-lees); font-size: 20px; line-height: 1.2; color: #0b1b2a; cursor: pointer; transition: background-color .15s; }
+.ku-scheiding::after { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; background: var(--goud); transform: translate(-50%, -50%) rotate(45deg); }
+.ku-keuze { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 8px 16px; border: 1px solid rgba(172, 121, 47, .55); border-radius: 3px; background: rgba(255, 250, 238, .3); font-family: var(--font-lees); font-size: 20px; line-height: 1.2; color: var(--nachtblauw); cursor: pointer; transition: background-color .15s; }
 .ku-keuze + .ku-keuze { margin-top: 12px; }
 .ku-keuze:hover { background: rgba(255, 251, 236, .6); }
-.ku-keuze:has(input:checked) { border-color: #b99455; background: rgba(222, 186, 120, .32); font-weight: 500; }
-.ku-keuze:has(input:focus-visible) { outline: 3px solid #066b95; outline-offset: 2px; }
+.ku-keuze:has(input:checked) { border-color: var(--kaartrand); background: rgba(222, 186, 120, .32); font-weight: 500; }
+.ku-keuze:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
 #top#top#top#top#top#top#top .ku-keuze input { flex: none; appearance: none; width: 24px; height: 24px; min-height: 0 !important; margin: 0; border: 1.5px solid #a8752c; border-radius: 50%; background: rgba(255, 249, 235, .7); cursor: pointer; outline: none; }
 #top#top#top#top#top#top#top .ku-keuze input:checked { background: radial-gradient(circle, #8a1620 0 6px, transparent 6.5px), rgba(255, 249, 235, .7); }
 
-#top#top#top#top#top#top#top#top .ku-verder { display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-width: min(100%, 300px); min-height: 56px !important; margin: 26px auto 0; padding: 0 40px; border: 1px solid #c49b62 !important; border-radius: 3px !important; background: linear-gradient(180deg, #14304b, #0b1b2a) !important; box-shadow: inset 0 0 0 2px rgba(201, 154, 69, .3), 0 4px 12px rgba(6, 14, 24, .3) !important; font-family: var(--font-lees) !important; font-size: 22px !important; font-weight: 500; letter-spacing: 0 !important; text-transform: none !important; color: #fff2d6 !important; cursor: pointer; }
+#top#top#top#top#top#top#top#top .ku-verder { display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-width: min(100%, 300px); min-height: 56px !important; margin: 26px auto 0; padding: 0 40px; border: 1px solid #c49b62 !important; border-radius: 3px !important; background: linear-gradient(180deg, #14304b, var(--nachtblauw)) !important; box-shadow: inset 0 0 0 2px rgba(201, 154, 69, .3), 0 4px 12px rgba(6, 14, 24, .3) !important; font-family: var(--font-lees) !important; font-size: 22px !important; font-weight: 500; letter-spacing: 0 !important; text-transform: none !important; color: var(--ivoor) !important; cursor: pointer; }
 #top#top#top#top#top#top#top#top .ku-verder:hover { filter: brightness(1.12); }
-#top#top#top#top#top#top#top#top .ku-verder:focus-visible { outline: 3px solid #066b95; outline-offset: 3px; }
+#top#top#top#top#top#top#top#top .ku-verder:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .ku-verder svg { width: 22px; height: 22px; }
-.ku-noot { margin: 14px 0 0; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: #5d5040; }
+.ku-noot { margin: 14px 0 0; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--gedempt); }
 
 /* Smal scherm: kalender en traditie onder elkaar, de scheiding als liggende lijn */
 @media (max-width: 600px) {

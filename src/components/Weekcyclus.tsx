@@ -162,10 +162,16 @@ export default function Weekcyclus() {
           <div className="vg-et-twee vg-wk-twee">
             <div className="vg-wk-rechts">
               <section className="vg-uur vg-wk-dag" aria-labelledby="wk-dag-titel" aria-live="polite">
-                <img className="vg-initiaal" src={letterBeeld(dag.label)} alt="" width={280} height={280} decoding="async" />
+                {letterBeeld(dag.label) && <img className="vg-initiaal" src={letterBeeld(dag.label)} alt="" width={280} height={280} decoding="async" />}
                 <h2 id="wk-dag-titel" className="vg-dienst">
-                  <span className="sr-only">{dag.label}</span>
-                  <span aria-hidden="true">{dag.label.slice(1)}</span>
+                  {letterBeeld(dag.label) ? (
+                    <>
+                      <span className="sr-only">{dag.label}</span>
+                      <span aria-hidden="true">{dag.label.slice(1)}</span>
+                    </>
+                  ) : (
+                    dag.label
+                  )}
                 </h2>
                 <p className="vg-label vg-wk-thema">{tekst.subtitle}</p>
               </section>

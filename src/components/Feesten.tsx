@@ -5,7 +5,6 @@ import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { BEWEEGLIJKE_FEESTEN, DERTIEN, OVERIGE_VASTE, type Feest } from '../lib/feesten';
 import { MAANDEN, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum } from '../lib/kalender';
 import { volgendeFeestDatum } from '../lib/overzicht';
-import { ALLE_HEILIGEN } from '../lib/heiligen';
 import { FEEST_HEILIGENJAAR, GEKOPPELDE_FEESTTEKSTEN } from '../lib/feestHeiligenjaar';
 import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
 import { KopBalk } from './NisKop';
@@ -21,7 +20,9 @@ import Modal from './Modal';
 
 // Feesten die het Heiligenjaar zelf als feest aanmerkt, niet aan een feest van de site gekoppeld zijn en geen twijfelgeval
 // uit de import zijn (bijvoorbeeld voorfeesten en de teruggave van een feest). Alleen in "Alle feesten", met hun eigen tekst.
-const HJ_FEESTEN: Feest[] = ALLE_HEILIGEN.filter((h) => h.type === 'feast' && !h.needsReview && !GEKOPPELDE_FEESTTEKSTEN.has(h.id)).map((h) => ({ id: h.id, naam: h.naam, soort: 'gedachtenis', md: h.md, rang: 2 }));
+// De heiligenlijst wordt apart geladen (App.tsx, useApp().heiligen); tot dan is deze lijst leeg.
+const hjFeesten = (lijst: NonNullable<ReturnType<typeof useApp>['heiligen']>['ALLE_HEILIGEN']): Feest[] =>
+  lijst.filter((h) => h.type === 'feast' && !h.needsReview && !GEKOPPELDE_FEESTTEKSTEN.has(h.id)).map((h) => ({ id: h.id, naam: h.naam, soort: 'gedachtenis', md: h.md, rang: 2 }));
 const BEWEEGLIJK_OVERIG = BEWEEGLIJKE_FEESTEN.filter((f) => f.offset !== undefined && !DERTIEN.includes(f) && (f.rang ?? 0) >= 3);
 const IN_REGISTER = 8;
 
@@ -33,7 +34,7 @@ const metDatum = (lijst: Feest[], vandaag: Date, mode: Mode): Item[] =>
   lijst.map((f) => { const datum = volgendeFeestDatum(f, vandaag, mode); return { f, datum, dagen: daysBetween(vandaag, datum) }; }).sort((a, b) => a.dagen - b.dagen);
 
 export default function Feesten() {
-  const { mode, vandaag } = useApp();
+  const { mode, vandaag, heiligen } = useApp();
   const [open, setOpen] = useState<string | null>(null);
   // Vandaag (feesttijd) kan het venster van een feest openen, bijvoorbeeld de Geboorte van Christus.
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function Feesten() {
   const groot = useMemo(() => metDatum(DERTIEN, vandaag, mode), [vandaag, mode]);
   const vast = useMemo(() => metDatum(OVERIGE_VASTE.filter((f) => (f.rang ?? 0) >= 3), vandaag, mode), [vandaag, mode]);
   const beweeglijk = useMemo(() => metDatum(BEWEEGLIJK_OVERIG, vandaag, mode), [vandaag, mode]);
-  const hj = useMemo(() => metDatum(HJ_FEESTEN, vandaag, mode), [vandaag, mode]);
+  const hj = useMemo(() => metDatum(heiligen ? hjFeesten(heiligen.ALLE_HEILIGEN) : [], vandaag, mode), [heiligen, vandaag, mode]);
   const alleItems = useMemo(() => [...groot, ...vast, ...beweeglijk, ...hj].sort((a, b) => a.dagen - b.dagen), [groot, vast, beweeglijk, hj]);
   const eerstvolgende = groot[0];
   const komend = useMemo(() => [...groot, ...vast, ...beweeglijk].sort((a, b) => a.dagen - b.dagen).slice(0, 5), [groot, vast, beweeglijk]);

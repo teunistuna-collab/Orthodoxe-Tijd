@@ -145,7 +145,7 @@ export default function Jaarcyclus() {
 
   // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
   const infoTegels = (zicht: string) => (
-    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment pt-6 pb-16 text-ink sm:pt-8 sm:pb-20`}>
+    <section className={`${zicht} orthodox-pattern parchment-pattern bg-parchment pt-6 pb-6 text-ink sm:pt-8 sm:pb-8`}>
       {/* Onzichtbare tussenkop: de tegels (h3) hangen zo onder een h2 voor schermlezers */}
       <h2 className="sr-only">Achtergrond</h2>
       <div className={CONTENT}>
@@ -172,8 +172,8 @@ export default function Jaarcyclus() {
                 <p className="vg-label">Waar zijn we nu?</p>
                 {/* Versierde beginletter (zoals Week en Etmaal), de rest van de naam sluit er direct op aan */}
                 <div className="vg-et-naam">
-                  <img className="vg-initiaal" src={letterBeeld(nuPeriode.label)} alt="" width={400} height={400} decoding="async" />
-                  <h2 id="jr-nu-kop" className="vg-dienst"><span className="sr-only">{nuPeriode.label}</span><span aria-hidden="true">{nuPeriode.label.slice(1)}</span></h2>
+                  {letterBeeld(nuPeriode.label) && <img className="vg-initiaal" src={letterBeeld(nuPeriode.label)} alt="" width={400} height={400} decoding="async" />}
+                  <h2 id="jr-nu-kop" className="vg-dienst">{letterBeeld(nuPeriode.label) ? <><span className="sr-only">{nuPeriode.label}</span><span aria-hidden="true">{nuPeriode.label.slice(1)}</span></> : nuPeriode.label}</h2>
                 </div>
                 <p className="vg-label vg-wk-thema">{nuPeriode.short}</p>
               </section>

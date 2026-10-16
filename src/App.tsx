@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
-import Footer, { FooterInhoud } from './components/Footer';
+import { FooterInhoud } from './components/Footer';
 import Vandaag from './components/Vandaag';
 import Kalender from './components/Kalender';
 import UrenCyclus from './components/UrenCyclus';
@@ -155,7 +155,7 @@ export default function App() {
   const heiligenGevraagd = useRef(false);
   useEffect(() => {
     const popup = dagOpen !== null || heiligenDag !== null || zoekOpen;
-    if (!heiligenGevraagd.current && (popup || pagina === 'vandaag' || pagina === 'heiligen' || pagina === 'kalender')) {
+    if (!heiligenGevraagd.current && (popup || pagina === 'vandaag' || pagina === 'heiligen' || pagina === 'kalender' || pagina === 'feesten')) {
       heiligenGevraagd.current = true;
       import('./lib/heiligen')
         .then(setHeiligen)
@@ -249,7 +249,6 @@ export default function App() {
           <div className={p('psalmen')}><Psalmen actief={pagina === 'psalmen'} /></div>
           <div className={p('bronnen')}><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
         </main>
-        <Footer />
         <BottomNav pagina={pagina} />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />
         <DagLezingen ymd={lezingenDag} onClose={sluitDagLezingen} />

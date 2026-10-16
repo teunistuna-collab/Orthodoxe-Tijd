@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Search, Settings } from 'lucide-react';
+import { BookOpen, ChevronDown, Search, Settings } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { KruisTeken } from './ui';
 
@@ -143,6 +143,11 @@ export default function Header({ pagina: actief }: { pagina: string }) {
             <button type="button" onClick={openZoeken} className="kop-zoek" aria-label="Zoeken" title="Zoeken  ( /  of  Ctrl+K )">
               <Search aria-hidden="true" />
             </button>
+
+            {/* Bronnen en verwijzingen (op web de enige weg erheen sinds de voettekst weg is; mobiel ook via Meer) */}
+            <a href="#bronnen" className={`kop-zoek kop-instellingen${actief === 'bronnen' ? ' is-actief' : ''}`} aria-label="Bronnen en verwijzingen" title="Bronnen en verwijzingen">
+              <BookOpen aria-hidden="true" />
+            </a>
 
             {/* De kalender (en later de traditie) kies je op de pagina Instellingen */}
             <a href="#instellingen" className={`kop-zoek kop-instellingen${actief === 'instellingen' ? ' is-actief' : ''}`} aria-label="Instellingen" title="Instellingen">

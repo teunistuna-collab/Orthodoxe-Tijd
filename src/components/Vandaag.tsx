@@ -136,7 +136,7 @@ export default function Vandaag() {
           <div className="vg-kol">
             {/* B. Het pijlgebed: het eigen pijlgebed uit Instellingen, anders het standaardgebed; de tekst linkt naar Instellingen. */}
             <section className="vg-gebed" aria-labelledby="vg-gebed-kop">
-              <h2 id="vg-gebed-kop" className="vg-label">Het pijlgebed</h2>
+              <h2 id="vg-gebed-kop" className="vg-label">Pijlgebed</h2>
               <a href="#instellingen" className="vg-gebed-tekst" title="Pijlgebed aanpassen in Instellingen">{pijlgebed}</a>
               <img className="vg-sierlijn" src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} />
             </section>

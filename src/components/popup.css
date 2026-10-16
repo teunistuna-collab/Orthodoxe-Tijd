@@ -9,52 +9,52 @@
   border: 1px solid rgba(172, 121, 47, .7) !important;
   border-image: none !important;
   border-radius: 4px !important;
-  background: #f5e6c8 url('/images/vandaag/papyrus-licht.webp') center top / 100% auto !important;
+  background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto !important;
   box-shadow: 0 24px 60px rgba(6, 14, 24, .45), inset 0 0 0 3px rgba(246, 231, 201, .55) !important;
   color: #17202b;
 }
 
 /* ---------- Bovenbalk: nachtblauw met lichte knoppen ---------- */
-#top#top#top#top#top#top#top#top#top .pk-kop { min-height: 52px; padding: 4px 6px 4px 10px; background: linear-gradient(180deg, #10243a, #0b1b2a); border-bottom: 1px solid rgba(201, 154, 69, .75); }
-#top#top#top#top#top#top#top#top#top .pk-kop :is(.pk-nav, .pk-sluit, button) { color: #fff2d6 !important; }
-#top#top#top#top#top#top#top#top#top .pk-kop .pk-nav:hover { color: #dfbd75 !important; }
-#top#top#top#top#top#top#top#top#top .pk-datum { font-family: var(--font-titel); font-size: 14px; letter-spacing: .14em; color: #dfbd75; }
+#top#top#top#top#top#top#top#top#top .pk-kop { min-height: 52px; padding: 4px 6px 4px 10px; background: linear-gradient(180deg, #10243a, var(--nachtblauw)); border-bottom: 1px solid rgba(201, 154, 69, .75); }
+#top#top#top#top#top#top#top#top#top .pk-kop :is(.pk-nav, .pk-sluit, button) { color: var(--ivoor) !important; }
+#top#top#top#top#top#top#top#top#top .pk-kop .pk-nav:hover { color: var(--goud-licht) !important; }
+#top#top#top#top#top#top#top#top#top .pk-datum { font-family: var(--font-titel); font-size: 14px; letter-spacing: .14em; color: var(--goud-licht); }
 
 /* ---------- Kop van het blad ---------- */
 #top#top#top#top#top#top#top#top#top .pk-titelblok { margin: 14px 0 8px; }
-#top#top#top#top#top#top#top#top#top .pk-label { font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .14em; color: #0b1b2a; }
-#top#top#top#top#top#top#top#top#top .pk .pk-titel { margin-top: 4px; font-family: var(--font-lees) !important; font-size: clamp(30px, 7vw, 42px) !important; font-weight: 500 !important; color: #0b1b2a !important; }
-#top#top#top#top#top#top#top#top#top .pk-onder { font-family: var(--font-lees); font-size: clamp(17px, 2vw, 20px); font-style: italic; color: #5d5040; }
+#top#top#top#top#top#top#top#top#top .pk-label { font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .14em; color: var(--nachtblauw); }
+#top#top#top#top#top#top#top#top#top .pk .pk-titel { margin-top: 4px; font-family: var(--font-lees) !important; font-size: clamp(30px, 7vw, 42px) !important; font-weight: 500 !important; color: var(--nachtblauw) !important; }
+#top#top#top#top#top#top#top#top#top .pk-onder { font-family: var(--font-lees); font-size: clamp(17px, 2vw, 20px); font-style: italic; color: var(--gedempt); }
 #top#top#top#top#top#top#top#top#top .pk-sierlijn { width: min(240px, 60%); aspect-ratio: 480 / 40; margin: 8px auto 0; background: url('/images/vandaag/sierlijn.svg') center / contain no-repeat; }
 
 /* ---------- Tekst ---------- */
 #top#top#top#top#top#top#top#top#top .pk .exact-modal-paper { color: #17202b; font-family: var(--font-lees); }
 #top#top#top#top#top#top#top#top#top .pk :is(.exact-popup-prose, .exact-popup-sectie) p { color: #17202b !important; }
-#top#top#top#top#top#top#top#top#top .pk .exact-modal-paper :is(h3, h4) { font-family: var(--font-lees); color: #0b1b2a; }
+#top#top#top#top#top#top#top#top#top .pk .exact-modal-paper :is(h3, h4) { font-family: var(--font-lees); color: var(--nachtblauw); }
 
 /* ---------- Leesbediening (A+, A−, avond, …): losse iconen in nachtblauw, actief in bordeaux ---------- */
-#top#top#top#top#top#top#top#top#top .pk-lees .leesbediening button { color: #0b1b2a !important; }
-#top#top#top#top#top#top#top#top#top .pk-lees .leesbediening [aria-pressed="true"] { color: #850d17 !important; }
+#top#top#top#top#top#top#top#top#top .pk-lees .leesbediening button { color: var(--nachtblauw) !important; }
+#top#top#top#top#top#top#top#top#top .pk-lees .leesbediening [aria-pressed="true"] { color: var(--bordeaux-diep) !important; }
 #top#top#top#top#top#top#top#top#top .pk-lees .leesbediening button:disabled { opacity: .35; }
 
 /* ---------- Knoppen in het venster (keuzes zoals "De dienst · Psalm 50"): kaartstijl van Cycli ---------- */
 #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-paper .btn-pill {
   position: relative; min-height: 44px; padding: 8px 18px !important;
-  border: 1px solid #b99455 !important; border-image: none !important; border-radius: 3px !important;
+  border: 1px solid var(--kaartrand) !important; border-image: none !important; border-radius: 3px !important;
   background: rgba(255, 244, 219, .25) !important; box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .9), inset 0 0 0 4px rgba(197, 165, 117, .33) !important;
-  font-family: var(--font-lees) !important; font-size: 17px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; color: #0b1b2a !important;
+  font-family: var(--font-lees) !important; font-size: 17px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--nachtblauw) !important;
 }
 #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-paper .btn-pill:hover { background: rgba(255, 251, 236, .6) !important; }
 #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-paper .btn-pill.is-actief,
 #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-paper .btn-pill[aria-pressed="true"],
 #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-paper .btn-pill[aria-selected="true"] {
   border-color: #a77234 !important; background: linear-gradient(130deg, #9b1925, #710d16) !important;
-  box-shadow: inset 0 0 0 3px rgba(122, 16, 26, .9), inset 0 0 0 4px rgba(230, 188, 109, .55) !important; color: #fff2d6 !important;
+  box-shadow: inset 0 0 0 3px rgba(122, 16, 26, .9), inset 0 0 0 4px rgba(230, 188, 109, .55) !important; color: var(--ivoor) !important;
 }
 
 /* ---------- Avondweergave ---------- */
 /* Het blad keert om (index.css: .lees-vlak); het venster eromheen en de bovenbalk worden donker nachtblauw. */
-html.lees-nacht #top#top#top#top#top#top#top#top#top .exact-modal-frame.pk { background: #0e1722 !important; box-shadow: 0 24px 60px rgba(0, 0, 0, .6) !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top#top .exact-modal-frame.pk { background: var(--nacht-vlak) !important; box-shadow: 0 24px 60px rgba(0, 0, 0, .6) !important; }
 html.lees-nacht #top#top#top#top#top#top#top#top#top .pk-kop { background: #08111b; }
 /* Leesbediening: niet terugdraaien maar mee omkeren, dan zijn de iconen licht op het donkere blad (voorheen donker op donker) */
 html.lees-nacht #top#top#top#top#top#top#top#top#top .lees-vlak .leesbediening { filter: none !important; }
@@ -66,7 +66,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-pa
 
 /* ---------- Kaarten in het venster (dag in de kalender, lezingen, "meer heiligen"): kaartstijl van Cycli ---------- */
 #top#top#top#top#top#top#top#top#top#top#top .pk :is(.dag-blok, .dag-lezing, .dag-meer summary) {
-  border: 1px solid #b99455 !important; border-image: none !important; border-radius: 3px !important;
+  border: 1px solid var(--kaartrand) !important; border-image: none !important; border-radius: 3px !important;
   background: rgba(255, 244, 219, .17) !important;
   box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .9), inset 0 0 0 4px rgba(197, 165, 117, .33) !important;
   color: #17202b;
@@ -74,27 +74,29 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-pa
 #top#top#top#top#top#top#top#top#top#top#top .pk :is(.dag-lezing, .dag-meer summary):is(:hover, :focus-visible) { background: rgba(255, 251, 236, .5) !important; }
 /* Ruitjes op twee hoeken in plaats van de oude hoeksieraden */
 #top#top#top#top#top#top#top#top#top#top#top .pk :is(.dag-blok, .dag-lezing)::before,
-#top#top#top#top#top#top#top#top#top#top#top .pk :is(.dag-blok, .dag-lezing)::after { width: 6px; height: 6px; border: 1px solid #b99455; background: #f5e6c8; opacity: 1; transform: rotate(45deg); }
+#top#top#top#top#top#top#top#top#top#top#top .pk :is(.dag-blok, .dag-lezing)::after { width: 6px; height: 6px; border: 1px solid var(--kaartrand); background: var(--papyrus); opacity: 1; transform: rotate(45deg); }
 #top#top#top#top#top#top#top#top#top#top#top .pk :is(.dag-blok, .dag-lezing)::before { left: -4px; top: -4px; }
 #top#top#top#top#top#top#top#top#top#top#top .pk :is(.dag-blok, .dag-lezing)::after { right: -4px; bottom: -4px; }
 
 /* ---------- Zoeken (eigen venster, Zoeken.tsx): zelfde stijl als de vensters ---------- */
 #top#top#top#top#top#top#top#top#top .zoek-achtergrond { background: rgba(6, 14, 24, .78); }
-#top#top#top#top#top#top#top#top#top .zoek-paneel { border: 1px solid rgba(172, 121, 47, .7); border-radius: 4px; background: #f5e6c8 url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; color: #17202b; scrollbar-color: rgba(172, 121, 47, .5) transparent; }
+#top#top#top#top#top#top#top#top#top .zoek-paneel { border: 1px solid rgba(172, 121, 47, .7); border-radius: 4px; background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; color: #17202b; scrollbar-color: rgba(172, 121, 47, .5) transparent; }
 /* Zoekbalk in de nachtblauwe bovenbalk, het veld zelf zoals het zoekveld op de pagina's */
-#top#top#top#top#top#top#top#top#top .zoek-veld { padding: 8px 6px 8px 10px; border: 0; border-bottom: 1px solid rgba(201, 154, 69, .75); background: linear-gradient(180deg, #10243a, #0b1b2a); }
-#top#top#top#top#top#top#top#top#top#top .zoek-veld { height: 60px !important; min-height: 60px !important; padding: 0 6px 0 16px !important; border: 0 !important; border-bottom: 1px solid rgba(201, 154, 69, .75) !important; border-image: none !important; border-radius: 0 !important; box-shadow: none !important; background: linear-gradient(180deg, #10243a, #0b1b2a) !important; color: #fff2d6 !important; }
-#top#top#top#top#top#top#top#top#top#top .zoek-veld > svg { color: #dfbd75 !important; }
-#top#top#top#top#top#top#top#top#top#top .zoek-veld input { height: 44px !important; padding: 0 6px !important; font-family: var(--font-lees); font-size: 19px; color: #fff2d6 !important; caret-color: #dfbd75; }
+#top#top#top#top#top#top#top#top#top .zoek-veld { padding: 8px 6px 8px 10px; border: 0; border-bottom: 1px solid rgba(201, 154, 69, .75); background: linear-gradient(180deg, #10243a, var(--nachtblauw)); }
+#top#top#top#top#top#top#top#top#top#top .zoek-veld { height: 60px !important; min-height: 60px !important; padding: 0 6px 0 16px !important; border: 0 !important; border-bottom: 1px solid rgba(201, 154, 69, .75) !important; border-image: none !important; border-radius: 0 !important; box-shadow: none !important; background: linear-gradient(180deg, #10243a, var(--nachtblauw)) !important; color: var(--ivoor) !important; }
+#top#top#top#top#top#top#top#top#top#top .zoek-veld > svg { color: var(--goud-licht) !important; }
+#top#top#top#top#top#top#top#top#top#top .zoek-veld input { height: 44px !important; padding: 0 6px !important; font-family: var(--font-lees); font-size: 19px; color: var(--ivoor) !important; caret-color: var(--goud-licht); }
 #top#top#top#top#top#top#top#top#top .zoek-veld input::placeholder { color: rgba(255, 242, 214, .6); }
-#top#top#top#top#top#top#top#top#top#top .zoek-sluit { color: #fff2d6 !important; background: none !important; border: 0 !important; box-shadow: none !important; }
-#top#top#top#top#top#top#top#top#top .zoek-hint { color: #5d5040; }
+#top#top#top#top#top#top#top#top#top#top .zoek-sluit { color: var(--ivoor) !important; background: none !important; border: 0 !important; box-shadow: none !important; }
+#top#top#top#top#top#top#top#top#top .zoek-hint { color: var(--gedempt); }
 /* Resultaten als rijen met dunne gouden lijnen */
-#top#top#top#top#top#top#top#top#top .zoek-groep h2 { font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #ac792f; }
+#top#top#top#top#top#top#top#top#top .zoek-groep h2 { font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--goud); }
 #top#top#top#top#top#top#top#top#top .zoek-groep li + li button { border-top: 1px solid rgba(172, 121, 47, .3); }
 #top#top#top#top#top#top#top#top#top .zoek-groep button { border-left: 2px solid transparent; }
-#top#top#top#top#top#top#top#top#top .zoek-groep button:is(:hover, :focus-visible) { border-left-color: #850d17; background: rgba(255, 251, 236, .55); }
-#top#top#top#top#top#top#top#top#top .zoek-titel { font-family: var(--font-lees); font-weight: 500; color: #0b1b2a; }
-#top#top#top#top#top#top#top#top#top .zoek-groep button:is(:hover, :focus-visible) .zoek-titel { color: #850d17; }
-#top#top#top#top#top#top#top#top#top .zoek-onder { color: #5d5040; }
-@media (max-width: 767px) { #top#top#top#top#top#top#top#top#top .zoek-achtergrond { background: #f5e6c8; } #top#top#top#top#top#top#top#top#top .zoek-paneel { border: 0; border-radius: 0; } }
+#top#top#top#top#top#top#top#top#top .zoek-groep button:is(:hover, :focus-visible) { border-left-color: var(--bordeaux-diep); background: rgba(255, 251, 236, .55); }
+#top#top#top#top#top#top#top#top#top .zoek-titel { font-family: var(--font-lees); font-weight: 500; color: var(--nachtblauw); }
+#top#top#top#top#top#top#top#top#top .zoek-groep button:is(:hover, :focus-visible) .zoek-titel { color: var(--bordeaux-diep); }
+/* Toetsenbord: een duidelijke focusring, niet alleen de streep en achtergrond van aanwijzen */
+#top#top#top#top#top#top#top#top#top .zoek-groep button:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+#top#top#top#top#top#top#top#top#top .zoek-onder { color: var(--gedempt); }
+@media (max-width: 767.98px) { #top#top#top#top#top#top#top#top#top .zoek-achtergrond { background: var(--papyrus); } #top#top#top#top#top#top#top#top#top .zoek-paneel { border: 0; border-radius: 0; } }

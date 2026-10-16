@@ -316,7 +316,7 @@ export default function Pascha() {
           achter={
             <picture>
               {/* Mobiel: het lege graf bij zonsopgang; web: de bestaande Pascha-banner */}
-              <source media="(max-width: 767px)" srcSet="/images/ontwerp/pascha-mobiel-banner-800.webp 800w, /images/ontwerp/pascha-mobiel-banner-1255.webp 1255w" sizes="100vw" width={1255} height={638} />
+              <source media="(max-width: 767.98px)" srcSet="/images/ontwerp/pascha-mobiel-banner-800.webp 800w, /images/ontwerp/pascha-mobiel-banner-1255.webp 1255w" sizes="100vw" width={1255} height={638} />
               <BannerBeeld naam="pascha-banner" open={open} />
             </picture>
           }

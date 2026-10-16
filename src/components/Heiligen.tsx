@@ -109,7 +109,7 @@ export default function Heiligen() {
         achter={
           <picture>
             {/* Mobiel: het icoon van Christus de Wijnstok met de apostelen in de nis; web: de bestaande kerkkop */}
-            <source media="(max-width: 767px)" srcSet="/images/ontwerp/heiligen-mobiel-banner-800.webp 800w, /images/ontwerp/heiligen-mobiel-banner-1536.webp 1536w" sizes="100vw" width={1536} height={1024} />
+            <source media="(max-width: 767.98px)" srcSet="/images/ontwerp/heiligen-mobiel-banner-800.webp 800w, /images/ontwerp/heiligen-mobiel-banner-1536.webp 1536w" sizes="100vw" width={1536} height={1024} />
             <img src="/images/vandaag/kerk-header-800.webp" srcSet="/images/vandaag/kerk-header-800.webp 800w, /images/vandaag/kerk-header-1536.webp 1536w" sizes="(min-width: 960px) 960px, 100vw" alt="" width={1536} height={1024} loading={open ? 'eager' : 'lazy'} decoding="async" />
           </picture>
         }
