@@ -1,4 +1,5 @@
-import { useState, type CSSProperties } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
 import ExactPageFrame from './ExactPageFrame';
@@ -9,12 +10,15 @@ import './Vandaag.css';
 import './ontwerp.css';
 import Verdieping from './Verdieping';
 import Gebedssnoer from './Gebedssnoer';
+import { usePijlgebed } from '../lib/pijlgebed';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
 // Adem volgens het overdrachtspakket (referentie gebeden-psalmen-adem.png, paneel 4): donkere kop met titel; twee tabs
-// (mee-ademen met het Jezusgebed, het gebedssnoer); daaronder de vier verdiepingen als rustig register (op mobiel
-// uitklapbaar), het citaat van Macarius en de cyclusweg.
+// (het Jezusgebed, het gebedssnoer); daaronder de vier verdiepingen als rustig register (op mobiel uitklapbaar), het
+// citaat van Macarius en de cyclusweg. Het Jezusgebed staat centraal: het icoon en het gebed (het eigen pijlgebed uit
+// Instellingen, anders het standaardgebed) als één tekst. De ademondersteuning is optioneel en uitklapbaar; ze start pas
+// na "Start ondersteuning" en stopt bij inklappen, wisselen van tab, verlaten van de pagina of een tabblad op de achtergrond.
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe ademcyclus.docx".
 
 const CARDS: Array<{ key: PopupKey; title: string; intro: string }> = [
@@ -33,16 +37,57 @@ const TEMPI = [
 type Tempo = (typeof TEMPI)[number]['id'];
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
+const TEMPO_SLEUTEL = 'adem-tempo';
+const leesTempo = (): Tempo => {
+  try {
+    const t = localStorage.getItem(TEMPO_SLEUTEL);
+    return TEMPI.some((x) => x.id === t) ? (t as Tempo) : 'rustig';
+  } catch {
+    return 'rustig';
+  }
+};
 
 export default function Ademcyclus() {
   const [popup, setPopup] = useState<PopupKey | null>(null);
-  const [meeAdemen, setMeeAdemen] = useState(false);
-  const [tempo, setTempo] = useState<Tempo>('rustig');
+  // Twee aparte toestanden: het onderdeel is uitgeklapt (steunOpen) en de begeleiding loopt (actief). Alleen de
+  // tempovoorkeur wordt bewaard; de begeleiding nooit, zodat ze bij terugkeer niet vanzelf start.
+  const [steunOpen, setSteunOpen] = useState(false);
+  const [actief, setActief] = useState(false);
+  const [tempo, setTempoState] = useState<Tempo>(leesTempo);
+  const setTempo = (t: Tempo) => {
+    setTempoState(t);
+    try {
+      localStorage.setItem(TEMPO_SLEUTEL, t);
+    } catch {
+      /* geen opslag */
+    }
+  };
   const sec = TEMPI.find((t) => t.id === tempo)!.sec;
   const open = usePaginaOpen('adem');
-  // Beide instrumenten blijven gemonteerd (hidden), zodat mee-ademen en de snoerstand niet verspringen bij het wisselen.
+  const pijlgebed = usePijlgebed();
+  // Het gebedssnoer blijft gemonteerd (hidden), zodat de snoerstand niet verspringt bij het wisselen van tab.
   const [tab, setTab] = useState<'jezusgebed' | 'snoer'>('jezusgebed');
   const TABS = [['jezusgebed', 'Jezusgebed'], ['snoer', 'Gebedssnoer']] as const;
+
+  // Verlaat de bezoeker de pagina, dan stopt de begeleiding (en start bij terugkeer niet opnieuw).
+  if (actief && !open) setActief(false);
+  // Tabblad op de achtergrond: stoppen.
+  useEffect(() => {
+    if (!actief) return;
+    const opZicht = () => {
+      if (document.visibilityState === 'hidden') setActief(false);
+    };
+    document.addEventListener('visibilitychange', opZicht);
+    return () => document.removeEventListener('visibilitychange', opZicht);
+  }, [actief]);
+  const kiesTab = (id: 'jezusgebed' | 'snoer') => {
+    setTab(id);
+    if (id !== 'jezusgebed') setActief(false);
+  };
+  const wisselSteun = () => {
+    setSteunOpen((o) => !o);
+    setActief(false);
+  };
 
   return (
     <>
@@ -53,15 +98,15 @@ export default function Ademcyclus() {
         <div className="vg-papier ot-inhoud">
           <div className="ot-ad-tabs" role="tablist" aria-label="Gebed">
             {TABS.map(([id, label]) => (
-              <button key={id} type="button" role="tab" id={`ad-tab-${id}`} aria-controls={`ad-paneel-${id}`} aria-selected={tab === id} onClick={() => setTab(id)}>
+              <button key={id} type="button" role="tab" id={`ad-tab-${id}`} aria-controls={`ad-paneel-${id}`} aria-selected={tab === id} onClick={() => kiesTab(id)}>
                 {label}
               </button>
             ))}
           </div>
-            {/* Mee-ademen met het Jezusgebed: de ringen zetten uit bij het inademen en krimpen bij het uitademen */}
+            {/* Het Jezusgebed: het icoon en het gebed als één tekst; de ademondersteuning eronder, optioneel en uitklapbaar */}
             <div className="ad-paneel" role="tabpanel" id="ad-paneel-jezusgebed" aria-labelledby="ad-tab-jezusgebed" hidden={tab !== 'jezusgebed'}>
               <h2 className="sr-only">Het Jezusgebed</h2>
-              <div className={`adem-ritme ad-ritme${meeAdemen ? ' is-actief' : ''}`} style={{ '--adem-duur': `${sec}s` } as CSSProperties}>
+              <div className={`adem-ritme ad-ritme${actief ? ' is-actief' : ''}`} style={{ '--adem-duur': `${sec}s` } as CSSProperties}>
                 <div className="ad-icoon">
                   <div className="adem-gloed" aria-hidden="true" />
                   <div className="adem-ring ad-ring-1" aria-hidden="true" />
@@ -69,31 +114,40 @@ export default function Ademcyclus() {
                   <div className="ad-ring-3" aria-hidden="true" />
                   <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
                 </div>
-                <div className="adem-in ad-regel">
-                  <p className="ad-gebed">Heer Jezus Christus,</p>
-                  <span className="opening-sierlijn" aria-hidden="true" />
-                  <p className="ad-adem">Inademen</p>
-                </div>
-                <div className="adem-uit ad-regel">
-                  <p className="ad-gebed">ontferm U over ons.</p>
-                  <span className="opening-sierlijn" aria-hidden="true" />
-                  <p className="ad-adem">Uitademen</p>
-                </div>
+                <p className="ad-gebed-tekst">{pijlgebed}</p>
+                {/* Alleen tijdens de begeleiding: de ademfasen, afwisselend oplichtend (CSS). Niet voorgelezen per fase. */}
+                {actief && (
+                  <p className="ad-fasen" aria-hidden="true">
+                    <span className="adem-in">Inademen</span>
+                    <span className="ad-fase-punt">·</span>
+                    <span className="adem-uit">Uitademen</span>
+                  </p>
+                )}
               </div>
 
-              <button type="button" onClick={() => setMeeAdemen((a) => !a)} aria-pressed={meeAdemen} className="ad-start">
-                {meeAdemen ? 'Stoppen' : 'Adem mee'}
+              <button type="button" className="ad-steun-knop" aria-expanded={steunOpen} aria-controls="ad-steun" onClick={wisselSteun}>
+                Ademondersteuning · optioneel
+                <ChevronDown className={`ad-steun-pijl${steunOpen ? ' is-open' : ''}`} aria-hidden="true" />
               </button>
-              <p className="sr-only" aria-live="polite">
-                {meeAdemen ? `Adem in bij de eerste regel, adem uit bij de tweede; ongeveer ${sec / 2} seconden elk.` : ''}
-              </p>
-              <p className="ad-tempo-label">Tempo</p>
-              <div className="ad-tempo" role="group" aria-label="Tempo">
-                {TEMPI.map((t) => (
-                  <button key={t.id} type="button" aria-pressed={tempo === t.id} onClick={() => setTempo(t.id)}>
-                    {t.label}
-                  </button>
-                ))}
+              <div id="ad-steun" className="ad-steun" hidden={!steunOpen}>
+                <p className="ad-steun-tekst">
+                  Bid rustig en zonder haast. U hoeft uw ademhaling niet aan te passen om dit gebed te bidden. De ondersteuning hieronder is optioneel. Volg
+                  voor persoonlijke begeleiding het advies van uw geestelijke.
+                </p>
+                <p className="ad-tempo-label" id="ad-tempo-label">Tempo</p>
+                <div className="ad-tempo" role="group" aria-labelledby="ad-tempo-label">
+                  {TEMPI.map((t) => (
+                    <button key={t.id} type="button" aria-pressed={tempo === t.id} onClick={() => setTempo(t.id)}>
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+                <button type="button" onClick={() => setActief((a) => !a)} className="ad-start">
+                  {actief ? 'Stop ondersteuning' : 'Start ondersteuning'}
+                </button>
+                <p className="sr-only" aria-live="polite">
+                  {actief ? `Ondersteuning gestart: adem rustig in en uit, ongeveer ${sec / 2} seconden per fase.` : ''}
+                </p>
               </div>
             </div>
 

@@ -275,6 +275,19 @@
 #top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-acties button + button { border-left: 1px solid var(--ot-lijn) !important; }
 .ot-adem .snoer-acties svg { width: 20px; height: 20px; color: var(--ot-goud); }
 .ot-adem .snoer-uitleg { text-align: center; }
+/* Het Jezusgebed als één tekst onder het icoon (letterlijk het eigen pijlgebed; alleen natuurlijke regelafbreking) */
+#top#top#top#top#top#top#top#top .ot-adem .ad-gebed-tekst { grid-column: 1 / -1; max-width: 20em; margin: 0 auto; font-family: var(--font-lees); font-size: clamp(24px, 6.4cqw, 32px); font-style: italic; line-height: 1.3; text-align: center; text-wrap: balance; white-space: pre-line; overflow-wrap: anywhere; color: var(--ot-inkt); }
+/* Ademfasen: alleen tijdens de ondersteuning, afwisselend oplichtend (index.css: adem-in / adem-uit) */
+.ot-adem .ad-fasen { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 12px; margin: 10px 0 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--goud-pijl); }
+/* Ademondersteuning · optioneel: bescheiden uitklapknop, perkament met een fijne gouden rand */
+#top#top#top#top#top#top#top#top .ot-adem .ad-steun-knop { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px !important; margin: 22px auto 0; padding: 0 18px; border: 1px solid rgba(172, 121, 47, .5) !important; border-radius: 3px !important; background: rgba(255, 250, 238, .3) !important; box-shadow: none !important; font-family: var(--font-lees) !important; font-size: 17px !important; font-weight: 500; letter-spacing: 0 !important; text-transform: none !important; color: var(--ot-inkt) !important; cursor: pointer; }
+#top#top#top#top#top#top#top#top .ot-adem .ad-steun-knop:hover { background: rgba(255, 251, 236, .6) !important; }
+.ot-adem .ad-steun-knop:focus-visible { outline: 3px solid #066b95; outline-offset: 2px; }
+.ot-adem .ad-steun-pijl { width: 18px; height: 18px; color: var(--goud-pijl); transition: transform .2s; }
+.ot-adem .ad-steun-pijl.is-open { transform: rotate(180deg); }
+.ot-adem .ad-steun { max-width: 520px; margin: 12px auto 0; text-align: center; }
+.ot-adem .ad-steun-tekst { margin: 0; font-family: var(--font-lees); font-size: 16px; line-height: 1.5; color: var(--ot-gedempt); }
+@media (prefers-reduced-motion: reduce) { .ot-adem .ad-steun-pijl { transition: none; } }
 
 /* Pascha: "Paascyclus <jaar>" gecentreerd (pijl blijft rechts) en een maat groter */
 #top#top#top#top#top#top#top#top#top .pc-cyclus-knop > span:first-child { flex: 1; padding-left: 32px; text-align: center; }

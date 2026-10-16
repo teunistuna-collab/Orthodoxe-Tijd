@@ -16,7 +16,7 @@ import './Vandaag.css';
 
 const KALENDERS: { id: Mode; naam: string; uitleg: string }[] = [
   { id: 'oud', naam: 'Juliaanse kalender', uitleg: 'Gebruikt in de meeste orthodoxe kerken.' },
-  { id: 'nieuw', naam: 'Herziene Juliaanse kalender', uitleg: 'Gebruikt door enkele orthodoxe kerken: de vaste feesten op de burgerlijke datum, Pascha blijft juliaans.' },
+  { id: 'nieuw', naam: 'Gregoriaanse kalender', uitleg: 'Gebruikt door enkele orthodoxe kerken: de vaste feesten op de burgerlijke datum, Pascha blijft juliaans.' },
 ];
 
 const bewaar = (t: string) => {

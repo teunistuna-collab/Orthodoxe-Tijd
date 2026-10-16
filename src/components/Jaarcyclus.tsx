@@ -5,8 +5,8 @@ import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './
 import { JAAR_INFO } from '../lib/cyclusTeksten';
 import { useApp } from '../lib/context';
 import { DERTIEN } from '../lib/feesten';
-import { daysBetween, formatDag, formatDatum, hoofdletter, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
-import { feestDatum, vastenPeriodes, volgendeFeestDatum } from '../lib/overzicht';
+import { daysBetween, formatDag, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
+import { volgendeFeestDatum } from '../lib/overzicht';
 import Verdieping from './Verdieping';
 import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
@@ -140,15 +140,8 @@ export default function Jaarcyclus() {
   const nu = huidigeTijd(vandaag, mode);
   const nuPeriode = PERIODS.find((p) => p.key === nu) ?? PERIODS[0];
 
-  // Waar zijn we nu: de lopende vasten- of vastenvrije periode, anders het laatste grote feest; en het komende grote feest.
-  const jaar = vandaag.getUTCFullYear();
-  const periodes = [jaar - 1, jaar, jaar + 1].flatMap((j) => vastenPeriodes(j, mode)).sort((a, b) => a.start.getTime() - b.start.getTime());
-  const lopend = periodes.find((p) => p.soort !== 'dag' && p.start <= vandaag && vandaag <= p.eind);
-  const vorigFeest = DERTIEN.flatMap((f) => [jaar - 1, jaar].map((j) => ({ f, d: feestDatum(f, j, mode) })))
-    .filter((x): x is { f: (typeof DERTIEN)[number]; d: Date } => !!x.d && x.d < vandaag)
-    .sort((a, b) => b.d.getTime() - a.d.getTime())[0];
+  // Het komende grote feest.
   const komend = DERTIEN.map((f) => ({ f, d: volgendeFeestDatum(f, vandaag, mode) })).sort((a, b) => a.d.getTime() - b.d.getTime())[0];
-  const periode = lopend ? lopend.naam : vorigFeest ? `Na het feest: ${vorigFeest.f.kort ?? vorigFeest.f.naam}` : null;
 
   // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
   const infoTegels = (zicht: string) => (
@@ -186,16 +179,6 @@ export default function Jaarcyclus() {
               </section>
               <img className="vg-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
               <ul className="vg-cy-lijst">
-                <li>
-                  <button type="button" className="vg-cy-kaart" onClick={() => setPeriodOpen(nuPeriode.key)}>
-                    <span className="vg-verd-symbool"><CalendarDays strokeWidth={1.3} aria-hidden="true" /></span>
-                    <span className="vg-verd-tekst">
-                      <b>{hoofdletter(formatDatum(vandaag))}</b>
-                      <span>{[periode, mode === 'oud' ? `${formatDag(kerkDatum(vandaag, mode))} (kerkelijke datum)` : null].filter(Boolean).join(' · ')}</span>
-                    </span>
-                    <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
-                  </button>
-                </li>
                 <li>
                   <a className="vg-cy-kaart" href="#feesten">
                     <span className="vg-verd-symbool"><Moon strokeWidth={1.3} aria-hidden="true" /></span>
