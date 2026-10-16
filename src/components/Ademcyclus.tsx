@@ -108,7 +108,7 @@ export default function Ademcyclus() {
           <img className="vg-ritmewiel vg-kop-teken" src="/images/Gebedssnoer-kop.webp" alt="" aria-hidden="true" width={376} height={640} />
         </NisKop>
         <div className="vg-papier ot-inhoud">
-          <h1 className="ot-titel">Adem</h1>
+          <h1 className="ot-titel">Het Jezusgebed</h1>
           <Sierlijn />
           <p className="ot-ad-onder">Het onophoudelijke gebed</p>
           <div className="ot-ad-tabs" role="tablist" aria-label="Gebed">
