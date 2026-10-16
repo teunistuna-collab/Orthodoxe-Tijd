@@ -160,7 +160,7 @@ export default function Jaarcyclus() {
           beginletter, de zes tijden van het jaar als tijdlijn en de vaste en beweeglijke feesten. */}
       <section id="jaar" className="vg vg-jaar">
         <NisKop open={open} balk terug="#cycli">
-          <img className="vg-ritmewiel vg-jaarwiel" src="/images/jaar/rozet.webp" alt="" aria-hidden="true" width={800} height={770} />
+          <img className="vg-ritmewiel vg-kop-teken" src="/images/Alfa-Omega.webp" alt="" aria-hidden="true" width={508} height={640} />
         </NisKop>
         <div className="vg-papier vg-cy">
           <h1 className="vg-cy-titel">Het kerkelijk jaar</h1>

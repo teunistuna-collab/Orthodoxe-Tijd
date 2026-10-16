@@ -250,12 +250,11 @@
 @container (min-width: 640px) { .ot-psalmen .ot-psalmraster { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
 
 /* ---------- Adem ---------- */
-/* Titel midden in de donkere kop (NisKop met titel): hoogte volgt de inhoud */
-.ot-adem .vg-kop.vg-niskop { height: auto; padding-top: 0; padding-bottom: calc(var(--boog) * .75 + 22px); }
-.ot-adem .vg-niskop .vg-titel { margin-top: clamp(6px, 3cqw, 20px); }
 .ot-adem .vg-kop-achter .ot-banner { object-position: 50% 25%; }
-@media (min-width: 768px) { #adem.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 30%; } }
-.ot-adem .ot-ad-onder { position: relative; margin: 0; font-family: var(--font-lees); font-size: 20px; text-align: center; color: var(--ivoor, #f3e6c8); text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+@media (min-width: 768px) { #adem.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 42%; } } /* web: de kerkkop, zoals Week */
+/* Het gebedssnoer is donker: een warme gloed eromheen zodat het loskomt van de nis */
+.ot-adem .vg-kop .vg-kop-teken { filter: drop-shadow(0 0 2px rgba(255, 214, 150, .55)) drop-shadow(0 0 14px rgba(255, 190, 110, .35)); }
+.ot-adem .ot-ad-onder { margin: 0 0 14px; font-family: var(--font-lees); font-size: 20px; text-align: center; color: var(--gedempt); }
 .ot-adem .ot-ad-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 480px; margin: 4px auto 14px; }
 #top#top#top main .ot-adem .ot-ad-tabs button { display: flex; align-items: center; justify-content: center; min-height: 48px !important; padding: 0 8px; border: 1px solid rgba(167, 118, 52, .45); border-radius: 7px; background: rgba(226, 205, 165, .45); font: inherit; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt); cursor: pointer; }
 #top#top#top main .ot-adem .ot-ad-tabs button[aria-selected="true"] { border-color: #6e0b13; background: linear-gradient(180deg, #991320, #740d15); color: var(--ivoor); }

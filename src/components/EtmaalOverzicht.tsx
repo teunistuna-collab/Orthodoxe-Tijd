@@ -49,7 +49,7 @@ export default function EtmaalOverzicht({ nuIndex, onOpen }: { nuIndex: number; 
         )}
       />
       <div className="vg-papier vg-cy">
-        <h1 className="vg-cy-titel">Etmaal</h1>
+        <h1 className="vg-cy-titel">De uren van de dag</h1>
         <img className="vg-sierlijn vg-cy-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
         {/* Mobiel eerst het gekozen gebedsuur, dan de tijdlijn; op web de tijdlijn links en het gebedsuur ernaast */}
         <div className="vg-et-twee">

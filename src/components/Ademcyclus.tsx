@@ -4,7 +4,7 @@ import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './
 import { ADEM_POPUPS } from '../lib/cyclusTeksten';
 import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
-import { BannerBeeld } from './onderdelen';
+import { BannerBeeld, Sierlijn } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import './Vandaag.css';
 import './ontwerp.css';
@@ -92,10 +92,25 @@ export default function Ademcyclus() {
   return (
     <>
       <section id="adem" className="vg ot-redesign ot-adem">
-        <NisKop open={open} balk terug="#cycli" titel="Adem" achter={<BannerBeeld naam="psalmen-adem-banner" open={open} />}>
-          <p className="ot-ad-onder">Het onophoudelijke gebed</p>
+        {/* Zoals Week: de banner zonder titel (de kaarsen blijven zichtbaar) met het gebedssnoer, de titel op het papier.
+            Mobiel de eigen Adem-banner, web de kerkkop van Week. */}
+        <NisKop
+          open={open}
+          balk
+          terug="#cycli"
+          achter={
+            <picture>
+              <source media="(min-width: 768px)" srcSet="/images/vandaag/kerk-header-800.webp 800w, /images/vandaag/kerk-header-1536.webp 1536w" sizes="(min-width: 960px) 960px, 100vw" width={1536} height={1024} />
+              <BannerBeeld naam="psalmen-adem-banner" open={open} />
+            </picture>
+          }
+        >
+          <img className="vg-ritmewiel vg-kop-teken" src="/images/Gebedssnoer-kop.webp" alt="" aria-hidden="true" width={376} height={640} />
         </NisKop>
         <div className="vg-papier ot-inhoud">
+          <h1 className="ot-titel">Adem</h1>
+          <Sierlijn />
+          <p className="ot-ad-onder">Het onophoudelijke gebed</p>
           <div className="ot-ad-tabs" role="tablist" aria-label="Gebed">
             {TABS.map(([id, label]) => (
               <button key={id} type="button" role="tab" id={`ad-tab-${id}`} aria-controls={`ad-paneel-${id}`} aria-selected={tab === id} onClick={() => kiesTab(id)}>

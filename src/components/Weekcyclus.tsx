@@ -115,8 +115,9 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string }> = [
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-// Dagkeuze van maandag tot zondag; de versierde initiaal van de dag (zelfde letters als de diensten, lib/etmaal.ts).
-const MA_ZO: DayKey[] = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'];
+// Dagkeuze van zondag (de Dag des Heren, eerste dag van de week) tot zaterdag; de versierde initiaal van de dag (zelfde
+// letters als de diensten, lib/etmaal.ts).
+const ZO_ZA: DayKey[] = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
 
 export default function Weekcyclus() {
   const { vandaag, mode, openDag } = useApp();
@@ -153,10 +154,10 @@ export default function Weekcyclus() {
           ingangen. Gekozen dag blijft staan tot "Terug naar vandaag". */}
       <section id="week" className="vg vg-week">
         <NisKop open={open} balk terug="#cycli">
-          <img className="vg-ritmewiel vg-jaarwiel" src="/images/Week-icoon.webp" alt="" aria-hidden="true" width={640} height={640} />
+          <img className="vg-ritmewiel vg-kop-teken" src="/images/Chi-Rho.webp" alt="" aria-hidden="true" width={496} height={640} />
         </NisKop>
         <div className="vg-papier vg-cy">
-          <h1 className="vg-cy-titel">Week</h1>
+          <h1 className="vg-cy-titel">De zeven dagen</h1>
           <img className="vg-sierlijn vg-cy-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
           {/* Zoals Etmaal: mobiel eerst de gekozen dag, dan de tijdlijn; op web de tijdlijn links en de dag ernaast */}
           <div className="vg-et-twee vg-wk-twee">
@@ -198,7 +199,7 @@ export default function Weekcyclus() {
               <p className="vg-label">De dagen met de Heer</p>
             {/* De zeven dagen als tijdlijn, zoals de diensten op Etmaal: dag en thema, de gekozen dag als bordeaux pil */}
             <ol className="vg-et-lijn vg-wk-lijn" aria-label="Kies een dag">
-              {MA_ZO.map((key) => (
+              {ZO_ZA.map((key) => (
                 <li key={key}>
                   <button type="button" className={key === gekozen ? 'is-actief' : undefined} aria-pressed={key === gekozen} aria-current={key === vandaagKey ? 'date' : undefined} onClick={() => setGekozen(key)}>
                     <span className="vg-wk-naam">{key.charAt(0).toUpperCase() + key.slice(1)}{key === vandaagKey && <span className="sr-only"> (vandaag)</span>}</span>
