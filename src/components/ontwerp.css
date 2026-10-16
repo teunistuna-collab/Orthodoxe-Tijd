@@ -190,6 +190,12 @@
 .ot-redesign .ot-gb-kaart { padding: 10px 12px !important; border: 1px solid rgba(167, 118, 52, .45) !important; border-radius: 8px !important; background: rgba(255, 248, 229, .45) !important; box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .7); }
 .ot-redesign div.ot-rij { display: flex; align-items: center; gap: 16px; min-height: 64px; color: var(--ot-inkt); }
 .ot-redesign .ot-gb-kaart.is-binnenkort .ot-rij-symbool { opacity: .85; }
+/* Mobiel en tablet: "Binnenkort" onder de omschrijving, zodat de titel de volle breedte heeft en niet afbreekt */
+@media (max-width: 1023.98px) {
+  #gebeden div.ot-gb-kaart.is-binnenkort { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 16px; row-gap: 6px; align-items: center; }
+  #gebeden div.ot-gb-kaart.is-binnenkort .ot-rij-symbool { grid-row: 1 / span 2; }
+  #gebeden div.ot-gb-kaart.is-binnenkort .ot-badge { grid-column: 2; justify-self: start; }
+}
 .ot-redesign .ot-badge { flex: none; padding: 4px 9px; border-radius: 5px; background: rgba(167, 118, 52, .2); font-size: 13px; color: var(--ot-inkt); }
 .ot-redesign a.ot-rij { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 10px 2px; color: var(--ot-inkt) !important; text-decoration: none; }
 .ot-redesign a.ot-rij:hover { background: rgba(255, 248, 229, .5); }

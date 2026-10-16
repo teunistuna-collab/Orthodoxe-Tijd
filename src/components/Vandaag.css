@@ -206,6 +206,8 @@
 /* ---------- Cycli (#cycli, Cycli.tsx): ritmewiel in de kop, titel en vijf omlijste ingangen op papyrus ---------- */
 /* Cycli (alleen mobiel): de zonnewijzer-banner (3 : 1) begint onder de balk met merk en zoekknop */
 .vg-cycli .vg-kop { height: clamp(200px, 56cqw, 300px); padding: 0; }
+/* Cycli en Psalmen: de kop heeft geen zijmarge; de kopbalk (merk, zoeken) krijgt dezelfde rand als op de andere pagina's */
+:is(.vg-cycli, .ot-psalmen) .vg-balk { padding-left: var(--rand); padding-right: var(--rand); }
 .vg-cycli .vg-kop-achter { background: #0d1a2b; }
 .vg-cycli .vg-kop-achter img { margin-top: 44px; height: calc(100% - 44px); object-position: 50% 45%; }
 .vg-ritmewiel { width: clamp(200px, 58cqw, 270px); height: auto; margin: -4px 0 4px; filter: drop-shadow(0 0 6px rgba(7, 18, 29, .8)); }
@@ -322,6 +324,10 @@
 .vg-kop-achter .vg-et-banner.is-actief { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .vg-kop-achter .vg-et-banner { transition: none; } }
 .vg-etmaal .vg-kop-achter:after { background: linear-gradient(rgba(6, 14, 24, .45), transparent 26%); }
+/* Kalender mobiel: het boek in de banner is licht; bovenin iets donkerder zodat merk en zoekknop leesbaar zijn */
+@media (max-width: 767px) { #kalender .vg-kop-achter:after { background: linear-gradient(rgba(6, 14, 24, .72), rgba(6, 14, 24, .35) 22%, transparent 42%); } }
+/* Jaar mobiel: het thema onder de beginletter gecentreerd en in evenwichtige regels, zoals de rest van dit blok */
+@media (max-width: 767px) { #jaar .vg-uur > .vg-wk-thema { text-align: center; text-wrap: balance; } }
 .vg-jaarwiel { width: clamp(210px, 60cqw, 290px); border-radius: 50%; margin-top: 0; }
 /* Rest van de pagina (verdieping, overgang, tijdlijn) in het gewone kader: zonder de hoekornamenten bovenaan. */
 .vg + .exact-design-page .pagina-hoek { display: none; }
