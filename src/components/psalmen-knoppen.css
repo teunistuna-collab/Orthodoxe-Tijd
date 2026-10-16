@@ -8,13 +8,14 @@
 .psalm-controls .pc-tab[aria-pressed=true]{color:#fff2d6;border-color:#a77234;background:linear-gradient(130deg,#9b1925,#710d16);box-shadow:inset 0 1px #d7866544}
 .psalm-controls .pc-tab[aria-pressed=true]:after{content:'◆';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);color:#e6bc6d;font-size:8px;line-height:10px}
 .psalm-controls .pc-note{margin:18px 0 20px;text-align:center;color:#75624b;font-size:14px;line-height:1.5}
-.psalm-controls .pc-ranges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0}
-.psalm-controls .pc-scroll{position:relative;border:0;background:transparent url('/images/psalmen/boekrol-licht.svg') center/100% 100% no-repeat;color:var(--pc-ink);min-width:0;min-height:68px;padding:13px 29px;font:inherit;font-size:22px;line-height:1.25;cursor:pointer}
-.psalm-controls .pc-scroll[aria-pressed=true]{background-image:url('/images/psalmen/boekrol-bordeaux.svg');color:#fff1d4}
+/* Reeksen 1–50, 51–100, 101–150: tekstkoppen op een dunne gouden lijn; de gekozen reeks in bordeaux met een streep eronder */
+.psalm-controls .pc-ranges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 14px;border-bottom:1px solid rgba(172,121,47,.55)}
+.psalm-controls .pc-scroll{position:relative;justify-self:center;margin-bottom:-1px;background:none;color:var(--inkt,#0b1b2a);min-width:0;padding:8px 10px 9px;font:inherit;font-size:22px;line-height:1.2;white-space:nowrap;cursor:pointer;transition:color .15s}
+.psalm-controls .pc-scroll:hover,.psalm-controls .pc-scroll[aria-pressed=true]{color:#850d17}
 .psalm-controls button:focus-visible{outline:3px solid #176587;outline-offset:4px}
 @media(hover:hover){.psalm-controls button:hover{filter:brightness(1.05)}.psalm-controls button[aria-pressed=false]:hover{color:#7d1521}}
 .psalm-controls button:disabled{opacity:.5;cursor:default;filter:none}
-@media(max-width:540px){.psalm-controls .pc-filters{gap:6px}.psalm-controls .pc-tab{flex-basis:calc(33.333% - 6px);min-width:0;font-size:15px;padding:10px 6px 17px;min-height:49px}.psalm-controls .pc-ranges{gap:7px}.psalm-controls .pc-scroll{font-size:17px;min-height:58px;padding:10px 17px}.psalm-controls .pc-note{font-size:13px;margin:14px 0}}
+@media(max-width:540px){.psalm-controls .pc-filters{gap:6px}.psalm-controls .pc-tab{flex-basis:calc(33.333% - 6px);min-width:0;font-size:15px;padding:10px 6px 17px;min-height:49px}.psalm-controls .pc-scroll{font-size:15px;padding:8px 2px 9px}.psalm-controls .pc-note{font-size:13px;margin:14px 0}}
 @media(prefers-reduced-motion:reduce){.psalm-controls button{transition:none}}
 
 /* Aanvullingen voor deze site */
@@ -22,8 +23,9 @@
 /* index.css geeft knoppen in main een eigen weergave, rand en minimale hoogte: hier de vorm uit het pakket aanhouden */
 #top#top#top#top#top#top#top main .psalm-controls :is(.pc-tab,.pc-scroll){display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--font-lees)!important;letter-spacing:0!important;text-transform:none!important;box-sizing:border-box}
 #top#top#top#top#top#top#top main .psalm-controls .pc-tab{min-height:56px!important}
-#top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:68px!important;border:0!important;border-image:none!important;box-shadow:none!important}
-@media(max-width:540px){#top#top#top#top#top#top#top main .psalm-controls .pc-tab{min-height:49px!important}#top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:58px!important}}
+#top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:50px!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;border-image:none!important;box-shadow:none!important}
+#top#top#top#top#top#top#top main .psalm-controls .pc-scroll[aria-pressed=true]{border-bottom-color:#850d17!important}
+@media(max-width:540px){#top#top#top#top#top#top#top main .psalm-controls .pc-tab{min-height:49px!important}#top#top#top#top#top#top#top main .psalm-controls .pc-scroll{min-height:46px!important}}
 
 /* Filterknoppen in de stijl van de kaarten op Cycli (.vg-cy-kaart): dun goud kader, dubbele binnenlijn, ruitjes op twee hoeken */
 .psalm-controls .pc-filters{gap:8px;border-bottom:0}
@@ -33,3 +35,7 @@
 .psalm-controls .pc-tab:after,.psalm-controls .pc-tab[aria-pressed=true]:after{left:auto;right:-4px;top:auto;bottom:-4px}
 #top#top#top#top#top#top#top main .psalm-controls .pc-tab:hover{background:rgba(255,251,236,.5)!important}
 #top#top#top#top#top#top#top main .psalm-controls .pc-tab[aria-pressed=true]{border-color:#a77234!important;background:linear-gradient(130deg,#9b1925,#710d16)!important;box-shadow:inset 0 0 0 3px rgba(122,16,26,.9),inset 0 0 0 4px rgba(230,188,109,.55)!important;color:#fff2d6}
+/* Mobiel: de vijf filters op één rij (in plaats van 3 + 2), smaller ingepakt; past het niet (grote letters), dan schuift de rij */
+@media(max-width:540px){.psalm-controls .pc-filters{flex-wrap:nowrap;overflow-x:auto;gap:5px;margin:0 -5px;padding:5px;scrollbar-width:none}.psalm-controls .pc-filters::-webkit-scrollbar{display:none}#top#top#top#top#top#top#top main .psalm-controls .pc-tab{flex:1 0 auto;padding:10px 7px!important;font-size:15px}}
+@media(max-width:370px){#top#top#top#top#top#top#top main .psalm-controls .pc-tab{padding:10px 6px!important;font-size:14px}}
+@media(max-width:370px){.psalm-controls .pc-scroll{font-size:14px}}

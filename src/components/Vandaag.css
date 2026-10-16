@@ -313,19 +313,21 @@
 
 /* Etmaal: tijdlijn met een doorlopende gouden lijn en rondjes; de gekozen dienst als bordeaux balk met pijl */
 .vg-et-lijn { position: relative; margin: 14px auto 0; max-width: 420px; text-align: left; }
-.vg-et-lijn:before { content: ""; position: absolute; left: 16px; top: 6px; bottom: 6px; width: 2.5px; margin-left: -1.25px; border-radius: 2px; background: #a8752c; }
+.vg-et-lijn:before { content: ""; position: absolute; left: 16px; top: 6px; bottom: 6px; width: 3px; margin-left: -1.5px; border-radius: 2px; background: #a8752c; }
 .vg-et-lijn li + li { margin-top: 4px; }
 /* Overschrijft de algemene mobiele knopregel (inline-flex) en de kleine tijd-opmaak uit index.css. */
 #top#top#top main .vg-et-lijn button { display: grid; min-height: 44px !important; }
 #top#top#top main .vg-et-lijn time { font-size: inherit !important; }
 .vg-et-lijn button { position: relative; display: grid; grid-template-columns: 32px 76px 1fr 18px; align-items: center; width: 100%; padding: 0 12px 0 0; border: 0; border-radius: 999px; background: none; font: inherit; font-size: 18px; color: var(--inkt); text-align: left; cursor: pointer; }
-.vg-et-lijn button:before { content: ""; justify-self: center; width: 15px; height: 15px; border: 2.5px solid #a8752c; border-radius: 50%; background: var(--papyrus); }
+.vg-et-lijn button:before { content: ""; justify-self: center; width: 17px; height: 17px; border: 3px solid #a8752c; border-radius: 50%; background: var(--papyrus); }
 .vg-et-lijn time { padding-left: 6px; font-variant-numeric: tabular-nums; }
 .vg-et-lijn svg { width: 18px; height: 18px; stroke-width: 2; opacity: 0; }
 .vg-et-lijn button:hover:not(.is-actief) { background: rgba(255, 249, 235, .55); }
-.vg-et-lijn button.is-actief { background: linear-gradient(180deg, #9a2a30, var(--bordeaux) 55%, #6e181d); color: var(--ivoor); font-weight: 500; box-shadow: inset 0 1px rgba(255, 220, 190, .25), 0 0 0 1px rgba(196, 155, 98, .55), 0 3px 8px rgba(80, 20, 10, .28); }
-.vg-et-lijn button.is-actief:before { border: 1.5px solid #f3d9b0; background: radial-gradient(circle, #fff7ea 0 3px, var(--bordeaux) 3.5px); }
-.vg-et-lijn button.is-actief svg { opacity: 1; }
+/* Gekozen rij: zacht goud vlak met donkere tekst, de naam vet, een bordeaux stip in de gouden ring en een gouden pijl */
+.vg-et-lijn button.is-actief { border-radius: 22px; background: rgba(222, 186, 120, .32); color: var(--inkt); box-shadow: none; }
+.vg-et-lijn button.is-actief > span:last-of-type { font-weight: 700; }
+.vg-et-lijn button.is-actief:before { border: 3px solid #a8752c; background: radial-gradient(circle at 40% 35%, #b02a34, #8a1620 70%); }
+.vg-et-lijn button.is-actief svg { opacity: 1; color: #a8752c; }
 .vg-et-nu { display: inline-flex; margin-left: 8px; padding: 1px 8px; border: 1px solid currentColor; border-radius: 999px; font-family: var(--font-titel); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; vertical-align: 3px; opacity: .85; }
 .vg-et-volg { display: flex; margin: 6px auto 0; }
 .vg-et-twee > .vg-et-links { margin-top: 26px; } /* mobiel: de tijdlijn onder het gebedsuur */

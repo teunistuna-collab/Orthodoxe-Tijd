@@ -159,10 +159,10 @@
   .ot-feesten .ot-bloemen { top: 0; width: 100%; } /* web: de brede banner met bloemenrand (Feesten.tsx <picture>) */
   .ot-feesten .vg-papier { padding-top: 11cqw; }
   .ot-feesten .ot-fs-kop { padding-left: 0; }
-  /* Titel en icoon binnen het kader van de banner (3 : 1, dus 33,3cqw hoog); de inleiding eronder, onder de kaderlijn:
-     marge = bannerhoogte − bovenruimte (11cqw) − titel en sierlijn (± 97 px) − icoon */
-  .ot-feesten .ot-fs-icoon { width: clamp(40px, 7cqw, 110px); margin-top: 4px; }
-  .ot-feesten .ot-fs-intro { margin-top: max(12px, calc(23cqw - 83px - clamp(40px, 7cqw, 110px))); }
+  /* Titel en icoon binnen het kader van de banner (3 : 1, dus 33,3cqw hoog; de kaderlijn op ± 31,8cqw). Het icoon loopt
+     door tot die lijn: bovenruimte 11cqw + titel en sierlijn (± 97 px), de rest is icoon. De inleiding staat eronder. */
+  .ot-feesten .ot-fs-icoon { width: max(40px, calc(20.8cqw - 97px)); margin-top: 4px; }
+  .ot-feesten .ot-fs-intro { margin-top: max(12px, calc(1.5cqw + 14px)); }
 }
 
 /* ---------- Vasten ---------- */
@@ -240,13 +240,6 @@
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-versnr { padding-top: 7px; font-family: var(--font-lees); font-size: 15px; color: var(--ot-rood); }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { font-family: var(--font-lees); font-size: 1em; line-height: 1.65; color: var(--ot-inkt); }
 #top#top#top#top#top#top .ot-lezer .ot-verzen .ps-stasis { color: var(--ot-goud); }
-/* Beginletter als op Vandaag: de letter zweeft links, de rest van het woord staat er direct tegenaan op de voetlijn
-   (het letterpaneel loopt tot ±86 % van de hoogte; de rechterrand van het beeld is transparant, vandaar de negatieve marge) */
-#top#top#top#top#top#top .ot-lezer .ot-vers-initiaal { float: left; width: 6em; height: 6em; margin: 2px -.35em 0 -4px; shape-outside: inset(0 6% 0 0); shape-margin: 3px; object-fit: contain; pointer-events: none; }
-#top#top#top#top#top#top .ot-lezer .ot-vers-rest { display: block; padding-top: 4em; }
-#top#top#top#top#top#top .ot-lezer .ot-eerste-regel ~ span { clear: left; } /* volgende regels onder de letter, uitgelijnd met de rest */
-#top#top#top#top#top#top .ot-lezer .ot-vers-letter { display: flex; align-items: center; justify-content: center; border: 2px solid var(--ot-goud); background: linear-gradient(180deg, #991320, #740d15); font-family: var(--font-titel); font-size: 2.2em; line-height: 1; color: #f3dca4; }
-#top#top#top#top#top#top .ot-lezer .ot-verzen .ps-vers p { display: flow-root; }
 .ot-lezer .ps-bron { text-align: center; }
 @container (min-width: 640px) { .ot-psalmen .ot-psalmraster { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
 
@@ -361,7 +354,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-v
   /* Vasten: spijzen en de grote vasten in twee gelijke kolommen, breder */
   #vasten.vg .vg-papier > .ot-twee { max-width: 1000px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 64px; }
 
-  /* Psalmen: zoeken, filters, boekrollen en nummers in één bredere container; de inleiding op leesbreedte */
+  /* Psalmen: zoeken, filters, reeksen en nummers in één bredere container; de inleiding op leesbreedte */
   #psalmen.ot-psalmen .vg-papier > * { max-width: 880px; }
   #psalmen.ot-psalmen .vg-papier > .ot-ps-intro { max-width: 36em; }
   #psalmen.ot-psalmen .ot-psalmraster { max-width: 880px; }

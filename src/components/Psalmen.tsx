@@ -8,7 +8,6 @@ import { OPEN_DIENST_EVENT } from '../lib/events';
 import { useFavorieten, wisselFavoriet } from '../lib/favorieten';
 import { gaNaar } from '../lib/navigatie';
 import { usePaginaOpen } from '../lib/paginaOpen';
-import { letterBeeld } from '../lib/letters';
 import { useLeesvoorkeur, vergroot, verklein, wisselNacht } from '../lib/leesvoorkeur';
 import { usePsalmAudio } from '../lib/psalmAudio';
 import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, laadPsalmTeksten, psalmVanHetUur, zoekPsalmen, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
@@ -201,7 +200,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           </label>
 
           {/* Bediening volgens het pakket "Psalmen tabbladen en boekrollen" (psalmen-knoppen.css): perkamenten tabbladen
-              voor de filters, boekrollen voor de delen van vijftig. Zelfde state, filters en aantallen als hiervoor. */}
+              voor de filters, tekstkoppen op een gouden lijn voor de delen van vijftig. Zelfde state, filters en aantallen als hiervoor. */}
           <section className="psalm-controls" aria-label="Psalmen selecteren">
             <div className="pc-filters" role="group" aria-label="Psalmfilter">
               {FILTERS.map(([id, label]) => (
@@ -239,7 +238,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
               <div className="pc-ranges" role="group" aria-label="Psalmreeks">
                 {BLOKKEN.map((b, i) => (
                   <button key={b.van} type="button" className="pc-scroll" aria-label={`Psalmen ${b.van} tot en met ${b.tot}`} aria-pressed={blok === i} onClick={() => setBlok(i)}>
-                    {b.van} – {b.tot}
+                    Psalmen {b.van}–{b.tot}
                   </button>
                 ))}
               </div>
@@ -438,8 +437,6 @@ export function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, ontwerp }: {
   const [speler, setSpeler] = useState(false);
   const aflevering = psalm.spotify?.split('/episode/')[1];
   const id = (s: string) => `${idVoorvoegsel}-${s}`;
-  // De eerste vers-regel met tekst krijgt in de lezer de versierde eerste letter (schermlezers lezen de regel één keer).
-  const eersteVers = ontwerp && tekst ? tekst.verzen.findIndex((v) => !v.kop && v.regels[0]?.trim()) : -1;
 
   return (
     <>
@@ -535,22 +532,7 @@ export function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, ontwerp }: {
                   <div key={k} className="ps-vers" id={ontwerp && v.n ? `ps-vers-${v.n}` : undefined}>
                     <span className="ps-versnr">{v.n ?? ''}</span>
                     <p>
-                      {v.regels.map((r, j) => {
-                        if (k !== eersteVers || j !== 0) return <span key={j}>{r}</span>;
-                        // Eerste regel: versierde letter uit het alfabet en de rest van de regel; voor schermlezers de hele regel.
-                        const tekstStart = r.trimStart();
-                        const letter = tekstStart.charAt(0);
-                        const beeld = letterBeeld(letter);
-                        if (!beeld) return <span key={j}>{r}</span>;
-                        return (
-                          <span key={j} className="ot-eerste-regel">
-                            <span className="sr-only">{tekstStart}</span>
-                            <img className="ot-vers-initiaal" src={beeld} alt="" width={400} height={400} decoding="async" />
-                            {/* De rest van het woord sluit op de voetlijn van de letter aan, zoals de dienst op Vandaag */}
-                            <span className="ot-vers-rest" aria-hidden="true">{tekstStart.slice(1)}</span>
-                          </span>
-                        );
-                      })}
+                      {v.regels.map((r, j) => <span key={j}>{r}</span>)}
                     </p>
                   </div>
                 ),
