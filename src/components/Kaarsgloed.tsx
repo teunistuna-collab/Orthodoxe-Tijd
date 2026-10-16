@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 // echte afbeeldingsbox berekend. Decoratie: aria-hidden, geen klikvlak; zonder beweging bij prefers-reduced-motion (CSS).
 const VLAMMEN: Record<string, [number, number, number][]> = {
   'kerk-header': [[7.1, 48, 7], [13.1, 67.5, 5], [89.8, 30, 4.5]],
+  'heiligen-mobiel-banner': [[7.1, 48, 7], [13.1, 67.5, 5], [89.8, 30, 4.5]],
   'kalender-banner': [[87.1, 18.5, 7]],
   'gebeden-banner': [[8.5, 43, 7], [87.1, 24.5, 5]],
   'vasten-banner': [[81.1, 32, 6.5]],

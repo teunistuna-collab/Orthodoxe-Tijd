@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import { useApp } from '../lib/context';
-import { PAASCYCLUS } from '../lib/feesten';
-import { addDays, daysBetween, formatDag, formatDatum, formatKort, volgendePascha, ymd } from '../lib/kalender';
+import { PAASCYCLUS, type Feest } from '../lib/feesten';
+import { addDays, dagInfo, formatDag, formatDatum, formatKort, ymd, type DagInfo } from '../lib/kalender';
+import { isPaascyclus, lezingSoort, vertaalRef, type HtcLezingRef } from '../lib/htc';
+import { paascyclusVoor, STAPPEN, volgendeZondag, zondagVanDeWeek, type Paascyclus, type StapKey } from '../lib/paascyclus';
 import { FeestTag } from './ui';
 import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
@@ -221,17 +223,8 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
   }
 };
 
-// De opbouw van de Paascyclus in zes stappen (aangeleverd ontwerp). De popups gebruiken de bestaande teksten hierboven;
-// "Hemelvaart en Pinksteren" voegt de twee bestaande teksten samen. offsetRange = eerste en laatste dag t.o.v. Pascha.
-type StapKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | 'vijftig-dagen' | 'hemelvaart-pinksteren';
-const STAPPEN: Array<{ key: StapKey; label: string; short: string; offsetRange: [number, number] }> = [
-  { key: 'voorbereiding', label: 'Voorbereiding', short: 'Zondag van de Tollenaar en de Farizeeër tot de Vergevingszondag', offsetRange: [-70, -49] },
-  { key: 'grote-vasten', label: 'Grote Vasten', short: 'Innerlijke zuivering en omkeer', offsetRange: [-48, -9] },
-  { key: 'goede-week', label: 'Heilige Week', short: 'Met Christus mee naar het Kruis', offsetRange: [-8, -1] },
-  { key: 'pascha', label: 'Pascha', short: 'De Verrijzenis van Christus', offsetRange: [0, 6] },
-  { key: 'vijftig-dagen', label: 'Paastijd', short: 'Vijftig dagen van vreugde', offsetRange: [7, 38] },
-  { key: 'hemelvaart-pinksteren', label: 'Hemelvaart en Pinksteren', short: 'Volheid van de Geest en het nieuwe leven', offsetRange: [39, 63] },
-];
+// De opbouw van de Paascyclus in zes stappen: STAPPEN in lib/paascyclus.ts. De popups gebruiken de bestaande teksten
+// hierboven; "Hemelvaart en Pinksteren" voegt de twee bestaande teksten samen.
 const STAP_INHOUD: Record<StapKey, PopupInhoud> = {
   voorbereiding: PERIODE_POPUPS.voorbereiding,
   'grote-vasten': PERIODE_POPUPS['grote-vasten'],
@@ -253,11 +246,29 @@ function bereikLang(a: Date, b: Date): string {
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
+// Desktop (vanaf 1024 px) krijgt een eigen, contextafhankelijke bovenkant; mobiel en tablet blijven zoals ze waren.
+const DESKTOP = '(min-width: 1024px)';
+const volgDesktop = (cb: () => void) => {
+  const m = window.matchMedia(DESKTOP);
+  m.addEventListener('change', cb);
+  return () => m.removeEventListener('change', cb);
+};
+const isDesktop = () => window.matchMedia(DESKTOP).matches;
+const dagen = (n: number) => `${n} ${n === 1 ? 'dag' : 'dagen'}`;
+const feestMetId = (id: string) => PAASCYCLUS.find((f) => f.id === id);
+/** De korte toelichting van een stap: de eerste alinea van de bestaande uitleg (bij Hemelvaart en Pinksteren van beide). */
+const betekenis = (k: StapKey) => {
+  const secties = STAP_INHOUD[k].sections ?? [];
+  return (k === 'hemelvaart-pinksteren' ? secties.slice(0, 2) : secties.slice(0, 1)).map((x) => x.paragraphs?.[0]).filter((x): x is string => !!x);
+};
+type Rij = { label: string; titel: string; tekst?: string; open?: () => void; href?: string };
+
 // Lijnsymbool en kleur per stap op de tijdlijn (public/images/ontwerp/pascha-*.svg, uit het overdrachtspakket): paars
 // voor de voorbereiding en de Grote Vasten, rood voor de Heilige Week en Pascha, goud voor de Paastijd en Pinksteren.
 
 export default function Pascha() {
-  const { vandaag, openDag } = useApp();
+  const { vandaag, vandaagYmd, mode, rooster, openDag, openLezing, openDagLezingen } = useApp();
+  const desktop = useSyncExternalStore(volgDesktop, isDesktop);
   const [stapOpen, setStapOpen] = useState<StapKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const [cyclusOpen, setCyclusOpen] = useState(false);
@@ -273,22 +284,23 @@ export default function Pascha() {
     return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
   }, []);
 
-  const pascha = volgendePascha(vandaag);
-  const paaschaJaar = pascha.getUTCFullYear();
-  const dagenTotPascha = daysBetween(vandaag, pascha);
-  // De stappen met hun datums van dit jaar; uitgelicht is de stap van nu, anders de eerstvolgende.
-  const stappen = STAPPEN.map((stap) => {
-    const van = addDays(pascha, stap.offsetRange[0]);
-    const tot = addDays(pascha, stap.offsetRange[1]);
-    return { stap, van, tot, nu: vandaag.getTime() >= van.getTime() && vandaag.getTime() <= tot.getTime() };
-  });
-  const uitgelichteStap = (stappen.find((s) => s.nu) ?? stappen.find((s) => s.van.getTime() > vandaag.getTime()))?.stap.key;
+  // Desktop, tablet en mobiel: de lopende cyclus (tijdens de Paastijd nog die van dit jaar), de actuele stap en de stap die
+  // de bezoeker bekijkt. Een handmatige keuze blijft staan bij een dagwisseling en bij het wisselen tussen desktop en
+  // mobiel; bij een nieuwe cyclus geldt weer de actuele periode.
+  const cyclus = useMemo(() => paascyclusVoor(vandaag), [vandaag]);
+  const dag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
+  const cyclusId = ymd(cyclus.pascha);
+  const [keuze, setKeuze] = useState<{ cyclus: string; stap: StapKey } | null>(null);
+  const gekozen = keuze?.cyclus === cyclusId ? keuze.stap : null;
+  const bekeken = gekozen ?? cyclus.huidige;
+  const pascha = cyclus.pascha;
 
-  // Iedere stap-pop-up krijgt de datums van dit jaar als eyebrow.
+  // Iedere stap-pop-up krijgt de datums van de getoonde cyclus als eyebrow.
+  const basis = pascha;
   const stapInhoud = {} as Record<StapKey, PopupInhoud>;
   for (const stap of STAPPEN) {
     const [start, eind] = stap.offsetRange;
-    stapInhoud[stap.key] = { ...STAP_INHOUD[stap.key], title: stap.label, eyebrow: formatBereik(addDays(pascha, start), addDays(pascha, eind)) };
+    stapInhoud[stap.key] = { ...STAP_INHOUD[stap.key], title: stap.label, eyebrow: formatBereik(addDays(basis, start), addDays(basis, eind)) };
   }
 
   return (
@@ -310,24 +322,20 @@ export default function Pascha() {
           }
         />
         <div className="vg-papier ot-inhoud">
-          <h1 className="ot-titel">Naar Pascha</h1>
-          <p className="ot-pc-datum">{formatDatum(pascha)}</p>
-          <Sierlijn />
-          {/* Aftellen tot Pascha (volgendePascha geeft op Paaszondag zelf die dag) */}
-          <p className="ot-pc-nog">{dagenTotPascha === 0 ? 'Vandaag is het Pascha' : `Nog ${dagenTotPascha} ${dagenTotPascha === 1 ? 'dag' : 'dagen'}`}</p>
-          {/* De stappen naar Pascha als tijdlijn, zoals de diensten op Etmaal: periode en naam; de stap van nu (of de
-              eerstvolgende) als bordeaux pil. Elke stap opent zijn venster. */}
-          <ol className="vg-et-lijn vg-wk-lijn vg-pc-lijn" aria-label="De weg naar Pascha">
-            {stappen.map(({ stap, van, tot, nu }) => (
-              <li key={stap.key}>
-                <button type="button" className={stap.key === uitgelichteStap ? 'is-actief' : undefined} aria-current={nu ? 'true' : undefined} aria-label={`${stap.label}, ${bereikLang(van, tot)} ${tot.getUTCFullYear()}${nu ? ' (nu)' : ''}`} onClick={() => setStapOpen(stap.key)}>
-                  <span className="vg-wk-naam">{formatKort(van)} – {formatKort(tot)}</span>
-                  <span>{stap.label}</span>
-                  <ChevronRight aria-hidden="true" />
-                </button>
-              </li>
-            ))}
-          </ol>
+          <PaschaInhoud
+            mobiel={!desktop}
+            cyclus={cyclus}
+            bekeken={bekeken}
+            gekozen={gekozen}
+            dag={dag}
+            lezingen={rooster?.[vandaagYmd]?.filter(isPaascyclus)}
+            heeftRooster={!!rooster?.[vandaagYmd]}
+            kies={(stap) => setKeuze(stap ? { cyclus: cyclusId, stap } : null)}
+            openStap={setStapOpen}
+            openDag={openDag}
+            openDagLezingen={() => openDagLezingen(vandaagYmd)}
+            openLezing={(l) => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: vandaag })}
+          />
         </div>
       </section>
 
@@ -338,7 +346,7 @@ export default function Pascha() {
           <div className="pc-cyclus">
             <button type="button" onClick={() => setCyclusOpen((o) => !o)} aria-expanded={cyclusOpen} className="pc-cyclus-knop">
               <span>
-                <span className="pc-cyclus-titel">Paascyclus {paaschaJaar}</span>
+                <span className="pc-cyclus-titel">Paascyclus {pascha.getUTCFullYear()}</span>
                 <span className="pc-cyclus-onder">Alles wat van de Paasdatum afhangt, dag voor dag</span>
               </span>
               <ChevronRight className={`h-5 w-5 shrink-0 text-gold-deep transition-transform ${cyclusOpen ? 'rotate-90' : ''}`} />
@@ -390,5 +398,410 @@ export default function Pascha() {
       <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? PASCHA_INFO[infoOpen] : null} />
       <LiturgicalPopup open={stapOpen !== null} onClose={() => setStapOpen(null)} content={stapOpen ? stapInhoud[stapOpen] : null} />
     </>
+  );
+}
+
+/** De bovenkant beweegt mee met de actuele periode — waar zijn we, wat betekent het, wat kan ik vandaag lezen of bidden.
+ *  Desktop: met de tijdlijn ernaast; mobiel en tablet: compact onder elkaar met de tijdlijn in beeld. Alleen bestaande
+ *  gegevens: de cyclus (lib/paascyclus.ts), de dag (dagInfo met de gekozen kalender), de feesten, het leesrooster en de
+ *  uitleg van de stappen. Ontbrekende onderdelen worden weggelaten. */
+function PaschaInhoud({
+  mobiel, cyclus, bekeken, gekozen, dag, lezingen, heeftRooster, kies, openStap, openDag, openDagLezingen, openLezing,
+}: {
+  mobiel: boolean;
+  cyclus: Paascyclus;
+  bekeken: StapKey | null;
+  gekozen: StapKey | null;
+  dag: DagInfo;
+  lezingen: HtcLezingRef[] | undefined;
+  heeftRooster: boolean;
+  kies: (stap: StapKey | null) => void;
+  openStap: (stap: StapKey) => void;
+  openDag: (ymd: string) => void;
+  openDagLezingen: () => void;
+  openLezing: (l: HtcLezingRef) => void;
+}) {
+  const { pascha, offset: off, huidige, dagenTotPascha } = cyclus;
+  const stap = bekeken ? cyclus.stappen.find((s) => s.key === bekeken) ?? null : null;
+  const isNu = !!stap && stap.key === huidige;
+  const datumVan = (f: Feest) => addDays(pascha, f.offset ?? 0);
+  const rijOpDag = (label: string, f: Feest): Rij => ({ label: `${label} · ${formatDag(datumVan(f))}`, titel: f.naam, tekst: f.toelichting, open: () => openDag(ymd(datumVan(f))) });
+
+  // Vandaag: de gedachtenis van de dag (eerst de beweeglijke), anders wat de kalender over deze dag in de periode zegt
+  const dagFeest = dag.feesten.find((f) => f.offset !== undefined) ?? dag.feesten[0];
+  const dagregel =
+    huidige === 'pascha'
+      ? off === 0
+        ? 'Vandaag is het heilig Pascha'
+        : `${dagFeest?.kort ?? dagFeest?.naam ?? dag.seizoen} · Lichte Week`
+      : dagFeest?.offset !== undefined
+        ? dagFeest.naam
+        : dag.seizoen;
+
+  const rijen: Rij[] = [];
+  if (isNu) {
+    if (dagFeest && huidige !== 'pascha') rijen.push({ label: 'Vandaag', titel: dagFeest.naam, tekst: dagFeest.toelichting, open: () => openDag(dag.ymd) });
+    if (huidige === 'voorbereiding') {
+      const z = volgendeZondag(off, cyclus.stappen[0].offsetRange[1]);
+      if (z && z.offset !== off) rijen.push(rijOpDag('Eerstvolgende zondag', z));
+    }
+    if (huidige === 'grote-vasten' || huidige === 'vijftig-dagen') {
+      const z = zondagVanDeWeek(off);
+      if (z && z.offset !== off) rijen.push(rijOpDag('Zondag van deze week', z));
+    }
+    if (huidige === 'grote-vasten') rijen.push({ label: 'Vasten vandaag', titel: dag.vasten.label, tekst: dag.vasten.detail, href: '#vasten' });
+    const hemelvaart = feestMetId('hemelvaart');
+    const pinksteren = feestMetId('pinksteren');
+    if (huidige === 'vijftig-dagen' && hemelvaart) rijen.push(rijOpDag(`Over ${dagen((hemelvaart.offset ?? 0) - off)}`, hemelvaart));
+    if (huidige === 'hemelvaart-pinksteren') {
+      if (!dagFeest || dagFeest.offset === undefined) {
+        const vorige = [...PAASCYCLUS].reverse().find((f) => (f.offset ?? 0) < off && (f.offset ?? 0) >= (hemelvaart?.offset ?? 39) && (f.rang ?? 0) >= 4);
+        if (vorige) rijen.push(rijOpDag('Laatst gevierd', vorige));
+      }
+      if (pinksteren && off < (pinksteren.offset ?? 0)) rijen.push(rijOpDag(`Over ${dagen((pinksteren.offset ?? 0) - off)}`, pinksteren));
+    }
+  }
+  const troparion = isNu && huidige !== 'pascha' ? dagFeest?.troparion : undefined;
+  // Terug naar de actuele periode: de knop verdwijnt, dus de focus gaat naar de actuele rij op de tijdlijn
+  const terug = (e: { currentTarget: HTMLElement }) => {
+    const vak = e.currentTarget.closest('.ot-pc-m, .ot-pc-desk');
+    kies(null);
+    requestAnimationFrame(() => vak?.querySelector<HTMLElement>('.vg-pc-lijn .is-nu')?.focus());
+  };
+  // Hoogstens drie lezingen (op Goede Vrijdag zijn het er meer dan twintig); de rest via "Alle lezingen van vandaag".
+  const heeftVandaag = isNu && (rijen.length > 0 || !!troparion || !!lezingen?.length);
+
+  // Mobiel en tablet (onder 1024 px): dezelfde gegevens, compact onder elkaar — de periode, vandaag (of algemene
+  // informatie over een andere periode), de tijdlijn en de uitleg met "Lees meer".
+  if (mobiel) {
+    const [hoofd, ...overig] = rijen;
+    const inPeriode = stap ? PAASCYCLUS.filter((f) => (f.offset ?? 0) >= stap.offsetRange[0] && (f.offset ?? 0) <= stap.offsetRange[1]) : [];
+    const kiesMobiel = (k: StapKey, knop: HTMLElement) => {
+      kies(k);
+      // De rij die de bezoeker koos blijft in beeld, ook als de inhoud erboven van hoogte verandert
+      requestAnimationFrame(() => knop.scrollIntoView({ block: 'nearest', behavior: 'auto' }));
+    };
+    return (
+      <div className="ot-pc-m">
+        <header className="ot-pc-ctx-kop">
+          {stap ? (
+            <>
+              <p className="vg-label">{isNu ? 'Waar zijn we nu?' : 'Periode in de Paascyclus'}</p>
+              <h1 className="ot-titel ot-pc-m-titel">
+                {stap.label}
+                {isNu && <span className="ot-nu">Nu</span>}
+              </h1>
+              <p className="ot-pc-bereik">
+                {bereikLang(stap.van, stap.tot)} {stap.tot.getUTCFullYear()}
+              </p>
+              {isNu && <p className="ot-pc-dagregel">{dagregel}</p>}
+            </>
+          ) : (
+            <>
+              <p className="vg-label">De Paascyclus</p>
+              <h1 className="ot-titel ot-pc-m-titel">Naar Pascha</h1>
+              <p className="ot-pc-bereik">{formatDatum(pascha)}</p>
+            </>
+          )}
+          <Sierlijn />
+          {(!stap || isNu) && dagenTotPascha > 0 && <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>}
+          {gekozen && gekozen !== huidige && (
+            <button type="button" className="ot-tekstknop ot-pc-terug" onClick={terug}>
+              ‹ {huidige ? 'Terug naar nu' : 'Terug naar het overzicht'}
+            </button>
+          )}
+        </header>
+
+        {!stap && (
+          <p className="ot-pc-tekst ot-pc-midden">
+            De voorbereiding begint op {formatDag(cyclus.stappen[0].van)} {cyclus.stappen[0].van.getUTCFullYear()}, met de Zondag van de Tollenaar en de Farizeeër.
+          </p>
+        )}
+
+        {/* Pascha en de Lichte Week: de feestgroet met het bestaande icoon (volledig, eigen verhouding) en het paastroparion */}
+        {isNu && huidige === 'pascha' && (
+          <div className="ot-pc-feestgroet">
+            <img className="ot-pc-icoon" src="/images/feesten/pascha.webp" alt="Icoon van de Verrijzenis van Christus" width={569} height={800} decoding="async" />
+            <div>
+              <p className="vg-label">{off === 0 ? 'Vandaag vieren wij' : 'In de Lichte Week vieren wij'}</p>
+              <p className="ot-pc-groet">
+                Christus is opgestaan!<span>Waarlijk opgestaan!</span>
+              </p>
+            </div>
+            <div className="ot-pc-m-trop">
+              <p className="vg-label ot-pc-tlabel">Troparion</p>
+              <blockquote className="ot-pc-troparion">{PERIODE_POPUPS.pascha.highlight}</blockquote>
+            </div>
+          </div>
+        )}
+
+        {/* Vandaag binnen de actuele periode: de gedachtenis of het dagthema, met hoogstens twee hoofdacties */}
+        {isNu && (hoofd || troparion || heeftRooster) && (
+          <section className="ot-pc-sectie" aria-labelledby="pc-m-vandaag">
+            <h2 id="pc-m-vandaag" className="vg-label">Vandaag binnen deze periode</h2>
+            {hoofd && (
+              <div className="ot-pc-m-hoofd">
+                <small className="ot-pc-rijlabel">{hoofd.label}</small>
+                <p className="ot-pc-m-hoofdtitel">{hoofd.titel}</p>
+                {hoofd.tekst && <p className="ot-pc-m-hoofdtekst">{hoofd.tekst}</p>}
+              </div>
+            )}
+            {troparion && (
+              <>
+                <p className="vg-label ot-pc-tlabel">Troparion</p>
+                <blockquote className="ot-pc-troparion">{troparion}</blockquote>
+              </>
+            )}
+            {overig.length > 0 && (
+              <ul className="ot-register ot-pc-m-overig">
+                {overig.map((r) => {
+                  const inhoud = (
+                    <>
+                      <span className="ot-rij-tekst">
+                        <small className="ot-pc-rijlabel">{r.label}</small>
+                        <b>{r.titel}</b>
+                      </span>
+                      <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+                    </>
+                  );
+                  return (
+                    <li key={r.label + r.titel}>
+                      {r.href ? <a className="ot-rij" href={r.href}>{inhoud}</a> : <button type="button" className="ot-rij" onClick={r.open}>{inhoud}</button>}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            <div className="ot-pc-m-acties">
+              {heeftRooster && (
+                <button type="button" className="ot-actie" onClick={openDagLezingen}>
+                  Lees de lezingen <span aria-hidden="true">→</span>
+                </button>
+              )}
+              <button type="button" className="ot-actie is-omlijnd" onClick={() => openDag(dag.ymd)}>
+                Bekijk de dag
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* Een andere periode bekijken: geen "vandaag", maar de gedachtenissen van die periode met hun datums */}
+        {stap && !isNu && inPeriode.length > 0 && (
+          <section className="ot-pc-sectie" aria-labelledby="pc-m-periode">
+            <h2 id="pc-m-periode" className="vg-label">In deze periode</h2>
+            <ul className="ot-register ot-pc-m-overig">
+              {inPeriode.map((f) => (
+                <li key={f.id}>
+                  <button type="button" className="ot-rij" onClick={() => openDag(ymd(datumVan(f)))}>
+                    <span className="ot-rij-tekst">
+                      <small className="ot-pc-rijlabel">{formatDag(datumVan(f))}</small>
+                      <b>{f.kort ?? f.naam}</b>
+                    </span>
+                    <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* De zes periodes, altijd in beeld */}
+        <ol className="vg-et-lijn vg-wk-lijn vg-pc-lijn" aria-label="De weg naar Pascha">
+          {cyclus.stappen.map((s) => {
+            const nu = s.key === huidige;
+            return (
+              <li key={s.key}>
+                <button
+                  type="button"
+                  className={[s.key === bekeken && 'is-actief', nu && 'is-nu'].filter(Boolean).join(' ') || undefined}
+                  aria-pressed={s.key === bekeken}
+                  aria-current={nu ? 'true' : undefined}
+                  aria-label={`${s.label}, ${bereikLang(s.van, s.tot)} ${s.tot.getUTCFullYear()}${nu ? ' (nu)' : ''}`}
+                  onClick={(e) => kiesMobiel(s.key, e.currentTarget)}
+                >
+                  <span className="vg-wk-naam">
+                    {formatKort(s.van)} – {formatKort(s.tot)}
+                  </span>
+                  <span>
+                    {s.label}
+                    {nu && <span className="ot-nu">Nu</span>}
+                  </span>
+                  <ChevronRight aria-hidden="true" />
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+
+        {/* Uitleg over de bekeken periode, met de bestaande uitgebreide uitleg achter "Lees meer" */}
+        {stap && (
+          <section className="ot-pc-sectie" aria-labelledby="pc-m-betekenis">
+            <h2 id="pc-m-betekenis" className="vg-label">Wat betekent deze periode?</h2>
+            {betekenis(stap.key).map((t) => (
+              <p key={t} className="ot-pc-tekst">{t}</p>
+            ))}
+            <button type="button" className="ot-tekstknop ot-pc-meer" onClick={() => openStap(stap.key)}>
+              Lees meer over deze periode ›
+            </button>
+          </section>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="ot-pc-desk">
+      <div className="ot-pc-ctx">
+        {stap ? (
+          <>
+            <header className="ot-pc-ctx-kop">
+              <p className="vg-label">{isNu ? 'Waar zijn we nu?' : 'Periode in de Paascyclus'}</p>
+              <h1 className="ot-titel">
+                {stap.label}
+                {isNu && <span className="ot-nu">Nu</span>}
+              </h1>
+              <p className="ot-pc-bereik">
+                {bereikLang(stap.van, stap.tot)} {stap.tot.getUTCFullYear()}
+              </p>
+              {isNu && <p className="ot-pc-dagregel">{dagregel}</p>}
+              <Sierlijn />
+              {isNu && dagenTotPascha > 0 && <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>}
+            </header>
+
+            {/* Pascha en de Lichte Week: de feestgroet met het bestaande icoon en het paastroparion */}
+            {isNu && huidige === 'pascha' && (
+              <div className="ot-pc-feestgroet">
+                <img className="ot-pc-icoon" src="/images/feesten/pascha.webp" alt="Icoon van de Verrijzenis van Christus" width={569} height={800} decoding="async" />
+                <div>
+                  <p className="vg-label">{off === 0 ? 'Vandaag vieren wij' : 'In de Lichte Week vieren wij'}</p>
+                  <p className="ot-pc-groet">
+                    Christus is opgestaan!<span>Waarlijk opgestaan!</span>
+                  </p>
+                  <p className="vg-label ot-pc-tlabel">Troparion</p>
+                  <blockquote className="ot-pc-troparion">{PERIODE_POPUPS.pascha.highlight}</blockquote>
+                </div>
+              </div>
+            )}
+
+            <section className="ot-pc-sectie" aria-labelledby="pc-betekenis">
+              <h2 id="pc-betekenis" className="vg-label">Wat betekent deze periode?</h2>
+              {betekenis(stap.key).map((t) => (
+                <p key={t} className="ot-pc-tekst">{t}</p>
+              ))}
+              <button type="button" className="ot-tekstknop ot-pc-meer" onClick={() => openStap(stap.key)}>
+                Lees meer over deze periode ›
+              </button>
+            </section>
+
+            {heeftVandaag && (
+              <section className="ot-pc-sectie" aria-labelledby="pc-vandaag">
+                <h2 id="pc-vandaag" className="vg-label">Vandaag binnen deze periode</h2>
+                {rijen.length > 0 && (
+                  <ul className="ot-register">
+                    {rijen.map((r) => {
+                      const inhoud = (
+                        <>
+                          <span className="ot-rij-tekst">
+                            <small className="ot-pc-rijlabel">{r.label}</small>
+                            <b>{r.titel}</b>
+                            {r.tekst && <span>{r.tekst}</span>}
+                          </span>
+                          <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+                        </>
+                      );
+                      return (
+                        <li key={r.label + r.titel}>
+                          {r.href ? (
+                            <a className="ot-rij" href={r.href}>{inhoud}</a>
+                          ) : (
+                            <button type="button" className="ot-rij" onClick={r.open}>{inhoud}</button>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+                {troparion && (
+                  <>
+                    <p className="vg-label ot-pc-tlabel">Troparion</p>
+                    <blockquote className="ot-pc-troparion">{troparion}</blockquote>
+                  </>
+                )}
+                {lezingen && lezingen.length > 0 && (
+                  <ul className="ot-register ot-pc-lezingen" aria-label="Lezingen van vandaag">
+                    {lezingen.slice(0, 3).map((l, i) => {
+                      const ref = vertaalRef(l.ref);
+                      const soort = lezingSoort(ref);
+                      return (
+                        <li key={`${l.ref}-${i}`}>
+                          <button type="button" className="ot-rij" onClick={() => openLezing(l)}>
+                            <span className="ot-rij-tekst">
+                              <small className="ot-pc-rijlabel">{soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'Oude Testament' : 'Apostel'}</small>
+                              <b>{ref}</b>
+                            </span>
+                            <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+                {heeftRooster && (
+                  <button type="button" className="ot-tekstknop ot-pc-meer" onClick={openDagLezingen}>
+                    Alle lezingen van vandaag ›
+                  </button>
+                )}
+              </section>
+            )}
+
+            {gekozen && gekozen !== huidige && (
+              <button type="button" className="ot-tekstknop ot-pc-terug" onClick={terug}>
+                ‹ {huidige ? 'Terug naar de huidige periode' : 'Terug naar het overzicht'}
+              </button>
+            )}
+          </>
+        ) : (
+          // Buiten de Paascyclus: geen periode is "nu"; het komende Pascha, de aftelling en het begin van de voorbereiding
+          <header className="ot-pc-ctx-kop">
+            <p className="vg-label">De Paascyclus</p>
+            <h1 className="ot-titel">Naar Pascha</h1>
+            <p className="ot-pc-datum">{formatDatum(pascha)}</p>
+            <Sierlijn />
+            <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>
+            <p className="ot-pc-tekst ot-pc-midden">
+              De voorbereiding begint op {formatDag(cyclus.stappen[0].van)} {cyclus.stappen[0].van.getUTCFullYear()}, met de Zondag van de Tollenaar en de
+              Farizeeër. Kies een periode op de tijdlijn om te lezen wat zij betekent.
+            </p>
+          </header>
+        )}
+      </div>
+
+      <ol className="vg-et-lijn vg-wk-lijn vg-pc-lijn" aria-label="De weg naar Pascha">
+        {cyclus.stappen.map((s) => {
+          const nu = s.key === huidige;
+          return (
+            <li key={s.key}>
+              <button
+                type="button"
+                className={[s.key === bekeken && 'is-actief', nu && 'is-nu'].filter(Boolean).join(' ') || undefined}
+                aria-pressed={s.key === bekeken}
+                aria-current={nu ? 'true' : undefined}
+                aria-label={`${s.label}, ${bereikLang(s.van, s.tot)} ${s.tot.getUTCFullYear()}${nu ? ' (nu)' : ''}`}
+                onClick={() => kies(s.key)}
+              >
+                <span className="vg-wk-naam">
+                  {formatKort(s.van)} – {formatKort(s.tot)}
+                </span>
+                <span>
+                  {s.label}
+                  {nu && <span className="ot-nu">Nu</span>}
+                </span>
+                <ChevronRight aria-hidden="true" />
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
   );
 }

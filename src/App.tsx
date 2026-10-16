@@ -163,13 +163,19 @@ export default function App() {
     }
   }, [pagina, dagOpen, heiligenDag, zoekOpen]);
 
-  // Datum verversen als de pagina lang open staat.
+  // Datum verversen als de pagina lang open staat, en direct bij terugkeer naar het tabblad (na slaapstand of 's nachts).
   useEffect(() => {
-    const t = setInterval(() => {
+    const ververs = () => {
       const n = bepaalVandaag();
       if (ymd(n) !== ymd(vandaag)) setVandaag(n);
-    }, 60_000);
-    return () => clearInterval(t);
+    };
+    const t = setInterval(ververs, 60_000);
+    const zicht = () => document.visibilityState === 'visible' && ververs();
+    document.addEventListener('visibilitychange', zicht);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener('visibilitychange', zicht);
+    };
   }, [vandaag]);
 
   const setMode = useCallback((m: Mode) => {

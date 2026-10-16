@@ -326,6 +326,54 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-v
    eigen marges boven en onder blijven, alleen links en rechts automatisch */
 @media (min-width: 768px) { .vg.ot-redesign .vg-papier > * { margin-left: auto; margin-right: auto; } }
 
+/* ---------- Pascha: de contextafhankelijke bovenkant (Pascha.tsx, PaschaInhoud) ----------
+   Gedeeld door desktop en mobiel; deze klassen bestaan alleen in die bovenkant. De bekeken periode krijgt het zachte
+   gouden vlak (Vandaag.css), de actuele een bordeaux stip en het label "Nu". */
+#pascha .ot-pc-ctx-kop { text-align: center; }
+#pascha .ot-pc-bereik { margin: 4px 0 0; font-family: var(--font-lees); font-size: 22px; line-height: 1.25; color: var(--ot-inkt); }
+#pascha .ot-pc-dagregel { margin: 4px 0 0; font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.35; color: var(--ot-gedempt); }
+#pascha .ot-pc-sectie { margin-top: 22px; text-align: left; }
+#pascha .ot-pc-sectie > .vg-label { margin-bottom: 6px; }
+#pascha .ot-pc-tekst { max-width: 62ch; margin: 0 0 8px; font-family: var(--font-lees); font-size: var(--t-tekst); line-height: 1.55; color: var(--ot-inkt); }
+#pascha .ot-pc-midden { margin: 14px auto 0; text-align: center; }
+#pascha .ot-pc-meer, #pascha .ot-pc-terug { padding-left: 0; color: var(--ot-rood); }
+#pascha .ot-pc-terug { margin-top: 18px; }
+#pascha .ot-pc-rijlabel { display: block; margin-bottom: 1px; font-family: var(--font-titel); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--goud-pijl); }
+#pascha .ot-pc-lezingen { margin-top: 10px; }
+#pascha .ot-pc-tlabel { margin-top: 14px; }
+#pascha .ot-pc-troparion { margin: 6px 0 0; padding-left: 12px; border-left: 1.5px solid var(--lijn); font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; color: var(--ot-inkt); }
+#pascha .ot-pc-feestgroet { display: grid; grid-template-columns: clamp(100px, 11cqw, 140px) minmax(0, 1fr); gap: 22px; align-items: center; margin-top: 18px; text-align: left; }
+#pascha .ot-pc-icoon { display: block; width: 100%; height: auto; aspect-ratio: 569 / 800; object-fit: contain; }
+#pascha .ot-pc-groet { margin: 2px 0 0; font-family: var(--font-lees); font-size: 28px; line-height: 1.2; color: var(--ot-rood); }
+#pascha .ot-pc-groet span { display: block; font-style: italic; color: var(--ot-gedempt); }
+#pascha .vg-pc-lijn button.is-actief:not(.is-nu):before { background: var(--papyrus); }
+#pascha .vg-pc-lijn button.is-nu:before { border: 3px solid #a8752c; background: radial-gradient(circle at 40% 35%, #b02a34, #8a1620 70%); }
+#pascha .vg-pc-lijn .ot-nu { color: var(--ot-rood); vertical-align: 2px; }
+#pascha .vg-pc-lijn button:focus-visible { outline: 3px solid #066b95; outline-offset: 2px; }
+/* Mobiel en tablet (onder 1024 px): compact onder elkaar, de tijdlijn altijd in beeld */
+@media (max-width: 1023.98px) {
+  #pascha .ot-pc-m { padding-bottom: 6px; }
+  #pascha .ot-titel.ot-pc-m-titel { margin: 4px 0 0; font-size: clamp(34px, 9.6cqw, 42px); line-height: 1.1; }
+  #pascha .ot-pc-m-titel .ot-nu { margin-left: 10px; vertical-align: 8px; color: var(--ot-rood); }
+  #pascha .ot-pc-bereik { font-size: 19px; }
+  #pascha .ot-pc-dagregel { font-size: 17px; }
+  #pascha .ot-pc-m .ot-pc-terug { display: inline-flex; margin-top: 2px; }
+  #pascha .ot-pc-m .ot-pc-feestgroet { grid-template-columns: 96px minmax(0, 1fr); gap: 16px; }
+  #pascha .ot-pc-m-trop { grid-column: 1 / -1; }
+  #pascha .ot-pc-groet { font-size: 24px; }
+  #pascha .ot-pc-m-hoofd { padding: 10px 0 12px; border-top: 1px solid var(--ot-lijn); border-bottom: 1px solid var(--ot-lijn); }
+  #pascha .ot-pc-m-hoofdtitel { margin: 0; font-family: var(--font-lees); font-size: var(--t-rij); font-weight: 500; line-height: 1.2; color: var(--ot-inkt); }
+  #pascha .ot-pc-m-hoofdtekst { margin: 4px 0 0; font-size: var(--t-klein); line-height: 1.4; color: var(--ot-gedempt); }
+  #pascha .ot-pc-m-overig { margin-top: 10px; }
+  #top#top#top main #pascha .ot-pc-m-overig .ot-rij { min-height: 52px !important; padding: 6px 2px; }
+  #pascha .ot-pc-m-acties { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  #pascha .ot-pc-m-acties .ot-actie { flex: 1 1 200px; white-space: nowrap; }
+  #pascha .ot-pc-m .vg-pc-lijn { max-width: none; margin: 24px 0 0; }
+  #pascha .ot-pc-m .vg-pc-lijn button { grid-template-columns: 32px 118px minmax(0, 1fr) 18px; }
+  #pascha .ot-pc-m .vg-pc-lijn button > span:not(.vg-wk-naam) { overflow-wrap: anywhere; }
+  #top#top#top#top main #pascha .ot-pc-m .vg-pc-lijn button { min-height: 48px !important; padding-top: 4px; padding-bottom: 4px; }
+}
+
 /* ---------- Desktop (vanaf 1024 px) ----------
    Alleen hier: onder 1024 px (mobiel en tablet) verandert niets. Per pagina een bredere, gecentreerde container waar
    kolommen helpen; lopende tekst houdt zijn leesbreedte. */
@@ -334,14 +382,11 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-vlak.lees-v
   #kalender.vg .vg-papier.ot-twee { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); column-gap: 56px; padding-inline: max(var(--rand), calc((100% - 1120px) / 2)); }
   #kalender.vg .ot-twee > * { max-width: none; margin-left: 0; margin-right: 0; }
 
-  /* Pascha: titel, datum en aftelling links als één blok, de tijdlijn ernaast */
-  #pascha.vg .vg-papier { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 1fr repeat(4, auto) 1fr; column-gap: 64px; padding-inline: max(var(--rand), calc((100% - 960px) / 2)); }
-  #pascha.vg .vg-papier > * { grid-column: 1; max-width: none; }
-  #pascha.vg .vg-papier > .ot-titel { grid-row: 2; }
-  #pascha.vg .vg-papier > .ot-pc-datum { grid-row: 3; }
-  #pascha.vg .vg-papier > .vg-sierlijn { grid-row: 4; }
-  #pascha.vg .vg-papier > .ot-pc-nog { grid-row: 5; }
-  #pascha.vg .vg-papier > .vg-pc-lijn { grid-column: 2; grid-row: 1 / -1; align-self: center; margin-top: 0; }
+  /* Pascha: de bovenkant beweegt mee met de actuele periode (Pascha.tsx, PaschaInhoud). Desktop: links waar we zijn, wat de periode
+     betekent en wat er vandaag is; rechts de tijdlijn met de bekeken periode (zacht goud vlak) en de actuele (stip, "Nu"). */
+  #pascha.vg .vg-papier > .ot-pc-desk { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, min(400px, 40%)); column-gap: clamp(36px, 5cqw, 64px); align-items: start; max-width: 1040px; }
+  #pascha .ot-pc-ctx-kop .ot-nu { margin-left: 12px; vertical-align: 14px; color: var(--ot-rood); }
+  #pascha .vg-papier > .ot-pc-desk .vg-pc-lijn { max-width: none; margin: 26px 0 0; }
 
   /* Gebeden: de drie soorten naast elkaar, de verwijzingen eronder in twee kolommen */
   #gebeden.vg .vg-papier > :is(.ot-gb-soorten, .ot-gb-verder) { max-width: 1000px; }
