@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
-import Modal from './Modal';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 import type { Mode } from '../lib/kalender';
 import { vergrendelScroll } from '../lib/scrollLock';
+import { useTerugSluit } from '../lib/terug';
+import { houdFocusBinnen } from '../lib/focus';
+import './welkom.css';
 
 const KALENDERS: { id: Mode; label: string }[] = [
   { id: 'oud', label: 'Oud · juliaans' },
@@ -11,45 +14,77 @@ const KALENDERS: { id: Mode; label: string }[] = [
 
 const TRADITIES = ['Oosters Orthodox', 'Koptisch Orthodox', 'Syrisch Orthodox'];
 
-// Keuzemenu bij het eerste bezoek (daarna op te roepen via de voettekst): de kalender (Oud/Nieuw, zoals de schakelaar
-// in de koptekst) en de traditie. Elke traditieknop sluit het menu en gaat naar Vandaag.
+// Welkomstvenster bij het eerste bezoek: de kalender (Oud/Nieuw, direct toegepast zoals in Instellingen) en de traditie,
+// met "Verder naar vandaag". Eigen venster op perkament met gouden hoeksieraden (welkom.css); Escape, de terugknop en
+// een klik buiten het venster sluiten het, net als de andere vensters (lib/terug.ts).
 export default function KalenderUitleg({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { mode, setMode } = useApp();
+  const [traditie, setTraditie] = useState(TRADITIES[0]);
+  const vensterRef = useRef<HTMLDivElement | null>(null);
+  useTerugSluit(open, onClose);
 
-  // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
+  // Scroll vastzetten en de focus in het venster; bij sluiten terug naar waar hij vandaan kwam.
   useEffect(() => {
     if (!open) return;
-    return vergrendelScroll();
+    const ontgrendel = vergrendelScroll();
+    const terug = document.activeElement as HTMLElement | null;
+    vensterRef.current?.focus({ preventScroll: true });
+    return () => {
+      ontgrendel();
+      terug?.focus?.({ preventScroll: true });
+    };
   }, [open]);
 
+  if (!open) return null;
+
+  const verder = () => {
+    onClose();
+    window.location.hash = 'vandaag';
+  };
+
   return (
-    <Modal open={open} onClose={onClose} eyebrow="Welkom" title="Kies uw traditie" labelledBy="kalender-uitleg-titel" centerTitle maxWidth="max-w-2xl">
-      <div className="keuze-menu">
-        <p className="ot-label">Kalender</p>
-        <div className="keuze-rij" role="group" aria-label="Kalender">
-          {KALENDERS.map(({ id, label }) => (
-            <button key={id} type="button" aria-pressed={mode === id} onClick={() => setMode(id)} className="btn-pill keuze-kalender">
-              {label}
-            </button>
-          ))}
+    <div className="ku-achter" onClick={onClose}>
+      <div role="dialog" aria-modal="true" aria-labelledby="ku-titel" ref={vensterRef} tabIndex={-1} className="ku-venster" onClick={(e) => e.stopPropagation()} onKeyDown={houdFocusBinnen}>
+        {(['lb', 'rb', 'lo', 'ro'] as const).map((hoek) => (
+          <img key={hoek} className={`ku-hoek ku-hoek-${hoek}`} src="/images/ui/hoeksier.webp" alt="" aria-hidden="true" width={256} height={256} />
+        ))}
+        <button type="button" className="ku-sluit" onClick={onClose} aria-label="Sluiten">
+          <X aria-hidden="true" />
+        </button>
+
+        <img className="ku-kruis" src="/images/ui/kruis.webp" alt="" aria-hidden="true" width={218} height={256} />
+        <p className="ku-merk">Orthodoxe Tijd</p>
+        <h2 id="ku-titel" className="ku-titel">Welkom</h2>
+        <p className="ku-onder">Een weg door de tijd, een leven met Christus.</p>
+        <img className="ku-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
+
+        <div className="ku-kolommen">
+          <fieldset className="ku-groep">
+            <legend>Kalender</legend>
+            {KALENDERS.map(({ id, label }) => (
+              <label key={id} className="ku-keuze">
+                <input type="radio" name="ku-kalender" value={id} checked={mode === id} onChange={() => setMode(id)} />
+                <span>{label}</span>
+              </label>
+            ))}
+          </fieldset>
+          <span className="ku-scheiding" aria-hidden="true" />
+          <fieldset className="ku-groep">
+            <legend>Traditie</legend>
+            {TRADITIES.map((t) => (
+              <label key={t} className="ku-keuze">
+                <input type="radio" name="ku-traditie" value={t} checked={traditie === t} onChange={() => setTraditie(t)} />
+                <span>{t}</span>
+              </label>
+            ))}
+          </fieldset>
         </div>
-        <p className="ot-label">Traditie</p>
-        <div className="keuze-tradities">
-          {TRADITIES.map((traditie) => (
-            <button
-              key={traditie}
-              type="button"
-              onClick={() => {
-                onClose();
-                window.location.hash = 'vandaag';
-              }}
-              className="btn-pill keuze-traditie"
-            >
-              {traditie}
-            </button>
-          ))}
-        </div>
+
+        <button type="button" className="ku-verder" onClick={verder}>
+          Verder naar vandaag <ArrowRight aria-hidden="true" />
+        </button>
+        <p className="ku-noot">U kunt uw keuze later wijzigen bij Instellingen.</p>
       </div>
-    </Modal>
+    </div>
   );
 }

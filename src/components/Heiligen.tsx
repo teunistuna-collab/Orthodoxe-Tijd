@@ -113,7 +113,10 @@ export default function Heiligen() {
             <img src="/images/vandaag/kerk-header-800.webp" srcSet="/images/vandaag/kerk-header-800.webp 800w, /images/vandaag/kerk-header-1536.webp 1536w" sizes="(min-width: 960px) 960px, 100vw" alt="" width={1536} height={1024} loading={open ? 'eager' : 'lazy'} decoding="async" />
           </picture>
         }
-      />
+      >
+        {/* Web: het icoon van Christus de Wijnstok met de apostelen in de nis (mobiel staat het al in de banner) */}
+        <img className="vg-hl-icoon" src="/images/ontwerp/heiligen-wijnstok-300.webp" srcSet="/images/ontwerp/heiligen-wijnstok-300.webp 300w, /images/ontwerp/heiligen-wijnstok-430.webp 430w" sizes="150px" alt="Icoon van Christus de Wijnstok met de apostelen" width={430} height={582} loading="lazy" decoding="async" />
+      </NisKop>
       <div className="vg-papier">
         {titel ? (
           <>

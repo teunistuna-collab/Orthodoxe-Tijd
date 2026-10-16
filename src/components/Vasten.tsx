@@ -209,7 +209,6 @@ export default function Vasten() {
                 {grotevier.map((p) => (
                   <li key={p.id}>
                     <button type="button" className="ot-rij" onClick={() => setPeriodeOpen(p.id)}>
-                      <span className="ot-rij-symbool" aria-hidden="true"><img src={`/images/ui/vasten-perioden/${p.id}.webp`} alt="" width={96} height={96} loading="lazy" decoding="async" /></span>
                       <span className="ot-rij-tekst">
                         <b>{PERIODE_INFO[p.id]?.label ?? p.naam}</b>
                         <span>{formatDag(p.start)} – {formatDatum(p.eind)}{PERIODE_INFO[p.id]?.beweeglijk ? ' · beweeglijk' : ''}</span>
