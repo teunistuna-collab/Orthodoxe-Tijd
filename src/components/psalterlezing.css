@@ -1,0 +1,31 @@
+/* Psalterlezing (Psalterlezing.tsx): compact, in de tokens van de site (Vandaag.css :root). Rustig: dunne gouden lijnen,
+   de kathisma's als kleine perkamenten verwijzingen, de status in de gedempte kleur. */
+.psl { --psl-lijn: var(--lijn-zacht, rgba(172, 121, 47, .3)); font-family: var(--font-lees); color: var(--inkt, #0b1b2a); text-align: left; }
+.psl-diensten { display: grid; gap: 0; }
+@container (min-width: 560px) { .psl-diensten:has(> :nth-child(2)) { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
+.psl-dienst { min-width: 0; padding: 10px 0 12px; border-bottom: 1px solid var(--psl-lijn); }
+.psl-naam { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: 0 0 6px !important; font-size: 18px; font-weight: 500; line-height: 1.25; color: var(--inkt, #0b1b2a); }
+.psl-naam small { font-size: 14px; font-weight: 400; color: var(--gedempt, #5d5040); }
+.psl-lezingen { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.psl a.psl-kathisma { display: inline-flex; align-items: center; min-height: 40px; padding: 4px 12px; border: 1px solid rgba(167, 118, 52, .45); border-radius: 7px; background: rgba(255, 250, 238, .55); font-size: 17px; line-height: 1.2; text-decoration: none !important; color: var(--inkt, #0b1b2a) !important; }
+.psl a.psl-kathisma small { font-size: 15px; color: var(--gedempt, #5d5040); }
+@media (hover: hover) { .psl a.psl-kathisma:hover { background: rgba(255, 248, 229, .95); border-color: var(--kaartrand, #b99455); } }
+.psl a:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+.psl-polyeleos { display: inline-flex; align-items: center; min-height: 40px; padding: 4px 2px; font-size: 17px; }
+.psl-polyeleos small { margin-left: 4px; font-size: 14px; color: var(--gedempt, #5d5040); }
+.psl-of { font-size: 15px; font-style: italic; color: var(--gedempt, #5d5040); }
+.psl p { margin: 0; }
+.psl .psl-hoofd { font-size: 17px; line-height: 1.4; }
+.psl .psl-status { margin-top: 6px; font-size: 14px; line-height: 1.4; color: var(--gedempt, #5d5040); }
+.psl .psl-noot { margin-top: 4px; font-size: 14px; font-style: italic; line-height: 1.4; color: var(--gedempt, #5d5040); }
+/* De naam van een dienst staat al in de kop (etmaal): alleen de datumregel erboven */
+.psl-datum { margin: 0 0 4px !important; font-size: 14px; color: var(--gedempt, #5d5040); }
+/* Etmaal: los blok onder de vaste psalmen van de dienst */
+.etmaal-kathisma { margin: 14px 0 8px; padding-top: 10px; border-top: 1px solid var(--lijn-zacht, rgba(172, 121, 47, .3)); }
+#top#top#top#top .etmaal-kathisma h3 { margin: 0 0 4px; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--inkt, #0b1b2a); }
+/* Psalmen, Per kathisma: het blok met de datum boven de twintig kaarten */
+.ot-kt-psalter { margin: 0 0 18px; padding: 12px 14px 4px; border: 1px solid rgba(167, 118, 52, .4); border-radius: 7px; background: rgba(255, 250, 238, .4); }
+#top#top#top#top#top#top#top .ot-psalmen .ot-kt-psalter h2 { margin: 0; font-family: var(--font-titel) !important; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--inkt, #0b1b2a); }
+#top#top#top#top#top#top#top .ot-kt-psalter .psl-datum { margin-top: 2px !important; font-size: 18px; color: var(--inkt, #0b1b2a); }
+.ot-kt-psalter .psl-dienst:last-child { border-bottom: 0; }
+.ot-kt .ot-kt-vandaag { margin: 6px 0 0; text-align: center; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--bordeaux-diep, #850d17); }

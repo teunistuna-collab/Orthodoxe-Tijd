@@ -138,6 +138,9 @@
 .vg-leeg { min-height: 44px; display: flex; align-items: center; font-size: 16px; font-style: italic; color: var(--gedempt); }
 
 .vg-duo { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--lijn); }
+/* Psalterlezing (Psalterlezing.tsx, psalterlezing.css) */
+.vg-psalter { margin-top: 18px; }
+.vg-psalter .vg-label { margin-bottom: 0; }
 .vg-nw { white-space: nowrap; }
 .vg-ingang { position: relative; display: grid; grid-template-columns: 26px 1fr; gap: 0 8px; padding: 14px 4px 14px 0; }
 .vg-ingang + .vg-ingang { padding-left: 14px; border-left: 1px solid var(--lijn); }

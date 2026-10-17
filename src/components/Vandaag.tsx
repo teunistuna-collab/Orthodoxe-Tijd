@@ -13,6 +13,7 @@ import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { vastenGroep } from '../lib/vasten';
 import { feestVoorDag } from '../lib/feestdagen';
 import Kaarsgloed from './Kaarsgloed';
+import Psalterlezing from './Psalterlezing';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -200,6 +201,12 @@ export default function Vandaag() {
                 </div>
               </section>
             </div>
+
+            {/* Psalterlezing: Metten en Vespers van vandaag naast elkaar (ook 's avonds), lib/psalterlezing.ts */}
+            <section className="vg-psalter" aria-labelledby="vg-psalter-kop">
+              <h2 id="vg-psalter-kop" className="vg-label">Psalterlezing</h2>
+              <Psalterlezing datum={dag.ymd} mode={mode} />
+            </section>
 
             {/* Overige daginformatie (weekcyclus, kerkelijke datum, paascyclus), compact om uit te klappen. */}
             <div className="vg-meer">

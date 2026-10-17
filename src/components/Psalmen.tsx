@@ -10,6 +10,10 @@ import { gaNaar } from '../lib/navigatie';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { useLeesvoorkeur, vergroot, verklein, wisselNacht } from '../lib/leesvoorkeur';
 import { usePsalmAudio } from '../lib/psalmAudio';
+import { useApp } from '../lib/context';
+import { WEEKDAGEN, formatDag, parseYmd, ymd } from '../lib/kalender';
+import { psalterlezingen, type Lezing } from '../lib/psalterlezing';
+import Psalterlezing from './Psalterlezing';
 import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, kathismaStappen, laadPsalmTeksten, psalmBereik, psalmVanHetUur, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type KathismaStuk, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 import './Vandaag.css';
 import './ontwerp.css';
@@ -77,21 +81,29 @@ const psalmUitHash = () => {
 
 // Kathismata: #psalmen/kathisma (overzicht), #psalmen/kathisma/3 (één kathisma), #psalmen/kathisma/3/2/18 (lezen).
 // Een onbekend kathisma geeft het overzicht; een psalm die niet bij dat deel hoort het kathisma zelf.
+// Met ?datum=2026-10-17 (vanaf Vandaag en het etmaal) toont "Per kathisma" de psalterlezing van die datum; zonder: vandaag.
 const kathismaUitHash = () => {
-  const m = /^#psalmen\/kathisma(?:\/(\d+)(?:\/(\d)\/(\d+))?)?$/.exec(window.location.hash);
+  const m = /^#psalmen\/kathisma(?:\/(\d+)(?:\/(\d)\/(\d+))?)?(?:\?datum=(\d{4}-\d{2}-\d{2}))?$/.exec(window.location.hash);
   if (!m) return null;
   const k = KATHISMATA[Number(m[1]) - 1] ?? null;
   const i = k ? kathismaStappen(k).findIndex((s) => s.deel === Number(m[2]) && s.psalm === Number(m[3])) : -1;
-  return { k, i: i >= 0 ? i : null };
+  const datum = m[4] && ymd(parseYmd(m[4])) === m[4] ? m[4] : null;
+  return { k, i: i >= 0 ? i : null, datum };
 };
-const kathismaPad = (k: Kathisma, s?: KathismaStap) => `#psalmen/kathisma/${k.nr}${s ? `/${s.deel}/${s.psalm}` : ''}`;
+const kathismaPad = (k: Kathisma | null, s?: KathismaStap, datum?: string | null) =>
+  `#psalmen/kathisma${k ? `/${k.nr}` : ''}${k && s ? `/${s.deel}/${s.psalm}` : ''}${datum ? `?datum=${datum}` : ''}`;
+const bevat = (l: Lezing, nr: number): boolean => (l.soort === 'keuze' ? l.opties.some((o) => bevat(o, nr)) : l.soort !== 'polyeleos' && l.nr === nr);
+const datumTekst = (d: string) => `${WEEKDAGEN[parseYmd(d).getUTCDay()]} ${formatDag(parseYmd(d))} ${parseYmd(d).getUTCFullYear()}`;
 /** "Psalm 18" of "Psalm 118, verzen 73–131" */
 const stukNaam = (s: KathismaStuk) => `Psalm ${s.psalm}${s.vanVers ? `, verzen ${s.vanVers}–${s.totVers}` : ''}`;
 const NIET_BESCHIKBAAR = 'Tekst nog niet beschikbaar';
 
 // Diepte van een adres binnen de pagina: overzicht (0), één kathisma (1), lezer (2). Terug naar een minder diepe weergave
 // zet de onthouden scrollpositie terug; dieper (een kathisma openen) brengt de tabbladen in beeld.
-const diepte = (h: string) => (/^#psalmen\/(\d+|kathisma\/\d+\/\d\/\d+)(\/|$)/.test(h) ? 2 : /^#psalmen\/kathisma\/\d+$/.test(h) ? 1 : 0);
+const diepte = (adres: string) => {
+  const h = adres.split('?')[0];
+  return /^#psalmen\/(\d+|kathisma\/\d+\/\d\/\d+)(\/|$)/.test(h) ? 2 : /^#psalmen\/kathisma\/\d+$/.test(h) ? 1 : 0;
+};
 
 export default function Psalmen({ actief }: { actief: boolean }) {
   const open = usePaginaOpen('psalmen');
@@ -205,7 +217,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   if (lezen) return <Lezer key={lezen.nr} nr={lezen.nr} vers={lezen.vers} tekst={teksten?.[lezen.nr]} laadFout={laadFout} />;
   if (kat?.k && kat.i !== null) {
     const psalm = kathismaStappen(kat.k)[kat.i].psalm;
-    return <Lezer key={`k${kat.k.nr}-${kat.i}`} nr={psalm} vers={null} tekst={teksten?.[psalm]} laadFout={laadFout} kathisma={{ k: kat.k, i: kat.i }} />;
+    return <Lezer key={`k${kat.k.nr}-${kat.i}`} nr={psalm} vers={null} tekst={teksten?.[psalm]} laadFout={laadFout} kathisma={{ k: kat.k, i: kat.i, datum: kat.datum }} />;
   }
   const perKathisma = !!kat;
   // Tabbladen "Per psalm" en "Per kathisma": pijltjes, Home en End wisselen (en verplaatsen de focus), zoals bij tabs.
@@ -248,7 +260,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
           <div id="ps-weergave" role="tabpanel" aria-labelledby={perKathisma ? 'ps-tab-kathisma' : 'ps-tab-psalm'}>
           {perKathisma ? (
-            kat.k ? <KathismaDelen k={kat.k} /> : <KathismaOverzicht />
+            kat.k ? <KathismaDelen k={kat.k} datum={kat.datum} /> : <KathismaOverzicht datum={kat.datum} />
           ) : (
           <>
           <label className="ot-zoekveld">
@@ -367,15 +379,25 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
 const KATHISMA_UITLEG = 'Het Psalter is verdeeld in twintig kathisma’s. Elk kathisma bestaat uit drie delen. De nummering volgt de Septuaginta.';
 
-/** Per kathisma: de twintig kathismata als klikbare kaarten. */
-function KathismaOverzicht() {
+/** Per kathisma: de psalterlezing van de datum, en de twintig kathismata als klikbare kaarten (vaste volgorde). */
+function KathismaOverzicht({ datum }: { datum: string | null }) {
+  const { mode, vandaagYmd } = useApp();
+  const dag = datum ?? vandaagYmd;
   return (
     <>
+      <section className="ot-kt-psalter" aria-labelledby="ot-kt-psalter-kop">
+        <h2 id="ot-kt-psalter-kop">Psalterlezing</h2>
+        <p className="psl-datum">
+          <time dateTime={dag}>{datumTekst(dag)}</time>
+          {dag === vandaagYmd ? ' · vandaag' : ''}
+        </p>
+        <Psalterlezing datum={dag} mode={mode} />
+      </section>
       <p className="ot-kt-uitleg">{KATHISMA_UITLEG}</p>
       <ul className="ot-kt-raster">
         {KATHISMATA.map((k) => (
           <li key={k.nr}>
-            <a className="ot-kt-kaart" href={kathismaPad(k)}>
+            <a className="ot-kt-kaart" href={kathismaPad(k, undefined, datum)}>
               <span className="ot-kt-titel">Kathisma {k.nr}</span>
               <span className="ot-kt-onder">{psalmBereik(k.van, k.tot)}</span>
             </a>
@@ -388,11 +410,14 @@ function KathismaOverzicht() {
 
 /** Eén kathisma: de drie delen met hun psalmen. Psalmen met tekst openen de lezer (in dit kathisma), de andere zijn
  *  gewone tekst met "Tekst nog niet beschikbaar". */
-function KathismaDelen({ k }: { k: Kathisma }) {
+function KathismaDelen({ k, datum }: { k: Kathisma; datum: string | null }) {
+  const { mode } = useApp();
   const stappen = kathismaStappen(k);
+  // Binnengekomen met een datum (Vandaag, etmaal): bij welke dienst van die datum dit kathisma hoort
+  const bij = datum ? Object.values(psalterlezingen(datum, mode)).filter((r) => r.lezingen.some((l) => bevat(l, k.nr))) : [];
   return (
     <section className="ot-kt" aria-labelledby="ot-kt-titel">
-      <a className="ot-kt-terug" href="#psalmen/kathisma">
+      <a className="ot-kt-terug" href={kathismaPad(null, undefined, datum)}>
         <ChevronLeft aria-hidden="true" />
         <span>Alle kathisma’s</span>
       </a>
@@ -400,6 +425,11 @@ function KathismaDelen({ k }: { k: Kathisma }) {
         <h2 id="ot-kt-titel">Kathisma {k.nr}</h2>
         <p>{psalmBereik(k.van, k.tot)}</p>
         {k.noot && <p className="ot-kt-noot">{k.noot}</p>}
+        {datum && bij.length > 0 && (
+          <p className="ot-kt-vandaag">
+            {datumTekst(datum)}: {bij.map((r) => (r.dienst === 'metten' ? 'Metten' : 'Vespers')).join(' en ')}
+          </p>
+        )}
       </header>
       {k.delen.map((deel, d) => {
         const beschikbaar = deel.filter((s) => PSALMEN[s.psalm - 1].hasText).length;
@@ -419,7 +449,7 @@ function KathismaDelen({ k }: { k: Kathisma }) {
                 return (
                   <li key={s.psalm}>
                     {PSALMEN[s.psalm - 1].hasText ? (
-                      <a href={kathismaPad(k, stap)}>
+                      <a href={kathismaPad(k, stap, datum)}>
                         <span>{stukNaam(s)}</span>
                         <span className="ot-kt-pijl" aria-hidden="true">›</span>
                       </a>
@@ -442,7 +472,7 @@ function KathismaDelen({ k }: { k: Kathisma }) {
 
 /** De psalm als eigen leesweergave: compacte balk, tabs en tekst (PsalmLezer), vorige/volgende psalm. Hervat op `vers`
  *  (verslink of "Ga verder") en houdt tijdens het lezen het eerste zichtbare vers bij. */
-function Lezer({ nr, vers, tekst, laadFout, kathisma }: { nr: number; vers: number | null; tekst?: PsalmTekst; laadFout: boolean; kathisma?: { k: Kathisma; i: number } }) {
+function Lezer({ nr, vers, tekst, laadFout, kathisma }: { nr: number; vers: number | null; tekst?: PsalmTekst; laadFout: boolean; kathisma?: { k: Kathisma; i: number; datum: string | null } }) {
   const psalm = PSALMEN[nr - 1];
   // Vanuit een kathisma: de stap in de leesvolgorde van dat kathisma; bij Psalm 118 alleen de verzen van dat deel.
   const k = kathisma?.k;
@@ -512,7 +542,7 @@ function Lezer({ nr, vers, tekst, laadFout, kathisma }: { nr: number; vers: numb
     <section id="psalmen" className="vg ot-redesign ot-lezer">
       <article ref={vlakRef} className="vg-papier ot-inhoud lees-vlak ot-lezer-vlak" aria-labelledby="ps-lezer-titel">
         <div ref={balkRef} className="ot-lezer-balk" role="toolbar" aria-label="Leesbediening">
-          <a className="ot-terug" href={k ? kathismaPad(k) : '#psalmen'}><ChevronLeft aria-hidden="true" />{k ? <span>Kathisma<span className="ot-terug-nr"> {k.nr}</span></span> : <span>Psalmen</span>}</a>
+          <a className="ot-terug" href={k ? kathismaPad(k, undefined, kathisma?.datum) : '#psalmen'}><ChevronLeft aria-hidden="true" />{k ? <span>Kathisma<span className="ot-terug-nr"> {k.nr}</span></span> : <span>Psalmen</span>}</a>
           <span className="ot-lezer-nr" aria-hidden="true">{stap ? `Deel ${stap.deel}` : `Psalm ${nr}`}</span>
           <div className="ot-lezer-knoppen">
             {/* Zelfde volgorde als de leesbediening van gebeden en heiligenlevens (Leesbediening.tsx): A+ · A− · avondweergave */}
@@ -553,14 +583,14 @@ function Lezer({ nr, vers, tekst, laadFout, kathisma }: { nr: number; vers: numb
         {k && stap ? (
           <nav className="ot-lezer-blader ot-lezer-blader-kt" aria-label={`Bladeren in kathisma ${k.nr}`}>
             {i > 0 ? (
-              <a href={kathismaPad(k, stappen[i - 1])}><ChevronLeft aria-hidden="true" /><span>Vorige<small>{blader(stappen[i - 1])}</small></span></a>
+              <a href={kathismaPad(k, stappen[i - 1], kathisma?.datum)}><ChevronLeft aria-hidden="true" /><span>Vorige<small>{blader(stappen[i - 1])}</small></span></a>
             ) : (
-              <a href={kathismaPad(k)}><ChevronLeft aria-hidden="true" /><span>Kathisma {k.nr}<small>Alle delen</small></span></a>
+              <a href={kathismaPad(k, undefined, kathisma?.datum)}><ChevronLeft aria-hidden="true" /><span>Kathisma {k.nr}<small>Alle delen</small></span></a>
             )}
             {i < stappen.length - 1 ? (
-              <a href={kathismaPad(k, stappen[i + 1])} className="is-volgende"><span>Volgende<small>{blader(stappen[i + 1])}</small></span><ChevronRight aria-hidden="true" /></a>
+              <a href={kathismaPad(k, stappen[i + 1], kathisma?.datum)} className="is-volgende"><span>Volgende<small>{blader(stappen[i + 1])}</small></span><ChevronRight aria-hidden="true" /></a>
             ) : (
-              <a href={kathismaPad(k)} className="is-volgende"><span>Einde van kathisma {k.nr}<small>Terug naar de delen</small></span><ChevronRight aria-hidden="true" /></a>
+              <a href={kathismaPad(k, undefined, kathisma?.datum)} className="is-volgende"><span>Einde van kathisma {k.nr}<small>Terug naar de delen</small></span><ChevronRight aria-hidden="true" /></a>
             )}
           </nav>
         ) : (

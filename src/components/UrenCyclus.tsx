@@ -9,6 +9,9 @@ import { dienstVanHetUur, serviceConfig, type PsalmMapping } from '../lib/etmaal
 import EtmaalOverzicht from './EtmaalOverzicht';
 import ExactPageFrame from './ExactPageFrame';
 import { PsalmLezer } from './Psalmen';
+import Psalterlezing from './Psalterlezing';
+import { useApp } from '../lib/context';
+import { WEEKDAGEN, addDays, formatDag } from '../lib/kalender';
 import Verdieping from './Verdieping';
 import { PSALMEN, laadPsalmTeksten, type PsalmTeksten } from '../lib/psalmen';
 
@@ -57,6 +60,7 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
 export default function UrenCyclus() {
   const [open, setOpen] = useState<number | null>(null);
   const [modalState, setModalState] = useState<ModalState | null>(null);
+  const { mode, vandaag, vandaagYmd } = useApp();
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const [pdf, setPdf] = useState<{ url: string; pages: Array<Array<PdfLine>>; status: 'error' | 'done' } | null>(null);
 
@@ -264,7 +268,7 @@ export default function UrenCyclus() {
               </blockquote>
             )}
 
-            <div className="etmaal-popup-keuze">
+            <div className="etmaal-popup-keuze" role="group" aria-label="Vaste psalmen van de dienst">
               <button type="button" onClick={() => goToService(open)} className={`btn-pill${modalState?.selectedPsalm ? '' : ' is-actief'}`}>
                 De dienst
               </button>
@@ -279,6 +283,17 @@ export default function UrenCyclus() {
                 </button>
               ))}
             </div>
+            {!modalState?.selectedPsalm && (currentService.title === 'Metten' || currentService.title === 'Vespers') && (
+              // Psalterlezing van vandaag (lib/psalterlezing.ts), zelfde uitkomst als op Vandaag en Psalmen
+              <section className="etmaal-kathisma" aria-labelledby="etmaal-kathisma-kop">
+                <h3 id="etmaal-kathisma-kop">Kathisma’s bij deze dienst</h3>
+                <p className="psl-datum">
+                  {WEEKDAGEN[vandaag.getUTCDay()]} {formatDag(vandaag)}
+                  {currentService.title === 'Vespers' && ` (avond) · vesper van ${WEEKDAGEN[addDays(vandaag, 1).getUTCDay()]} ${formatDag(addDays(vandaag, 1))}`}
+                </p>
+                <Psalterlezing datum={vandaagYmd} mode={mode} dienst={currentService.title === 'Metten' ? 'metten' : 'vespers'} onKies={closeModal} />
+              </section>
+            )}
             {modalState?.selectedPsalm && (
               // De link zelf gaat via gaNaar (App.tsx); de dienst sluit, de psalm opent op de Psalmenpagina.
               <a className="etmaal-naar-psalter" href={`#psalmen/${modalState.selectedPsalm.title.replace('Psalm ', '')}`} onClick={closeModal}>
