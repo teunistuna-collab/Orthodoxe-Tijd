@@ -82,29 +82,75 @@ for (const { dienst, tijd, delen } of ETMAAL_GROEPEN) {
   }
 }
 
-/** De kathismata van het psalter (Septuagint-nummering), zoals aangeleverd door de redactie. */
-export const KATHISMATA: { nr: number; van: number; tot: number; noot?: string }[] = [
-  { nr: 1, van: 1, tot: 8 },
-  { nr: 2, van: 9, tot: 16 },
-  { nr: 3, van: 17, tot: 23 },
-  { nr: 4, van: 24, tot: 31 },
-  { nr: 5, van: 32, tot: 36 },
-  { nr: 6, van: 37, tot: 45 },
-  { nr: 7, van: 46, tot: 54 },
-  { nr: 8, van: 55, tot: 63 },
-  { nr: 9, van: 64, tot: 69 },
-  { nr: 10, van: 70, tot: 76 },
-  { nr: 11, van: 77, tot: 84 },
-  { nr: 12, van: 85, tot: 90 },
-  { nr: 13, van: 91, tot: 100 },
-  { nr: 14, van: 101, tot: 104 },
-  { nr: 15, van: 105, tot: 108 },
-  { nr: 16, van: 109, tot: 111 },
-  { nr: 17, van: 118, tot: 118, noot: 'De langste psalm, de Wet/Grafpsalm' },
-  { nr: 18, van: 119, tot: 133, noot: 'De bedevaartsliederen' },
-  { nr: 19, van: 134, tot: 142 },
-  { nr: 20, van: 143, tot: 150 },
+/* ---------- Kathismata ---------- */
+
+/** Eén stuk van een kathismadeel: een hele psalm, of een versbereik daarvan (alleen Psalm 118 in kathisma 17). */
+export interface KathismaStuk {
+  /** Septuagint-nummer, gelijk aan PSALMEN[psalm - 1].septuagintNumber. */
+  psalm: number;
+  vanVers?: number;
+  totVers?: number;
+}
+export interface Kathisma {
+  nr: number;
+  /** Altijd drie delen (stases), in leesvolgorde. */
+  delen: KathismaStuk[][];
+  /** Eerste en laatste psalm van het kathisma. */
+  van: number;
+  tot: number;
+  noot?: string;
+}
+/** Een stuk met zijn deelnummer (1–3): de leesvolgorde binnen één kathisma. */
+export interface KathismaStap extends KathismaStuk {
+  deel: number;
+}
+
+/**
+ * De indeling van het psalter in twintig kathismata van elk drie delen, Septuagint-nummering. Bron: OCA, "The Division of
+ * the Psalter into Kathismas" (https://www.oca.org/liturgics/outlines/the-division-of-the-psalter-into-kathismas).
+ * Per deel [eerste psalm, laatste psalm]; kathisma 17 is Psalm 118, verdeeld over drie versbereiken.
+ * scripts/psalmen.check.ts controleert dat alle 150 psalmen precies één keer voorkomen.
+ */
+const KATHISMA_DELEN: [number, number][][] = [
+  [[1, 3], [4, 6], [7, 8]],
+  [[9, 10], [11, 13], [14, 16]],
+  [[17, 17], [18, 20], [21, 23]],
+  [[24, 26], [27, 29], [30, 31]],
+  [[32, 33], [34, 35], [36, 36]],
+  [[37, 39], [40, 42], [43, 45]],
+  [[46, 48], [49, 50], [51, 54]],
+  [[55, 57], [58, 60], [61, 63]],
+  [[64, 66], [67, 67], [68, 69]],
+  [[70, 71], [72, 73], [74, 76]],
+  [[77, 77], [78, 80], [81, 84]],
+  [[85, 87], [88, 88], [89, 90]],
+  [[91, 93], [94, 96], [97, 100]],
+  [[101, 102], [103, 103], [104, 104]],
+  [[105, 105], [106, 106], [107, 108]],
+  [[109, 111], [112, 114], [115, 117]],
+  [[118, 118], [118, 118], [118, 118]], // verzen: PSALM_118_DELEN
+  [[119, 123], [124, 128], [129, 133]],
+  [[134, 136], [137, 139], [140, 142]],
+  [[143, 144], [145, 147], [148, 150]],
 ];
+const PSALM_118_DELEN: [number, number][] = [[1, 72], [73, 131], [132, 176]];
+// Toelichtingen zoals aangeleverd door de redactie.
+const KATHISMA_NOTEN: Record<number, string> = { 17: 'De langste psalm, de Wet/Grafpsalm', 18: 'De bedevaartsliederen' };
+
+export const KATHISMATA: Kathisma[] = KATHISMA_DELEN.map((delen, i) => {
+  const nr = i + 1;
+  const stukken =
+    nr === 17
+      ? PSALM_118_DELEN.map(([vanVers, totVers]) => [{ psalm: 118, vanVers, totVers }])
+      : delen.map(([a, b]) => Array.from({ length: b - a + 1 }, (_, j) => ({ psalm: a + j })));
+  return { nr, delen: stukken, van: delen[0][0], tot: delen[2][1], ...(KATHISMA_NOTEN[nr] ? { noot: KATHISMA_NOTEN[nr] } : {}) };
+});
+
+/** Alle stukken van een kathisma in leesvolgorde, met hun deelnummer. */
+export const kathismaStappen = (k: Kathisma): KathismaStap[] => k.delen.flatMap((d, i) => d.map((s) => ({ ...s, deel: i + 1 })));
+
+/** "Psalmen 1–8" of "Psalm 118" */
+export const psalmBereik = (van: number, tot: number) => (van === tot ? `Psalm ${van}` : `Psalmen ${van}–${tot}`);
 
 /** Thema's van het psalter, zoals aangeleverd door de redactie; verzen alleen waar een psalm maar voor een deel meetelt. */
 export const THEMAS: { naam: string; psalmen: number[]; verzen?: Record<number, string> }[] = [
@@ -169,6 +215,24 @@ export function laadPsalmTeksten(): Promise<PsalmTeksten> {
       throw fout;
     });
   return tekstenLaden;
+}
+
+/**
+ * De verzen van een versbereik (Psalm 118 in kathisma 17), op de versnummers uit de bron. Een blok zonder nummer hoort bij
+ * het vers ervoor (aan het begin: het opschrift en vers 1); een tussenkop ("tweede stasis") bij het vers erna. Geeft null
+ * als niet elk vers van het bereik een eigen nummer heeft (behalve vers 1 aan het begin): dan wordt er niets geknipt.
+ */
+export function verzenVanStuk(tekst: PsalmTekst, stuk: KathismaStuk): PsalmBlok[] | null {
+  const { vanVers, totVers } = stuk;
+  if (!vanVers || !totVers) return tekst.verzen;
+  const nummers = new Set(tekst.verzen.map((v) => v.n).filter((n): n is number => !!n));
+  for (let n = Math.max(vanVers, 2); n <= totVers; n++) if (!nummers.has(n)) return null;
+  let huidig = 1;
+  return tekst.verzen.filter((v, i) => {
+    const n = v.kop ? (tekst.verzen.slice(i + 1).find((w) => w.n)?.n ?? huidig) : (v.n ?? huidig);
+    if (!v.kop) huidig = n;
+    return n >= vanVers && n <= totVers;
+  });
 }
 
 /* ---------- Zoeken ---------- */
