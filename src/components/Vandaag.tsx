@@ -9,7 +9,6 @@ import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
 import { dienstVanHetUur } from '../lib/etmaal';
 import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
 import { heiligeTitel } from '../lib/heiligenPopup';
-import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { vastenGroep } from '../lib/vasten';
 import { feestVoorDag } from '../lib/feestdagen';
 import Kaarsgloed from './Kaarsgloed';
@@ -56,7 +55,6 @@ export default function Vandaag() {
   const hoofdFeest = dag.feesten[0];
   // De eerste echte heilige van de dag (geen voorfeest, "Zaterdag vóór …" of icoon) die niet al het feest van de dag is.
   const heilige = heiligen?.HEILIGEN[dag.kerkKey]?.find((h) => h.type === 'saint' && !(hoofdFeest && zelfdeGedachtenis(h.naam, hoofdFeest.naam)));
-  const kleur = liturgischeKleur(dag);
   // Feestdagen (lib/feestdagen.ts): tijdens Pascha en de Geboorte van Christus vervangt het feesticoon het Christusicoon
   // in de kop, met de begroeting en een feestlink eronder. Bij een dagwisseling of andere kalenderkeuze opnieuw bepaald.
   const feest = useMemo(() => feestVoorDag(vandaag, mode), [vandaag, mode]);
@@ -164,23 +162,20 @@ export default function Vandaag() {
             <section className="vg-vf" aria-labelledby="vg-vf-kop">
               <h2 id="vg-vf-kop" className="vg-label vg-sectiekop vg-sectiekop-lees">Vasten &amp; feesten</h2>
               <div className="vg-meer vg-cyclus">
-                <details>
-                  <summary className="vg-cyclusregel"><span>{hoofdletter(dag.weekdagNaam)} · {weekthema.titel}</span><ChevronRight aria-hidden="true" /></summary>
-                  <p>{weekthema.uitleg}</p>
-                  <Actie className="vg-link" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>Bekijk de week ›</Actie>
-                </details>
-                <details>
-                  <summary className="vg-cyclusregel"><span>Kerkelijke datum: {kerkelijkeDatum}</span><ChevronRight aria-hidden="true" /></summary>
-                  <p>
-                    <i className="vg-kleur" style={{ background: LITURGISCHE_KLEUREN[kleur].hex }} aria-hidden="true" />
-                    Liturgische kleur: {kleur} ({LITURGISCHE_KLEUREN[kleur].uitleg})
-                  </p>
-                  <button type="button" className="vg-link" onClick={() => openDag(dag.ymd)}>Bekijk de volledige dag ›</button>
-                </details>
-                <details>
-                  <summary className="vg-cyclusregel"><span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span><ChevronRight aria-hidden="true" /></summary>
-                  <Actie className="vg-link" href="#pascha" onClick={() => openDagPascha(dag.ymd)}>Bekijk de cyclus ›</Actie>
-                </details>
+                {/* De weekdag opent meteen het venster van die dag uit de weekcyclus */}
+                <Actie className="vg-cyclusregel vg-cyclus-link" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>
+                  <span>{hoofdletter(dag.weekdagNaam)} · {weekthema.titel}</span>
+                  <ChevronRight aria-hidden="true" />
+                </Actie>
+                {/* De kerkelijke datum opent de volledige dag, de paascyclus het venster "Paascyclus" van vandaag */}
+                <button type="button" className="vg-cyclusregel vg-cyclus-link" onClick={() => openDag(dag.ymd)}>
+                  <span>Kerkelijke datum: {kerkelijkeDatum}</span>
+                  <ChevronRight aria-hidden="true" />
+                </button>
+                <Actie className="vg-cyclusregel vg-cyclus-link" href="#pascha" onClick={() => openDagPascha(dag.ymd)}>
+                  <span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span>
+                  <ChevronRight aria-hidden="true" />
+                </Actie>
               </div>
 
               {/* Het feest of de gedachtenis van de dag; alleen als de kalender er een heeft */}
@@ -231,7 +226,7 @@ export default function Vandaag() {
                         {lezingen.length > 2 && (
                           <li>
                             <details className="vg-meer-lezingen">
-                              <summary className="vg-rij">Nog {lezingen.length - 2} lezingen<ChevronRight aria-hidden="true" /></summary>
+                              <summary className="vg-rij">Nog {lezingen.length - 2} {lezingen.length - 2 === 1 ? 'lezing' : 'lezingen'}<ChevronRight aria-hidden="true" /></summary>
                               <ul>{lezingen.slice(2).map(lezingRij)}</ul>
                             </details>
                           </li>
@@ -239,7 +234,8 @@ export default function Vandaag() {
                       </>
                     )}
                     <li>
-                      <Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}><span>Alle lezingen van vandaag</span><ChevronRight aria-hidden="true" /></Actie>
+                      <Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}>{/* Opent het venster met alle lezingen van de dag (ook buiten de paascyclus); mobiel met een korter label */}
+                      <span className="vg-niet-mobiel">Alle lezingen van vandaag</span><span className="vg-alleen-mobiel">Open de lezingen</span><ChevronRight aria-hidden="true" /></Actie>
                     </li>
                   </ul>
                 </div>
