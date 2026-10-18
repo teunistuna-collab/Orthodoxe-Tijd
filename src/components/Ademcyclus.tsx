@@ -92,7 +92,7 @@ export default function Ademcyclus() {
   return (
     <>
       <section id="adem" className="vg ot-redesign ot-adem">
-        {/* Zoals Week: de banner zonder titel (de kaarsen blijven zichtbaar) met het gebedssnoer, de titel op het papier.
+        {/* Zoals Week: de banner zonder titel (de kaarsen blijven zichtbaar), de titel op het papier.
             Mobiel de eigen Adem-banner, web de kerkkop van Week. */}
         <NisKop
           open={open}
@@ -104,9 +104,7 @@ export default function Ademcyclus() {
               <BannerBeeld naam="psalmen-adem-banner" open={open} />
             </picture>
           }
-        >
-          <img className="vg-ritmewiel vg-kop-teken" src="/images/Gebedssnoer-kop.webp" alt="" aria-hidden="true" width={376} height={640} />
-        </NisKop>
+        />
         <div className="vg-papier ot-inhoud">
           <h1 className="ot-titel">Het Jezusgebed</h1>
           <Sierlijn />

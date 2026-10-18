@@ -407,7 +407,8 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-knoppen > b
 #pascha .ot-pc-sectie > .vg-label { margin-bottom: 6px; }
 #pascha .ot-pc-tekst { max-width: 62ch; margin: 0 0 8px; font-family: var(--font-lees); font-size: var(--t-tekst); line-height: 1.55; color: var(--ot-inkt); }
 #pascha .ot-pc-midden { margin: 14px auto 0; text-align: center; }
-#pascha .ot-pc-meer, #pascha .ot-pc-terug { padding-left: 0; color: var(--ot-rood); }
+#pascha .ot-pc-meer, #pascha .ot-pc-terug, #pascha .ot-pc-bekijk { padding-left: 0; color: var(--ot-rood); }
+#pascha .ot-pc-bekijk { margin-top: 2px; } /* "Bekijk deze periode": opent de bestaande uitleg van de huidige periode */
 #pascha .ot-pc-terug { margin-top: 18px; }
 #pascha .ot-pc-rijlabel { display: block; margin-bottom: 1px; font-family: var(--font-titel); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--goud-pijl); }
 #pascha .ot-pc-lezingen { margin-top: 10px; }

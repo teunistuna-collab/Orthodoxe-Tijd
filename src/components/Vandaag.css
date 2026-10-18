@@ -450,10 +450,10 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   :is(#week, #jaar) .vg-kop .vg-jaarwiel { display: none; }
   :is(#week, #jaar) .vg-kop { min-height: clamp(180px, 50cqw, 260px); }
   /* Week (Chi-Rho) en Jaar (kruis met Alfa en Omega): het teken staat wel in de kop */
-  :is(#week, #jaar, #adem) .vg-kop .vg-kop-teken { width: auto; height: clamp(110px, 32cqw, 150px); margin: 0 0 8px; }
+  :is(#week, #jaar) .vg-kop .vg-kop-teken { width: auto; height: clamp(110px, 32cqw, 150px); margin: 0 0 8px; }
 }
 @media (min-width: 768px) {
-  :is(#week, #jaar, #adem) .vg-kop .vg-kop-teken { width: auto; height: 140px; margin: 0; }
+  :is(#week, #jaar) .vg-kop .vg-kop-teken { width: auto; height: 140px; margin: 0; }
 }
 
 /* Feesttijd op Vandaag: begroeting en feestlink in de bestaande rijstijl (gouden lijnen, transparant) */

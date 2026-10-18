@@ -486,7 +486,7 @@ function PaschaInhoud({
         <header className="ot-pc-ctx-kop">
           {stap ? (
             <>
-              <p className="vg-label">{isNu ? 'Waar zijn we nu?' : 'Periode in de Paascyclus'}</p>
+              <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paascyclus'}</p>
               <h1 className="ot-titel ot-pc-m-titel">
                 {stap.label}
                 {isNu && <span className="ot-nu">Nu</span>}
@@ -495,6 +495,11 @@ function PaschaInhoud({
                 {bereikLang(stap.van, stap.tot)} {stap.tot.getUTCFullYear()}
               </p>
               {isNu && <p className="ot-pc-dagregel">{dagregel}</p>}
+              {isNu && (
+                <button type="button" className="ot-tekstknop ot-pc-bekijk" onClick={() => openStap(stap.key)}>
+                  Bekijk deze periode ›
+                </button>
+              )}
             </>
           ) : (
             <>
@@ -655,7 +660,7 @@ function PaschaInhoud({
         {stap ? (
           <>
             <header className="ot-pc-ctx-kop">
-              <p className="vg-label">{isNu ? 'Waar zijn we nu?' : 'Periode in de Paascyclus'}</p>
+              <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paascyclus'}</p>
               <h1 className="ot-titel">
                 {stap.label}
                 {isNu && <span className="ot-nu">Nu</span>}
@@ -664,6 +669,11 @@ function PaschaInhoud({
                 {bereikLang(stap.van, stap.tot)} {stap.tot.getUTCFullYear()}
               </p>
               {isNu && <p className="ot-pc-dagregel">{dagregel}</p>}
+              {isNu && (
+                <button type="button" className="ot-tekstknop ot-pc-bekijk" onClick={() => openStap(stap.key)}>
+                  Bekijk deze periode ›
+                </button>
+              )}
               <Sierlijn />
               {isNu && dagenTotPascha > 0 && <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>}
             </header>
