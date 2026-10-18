@@ -138,9 +138,6 @@
 .vg-leeg { min-height: 44px; display: flex; align-items: center; font-size: 16px; font-style: italic; color: var(--gedempt); }
 
 .vg-duo { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--lijn); }
-/* Psalterlezing (Psalterlezing.tsx, psalterlezing.css) */
-.vg-psalter { margin-top: 18px; }
-.vg-psalter .vg-label { margin-bottom: 0; }
 .vg-nw { white-space: nowrap; }
 .vg-ingang { position: relative; display: grid; grid-template-columns: 26px 1fr; gap: 0 8px; padding: 14px 4px 14px 0; }
 .vg-ingang + .vg-ingang { padding-left: 14px; border-left: 1px solid var(--lijn); }
@@ -165,6 +162,29 @@
 .vg-meer details > :not(summary) { margin: 0 0 12px !important; font-size: var(--t-klein); line-height: 1.5; color: var(--inkt); }
 .vg-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: none; font: inherit; font-size: var(--t-link); color: var(--nachtblauw) !important; cursor: pointer; }
 .vg-kleur { display: inline-block; width: 11px; height: 11px; margin-right: 7px; border: 1px solid rgba(23, 32, 43, .35); border-radius: 50%; vertical-align: 0; }
+
+/* Vandaag: vier hoofdonderdelen met dezelfde sectiekop (die van het pijlgebed), gecentreerd en met gelijke ruimte.
+   De cyclusregels (naam van het gebedsuur, weekcyclus, kerkelijke datum, paascyclus) klein, gecentreerd en gedempt;
+   uitleg en lezingen houden hun gewone leesuitlijning. */
+#vandaag .vg-sectiekop { display: block; margin: 0 0 6px !important; text-align: center; }
+/* Dit gebedsuur en Vasten & feesten: dezelfde letter als de koppen van de tegels ("Heiligen van vandaag") */
+#vandaag .vg-sectiekop-lees { font-family: var(--font-lees); font-size: 18px; font-weight: 500; line-height: 1.2; letter-spacing: 0; text-transform: none; color: var(--inkt); }
+#vandaag :is(.vg-uur, .vg-vf, .vg-lezingen-sectie) { margin-top: 28px; }
+#vandaag .vg-cyclusregel { font-family: var(--font-lees); font-size: var(--t-klein); font-weight: 400; line-height: 1.35; color: var(--gedempt); text-align: center; overflow-wrap: anywhere; }
+#vandaag .vg-uurnaam { margin: 0 !important; font-size: 19px; } /* één groter dan de kop "Dit gebedsuur" (18 px) */
+#vandaag .vg-cyclus { margin-bottom: 6px; }
+#vandaag .vg-cyclus details { border-bottom: 0; }
+#vandaag .vg-cyclus summary.vg-cyclusregel { justify-content: center; align-items: center; gap: 4px; min-height: 44px; padding: 0; font-size: var(--t-klein); }
+#vandaag .vg-cyclus summary > span:first-child { font-weight: 400; color: var(--gedempt); text-wrap: balance; }
+#vandaag .vg-cyclus summary svg { position: static; flex: none; width: 16px; height: 16px; }
+#vandaag .vg-cyclus details > :not(summary) { display: block; max-width: 34em; margin: 0 auto 10px !important; text-align: left; }
+#vandaag .vg-cyclus details > .vg-link { display: flex; width: fit-content; }
+#vandaag .vg-vf .vg-feestdag { grid-template-columns: 26px 1fr; border-top: 1px solid var(--lijn); }
+#vandaag .vg-vf .vg-duo { border-top: 1px solid var(--lijn); }
+#vandaag .vg-ster { width: 22px; height: 22px; margin: 2px auto 0; stroke-width: 1.6; }
+#vandaag .vg-ingang h3 { margin: 0; font-size: 18px; font-weight: 500; line-height: 1.2; }
+#vandaag .vg-sub { overflow-wrap: anywhere; }
+#vandaag .vg-lezingen-sectie .vg-lezingen { margin-top: 0; }
 
 /* ---------- E. Stilte ---------- */
 .vg-stilte { position: relative; display: flex; align-items: flex-end; justify-content: center; min-height: clamp(160px, 42cqw, 280px); margin-top: 4px; }
@@ -497,7 +517,6 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 @media (min-width: 1024px) {
   /* Vandaag: links het gebed (pijlgebed + gebedsuur), rechts de daginformatie (lezingen, heiligen, vasten, cycli) */
   #vandaag .vg-papier > .vg-kolommen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 72px; align-items: start; max-width: 1120px; }
-  #vandaag .vg-kol > .vg-lezingen { margin-top: 10px; }
 
   /* Etmaal: de brede banner (40cqw) wordt op grote schermen te hoog; begrensd, met maan en kerk in beeld */
   #etmaal.vg-etmaal .vg-kop { height: min(40cqw, 440px); }
