@@ -150,7 +150,11 @@ export default function Vandaag() {
 
             {/* 2. Het gebedsuur van nu (lib/etmaal.ts): de naam klein en gecentreerd, het kernvers met zijn psalm. */}
             <section className="vg-uur" aria-labelledby="vg-uur-kop">
-              <h2 id="vg-uur-kop" className="vg-label vg-sectiekop vg-sectiekop-lees">Dit gebedsuur</h2>
+              <h2 id="vg-uur-kop" className="vg-label vg-sectiekop vg-sectiekop-lees">
+                {/* Mobiel: de olielamp links van de titel, zoals het kalendericoon bij Vasten & feesten */}
+                <span className="vg-lamp-teken" aria-hidden="true" />
+                <span>Gebedsuur</span>
+              </h2>
               <p className="vg-cyclusregel vg-uurnaam">{uurMoment.title}</p>
               <blockquote className="vg-kernvers">“{uurMoment.kernvers.verses.join(' ')}”</blockquote>
               <p className="vg-bron"><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a></p>
@@ -160,8 +164,13 @@ export default function Vandaag() {
           <div className="vg-kol">
             {/* 3. Vasten & feesten: de dag in de week-, vaste en paascyclus, het feest of de gedachtenis, de heiligen en het vasten. */}
             <section className="vg-vf" aria-labelledby="vg-vf-kop">
-              <h2 id="vg-vf-kop" className="vg-label vg-sectiekop vg-sectiekop-lees">Vasten &amp; feesten</h2>
+              <h2 id="vg-vf-kop" className="vg-label vg-sectiekop vg-sectiekop-lees">
+                {/* Mobiel: het kalendericoon links van de titel, in de kleur van het kruis bij de heiligen (Vandaag.css) */}
+                <span className="vg-kal-teken" aria-hidden="true" />
+                <span>Vasten &amp; feesten</span>
+              </h2>
               <div className="vg-meer vg-cyclus">
+                <div className="vg-cyclus-regels">
                 {/* De weekdag opent meteen het venster van die dag uit de weekcyclus */}
                 <Actie className="vg-cyclusregel vg-cyclus-link" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>
                   <span>{hoofdletter(dag.weekdagNaam)} · {weekthema.titel}</span>
@@ -176,6 +185,7 @@ export default function Vandaag() {
                   <span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span>
                   <ChevronRight aria-hidden="true" />
                 </Actie>
+                </div>
               </div>
 
               {/* Het feest of de gedachtenis van de dag; alleen als de kalender er een heeft */}

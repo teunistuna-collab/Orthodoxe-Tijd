@@ -171,10 +171,12 @@
 #vandaag .vg-sectiekop-lees { font-family: var(--font-lees); font-size: 18px; font-weight: 500; line-height: 1.2; letter-spacing: 0; text-transform: none; color: var(--inkt); }
 #vandaag :is(.vg-uur, .vg-vf, .vg-lezingen-sectie) { margin-top: 28px; }
 #vandaag .vg-cyclusregel { font-family: var(--font-lees); font-size: var(--t-klein); font-weight: 400; line-height: 1.35; color: var(--gedempt); text-align: center; overflow-wrap: anywhere; }
-#vandaag .vg-uurnaam { margin: 0 !important; font-size: 19px; } /* één groter dan de kop "Dit gebedsuur" (18 px) */
+#vandaag .vg-uurnaam { margin: 0 !important; }
+#vandaag .vg-uur > .vg-uurnaam { font-size: clamp(27px, 7.4cqw, 34px); line-height: 1.15; } /* de naam van de dienst even groot als de tekst van het pijlgebed (web en mobiel) */
 /* Vasten & feesten: dezelfde lijnen als de lezingen — een goudlijn boven en onder, dunne lijnen tussen de regels */
 #vandaag .vg-cyclus { margin-bottom: 0; border-top: 1px solid var(--lijn); }
 #vandaag .vg-cyclus-link + .vg-cyclus-link { border-top: 1px solid var(--lijn-zacht); }
+#vandaag :is(.vg-kal-teken, .vg-lamp-teken) { display: none; }
 #vandaag .vg-cyclus-link { display: flex; justify-content: center; align-items: center; gap: 4px; width: 100%; min-height: 44px; padding: 0; border: 0; background: none; font: inherit; cursor: pointer; }
 #vandaag .vg-cyclus-link span { text-wrap: balance; }
 #vandaag .vg-cyclus-link svg { flex: none; width: 16px; height: 16px; color: var(--goud-pijl); }
@@ -200,6 +202,15 @@
   /* Korte cyclusinformatie: dezelfde letter als de naam van het gebedsuur, iets donkerder voor het perkament */
   #vandaag .vg-cyclusregel, #vandaag .vg-uurnaam { font-size: 17px; font-weight: 400; line-height: 1.35; color: #463b2e; }
   /* Cyclusregels links uitgelijnd, het pijltje rechts (zoals de rijen van de lezingen) */
+  /* Vasten & feesten: icoon en titel links op één regel (zoals "Heiligen van vandaag"), de regels eronder op de lijn van de titel */
+  #vandaag :is(.vg-vf, .vg-uur) > .vg-sectiekop-lees { display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: center; gap: 0 12px; padding-left: 2px; text-align: left; }
+  #vandaag .vg-kal-teken { display: block; width: 26px; height: 28px; margin: 0 auto; color: #9e6f2b; /* goud, één tint donkerder */ background: currentColor; -webkit-mask: url(/images/ui/kalender-kruis.webp) center/contain no-repeat; mask: url(/images/ui/kalender-kruis.webp) center/contain no-repeat; }
+  #vandaag .vg-lamp-teken { display: block; width: 30px; height: 19px; color: #906627; /* goud, twee tinten donkerder */ background: currentColor; -webkit-mask: url(/images/ui/olielamp.webp) center/contain no-repeat; mask: url(/images/ui/olielamp.webp) center/contain no-repeat; }
+  #vandaag .vg-cyclus { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 0 12px; }
+  /* Dit gebedsuur: dezelfde gouden lijn onder de titel als bij Vasten & feesten */
+  #vandaag .vg-uur > .vg-sectiekop { padding-bottom: 8px; border-bottom: 1px solid rgba(172, 121, 47, .55); } /* niet var(--lijn): binnen .vg-uur is dat een inspringing */
+  #vandaag .vg-uur > .vg-uurnaam { margin-top: 6px !important; }
+  #vandaag .vg-cyclus-regels { grid-column: 2; }
   #vandaag .vg-cyclus-link { min-height: 44px; justify-content: space-between; gap: 12px; padding: 0 2px; text-align: left; }
   #vandaag .vg-cyclus-link span { text-wrap: pretty; }
   #vandaag .vg-cyclus-link span { color: #463b2e; }
