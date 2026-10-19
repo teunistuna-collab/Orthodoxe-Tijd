@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { ArrowRight, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 import type { Mode } from '../lib/kalender';
@@ -12,14 +12,11 @@ const KALENDERS: { id: Mode; label: string }[] = [
   { id: 'nieuw', label: 'Nieuw · gregoriaans' },
 ];
 
-const TRADITIES = ['Oosters Orthodox', 'Koptisch Orthodox', 'Syrisch Orthodox'];
-
-// Welkomstvenster bij het eerste bezoek: de kalender (Oud/Nieuw, direct toegepast zoals in Instellingen) en de traditie,
-// met "Verder naar vandaag". Eigen venster op perkament met gouden hoeksieraden (welkom.css); Escape, de terugknop en
+// Welkomstvenster bij het eerste bezoek: de kalender (Oud/Nieuw, direct toegepast zoals in Instellingen), met "Verder naar
+// vandaag". De keuze voor een traditie komt terug zodra er andere tradities zijn (Instellingen: "Binnenkort"). Eigen venster op perkament met gouden hoeksieraden (welkom.css); Escape, de terugknop en
 // een klik buiten het venster sluiten het, net als de andere vensters (lib/terug.ts).
 export default function KalenderUitleg({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { mode, setMode } = useApp();
-  const [traditie, setTraditie] = useState(TRADITIES[0]);
   const vensterRef = useRef<HTMLDivElement | null>(null);
   useTerugSluit(open, onClose);
 
@@ -65,16 +62,6 @@ export default function KalenderUitleg({ open, onClose }: { open: boolean; onClo
               <label key={id} className="ku-keuze">
                 <input type="radio" name="ku-kalender" value={id} checked={mode === id} onChange={() => setMode(id)} />
                 <span>{label}</span>
-              </label>
-            ))}
-          </fieldset>
-          <span className="ku-scheiding" aria-hidden="true" />
-          <fieldset className="ku-groep">
-            <legend>Traditie</legend>
-            {TRADITIES.map((t) => (
-              <label key={t} className="ku-keuze">
-                <input type="radio" name="ku-traditie" value={t} checked={traditie === t} onChange={() => setTraditie(t)} />
-                <span>{t}</span>
               </label>
             ))}
           </fieldset>

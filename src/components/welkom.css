@@ -17,6 +17,7 @@
 .ku-sierlijn { display: block; width: min(60%, 260px); height: auto; margin: 14px auto 20px; }
 
 .ku-kolommen { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 30px; align-items: start; text-align: left; }
+.ku-kolommen:not(:has(.ku-scheiding)) { grid-template-columns: minmax(0, 360px); justify-content: center; } /* alleen de kalender (de traditie volgt later) */
 .ku-groep { min-width: 0; margin: 0; padding: 0; border: 0; }
 .ku-groep legend { width: 100%; margin: 0 0 12px; padding: 0; font-family: var(--font-lees); font-size: 28px; font-weight: 500; line-height: 1.1; text-align: center; color: var(--nachtblauw); }
 .ku-scheiding { position: relative; align-self: stretch; width: 1px; margin-top: 8px; background: rgba(172, 121, 47, .6); }
