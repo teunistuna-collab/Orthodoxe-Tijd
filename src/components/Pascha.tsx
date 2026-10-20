@@ -11,6 +11,7 @@ import { FeestTag } from './ui';
 import { LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
 import { PASCHA_INFO, type PopupInhoud } from '../lib/cyclusTeksten';
 import Verdieping from './Verdieping';
+import KleurVanDeDag from './KleurVanDeDag';
 import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
 import { BannerBeeld, Sierlijn } from './onderdelen';
@@ -509,6 +510,7 @@ function PaschaInhoud({
             </>
           )}
           <Sierlijn />
+          <KleurVanDeDag dag={dag} />
           {(!stap || isNu) && dagenTotPascha > 0 && <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>}
           {gekozen && gekozen !== huidige && (
             <button type="button" className="ot-tekstknop ot-pc-terug" onClick={terug}>
@@ -675,6 +677,7 @@ function PaschaInhoud({
                 </button>
               )}
               <Sierlijn />
+              <KleurVanDeDag dag={dag} />
               {isNu && dagenTotPascha > 0 && <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>}
             </header>
 
@@ -777,6 +780,7 @@ function PaschaInhoud({
             <h1 className="ot-titel">Naar Pascha</h1>
             <p className="ot-pc-datum">{formatDatum(pascha)}</p>
             <Sierlijn />
+            <KleurVanDeDag dag={dag} />
             <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>
             <p className="ot-pc-tekst ot-pc-midden">
               De voorbereiding begint op {formatDag(cyclus.stappen[0].van)} {cyclus.stappen[0].van.getUTCFullYear()}, met de Zondag van de Tollenaar en de

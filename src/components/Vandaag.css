@@ -277,6 +277,23 @@
   #vandaag .vg-lezingen li .vg-rij, #vandaag .vg-lezingen .vg-rij-kop { min-height: 52px !important; font-size: 18px; color: var(--inkt); }
 }
 
+/* Liturgische kleur (KleurVanDeDag.tsx, Vandaag en Pascha): klein medaillon, kleur en reden, betekenis, info-knop */
+.lk { display: flex; align-items: flex-start; gap: 10px; text-align: left; }
+.lk-medaillon { flex: none; width: 16px; height: 16px; margin-top: 4px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--papyrus), 0 0 0 2.5px var(--goud); }
+.lk-tekst { flex: 1; min-width: 0; margin: 0; font-family: var(--font-lees); line-height: 1.35; }
+.lk-naam { display: block; font-size: 16px; font-weight: 500; color: var(--inkt); }
+.lk-reden { font-weight: 400; color: var(--gedempt); }
+.lk-betekenis { display: block; margin-top: 1px; font-size: 15px; font-style: italic; color: var(--gedempt); }
+.lk-uitleg { display: block; margin-top: 6px; font-size: 14px; line-height: 1.45; color: var(--gedempt); }
+.lk-info { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin: -4px -6px 0 0; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--goud-pijl); cursor: pointer; }
+.lk-info svg { width: 17px; height: 17px; stroke-width: 1.7; }
+.lk-info[aria-expanded="true"] { color: var(--bordeaux-diep); }
+.lk-info:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
+/* Vandaag: als laatste regel onder de cyclusregels, met dezelfde scheidingslijn */
+#vandaag .vg-cyclus-regels > .lk { padding: 10px 2px 10px; border-top: 1px solid var(--lijn-zacht); }
+/* Pascha: onder de sierlijn in de kop, gecentreerd blok op leesbreedte */
+#pascha .ot-pc-ctx-kop .lk { max-width: 30em; margin: 10px auto 4px; }
+
 /* ---------- E. Stilte ---------- */
 .vg-stilte { position: relative; display: flex; align-items: flex-end; justify-content: center; min-height: clamp(160px, 42cqw, 280px); margin-top: 4px; }
 .vg-stilte-achter { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; -webkit-mask: linear-gradient(transparent, #000 34%); mask: linear-gradient(transparent, #000 34%); }

@@ -12,6 +12,7 @@ import { heiligeTitel } from '../lib/heiligenPopup';
 import { vastenGroep } from '../lib/vasten';
 import { feestVoorDag } from '../lib/feestdagen';
 import Kaarsgloed from './Kaarsgloed';
+import KleurVanDeDag from './KleurVanDeDag';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -194,6 +195,8 @@ export default function Vandaag() {
                   <span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span>
                   <ChevronRight aria-hidden="true" />
                 </Actie>
+                {/* De gebruikelijke liturgische kleur van vandaag (lib/liturgischeKleur.ts) */}
+                <KleurVanDeDag dag={dag} />
                 </div>
               </div>
 
