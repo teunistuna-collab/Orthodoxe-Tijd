@@ -16,7 +16,7 @@ export type FeestContext = {
 };
 
 const THEMAS: Record<FeestId, { beeld: string; breedte: number; hoogte: number; alt: string; groet: string; antwoord: string; linkLabel: string }> = {
-  pascha: { beeld: '/images/feesten/pascha.webp', breedte: 569, hoogte: 800, alt: 'Icoon van de Verrijzenis van Christus', groet: 'Christus is opgestaan!', antwoord: 'Waarlijk opgestaan!', linkLabel: 'Vier Pascha' },
+  pascha: { beeld: '/images/feesten/pascha.webp', breedte: 569, hoogte: 800, alt: 'Icoon van de Verrijzenis van Christus', groet: 'Christus is opgestaan!', antwoord: 'Hij is waarlijk opgestaan!', linkLabel: 'Vier Pascha' },
   nativity: { beeld: '/images/feesten/kerst.jpg', breedte: 474, hoogte: 714, alt: 'Icoon van de Geboorte van Christus', groet: 'Christus is geboren!', antwoord: 'Verheerlijkt Hem!', linkLabel: 'Vier de Geboorte' },
 };
 

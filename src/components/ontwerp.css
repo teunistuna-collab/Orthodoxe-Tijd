@@ -114,6 +114,18 @@
 .ot-feesten { position: relative; }
 /* Zonder nis: alleen de donkere balk met merk en zoekknop bovenaan (op web staat de kopbalk van de site erboven) */
 .ot-redesign .ot-strook { position: relative; z-index: 2; padding: 0 var(--rand); background: linear-gradient(180deg, #10243a, var(--nachtblauw)); color: var(--ivoor); }
+/* Bronnen: alleen de bovenbalk (App.tsx); op web staat de vaste kopbalk van de site erboven */
+.vg.vg-losse-balk { background: none; }
+@media (min-width: 768px) { .vg.vg-losse-balk { display: none; } }
+/* Bronnen: de inhoud op hetzelfde perkament als de andere pagina's (eerst donker "bark"), met donkere tekst */
+.bronnen-inhoud { background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; color: var(--inkt); font-family: var(--font-lees); }
+/* Tekstkleuren zoals op de andere pagina's: koppen en tekst in nachtblauw/inkt, het citaat gedempt, het kruis goud */
+#top#top#top#top#top#top#top#top .bronnen-inhoud :is(p, li, h3, span, a) { color: var(--inkt) !important; }
+#top#top#top#top#top#top#top#top .bronnen-inhoud h3 { color: var(--nachtblauw) !important; }
+#top#top#top#top#top#top#top#top .bronnen-inhoud p.italic { color: var(--gedempt) !important; }
+#top#top#top#top#top#top#top#top .bronnen-inhoud .text-gold { color: var(--goud) !important; }
+#top#top#top#top#top#top#top#top .bronnen-inhoud a { color: var(--nachtblauw) !important; text-decoration-color: var(--lijn) !important; }
+#top#top#top#top#top#top#top#top .bronnen-inhoud a:hover { color: var(--bordeaux-diep) !important; }
 /* Bloemenrand boven en links: decoratie, nooit over de tekst */
 .ot-feesten .ot-bloemen { position: absolute; top: 52px; left: 0; z-index: 0; width: 100%; height: auto; pointer-events: none; user-select: none; }
 .ot-feesten .vg-papier { position: relative; z-index: 1; padding-top: 25cqw; }
@@ -221,7 +233,12 @@
 .ot-redesign .ot-segmenten { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; margin: 0 0 10px; }
 .ot-redesign .ot-segmenten-klein { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
 #top#top#top main .ot-redesign .ot-segmenten button { display: inline-flex; flex: 1 1 0; align-items: center; justify-content: center; min-width: 0; line-height: 1.15; text-align: center; min-height: 44px !important; padding: 4px 8px; border: 1px solid rgba(167, 118, 52, .45); border-radius: 7px; background: rgba(226, 205, 165, .45); font: inherit; font-family: var(--font-lees); font-size: 17px; color: var(--ot-inkt); cursor: pointer; }
-#top#top#top main .ot-redesign .ot-segmenten button[aria-pressed="true"] { border-color: #6e0b13; background: linear-gradient(180deg, #991320, #740d15); color: var(--ivoor); }
+/* Zoals de tabs op Adem en de reeksen "Psalmen 1–50": tekst op een dunne gouden lijn, de keuze in bordeaux met een streep
+   eronder (geen gevuld rood vlak) */
+#top#top#top main .ot-redesign .ot-segmenten button { border: 0 !important; border-bottom: 1px solid rgba(172, 121, 47, .45) !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; color: var(--inkt, var(--ot-inkt)); transition: color .15s; }
+#top#top#top main .ot-redesign .ot-segmenten button:hover, #top#top#top main .ot-redesign .ot-segmenten button[aria-pressed="true"] { color: var(--bordeaux-diep); }
+#top#top#top main .ot-redesign .ot-segmenten button[aria-pressed="true"] { border-bottom: 3px solid var(--bordeaux-diep) !important; }
+.ot-redesign .ot-segmenten { column-gap: 4px; }
 #top#top#top main .ot-redesign .ot-segmenten-klein button { min-width: 0; font-size: 15px; }
 .ot-psalmen .ot-psalmraster { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
 #top#top#top main .ot-psalmen .ot-psalmraster button { position: relative; display: flex; align-items: center; justify-content: center; min-height: 46px !important; padding: 0; border: 1px solid rgba(167, 118, 52, .4); border-radius: 7px; background: rgba(255, 250, 238, .55); font: inherit; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt); cursor: pointer; }
@@ -296,16 +313,26 @@
 .ot-adem .vg-kop-achter .ot-banner { object-position: 50% 25%; }
 @media (min-width: 768px) { #adem.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 42%; } } /* web: de kerkkop, zoals Week */
 .ot-adem .ot-ad-onder { margin: 0 0 14px; font-family: var(--font-lees); font-size: 20px; text-align: center; color: var(--gedempt); }
-.ot-adem .ot-ad-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 480px; margin: 4px auto 14px; }
-#top#top#top main .ot-adem .ot-ad-tabs button { display: flex; align-items: center; justify-content: center; min-height: 48px !important; padding: 0 8px; border: 1px solid rgba(167, 118, 52, .45); border-radius: 7px; background: rgba(226, 205, 165, .45); font: inherit; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt); cursor: pointer; }
-#top#top#top main .ot-adem .ot-ad-tabs button[aria-selected="true"] { border-color: #6e0b13; background: linear-gradient(180deg, #991320, #740d15); color: var(--ivoor); }
+/* Jezusgebed / Gebedssnoer: zoals de reeksen "Psalmen 1–50" (psalmen-knoppen.css): tekst op een dunne gouden lijn,
+   de keuze in bordeaux met een streep eronder */
+.ot-adem .ot-ad-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; max-width: 480px; margin: 4px auto 14px; border-bottom: 1px solid rgba(172, 121, 47, .55); }
+#top#top#top main .ot-adem .ot-ad-tabs button { position: relative; display: flex; align-items: center; justify-content: center; justify-self: center; min-height: 50px !important; margin-bottom: -1px; padding: 8px 10px 9px; border: 0 !important; border-bottom: 3px solid transparent !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; font: inherit; font-family: var(--font-lees) !important; font-size: 22px; line-height: 1.2; letter-spacing: 0 !important; text-transform: none !important; white-space: nowrap; color: var(--inkt, var(--nachtblauw)); cursor: pointer; transition: color .15s; }
+#top#top#top main .ot-adem .ot-ad-tabs button:hover, #top#top#top main .ot-adem .ot-ad-tabs button[aria-selected="true"] { color: var(--bordeaux-diep); }
+#top#top#top main .ot-adem .ot-ad-tabs button[aria-selected="true"] { border-bottom-color: var(--bordeaux-diep) !important; }
+.ot-adem .ot-ad-tabs button:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+@media (max-width: 540px) { #top#top#top main .ot-adem .ot-ad-tabs button { min-height: 46px !important; padding: 8px 2px 9px; font-size: 15px; } }
+@media (prefers-reduced-motion: reduce) { #top#top#top main .ot-adem .ot-ad-tabs button { transition: none; } }
+/* De ademcirkel (gloed achter het icoon) in het nachtblauw van de navigatiebalk in plaats van rood */
+#top#top#top .ot-adem .adem-gloed { background: radial-gradient(circle, rgba(16, 36, 58, .62) 0 44%, rgba(11, 27, 42, .26) 61%, transparent 72%); }
 /* De panelen liggen direct op het papier (geen kader) */
 #top#top#top#top#top#top#top#top#top .ot-adem .ad-paneel { padding: 0; border: 0; background: none !important; box-shadow: none !important; }
 .ot-adem [hidden] { display: none !important; }
 .ot-adem .snoer-kies { margin: 0 0 8px; font-family: var(--font-lees); font-size: 18px; text-align: center; color: var(--ot-inkt); }
 #top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze { justify-content: center; }
-#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button { min-width: 88px; border-radius: 7px !important; box-shadow: none !important; font-family: var(--font-lees) !important; font-size: 19px; color: var(--ot-inkt) !important; }
-#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button[aria-pressed="true"] { border-color: #6e0b13 !important; background: linear-gradient(180deg, #991320, #740d15) !important; color: var(--ivoor) !important; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze { gap: 0 !important; border-bottom: 1px solid rgba(172, 121, 47, .55); }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button { min-width: 88px; min-height: 46px; margin-bottom: -1px; border: 0 !important; border-bottom: 3px solid transparent !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; font-family: var(--font-lees) !important; font-size: 19px; color: var(--inkt, var(--ot-inkt)) !important; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button:hover { color: var(--bordeaux-diep) !important; }
+#top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button[aria-pressed="true"] { border-bottom-color: var(--bordeaux-diep) !important; background: none !important; color: var(--bordeaux-diep) !important; }
 #top#top#top#top#top#top#top#top#top#top#top .ot-adem .snoer-keuze button[aria-pressed="true"]::before { content: none; }
 .ot-adem .snoer-gebed { margin: 14px 0 0; font-family: var(--font-lees); font-size: clamp(24px, 6.6cqw, 30px); line-height: 1.15; text-align: center; color: var(--ot-inkt); }
 .ot-adem .snoer-verder { margin-top: 14px; min-width: min(260px, 80%); }

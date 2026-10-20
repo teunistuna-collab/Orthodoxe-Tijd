@@ -39,7 +39,7 @@ export default function Meer() {
   const open = usePaginaOpen('meer');
   return (
     <section id="meer" className="vg vg-verdieping">
-      <NisKop titel="Verdieping" open={open} />
+      <NisKop titel="Verdieping" open={open} balk />
       <nav className="vg-papier vg-verd-lijst" aria-label="Verdieping">
         <ul>{BOVEN.map(rij)}</ul>
         <p className="vg-verd-scheiding" aria-hidden="true"><span>✣</span></p>

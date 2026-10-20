@@ -63,7 +63,9 @@ export default function Vandaag() {
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));
   // Kernvers van de dienst, zoals in de Etmaal-cyclus ("Psalm Kernvers: 50:12" → "Psalm 50:12").
   const kernversRef = uurMoment.kernvers.reference.replace('Psalm Kernvers:', 'Psalm');
-  const kerkelijkeDatum = mode === 'oud' ? `${formatDag(dag.kerk)} · Juliaanse kalender` : 'Nieuwe kalender (gereviseerd juliaans)';
+  // Kerkelijke datum in twee delen: mobiel op twee regels (datum, dan de kalender), web op één regel met een punt ertussen.
+  const kerkDatumDeel = mode === 'oud' ? formatDag(dag.kerk) : null;
+  const kalenderNaam = mode === 'oud' ? 'Juliaanse kalender' : 'Nieuwe kalender (gereviseerd juliaans)';
   const heiligenRegel = heilige ? heiligeTitel(heilige.naam) : heiligen ? 'Bekijk de heiligen van vandaag' : 'Heiligen worden geladen…';
   const feestLabel = hoofdFeest && (hoofdFeest.groot || hoofdFeest.soort === 'pascha' || (hoofdFeest.rang ?? 0) >= 4) ? 'Feest van vandaag' : 'Gedachtenis van vandaag';
   const groep = vastenGroep(dag.vasten.niveau);
@@ -153,13 +155,16 @@ export default function Vandaag() {
               <h2 id="vg-uur-kop" className="vg-label vg-sectiekop vg-sectiekop-lees">
                 {/* Mobiel: de olielamp links van de titel, zoals het kalendericoon bij Vasten & feesten */}
                 <span className="vg-lamp-teken" aria-hidden="true" />
+                <img className="vg-icoon-m" src="/images/vandaag/iconen/01_gebedsuur_lamp.webp" alt="" aria-hidden="true" width={81} height={75} decoding="async" />
                 <span>Gebedsuur</span>
               </h2>
+              <img className="vg-sierlijn vg-uur-sier" src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} />
               <p className="vg-cyclusregel vg-uurnaam">{uurMoment.title}</p>
               <blockquote className="vg-kernvers">“{uurMoment.kernvers.verses.join(' ')}”</blockquote>
               <p className="vg-bron"><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a></p>
               <Actie className="vg-knop" href="#etmaal" onClick={openDienst}>Open het gebed <span aria-hidden="true">→</span></Actie>
             </section>
+            <Scheiding />
           </div>
           <div className="vg-kol">
             {/* 3. Vasten & feesten: de dag in de week-, vaste en paascyclus, het feest of de gedachtenis, de heiligen en het vasten. */}
@@ -167,18 +172,22 @@ export default function Vandaag() {
               <h2 id="vg-vf-kop" className="vg-label vg-sectiekop vg-sectiekop-lees">
                 {/* Mobiel: het kalendericoon links van de titel, in de kleur van het kruis bij de heiligen (Vandaag.css) */}
                 <span className="vg-kal-teken" aria-hidden="true" />
+                <img className="vg-icoon-m" src="/images/vandaag/iconen/02_vasten_feesten_kalender.webp" alt="" aria-hidden="true" width={66} height={71} decoding="async" />
                 <span>Vasten &amp; feesten</span>
               </h2>
               <div className="vg-meer vg-cyclus">
                 <div className="vg-cyclus-regels">
                 {/* De weekdag opent meteen het venster van die dag uit de weekcyclus */}
-                <Actie className="vg-cyclusregel vg-cyclus-link" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>
+                <Actie className="vg-cyclusregel vg-cyclus-link vg-cyclus-week" href="#week" onClick={() => openPopup({ pagina: 'week', sleutel: WEEKDAG_SLEUTELS[dag.weekdag] })}>
                   <span>{hoofdletter(dag.weekdagNaam)} · {weekthema.titel}</span>
                   <ChevronRight aria-hidden="true" />
                 </Actie>
                 {/* De kerkelijke datum opent de volledige dag, de paascyclus het venster "Paascyclus" van vandaag */}
                 <button type="button" className="vg-cyclusregel vg-cyclus-link" onClick={() => openDag(dag.ymd)}>
-                  <span>Kerkelijke datum: {kerkelijkeDatum}</span>
+                  <span>
+                    Kerkelijke datum{kerkDatumDeel ? `: ${kerkDatumDeel}` : ':'}
+                    <span className="vg-cyclus-sub"><span className="vg-cyclus-punt">{kerkDatumDeel ? ' · ' : ' '}</span>{kalenderNaam}</span>
+                  </span>
                   <ChevronRight aria-hidden="true" />
                 </button>
                 <Actie className="vg-cyclusregel vg-cyclus-link" href="#pascha" onClick={() => openDagPascha(dag.ymd)}>
@@ -196,33 +205,39 @@ export default function Vandaag() {
                     <h3><Actie className="vg-ingang-link" href="#kalender" onClick={() => openDag(dag.ymd)}>{feestLabel}<ChevronRight aria-hidden="true" /></Actie></h3>
                     <p className="vg-sub">{hoofdFeest.naam}</p>
                   </div>
+                  <ChevronRight className="vg-ingang-pijl" aria-hidden="true" />
                 </div>
               )}
 
               {/* De hele vlakken zijn klikbaar: de link in de kop strekt zich uit over het vlak (CSS). */}
               <div className="vg-duo">
                 <div className="vg-ingang">
-                  <span className="vg-ingang-icoon" aria-hidden="true"><KruisTeken /></span>
+                  <span className="vg-ingang-icoon" aria-hidden="true"><KruisTeken /><img className="vg-icoon-m" src="/images/vandaag/iconen/03_heiligen_kruis.webp" alt="" width={69} height={77} decoding="async" /></span>
                   <div>
                     <h3><Actie className="vg-ingang-link" href="#heiligen" onClick={() => openDagHeiligen(dag.ymd)}>Heiligen van <span className="vg-nw">vandaag<ChevronRight aria-hidden="true" /></span></Actie></h3>
                     <p className="vg-sub">{heiligenRegel}</p>
                   </div>
+                  <ChevronRight className="vg-ingang-pijl" aria-hidden="true" />
                 </div>
                 <div className="vg-ingang">
-                  <span className="vg-ingang-icoon" aria-hidden="true"><VastenSymbool groep={groep ?? 'vis'} className="vg-vis" /></span>
+                  {/* Mobiel de vis uit het iconenpakket; bij een ander vastenniveau het bestaande symbool (olie, zuivel …) */}
+                  <span className={`vg-ingang-icoon${(groep ?? 'vis') === 'vis' ? ' met-icoon-m' : ''}`} aria-hidden="true"><VastenSymbool groep={groep ?? 'vis'} className="vg-vis" />{(groep ?? 'vis') === 'vis' && <img className="vg-icoon-m" src="/images/vandaag/iconen/04_vasten_vis.webp" alt="" width={70} height={32} decoding="async" />}</span>
                   <div>
                     <h3><Actie className="vg-ingang-link" href="#vasten" onClick={() => openPopup({ pagina: 'vasten', sleutel: dag.ymd })}>Vasten <span className="vg-nw">vandaag<ChevronRight aria-hidden="true" /></span></Actie></h3>
                     <p className="vg-sub">{dag.vasten.label}{dag.vasten.periode ? ` · ${dag.vasten.periode}` : ''}</p>
                   </div>
+                  <ChevronRight className="vg-ingang-pijl" aria-hidden="true" />
                 </div>
               </div>
             </section>
+            <Scheiding />
 
             {/* 4. Lezingen van vandaag: de lezingen van de paascyclus uit het leesrooster; alle lezingen van de dag erachter. */}
             <section className="vg-lezingen-sectie" aria-labelledby="vg-lezingen-kop">
               <h2 id="vg-lezingen-kop" className="vg-label vg-sectiekop">Lezingen van vandaag</h2>
               <div className="vg-lezingen">
                 <BookOpen className="vg-boek" aria-hidden="true" />
+                <img className="vg-icoon-m vg-boek-m" src="/images/vandaag/iconen/05_lezingen_boek.webp" alt="" aria-hidden="true" width={68} height={63} decoding="async" />
                 <div>
                   <ul>
                     {lezingen === undefined ? (
@@ -267,6 +282,15 @@ export default function Vandaag() {
         <p className="vg-stilte-tekst">Een moment van stilte.<img src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} /></p>
       </div>
     </section>
+  );
+}
+
+/** Mobiel: scheiding tussen de hoofdonderdelen, een gouden lijn met een ornament in het midden (web verborgen). */
+function Scheiding() {
+  return (
+    <div className="vg-scheiding" aria-hidden="true">
+      <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 1.5c1.1 2.3 1.1 4.6 0 6.9-1.1-2.3-1.1-4.6 0-6.9Zm0 17c-1.1-2.3-1.1-4.6 0-6.9 1.1 2.3 1.1 4.6 0 6.9ZM1.5 10c2.3-1.1 4.6-1.1 6.9 0-2.3 1.1-4.6 1.1-6.9 0Zm17 0c-2.3 1.1-4.6 1.1-6.9 0 2.3-1.1 4.6-1.1 6.9 0ZM10 8.3l1.7 1.7-1.7 1.7-1.7-1.7Z" fill="currentColor" /></svg>
+    </div>
   );
 }
 

@@ -126,7 +126,7 @@ const PERIODE_POPUPS: Record<PeriodeKey, PopupInhoud> = {
   "pascha": {
     "title": "Pascha",
     "subtitle": "De Verrijzenis van Christus",
-    "highlight": "Christus is opgestaan uit de doden, door Zijn dood heeft Hij de dood vertreden, en aan hen in de graven heeft Hij het leven geschonken.",
+    "highlight": "Christus, opgestaan van de doden, overwon de dood door Zijn dood, aan allen in de graven schonk Hij het leven.",
     "paragraphs": [],
     "sections": [
       {
@@ -380,7 +380,7 @@ export default function Pascha() {
             <h2 id="pc-feest-titel" className="pc-feest-titel">Pascha</h2>
             <p className="pc-feest-onder">De Verrijzenis van onze Heer</p>
             <p className="pc-feest-tekst">In de Nacht van Pascha vieren wij de Verrijzenis van Christus, Die door Zijn dood de dood heeft overwonnen en ons het eeuwige leven heeft geschonken.</p>
-            <p className="pascha-groet">„Christus is opgestaan!” <span>„Waarlijk opgestaan!”</span></p>
+            <p className="pascha-groet">„Christus is opgestaan!” <span>„Hij is waarlijk opgestaan!”</span></p>
             <div className="pc-feest-vakken">
               <div className="pc-vak jr-vak">
                 <p className="pc-vak-label">Troparion</p>
@@ -530,7 +530,7 @@ function PaschaInhoud({
             <div>
               <p className="vg-label">{off === 0 ? 'Vandaag vieren wij' : 'In de Lichte Week vieren wij'}</p>
               <p className="ot-pc-groet">
-                Christus is opgestaan!<span>Waarlijk opgestaan!</span>
+                Christus is opgestaan!<span>Hij is waarlijk opgestaan!</span>
               </p>
             </div>
             <div className="ot-pc-m-trop">
@@ -685,7 +685,7 @@ function PaschaInhoud({
                 <div>
                   <p className="vg-label">{off === 0 ? 'Vandaag vieren wij' : 'In de Lichte Week vieren wij'}</p>
                   <p className="ot-pc-groet">
-                    Christus is opgestaan!<span>Waarlijk opgestaan!</span>
+                    Christus is opgestaan!<span>Hij is waarlijk opgestaan!</span>
                   </p>
                   <p className="vg-label ot-pc-tlabel">Troparion</p>
                   <blockquote className="ot-pc-troparion">{PERIODE_POPUPS.pascha.highlight}</blockquote>

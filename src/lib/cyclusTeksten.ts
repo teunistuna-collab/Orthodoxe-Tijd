@@ -446,7 +446,7 @@ export const PASCHA_INFO: Record<'wat' | 'cyclus' | 'betekenis' | 'tradities', P
   "wat": {
     "title": "Wat is Pascha?",
     "subtitle": "Het Feest der Feesten",
-    "highlight": "Christus is opgestaan uit de doden, door Zijn dood heeft Hij de dood vertreden, en aan hen in de graven heeft Hij het leven geschonken.",
+    "highlight": "Christus, opgestaan van de doden, overwon de dood door Zijn dood, aan allen in de graven schonk Hij het leven.",
     "paragraphs": [],
     "sections": [
       {

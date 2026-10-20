@@ -39,3 +39,12 @@
 @media(max-width:540px){.psalm-controls .pc-filters{flex-wrap:nowrap;overflow-x:auto;gap:5px;margin:0 -5px;padding:5px;scrollbar-width:none}.psalm-controls .pc-filters::-webkit-scrollbar{display:none}#top#top#top#top#top#top#top main .psalm-controls .pc-tab{flex:1 0 auto;padding:10px 7px!important;font-size:15px}}
 @media(max-width:370px){#top#top#top#top#top#top#top main .psalm-controls .pc-tab{padding:10px 6px!important;font-size:14px}}
 @media(max-width:370px){.psalm-controls .pc-scroll{font-size:14px}}
+
+/* Filters zoals de reeksen eronder en de tabs op Adem: tekst op een dunne gouden lijn, de keuze in bordeaux met een streep
+   eronder (geen gevulde rode tegel) */
+.psalm-controls .pc-filters{gap:0;border-bottom:1px solid rgba(172,121,47,.55)}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab,#top#top#top#top#top#top#top main .psalm-controls .pc-tab[aria-pressed=true]{flex:1 1 0;min-height:50px!important;margin-bottom:-1px;padding:8px 10px 9px!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;background:none!important;box-shadow:none!important;font-size:20px;color:var(--inkt,var(--nachtblauw))}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab:hover{background:none!important;color:var(--bordeaux-diep)}
+#top#top#top#top#top#top#top main .psalm-controls .pc-tab[aria-pressed=true]{border-bottom-color:var(--bordeaux-diep)!important;color:var(--bordeaux-diep)}
+.psalm-controls .pc-tab:before,.psalm-controls .pc-tab:after,.psalm-controls .pc-tab[aria-pressed=true]:after{content:none}
+@media(max-width:540px){.psalm-controls .pc-filters{margin:0;padding:0;overflow:visible}#top#top#top#top#top#top#top main .psalm-controls .pc-tab,#top#top#top#top#top#top#top main .psalm-controls .pc-tab[aria-pressed=true]{flex:1 1 0;min-height:46px!important;padding:8px 2px 9px!important;font-size:15px}}

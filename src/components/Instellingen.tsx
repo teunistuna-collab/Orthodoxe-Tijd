@@ -50,7 +50,7 @@ export default function Instellingen() {
 
   return (
     <section id="instellingen" className="vg vg-voorkeuren">
-      <NisKop titel="Jouw voorkeuren" open={open} />
+      <NisKop titel="Jouw voorkeuren" open={open} balk />
       <div className="vg-papier">
         <section className="vg-vk-vak" aria-labelledby="vk-pijlgebed">
           <span className="vg-vk-symbool">{HANDEN}</span>

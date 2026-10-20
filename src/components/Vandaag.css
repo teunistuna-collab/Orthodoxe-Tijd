@@ -202,6 +202,7 @@
 #vandaag .vg-lezingen-sectie .vg-lezingen { margin-top: 0; }
 
 #vandaag .vg-alleen-mobiel { display: none; }
+#vandaag :is(.vg-icoon-m, .vg-uur-sier, .vg-scheiding, .vg-ingang-pijl) { display: none; } /* alleen mobiel (hieronder) */
 
 /* Vandaag, alleen mobiel (tot 768 px): alle vier sectiekoppen als "Lezingen van vandaag" (kleine kapitalen, gecentreerd),
    de naam van het gebedsuur en de cyclusregels in één kleine maat, een rustigere knop, heiligen en vasten onder elkaar.
@@ -229,6 +230,51 @@
   /* Lezingen: alle verwijzingen op één lijn, gelijke rijen */
   #vandaag .vg-lezingen .vg-meer-lezingen ul li { margin-left: -2px; }
   #vandaag .vg-lezingen .vg-rij-kop { font-size: var(--t-klein); }
+
+  /* ---- Mobiele startpagina volgens het voorbeeld (iconenpakket, ornamenten, compacte rijen); het pijlgebed blijft zoals het is ---- */
+  #vandaag :is(.vg-lamp-teken, .vg-kal-teken) { display: none; }
+  #vandaag .vg-icoon-m { display: block; height: auto; }
+  /* Eén lijn voor alle iconen (30 px) en alle tekst ernaast (16 px verder) */
+  #vandaag :is(.vg-uur, .vg-vf) > .vg-sectiekop-lees { grid-template-columns: 30px minmax(0, 1fr); gap: 0 16px; font-size: 20px; font-weight: 600; }
+  #vandaag .vg-sectiekop-lees > .vg-icoon-m { width: 32px; justify-self: center; }
+  #vandaag .vg-vf > .vg-sectiekop-lees > .vg-icoon-m { width: 28px; }
+  /* Gebedsuur: sierlijntje, de dienst groot, het vers en de psalm gecentreerd, "Open het gebed" eronder */
+  #vandaag .vg-uur-sier { display: block; width: 120px; height: auto; margin: 18px auto 6px; }
+  #vandaag .vg-uur > .vg-uurnaam { margin-top: 0 !important; color: var(--inkt); }
+  #vandaag .vg-uur .vg-kernvers { margin: 6px auto 0 !important; padding: 0; border: 0; max-width: none; text-align: center; font-size: 19px; color: var(--inkt); }
+  #vandaag .vg-uur .vg-bron { margin: 8px 0 0 !important; padding: 0; text-align: center; }
+  #vandaag .vg-uur .vg-knop { margin-top: 16px !important; font-size: 19px; }
+  /* Scheiding tussen de onderdelen: gouden lijn met een ornament */
+  #vandaag .vg-scheiding { display: flex; align-items: center; gap: 10px; margin: 24px 0 0; color: var(--goud-pijl); }
+  #vandaag .vg-scheiding::before, #vandaag .vg-scheiding::after { content: ""; flex: 1; border-top: 1px solid rgba(172, 121, 47, .75); }
+  #vandaag .vg-scheiding svg { flex: none; width: 18px; height: 18px; }
+  #vandaag :is(.vg-vf, .vg-lezingen-sectie) { margin-top: 20px; }
+  /* Vasten & feesten: de regels in inkt, de weekdag vet, de kalender onder de kerkelijke datum */
+  #vandaag .vg-cyclus { grid-template-columns: 30px minmax(0, 1fr); gap: 0 16px; }
+  #vandaag .vg-cyclus-link { min-height: 54px; padding: 8px 2px; }
+  #vandaag .vg-cyclus-link span { font-size: 18px; line-height: 1.3; color: var(--inkt); }
+  #vandaag .vg-cyclus-week span { font-size: 19px; font-weight: 600; }
+  #vandaag .vg-cyclus-link .vg-cyclus-sub { display: block; font-size: 16px; color: var(--gedempt); }
+  #vandaag .vg-cyclus-punt { display: none; }
+  /* Feest, heiligen en vasten: icoon | titel en tekst | pijl rechts */
+  #vandaag .vg-vf .vg-ingang { grid-template-columns: 30px minmax(0, 1fr) 18px; gap: 0 16px; align-items: center; padding: 14px 2px; }
+  #vandaag .vg-vf .vg-ingang h3 { font-size: 20px; font-weight: 600; }
+  #vandaag .vg-vf .vg-ingang h3 svg { display: none; }
+  #vandaag .vg-vf .vg-sub { font-size: 17px; }
+  #vandaag .vg-ingang-pijl { display: block; width: 18px; height: 18px; color: var(--goud-pijl); stroke-width: 1.8; }
+  #vandaag .vg-ingang-icoon { align-self: start; padding-top: 2px; }
+  #vandaag .vg-ingang-icoon:has(.vg-icoon-m) .kruis-teken, #vandaag .met-icoon-m .vg-vis { display: none; }
+  #vandaag .vg-ingang-icoon .vg-icoon-m { width: 28px; margin: 0 auto; }
+  #vandaag .met-icoon-m .vg-icoon-m { width: 32px; margin-top: 6px; }
+  #vandaag .vg-vf .vg-duo { border-bottom: 0; }
+  /* Lezingen: kop met lijntjes ernaast, het boek links, de verwijzingen in inkt */
+  #vandaag .vg-lezingen-sectie > .vg-sectiekop { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  #vandaag .vg-lezingen-sectie > .vg-sectiekop::before, #vandaag .vg-lezingen-sectie > .vg-sectiekop::after { content: ""; width: 40px; border-top: 1px solid rgba(172, 121, 47, .7); }
+  #vandaag .vg-lezingen { grid-template-columns: 30px minmax(0, 1fr); gap: 0 16px; padding: 0 0 4px; border: 0; }
+  #vandaag .vg-lezingen > .vg-boek { display: none; }
+  #vandaag .vg-boek-m { width: 30px; margin: 12px auto 0; }
+  #vandaag .vg-lezingen > div > ul > li:first-child { border-top: 0; }
+  #vandaag .vg-lezingen li .vg-rij, #vandaag .vg-lezingen .vg-rij-kop { min-height: 52px !important; font-size: 18px; color: var(--inkt); }
 }
 
 /* ---------- E. Stilte ---------- */
@@ -264,6 +310,14 @@
 /* ---------- Verdieping (#meer, Meer.tsx): dezelfde kop, daaronder klikbare regels op papyrus ---------- */
 .vg-niskop .vg-titel { font-size: clamp(38px, 10.6cqw, 56px); }
 .vg-niskop { padding-top: clamp(56px, 15cqw, 90px); padding-bottom: calc(var(--boog) * .75 + clamp(36px, 9cqw, 56px)); } /* titel midden in de nis */
+/* Nis met titel én bovenbalk (Heiligen, Verdieping, Instellingen): mobiel staat de balk bovenaan zoals op Vandaag
+   (merk en zoeken op dezelfde plek); vanaf 768 px staat de kopbalk van de site erboven en blijft de nis zoals hij was. */
+@media (max-width: 767.98px) {
+  .vg-niskop:has(> .vg-balk) { padding-top: 0; }
+  .vg-niskop:has(> .vg-balk) > .vg-titel { margin-top: clamp(4px, 1cqw, 38px); }
+  #heiligen .vg-niskop > .vg-balk { position: absolute; top: 0; left: 0; right: 0; z-index: 2; padding: 0 var(--rand); }
+}
+@media (min-width: 768px) { .vg-niskop > .vg-balk { display: none; } }
 .vg-verd-sierlijn { width: min(60%, 220px); margin: 6px auto 0; }
 .vg-verd-lijst { padding-top: 4px; padding-bottom: 28px; }
 .vg-verd-lijst li + li { border-top: 1px solid var(--lijn-zacht); }

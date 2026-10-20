@@ -106,6 +106,7 @@ export default function Heiligen() {
       <NisKop
         titel="De Heiligen"
         open={open}
+        balk
         achter={
           <picture>
             {/* Mobiel: het icoon van Christus de Wijnstok met de apostelen in de nis; web: de bestaande kerkkop */}

@@ -34,7 +34,7 @@ export const PASCHA: Feest = {
   traditie:
     'Rode eieren als teken van het nieuwe leven, de zegening van het paasbrood (koulitsj, tsoureki), en veertig dagen lang de paasgroet in plaats van de gewone begroeting.',
   troparion:
-    'Christus is opgestaan uit de doden, door Zijn dood heeft Hij de dood vertreden, en aan hen in de graven heeft Hij het leven geschonken.',
+    'Christus, opgestaan van de doden, overwon de dood door Zijn dood, aan allen in de graven schonk Hij het leven.',
 };
 
 export const GROTE_FEESTEN: Feest[] = [

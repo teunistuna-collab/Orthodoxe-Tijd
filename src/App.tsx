@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
+import { KopBalk } from './components/NisKop';
+import './components/Vandaag.css';
+import './components/ontwerp.css';
 import { FooterInhoud } from './components/Footer';
 import Vandaag from './components/Vandaag';
 import Kalender from './components/Kalender';
@@ -247,7 +250,7 @@ export default function App() {
           <div className={p('cycli')}><Cycli /></div>
           <div className={p('instellingen')}><Instellingen /></div>
           <div className={p('psalmen')}><Psalmen actief={pagina === 'psalmen'} /></div>
-          <div className={p('bronnen')}><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="orthodox-pattern bg-bark text-[#d9cbb0]"><FooterInhoud /></section></div></div></div>
+          <div className={p('bronnen')}>{/* Mobiel: dezelfde bovenbalk (merk en zoeken) als de andere pagina's */}<div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><KopBalk /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></div>
         </main>
         <BottomNav pagina={pagina} />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />
