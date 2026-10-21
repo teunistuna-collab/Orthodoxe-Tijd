@@ -212,3 +212,92 @@ export const STAP_INHOUD: Record<StapKey, PopupInhoud> = {
   hemelvaart: PERIODE_POPUPS.hemelvaart,
   pinksteren: PERIODE_POPUPS.pinksteren,
 };
+
+/** Aangeleverde iconen in de Paascyclus (public/images/feesten/, uit "Pascha icons"), per dag t.o.v. Pascha. Teksten:
+ *  concept. `periode`: icoon van de periode (het nafeest van Hemelvaart), niet van de dag zelf. Pascha en de Lichte Week
+ *  houden het icoon van de Verrijzenis, behalve Lichte Vrijdag (Levenschenkende Bron). Alle Heiligen (+56) valt buiten
+ *  de cyclus en wordt hier niet getoond (bestand allerheiligen.webp staat klaar). */
+export interface PaasIcoon { bestand: string; breedte: number; hoogte: number; naam: string; betekenis: string; schrift?: string; periode?: boolean }
+const HEMELVAART: PaasIcoon = {
+  bestand: 'hemelvaart.webp', breedte: 659, hoogte: 800, naam: 'Icoon van de Hemelvaart van Christus',
+  betekenis: 'Op de veertigste dag na Pascha stijgt Christus ten hemel, gedragen door engelen. Beneden staan de Moeder Gods en de apostelen; twee engelen zeggen hun dat Hij op dezelfde wijze zal terugkomen.',
+  schrift: 'Handelingen 1:9–11',
+};
+export const PASCHA_DAGICONEN: Record<number, PaasIcoon> = {
+  [-42]: {
+    bestand: 'orthodoxie.webp', breedte: 639, hoogte: 800, naam: 'Icoon van de Triomf van de Orthodoxie',
+    betekenis: 'Op de eerste zondag van de Grote Vasten viert de Kerk het herstel van de iconenverering in 843. De icoon toont keizerin Theodora, haar zoon Michaël en patriarch Methodius met heiligen rond de icoon van de Moeder Gods.',
+  },
+  [-35]: {
+    bestand: 'palamas.webp', breedte: 598, hoogte: 800, naam: 'Icoon van de heilige Gregorius Palamas',
+    betekenis: 'De heilige Gregorius Palamas, aartsbisschop van Thessaloniki (†1359), verdedigde het gebed van het hart en de leer van het ongeschapen licht van God. Hij staat afgebeeld als bisschop met het Evangelieboek.',
+  },
+  [-28]: {
+    bestand: 'kruisverering.webp', breedte: 579, hoogte: 800, naam: 'Icoon van de verheffing van het Kruis',
+    betekenis: 'Halverwege de Grote Vasten wordt het Kruis in het midden van de kerk gelegd en vereerd, om de gelovigen op hun weg naar Pascha te sterken: „Uw Kruis aanbidden wij, Heer, en Uw heilige Verrijzenis verheerlijken wij.”',
+  },
+  [-15]: {
+    bestand: 'akathist.webp', breedte: 645, hoogte: 800, naam: 'Icoon van de Lof van de Moeder Gods',
+    betekenis: 'Op de Akathistzaterdag zingt de Kerk staande de Akathistos-hymne, de grote lofzang op de Moeder Gods. De icoon toont haar met het Kind, omringd door de profeten met de voorafbeeldingen die naar haar verwijzen.',
+  },
+  [-7]: {
+    bestand: 'palmzondag.webp', breedte: 599, hoogte: 800, naam: 'Icoon van de Intocht in Jeruzalem',
+    betekenis: 'Christus rijdt op een ezel Jeruzalem binnen; kinderen spreiden hun kleren en takken op de weg en het volk roept „Hosanna”. Hij komt als de Koning van de vrede, op weg naar Zijn lijden.',
+    schrift: 'Matteüs 21:1–11; Johannes 12:12–18',
+  },
+  [-3]: {
+    bestand: 'grote-donderdag.webp', breedte: 320, hoogte: 440, naam: 'Icoon van het Laatste Avondmaal',
+    betekenis: 'Christus viert met Zijn leerlingen het Laatste Avondmaal en geeft hun Zijn Lichaam en Bloed: de instelling van de Eucharistie.',
+    schrift: 'Matteüs 26:17–30',
+  },
+  [-2]: {
+    bestand: 'grote-vrijdag.webp', breedte: 800, hoogte: 501, naam: 'Epitaphios: Christus in het graf',
+    betekenis: 'Het epitaphios is het geborduurde doek met het lichaam van Christus, gereed voor het graf. Op Grote Vrijdag wordt het in processie rondgedragen en in het midden van de kerk gelegd, waar de gelovigen het vereren.',
+    schrift: 'Johannes 19:38–42',
+  },
+  [-1]: {
+    bestand: 'grote-zaterdag.webp', breedte: 612, hoogte: 800, naam: 'Icoon van de Graflegging',
+    betekenis: 'Jozef van Arimatea en Nikodemus leggen het lichaam van Christus in het graf, bij de Moeder Gods, Johannes en de vrouwen. Op deze gezegende sabbat rust Christus in het graf en daalt Hij af in het dodenrijk.',
+    schrift: 'Matteüs 27:57–61',
+  },
+  5: {
+    bestand: 'lichte-vrijdag.webp', breedte: 656, hoogte: 800, naam: 'Icoon van de Moeder Gods, de Levenschenkende Bron',
+    betekenis: 'Op de vrijdag van de Lichte Week eert de Kerk de Moeder Gods als de Levenschenkende Bron. Zij staat met het Kind boven een bron waarvan het water de zieken geneest; na de Liturgie volgt een kleine waterwijding.',
+  },
+  7: {
+    bestand: 'thomas.webp', breedte: 538, hoogte: 800, naam: 'Icoon van de belijdenis van Thomas',
+    betekenis: 'Acht dagen na Pascha toont Christus Zijn wonden aan de apostel Thomas, die belijdt: „Mijn Heer en mijn God!”',
+    schrift: 'Johannes 20:24–29',
+  },
+  14: {
+    bestand: 'myrondraagsters.webp', breedte: 526, hoogte: 724, naam: 'Icoon van de myrondraagsters bij het graf',
+    betekenis: 'Vroeg op de eerste dag van de week komen de vrouwen met welriekende olie naar het graf. Een engel op de weggerolde steen verkondigt hun dat de Heer is opgestaan.',
+    schrift: 'Marcus 16:1–8',
+  },
+  21: {
+    bestand: 'lamme.webp', breedte: 414, hoogte: 550, naam: 'Icoon van de genezing van de lamme',
+    betekenis: 'Bij het bad van Betesda geneest Christus een man die achtendertig jaar verlamd was: „Sta op, neem uw bed op en loop.”',
+    schrift: 'Johannes 5:1–15',
+  },
+  24: {
+    bestand: 'mid-pinksteren.webp', breedte: 494, hoogte: 750, naam: 'Icoon van Mid-Pinksteren',
+    betekenis: 'Halverwege tussen Pascha en Pinksteren gedenkt de Kerk hoe Christus in de tempel onderwijst, zodat de leraars zich verwonderen over Zijn wijsheid.',
+    schrift: 'Johannes 7:14–30',
+  },
+  28: {
+    bestand: 'samaritaanse.webp', breedte: 800, hoogte: 734, naam: 'Icoon van Christus en de Samaritaanse vrouw',
+    betekenis: 'Bij de put van Jakob spreekt Christus met de Samaritaanse vrouw over het levende water. Zij gelooft en verkondigt Hem in haar stad; de Kerk eert haar als de heilige Photini.',
+    schrift: 'Johannes 4:5–42',
+  },
+  35: {
+    bestand: 'blindgeborene.webp', breedte: 533, hoogte: 800, naam: 'Icoon van de genezing van de blindgeborene',
+    betekenis: 'Christus strijkt slijk op de ogen van een man die blind geboren is en zendt hem naar het bad van Siloam. Hij komt ziende terug en belijdt zijn geloof in de Zoon van God.',
+    schrift: 'Johannes 9:1–38',
+  },
+  39: HEMELVAART,
+  42: {
+    bestand: 'vaders-nicea.webp', breedte: 617, hoogte: 800, naam: 'Icoon van het Eerste Oecumenisch Concilie',
+    betekenis: 'De vaders van het Concilie van Nicea (325) beleden dat de Zoon één in wezen is met de Vader. Hun belijdenis vormt de kern van het Credo dat in elke Liturgie wordt gezongen.',
+  },
+  ...Object.fromEntries([40, 41, 43, 44, 45, 46, 47].map((o) => [o, { ...HEMELVAART, periode: true }])),
+};

@@ -2,10 +2,10 @@ import { addDays, type DagInfo, type Mode } from './kalender';
 import { GROTE_FEESTEN, PASCHA, type Feest } from './feesten';
 import { PASCHA_INFO } from './cyclusTeksten';
 import { paascyclusActief, paascyclusVoor, STAPPEN, type StapKey } from './paascyclus';
-import { PERIODE_POPUPS, STAP_INHOUD } from './paascyclusTeksten';
+import { PASCHA_DAGICONEN, PERIODE_POPUPS, STAP_INHOUD } from './paascyclusTeksten';
 import { kleurVanDeDag, type KleurVanDeDag } from './liturgischeKleur';
 import { geboortecyclusVoor } from './geboortecyclus';
-import { BRON_CONCEPT, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_WEETJES, KERKVADER_PER_PERIODE, KERKVADERS } from './geboorteInhoud';
+import { BRON_CONCEPT, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_WEETJES, KERKVADER_PER_PERIODE, KERKVADERS, GEBOORTE_DAGICONEN } from './geboorteInhoud';
 import { actieveCyclus, type Cyclus } from './seizoen';
 
 /*
@@ -132,9 +132,20 @@ function betekenisPascha(dag: DagInfo): BetekenisVanVandaag | null {
   const troparion = feest?.troparion ?? (off >= 0 && off <= 38 ? PASCHA.troparion : undefined);
   const hymne = deel('Hymne van de dag', troparion, BRON_TROPARION, feest?.troparion ? `Troparion · ${feest.kort ?? feest.naam}` : 'Troparion van Pascha (tot de Afsluiting van Pascha)');
 
-  // Icoon: alleen het aangeleverde icoon van de Verrijzenis, op Pascha en in de Lichte Week.
-  const icoon: IcoonVanDeDag | undefined =
-    off >= 0 && off <= 6
+  // Icoon: het aangeleverde icoon van de dag (lib/paascyclusTeksten.ts), anders op Pascha en in de Lichte Week dat van de Verrijzenis.
+  const dagIcoon = PASCHA_DAGICONEN[off];
+  const icoon: IcoonVanDeDag | undefined = dagIcoon
+    ? {
+        beeld: `/images/feesten/${dagIcoon.bestand}`,
+        breedte: dagIcoon.breedte,
+        hoogte: dagIcoon.hoogte,
+        naam: dagIcoon.periode ? `${dagIcoon.naam} (icoon van de periode)` : dagIcoon.naam,
+        periodeIcoon: !!dagIcoon.periode,
+        betekenis: dagIcoon.betekenis,
+        ...(dagIcoon.schrift ? { schrift: dagIcoon.schrift } : {}),
+        bron: 'Aangeleverd icoon (map Pascha icons); herkomst en gebruiksrecht nog vast te stellen. Tekst: ' + BRON_CONCEPT,
+      }
+    : off >= 0 && off <= 6
       ? { beeld: '/images/feesten/pascha.webp', breedte: 569, hoogte: 800, naam: 'Icoon van de Verrijzenis van Christus', betekenis: alinea('pascha', 0, 0) ?? '', bron: 'Icoon van de site (Pascha-pagina); tekst: ' + BRON_DOCX }
       : undefined;
 
@@ -180,7 +191,19 @@ function betekenisGeboorte(dag: DagInfo, mode: Mode): BetekenisVanVandaag | null
   // Icoon: het aangeleverde icoon van de Geboorte; van de vasten t/m de vooravond als icoon van de periode
   const feestIcoon = key === 'geboorte' || key === 'nafeest';
   const metIcoon = ['vasten', 'voorouders', 'vaders', 'voorfeest', 'vooravond', 'geboorte', 'nafeest'].includes(key);
-  const icoon: IcoonVanDeDag | undefined = metIcoon
+  const dagIcoon = GEBOORTE_DAGICONEN[dag.kerkKey];
+  const icoon: IcoonVanDeDag | undefined = dagIcoon
+    ? {
+        beeld: `/images/feesten/${dagIcoon.bestand}`,
+        breedte: dagIcoon.breedte,
+        hoogte: dagIcoon.hoogte,
+        naam: dagIcoon.periode ? `${dagIcoon.naam} (icoon van de periode)` : dagIcoon.naam,
+        periodeIcoon: !!dagIcoon.periode,
+        betekenis: dagIcoon.betekenis,
+        ...(dagIcoon.schrift ? { schrift: dagIcoon.schrift } : {}),
+        bron: 'Aangeleverd icoon; herkomst en gebruiksrecht nog vast te stellen. Tekst: ' + BRON_CONCEPT,
+      }
+    : metIcoon
     ? {
         beeld: '/images/feesten/kerst.jpg',
         breedte: 474,

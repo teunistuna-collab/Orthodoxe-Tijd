@@ -85,3 +85,57 @@ export const GEBOORTE_VERDIEPING: Array<{ key: GeboorteInfoKey; title: string; i
   { key: 'liturgie', title: 'Voorbereiding en viering', intro: 'Van de Geboortevasten tot de Grote Waterwijding.' },
   { key: 'gebruiken', title: 'Gebruiken en symboliek', intro: 'Hoe orthodoxe gezinnen de Geboortecyclus beleven.' },
 ];
+
+/** Aangeleverde iconen in de Geboortecyclus (public/images/feesten/), per kerkelijke datum "M-D". `periode`: past bij de
+ *  dag of periode maar is niet de feesticoon van die dag. Theofanie geldt van het voorfeest t/m het nafeest. */
+export interface DagIcoon { bestand: string; breedte: number; hoogte: number; naam: string; betekenis: string; schrift?: string; periode?: boolean }
+const THEOFANIE_ICOON: Omit<DagIcoon, 'periode'> = {
+  bestand: 'theofanie.webp', breedte: 557, hoogte: 800, naam: 'Icoon van Theofanie, de Doop van Christus',
+  betekenis: 'Christus staat in de Jordaan; Johannes de Voorloper legt zijn hand op Zijn hoofd. Van boven daalt een lichtstraal uit de hemel, het teken van de Vader en de Heilige Geest; aan de oever wachten engelen met doeken. Hier wordt de Heilige Drie-eenheid geopenbaard.',
+  schrift: 'Matteüs 3:13–17',
+};
+export const GEBOORTE_DAGICONEN: Record<string, DagIcoon> = {
+  '11-15': {
+    bestand: 'filippus.webp', breedte: 434, hoogte: 648, naam: 'Icoon van de heilige apostel Filippus', periode: true,
+    betekenis: 'De apostel Filippus uit Betsaïda bracht Natanaël bij Christus met de woorden „Kom en zie”. Zijn gedachtenis op 14 november gaat direct aan de Geboortevasten vooraf; daarom heet deze vasten ook de Filippusvasten.',
+    schrift: 'Johannes 1:43–51',
+  },
+  '11-21': {
+    bestand: 'opdracht-moeder-gods.webp', breedte: 586, hoogte: 800, naam: 'Icoon van de Intrede van de Moeder Gods in de tempel',
+    betekenis: 'Joachim en Anna brengen de driejarige Maria naar de tempel, vergezeld door meisjes met brandende kaarsen. De hogepriester Zacharias ontvangt haar; linksboven zit zij in het Heilige der Heiligen en ontvangt zij voedsel van een engel. Zij die zelf de tempel van God zal worden, wordt in de tempel gebracht.',
+  },
+  '12-6': {
+    bestand: 'nicolaas.webp', breedte: 342, hoogte: 500, naam: 'Icoon van de heilige Nicolaas van Myra',
+    betekenis: 'De heilige Nicolaas, aartsbisschop van Myra in Lycië (4e eeuw), in bisschoppelijk gewaad met kruisen, zegenend en met het Evangelieboek. Hij wordt vereerd als beschermer van armen, kinderen, zeelieden en reizigers.',
+  },
+  '12-26': {
+    bestand: 'synaxis-moeder-gods.webp', breedte: 618, hoogte: 800, naam: 'Icoon van de Synaxis van de Moeder Gods',
+    betekenis: 'De dag na de Geboorte eert de Kerk de Moeder Gods die Christus ter wereld bracht. Zij troont met het Kind, omringd door wat de schepping Hem aanbiedt: de engelen hun lofzang, de hemel de ster, de wijzen hun geschenken, de herders hun verwondering, de aarde de grot en de woestijn de kribbe, en wij de Maagd als Moeder.',
+  },
+  '12-27': {
+    bestand: 'stefanus.webp', breedte: 616, hoogte: 800, naam: 'Icoon van de heilige Stefanus',
+    betekenis: 'De heilige Stefanus, aartsdiaken en eerste martelaar, in het gewaad van een diaken met het wierookvat. Hij werd in Jeruzalem gestenigd en bad voor wie hem doodden: „Heer, reken hun deze zonde niet aan.”',
+    schrift: 'Handelingen 6–7',
+  },
+  '12-29': {
+    bestand: 'kinderen-bethlehem.webp', breedte: 800, hoogte: 519, naam: 'Icoon van de kinderen van Bethlehem',
+    betekenis: 'Herodes laat in Bethlehem en omgeving alle jongens van twee jaar en jonger doden, in de hoop het Kind te treffen. De Kerk eert deze kinderen als de eerste martelaren voor Christus; rechtsboven dragen engelen hun zielen naar de hemel.',
+    schrift: 'Matteüs 2:16–18',
+  },
+  '1-1': {
+    bestand: 'besnijdenis.webp', breedte: 600, hoogte: 677, naam: 'Icoon van de Besnijdenis des Heren',
+    betekenis: 'Op de achtste dag wordt het Kind besneden en ontvangt Het de naam Jezus, zoals de engel had gezegd. Links staat de heilige Basilius de Grote, wiens gedachtenis op dezelfde dag valt.',
+    schrift: 'Lucas 2:21',
+  },
+  '1-2': { ...THEOFANIE_ICOON, periode: true },
+  '1-3': { ...THEOFANIE_ICOON, periode: true },
+  '1-4': { ...THEOFANIE_ICOON, periode: true },
+  '1-5': { ...THEOFANIE_ICOON, periode: true },
+  '1-6': THEOFANIE_ICOON,
+  '1-7': {
+    bestand: 'synaxis-johannes.webp', breedte: 670, hoogte: 800, naam: 'Icoon van de heilige Johannes de Voorloper',
+    betekenis: 'De dag na Theofanie komt de Kerk samen om Johannes de Voorloper en Doper te eren, die de Heer in de Jordaan mocht dopen en Hem aanwees als „het Lam Gods, dat de zonde der wereld wegneemt”.',
+    schrift: 'Johannes 1:29–34',
+  },
+  ...Object.fromEntries(['1-8', '1-9', '1-10', '1-11', '1-12', '1-13', '1-14'].map((k) => [k, { ...THEOFANIE_ICOON, periode: true }])),
+};

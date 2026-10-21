@@ -728,6 +728,8 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 /* Bouw 44 — portret van een heilige van de Lage Landen (alleen in de pop-up) */
 .heilige-portret{display:block;border-radius:50%;object-fit:cover;background:#f3eee5;aspect-ratio:1/1}
 .heilige-portret-groot{width:150px;height:150px;margin:0 auto 14px;box-shadow:0 8px 20px rgba(58,33,16,.25)}
+/* Icoon in een venster (Icoon van de dag, Geboortecyclus): het hele icoon, staand of liggend, niet bijgesneden */
+.exact-popup-icoon{display:block;width:auto;max-width:min(100%,340px);height:auto;max-height:440px;margin:0 auto 16px;border-radius:3px;box-shadow:0 8px 20px rgba(58,33,16,.25)}
 
 /* Bouw 45 — mobiel: tikdoelen van minimaal 44px en leesbare lettergroottes */
 @media(max-width: 1023.98px){

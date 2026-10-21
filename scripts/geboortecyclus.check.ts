@@ -96,7 +96,17 @@ assert.equal(bv('2027-01-07')?.icoon?.periodeIcoon, false);
 assert.match(bv('2027-01-07')?.hymne?.tekst ?? '', /^Uw geboorte, Christus onze God/);
 assert.match(bv('2027-01-10')?.hymne?.tekst ?? '', /^Uw geboorte/); // nafeest
 assert.match(bv('2027-01-19')?.hymne?.tekst ?? '', /^Toen Gij, Heer, in de Jordaan/);
-assert.equal(bv('2027-01-19')?.icoon, undefined); // geen aangeleverd icoon van Theofanie
+assert.equal(bv('2027-01-19')?.icoon?.beeld, '/images/feesten/theofanie.webp'); // Theofanie
+assert.equal(bv('2027-01-19')?.icoon?.periodeIcoon, false);
+assert.equal(bv('2027-01-20')?.icoon?.beeld, '/images/feesten/synaxis-johannes.webp'); // Synaxis van Johannes
+assert.equal(bv('2027-01-08')?.icoon?.beeld, '/images/feesten/synaxis-moeder-gods.webp');
+assert.equal(bv('2027-01-14')?.icoon?.beeld, '/images/feesten/besnijdenis.webp');
+assert.equal(bv('2026-12-04')?.icoon?.beeld, '/images/feesten/opdracht-moeder-gods.webp'); // Intrede (kerkelijk 21 nov)
+assert.equal(bv('2026-12-19')?.icoon?.beeld, '/images/feesten/nicolaas.webp');
+assert.equal(bv('2026-12-20')?.icoon?.beeld, '/images/feesten/kerst.jpg'); // gewone vastendag: icoon van de periode
+assert.equal(bv('2027-01-25')?.icoon?.periodeIcoon, true); // nafeest van Theofanie
+assert.equal(bv('2025-12-25', 'nieuw')?.icoon?.beeld, '/images/feesten/kerst.jpg');
+assert.equal(bv('2026-01-06', 'nieuw')?.icoon?.beeld, '/images/feesten/theofanie.webp');
 assert.equal(bv('2027-01-19')?.link, '#geboorte');
 assert.equal(bv('2027-01-28'), null);
 assert.ok(bv('2027-01-06')?.kerkvader?.concept);

@@ -118,7 +118,7 @@ assert.equal(bv('2026-04-11')?.kleur.naar, 'wit'); // Grote Zaterdag: donker →
 assert.ok(bv('2026-04-12')?.icoon); // Pascha: icoon van de Verrijzenis
 assert.match(bv('2026-04-12')?.hymne?.tekst ?? '', /^Christus, opgestaan van de doden/);
 assert.ok(bv('2026-04-15')?.icoon); // Lichte Week
-assert.equal(bv('2026-04-19')?.icoon, undefined); // Thomaszondag: geen aangeleverd icoon
+assert.equal(bv('2026-04-19')?.icoon?.beeld, '/images/feesten/thomas.webp'); // Thomaszondag: eigen icoon
 assert.equal(bv('2026-05-21')?.kleur.kleur, 'wit'); // Hemelvaart
 assert.equal(bv('2026-05-21')?.periode.key, 'hemelvaart');
 assert.equal(bv('2026-05-31')?.kleur.kleur, 'groen'); // Pinksteren
@@ -135,6 +135,21 @@ for (const jaar of [2026, 2027, 2028]) {
     assert.equal(betekenisVoor(dagInfo(addDays(p, -71), mode), mode), null);
     assert.equal(betekenisVoor(dagInfo(addDays(p, 50), mode), mode), null);
   }
+}
+
+// Icoon van de dag in de Paascyclus (2027: Pascha 2 mei)
+{
+  const ic = (s: string) => betekenisVoor(dagInfo(utc(...(s.split('-').map(Number) as [number, number, number])), 'oud'), 'oud')?.icoon;
+  assert.equal(ic('2027-04-25')?.beeld, '/images/feesten/palmzondag.webp');
+  assert.equal(ic('2027-04-30')?.beeld, '/images/feesten/grote-vrijdag.webp');
+  assert.equal(ic('2027-05-02')?.beeld, '/images/feesten/pascha.webp');
+  assert.equal(ic('2027-05-07')?.beeld, '/images/feesten/lichte-vrijdag.webp');
+  assert.equal(ic('2027-05-09')?.beeld, '/images/feesten/thomas.webp');
+  assert.equal(ic('2027-06-10')?.beeld, '/images/feesten/hemelvaart.webp');
+  assert.equal(ic('2027-06-10')?.periodeIcoon, false);
+  assert.equal(ic('2027-06-11')?.periodeIcoon, true); // nafeest van Hemelvaart
+  assert.equal(ic('2027-06-13')?.beeld, '/images/feesten/vaders-nicea.webp');
+  assert.equal(ic('2027-03-10'), undefined); // gewone vastendag: geen icoon
 }
 
 console.log('paascyclus: alle controles geslaagd');

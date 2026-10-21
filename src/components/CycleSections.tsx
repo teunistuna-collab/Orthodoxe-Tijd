@@ -158,7 +158,7 @@ export function LiturgicalPopup({ open, onClose, content, lezen = false, deel }:
   return (
     <Modal open={open} onClose={onClose} eyebrow={content.eyebrow ?? 'Lees meer'} title={content.title} centerTitle maxWidth="max-w-3xl" lezen={lezen} deel={deel}>
       <div className="exact-popup-reading">
-        {content.image && <img loading="lazy" decoding="async" src={content.image.src} alt={content.image.alt} width={400} height={400} className="heilige-portret heilige-portret-groot" />}
+        {content.image && <img loading="lazy" decoding="async" src={content.image.src} alt={content.image.alt} className="exact-popup-icoon" />}
         {content.subtitle && <p className="exact-popup-subtitle">{content.subtitle}</p>}
         {content.highlight && <blockquote className="exact-popup-highlight">{content.highlight}</blockquote>}
         {content.paragraphs.length > 0 && (
