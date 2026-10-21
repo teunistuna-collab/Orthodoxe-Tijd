@@ -25,6 +25,7 @@ const CYCLUS_ITEMS = [
   { id: 'etmaal', label: '◷ ETMAAL', description: 'De gebeden van dag en nacht', href: '#etmaal' },
   { id: 'week', label: '☼ WEEK', description: 'Van zondag tot zaterdag', href: '#week' },
   { id: 'jaar', label: '✣ JAAR', description: 'Het ritme van het kerkelijk jaar', href: '#jaar' },
+  { id: 'geboorte', label: '✶ GEBOORTE', description: 'Van de Geboortevasten tot Theofanie', href: '#geboorte' },
 ];
 
 // Er staat één pagina tegelijk in beeld (App.tsx); de actieve link volgt die pagina.
@@ -66,7 +67,7 @@ export default function Header({ pagina: actief }: { pagina: string }) {
     };
   }, []);
 
-  const cyclusActief = ['adem', 'etmaal', 'week', 'jaar'].includes(actief);
+  const cyclusActief = ['adem', 'etmaal', 'week', 'jaar', 'geboorte'].includes(actief);
 
   return (
     <header className="site-header sticky top-0 z-50 overflow-visible">

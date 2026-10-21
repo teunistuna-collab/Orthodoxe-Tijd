@@ -292,7 +292,34 @@
 /* Vandaag: als laatste regel onder de cyclusregels, met dezelfde scheidingslijn */
 #vandaag .vg-cyclus-regels > .lk { padding: 10px 2px 10px; border-top: 1px solid var(--lijn-zacht); }
 /* Pascha: onder de sierlijn in de kop, gecentreerd blok op leesbreedte */
-#pascha .ot-pc-ctx-kop .lk { max-width: 30em; margin: 10px auto 4px; }
+:is(#pascha, #geboorte) .ot-pc-ctx-kop .lk { max-width: 30em; margin: 10px auto 4px; }
+
+/* De betekenis van vandaag (BetekenisVanVandaag.tsx; Vandaag en Pascha, alleen tijdens de Paascyclus): perkament, dunne
+   gouden lijnen; bovenaan de kleur en de periode, daaronder rijen met icoon | titel en korte tekst | "Lees meer →" */
+.bv { margin-top: 24px; text-align: left; }
+.bv .bv-kop { display: flex; align-items: center; justify-content: center; gap: 10px; white-space: nowrap; margin: 0 0 10px !important; text-align: center; }
+.bv .bv-kop::before, .bv .bv-kop::after { content: ""; flex: none; width: 22px; border-top: 1px solid rgba(172, 121, 47, .7); }
+.bv-direct { display: grid; gap: 0; border-top: 1px solid rgba(172, 121, 47, .55); }
+.bv-direct > .lk { padding: 10px 2px; border-bottom: 1px solid var(--lijn-zacht); }
+.bv-fase { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 6px 2px; border-bottom: 1px solid var(--lijn-zacht); font-family: var(--font-lees); font-size: 17px; color: var(--inkt) !important; text-decoration: none !important; }
+.bv-fase-label { font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--goud-pijl); }
+.bv-fase-bereik { color: var(--gedempt); }
+.bv-fase svg, .bv-rij svg { flex: none; width: 18px; height: 18px; color: var(--goud-pijl); stroke-width: 1.8; }
+.bv-lijst { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid rgba(172, 121, 47, .55); }
+.bv-lijst li + li { border-top: 1px solid var(--lijn-zacht); }
+.bv-rij { display: grid !important; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 0 16px; width: 100%; min-height: 60px; padding: 10px 2px; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; color: var(--inkt); }
+@media (hover: hover) { .bv-rij:hover { background: rgba(255, 251, 236, .45); } }
+.bv-rij:focus-visible, .bv-fase:focus-visible { outline: 3px solid var(--focus); outline-offset: -2px; }
+.bv-rij-icoon { display: flex; flex: none; width: 30px; justify-content: center; }
+.bv-icoon { flex: none; }
+.bv-icoon { display: block; width: 28px; height: auto; }
+.bv-icoon-rond { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; box-shadow: 0 0 0 1.5px var(--papyrus), 0 0 0 2.5px var(--goud); }
+.bv-rij-tekst { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.bv-rij-tekst b { font-family: var(--font-lees); font-size: 18px; font-weight: 600; line-height: 1.2; }
+.bv-rij-tekst small { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-family: var(--font-lees); font-size: 15px; line-height: 1.35; color: var(--gedempt); }
+.bv-meer { font-family: var(--font-titel); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; color: var(--goud-pijl); }
+/* Pascha: op de breedte van de kolom, onder "Vandaag binnen deze periode" */
+:is(#pascha, #geboorte) .bv { margin-top: 22px; }
 
 /* ---------- E. Stilte ---------- */
 .vg-stilte { position: relative; display: flex; align-items: flex-end; justify-content: center; min-height: clamp(160px, 42cqw, 280px); margin-top: 4px; }
@@ -660,3 +687,21 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   #instellingen.vg .vg-papier > :is(.vg-vk-keuzes, .vg-vk-noot) { max-width: 580px; margin-left: calc((100% - 640px) / 2 + 60px) !important; margin-right: auto !important; }
 
 }
+
+/* Seizoensbanner (Vandaag, alleen tijdens de Geboortecyclus): nachtblauwe strook met de titel van de periode (lib/geboortecyclus.ts, geboorteBannerTitel); de hele strook opent de Geboortecyclus. */
+.vg-seizoen {
+  position: relative; display: grid !important; grid-template-columns: minmax(0, 1fr) 18px; align-items: center; column-gap: 12px;
+  min-height: 92px; margin: 24px 0 0; padding: 14px 18px 14px 22px; border: 1px solid #b99455; border-radius: 3px;
+  background: var(--nachtblauw);
+  box-shadow: inset 0 0 0 3px var(--nachtblauw), inset 0 0 0 4px rgba(185, 148, 85, .55);
+  text-align: left; color: var(--ivoor) !important;
+}
+.vg-seizoen-label { grid-column: 1; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #d9b36b; }
+.vg-seizoen-titel { grid-column: 1; margin-top: 2px; font-family: var(--font-lees); font-size: clamp(21px, 6cqw, 26px); line-height: 1.2; text-shadow: 0 1px 6px rgba(4, 10, 20, .7); }
+.vg-seizoen svg { grid-column: 2; grid-row: 1 / span 2; width: 18px; height: 18px; color: #d9b36b; }
+.vg-seizoen:focus-visible { outline: 2px solid #066b95; outline-offset: 3px; }
+
+/* Aanduiding en ondertitel in de nis (NisKop met label/ondertitel: Pascha, Geboortecyclus) */
+.vg-nis-label { margin: 0 0 6px !important; font-family: var(--font-titel); font-size: clamp(12px, 3.3cqw, 14px); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #e2bd78; text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+.vg-nis-onder { max-width: 34em; margin: 4px auto 0 !important; font-family: var(--font-lees); font-size: clamp(17px, 4.6cqw, 21px); line-height: 1.4; text-wrap: balance; color: var(--ivoor); text-shadow: 0 1px 8px rgba(0, 0, 0, .7); }
+.vg-niskop:has(.vg-nis-onder) .vg-titel { font-size: clamp(34px, 9.6cqw, 52px); line-height: 1.08; text-wrap: balance; }

@@ -66,6 +66,10 @@ export function kleurVanDeDag(d: DagInfo): KleurVanDeDag {
   if (beweeglijk) return { kleur: beweeglijk[0], reden: beweeglijk[1], ...(o === -1 ? { naar: 'wit' as const } : {}) };
   if (o >= 1 && o <= 6) return { kleur: 'rood', reden: 'Lichte Week' };
   if (vast) return { kleur: vast[0], reden: vast[1] };
+  // Nafeesten van de Geboorte (kerkelijk 26–31 december) en van Theofanie (7–14 januari): wit
+  const [m, dg] = d.kerkKey.split('-').map(Number);
+  if (m === 12 && dg >= 26) return { kleur: 'wit', reden: dg === 26 ? 'Synaxis van de Moeder Gods · nafeest van de Geboorte' : 'Nafeest van de Geboorte' };
+  if (m === 1 && dg >= 7 && dg <= 14) return { kleur: 'wit', reden: dg === 7 ? 'Synaxis van Johannes de Voorloper · nafeest van Theofanie' : 'Nafeest van Theofanie' };
   if (o >= 7 && o <= 38) return { kleur: 'rood', reden: 'Paastijd' };
   if (o >= 40 && o <= 48) return { kleur: 'wit', reden: 'Nafeest van Hemelvaart' };
   if (o >= 50 && o <= 55) return { kleur: 'groen', reden: 'Week van de Heilige Geest' };

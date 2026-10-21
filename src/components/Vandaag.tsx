@@ -11,8 +11,10 @@ import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRe
 import { heiligeTitel } from '../lib/heiligenPopup';
 import { vastenGroep } from '../lib/vasten';
 import { feestVoorDag } from '../lib/feestdagen';
+import { actieveCyclus } from '../lib/seizoen';
+import { geboorteBannerTitel } from '../lib/geboortecyclus';
 import Kaarsgloed from './Kaarsgloed';
-import KleurVanDeDag from './KleurVanDeDag';
+import BetekenisVanVandaag from './BetekenisVanVandaag';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -70,6 +72,8 @@ export default function Vandaag() {
   const heiligenRegel = heilige ? heiligeTitel(heilige.naam) : heiligen ? 'Bekijk de heiligen van vandaag' : 'Heiligen worden geladen…';
   const feestLabel = hoofdFeest && (hoofdFeest.groot || hoofdFeest.soort === 'pascha' || (hoofdFeest.rang ?? 0) >= 4) ? 'Feest van vandaag' : 'Gedachtenis van vandaag';
   const groep = vastenGroep(dag.vasten.niveau);
+  const betekenis = useMemo(() => actieveCyclus(dag.civil, mode) !== null, [dag, mode]);
+  const seizoenTitel = useMemo(() => (actieveCyclus(dag.civil, mode) === 'geboorte' ? geboorteBannerTitel(dag.civil, mode) : null), [dag, mode]);
   const lezingRij = (l: HtcLezingRef, i: number) => {
     const ref = vertaalRef(l.ref);
     const soort = lezingSoort(ref);
@@ -195,8 +199,6 @@ export default function Vandaag() {
                   <span>{dag.seizoen}{dag.toon ? ` · Toon ${dag.toon}` : ''}</span>
                   <ChevronRight aria-hidden="true" />
                 </Actie>
-                {/* De gebruikelijke liturgische kleur van vandaag (lib/liturgischeKleur.ts) */}
-                <KleurVanDeDag dag={dag} />
                 </div>
               </div>
 
@@ -269,6 +271,21 @@ export default function Vandaag() {
                 </div>
               </div>
             </section>
+
+            {/* Alleen tijdens de Paascyclus of de Geboortecyclus (lib/seizoen.ts): de betekenis van vandaag */}
+            {betekenis && (
+              <>
+                <Scheiding />
+                {seizoenTitel && (
+                  <a className="vg-seizoen" href="#geboorte">
+                    <span className="vg-seizoen-label">De Geboortecyclus</span>
+                    <span className="vg-seizoen-titel">{seizoenTitel}</span>
+                    <ChevronRight aria-hidden="true" />
+                  </a>
+                )}
+                <BetekenisVanVandaag dag={dag} />
+              </>
+            )}
           </div>
         </div>
       </div>

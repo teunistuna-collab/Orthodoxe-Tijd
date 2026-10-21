@@ -3,7 +3,34 @@ import { berekenVasten, type VastenRegel } from './vasten';
 
 export type Mode = 'nieuw' | 'oud';
 
-export const JULIAANS_OFFSET = 13;
+/* ---------- Juliaanse kalender ----------
+   Omrekening via het Juliaanse dagnummer, zodat het verschil met de Gregoriaanse kalender voor elke eeuw klopt
+   (13 dagen in 1900–2099, 14 vanaf maart 2100, enzovoort). Een Juliaanse datum wordt, zoals overal in de site, als
+   UTC-datum met de Juliaanse jaar-, maand- en dagwaarden doorgegeven. */
+const DAG_1970 = 2440588; // Juliaans dagnummer van 1 januari 1970
+const gregoriaansNaarJd = (y: number, m: number, d: number) => {
+  const a = Math.floor((14 - m) / 12), j = y + 4800 - a, mm = m + 12 * a - 3;
+  return d + Math.floor((153 * mm + 2) / 5) + 365 * j + Math.floor(j / 4) - Math.floor(j / 100) + Math.floor(j / 400) - 32045;
+};
+const juliaansNaarJd = (y: number, m: number, d: number) => {
+  const a = Math.floor((14 - m) / 12), j = y + 4800 - a, mm = m + 12 * a - 3;
+  return d + Math.floor((153 * mm + 2) / 5) + 365 * j + Math.floor(j / 4) - 32083;
+};
+const jdNaarDatum = (jd: number) => new Date(Date.UTC(1970, 0, 1) + (jd - DAG_1970) * 864e5);
+const jdNaarJuliaans = (jd: number): [number, number, number] => {
+  const c = jd + 32082, d = Math.floor((4 * c + 3) / 1461), e = c - Math.floor((1461 * d) / 4), m = Math.floor((5 * e + 2) / 153);
+  return [d - 4800 + Math.floor(m / 10), m + 3 - 12 * Math.floor(m / 10), e - Math.floor((153 * m + 2) / 5) + 1];
+};
+/** De burgerlijke (Gregoriaanse) datum van een Juliaanse datum. */
+export function juliaansNaarCivil(jaar: number, maand: number, dag: number): Date {
+  return jdNaarDatum(juliaansNaarJd(jaar, maand, dag));
+}
+/** De Juliaanse datum van een burgerlijke datum (jaar, maand en dag als UTC-datum).
+ *  ponytail: 29 februari van een eeuwjaar als 2100 bestaat Juliaans wel, Gregoriaans niet; die ene dag schuift naar 1 maart. */
+export function civilNaarJuliaans(civil: Date): Date {
+  const [y, m, d] = jdNaarJuliaans(gregoriaansNaarJd(civil.getUTCFullYear(), civil.getUTCMonth() + 1, civil.getUTCDate()));
+  return new Date(Date.UTC(y, m - 1, d));
+}
 
 export const MAANDEN = [
   'januari', 'februari', 'maart', 'april', 'mei', 'juni',
@@ -48,21 +75,20 @@ export function mdKey(d: Date): string {
   return `${d.getUTCMonth() + 1}-${d.getUTCDate()}`;
 }
 
-/** Kerkelijke datum: bij de oude kalender loopt de kerk 13 dagen achter op de burgerlijke datum. */
+/** Kerkelijke datum: bij de oude kalender de Juliaanse datum (13 dagen achter in 1900–2099), anders de burgerlijke. */
 export function kerkDatum(civil: Date, mode: Mode): Date {
-  return mode === 'oud' ? addDays(civil, -JULIAANS_OFFSET) : civil;
+  return mode === 'oud' ? civilNaarJuliaans(civil) : civil;
 }
 
-/** Juliaanse datum (altijd civil − 13). Sleutel voor het menologion van holytrinityorthodox.com. */
+/** Juliaanse datum als sleutel ("M-D") voor het menologion van holytrinityorthodox.com. */
 export function julianKey(civil: Date): string {
-  return mdKey(addDays(civil, -JULIAANS_OFFSET));
+  return mdKey(civilNaarJuliaans(civil));
 }
 
 /** Burgerlijke datum van een vaste kerkelijke datum (maand-dag) in een gegeven burgerlijk jaar. */
 export function civilVanKerkdatum(md: string, jaar: number, mode: Mode): Date {
   const [m, d] = md.split('-').map(Number);
-  const base = utc(jaar, m, d);
-  return mode === 'oud' ? addDays(base, JULIAANS_OFFSET) : base;
+  return mode === 'oud' ? juliaansNaarCivil(jaar, m, d) : utc(jaar, m, d);
 }
 
 /** Eerstvolgende burgerlijke datum (vandaag of later) van een vaste kerkelijke datum. */
@@ -75,10 +101,7 @@ export function volgendeCivil(md: string, vanaf: Date, mode: Mode): Date {
   return civilVanKerkdatum(md, y + 1, mode);
 }
 
-/**
- * Orthodox Pascha (Meeus' Juliaanse algoritme), teruggegeven als Gregoriaanse datum.
- * Geldig voor 1900–2099 (verschil 13 dagen).
- */
+/** Orthodox Pascha (Meeus' Juliaanse algoritme), teruggegeven als burgerlijke (Gregoriaanse) datum, voor elke eeuw. */
 export function orthodoxPascha(jaar: number): Date {
   const a = jaar % 4;
   const b = jaar % 7;
@@ -87,7 +110,7 @@ export function orthodoxPascha(jaar: number): Date {
   const e = (2 * a + 4 * b - d + 34) % 7;
   const maand = Math.floor((d + e + 114) / 31);
   const dag = ((d + e + 114) % 31) + 1;
-  return addDays(utc(jaar, maand, dag), JULIAANS_OFFSET);
+  return juliaansNaarCivil(jaar, maand, dag);
 }
 
 /** Westers Pasen (Gregoriaans, Meeus/Jones/Butcher). */
@@ -122,6 +145,13 @@ export function formatDag(d: Date): string {
 }
 export function formatKort(d: Date): string {
   return `${d.getUTCDate()} ${MAANDEN_KORT[d.getUTCMonth()]}`;
+}
+/** "15 mrt – 23 apr", of één datum voor een periode van één dag. */
+export const kortBereik = (a: Date, b: Date) => (a.getTime() === b.getTime() ? formatKort(a) : `${formatKort(a)} – ${formatKort(b)}`);
+/** "23 februari – 11 april", "6 – 11 april", of één datum. */
+export function bereikLang(a: Date, b: Date): string {
+  if (a.getTime() === b.getTime()) return formatDag(a);
+  return `${a.getUTCMonth() === b.getUTCMonth() ? a.getUTCDate() : formatDag(a)} – ${formatDag(b)}`;
 }
 export function formatMd(md: string): string {
   const [m, d] = md.split('-').map(Number);

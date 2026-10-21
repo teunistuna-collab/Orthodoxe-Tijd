@@ -500,9 +500,9 @@ header>nav>div{justify-content:space-between!important}
 .bg-parchment .v15-cycle-timeline .timeline-title,.parchment-pattern .v15-cycle-timeline .timeline-title{color:#eadcc2!important}
 
 /* Light cycle-page closing quotations: readable dark ink on parchment. */
-#adem blockquote,#etmaal blockquote,#week blockquote,#jaar blockquote,#pascha blockquote{opacity:1!important}
-#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote{color:#572d20!important}
-#adem .bg-parchment blockquote+*,#etmaal .bg-parchment blockquote+*,#week .bg-parchment blockquote+*,#jaar .bg-parchment blockquote+*,#pascha .bg-parchment blockquote+*{opacity:1!important}
+#adem blockquote,#etmaal blockquote,#week blockquote,#jaar blockquote,#pascha blockquote,#geboorte blockquote{opacity:1!important}
+#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote,#geboorte .bg-parchment blockquote{color:#572d20!important}
+#adem .bg-parchment blockquote+*,#etmaal .bg-parchment blockquote+*,#week .bg-parchment blockquote+*,#jaar .bg-parchment blockquote+*,#pascha .bg-parchment blockquote+*,#geboorte .bg-parchment blockquote+*{opacity:1!important}
 /* Navigation marks: typographic/manuscript marks instead of modern icon-pack glyphs. */
 
 /* ===== BOUW 19 — harde herstelpunten (verouderd, zie Bouw 56: banners worden nu juist bewust uitgesneden) ===== */
@@ -531,8 +531,8 @@ header>nav>div{justify-content:space-between!important}
 /* Heiligen: dagcirkels krijgen donkere, grotere cijfers op ivoor; geselecteerd omgekeerd. */
 
 /* Cycli: citeerregels op lichte ondergronden leesbaar. */
-#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote{color:#0b1b2a!important;opacity:1!important}
-#adem .bg-parchment cite,#etmaal .bg-parchment cite,#week .bg-parchment cite,#jaar .bg-parchment cite,#pascha .bg-parchment cite{color:#8a5b20!important;opacity:1!important}
+#adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote,#geboorte .bg-parchment blockquote{color:#0b1b2a!important;opacity:1!important}
+#adem .bg-parchment cite,#etmaal .bg-parchment cite,#week .bg-parchment cite,#jaar .bg-parchment cite,#pascha .bg-parchment cite,#geboorte .bg-parchment cite{color:#8a5b20!important;opacity:1!important}
 
 /* Bouw 21 — definitieve gebedskaarten */
 .prayer-choice-card{border:1px solid #b88628;background:linear-gradient(145deg,#351a11,#1a0c08);box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(201,162,39,.35),0 10px 24px rgba(55,31,15,.15);color:#f5e6c8}

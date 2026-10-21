@@ -12,6 +12,7 @@ import Feesten from './components/Feesten';
 import Psalmen from './components/Psalmen';
 import Vasten from './components/Vasten';
 import Pascha from './components/Pascha';
+import Geboorte from './components/Geboorte';
 import Heiligen from './components/Heiligen';
 import Gebeden from './components/Gebeden';
 import Meer from './components/Meer';
@@ -48,7 +49,7 @@ const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
 const STANDAARD_TITEL = document.title;
 
-const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer', 'cycli'];
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'geboorte', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer', 'cycli'];
 
 // "#psalmen/50" hoort bij de pagina "psalmen" (de Psalmenpagina opent zelf Psalm 50).
 function paginaUitHash(): string | null {
@@ -242,6 +243,7 @@ export default function App() {
           <div className={p('week')}><Weekcyclus /></div>
           <div className={p('jaar')}><Jaarcyclus /></div>
           <div className={p('pascha')}><Pascha /></div>
+          <div className={p('geboorte')}><Geboorte /></div>
           <div className={p('gebeden')}><Gebeden /></div>
           <div className={p('vasten')}><Vasten /></div>
           <div className={p('heiligen')}><Heiligen /></div>

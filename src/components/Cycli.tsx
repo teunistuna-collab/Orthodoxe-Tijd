@@ -14,6 +14,7 @@ const CYCLI = [
   { id: 'week', titel: 'Week', ondertitel: 'De dagen met de Heer', beeld: '/images/Week-icoon.webp' },
   { id: 'jaar', titel: 'Jaar', ondertitel: 'De heilige seizoenen', beeld: '/images/jaar/rozet.webp' },
   { id: 'pascha', titel: 'Pascha', ondertitel: 'Het hart van ons geloof', beeld: '/images/Pascha-icoon.webp' },
+  { id: 'geboorte', titel: 'Geboorte', ondertitel: 'Van de Geboortevasten tot Theofanie', beeld: '/images/feesten/kerst.jpg' },
 ];
 
 export default function Cycli() {
@@ -27,7 +28,7 @@ export default function Cycli() {
         <img className="vg-sierlijn vg-cy-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
         <p className="vg-label">Het ritme van gebed</p>
         <p className="vg-cy-intro">Het kerkelijk leven beweegt in heilige cycli van dag en nacht, week en jaar. Zo groeien wij in gebed, in de tijd van God.</p>
-        <nav aria-label="De vijf cycli">
+        <nav aria-label="De zes cycli">
           <ul className="vg-cy-lijst">
             {CYCLI.map(({ id, titel, ondertitel, beeld }) => (
               <li key={id}>

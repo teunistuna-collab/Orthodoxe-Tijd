@@ -5,11 +5,12 @@ import Kaarsgloed from './Kaarsgloed';
 
 // De kerkelijke kop van Verdieping, De heiligen, Jouw voorkeuren en de cycluspagina's: de nis (kerk-header, of een
 // eigen beeld via `achter`) met de sierboog naar het papyrus. Met `titel` staat de titel midden in de nis; met `balk`
-// staat bovenin het merk en de zoekknop, en met `terug` ook een pijl terug (bijv. naar Cycli). Opmaak: Vandaag.css.
+// staat bovenin het merk en de zoekknop, en met `terug` ook een pijl terug (bijv. naar Cycli). Met `label` en `ondertitel`
+// staan een aanduiding boven en een korte tekst onder de titel (Pascha, Geboortecyclus). Opmaak: Vandaag.css.
 
-type Props = { titel?: string; open: boolean; balk?: boolean; terug?: string; achter?: ReactNode; children?: ReactNode };
+type Props = { titel?: string; label?: string; ondertitel?: string; open: boolean; balk?: boolean; terug?: string; achter?: ReactNode; children?: ReactNode };
 
-export default function NisKop({ titel, open, balk, terug, achter, children }: Props) {
+export default function NisKop({ titel, label, ondertitel, open, balk, terug, achter, children }: Props) {
   return (
     <div className={`vg-kop${titel ? ' vg-niskop' : ''}`}>
       <div className="vg-kop-achter" aria-hidden="true">
@@ -19,8 +20,10 @@ export default function NisKop({ titel, open, balk, terug, achter, children }: P
       {balk && <KopBalk terug={terug} />}
       {titel && (
         <>
+          {label && <p className="vg-nis-label">{label}</p>}
           <h1 className="vg-titel">{titel}</h1>
           <img className="vg-sierlijn vg-verd-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
+          {ondertitel && <p className="vg-nis-onder">{ondertitel}</p>}
         </>
       )}
       {children}

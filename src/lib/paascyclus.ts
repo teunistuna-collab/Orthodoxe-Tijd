@@ -1,18 +1,24 @@
 import { addDays, daysBetween, orthodoxPascha } from './kalender';
 import { PAASCYCLUS, type Feest } from './feesten';
 
-// De zes stappen van de Paascyclus (Pascha-pagina). offsetRange = eerste en laatste dag t.o.v. Pascha, uit de bestaande
-// indeling: Lazaruszaterdag en Palmzondag horen bij de Heilige Week, Pascha omvat de Lichte Week, de Paastijd loopt tot en
-// met de Afsluiting van Pascha, en de laatste stap van Hemelvaart tot en met de Zondag van de heiligen van het eigen land.
+// De tien perioden van de Paascyclus (Pascha-pagina, en "De betekenis van vandaag"). offsetRange = eerste en laatste dag
+// t.o.v. Pascha, aaneensluitend en zonder overlap: van de Zondag van de Tollenaar en de Farizeeër (Pascha − 70) tot en met
+// Pinksteren (Pascha + 49). Grenzen: Grote Vasten = Schone Maandag (−48) t/m de vrijdag vóór Lazaruszaterdag (−9);
+// Goede Week = Grote Maandag (−6) t/m Grote Zaterdag (−1); Lichte Week = Lichte Maandag t/m Lichte Zaterdag (1–6);
+// Paastijd t/m de Afsluiting van Pascha (38); Hemelvaart (39) met het nafeest t/m Pinksterzaterdag (48).
 // De Paasdatum is voor beide kalenderinstellingen dezelfde (orthodoxPascha); alleen de vaste feesten verschillen.
-export type StapKey = 'voorbereiding' | 'grote-vasten' | 'goede-week' | 'pascha' | 'vijftig-dagen' | 'hemelvaart-pinksteren';
+export type StapKey = 'voorbereiding' | 'grote-vasten' | 'lazarus' | 'palmzondag' | 'goede-week' | 'pascha' | 'lichte-week' | 'paastijd' | 'hemelvaart' | 'pinksteren';
 export const STAPPEN: Array<{ key: StapKey; label: string; short: string; offsetRange: [number, number] }> = [
-  { key: 'voorbereiding', label: 'Voorbereiding', short: 'Zondag van de Tollenaar en de Farizeeër tot de Vergevingszondag', offsetRange: [-70, -49] },
+  { key: 'voorbereiding', label: 'Voorbereidende zondagen', short: 'Van de Tollenaar en de Farizeeër tot de Vergevingszondag', offsetRange: [-70, -49] },
   { key: 'grote-vasten', label: 'Grote Vasten', short: 'Innerlijke zuivering en omkeer', offsetRange: [-48, -9] },
-  { key: 'goede-week', label: 'Heilige Week', short: 'Met Christus mee naar het Kruis', offsetRange: [-8, -1] },
-  { key: 'pascha', label: 'Pascha', short: 'De Verrijzenis van Christus', offsetRange: [0, 6] },
-  { key: 'vijftig-dagen', label: 'Paastijd', short: 'Vijftig dagen van vreugde', offsetRange: [7, 38] },
-  { key: 'hemelvaart-pinksteren', label: 'Hemelvaart en Pinksteren', short: 'Volheid van de Geest en het nieuwe leven', offsetRange: [39, 63] },
+  { key: 'lazarus', label: 'Lazaruszaterdag', short: 'Christus wekt Lazarus op', offsetRange: [-8, -8] },
+  { key: 'palmzondag', label: 'Palmzondag', short: 'De intocht in Jeruzalem', offsetRange: [-7, -7] },
+  { key: 'goede-week', label: 'Goede Week', short: 'Met Christus mee naar het Kruis', offsetRange: [-6, -1] },
+  { key: 'pascha', label: 'Pascha', short: 'De Verrijzenis van Christus', offsetRange: [0, 0] },
+  { key: 'lichte-week', label: 'Lichte Week', short: 'De week als één grote feestdag', offsetRange: [1, 6] },
+  { key: 'paastijd', label: 'Paastijd', short: 'De vreugde van de Verrijzenis', offsetRange: [7, 38] },
+  { key: 'hemelvaart', label: 'Hemelvaart', short: 'Christus verheerlijkt', offsetRange: [39, 48] },
+  { key: 'pinksteren', label: 'Pinksteren', short: 'De nederdaling van de Heilige Geest', offsetRange: [49, 49] },
 ];
 const EIND = STAPPEN[STAPPEN.length - 1].offsetRange[1];
 
@@ -28,8 +34,8 @@ export interface Paascyclus {
   dagenTotPascha: number;
 }
 
-/** De Paascyclus van een dag: de lopende (tot en met de laatste dag van de laatste stap), anders de eerstvolgende. Zo blijft
- *  de pagina tijdens de Paastijd bij Pascha van dit jaar en kiest hij na de cyclus (ook rond de jaarwisseling) het volgende. */
+/** De Paascyclus van een dag: de lopende (tot en met Pinksteren), anders de eerstvolgende. Zo blijft de pagina tijdens de
+ *  Paastijd bij Pascha van dit jaar en kiest hij na Pinksteren (ook rond de jaarwisseling) het volgende. */
 export function paascyclusVoor(dag: Date): Paascyclus {
   const jaar = dag.getUTCFullYear();
   let pascha = orthodoxPascha(jaar);
@@ -52,3 +58,7 @@ export function zondagVanDeWeek(offset: number): Feest | undefined {
 export function volgendeZondag(offset: number, totEnMet: number): Feest | undefined {
   return ZONDAGEN.find((f) => (f.offset ?? 0) >= offset && (f.offset ?? 0) <= totEnMet);
 }
+
+/** De centrale controle voor alles wat alleen tijdens de Paascyclus verschijnt (Vandaag, Pascha): van de Zondag van de
+ *  Tollenaar en de Farizeeër t/m Pinksteren, beide inbegrepen. `dag`: de burgerlijke datum (UTC-middernacht, zoals overal). */
+export const paascyclusActief = (dag: Date): boolean => paascyclusVoor(dag).huidige !== null;
