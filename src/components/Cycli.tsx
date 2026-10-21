@@ -24,10 +24,10 @@ export default function Cycli() {
       {/* Banner: de zonnewijzer in het gewelf (public/images/ontwerp/cycli-banner-*.webp) */}
       <NisKop open={open} balk achter={<BannerBeeld naam="cycli-banner" open={open} />} />
       <div className="vg-papier vg-cy">
-        <h1 className="vg-cy-titel">Cycli</h1>
+        <h1 className="vg-cy-titel">Heilige Ritmes</h1>
         <img className="vg-sierlijn vg-cy-sierlijn" src="/images/vandaag/sierlijn.svg" alt="" aria-hidden="true" width={480} height={40} />
         <p className="vg-label">Het ritme van gebed</p>
-        <p className="vg-cy-intro">Het kerkelijk leven beweegt in heilige cycli van dag en nacht, week en jaar. Zo groeien wij in gebed, in de tijd van God.</p>
+        <p className="vg-cy-intro">Van de stilte van het hart tot de grote feesten van de Kerk. In ieder uur, iedere dag en ieder seizoen nodigt God ons uit tot gebed.</p>
         <nav aria-label="De zes cycli">
           <ul className="vg-cy-lijst">
             {CYCLI.map(({ id, titel, ondertitel, beeld }) => (
