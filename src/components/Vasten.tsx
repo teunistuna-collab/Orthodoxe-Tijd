@@ -216,19 +216,9 @@ export default function Vasten() {
       </section>
 
       <ExactPageFrame title="Vasten">
-      {/* Volgorde: uitleg → het wekelijkse vasten → de vier grote vasten → praktisch → de vier informatiekaarten */}
+      {/* Volgorde: het wekelijkse vasten → de vier grote vasten → praktisch → de vier informatiekaarten */}
       <div className="orthodox-pattern parchment-pattern relative bg-parchment py-14 text-ink sm:py-20">
         <div className={CONTENT}>
-          {/* Doorlopende verticale lijn verbindt het dagpaneel met de algemene uitleg — geen nieuwe pagina */}
-          <div className="md:hidden mx-auto mt-10 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">
-            <p className="ot-label">Wat betekent vasten?</p>
-            <p className="mt-3 max-w-3xl text-base leading-relaxed text-ink-soft sm:text-lg">
-              De Orthodoxe Kerk vast ongeveer de helft van het jaar: vier grote vastenperiodes, enkele strenge dagen en elke
-              woensdag en vrijdag. Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet — het
-              hoort samen met bekering, zelfbeheersing, liefde tot de naaste en de voorbereiding op de feesten van de Kerk.
-            </p>
-          </div>
-
           <GoldDivider />
 
           {/* Het wekelijkse vasten + vastenvrije periodes — compact, geïntegreerd naast elkaar */}
