@@ -133,7 +133,9 @@ export function vastenPeriodes(jaar: number, mode: Mode): Periode[] {
   );
 
   /* Vastenvrije perioden */
-  out.push(mk('kersttijd-begin', 'Kersttijd (vervolg van vorig jaar)', 'vrij', utc(jaar, 1, 1), civilVanKerkdatum('1-4', jaar, mode), 'De Twaalf Heilige Dagen lopen door tot de vooravond van Theofanie.', ['Alles toegestaan, ook op wo/vr'], '#4a7c59'));
+  // De Kersttijd van vorig jaar loopt dit jaar door; op de oude kalender begint hij pas op 7 januari (kerkelijk 25 december)
+  const kerstVorigJaar = civilVanKerkdatum('12-25', jaar - 1, mode);
+  out.push(mk('kersttijd-begin', 'Kersttijd (vervolg van vorig jaar)', 'vrij', kerstVorigJaar > utc(jaar, 1, 1) ? kerstVorigJaar : utc(jaar, 1, 1), civilVanKerkdatum('1-4', jaar, mode), 'De Twaalf Heilige Dagen lopen door tot de vooravond van Theofanie.', ['Alles toegestaan, ook op wo/vr'], '#4a7c59'));
   out.push(
     mk('kersttijd', 'Kersttijd (Twaalf Heilige Dagen)', 'vrij', kd('12-25'), civilVanKerkdatum('1-4', jaar + 1, mode), 'Van Kerstmis tot de vooravond van Theofanie wordt niet gevast.', ['Alles toegestaan, ook op wo/vr'], '#4a7c59'),
   );

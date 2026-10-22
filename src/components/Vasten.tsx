@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, ChevronRight, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { dagInfo, formatDag, formatDatum, formatKort, hoofdletter, ymd } from '../lib/kalender';
+import { addDays, dagInfo, formatDag, formatDatum, formatKort, hoofdletter, ymd } from '../lib/kalender';
 import { vastenPeriodes } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
@@ -13,8 +13,10 @@ import Verdieping from './Verdieping';
 import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
 import VastenTafel from './VastenTafel';
-import { voedselStatus, type Voedselgroep } from '../lib/voedselgroepen';
-import { ActieKnop, BannerBeeld, Sierlijn } from './onderdelen';
+import VoedselTegels from './VoedselTegels';
+import { voedselStatus } from '../lib/voedselgroepen';
+import { PASTORALE_NOOT, vastenBetekenis } from '../lib/vastenBetekenis';
+import { BannerBeeld, Sierlijn } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import './Vandaag.css';
 import './ontwerp.css';
@@ -25,10 +27,6 @@ const FAQ = [
   {
     v: 'Wat als een feest in een vastenperiode valt?',
     a: 'Dan wordt het vasten verzacht. Bij een groot feest (zoals de Annunciatie of de Transfiguratie) mag er vis gegeten worden; bij een polyeleosfeest wijn en olie. Op woensdag en vrijdag buiten de vastenperiodes heft een groot feest het vasten op tot een visdag. Alleen de Kruisverheffing blijft een vastendag.',
-  },
-  {
-    v: 'Waarom woensdag én vrijdag?',
-    a: 'De woensdag herinnert aan het verraad van Judas, de vrijdag aan de kruisiging. Beide dagen worden al sinds de eerste eeuwen gevast — het staat al in de Didachè. Vastenvrij zijn alleen de Lichte Week, de week na Pinksteren, de Kersttijd en de week na Tollenaar en Farizeeër.',
   },
   {
     v: 'Hoe streng moet ik het nemen?',
@@ -71,17 +69,6 @@ const PERIODE_INFO: Record<string, { label: string; href: string; linkLabel: str
 };
 
 // Medaillon per weekdag: kruis op een vastendag, opkomende zon op een vrije dag.
-// Voedselkaart (Vlees, Zuivel, Eieren, Vis, Olie, Wijn; scripts/voedselkaarten.mjs) met in de lege cirkel een vinkje
-// (toegestaan) of kruis (niet toegestaan). De naam staat al op de kaart; voor schermlezers staat hij er als tekst bij.
-function VoedselKaart({ label, toegestaan }: { label: string; toegestaan: boolean }) {
-  return (
-    <div className={`voedsel-kaart${toegestaan ? ' is-toegestaan' : ' is-niet'}`}>
-      <img src={`/images/ui/voeding/${label.toLowerCase()}.webp`} alt="" width={300} height={620} loading="lazy" decoding="async" />
-      <span className="voedsel-teken" aria-hidden="true">{toegestaan ? '✓' : '✕'}</span>
-      <span className="sr-only">{label}: {toegestaan ? 'toegestaan' : 'niet toegestaan'}</span>
-    </div>
-  );
-}
 
 type FastingRij = { key: string; naam: string; wanneer: string; onClick?: () => void };
 
@@ -122,7 +109,7 @@ function FastingTable({ titel, rijen, noot }: { titel: string; rijen: FastingRij
 export default function Vasten() {
   const { mode, vandaag, vandaagYmd } = useApp();
   const open = usePaginaOpen('vasten');
-  const [jaar, setJaar] = useState(vandaag.getUTCFullYear());
+  const jaar = vandaag.getUTCFullYear();
   // Op mobiel starten alle vragen dicht (compacter); op desktop staat de eerste open.
   const [openFaq, setOpenFaq] = useState<number | null>(() => (window.matchMedia('(min-width: 768px)').matches ? 0 : null));
   const [geselecteerdeDag, setGeselecteerdeDag] = useState<string | null>(null);
@@ -140,7 +127,13 @@ export default function Vasten() {
   const [periodeOpen, setPeriodeOpen] = useState<string | null>(null);
 
   const dagVandaag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
-  const niveauVandaag = NIVEAUS[dagVandaag.vasten.niveau];
+  // Weergavedatum van de vastentafel: vandaag (standaard) of morgen, de volgende kalenderdag; de systeemdatum blijft
+  // ongemoeid. Status, tafel, tegels en toelichting lezen allemaal deze ene dag.
+  const [morgen, setMorgen] = useState(false);
+  const dagMorgen = useMemo(() => dagInfo(addDays(vandaag, 1), mode), [vandaag, mode]);
+  const dagWeergave = morgen ? dagMorgen : dagVandaag;
+  const niveauWeergave = NIVEAUS[dagWeergave.vasten.niveau];
+  const betekenis = vastenBetekenis(dagWeergave);
 
   const periodes = useMemo(() => vastenPeriodes(jaar, mode), [jaar, mode]);
 
@@ -152,11 +145,6 @@ export default function Vasten() {
   const periodeGeopend = periodeOpen ? vastenP.find((p) => p.id === periodeOpen) : null;
 
   // Voedselkaarten in het dagvenster: dezelfde status als de vastentafel (lib/voedselgroepen.ts)
-  const onthoudingenVoor = (niveau: (typeof dagVandaag)['vasten']['niveau']) => {
-    const st = voedselStatus(niveau);
-    return (['Vlees', 'Zuivel', 'Eieren', 'Vis', 'Olie', 'Wijn'] as const).map((label) => ({ label, toegestaan: st[label.toLowerCase() as Voedselgroep] }));
-  };
-  const onthoudingen = geselecteerdeDagInfo ? onthoudingenVoor(geselecteerdeDagInfo.vasten.niveau) : [];
 
   const infoKaarten = (
     <Verdieping
@@ -180,15 +168,31 @@ export default function Vasten() {
       <section id="vasten" className="vg ot-redesign ot-vasten">
         <NisKop open={open} balk achter={<BannerBeeld naam="vasten-banner" open={open} />} />
         <div className="vg-papier ot-inhoud">
-          <p className="vg-label ot-vs-label">Vandaag</p>
-          <h1 className="ot-titel">{dagVandaag.vasten.label}</h1>
+          <div aria-live="polite">
+            <p className="vg-label ot-vs-label">{morgen ? `Morgen — ${formatDatum(dagMorgen.civil)}` : 'Vandaag'}</p>
+            <h1 className="ot-titel">{dagWeergave.vasten.label}</h1>
+          </div>
           <Sierlijn />
-          <p className="ot-vs-toegestaan">{niveauVandaag.toegestaan}</p>
-          <p className="ot-vs-detail">{dagVandaag.vasten.detail}</p>
-          {dagVandaag.vasten.periode && <p className="ot-vs-periode">{dagVandaag.vasten.periode}</p>}
+          <p className="ot-vs-toegestaan">{niveauWeergave.toegestaan}</p>
+          <p className="ot-vs-detail">{dagWeergave.vasten.detail}</p>
+          {dagWeergave.vasten.periode && <p className="ot-vs-periode">{dagWeergave.vasten.periode}</p>}
 
-          {/* De vastentafel: het eten van vandaag op tafel (components/VastenTafel.tsx) */}
-          <VastenTafel niveau={dagVandaag.vasten.niveau} />
+          {/* De geestelijke betekenis van de dag (lib/vastenBetekenis.ts), los van de voedselregels */}
+          <section className="ot-vs-betekenis" aria-labelledby="vs-betekenis">
+            <h2 id="vs-betekenis">{betekenis.titel}</h2>
+            <p>{betekenis.tekst}</p>
+            <p className="ot-vs-noot">{PASTORALE_NOOT}</p>
+          </section>
+
+          {/* De vastentafel: het eten van de gekozen dag op tafel (components/VastenTafel.tsx) */}
+          <VastenTafel niveau={dagWeergave.vasten.niveau} />
+          <p className="ot-vs-morgen">
+            {morgen ? (
+              <button type="button" className="ot-tekstknop" onClick={() => setMorgen(false)}>← Terug naar vandaag</button>
+            ) : (
+              <button type="button" className="ot-tekstknop" onClick={() => setMorgen(true)}>Morgen bekijken →</button>
+            )}
+          </p>
 
           <div className="ot-vs-grote">
             <div>
@@ -206,7 +210,6 @@ export default function Vasten() {
                   </li>
                 ))}
               </ul>
-              <div className="ot-knoprij"><ActieKnop omlijnd onClick={() => setInfoOpen('wat')}>Meer over vasten</ActieKnop></div>
             </div>
           </div>
         </div>
@@ -245,7 +248,7 @@ export default function Vasten() {
             <div className="mt-8 grid gap-4 border-t border-gold/25 pt-6 lg:grid-cols-2">
               <FastingTable
                 titel="Vastenvrije weken"
-                rijen={vrijP.map((p) => ({ key: p.id, naam: p.naam, wanneer: `${formatKort(p.start)} – ${formatKort(p.eind)}`, onClick: () => setGeselecteerdeDag(ymd(p.start)) }))}
+                rijen={vrijP.map((p) => ({ key: p.id, naam: p.naam, wanneer: `${formatKort(p.start)} – ${formatKort(p.eind)}${p.eind.getUTCFullYear() !== jaar ? ` ${p.eind.getUTCFullYear()}` : ''}`, onClick: () => setGeselecteerdeDag(ymd(p.start)) }))}
               />
               <FastingTable
                 titel="Strenge losse vastendagen"
@@ -271,46 +274,6 @@ export default function Vasten() {
           </div>
 
 
-          {/* De vasten door het jaar */}
-          {/* Zelfde kader als "De grote bewegingen" op Jaar (index.css, Bouw 174): dubbele lijn, kolommen met een beeld per vasten */}
-          <div className="vlak jr-vak vs-kader">
-            <div className="flex flex-wrap items-end justify-between gap-4 text-center sm:text-left">
-              <div className="mx-auto sm:mx-0">
-                <p className="ot-label">De vasten door het jaar</p>
-                <h2 className="ot-titel font-display mt-2 text-2xl font-semibold sm:text-3xl">De vier grote vasten van {jaar}</h2>
-              </div>
-              <div className="v17-year-selector mx-auto flex items-center sm:mx-0" role="group" aria-label="Jaar kiezen">
-                <button type="button" className="v17-year-arrow" onClick={() => setJaar(jaar - 1)} aria-label="Vorig jaar">‹</button>
-                <span className="v17-year-current">{jaar}</span>
-                <span className="v17-year-divider">✣</span>
-                <span className="v17-year-next">{jaar + 1}</span>
-                <button type="button" className="v17-year-arrow" onClick={() => setJaar(jaar + 1)} aria-label="Volgend jaar">›</button>
-              </div>
-            </div>
-
-            <div className="vs-vasten">
-              {grotevier.map((p) => {
-                const info = PERIODE_INFO[p.id];
-                return (
-                  <article key={p.id} className="vs-vast" role="button" tabIndex={0} onClick={() => setPeriodeOpen(p.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPeriodeOpen(p.id); } }}>
-                    <img src={`/images/jaar/${p.id}.webp`} alt="" width={464} height={272} loading="lazy" decoding="async" />
-                    <h4 className="vs-vast-naam">{(info?.label ?? p.naam).replace(/(apostel|ontslapenis)(vasten)/i, '$1­$2')}</h4>
-                    <p className="vs-vast-data">
-                      {formatDag(p.start)} – {formatDatum(p.eind)} · {p.dagen} dagen{info?.beweeglijk ? ' · beweeglijk' : ''}
-                    </p>
-                    <p className="vs-vast-tekst">{p.omschrijving}</p>
-                    {info && (
-                      <a href={info.href} className="jr-link" onClick={(e) => e.stopPropagation()}>
-                        {info.linkLabel} ›
-                      </a>
-                    )}
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-
-          <GoldDivider />
 
           {/* FAQ / praktisch */}
           <div className="vlak parchment-pattern rounded-lg border border-gold/35 bg-[#f7edda]/75 px-5 py-7 shadow-[0_14px_34px_rgba(55,31,15,0.1)] sm:px-8 sm:py-9">
@@ -378,11 +341,7 @@ export default function Vasten() {
               <div className="gold-rule my-5" />
               <div>
                 <p className="ot-label mb-2">Toegestaan op deze dag</p>
-                <div className="fasting-food-grid">
-                  {onthoudingen.map(({ label, toegestaan }) => (
-                    <VoedselKaart key={label} label={label} toegestaan={toegestaan} />
-                  ))}
-                </div>
+                <VoedselTegels status={voedselStatus(geselecteerdeDagInfo.vasten.niveau)} />
               </div>
               {geselecteerdeDagInfo.vasten.periode && <p className="text-sm font-semibold text-gold-deep">{geselecteerdeDagInfo.vasten.periode}</p>}
               <div className="gold-rule mt-5" />

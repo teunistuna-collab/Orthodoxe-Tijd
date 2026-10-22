@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Check, X } from 'lucide-react';
 import type { VastenNiveau } from '../lib/vasten';
 import { VOEDSELGROEPEN, voedselStatus, type Voedselgroep } from '../lib/voedselgroepen';
+import VoedselTegels from './VoedselTegels';
 
-// De vastentafel (Vasten, "Vandaag"): de vaste tafel (kaars, waterkan, olijftakken, schaal, karaf) met de negen
-// voedselgroepen als losse lagen erop, en daaronder per groep een tegel met vinkje of kruis. Tafel en tegels lezen
-// dezelfde status (lib/voedselgroepen.ts, uit het vastenniveau van de dag). Posities in pixels van tafel.png (1860
-// breed) met een strook erboven voor de hoge gerechten, in de pagina omgerekend naar procenten binnen een vaste
-// beeldverhouding. Beelden: public/images/vasten/tafel/ (Orthodoxe_Tijd_Tafel_Losse_Afbeeldingen.zip).
+// De vastentafel (Vasten, "Vandaag"/"Morgen"): de vaste tafel (kaars, waterkan, olijftakken, schaal, karaf) met de negen
+// voedselgroepen als losse lagen erop, en daaronder de voedseltegels. Tafel en tegels lezen dezelfde status
+// (lib/voedselgroepen.ts, uit het vastenniveau van de gekozen dag). Hover of focus op een tegel licht het gerecht op tafel
+// op en omgekeerd; aantikken houdt de keuze vast (mobiel). Een niet-toegestaan gerecht blijft weg, ook als zijn tegel
+// gekozen is. Posities in pixels van tafel.png (1860 breed) met een strook erboven voor de hoge gerechten, in de pagina
+// omgerekend naar procenten binnen een vaste beeldverhouding. Beelden: public/images/vasten/tafel/.
 
 const B = 1860; // breedte van tafel.png
 const BOVEN = 70; // ruimte boven de tafel
@@ -26,7 +27,6 @@ const LAGEN: Array<{ groep: Voedselgroep; x: number; y: number; s: number; z: nu
   { groep: 'zuivel', x: 930, y: 238, s: 0.66, z: 3, b: 266, h: 154 },
   { groep: 'graan', x: 1150, y: 240, s: 0.68, z: 3, b: 307, h: 147 },
 ];
-const MAAT = Object.fromEntries(LAGEN.map((l) => [l.groep, l])) as Record<Voedselgroep, (typeof LAGEN)[number]>;
 
 const pct = (v: number, t: number) => `${((v / t) * 100).toFixed(3)}%`;
 
@@ -41,8 +41,11 @@ const TESTS: Array<{ id: string; label: string; niveau: VastenNiveau | null }> =
 export default function VastenTafel({ niveau }: { niveau: VastenNiveau }) {
   const [test, setTest] = useState<VastenNiveau | null>(null);
   const [handmatig, setHandmatig] = useState<Partial<Record<Voedselgroep, boolean>>>({});
+  const [hover, setHover] = useState<Voedselgroep | null>(null);
+  const [gekozen, setGekozen] = useState<Voedselgroep | null>(null);
   const basis = voedselStatus(test ?? niveau);
   const status = import.meta.env.DEV ? { ...basis, ...handmatig } : basis;
+  const licht = hover ?? gekozen;
 
   return (
     <>
@@ -54,43 +57,22 @@ export default function VastenTafel({ niveau }: { niveau: VastenNiveau }) {
           return (
             <img
               key={l.groep}
-              className={`vt-gerecht${status[l.groep] ? '' : ' is-weg'}`}
+              className={`vt-gerecht ${l.z > 1 ? 'vt-voor' : 'vt-achter'}${status[l.groep] ? '' : ' is-weg'}${licht === l.groep && status[l.groep] ? ' is-licht' : ''}`}
               src={`${MAP}/${l.groep}.webp`}
               alt=""
               width={l.b}
               height={l.h}
               decoding="async"
+              onMouseEnter={() => setHover(l.groep)}
+              onMouseLeave={() => setHover(null)}
               style={{ left: pct(l.x, B), top: pct(l.y + BOVEN - h, H), width: pct(w, B), zIndex: l.z }}
             />
           );
         })}
       </div>
 
-      <h2 className="sr-only">Toegestane spijzen vandaag</h2>
-      <ul className="vt-tegels">
-        {VOEDSELGROEPEN.map(({ groep, naam }) => {
-          const ok = status[groep];
-          const inhoud = (
-            <>
-              <img src={`${MAP}/${groep}.webp`} alt="" width={MAAT[groep].b} height={MAAT[groep].h} loading="lazy" decoding="async" />
-              <span className="vt-naam">{naam}</span>
-              <span className="vt-teken" aria-hidden="true">{ok ? <Check /> : <X />}</span>
-              <span className="sr-only">: {ok ? 'toegestaan' : 'niet toegestaan'}</span>
-            </>
-          );
-          return (
-            <li key={groep} className={`vt-tegel ${ok ? 'is-toegestaan' : 'is-niet'}`}>
-              {import.meta.env.DEV ? (
-                <button type="button" className="vt-tegel-binnen" title="Testmodus: klik om dit gerecht aan of uit te zetten" onClick={() => setHandmatig((m) => ({ ...m, [groep]: !ok }))}>
-                  {inhoud}
-                </button>
-              ) : (
-                <div className="vt-tegel-binnen">{inhoud}</div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+      <h2 className="sr-only">Toegestane spijzen</h2>
+      <VoedselTegels status={status} licht={licht} gekozen={gekozen} onLicht={setHover} onKies={(g) => setGekozen((k) => (k === g ? null : g))} />
 
       {import.meta.env.DEV && (
         <div className="vt-test" role="group" aria-label="Testmodus vastentafel">
@@ -100,7 +82,12 @@ export default function VastenTafel({ niveau }: { niveau: VastenNiveau }) {
               {t.label}
             </button>
           ))}
-          <span>Klik op een tegel om één gerecht te wisselen.</span>
+          <span>Eén gerecht wisselen:</span>
+          {VOEDSELGROEPEN.map(({ groep, naam }) => (
+            <button key={groep} type="button" aria-pressed={!status[groep]} onClick={() => setHandmatig((m) => ({ ...m, [groep]: !status[groep] }))}>
+              {naam}
+            </button>
+          ))}
         </div>
       )}
     </>
