@@ -714,6 +714,7 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 #vandaag .vg-leef p { margin: 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.55; color: var(--inkt); }
 #vandaag .vg-leef-link { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; font-family: var(--font-lees); font-size: 16px; color: #7a5a2a; text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .45); text-underline-offset: 3px; }
 #vandaag .vg-leef-link svg { width: 16px; height: 16px; }
+#vandaag .vg-leef-link:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 #vandaag .vg-leef-schrift { max-width: 30em; margin: 18px auto 0; padding-top: 12px; border-top: 1px solid rgba(172, 121, 47, .45); }
 #vandaag .vg-leef-schrift .vg-label { display: block; margin-bottom: 4px; color: #7a5a2a; }
 #vandaag .vg-leef-schrift blockquote { margin: 0 0 4px; font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; color: var(--inkt); }
@@ -732,3 +733,6 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 #etmaal .vg-et-uur .vg-knop > span { color: var(--goud-pijl); }
 @media (hover: hover) { #etmaal .vg-et-uur .vg-knop:hover { filter: none; background: rgba(255, 248, 229, .9) !important; border-color: var(--kaartrand) !important; } }
 #etmaal .vg-et-uur .vg-knop:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+/* De psalmverwijzing onder het kernvers: groter tikvlak (min. 24 px hoog) zonder dat de regel verspringt */
+#vandaag .vg-bron a { display: inline-block; padding: 6px 4px; margin: -6px -4px; }
+

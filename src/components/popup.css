@@ -100,3 +100,6 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .pk .exact-modal-pa
 #top#top#top#top#top#top#top#top#top .zoek-groep button:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
 #top#top#top#top#top#top#top#top#top .zoek-onder { color: var(--gedempt); }
 @media (max-width: 767.98px) { #top#top#top#top#top#top#top#top#top .zoek-achtergrond { background: var(--papyrus); } #top#top#top#top#top#top#top#top#top .zoek-paneel { border: 0; border-radius: 0; } }
+/* Smalle telefoons: in de kop alleen de pijlen (het label blijft voor schermlezers), zodat datum, delen en sluiten passen */
+@media (max-width: 419.98px) { .pk-nav-woord { display: none; } }
+

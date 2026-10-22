@@ -578,3 +578,11 @@ button.vt-tegel-binnen { cursor: pointer; }
 .ot-vasten .ot-vs-morgen { margin: 14px 0 0; text-align: center; }
 .ot-vasten .ot-vs-morgen .ot-tekstknop { color: #7a5a2a; font-size: 17px; }
 @media (prefers-reduced-motion: reduce) { .vt-tegel-binnen, .vt-tegel-binnen img, .vt-teken, .vt-teken svg, .ot-vasten .vt-gerecht { transition: none; } }
+/* Psalmlezer op de smalste telefoons: de drie tabs passen naast elkaar zonder dat de laatste wordt afgesneden */
+@media (max-width: 359.98px) { .ot-lezer .ps-tabs { gap: 14px; } }
+
+/* Kleine telefoons (< 360 px): de banner van Pascha en Geboorte iets compacter (titel 30 px, ondertitel 15 px) */
+@media (max-width: 359.98px) {
+  :is(#pascha, #geboorte) .vg-niskop .vg-titel { font-size: 30px; }
+  :is(#pascha, #geboorte) .vg-niskop .vg-nis-onder { font-size: 15px; line-height: 1.35; }
+}

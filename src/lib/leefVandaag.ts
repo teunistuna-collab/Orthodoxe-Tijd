@@ -5,9 +5,10 @@ import type { Schriftwoord } from './schrift';
 // dezelfde datum geeft altijd dezelfde inhoud). Bewerken: alleen de teksten hieronder. Geen citaten in de teksten;
 // het schriftwoord is een verwijzing (lib/schrift.ts toont een citaat alleen als het gecontroleerd is).
 // Voorrang (eerste die past):
-//   1. Pascha en de Lichte Week   2. de Grote en Heilige Week   3. een van de twaalf grote feesten (+ Pascha)
-//   4. een feest of heilige met vigilie (rang 5)   5. vastenperiode   6. Paastijd, voor Pinksteren, Pinksterweek, Kersttijd
-//   7. een heilige of feest met polyeleos (rang 4)   8. zondag   9. woensdag/vrijdag   10. het thema van de weekdag.
+//   1. Pascha en de Lichte Week   2. Grote Vrijdag, Grote Zaterdag, de Heilige Week   3. Lazaruszaterdag, Vergevingszondag,
+//   Kerstavond, de vooravond van Theofanie   4. een van de twaalf grote feesten   5. een feest of heilige met vigilie (rang 5)
+//   6. vastenperiode (per weekdag een eigen variant)   7. Paastijd, voor Pinksteren, Pinksterweek, Kersttijd
+//   8. een heilige of feest met polyeleos (rang 4)   9. zondag   10. woensdag/vrijdag   11. het thema van de weekdag.
 
 export interface LeefTekst {
   overweeg: string;
@@ -136,33 +137,104 @@ const GROTE_FEESTEN: Record<string, LeefTekst> = {
   },
 };
 
-const PERIODEN: Record<string, LeefTekst> = {
+/** Dagen met een eigen tekst binnen een periode (Paascyclus: dagen t.o.v. Pascha; vaste dagen: kerkelijke datum). */
+const LAZARUS: LeefTekst = {
+  overweeg: 'Op Lazaruszaterdag gedenkt de Kerk hoe Christus Zijn vriend Lazarus uit het graf riep. Nog vóór Zijn eigen lijden toont Hij dat Hij de Heer is over leven en dood.',
+  bid: 'Dank Christus vandaag in uw gebed dat Hij sterker is dan de dood, en bid voor wie u zijn ontvallen.',
+  praktijk: 'Bezoek of bel vandaag iemand die rouwt of ziek is.',
+  link: PAASCYCLUS,
+  schrift: nbv('Johannes 11:43–44'),
+};
+const VERGEVINGSZONDAG: LeefTekst = {
+  overweeg: 'Op Vergevingszondag staat de Kerk op de drempel van de Grote Vasten. Na de vespers vragen de gelovigen elkaar om vergeving, want de weg naar Pascha begint met verzoening.',
+  bid: 'Bid vandaag voor wie u pijn heeft gedaan, en voor wie u zelf pijn heeft gedaan.',
+  praktijk: 'Vraag vandaag iemand om vergeving, of zeg tegen iemand dat u vergeeft.',
+  link: PAASCYCLUS,
+  schrift: nbv('Matteüs 6:14–15'),
+};
+const GROTE_ZATERDAG: LeefTekst = {
+  overweeg: 'Op Grote Zaterdag rust Christus in het graf, terwijl Hij afdaalt in het dodenrijk om wie daar gevangen zijn te bevrijden. De Kerk waakt in stilte, en in de loop van de dag breekt het licht van de Verrijzenis al door.',
+  bid: 'Bid vandaag in stilte en bereid uw hart voor op de paasnacht.',
+  praktijk: 'Maak vandaag ruimte voor rust en stilte, ook bij de voorbereidingen van het feest.',
+  link: PAASCYCLUS,
+  schrift: nbv('1 Petrus 3:18–19'),
+};
+const BIJZONDERE_DAGEN: Record<string, LeefTekst> = {
+  '12-24': {
+    overweeg: 'Op de vooravond van de Geboorte is de verwachting het grootst. Met de Koninklijke Uren en de vespers gaat de Kerk het feest van de Geboorte binnen.',
+    bid: 'Neem vandaag een moment van stilte en verwacht in gebed de komst van Christus.',
+    praktijk: 'Wacht vandaag met de feestmaaltijd tot na de vespers, naar oud gebruik bij de eerste ster.',
+    link: GEBOORTECYCLUS,
+    schrift: nbv('Lucas 2:6–7'),
+  },
+  '1-5': {
+    overweeg: 'Op de vooravond van Theofanie bereidt de Kerk zich voor op het feest van de Doop van Christus in de Jordaan. Na de liturgie wordt de Grote Waterwijding gevierd.',
+    bid: 'Bid vandaag om een gezuiverd hart, terwijl de Kerk bidt om de heiliging van het water.',
+    praktijk: 'Neem vandaag een fles mee naar de kerk voor het gewijde water.',
+    link: GEBOORTECYCLUS,
+    schrift: nbv('Matteüs 3:13–15'),
+  },
+};
+
+const ZONDAG_IN_DE_VASTEN = 'Neem vandaag deel aan de Goddelijke Liturgie, of verbind u in gebed met de Kerk.';
+
+/** De vier vastenperioden: zeven varianten (zondag = 0 … zaterdag = 6), zodat niet elke dag dezelfde tekst staat. Elke
+ *  variant verbindt de periode met de vaste gedachtenis van de weekdag (Oktoëchos). Sleutel = periode uit lib/vasten.ts. */
+type Dagtekst = Pick<LeefTekst, 'overweeg' | 'bid' | 'praktijk'>;
+const VASTENPERIODEN: Record<string, { link?: LeefTekst['link']; schrift: Schriftwoord; dagen: Dagtekst[] }> = {
   'Grote Vasten': {
-    overweeg: 'De Grote Vasten is de tijd van bekering en vernieuwing op weg naar Pascha. Het vasten van het lichaam gaat samen met gebed, vergeving en barmhartigheid.',
-    bid: 'Bid vandaag het Jezusgebed en vraag de Heer om een berouwvol en nederig hart.',
-    praktijk: 'Vraag vandaag iemand om vergeving, of schenk die aan wie u iets heeft aangedaan.',
     link: JEZUSGEBED,
     schrift: nbv('Joël 2:12–13'),
+    dagen: [
+      { overweeg: 'Ook in de Grote Vasten blijft de zondag de dag van de Verrijzenis. Iedere zondag van de Vasten heeft een eigen gedachtenis, die de Kerk een stap dichter bij Pascha brengt.', bid: ZONDAG_IN_DE_VASTEN, praktijk: 'Rust vandaag van uw werk en geef tijd aan God en aan uw naasten.' },
+      { overweeg: 'De Grote Vasten is de tijd van bekering en vernieuwing op weg naar Pascha. Het vasten van het lichaam gaat samen met gebed en barmhartigheid.', bid: 'Bid vandaag het gebed van de heilige Efrem de Syriër, dat de Kerk op de weekdagen van de Vasten bidt.', praktijk: 'Kies vandaag één gewoonte die u afleidt van God, en laat die rusten.' },
+      { overweeg: 'De Vasten is een school van nederigheid. Wie eerlijk naar zichzelf kijkt, leert ook milder te zijn voor anderen.', bid: 'Bid vandaag het Jezusgebed en vraag de Heer om een nederig hart.', praktijk: 'Spreek vandaag over niemand een oordeel uit.' },
+      { overweeg: 'Op woensdag gedenkt de Kerk het verraad van Christus; in de Vasten wordt dan de Liturgie van de Voorafgewijde Gaven gevierd. Zo blijft de Eucharistie ook op vastendagen het hart van de Kerk.', bid: 'Bid vandaag om trouw aan Christus, ook in kleine dingen.', praktijk: 'Wees vandaag eerlijk, ook waar een kleine onwaarheid makkelijker zou zijn.' },
+      { overweeg: 'Het vasten is niet alleen onthouding van voedsel, maar ook van boze woorden en gedachten. Zo komt er ruimte voor God.', bid: 'Bid vandaag het Jezusgebed wanneer onrust of ergernis opkomt.', praktijk: 'Laat vandaag een scherp woord onuitgesproken.' },
+      { overweeg: 'Op vrijdag gedenkt de Kerk de kruisiging van Christus, en ook dan wordt in de Vasten de Liturgie van de Voorafgewijde Gaven gevierd. Het kruis staat midden op de weg naar Pascha.', bid: 'Maak vandaag met aandacht het kruisteken en vraag Christus om ontferming.', praktijk: 'Help vandaag iemand die het zwaar heeft, zonder dat het opvalt.' },
+      { overweeg: 'Op de zaterdagen van de Vasten gedenkt de Kerk vaak de overledenen. Het vasten verbindt ons met allen die ons zijn voorgegaan.', bid: 'Bid vandaag bij naam voor uw overleden familieleden en vrienden.', praktijk: 'Bezoek vandaag een graf, of steek thuis een kaars aan bij het gebed voor de overledenen.' },
+    ],
   },
   Kerstvasten: {
-    overweeg: 'In de Geboortevasten bereidt de Kerk zich voor op de Menswording en de Geboorte van Christus. Zij nodigt ons uit om ruimte te maken voor de komst van het Woord.',
-    bid: 'Neem vandaag een moment van stilte en bid het Jezusgebed in verwachting van de Heer.',
-    praktijk: 'Geef vandaag iets weg aan wie het minder heeft, in stilte en zonder er iets voor terug te verwachten.',
     link: GEBOORTECYCLUS,
     schrift: nbv('Jesaja 9:1'),
+    dagen: [
+      { overweeg: 'In de Geboortevasten blijft de zondag de dag van de Verrijzenis. De Kerk viert de opgestane Christus, wiens geboorte zij verwacht.', bid: ZONDAG_IN_DE_VASTEN, praktijk: 'Maak vandaag tijd voor uw gezin of voor iemand die alleen is.' },
+      { overweeg: 'In de Geboortevasten bereidt de Kerk zich voor op de Menswording van Christus. Op maandag gedenkt zij de engelen, die bij Zijn geboorte de vrede op aarde verkondigden.', bid: 'Bid vandaag in stilte en vraag uw beschermengel om u te behoeden.', praktijk: 'Breng vandaag vrede waar spanning is, met een rustig en vriendelijk woord.' },
+      { overweeg: 'Op dinsdag gedenkt de Kerk de heilige Johannes de Voorloper, die de weg van de Heer bereidde. Ook de Geboortevasten is een tijd om de weg voor Christus vrij te maken.', bid: 'Bid vandaag om een hart dat klaar is om Christus te ontvangen.', praktijk: 'Ruim vandaag iets op wat tussen u en een ander in staat.' },
+      { overweeg: 'Op woensdag gedenkt de Kerk het verraad van Christus. In de Geboortevasten herinnert dat ons eraan dat Hij die als kind komt, ook de weg van het kruis zal gaan.', bid: 'Bid vandaag om trouw aan Christus.', praktijk: 'Wees vandaag trouw in iets kleins dat u hebt beloofd.' },
+      { overweeg: 'Op donderdag gedenkt de Kerk de apostelen en de heilige Nicolaas, wiens feest in deze vastentijd valt. Hun leven laat zien hoe het geloof zich in goedheid vertaalt.', bid: 'Bid vandaag voor wie in nood verkeren.', praktijk: 'Geef vandaag in stilte iets aan iemand die het nodig heeft.' },
+      { overweeg: 'Op vrijdag gedenkt de Kerk het lijden van Christus. Hij die in de kribbe komt, geeft later Zijn leven aan het kruis; Kerstmis en Pascha horen bij elkaar.', bid: 'Bid vandaag het Jezusgebed en vraag Christus om ontferming.', praktijk: 'Wees vandaag geduldig met iemand die u moeite kost.' },
+      { overweeg: 'Op zaterdag gedenkt de Kerk de Moeder Gods, die het Woord in haar schoot droeg. Zij is het voorbeeld van de verwachting in deze vastentijd.', bid: 'Vraag vandaag in uw gebed de voorspraak van de Moeder Gods.', praktijk: 'Bereid u vandaag in rust voor op de zondag.' },
+    ],
   },
   Apostelvasten: {
-    overweeg: 'De Apostelvasten bereidt voor op het feest van de heilige apostelen Petrus en Paulus. De apostelen vastten en baden voordat zij uitgingen om het Evangelie te verkondigen.',
-    bid: 'Bid vandaag voor wie het Evangelie verkondigen, en voor uw eigen getuigenis.',
-    praktijk: 'Laat vandaag in een gesprek merken dat het geloof u lief is, zonder iemand iets op te dringen.',
     schrift: nbv('Handelingen 13:2–3'),
+    dagen: [
+      { overweeg: 'In de Apostelvasten blijft de zondag de dag van de Verrijzenis. De apostelen waren getuigen van de opgestane Christus en droegen die boodschap de wereld in.', bid: ZONDAG_IN_DE_VASTEN, praktijk: 'Vertel vandaag iemand wat het geloof u geeft, als het gesprek daarom vraagt.' },
+      { overweeg: 'De Apostelvasten volgt op Pinksteren en bereidt voor op het feest van de heilige apostelen Petrus en Paulus. Op maandag gedenkt de Kerk de engelen, Gods boodschappers.', bid: 'Bid vandaag voor wie het Evangelie verkondigen.', praktijk: 'Breng vandaag goed nieuws naar iemand die dat nodig heeft.' },
+      { overweeg: 'Op dinsdag gedenkt de Kerk Johannes de Voorloper, die als eerste op Christus wees. De apostelen gingen in zijn spoor verder.', bid: 'Bid vandaag om moed om voor de waarheid uit te komen.', praktijk: 'Spreek vandaag eerlijk en vriendelijk, ook als dat moeite kost.' },
+      { overweeg: 'Op woensdag gedenkt de Kerk het verraad van Christus. Ook Petrus verloochende de Heer, en werd door Zijn liefde hersteld.', bid: 'Bid vandaag om berouw en om vertrouwen in Gods vergeving.', praktijk: 'Geef vandaag iemand een nieuwe kans.' },
+      { overweeg: 'Op donderdag gedenkt de Kerk de heilige apostelen. Zij lieten alles achter om Christus te volgen.', bid: 'Bid vandaag voor de Kerk, haar bisschoppen en priesters.', praktijk: 'Laat vandaag iets los waar u te veel aan hecht.' },
+      { overweeg: 'Op vrijdag gedenkt de Kerk het kruis van Christus. De apostelen verkondigden juist de gekruisigde Christus als de kracht van God.', bid: 'Bid vandaag het Jezusgebed en vraag om kracht.', praktijk: 'Draag vandaag een tegenslag zonder te klagen.' },
+      { overweeg: 'Op zaterdag gedenkt de Kerk de Moeder Gods en alle heiligen. Met de apostelen vormen zij een grote wolk van getuigen.', bid: 'Bid vandaag voor de overledenen die u dierbaar zijn.', praktijk: 'Maak vandaag uw huis en uw hart klaar voor de zondag.' },
+    ],
   },
   Dormitionvasten: {
-    overweeg: 'De Ontslapingsvasten is een tijd van gebed en inkeer op weg naar het feest van de Ontslaping van de Moeder Gods. In haar leven zien wij volledige overgave aan God.',
-    bid: 'Vraag vandaag in uw gebed de voorspraak van de Moeder Gods.',
-    praktijk: 'Kies vandaag één moment om in stilte te luisteren in plaats van te spreken.',
     schrift: nbv('Lucas 1:46–48'),
+    dagen: [
+      { overweeg: 'Ook in de Ontslapingsvasten blijft de zondag de dag van de Verrijzenis. In dat licht ziet de Kerk het ontslapen van de Moeder Gods tegemoet.', bid: ZONDAG_IN_DE_VASTEN, praktijk: 'Geef vandaag tijd aan wie oud of ziek is.' },
+      { overweeg: 'De Ontslapingsvasten is een tijd van gebed en inkeer op weg naar het feest van de Ontslaping van de Moeder Gods. Op maandag gedenkt de Kerk de engelen, die God dienen en loven.', bid: 'Vraag vandaag in uw gebed de voorspraak van de Moeder Gods.', praktijk: 'Begin uw werk vandaag met een kort gebed.' },
+      { overweeg: 'Op dinsdag gedenkt de Kerk Johannes de Voorloper. Zijn leven in eenvoud past bij deze vastentijd.', bid: 'Bid vandaag het Jezusgebed en vraag om eenvoud van hart.', praktijk: 'Leef vandaag wat eenvoudiger: minder kopen, minder spreken.' },
+      { overweeg: 'Op woensdag gedenkt de Kerk het verraad van Christus. De Moeder Gods bleef haar Zoon trouw tot onder het kruis.', bid: 'Bid vandaag om trouw.', praktijk: 'Blijf vandaag bij iemand die het moeilijk heeft.' },
+      { overweeg: 'Op donderdag gedenkt de Kerk de apostelen, die volgens de overlevering bij het ontslapen van de Moeder Gods samenkwamen.', bid: 'Bid vandaag voor uw parochie en uw geestelijk vader.', praktijk: 'Neem vandaag contact op met iemand uit uw kerkgemeenschap.' },
+      { overweeg: 'Op vrijdag gedenkt de Kerk het lijden van Christus, dat de Moeder Gods van nabij meebeleefde. Haar stille trouw is een voorbeeld voor ons gebed.', bid: 'Bid vandaag het Jezusgebed en vraag Christus om ontferming.', praktijk: 'Draag vandaag iets moeilijks in stilte.' },
+      { overweeg: 'Op zaterdag gedenkt de Kerk de Moeder Gods in het bijzonder. In deze vastentijd richt de Kerk zich met haar op het eeuwige leven.', bid: 'Vraag vandaag de voorspraak van de Moeder Gods voor wie u dierbaar zijn.', praktijk: 'Bid vandaag voor een overledene en steek een kaars aan.' },
+    ],
   },
+};
+
+const PERIODEN: Record<string, LeefTekst> = {
   Paastijd: {
     overweeg: 'In de Paastijd leeft de Kerk in het licht van de Verrijzenis. Wat met Pascha is begonnen, wil groeien in ons dagelijks leven.',
     bid: 'Begin vandaag uw gebed met de paasgroet: „Christus is opgestaan!”',
@@ -245,30 +317,52 @@ const WEEKDAG: Record<number, LeefTekst> = {
   },
 };
 
-/** Feest of heilige van de dag: de naam uit de kalender (lib/feesten.ts) in een vaste tekst. De toelichtingen daar
- *  bevatten soms voedselregels en zijn daarom niet bruikbaar als overweging. */
+/** Feest of heilige van de dag zonder eigen tekst: de naam uit de kalender (lib/feesten.ts) in een vaste tekst, naar
+ *  soort: een feest van de Heer, van de Moeder Gods of een heilige. (De toelichtingen in lib/feesten.ts bevatten soms
+ *  voedselregels en worden hier daarom niet gebruikt.) */
 function gedachtenis(naam: string): LeefTekst {
+  if (/des Heren|Christus|\bHeer\b/.test(naam))
+    return {
+      overweeg: `Vandaag gedenkt de Kerk: ${naam}. Elk feest van de Heer laat iets zien van de liefde van God, die in Christus mens werd.`,
+      bid: 'Dank Christus vandaag in uw gebed voor wat Hij voor ons heeft gedaan, en bid het Jezusgebed.',
+      praktijk: 'Laat vandaag in één concreet gebaar iets zien van de dankbaarheid die dit feest wekt.',
+      link: JEZUSGEBED,
+      schrift: nbv('Hebreeën 13:8'),
+    };
+  if (/Moeder Gods/.test(naam))
+    return {
+      overweeg: `Vandaag gedenkt de Kerk: ${naam}. De Moeder Gods wijst ons steeds de weg naar haar Zoon.`,
+      bid: 'Vraag vandaag in uw gebed de voorspraak van de Moeder Gods.',
+      praktijk: 'Neem vandaag een moment van stilte bij een icoon van de Moeder Gods.',
+      link: GEBEDSUUR,
+      schrift: nbv('Johannes 2:5'),
+    };
   return {
-    overweeg: `Vandaag gedenkt de Kerk: ${naam}. In haar feesten en heiligen laat de Kerk zien hoe Gods genade in mensen werkt.`,
-    bid: 'Vraag vandaag in uw gebed om de voorspraak van de heiligen die de Kerk gedenkt.',
-    praktijk: 'Laat vandaag in één concreet gebaar zien wat het geloof voor u betekent.',
-    link: GEBEDSUUR,
+    overweeg: `Vandaag gedenkt de Kerk: ${naam}. In het leven van de heiligen zien wij hoe het Evangelie gestalte krijgt in een mensenleven.`,
+    bid: 'Vraag vandaag in uw gebed om de voorspraak van de heiligen die de Kerk vandaag gedenkt.',
+    praktijk: 'Lees vandaag iets over het leven van deze heilige.',
+    link: { label: 'Naar de heiligen', href: '#heiligen' },
     schrift: nbv('Hebreeën 13:7'),
   };
 }
 
 export function leefVoor(dag: DagInfo): LeefTekst {
-  const { offset, weekdag, feesten } = dag;
+  const { offset, weekdag, feesten, kerkKey } = dag;
   const periode = dag.vasten.periode;
   if (offset === 0) return PASCHA;
   if (offset >= 1 && offset <= 6) return LICHTE_WEEK;
   if (offset === -2) return GROTE_VRIJDAG;
-  if (offset >= -6 && offset <= -1) return HEILIGE_WEEK;
+  if (offset === -1) return GROTE_ZATERDAG;
+  if (offset >= -6 && offset <= -3) return HEILIGE_WEEK;
+  if (offset === -8) return LAZARUS;
+  if (offset === -49) return VERGEVINGSZONDAG;
+  if (BIJZONDERE_DAGEN[kerkKey]) return BIJZONDERE_DAGEN[kerkKey];
   const groot = feesten.find((f) => GROTE_FEESTEN[f.id]);
   if (groot) return GROTE_FEESTEN[groot.id];
   const vigilie = feesten.find((f) => (f.rang ?? 0) >= 5 && f.offset === undefined);
   if (vigilie) return gedachtenis(vigilie.naam);
-  if (periode && PERIODEN[periode] && periode !== 'Paastijd' && periode !== 'Kersttijd') return PERIODEN[periode];
+  const vasten = periode ? VASTENPERIODEN[periode] : undefined;
+  if (vasten) return { ...vasten.dagen[weekdag], link: vasten.link, schrift: vasten.schrift };
   if (offset >= 7 && offset <= 38) return PERIODEN.Paastijd;
   if (offset >= 40 && offset <= 48) return PERIODEN['Voor Pinksteren'];
   if (offset >= 50 && offset <= 55) return PERIODEN.Pinksterweek;
