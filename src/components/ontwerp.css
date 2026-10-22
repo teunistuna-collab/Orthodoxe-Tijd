@@ -185,10 +185,7 @@
 .ot-vasten .ot-vs-detail { max-width: 34em; margin: 4px auto 0; font-size: 16px; line-height: 1.45; text-align: center; color: var(--ot-gedempt); }
 .ot-vasten .ot-vs-periode { margin: 6px 0 0; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-align: center; text-transform: uppercase; color: var(--ot-goud); }
 .ot-vasten .ot-kop { margin-top: 20px; text-align: center; }
-.ot-vasten .ot-vs-spijzen { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin: 8px 0 0; padding: 0; border: 0; }
 .ot-vasten .ot-rij-symbool img { width: 100%; height: 100%; object-fit: contain; }
-/* De zes bestaande voedselkaarten in één rij, zoals in de referentie (overschrijft de 3 kolommen op mobiel uit index.css) */
-#top#top#top#top#top#top .ot-vasten .fasting-food-grid.ot-vs-spijzen { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; gap: 5px !important; }
 
 /* ---------- Gebeden ---------- */
 .ot-gebeden .vg-kop-achter .ot-banner { object-position: 45% 62%; }

@@ -163,8 +163,6 @@ section[id] {
 }
 .today-link:hover { color:#0b1b2a; transform: translateX(2px); }
 
-/* Heiligen & Feesten — één rustig digitaal menologion/feestboek */
-
 /* Orthodoxe Tijd — sitebrede editorial polish */
 :root { color-scheme: light; }
 main > section[id] > img {
@@ -183,8 +181,6 @@ main > section[id] > img {
 @media (prefers-reduced-motion: reduce){ * { scroll-behavior:auto !important; animation:none !important; transition:none !important; } }
 
 /* Vandaag v4 — rustige, gelaagde liturgische startpagina */.today-link{display:inline-block;margin-top:18px;border:0;background:none;padding:0;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7d5218;cursor:pointer;text-decoration:none}.today-link:hover{color:#0b1b2a}
-
-/* Vandaag — vaste visuele specificatie, 17-09-2026 */
 
 /* Exacte designbasis: alle hoofdpagina's gebruiken dezelfde boekvorm als Vandaag. */
 .exact-design-page{background:radial-gradient(circle at 50% 0%,#392314 0,#1b0e09 44%,#110806 100%);padding:38px 18px 64px;color:#2b1b12}
@@ -214,8 +210,6 @@ main > section[id] > img {
 .ornate-card:before{content:"";position:absolute;inset:9px;border:1px solid rgba(211,165,62,.38);pointer-events:none}
 .ornate-card h3{color:#f3dfb4!important;letter-spacing:.04em}.ornate-card p{color:#eadcc1!important}.ornate-card>div:first-child{background:#1a0d09!important;border:1px solid #b88628!important;color:#d3a53e!important;box-shadow:inset 0 0 0 3px #24130d,0 0 0 1px rgba(211,165,62,.2)}
 .ornate-card:hover{border-color:#e0b955!important;transform:translateY(-2px)}
-
-/* De paginatitel blijft staan onder de hoofdnavigatie. */
 
 /* Leesbaarheid van lichte cyclus-overgangen en tijdlijn. */
 .exact-content .text-ink-soft{color:#5d4935}.exact-content .text-ink-mute{color:#756147}
@@ -250,8 +244,6 @@ header>nav>div{justify-content:center}
 .exact-content section:not(.bg-bark):not([class*="bg-bark"]) p:not([class*="text-gold"]),.exact-content section:not(.bg-bark):not([class*="bg-bark"]) li,.exact-content section:not(.bg-bark):not([class*="bg-bark"]) span.text-ink-soft{color:#5b402e!important;opacity:1!important}
 .exact-content section:not(.bg-bark):not([class*="bg-bark"]) blockquote{color:#0b1b2a!important;opacity:1!important}
 .exact-content .text-ink-mute{color:#72533b!important;opacity:1!important}
-
-/* Vandaag: medailloniconen en volledig klikbare regels. */
 
 /* Vasten: weekstrip en informatievlakken zonder pastel. */
 #vasten .bg-\[\#e3efe4\],#vasten .bg-\[\#f1d6d6\]{background:linear-gradient(145deg,#2d190f,#1b0d09)!important;border:1px solid #b88628!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.45)!important;padding:28px!important;border-radius:2px!important}
@@ -289,14 +281,6 @@ header>div.bg-bark>div{position:relative}
 .ornate-card p{margin:13px auto 0!important;max-width:480px!important;font-size:14px!important;line-height:1.55!important;color:#f1e4cc!important;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .ornate-card>span:last-child,.ornate-card>a:last-child{margin-top:auto!important;padding-top:14px!important;color:#e0b454!important;font-size:11px!important;font-weight:800!important;letter-spacing:.22em!important;text-transform:uppercase!important}
 @media(max-width:700px){.ornate-card{height:370px!important;min-height:370px!important;max-height:370px!important;padding:28px 24px 25px!important}.ornate-card>div:first-child{width:92px!important;height:92px!important;min-width:92px!important;min-height:92px!important}}
-
-/* Pascha: countdown has room; information blocks use canonical cards. */
-
-/* Feasts: no database-table look for the great feasts. */
-
-/* Dark introductory panels: decorated instead of flat brown slabs. */
-
-/* Saints date: day number becomes a double outlined medallion. */
 
 /* Vasten: remove pastel/dashboard styling entirely. */
 #vasten .bg-\[\#e3efe4\],#vasten .bg-\[\#f1d6d6\]{background:radial-gradient(circle at 50% 12%,rgba(160,98,29,.13),transparent 44%),linear-gradient(145deg,#2d190f,#190c08)!important;border:2px solid #a97720!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(213,169,72,.62)!important;color:#f1e4cc!important;min-height:300px!important}
@@ -347,13 +331,9 @@ header>nav>div{justify-content:space-between!important}
 #vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important;align-items:stretch!important;border-left:0!important;padding-left:0!important}
 @media(max-width:760px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}}
 
-/* Fasting week & exception panels: remove pastel dashboard language. */
-
 /* Food permissions: medallions should read as intentional controls. */
 #vasten .grid.grid-cols-3.sm\:grid-cols-6>div{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
 #vasten .grid.grid-cols-3.sm\:grid-cols-6>div>svg{width:68px!important;height:68px!important;padding:16px!important;margin-bottom:4px!important}
-
-/* Cycle diagrams: give labels a safe ring inside the frame. */
 
 /* Transition/read-more parchment sections: content text must never behave like a watermark. */
 .exact-content section:not([class*="bg-bark"]) .font-display.italic,
@@ -361,19 +341,8 @@ header>nav>div{justify-content:space-between!important}
 .exact-content section:not([class*="bg-bark"]) p{color:#583b2b!important;opacity:1!important}
 .exact-content section:not([class*="bg-bark"]) [class*="text-gold-light"]{color:#9b681d!important;opacity:1!important}
 
-/* Pascha countdown: horizontal hierarchy, protected wrapping. */
-
-/* Saints date block: the date is the ornament, not a flat brown slab. */
-
 /* Feasts: dark introduction gets more gold structure; final quote stays readable on parchment. */
 #feesten~section:last-of-type .font-display{color:#0b1b2a!important;opacity:1!important}
-
-/* v14 — Heiligen rebuilt to the approved editorial reference */
-
-/* v14.1 — Heiligen fixes */
-
-/* ================= VERSION 15 — verified visual refinement ================= */
-/* Page title is decorative, not a second sticky header. */
 
 /* Wider reading popup on desktop; one generous reading column. */
 .exact-modal-frame{width:min(1180px,calc(100vw - 40px))!important;max-width:1180px!important}
@@ -398,17 +367,9 @@ header>nav>div{justify-content:space-between!important}
 @media(max-width:1179px){#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:620px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}}
 
-/* Food-rule symbols: large, double-ring medallions. */
-.fasting-food-grid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:18px!important}
-@media(max-width:640px){.fasting-food-grid{grid-template-columns:repeat(3,1fr)!important}}
-
 /* Weekly fasting area: remove pastel dashboard language. */
 #vasten .v15-fasting-panel{background:linear-gradient(145deg,#2d190f,#1b0d09)!important;border:1px solid #b88628!important;color:#f0dfbf!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(205,158,55,.42)!important;border-radius:2px!important}
 #vasten .v15-fasting-panel *{color:#f0dfbf!important}
-
-/* Four major fasts become a compact 1x4 dark editorial row. */
-
-/* Calendar day-detail CTAs. */
 
 /* Dark compact cycle timeline, matching the approved Jaar concept. */
 .v15-cycle-timeline{background:radial-gradient(circle at 50% 0,rgba(158,99,29,.16),transparent 45%),linear-gradient(180deg,#25140d,#160a07)!important;border-top:1px solid rgba(196,147,50,.48);border-bottom:1px solid rgba(196,147,50,.34);padding:28px 24px!important;color:#f4e6c8!important}
@@ -432,28 +393,16 @@ header>nav>div{justify-content:space-between!important}
 #vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
 @media(max-width:1180px){#vasten div.grid:has(> .fasting-step){display:flex!important;overflow-x:auto!important;padding-bottom:12px!important}}
 
-/* 3. Fasting food bar becomes one ornate wide card */
-#vasten .orthodox-pattern.rounded-2xl:has(.fasting-food-grid){position:relative;border:2px solid #a97720!important;border-radius:3px!important;box-shadow:inset 0 0 0 6px #211109,inset 0 0 0 7px rgba(205,158,55,.5),0 15px 34px rgba(43,20,7,.2)!important;background:radial-gradient(circle at 50% 0,rgba(190,128,34,.12),transparent 38%),linear-gradient(145deg,#30190f,#160a07)!important}
-#vasten .orthodox-pattern.rounded-2xl:has(.fasting-food-grid):before,#vasten .orthodox-pattern.rounded-2xl:has(.fasting-food-grid):after{position:absolute;color:#d1a03d;font-size:24px}.orthodox-pattern.rounded-2xl:has(.fasting-food-grid):before{content:"❧";left:15px;top:12px}.orthodox-pattern.rounded-2xl:has(.fasting-food-grid):after{content:"❧";right:15px;bottom:12px;transform:rotate(180deg)}
-
 /* 4. Cycle captions on light backgrounds must remain readable */
 .bg-parchment .timeline-title,.parchment-pattern .timeline-title{color:#5a3523!important;opacity:1!important;font-size:12px!important;font-weight:500!important}
 .bg-parchment .timeline-label,.parchment-pattern .timeline-label{color:#a56f18!important;opacity:1!important}
 .v15-cycle-timeline .timeline-title{color:#eadcc2!important}
-
-/* 5. Feasts discovery follows the richer Saints browser */
-
-/* 6. Today: preserve the calm list, add book-like richness */
 
 /* 7. Annual wheel: compact, less empty parchment */
 #jaar .parchment-pattern:has(.aspect-square){padding-top:32px!important;padding-bottom:32px!important}
 
 /* ================= ORTHODOXE TIJD — VERSIE 17 ================= */
 /* Remove duplicate page-identification bar: hero is the page title. */.exact-content{padding-top:0!important}
-
-/* Etmaal: medallion centre is mathematically anchored to the ring point. */
-
-/* Vasten vandaag: ornate wide card + legible practical status. */
 
 /* Year selector: stronger liturgical control. */
 #vasten .v17-year-selector{border:1px solid #b88628!important;background:#211109!important;padding:4px!important;box-shadow:inset 0 0 0 2px rgba(201,162,39,.22)}#vasten .v17-year-selector button{min-width:72px;padding:9px 14px!important;font-family:var(--font-display);font-size:14px!important;color:#e9d8b5!important}#vasten .v17-year-selector button.bg-wine{background:#6b2926!important;color:#f5e5bd!important;box-shadow:inset 0 0 0 1px #c99a38}
@@ -464,20 +413,8 @@ header>nav>div{justify-content:space-between!important}
 /* Fasting ladder: ALL nine cards use the dimensions of the former largest card. */
 #vasten div.grid:has(> .fasting-step){align-items:stretch!important}
 
-/* Feasts discovery: rich browser like Saints. */
-
-/* Low Countries: preserve composition, fix contrast. */
-
-/* Today: approved book-like row design, richer without turning into huge cards. */
-
 /* Cycle timeline: less generic icon-pack, more manuscript/Orthodox ornament. */
 .v15-cycle-timeline .timeline-medallion{border-radius:8px!important;transform:rotate(45deg);width:62px!important;height:62px!important;border:2px solid #b88628!important;background:linear-gradient(145deg,#2c160e,#160a07)!important;box-shadow:inset 0 0 0 4px #211109,inset 0 0 0 5px rgba(196,147,50,.5)!important}.v15-cycle-timeline .timeline-medallion svg{transform:rotate(-45deg);stroke:#d8aa45}.v15-cycle-timeline .timeline-line{position:relative;background:linear-gradient(90deg,transparent,#b98a31 12%,#b98a31 88%,transparent)!important}.v15-cycle-timeline .timeline-line:after{content:'✣';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#c99a38;background:#211109;padding:0 5px;font-size:10px}
-/* Feast dates: high-contrast scan column. */
-
-/* v17.1 — Calendar quick actions now use the same ornate card language as the rest of Orthodoxe Tijd. */
-
-/* ================= ORTHODOXE TIJD — VERSIE 18 / HARD FIXES ================= */
-/* Food status: symbol only, deliberately large. */
 
 /* Fasting ladder: hard equal dimensions. Never content-sized on desktop. */
 #vasten div.grid:has(> .fasting-step){display:grid!important;grid-template-columns:repeat(9,minmax(118px,1fr))!important;align-items:stretch!important;gap:10px!important}
@@ -486,8 +423,6 @@ header>nav>div{justify-content:space-between!important}
 /* Weekly fasting: one warm framed composition, with two rich lower panels. */
 #vasten .v15-fasting-panel{min-height:290px!important;border:2px solid #a97720!important;background:radial-gradient(circle at 50% 0,rgba(201,162,57,.11),transparent 45%),linear-gradient(145deg,#32190f,#180b07)!important;color:#f2e2c5!important;box-shadow:inset 0 0 0 5px #211109,inset 0 0 0 6px rgba(201,162,57,.45),0 12px 26px rgba(45,20,7,.16)!important}
 #vasten .v15-fasting-panel h4{color:#efc96e!important;font-size:23px!important}.v15-fasting-panel li button{color:#f3e5cb!important}.v15-fasting-panel li span{color:#d9c6a4!important}.v15-fasting-panel .rounded-full{color:#f0d8b2!important}
-
-/* Low Countries: force readable typography even if a parent has muted opacity. */
 
 /* Year navigation: not a modern pill; works indefinitely backward/forward. */
 #vasten .v17-year-selector{border:2px solid #a97720!important;border-radius:3px!important;background:linear-gradient(145deg,#2b160e,#160a07)!important;padding:4px 6px!important;box-shadow:inset 0 0 0 3px #211109,inset 0 0 0 4px rgba(201,162,57,.45)!important;color:#f1dfbd!important;gap:4px!important}
@@ -503,11 +438,6 @@ header>nav>div{justify-content:space-between!important}
 #adem blockquote,#etmaal blockquote,#week blockquote,#jaar blockquote,#pascha blockquote,#geboorte blockquote{opacity:1!important}
 #adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote,#geboorte .bg-parchment blockquote{color:#572d20!important}
 #adem .bg-parchment blockquote+*,#etmaal .bg-parchment blockquote+*,#week .bg-parchment blockquote+*,#jaar .bg-parchment blockquote+*,#pascha .bg-parchment blockquote+*,#geboorte .bg-parchment blockquote+*{opacity:1!important}
-/* Navigation marks: typographic/manuscript marks instead of modern icon-pack glyphs. */
-
-/* ===== BOUW 19 — harde herstelpunten (verouderd, zie Bouw 56: banners worden nu juist bewust uitgesneden) ===== */
-
-/* Traditionelere, typografische liturgische tekens i.p.v. generieke app-iconen. */
 
 /* Cyclusmedaillons blijven rond. Geen ruiten en geen connector-ornamenten. */
 .v15-cycle-timeline .timeline-medallion{border-radius:50%!important;transform:none!important}
@@ -526,10 +456,6 @@ header>nav>div{justify-content:space-between!important}
 #vasten .v15-fasting-panel li>span:last-child{color:#e3cda8!important;text-align:right!important;white-space:normal!important;max-width:190px!important}
 @media(max-width:720px){#vasten .v15-fasting-panel li{grid-template-columns:1fr!important}#vasten .v15-fasting-panel li>span:last-child{text-align:left!important;max-width:none!important}}
 
-/* Heiligen Lage Landen: harde contrastwaarden, zonder transparantie op tekst. */
-
-/* Heiligen: dagcirkels krijgen donkere, grotere cijfers op ivoor; geselecteerd omgekeerd. */
-
 /* Cycli: citeerregels op lichte ondergronden leesbaar. */
 #adem .bg-parchment blockquote,#etmaal .bg-parchment blockquote,#week .bg-parchment blockquote,#jaar .bg-parchment blockquote,#pascha .bg-parchment blockquote,#geboorte .bg-parchment blockquote{color:#0b1b2a!important;opacity:1!important}
 #adem .bg-parchment cite,#etmaal .bg-parchment cite,#week .bg-parchment cite,#jaar .bg-parchment cite,#pascha .bg-parchment cite,#geboorte .bg-parchment cite{color:#8a5b20!important;opacity:1!important}
@@ -543,8 +469,6 @@ header>nav>div{justify-content:space-between!important}
 #vasten div.grid:has(> .fasting-step){display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important;padding-bottom:0!important;align-items:stretch!important}
 @media(max-width:1100px){#vasten div.grid:has(> .fasting-step){grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:620px){#vasten div.grid:has(> .fasting-step){grid-template-columns:1fr!important}}
-
-/* Bouw 21 — Heiligen: lichte zoekvelden, sterke Lage-Landen- en dagcontrast */
 
 /* Bouw 22 — definitive supplied asset integration */
 /* definitive ladder: no horizontal scrolling; 9 narrow equal steps on desktop, responsive grid below */
@@ -617,14 +541,10 @@ header>nav>div{justify-content:space-between!important}
 /* Bouw 27 — zoekbalk op Feesten gelijk aan die op Heiligen (zelfde .saints-search-row);
    de oudere ".feast-discover input/select"-opmaak mag de velden daarin niet meer overschrijven */
 
-/* Bouw 29 — Kalender, "Heilige(n) van de dag": hoofdheilige met hiërarchie, overige namen als rustige lijst */
-
 /* Bouw 30 — Vandaag op web: kaartenraster (twee kolommen) i.p.v. één lange lijst. Mobiel blijft ongewijzigd. */
 @media(min-width:980px){
   /* vaag watermerk van het eigen medaillon */
 }
-
-/* Bouw 31 — knoppen op de Vandaag-pagina iets kleiner */
 
 /* Bouw 32 — Etmaal: venster met de tekst van een dienst (uur, psalmen, PDF-tekst) */
 #top#top .etmaal-popup-keuze{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:18px 0 6px}
@@ -636,8 +556,6 @@ header>nav>div{justify-content:space-between!important}
 #top#top .etmaal-pdf-pagina p{margin:0;font-size:15.5px;line-height:1.65;color:#3b2518}
 #top#top .etmaal-pdf-pagina p.etmaal-pdf-alinea{margin-top:14px}
 #top#top .etmaal-pdf{width:fit-content;max-width:100%;margin:14px auto 0}
-
-/* Bouw 33 — Vandaag (web): drie kolommen × twee rijen, kleinere kaarten; Vaders & moeders over de volle breedte */
 
 /* Bouw 34 — "De heiliging van de tijd" op mobiel: geen horizontale scrollbalk meer, zonder subtekst */
 @media(max-width:700px){
@@ -661,8 +579,6 @@ header>nav>div{justify-content:space-between!important}
 @media(min-width:701px) and (max-width:1179px){
   .prayer-category-grid>.ornate-card:last-child:nth-child(odd){grid-column:1/-1;max-width:calc(50% - 10px);justify-self:center;width:100%}
 }
-
-/* Bouw 36 — Vasten, "Deze week": dagkaarten met rond medaillon, gekleurde balk en label (naar het aangeleverde voorbeeld) */
 
 /* Bouw 37 — de negen vastentreden hebben overal dezelfde afmeting (alle rijen even hoog als de hoogste) */
 #top#top div.grid:has(> .fasting-step){grid-auto-rows:1fr;align-items:stretch!important}
@@ -710,8 +626,6 @@ header>nav [class*="bg-[#2a1d16]"]{background:#f2e4c2!important;border-color:rgb
 header>nav [class*="hover:bg-[#241813]"]:hover{background:#f6ebd0!important;border-color:rgba(184,134,40,.45)!important}
 header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important}
 
-/* Bouw 40 — Vandaag-kaarten: bij zweven verspringt de tekst niet meer (zelfde opvulling, geen optillen) */
-
 /* Bouw 41 — geen bruin vlak meer onder de hero-banners: de sectie is zo hoog als de afbeelding zelf
    */
 #top#top .exact-content>section:first-child{height:auto!important;min-height:0!important}
@@ -721,9 +635,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .exact-modal-close{position:relative;display:inline-grid!important;place-items:center;width:48px!important;height:48px!important;min-width:48px;padding:0!important;font-size:0!important}
 #top#top .exact-modal-close:after{content:"";position:absolute;inset:-4px}
 #top#top .exact-modal-close svg{width:24px!important;height:24px!important;stroke-width:1.8!important}
-
-/* Bouw 43 — Etmaal: dienstknoppen in dezelfde kaartstijl als de knoppen op Vandaag */
-/* lijst op tablet/mobiel */
 
 /* Bouw 44 — portret van een heilige van de Lage Landen (alleen in de pop-up) */
 .heilige-portret{display:block;border-radius:50%;object-fit:cover;background:#f3eee5;aspect-ratio:1/1}
@@ -764,8 +675,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   #top#top main div.mt-8.flex-wrap>a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px}
 }
 
-/* Bouw 46 — kaart van de Lage Landen: Nederland in het midden van het vak in plaats van links afgesneden */
-
 /* Bouw 47 — koptekst op mobiel: het sierteken in het midden botst met de bredere Oud/Nieuw-schakelaar */
 @media(max-width:639px){
   header>div.bg-bark>div:after{display:none}
@@ -779,17 +688,12 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 /* Bouw 49 — pop-up leesweergave: regeleinden binnen een alinea (koppen en versregels in gebeden) blijven zichtbaar in plaats van in elkaar te lopen */
 .exact-popup-prose p{white-space:pre-line}
 
-/* Bouw 50 — vastenpagina, "Deze week" op mobiel: compacte dagrijen (88px, zoals het Pijlgebed op Vandaag) in plaats van hoge kaarten */
-
 /* Bouw 51 — mobiele Vandaag-pagina en onderbalk. Alles hieronder geldt alleen op max-width:767px; vanaf 768px blijft de desktop ongewijzigd. */
 .bottom-nav,.bottom-nav-blad{display:none}
 @media(max-width: 767.98px){
   header.site-header{display:none!important}
   section[id]{scroll-margin-top:0}
   #top{padding-top:env(safe-area-inset-top);padding-bottom:calc(68px + env(safe-area-inset-bottom))}
-
-  /* Vandaag: eigen mobiele opbouw in plaats van de banner en de lijst */
-  /* keuzeknop met een echte tikhoogte van 44px */
 
   /* Onderbalk */
   /* Donkere balk in de huisstijl van de desktopkop: chocolade, fijne gouden dubbele lijn boven, lijniconen in gedempt goud. */
@@ -844,25 +748,12 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   .prayer-category-grid>.ornate-card:last-child:nth-child(4n+2){grid-column:3}
 }
 
-/* Vasten, "De vier grote vasten" op desktop (vanaf 768px): alleen de "Lees meer"-knop, zonder link naar de cyclus */
-
-/* Bouw 53 — datum- en maandknoppen bij Heiligen en Feesten: duidelijk leesbaar (desktop en mobiel) */
-/* bijschrift boven de dagen was donkerbruin op donkerbruin */
-
-/* Bouw 54 — Feesten "Geselecteerde feesten" op mobiel (max-width:639px): datum boven, titel links, knop rechts; kop breekt netjes af */
-
-/* Vasten, "De vier grote vasten": zonder "Lees meer"-knop is op desktop het actiegebied leeg (de kaart zelf is klikbaar) */
-
 /* Bouw 55 — "De vier grote vasten" op desktop (vanaf 768px): kaart in de stijl van de andere gouden kaarten, met rond icoon,
    titel, korte lijn met ornament en daaronder de bestaande tekst. Mobiel blijft ongewijzigd. */
-
-/* Bouw 55b — "De vier grote vasten" op mobiel (max-width: 767.98px): compacte kaart zoals de andere mobiele kaarten: rond icoon, titel en korte lijn met ornament, zonder tekst */
 
 /* Bouw 56 — alle pagina-banners in hetzelfde, compacte panoramaformaat. De banners in
    public/images/heroes zijn zelf al op 6.25/1 (1800×288) uitgesneden, dus dit volgt exact
    die verhouding — object-fit:cover snijdt dan niets extra weg. */
-/* Mobiel: hoger (3/1) en in het midden uitgesneden, zodat kruis, titel en ondertitel leesbaar blijven. */
-/* Bij Etmaal en Week staat de tekst rechts van het midden van de afbeelding. */
 
 /* Bouw 58 — er staat één pagina tegelijk in beeld (App.tsx). Verborgen pagina's blijven gemount zodat pop-ups
    die Vandaag in een andere pagina opent (week, vasten, pascha, etmaal) toch verschijnen. */
@@ -870,10 +761,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
    voor de scrolllengte, zodat je onder de footer kon doorscrollen naar leeg vlak. Pop-ups (position:fixed) blijven werken. */
 .pagina-verborgen{position:relative;height:0;overflow:hidden;visibility:hidden}
 .pagina-verborgen .exact-modal-backdrop{visibility:visible}
-
-/* Bouw 57 — kalenderdagen: het vlak krijgt dezelfde liturgische kleur als het kader (niet alleen een dunne rand). */
-
-/* Bouw 59 — leesknoppen in elke pop-up: grotere letters en een donkere avondweergave (klasse op <html>, zie Modal.tsx) */
 
 /* Bouw 61 — vastentabel (FastingTable in Vasten.tsx): naam + datum per regel, op mobiel onder elkaar, noot in dezelfde maat als de regels */
 #top#top .fasting-table h4{color:#efcf82;font-size:clamp(19px,2.2vw,22px);line-height:1.2}
@@ -907,7 +794,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .mlr-titel{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.25;color:#2b1d12;text-transform:none;letter-spacing:0}
 #top#top .mlr-onder{font-size:12.5px;line-height:1.35;color:#6b4a2e}
 #top#top .mlr-pijl{flex:0 0 auto;font-family:var(--font-display);font-size:24px;line-height:1;color:#a87825}
-/* weekdagen van Vasten: mobiel regels, vanaf 768px de bestaande tegels */
 
 /* Vasten vandaag: voedingsstatus op mobiel in één compacte rij van zes */
 /* kop van de vastentabel: op mobiel een knop om in/uit te klappen, op desktop gewoon een kop */
@@ -944,7 +830,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   #top#top#top .prayer-category-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important}
   #top#top#top .prayer-category-grid>*,#top#top#top .prayer-category-grid>:last-child:nth-child(3n+1){grid-column:auto!important}
 }
-/* Feesten: Pascha, het feest der feesten, gecentreerd bovenaan; daaronder de twaalf grote feesten in gelijke rijen */
 
 /* Bouw 67 — leesbreedte: een oude regel (.exact-content [class*="max-w-"]{max-width:100%}) liet lopende tekst over de volle breedte lopen.
    Alinea's met een max-w-klasse krijgen weer een comfortabele regellengte van ±65–75 tekens. */
@@ -1081,7 +966,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   .ps-vers{grid-template-columns:26px minmax(0,1fr)}
   .ps-vers p{font-size:19px}
 }
-/* desktop: lijst links (±46%), leesvenster rechts (±54%); de lijst blijft staan terwijl je leest */
 
 /* Meer-menu met Psalmen erbij: zes keuzes in twee rijen van drie */
 @media(max-width:767.98px){
@@ -1119,8 +1003,6 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 .lb-a sup{top:-.55em;margin-left:1px;font-size:11px;font-weight:700}
 .lb-a-klein{font-size:15px}
 
-/* leesvenster als pop-up: de bediening staat onderaan, buiten de tekst */
-
 /* A+ / A−: alleen de leestekst zelf, niet titels, tabs, knoppen of metadata */
 .lees-vlak :is(.lees-tekst,.etmaal-pdf,.exact-popup-prose,.exact-popup-highlight,.exact-popup-sectie){zoom:var(--lees-schaal)}
 
@@ -1156,8 +1038,6 @@ html.lees-nacht #top .lees-vlak :is(img,.leesbediening){filter:invert(1) hue-rot
 /* Bouw 77 — leesbaarheid: inhoudelijke kleine tekst minstens 13px (tijden van de diensten, voedingslabels bij Vasten).
    Na de algemene 11,5px-regel voor labels (Bouw 62, via :is() zwaarder), daarom aan het eind en met dubbele klasse. */
 
-/* Vandaag mobiel: bij een oneven aantal knoppen staat de laatste gecentreerd, even breed als de andere */
-
 /* Bouw 78 — afwerking van wat de browser zelf tekent, in de huisstijl.
    Focusring (toetsenbord) voor alles zonder eigen ring; :where() houdt de specificiteit op nul, zodat bestaande ringen voorgaan. */
 :where(a[href],button,select,input,textarea,summary,[role=button],[role=link],[tabindex]:not([tabindex="-1"])):focus-visible{outline:2px solid #b88628;outline-offset:2px}
@@ -1166,7 +1046,6 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 :where(input,textarea){caret-color:#7d5218}
 .zoek-paneel{scrollbar-color:rgba(232,207,122,.45) transparent}
 .zoek-veld input{caret-color:#e8cf7a}
-/* Heiligen: "(kerkelijke kalender)" had te weinig contrast (3,7:1) */
 
 /* Bouw 79 — uit de critique van de mobiele versie (.impeccable/critique):
    Vandaag mobiel: onder Vasten, Schriftlezingen en Heiligen staat meteen het antwoord van vandaag (max. 2 regels) */
@@ -1230,7 +1109,6 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
   .vm-rij-tekst small{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-family:var(--font-body);font-size:13px;line-height:1.28;color:#d9c6a3}
   .vm-rij svg{flex:none;width:16px;height:16px;color:#c9a227;stroke-width:2}
 }
-/* Vandaag mobiel: kleinere Oud/Nieuw-keuze; het tikvlak blijft via ::after 44px hoog */
 
 /* Bouw 83 — paginabanners met echte tekst (PageHero.tsx). Alleen de --ot-kleuren en --hoeksier; geen losse kleuren.
    Hoogte met min-height in plaats van een vaste uitsnede: de tekst past altijd. Donker verloop in het midden voor contrast,
@@ -1258,21 +1136,11 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 #top#top#top#top .bibliotheek :is(.saints-days-grid,.feast-day-grid) button{background:var(--bieb-vak)!important;border:1px solid var(--bieb-rand)!important;color:var(--color-ink)!important;font-variant-numeric:lining-nums;box-shadow:0 3px 10px color-mix(in srgb,var(--ot-bark) 7%,transparent)!important;transition:border-color .18s,box-shadow .18s,background-color .18s}
 #top#top#top#top .bibliotheek :is(.saints-month-grid,.feast-month-grid,.saints-category-grid,.saints-days-grid,.feast-day-grid,.saints-days-panel>div:first-child) button:is(:hover,:focus-visible){border-color:var(--color-gold-deep)!important;outline:none;box-shadow:0 0 0 1px var(--color-gold-deep),0 6px 14px color-mix(in srgb,var(--ot-bark) 12%,transparent)!important}
 #top#top#top#top .bibliotheek :is(.saints-month-grid,.feast-month-grid,.saints-category-grid,.saints-days-grid,.feast-day-grid,.saints-days-panel>div:first-child) button.active{background:var(--ot-bark2)!important;border-color:var(--ot-bark)!important;color:var(--ot-gold2)!important}
-/* categoriekaarten: licht, met rond donker medaillon */
-/* dagenpaneel (na het kiezen van een maand): licht paneel in plaats van het grijze vlak van de donkere stijl */
-/* resultatenlijst Heiligen */
-/* Heiligen: "Vandaag gedenken wij" als lichte band over de volle breedte */
-
-/* Bouw 85 — lijstrijen in de bibliotheek (Feesten): DATUM / titel / subregel | ›. De hele rij is de knop. Licht. */
-/* oudere knopregels in .feast-discover maken van elke knop een flexbox; de rij blijft een raster */
 
 /* Bouw 86 — maandkalender (Kalender.tsx): Cormorant-cijfers, liturgische kleur als balkje of rand, vastensymbool, feestnaam.
    Liturgische kleuren als variabelen, gedeeld door raster en legenda. Zondag in --ot-wijnrood: het bestaande --color-wine is op het perkament nauwelijks van de inktkleur te onderscheiden. */
 :root{--ot-wijnrood:#7d1f25;--lit-rood:var(--ot-wijnrood);--lit-blauw:#233f8c;--lit-groen:#566a2b;--lit-paars:#4a2a76;--lit-wit:var(--ot-ivory);--lit-donker:var(--ot-bark);
   --kal-vak:color-mix(in srgb,var(--ot-ivory) 30%,var(--color-paper))}
-/* de algemene tikdoel-regel (min-height 44px, max 1023px) mag de vakjes niet lager maken */
-/* liturgische kleur: gekleurd balkje van 4px onderin */
-/* legenda */
 
 /* Bouw 88 — één stijl over de hele site:
    · grote tegels en de bibliotheek donker; lijstrijen en kaarten op een perkamentpagina licht (Etmaal, Week, Jaar, Pascha, Vandaag, Psalmen);
@@ -1300,8 +1168,6 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
    bibliotheek; actief blijft goud gevuld (Bouw 88). De psalmrijen blijven licht, met gouden rand. */
 #top#top#top#top :is(.ps-filters,.ps-themas,.ps-kathismas) button{border:1px solid var(--ot-rand);background:var(--ot-bark2);color:var(--ot-gold2);transition:border-color .18s,box-shadow .18s}
 #top#top#top#top :is(.ps-filters,.ps-themas,.ps-kathismas) button:is(:hover,:focus-visible){border-color:var(--ot-gold2);outline:none;box-shadow:0 0 0 1px var(--ot-gold2),0 0 14px color-mix(in srgb,var(--ot-gold2) 30%,transparent)}
-
-/* Bouw 90 — paginabanner op mobiel compacter (was 214px hoog): minder leesruimte kwijt, zelfde opbouw en tekst */
 
 /* Bouw 91 — Vandaag (mobiel): de rijen licht, zoals de kaarten op de andere perkamentpagina's; "Nu" goud gevuld */
 @media(max-width:767.98px){
@@ -1353,8 +1219,6 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 .dag-kop:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--ot-rand),transparent)}
 .dag-kop svg{flex:none;width:14px;height:14px}
 
-/* Bouw 96 — mobiel: geen footer-balk (bronnen staan onder Meer → Bronnen, met daar ook de uitleg oud/nieuw) */
-
 /* Bouw 97 — beweging die bij de inhoud past:
    · Adem: "Adem mee" laat de ringen rond het icoon 4 s uitzetten (inademen) en 4 s krimpen (uitademen); de regel die bij
      dat moment hoort licht op. Bij "beweging beperken" alleen het oplichten, zonder uitzetten.
@@ -1381,10 +1245,6 @@ details[open]::details-content{height:auto}
 .adem-ritme.is-actief .adem-ring{animation-name:adem-ring-sterk}
 @keyframes adem-ring-sterk{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.2);opacity:1}}
 @media(prefers-reduced-motion:reduce){.adem-ritme.is-actief .adem-gloed{animation:none;opacity:.4;transform:none}}
-
-/* Bouw 99 — cycluspanelen (Etmaal, Week, Jaar, Pascha) op mobiel compacter: minder ruimte boven de kop en tot de kaarten */
-
-/* Bouw 100 — psalmnummer als medaillon zoals de rest (donker met gouden ring) in plaats van wijnrood; groter, gewone cijfers */
 
 /* Bouw 101 — Psalmen: filters als tabbalk (zoals de tabs in het psalmvenster), geen dikke donkere pillen en geen geel vlak.
    Kathisma-nummers en thema's als dunne lichte knopjes; gekozen = donker met gouden tekst. Vervangt Bouw 88/89 voor deze knoppen. */
@@ -1525,9 +1385,6 @@ details[open]::details-content{height:auto}
   #top#top#top#top :is(.ornate-card,.v15-major-fast):after{content:""!important;display:block!important;position:absolute!important;inset:auto!important;right:3px!important;bottom:3px!important;width:12px!important;height:12px!important;border:0!important;background:var(--hoeksier) no-repeat center/contain!important;opacity:.8;transform:rotate(180deg);pointer-events:none}
 }
 
-/* Bouw 115 — Kalender, introductie (mobiel): sierhoekjes kleiner, zoals bij de cycluspanelen (Bouw 99); ze staan dicht bij de rand (Kalender.tsx) */
-
-
 /* Bouw 116 — polijstronde
    1. Vasten, de vier grote vastenperiodes op mobiel: lichte rijen zoals alle andere knoppen (was nog donkere 2x2-tegels).
    2. Cyclusbalk: labels in Deep Gold (contrast 3,7 naar ruim 5:1 op perkament).
@@ -1601,7 +1458,6 @@ main#inhoud:focus{outline:none}
 
 /* Bouw 123 — Vandaag (mobiel): het Christus-icoon groter. De gestippelde cirkel en de vier kruisjes erom zijn weg (het icoon heeft
    zelf al een sierrand met vier knoppen); de dunne ring in de liturgische kleur van de dag blijft, vlak om het icoon. */
-/* Adem (mobiel): het Christus-icoon even groot als op Vandaag; de ringen eromheen schalen mee */
 
 /* Bouw 124 — grote lichte vlakken (geen kaarten of knoppen) worden één met de perkamentachtergrond, web en mobiel:
    introductie en kader van de kalender, de panelen van Adem (Jezusgebed, gebedssnoer), Etmaal, Week, Jaar en Pascha,
@@ -1928,16 +1784,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Vasten: de weekdagen tonen weer een symbool, nu de aangeleverde medaillons (geen eigen cirkel eromheen) */
 #top#top#top#top#top .mlr .mlr-icoon{display:flex!important;background:none!important;border:0!important;box-shadow:none!important}
 /* Vasten: de vier grote vasten op mobiel gecentreerd, titel op één regel, sierlijn eronder */
-/* Vasten vandaag: de zes voedselkaarten; vinkje of kruis in de lege cirkel van de kaart (55 % hoogte) */
-#top#top#top#top#top .fasting-food-grid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:10px!important}
-@media(max-width:640px){#top#top#top#top#top .fasting-food-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}}
-#top#top#top#top .voedsel-kaart{position:relative;filter:drop-shadow(0 2px 4px rgba(60,30,10,.25))}
-#top#top#top#top .voedsel-kaart img{display:block;width:100%;height:auto}
-#top#top#top#top .voedsel-teken{position:absolute;left:50%;top:55.3%;transform:translate(-50%,-50%);font-family:var(--font-lees);font-weight:700;line-height:1}
-#top#top#top#top .voedsel-kaart{container-type:inline-size}
-#top#top#top#top .voedsel-teken{font-size:24cqw}
-#top#top#top#top .is-toegestaan .voedsel-teken{color:#2f6b3c}
-#top#top#top#top .is-niet .voedsel-teken{color:#0b1b2a}
 #top#top#top#top .is-niet img{filter:saturate(.75)}
 /* leesvensters op het web: ongeveer 900 px breed (zoals de referentie), sierbalk niet breder dan 640 px */
 @media(min-width:641px){
@@ -1993,7 +1839,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 #top#top#top#top#top .exact-content>section.opening-rustig,#top#top#top#top#top .exact-content>section.opening-cyclisch{background:none!important}
 #top#top#top#top#top .exact-content>section.opening img.opening-beeld{width:clamp(110px,16vw,190px)!important;height:auto!important;max-width:190px;object-fit:contain!important}
 @media(max-width:767.98px){#top#top#top#top#top .exact-content>section.opening img.opening-beeld{width:118px!important}}
-/* Vandaag (web): de lezingen in de primaire kaart even groot als de rest */
 
 /* Bouw 167 — de gouden hoeken bovenaan elke pagina op mobiel, zoals op Vandaag (ExactPageFrame.tsx) */
 @media(min-width:768px){.pagina-hoek{display:none!important}}
@@ -2001,8 +1846,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top .exact-frame{position:relative}
   #top#top#top#top .pagina-hoek{z-index:3}
 }
-/* Psalmen: geen hoekornament in het introductiekader; de paginahoeken (Bouw 167) staan er al boven */
-/* Vasten vandaag: geen kader en geen hoekornamenten, het blok staat los op het perkament */
 
 /* Bouw 168 — Pascha-opening zoals de dagkop van Vandaag: geen vlak, het Verrijzenis-icoon (public/images/Pascha-icoon.webp)
    groot en vrij op het perkament; op het web links naast de tekst, op mobiel erboven. De groet blijft staan. */
@@ -2015,12 +1858,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top#top#top .opening-hoogfeest .opening-binnen:has(>.opening-beeld){max-width:900px;gap:clamp(28px,4vw,56px)}
   #top#top#top#top#top#top .exact-content>section.opening-hoogfeest img.opening-beeld{width:clamp(190px,18vw,250px)!important;margin:0!important}
 }
-
-/* Feesten: geen sierlijn naast de tussenkoppen (per maand, dag, geselecteerde feesten) */
-/* Vasten vandaag: kleinere voedselkaarten, groter vastensymbool */
-/* Pascha: compactere datumkaart */
-/* Vandaag mobiel: de titel in hetzelfde rubriekrood als de Pascha-titel */
-/* Adem: "Het Jezusgebed" in dezelfde letter en kleur als de titel Orthodoxe Tijd op Vandaag (vm-titel) */
 
 /* Bouw 169 — de primaire titelkleur (--ot-titel, de kleur van de datum op Vandaag web) voor belangrijke titels op het perkament:
    paginatitels, sectietitels, de heilige of het feest van de dag, de titel van de geopende inhoud. Lopende tekst blijft chocolade,
@@ -2075,7 +1912,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Psalmen, leesvenster op mobiel en tablet: vorige · psalm · volgende onderaan, blijft in beeld tijdens het lezen */
 /* Psalmen: het leesvenster in warm perkament, bijna zoals de pagina (de andere vensters houden het lichtere vlak) */
 #top#top#top#top#top .exact-modal-frame.pk:has(.psr-blader){--pk-vlak:linear-gradient(rgba(255,248,232,.2),rgba(255,248,232,.2)),url(/images/ui/perkament.webp) center/cover}
-/* Gebeden: melding zolang de gebeden uit staan (lib/gebeden.ts, GEBEDEN_ZICHTBAAR) */
 
 /* Bouw 172 — Feesten als feestelijk hoofdstuk (Feesten.tsx). Rijk: de opening en het feest van vandaag of het eerstvolgende
    feest (manuscriptrand); middel: de sectiekoppen; rustig: registers zonder kaders of hoekversiering; één donker vlak: de
@@ -2198,10 +2034,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top#top#top#top#top .exact-content>section#week .opening-tekst{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:40px;align-items:start}
   #top#top#top#top#top#top#top#top .exact-content>section#week .opening-tekst>*{grid-column:1}
 }
-/* deze week */
-/* de gekozen dag: links uitgelijnd, zoals in het ontwerp */
-/* Heiligen op mobiel: de tussenkoppen (per maand, naar categorie) en hun aantal gecentreerd */
-/* Heiligen: alleen het zoekveld en de knop (geen keuzelijsten voor maand en categorie) */
 
 /* Bouw 177 — "Hier ben je nu" in de cycli: één gedeelde markering (.cyclus-nu) voor Etmaal (de dienst van nu), Week (vandaag)
    en Jaar (de tijd van nu). Diep verweerd bordeaux op perkament, dunne antiekgouden lijnen, ivoor en goud als tekst,
@@ -2222,8 +2054,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 
 /* Bouw 178 — de NU-markering met het aangeleverde kader (public/images/ui/nu-kader.webp): verweerd bordeaux met gouden rand
    en hoekornamenten, uitgerekt met border-image (de hoeken blijven heel). Grote vlakken een bredere rand dan regels. */
-/* Etmaal: de diensten zonder beeld — tijd, naam en dagdeel; op mobiel een tijdlijn met stippen */
-/* Week: de toon van de week in het rode kader (zelfde als de NU-markering) */
 
 /* Bouw 179 — Instellingen: kalender (de gekozen in het rode kader) en traditie (volgt) */
 /* Psalmen: link naar de podcastaflevering op Spotify (extern) */
@@ -2337,7 +2167,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top#top#top#top#top .snoer-getal .is-nieuw{animation:none}
 }
 
-
 /* Bouw 185 — Vandaag mobiel volgens het aangeleverde ontwerp: de dienst van nu met bordeaux titel, een bordeaux "Nu"-label
    met gouden rand en kleine sierpuntjes, en een gouden lijn om de regel. */
 /* Instellingen: het eigen pijlgebed */
@@ -2354,8 +2183,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 .ps-spotify-mobiel{display:none!important}
 @media(pointer:coarse){.ps-spotify-mobiel{display:inline-flex!important}.ps-spotify-web{display:none!important}}
 #top#top#top#top#top#top .ps-spotify-mobiel{text-decoration:none}
-
-/* Bouw 187 — Heiligen: citaten met bronvermelding (Woestijnvaders) */
 
 /* Bouw 188 — Adem: "Adem mee" en het gekozen tempo in de stijl van "vandaag" in de kalender (licht vlak, bordeaux en gouden binnenlijn, ruitje) */
 #top#top#top#top#top#top#top#top#top :is(.ad-start,.ad-tempo button[aria-pressed=true]){border:0;background:rgba(251,246,233,.45);box-shadow:inset 0 0 0 2px var(--ot-titel),inset 0 0 0 4px rgba(218,175,55,.7);color:var(--ot-chocolade)}
@@ -2395,9 +2222,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 @media(min-width:768px){
   #top#top#top#top#top#top#top#top#top#top .pc-feest-vakken{grid-template-columns:minmax(0,1fr)!important}
 }
-/* M7 Vasten (mobiel): de dagrij krijgt ruimte; de kleurbalk van het vastenniveau staat onder de tekst in plaats van ernaast */
-/* M8 Feesten (mobiel): maanden in een raster van vier, dagknoppen minstens 44×44px */
-/* M9 Heiligen (tablet): de categorieën in twee kolommen in plaats van vijf (tien tegels, dus vijf gelijke rijen) */
 
 /* Bouw 193 — audit M4: één sectiekop, gelijk aan .ot-sectietitel: Cormorant, 26–36px, gewone hoofdletters, bordeaux
    (op donkere vlakken goud). Kleine kapitalen-labels (pc-kop, vak-labels) blijven de bovenregel. */
@@ -2430,7 +2254,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
    44px, beeldrand zoals de werkbalk van het psalter). Alle primaire knoppen en tekstlinks minstens 44px hoog. */
 #top#top#top#top#top#top#top#top#top#top :is(.btn-pill,.vandaag-main-button,.saints-gold-button,.saints-text-link,.saints-outline-button,.saints-search-button,.cyclus-verder){min-height:44px!important}
 #top#top#top#top#top#top#top#top#top#top :is(.fs-link,.jr-link){min-height:44px}
-/* M6 Heiligen (desktop): het zijcitaat een leesbare kolom in plaats van ±110px, met rechte hoeken */
 
 /* Bouw 197 — audit M11: Psalmen (mobiel en tablet) "Alle" als raster van 150 nummers in plaats van 150 rijen.
    Psalmen met tekst in bordeaux; de gekozen psalm in het kader van vandaag. Desktop houdt de lijst. */
@@ -2447,12 +2270,6 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 
 /* Bouw 198 — Vandaag: overal hetzelfde pijltje, geen sierlijnen tussen de kaarten maar één rustige tussenruimte.
    Kleuren ongewijzigd. */
-
-/* Bouw 199 — audit L6: Lage Landen zonder afgeronde hoeken, net als de rest van de site. */
-
-/* Bouw 200 — Feesten: de datum van het eerstvolgende feest in het ronde ornamentkader. */
-
-/* Bouw 201 — Feesten: in de kaart van het eerstvolgende feest een subtiele gouden lijn in plaats van het sierornament. */
 
 /* Bouw 202 — Onderbalk en het Cycli/Meer-blad overal nachtblauw met gedempt goud (startpagina-pakket). */
 #top .bottom-nav{background:linear-gradient(180deg,#10243a,#0b1b2a);border-top-color:rgba(172,121,47,.55)}

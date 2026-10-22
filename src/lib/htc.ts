@@ -574,20 +574,3 @@ export function vertaalLeven(text: string): string {
   return t;
 }
 
-/** HTC-rangicoon → Nederlandse rang. */
-export function rangLabel(icon: string): { label: string; rang: number } | null {
-  switch (icon) {
-    case '6':
-      return { label: 'Groot feest', rang: 6 };
-    case '5':
-      return { label: 'Vigilie', rang: 5 };
-    case '4':
-      return { label: 'Polyeleos', rang: 4 };
-    case '3':
-      return { label: 'Grote doxologie', rang: 3 };
-    case '2':
-      return { label: 'Zes stichieren', rang: 2 };
-    default:
-      return null;
-  }
-}

@@ -67,7 +67,6 @@ export interface Psalterlezing {
 
 export const BRON_METTEN = { naam: 'OCA — Kathisma Readings at Matins', url: 'https://www.oca.org/liturgics/outlines/kathisma-readings-at-matins' };
 export const BRON_VESPERS = { naam: 'OCA — Kathisma Readings at Vespers', url: 'https://www.oca.org/liturgics/outlines/kathisma-readings-at-vespers' };
-export const BRON_TEKST = 'Liturgisch leesschema volgens het OCA-overzicht. De uitvoering kan per parochie of klooster verschillen.';
 
 const PERIODEN: Record<PeriodeSleutel, string> = {
   'thomas-sep21': 'Thomaszondag tot en met 21 september',

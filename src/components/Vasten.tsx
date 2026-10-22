@@ -163,7 +163,7 @@ export default function Vasten() {
   return (
     <>
       {/* Bovenkant volgens het overdrachtspakket (referentie kalender-pascha-feesten-vasten.png, paneel 4): de vasten van
-          vandaag met de bestaande voedselkaarten, de week met de vastenkleuren en de vier grote vasten met hun bestaande
+          vandaag met de vastentafel, de week met de vastenkleuren en de vier grote vasten met hun bestaande
           iconen. Alle gegevens uit lib/vasten.ts en lib/overzicht.ts; elke dag en periode opent het bestaande venster. */}
       <section id="vasten" className="vg ot-redesign ot-vasten">
         <NisKop open={open} balk achter={<BannerBeeld naam="vasten-banner" open={open} />} />

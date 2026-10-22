@@ -91,16 +91,6 @@ export function civilVanKerkdatum(md: string, jaar: number, mode: Mode): Date {
   return mode === 'oud' ? juliaansNaarCivil(jaar, m, d) : utc(jaar, m, d);
 }
 
-/** Eerstvolgende burgerlijke datum (vandaag of later) van een vaste kerkelijke datum. */
-export function volgendeCivil(md: string, vanaf: Date, mode: Mode): Date {
-  const y = vanaf.getUTCFullYear();
-  for (const yy of [y - 1, y, y + 1]) {
-    const c = civilVanKerkdatum(md, yy, mode);
-    if (c.getTime() >= vanaf.getTime()) return c;
-  }
-  return civilVanKerkdatum(md, y + 1, mode);
-}
-
 /** Orthodox Pascha (Meeus' Juliaanse algoritme), teruggegeven als burgerlijke (Gregoriaanse) datum, voor elke eeuw. */
 export function orthodoxPascha(jaar: number): Date {
   const a = jaar % 4;
@@ -111,25 +101,6 @@ export function orthodoxPascha(jaar: number): Date {
   const maand = Math.floor((d + e + 114) / 31);
   const dag = ((d + e + 114) % 31) + 1;
   return juliaansNaarCivil(jaar, maand, dag);
-}
-
-/** Westers Pasen (Gregoriaans, Meeus/Jones/Butcher). */
-export function westersPasen(jaar: number): Date {
-  const a = jaar % 19;
-  const b = Math.floor(jaar / 100);
-  const c = jaar % 100;
-  const d = Math.floor(b / 4);
-  const e = b % 4;
-  const f = Math.floor((b + 8) / 25);
-  const g = Math.floor((b - f + 1) / 3);
-  const h = (19 * a + b - d - g + 15) % 30;
-  const i = Math.floor(c / 4);
-  const k = c % 4;
-  const l = (32 + 2 * e + 2 * i - h - k) % 7;
-  const m = Math.floor((a + 11 * h + 22 * l) / 451);
-  const maand = Math.floor((h + l - 7 * m + 114) / 31);
-  const dag = ((h + l - 7 * m + 114) % 31) + 1;
-  return utc(jaar, maand, dag);
 }
 
 /* ---------- Opmaak ---------- */
@@ -275,18 +246,6 @@ export function dagInfo(civil: Date, mode: Mode, vandaagYmd?: string): DagInfo {
   };
 }
 
-/** Alle dagen van een burgerlijke maand. */
-export function maandDagen(jaar: number, maand: number, mode: Mode, vandaagYmd: string): DagInfo[] {
-  const eerste = utc(jaar, maand, 1);
-  const out: DagInfo[] = [];
-  let d = eerste;
-  while (d.getUTCMonth() + 1 === maand) {
-    out.push(dagInfo(d, mode, vandaagYmd));
-    d = addDays(d, 1);
-  }
-  return out;
-}
-
 /** Zes weken rooster (ma–zo) rond een maand. */
 export function maandRooster(jaar: number, maand: number, mode: Mode, vandaagYmd: string): DagInfo[] {
   const eerste = utc(jaar, maand, 1);
@@ -295,13 +254,6 @@ export function maandRooster(jaar: number, maand: number, mode: Mode, vandaagYmd
   const out: DagInfo[] = [];
   for (let i = 0; i < 42; i++) out.push(dagInfo(addDays(start, i), mode, vandaagYmd));
   return out;
-}
-
-/** Week (ma–zo) waarin een datum valt. */
-export function weekRond(d: Date, mode: Mode, vandaagYmd: string): DagInfo[] {
-  const startOffset = (d.getUTCDay() + 6) % 7;
-  const start = addDays(d, -startOffset);
-  return Array.from({ length: 7 }, (_, i) => dagInfo(addDays(start, i), mode, vandaagYmd));
 }
 
 /** Eerstvolgende Pascha vanaf een datum. */

@@ -1,11 +1,5 @@
-import { DERTIEN, OVERIGE_VASTE, type Feest } from './feesten';
+import type { Feest } from './feesten';
 import { addDays, civilVanKerkdatum, daysBetween, orthodoxPascha, utc, type Mode } from './kalender';
-
-export interface FeestDatum {
-  feest: Feest;
-  datum: Date;
-  dagen: number;
-}
 
 export function feestDatum(feest: Feest, jaar: number, mode: Mode): Date | null {
   if (feest.offset !== undefined) return addDays(orthodoxPascha(jaar), feest.offset);
@@ -21,17 +15,6 @@ export function volgendeFeestDatum(feest: Feest, vanaf: Date, mode: Mode): Date 
     if (d && d.getTime() >= vanaf.getTime()) return d;
   }
   return feestDatum(feest, y + 1, mode) as Date;
-}
-
-export function komendeFeesten(vanaf: Date, mode: Mode, aantal = 6): FeestDatum[] {
-  const kandidaten = [...DERTIEN, ...OVERIGE_VASTE.filter((f) => (f.rang ?? 0) >= 5)];
-  return kandidaten
-    .map((feest) => {
-      const datum = volgendeFeestDatum(feest, vanaf, mode);
-      return { feest, datum, dagen: daysBetween(vanaf, datum) };
-    })
-    .sort((a, b) => a.dagen - b.dagen)
-    .slice(0, aantal);
 }
 
 /* ------------------------------------------------------------------ */
@@ -151,7 +134,3 @@ export function vastenPeriodes(jaar: number, mode: Mode): Periode[] {
   return out.sort((a, b) => a.start.getTime() - b.start.getTime());
 }
 
-/** Schatting van het aantal vastendagen in een jaar (alle dagen met een beperking). */
-export function telVastendagen(dagen: { vasten: { niveau: string } }[]): number {
-  return dagen.filter((d) => d.vasten.niveau !== 'geen' && d.vasten.niveau !== 'vrij').length;
-}

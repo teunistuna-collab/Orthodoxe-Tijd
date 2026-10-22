@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import { useApp } from '../lib/context';
+import { useDesktop } from '../lib/desktop';
 import { PAASCYCLUS, type Feest } from '../lib/feesten';
 import { addDays, bereikLang, dagInfo, formatDag, formatDatum, formatKort, ymd, type DagInfo } from '../lib/kalender';
 import { isPaascyclus, lezingSoort, vertaalRef, type HtcLezingRef } from '../lib/htc';
@@ -42,14 +43,6 @@ function formatBereik(a: Date, b: Date): string {
 }
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-// Desktop (vanaf 1024 px) krijgt een eigen, contextafhankelijke bovenkant; mobiel en tablet blijven zoals ze waren.
-const DESKTOP = '(min-width: 1024px)';
-const volgDesktop = (cb: () => void) => {
-  const m = window.matchMedia(DESKTOP);
-  m.addEventListener('change', cb);
-  return () => m.removeEventListener('change', cb);
-};
-const isDesktop = () => window.matchMedia(DESKTOP).matches;
 const dagen = (n: number) => `${n} ${n === 1 ? 'dag' : 'dagen'}`;
 const feestMetId = (id: string) => PAASCYCLUS.find((f) => f.id === id);
 /** De korte toelichting van een stap: de eerste alinea van de bestaande uitleg (bij Hemelvaart en Pinksteren van beide). */
@@ -64,7 +57,7 @@ type Rij = { label: string; titel: string; tekst?: string; open?: () => void; hr
 
 export default function Pascha() {
   const { vandaag, vandaagYmd, mode, rooster, openDag, openLezing, openDagLezingen } = useApp();
-  const desktop = useSyncExternalStore(volgDesktop, isDesktop);
+  const desktop = useDesktop();
   const [stapOpen, setStapOpen] = useState<StapKey | null>(null);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
   const [cyclusOpen, setCyclusOpen] = useState(false);

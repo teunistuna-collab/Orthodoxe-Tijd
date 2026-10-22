@@ -1,7 +1,7 @@
 import type { VastenNiveau } from './vasten';
 
-// Per voedselgroep: toegestaan of niet op een vastenniveau (lib/vasten.ts). Eén bron voor de vastentafel, de
-// voedseltegels en de voedselkaarten in het dagvenster. Vlees t/m wijn: de bestaande regels van de Vasten-pagina.
+// Per voedselgroep: toegestaan of niet op een vastenniveau (lib/vasten.ts). Eén bron voor de vastentafel en de
+// voedseltegels (ook in het dagvenster). Vlees t/m wijn: de bestaande regels van de Vasten-pagina.
 // Groenten en graan: altijd, behalve bij onthouding ("Niets (water)"); peulvruchten ook niet bij droog voedsel
 // (streng: "Brood, groenten, fruit, noten").
 

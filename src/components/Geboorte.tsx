@@ -1,5 +1,6 @@
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState } from 'react';
 import { useApp } from '../lib/context';
+import { useDesktop } from '../lib/desktop';
 import { bereikLang, dagInfo, formatDag, formatDatum, ymd } from '../lib/kalender';
 import { GROTE_FEESTEN } from '../lib/feesten';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
@@ -23,14 +24,6 @@ import './ontwerp.css';
 
 const KERSTMIS = GROTE_FEESTEN.find((f) => f.id === 'kerstmis')!;
 const THEOFANIE = GROTE_FEESTEN.find((f) => f.id === 'theofanie')!;
-// Zelfde grens als Pascha: vanaf 1024 px de tijdlijn naast de periode, daaronder alles onder elkaar.
-const DESKTOP = '(min-width: 1024px)';
-const volgDesktop = (cb: () => void) => {
-  const m = window.matchMedia(DESKTOP);
-  m.addEventListener('change', cb);
-  return () => m.removeEventListener('change', cb);
-};
-const isDesktop = () => window.matchMedia(DESKTOP).matches;
 const dagen = (n: number) => `${n} ${n === 1 ? 'dag' : 'dagen'}`;
 const CONCEPT_NOOT = { note: `Concept: ${BRON_CONCEPT}.` };
 
@@ -81,7 +74,7 @@ const INFO: Record<GeboorteInfoKey, PopupInhoud> = {
 export default function Geboorte() {
   const { vandaag, vandaagYmd, mode } = useApp();
   const open = usePaginaOpen('geboorte');
-  const desktop = useSyncExternalStore(volgDesktop, isDesktop);
+  const desktop = useDesktop();
   const cyclus = useMemo(() => geboortecyclusVoor(vandaag, mode), [vandaag, mode]);
   const dag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
   const cyclusId = ymd(cyclus.geboorte);

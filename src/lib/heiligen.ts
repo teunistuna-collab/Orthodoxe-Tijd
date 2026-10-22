@@ -35,7 +35,6 @@ export interface Heilige {
 
 type JaarVermelding = { id: string; title: string; names?: string[]; opening?: string; type: Soort; needsReview?: boolean };
 const DAGEN = (JAAR as { importVersion: number; days: Record<string, JaarVermelding[]> }).days;
-export const IMPORT_VERSIE = (JAAR as { importVersion: number }).importVersion;
 
 // Heiligenjaar-vermeldingen die al als Heilige van de Lage Landen in de lijst staan (zelfde persoon): niet dubbel tonen.
 const ALS_LAGE_LANDEN = new Set(LAGE_LANDEN.flatMap((h) => (h.heiligenjaar ? [h.heiligenjaar] : [])));

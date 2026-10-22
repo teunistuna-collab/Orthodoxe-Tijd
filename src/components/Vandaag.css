@@ -705,3 +705,30 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 .vg-nis-label { margin: 0 0 6px !important; font-family: var(--font-titel); font-size: clamp(12px, 3.3cqw, 14px); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #e2bd78; text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
 .vg-nis-onder { max-width: 34em; margin: 4px auto 0 !important; font-family: var(--font-lees); font-size: clamp(17px, 4.6cqw, 21px); line-height: 1.4; text-wrap: balance; color: var(--ivoor); text-shadow: 0 1px 8px rgba(0, 0, 0, .7); }
 .vg-niskop:has(.vg-nis-onder) .vg-titel { font-size: clamp(34px, 9.6cqw, 52px); line-height: 1.08; text-wrap: balance; }
+/* Leef vandaag met de Kerk (LeefVandaag.tsx): rustig, zonder kader; titel als de leestitels, kopjes als labels */
+#vandaag .vg-leef { margin-top: 28px; text-align: center; }
+#vandaag .vg-leef-titel { margin: 0 !important; font-family: var(--font-lees); font-size: 24px; font-weight: 500; line-height: 1.2; color: var(--inkt); }
+#vandaag .vg-leef-sierlijn { width: min(50%, 180px); margin: 6px auto 4px; }
+#vandaag .vg-leef-deel { max-width: 34em; margin: 14px auto 0; }
+#vandaag .vg-leef-deel .vg-label { margin: 0 0 4px !important; color: #7a5a2a; }
+#vandaag .vg-leef p { margin: 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.55; color: var(--inkt); }
+#vandaag .vg-leef-link { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; font-family: var(--font-lees); font-size: 16px; color: #7a5a2a; text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .45); text-underline-offset: 3px; }
+#vandaag .vg-leef-link svg { width: 16px; height: 16px; }
+#vandaag .vg-leef-schrift { max-width: 30em; margin: 18px auto 0; padding-top: 12px; border-top: 1px solid rgba(172, 121, 47, .45); }
+#vandaag .vg-leef-schrift .vg-label { display: block; margin-bottom: 4px; color: #7a5a2a; }
+#vandaag .vg-leef-schrift blockquote { margin: 0 0 4px; font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; color: var(--inkt); }
+#vandaag .vg-leef-schrift cite { font-family: var(--font-lees); font-size: 16px; font-style: normal; color: #5d5040; }
+/* Desktop (vanaf 1024 px): Leef vandaag over de breedte van de twee kolommen; overweeg, bid en praktijk naast elkaar
+   met fijne verticale lijnen, het schriftwoord gecentreerd eronder. Kleiner: alles onder elkaar. */
+@media (min-width: 1024px) {
+  #vandaag .vg-papier > .vg-leef { max-width: 1120px; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(172, 121, 47, .35); }
+  #vandaag .vg-leef-delen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 10px; }
+  #vandaag .vg-leef-deel { max-width: none; margin: 0; padding: 4px 28px; }
+  #vandaag .vg-leef-deel + .vg-leef-deel { border-left: 1px solid rgba(172, 121, 47, .4); }
+}
+
+/* Etmaal: "Open het gebed" in de vorm van de kathismaknoppen op Psalmen (.ot-kt-kaart): licht perkament, dun goud kader */
+#etmaal .vg-et-uur .vg-knop { min-height: 52px; padding: 8px 22px; border: 1px solid rgba(167, 118, 52, .4) !important; border-radius: 7px !important; background: rgba(255, 250, 238, .55) !important; box-shadow: none !important; font-family: var(--font-lees); font-size: 19px; color: var(--inkt) !important; }
+#etmaal .vg-et-uur .vg-knop > span { color: var(--goud-pijl); }
+@media (hover: hover) { #etmaal .vg-et-uur .vg-knop:hover { filter: none; background: rgba(255, 248, 229, .9) !important; border-color: var(--kaartrand) !important; } }
+#etmaal .vg-et-uur .vg-knop:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }

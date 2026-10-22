@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "check:leesrooster": "node scripts/leesrooster.check.mjs",
+    "check:leefvandaag": "esbuild scripts/leefvandaag.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/leefvandaag.check.mjs --log-level=warning && node node_modules/.cache/leefvandaag.check.mjs",
     "check:vastentafel": "esbuild scripts/vastentafel.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/vastentafel.check.mjs --log-level=warning && node node_modules/.cache/vastentafel.check.mjs",
     "check:geboortecyclus": "esbuild scripts/geboortecyclus.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/geboortecyclus.check.mjs --log-level=warning && node node_modules/.cache/geboortecyclus.check.mjs",
     "check:heiligen": "esbuild scripts/heiligen.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/heiligen.check.mjs --log-level=warning && node node_modules/.cache/heiligen.check.mjs",
@@ -22,12 +23,10 @@
     "@fontsource/cormorant-garamond": "^5.3.0",
     "@fontsource/eb-garamond": "^5.3.0",
     "@tailwindcss/vite": "^4.2.1",
-    "framer-motion": "^12.35.0",
     "lucide-react": "^0.577.0",
     "pdfjs-dist": "^6.3.289",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.13.1",
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {

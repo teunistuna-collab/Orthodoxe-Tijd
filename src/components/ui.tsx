@@ -1,26 +1,6 @@
-import type { CSSProperties, ReactNode } from 'react';
-import { LADDER, NIVEAUS, vastenGroep, type VastenGroep, type VastenNiveau, type VastenRegel } from '../lib/vasten';
+import type { ReactNode } from 'react';
+import { NIVEAUS, vastenGroep, type VastenGroep, type VastenRegel } from '../lib/vasten';
 import type { Feest } from '../lib/feesten';
-
-interface SectionTitleProps {
-  eyebrow: string;
-  title: string;
-  intro?: ReactNode;
-  dark?: boolean;
-  align?: 'center' | 'left';
-}
-
-export function SectionTitle({ eyebrow, title, intro, dark, align = 'center' }: SectionTitleProps) {
-  const center = align === 'center';
-  return (
-    <div className={`${center ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'} mb-10`}>
-      <p className={`text-[11px] font-bold tracking-[0.28em] uppercase ${dark ? 'text-gold-light' : 'text-gold-deep'}`}>{eyebrow}</p>
-      <h2 className={`font-display mt-2 text-3xl font-semibold sm:text-4xl ${dark ? 'text-cream' : 'text-ink'}`}>{title}</h2>
-      <div className={`gold-rule mt-4 w-40 ${center ? 'mx-auto' : ''}`} />
-      {intro && <p className={`mt-4 text-[15px] leading-relaxed ${dark ? 'text-[#e6d9bd]' : 'text-ink-soft'}`}>{intro}</p>}
-    </div>
-  );
-}
 
 // Vastensymbool in de kalender en het dagvenster; de groepen staan in lib/vasten.ts (vastenGroep).
 const SYMBOOL: Record<VastenGroep, ReactNode> = {
@@ -51,23 +31,6 @@ export function VastenBadge({ regel, size = 'md', showLabel = true }: { regel: V
   );
 }
 
-// Kleurlegenda van het vasten: één kleurstip per trede van de ladder. Gedeeld door de kalender en de vastenpagina.
-export function VastenKleuren({ actief }: { actief?: VastenNiveau }) {
-  return (
-    <>
-      {LADDER.filter((l) => l.id !== 'geen').map((l) => (
-        <span key={l.id} className={`inline-flex items-center gap-1.5${actief === l.id ? ' font-bold text-ink' : ''}`}>
-          <span className="h-2.5 w-2.5 rounded-full" style={{ background: l.kleur }} /> {l.kort}
-        </span>
-      ))}
-    </>
-  );
-}
-
-export function NiveauDot({ niveau, className = 'h-2 w-2' }: { niveau: VastenRegel['niveau']; className?: string }) {
-  return <span className={`inline-block rounded-full ${className}`} style={{ background: NIVEAUS[niveau].kleur }} />;
-}
-
 export function FeestTag({ feest }: { feest: Feest }) {
   const map: Record<string, string> = {
     pascha: 'bg-wine text-gold-light',
@@ -87,47 +50,8 @@ export function FeestTag({ feest }: { feest: Feest }) {
   return <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase ${map[key]}`}>{label[key]}</span>;
 }
 
-// De gouden hoekversiering (public/images/ui/hoeksier.webp, scripts/hoeksier.mjs; linksboven); spiegelen met -scale-x-100 / -scale-y-100.
 /** Het kruis als teken in de tekst (in plaats van ☦): silhouet in de huidige tekstkleur. Opmaak: .kruis-teken in index.css. */
 export function KruisTeken() {
   return <span className="kruis-teken" aria-hidden="true" />;
 }
 
-export function Hoeksier({ className = '' }: { className?: string }) {
-  return <span aria-hidden="true" className={`hoeksier ${className}`} />;
-}
-
-export function Ornament({ className = '' }: { className?: string }) {
-  return (
-    <div className={`flex items-center justify-center gap-3 text-gold ${className}`} aria-hidden>
-      <span className="h-px w-12 bg-gradient-to-r from-transparent to-gold" />
-      <span className="text-sm">✠</span>
-      <span className="h-px w-12 bg-gradient-to-l from-transparent to-gold" />
-    </div>
-  );
-}
-
-// Compacte lijstregel voor mobiel (feesten, weekdagen, ...): datumblok links, titel met onderregel, pijl rechts.
-export function MobileListRow({ links, icoon, titel, onder, rechts, onClick, className = '', style }: {
-  links: ReactNode;
-  icoon?: ReactNode;
-  titel: ReactNode;
-  onder?: ReactNode;
-  rechts?: ReactNode;
-  onClick: () => void;
-  className?: string;
-  style?: CSSProperties;
-}) {
-  return (
-    <button type="button" onClick={onClick} className={`mlr ${className}`} style={style}>
-      <span className="mlr-links">{links}</span>
-      {icoon && <span className="mlr-icoon" aria-hidden="true">{icoon}</span>}
-      <span className="mlr-tekst">
-        <span className="mlr-titel">{titel}</span>
-        {onder && <span className="mlr-onder">{onder}</span>}
-      </span>
-      {rechts}
-      <span className="mlr-pijl" aria-hidden="true">›</span>
-    </button>
-  );
-}
