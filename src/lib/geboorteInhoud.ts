@@ -139,3 +139,11 @@ export const GEBOORTE_DAGICONEN: Record<string, DagIcoon> = {
   },
   ...Object.fromEntries(['1-8', '1-9', '1-10', '1-11', '1-12', '1-13', '1-14'].map((k) => [k, { ...THEOFANIE_ICOON, periode: true }])),
 };
+
+/** Zondag van de Voorouders en Zondag van de Heilige Vaders (beweeglijk): het icoon van Christus de Ware Wijnstok,
+ *  als icoon van de periode (een eigen icoon van deze zondagen ontbreekt nog). */
+export const GEBOORTE_ZONDAGICOON: DagIcoon = {
+  bestand: 'wijnstok.webp', breedte: 450, hoogte: 599, naam: 'Icoon van Christus de Ware Wijnstok', periode: true,
+  betekenis: 'Christus zit in de stam van de wijnstok met het geopende Evangelie; op de ranken zitten de apostelen. Op de zondagen vóór de Geboorte gedenkt de Kerk de voorouders van Christus en de rechtvaardigen van het Oude Verbond: zoals ranken aan de wijnstok groeit heel het volk van God naar Hem toe.',
+  schrift: 'Johannes 15:1–8',
+};

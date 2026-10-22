@@ -106,6 +106,9 @@ assert.equal(bv('2026-12-19')?.icoon?.beeld, '/images/feesten/nicolaas.webp');
 assert.equal(bv('2026-12-20')?.icoon?.beeld, '/images/feesten/kerst.jpg'); // gewone vastendag: icoon van de periode
 assert.equal(bv('2027-01-25')?.icoon?.periodeIcoon, true); // nafeest van Theofanie
 assert.equal(bv('2025-12-25', 'nieuw')?.icoon?.beeld, '/images/feesten/kerst.jpg');
+assert.equal(bv('2026-12-27')?.icoon?.beeld, '/images/feesten/wijnstok.webp'); // Zondag van de Voorouders
+assert.equal(bv('2027-01-03')?.icoon?.beeld, '/images/feesten/wijnstok.webp'); // Zondag van de Heilige Vaders
+assert.equal(bv('2027-01-03')?.icoon?.periodeIcoon, true);
 assert.equal(bv('2026-01-06', 'nieuw')?.icoon?.beeld, '/images/feesten/theofanie.webp');
 assert.equal(bv('2027-01-19')?.link, '#geboorte');
 assert.equal(bv('2027-01-28'), null);

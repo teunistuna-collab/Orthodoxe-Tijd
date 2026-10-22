@@ -5,7 +5,7 @@ import { paascyclusActief, paascyclusVoor, STAPPEN, type StapKey } from './paasc
 import { PASCHA_DAGICONEN, PERIODE_POPUPS, STAP_INHOUD } from './paascyclusTeksten';
 import { kleurVanDeDag, type KleurVanDeDag } from './liturgischeKleur';
 import { geboortecyclusVoor } from './geboortecyclus';
-import { BRON_CONCEPT, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_WEETJES, KERKVADER_PER_PERIODE, KERKVADERS, GEBOORTE_DAGICONEN } from './geboorteInhoud';
+import { BRON_CONCEPT, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_WEETJES, KERKVADER_PER_PERIODE, KERKVADERS, GEBOORTE_DAGICONEN, GEBOORTE_ZONDAGICOON } from './geboorteInhoud';
 import { actieveCyclus, type Cyclus } from './seizoen';
 
 /*
@@ -191,7 +191,7 @@ function betekenisGeboorte(dag: DagInfo, mode: Mode): BetekenisVanVandaag | null
   // Icoon: het aangeleverde icoon van de Geboorte; van de vasten t/m de vooravond als icoon van de periode
   const feestIcoon = key === 'geboorte' || key === 'nafeest';
   const metIcoon = ['vasten', 'voorouders', 'vaders', 'voorfeest', 'vooravond', 'geboorte', 'nafeest'].includes(key);
-  const dagIcoon = GEBOORTE_DAGICONEN[dag.kerkKey];
+  const dagIcoon = key === 'voorouders' || key === 'vaders' ? GEBOORTE_ZONDAGICOON : GEBOORTE_DAGICONEN[dag.kerkKey];
   const icoon: IcoonVanDeDag | undefined = dagIcoon
     ? {
         beeld: `/images/feesten/${dagIcoon.bestand}`,

@@ -180,7 +180,6 @@
 /* ---------- Vasten ---------- */
 .ot-vasten .vg-kop-achter .ot-banner { object-position: 60% 62%; }
 @media (min-width: 768px) { #vasten.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 55% 60%; } }
-.ot-vasten .ot-vs-status { display: block; width: 64px; height: 64px; margin: 4px auto 0; }
 .ot-vasten .ot-vs-label { margin-top: 2px; text-align: center; }
 .ot-vasten .ot-vs-toegestaan { margin: 0; font-size: 18px; text-align: center; }
 .ot-vasten .ot-vs-detail { max-width: 34em; margin: 4px auto 0; font-size: 16px; line-height: 1.45; text-align: center; color: var(--ot-gedempt); }
@@ -532,3 +531,32 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-knoppen > b
   :is(#pascha, #geboorte) .vg-niskop .vg-verd-sierlijn { margin: 20px auto 0; }
   :is(#pascha, #geboorte) .vg-niskop .vg-nis-onder { max-width: min(76%, 620px); margin-top: 18px !important; font-size: 18px; line-height: 1.5; }
 }
+/* Vastentafel (VastenTafel.tsx): vaste beeldverhouding (tafel.png + strook erboven), gerechten in procenten */
+.ot-vasten .vt { position: relative; width: 100%; aspect-ratio: 1860 / 441; margin: 14px auto 0; }
+@media (min-width: 768px) { .ot-vasten .vg-papier > .vt { max-width: 1040px; } }
+.ot-vasten .vt-tafel { position: absolute; left: 0; bottom: 0; width: 100%; height: auto; }
+.ot-vasten .vt-gerecht { position: absolute; height: auto; transition: opacity .35s ease; }
+.ot-vasten .vt-gerecht.is-weg { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .ot-vasten .vt-gerecht { transition: none; } }
+@media (max-width: 767.98px) { .ot-vasten .vg-papier > .vt { width: calc(100% + 2 * var(--rand)); margin-inline: calc(-1 * var(--rand)); } } /* mobiel: tot de schermranden */
+/* Voedseltegels onder de tafel: per groep het gerecht, de naam en een vinkje of kruis (zelfde status als de tafel) */
+.ot-vasten .vt-tegels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+@media (min-width: 560px) { .ot-vasten .vt-tegels { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (min-width: 768px) { .ot-vasten .vg-papier > .vt-tegels { max-width: 1040px; grid-template-columns: repeat(9, minmax(0, 1fr)); } }
+.ot-vasten .vt-tegel-binnen {
+  position: relative; display: flex !important; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; width: 100%; height: 100%; min-height: 0;
+  padding: 8px 4px 6px; border: 1px solid #b99455; border-radius: 3px; background: #f7ecd4; box-shadow: inset 0 0 0 3px #f7ecd4, inset 0 0 0 4px rgba(185, 148, 85, .55);
+  font: inherit; color: var(--ot-inkt); transition: opacity .35s ease, filter .35s ease;
+}
+.ot-vasten .vt-tegel img { display: block; width: 100%; max-width: 92px; height: 46px; object-fit: contain; }
+.ot-vasten .vt-naam { font-family: var(--font-lees); font-size: 14px; line-height: 1.2; }
+.ot-vasten .vt-teken { position: absolute; top: 4px; right: 4px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; color: #fff; }
+.ot-vasten .vt-teken svg { width: 13px; height: 13px; stroke-width: 3; }
+.ot-vasten .is-toegestaan .vt-teken { background: #3f7a4f; }
+.ot-vasten .is-niet .vt-teken { background: #7d1a1f; }
+.ot-vasten .is-niet .vt-tegel-binnen img { opacity: .35; filter: grayscale(.6); }
+.ot-vasten .ot-vs-grote { margin-top: 26px; }
+.ot-vasten .vt-test { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 12px 0 0; padding: 8px 10px; border: 1px dashed #b99455; font-size: 13px; }
+.ot-vasten .vt-test button { padding: 3px 8px; border: 1px solid #b99455; border-radius: 3px; background: #fff8ea; font: inherit; }
+.ot-vasten .vt-test button[aria-pressed="true"] { background: #e9d5a8; }
+.ot-vasten .vt-test span { color: var(--ot-gedempt); }

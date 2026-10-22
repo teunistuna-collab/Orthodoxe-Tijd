@@ -12,6 +12,8 @@ import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
 import Verdieping from './Verdieping';
 import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
+import VastenTafel from './VastenTafel';
+import { voedselStatus, type Voedselgroep } from '../lib/voedselgroepen';
 import { ActieKnop, BannerBeeld, Sierlijn } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import './Vandaag.css';
@@ -149,18 +151,12 @@ export default function Vasten() {
   const geselecteerdeDagInfo = geselecteerdeDag ? dagInfo(new Date(`${geselecteerdeDag}T00:00:00Z`), mode) : null;
   const periodeGeopend = periodeOpen ? vastenP.find((p) => p.id === periodeOpen) : null;
 
-  const onthoudingenVoor = (niveau: (typeof dagVandaag)['vasten']['niveau']) => [
-    { label: 'Vlees', toegestaan: ['vrij', 'geen'].includes(niveau) },
-    { label: 'Zuivel', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau) },
-    { label: 'Eieren', toegestaan: ['vrij', 'geen', 'zuivel'].includes(niveau) },
-    { label: 'Vis', toegestaan: ['vrij', 'geen', 'zuivel', 'vis'].includes(niveau) },
-    { label: 'Olie', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau) },
-    { label: 'Wijn', toegestaan: ['vrij', 'geen', 'zuivel', 'vis', 'wijn-olie', 'vastendag'].includes(niveau) },
-  ];
+  // Voedselkaarten in het dagvenster: dezelfde status als de vastentafel (lib/voedselgroepen.ts)
+  const onthoudingenVoor = (niveau: (typeof dagVandaag)['vasten']['niveau']) => {
+    const st = voedselStatus(niveau);
+    return (['Vlees', 'Zuivel', 'Eieren', 'Vis', 'Olie', 'Wijn'] as const).map((label) => ({ label, toegestaan: st[label.toLowerCase() as Voedselgroep] }));
+  };
   const onthoudingen = geselecteerdeDagInfo ? onthoudingenVoor(geselecteerdeDagInfo.vasten.niveau) : [];
-  const onthoudingenVandaag = onthoudingenVoor(dagVandaag.vasten.niveau);
-  // Symbool van vandaag: brood en olijven bij een vastendag, vis, druiven en beker als er niet gevast wordt.
-  const vastenVandaagIcon = ['vrij', 'geen'].includes(dagVandaag.vasten.niveau) ? '/images/ui/vastenvrij.webp' : '/images/ui/vasten.webp';
 
   const infoKaarten = (
     <Verdieping
@@ -184,7 +180,6 @@ export default function Vasten() {
       <section id="vasten" className="vg ot-redesign ot-vasten">
         <NisKop open={open} balk achter={<BannerBeeld naam="vasten-banner" open={open} />} />
         <div className="vg-papier ot-inhoud">
-          <img className="ot-vs-status" src={vastenVandaagIcon} alt="" width={256} height={256} decoding="async" />
           <p className="vg-label ot-vs-label">Vandaag</p>
           <h1 className="ot-titel">{dagVandaag.vasten.label}</h1>
           <Sierlijn />
@@ -192,17 +187,10 @@ export default function Vasten() {
           <p className="ot-vs-detail">{dagVandaag.vasten.detail}</p>
           {dagVandaag.vasten.periode && <p className="ot-vs-periode">{dagVandaag.vasten.periode}</p>}
 
-          <div className="ot-twee">
-            <div>
-              <h2 className="ot-kop">Toegestane spijzen vandaag</h2>
-              <div className="fasting-food-grid ot-vs-spijzen">
-                {onthoudingenVandaag.map(({ label, toegestaan }) => (
-                  <VoedselKaart key={label} label={label} toegestaan={toegestaan} />
-                ))}
-              </div>
+          {/* De vastentafel: het eten van vandaag op tafel (components/VastenTafel.tsx) */}
+          <VastenTafel niveau={dagVandaag.vasten.niveau} />
 
-            </div>
-
+          <div className="ot-vs-grote">
             <div>
               <h2 className="ot-kop">De vier grote vasten</h2>
               <ul className="ot-register">

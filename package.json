@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "check:leesrooster": "node scripts/leesrooster.check.mjs",
+    "check:vastentafel": "esbuild scripts/vastentafel.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/vastentafel.check.mjs --log-level=warning && node node_modules/.cache/vastentafel.check.mjs",
     "check:geboortecyclus": "esbuild scripts/geboortecyclus.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/geboortecyclus.check.mjs --log-level=warning && node node_modules/.cache/geboortecyclus.check.mjs",
     "check:heiligen": "esbuild scripts/heiligen.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/heiligen.check.mjs --log-level=warning && node node_modules/.cache/heiligen.check.mjs",
     "check:psalmen": "esbuild scripts/psalmen.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/psalmen.check.mjs --log-level=warning && node node_modules/.cache/psalmen.check.mjs",

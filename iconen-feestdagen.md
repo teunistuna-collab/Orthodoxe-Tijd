@@ -12,8 +12,8 @@ Aanleveren in `public/images/feesten/` met de bestandsnaam uit de tweede kolom (
 | Begin Geboortevasten (H. Apostel Filippus) | `filippus` | H. Apostel Filippus | ✓ `filippus.webp` |
 | Intrede van de Moeder Gods in de tempel | `opdracht-moeder-gods` | Intrede van de Moeder Gods | ✓ `opdracht-moeder-gods.webp` |
 | H. Nicolaas van Myra | `nicolaas` | H. Nicolaas | ✓ `nicolaas.webp` |
-| Zondag van de Voorouders | `voorouders` | De heilige voorouders van Christus | – |
-| Zondag van de Heilige Vaders | `vaders` | De vaders vóór Christus (stamboom van Jesse) | – |
+| Zondag van de Voorouders | `voorouders` | De heilige voorouders van Christus | ✓ `wijnstok.webp` (Ware Wijnstok) |
+| Zondag van de Heilige Vaders | `vaders` | De vaders vóór Christus (stamboom van Jesse) | ✓ `wijnstok.webp` (Ware Wijnstok) |
 | Vooravond van de Geboorte | `kerstavond` | Geboorte (zelfde icoon) | ✓ `kerst.jpg` |
 | **Geboorte van Christus** | `kerstmis` | Geboorte van Christus | ✓ `kerst.jpg` |
 | Synaxis van de Moeder Gods | `synaxis-moeder-gods` | Synaxis van de Moeder Gods | ✓ `synaxis-moeder-gods.webp` |
@@ -59,4 +59,4 @@ Aanleveren in `public/images/feesten/` met de bestandsnaam uit de tweede kolom (
 ## Prioriteit
 
 1. Het grote feest zonder icoon: Pinksteren.
-2. Daarna: Lazaruszaterdag, Zondag van de Voorouders, Zondag van de Heilige Vaders, en de zondagen van de voorbereiding (Tollenaar, Verloren Zoon, Laatste Oordeel, Vergeving), Johannes Climacus en Maria van Egypte.
+2. Daarna: Lazaruszaterdag, de zondagen van de voorbereiding (Tollenaar, Verloren Zoon, Laatste Oordeel, Vergeving), Johannes Climacus en Maria van Egypte.
