@@ -261,22 +261,8 @@ export default function Vasten() {
             </div>
           </div>
 
-          <GoldDivider />
-
-          {/* Web: de uitleg na het wekelijkse vasten (op mobiel staat hij direct onder vasten vandaag) */}
-          <div className="max-md:hidden mx-auto mt-10 mb-12 max-w-3xl border-l-2 border-gold/40 pl-6 text-center sm:mt-14 sm:pl-0 sm:text-left sm:border-l-0 sm:border-t-2 sm:pt-8">
-            <p className="ot-label">Wat betekent vasten?</p>
-            <p className="mt-3 max-w-3xl text-base leading-relaxed text-ink-soft sm:text-lg">
-              De Orthodoxe Kerk vast ongeveer de helft van het jaar: vier grote vastenperiodes, enkele strenge dagen en elke
-              woensdag en vrijdag. Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet — het
-              hoort samen met bekering, zelfbeheersing, liefde tot de naaste en de voorbereiding op de feesten van de Kerk.
-            </p>
-          </div>
-
-
-
           {/* FAQ / praktisch */}
-          <div className="vlak parchment-pattern rounded-lg border border-gold/35 bg-[#f7edda]/75 px-5 py-7 shadow-[0_14px_34px_rgba(55,31,15,0.1)] sm:px-8 sm:py-9">
+          <div className="vlak mt-8 parchment-pattern rounded-lg border border-gold/35 bg-[#f7edda]/75 px-5 py-7 shadow-[0_14px_34px_rgba(55,31,15,0.1)] sm:px-8 sm:py-9">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)]">
             <div>
               <p className="ot-label">Hoe ziet vasten er praktisch uit?</p>
