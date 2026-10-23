@@ -68,6 +68,28 @@ function moetUitlegTonen(): boolean {
   }
 }
 
+// De pagina's als vaste elementen: bij een paginawissel rendert React zo alleen de pagina's opnieuw die zelf iets zien
+// veranderen (context, eigen state of het adres), niet alle zeventien. Psalmen krijgt `actief` mee en staat daarom in App.
+const INHOUD = {
+  vandaag: <Vandaag />,
+  kalender: <Kalender />,
+  adem: <Ademcyclus />,
+  etmaal: <UrenCyclus />,
+  week: <Weekcyclus />,
+  jaar: <Jaarcyclus />,
+  pascha: <Pascha />,
+  geboorte: <Geboorte />,
+  gebeden: <Gebeden />,
+  vasten: <Vasten />,
+  heiligen: <Heiligen />,
+  feesten: <Feesten />,
+  meer: <Meer />,
+  cycli: <Cycli />,
+  instellingen: <Instellingen />,
+  // Bronnen: mobiel dezelfde bovenbalk (merk en zoeken) als de andere pagina's
+  bronnen: <><div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><KopBalk /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></>,
+};
+
 export default function App() {
   const [mode, setModeState] = useState<Mode>(leesMode);
   const [uitlegOpen, setUitlegOpen] = useState(moetUitlegTonen);
@@ -102,8 +124,6 @@ export default function App() {
       // dus de volgende keer weer bovenaan beginnen. Halverwege weggaan onthoudt de plek wel.
       const totEinde = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
       scrollPosities.current[huidige.current] = totEinde < window.innerHeight ? 0 : window.scrollY;
-      // Vanaf de eerste wissel vervaagt een nieuwe pagina zacht in (index.css, Bouw 81); bij het openen van de site niet.
-      document.documentElement.dataset.overgang = '1';
       huidige.current = p;
       setPagina(p);
     };
@@ -236,23 +256,23 @@ export default function App() {
       <div id="top" className="min-h-screen bg-parchment text-ink">
         <Header pagina={pagina} />
         <main id="inhoud" tabIndex={-1}>
-          <div className={p('vandaag')}><Vandaag /></div>
-          <div className={p('kalender')}><Kalender /></div>
-          <div className={p('adem')}><Ademcyclus /></div>
-          <div className={p('etmaal')}><UrenCyclus /></div>
-          <div className={p('week')}><Weekcyclus /></div>
-          <div className={p('jaar')}><Jaarcyclus /></div>
-          <div className={p('pascha')}><Pascha /></div>
-          <div className={p('geboorte')}><Geboorte /></div>
-          <div className={p('gebeden')}><Gebeden /></div>
-          <div className={p('vasten')}><Vasten /></div>
-          <div className={p('heiligen')}><Heiligen /></div>
-          <div className={p('feesten')}><Feesten /></div>
-          <div className={p('meer')}><Meer /></div>
-          <div className={p('cycli')}><Cycli /></div>
-          <div className={p('instellingen')}><Instellingen /></div>
+          <div className={p('vandaag')}>{INHOUD.vandaag}</div>
+          <div className={p('kalender')}>{INHOUD.kalender}</div>
+          <div className={p('adem')}>{INHOUD.adem}</div>
+          <div className={p('etmaal')}>{INHOUD.etmaal}</div>
+          <div className={p('week')}>{INHOUD.week}</div>
+          <div className={p('jaar')}>{INHOUD.jaar}</div>
+          <div className={p('pascha')}>{INHOUD.pascha}</div>
+          <div className={p('geboorte')}>{INHOUD.geboorte}</div>
+          <div className={p('gebeden')}>{INHOUD.gebeden}</div>
+          <div className={p('vasten')}>{INHOUD.vasten}</div>
+          <div className={p('heiligen')}>{INHOUD.heiligen}</div>
+          <div className={p('feesten')}>{INHOUD.feesten}</div>
+          <div className={p('meer')}>{INHOUD.meer}</div>
+          <div className={p('cycli')}>{INHOUD.cycli}</div>
+          <div className={p('instellingen')}>{INHOUD.instellingen}</div>
           <div className={p('psalmen')}><Psalmen actief={pagina === 'psalmen'} /></div>
-          <div className={p('bronnen')}>{/* Mobiel: dezelfde bovenbalk (merk en zoeken) als de andere pagina's */}<div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><KopBalk /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></div>
+          <div className={p('bronnen')}>{INHOUD.bronnen}</div>
         </main>
         <BottomNav pagina={pagina} />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />

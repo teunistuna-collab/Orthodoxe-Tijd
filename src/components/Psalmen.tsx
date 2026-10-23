@@ -119,6 +119,8 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const [laatst, setLaatst] = useState(leesLaatst);
   const [zoek, setZoek] = useState('');
   const [filter, setFilter] = useState<Filter>('alle');
+  // Zolang niet alle psalmen tekst hebben: desgewenst alleen de psalmen met tekst tonen.
+  const [alleenTekst, setAlleenTekst] = useState(false);
   const [thema, setThema] = useState(THEMAS[0]);
   const favorieten = useFavorieten();
 
@@ -174,7 +176,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   }, [lezen, kat, leest]);
 
   // Etmaal zonder zoekterm: gegroepeerd per dienst, in de volgorde van het etmaal.
-  const groepen = filter === 'etmaal' && !zoek.trim() ? ETMAAL_GROEPEN : null;
+  const groepen = filter === 'etmaal' && !zoek.trim() && !alleenTekst ? ETMAAL_GROEPEN : null;
   const lijst = useMemo(
     () => {
       if (groepen) return groepen.flatMap((g) => g.delen.flatMap((d) => d.psalmen.map((n) => PSALMEN[n - 1])));
@@ -186,12 +188,12 @@ export default function Psalmen({ actief }: { actief: boolean }) {
             : filter === 'favorieten'
               ? PSALMEN.filter((p) => favorieten.includes(`psalmen/${p.septuagintNumber}`))
               : PSALMEN;
-      return zoekPsalmen(basis, zoek, teksten);
+      return zoekPsalmen(alleenTekst ? basis.filter((p) => p.hasText) : basis, zoek, teksten);
     },
-    [groepen, filter, thema, zoek, teksten, favorieten],
+    [groepen, filter, thema, zoek, teksten, favorieten, alleenTekst],
   );
 
-  const raster = filter === 'alle' && !zoek.trim();
+  const raster = filter === 'alle' && !zoek.trim() && !alleenTekst;
   // Het raster in delen van vijftig; begint bij het deel met de psalm van het uur.
   const [uurPsalm] = useState(() => psalmVanHetUur(new Date()));
   const [blok, setBlok] = useState(() => Math.floor((uurPsalm - 1) / 50));
@@ -289,9 +291,12 @@ export default function Psalmen({ actief }: { actief: boolean }) {
               </div>
             )}
 
-            <p className="pc-note">
-              {MET_TEKST} van de {AANTAL} psalmen hebben al tekst{MET_TEKST < AANTAL ? '; de andere worden toegevoegd.' : '.'}
-            </p>
+            {MET_TEKST < AANTAL && (
+              <label className="pc-note pc-alleen">
+                <input type="checkbox" checked={alleenTekst} onChange={(e) => setAlleenTekst(e.target.checked)} />
+                <span>Alleen psalmen met tekst ({MET_TEKST} van de {AANTAL})</span>
+              </label>
+            )}
 
             {raster && (
               <div className="pc-ranges" role="group" aria-label="Psalmreeks">
@@ -704,7 +709,7 @@ export function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, ontwerp, zon
                     {v.kop}
                   </p>
                 ) : (
-                  <div key={k} className="ps-vers" id={ontwerp && v.n ? `ps-vers-${v.n}` : undefined}>
+                  <div key={k} className={`ps-vers${v.n ? ' heeft-nr' : ''}`} id={ontwerp && v.n ? `ps-vers-${v.n}` : undefined}>
                     <span className="ps-versnr">{v.n ?? ''}</span>
                     <p>
                       {v.regels.map((r, j) => <span key={j}>{r}</span>)}

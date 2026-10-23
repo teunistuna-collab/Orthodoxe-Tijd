@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { civilVanKerkdatum, formatDag, formatMd, hoofdletter, MAANDEN } from '../lib/kalender';
+import { civilVanKerkdatum, formatDag, formatMd, hoofdletter, kerkDatum, MAANDEN } from '../lib/kalender';
 import HeiligePopup from './HeiligePopup';
 import { normaliseer, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
 import { CATEGORIEEN, categorieenVan } from '../lib/heiligenSoort';
@@ -66,7 +66,25 @@ export default function Heiligen() {
 
   // Datum van de gedachtenis: de kerkelijke datum; bij de oude kalender ook de burgerlijke datum dit jaar.
   const jaar = vandaag.getUTCFullYear();
-  const datum = (md: string) => (mode === 'oud' ? `${formatMd(md)} · ${formatDag(civilVanKerkdatum(md, jaar, mode))}` : formatMd(md));
+  const datum = (md: string) => (mode === 'oud' ? `Jul. ${formatMd(md)} · Greg. ${formatDag(civilVanKerkdatum(md, jaar, mode))}` : formatMd(md));
+
+  // Het overzicht opent met de heiligen van vandaag (kerkelijke datum) en markeert de huidige maand.
+  const kerkVandaag = kerkDatum(vandaag, mode);
+  const huidigeMaand = kerkVandaag.getUTCMonth() + 1;
+  const vandaagMd = `${huidigeMaand}-${kerkVandaag.getUTCDate()}`;
+  const vanVandaag = useMemo(() => alle.filter((h) => h.md === vandaagMd), [alle, vandaagMd]);
+
+  const rijKnop = (h: Resultaat) => (
+    <li key={h.id}>
+      <button type="button" className="vg-hl-rij" onClick={() => setGeselecteerde(h)}>
+        <span>
+          <b>{h.naam}</b>
+          {h.titel && h.titel !== h.naam && <span>{h.titel}</span>}
+        </span>
+        <ChevronRight aria-hidden="true" />
+      </button>
+    </li>
+  );
 
   const lijst = (
     <>
@@ -79,19 +97,7 @@ export default function Heiligen() {
           {groepen.map(([md, items]) => (
             <li key={md}>
               <h3>{datum(md)}</h3>
-              <ul>
-                {items.map((h) => (
-                  <li key={h.id}>
-                    <button type="button" className="vg-hl-rij" onClick={() => setGeselecteerde(h)}>
-                      <span>
-                        <b>{h.naam}</b>
-                        {h.titel && h.titel !== h.naam && <span>{h.titel}</span>}
-                      </span>
-                      <ChevronRight aria-hidden="true" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <ul>{items.map(rijKnop)}</ul>
             </li>
           ))}
         </ol>
@@ -126,7 +132,7 @@ export default function Heiligen() {
             </a>
             <h2 className="vg-hl-kop">{titel}</h2>
             <p className="vg-hl-uitleg">
-              {gevonden.length} heiligen{mode === 'oud' ? ' · kerkelijke datum, daarna de burgerlijke datum' : ''}
+              {gevonden.length} heiligen{mode === 'oud' ? ' · Jul = juliaanse (oude) kalender, Greg = gregoriaanse (nieuwe) kalender' : ''}
             </p>
             {lijst}
           </>
@@ -145,11 +151,23 @@ export default function Heiligen() {
               </section>
             ) : (
               <>
+                {vanVandaag.length > 0 && (
+                  <section className="vg-hl-vandaag vg-hl-dagen" aria-labelledby="vg-hl-vandaag-kop">
+                    <h2 id="vg-hl-vandaag-kop">Vandaag · {datum(vandaagMd)}</h2>
+                    <ul>{vanVandaag.slice(0, 4).map(rijKnop)}</ul>
+                    {vanVandaag.length > 4 && (
+                      <a className="vg-hl-meer" href={`#heiligen/${huidigeMaand}`}>
+                        <span>Nog {vanVandaag.length - 4} heiligen van vandaag in {MAANDEN[huidigeMaand - 1]}</span> <ChevronRight aria-hidden="true" />
+                      </a>
+                    )}
+                  </section>
+                )}
+
                 <nav aria-label="Heiligen per maand">
                   <ul className="vg-hl-maanden">
                     {MAANDEN.map((m, i) => (
                       <li key={m}>
-                        <a href={`#heiligen/${i + 1}`}>
+                        <a href={`#heiligen/${i + 1}`} className={i + 1 === huidigeMaand ? 'is-nu' : undefined} aria-current={i + 1 === huidigeMaand ? 'date' : undefined}>
                           <span>{hoofdletter(m)}</span>
                           <ChevronRight aria-hidden="true" />
                         </a>
@@ -164,9 +182,9 @@ export default function Heiligen() {
                   <img className="vg-hl-ll-kaart" src="/images/decor/lage-landen.webp" alt="" loading="lazy" decoding="async" />
                   <h2 id="vg-hl-ll-kop">Heiligen van de Lage Landen</h2>
                   <p className="vg-hl-ll-namen">Willibrord, Servatius, Bavo</p>
-                  <p>Ontdek de rijke erfenis van heilige mannen en vrouwen in onze streken.</p>
+                  <p>Heilige mannen en vrouwen die in onze streken hebben geleefd.</p>
                   <a className="vg-knop" href="#heiligen/lage-landen">
-                    <span>Ontdek hun leven</span> <ArrowRight aria-hidden="true" />
+                    <span>Lees over hun leven</span> <ChevronRight aria-hidden="true" />
                   </a>
                 </section>
 

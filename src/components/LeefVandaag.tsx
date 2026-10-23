@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import type { LeefTekst } from '../lib/leefVandaag';
-import { schriftCitaat, schriftRef, type Schriftwoord } from '../lib/schrift';
+import { schriftCitaat, schriftLink, schriftRef, type Schriftwoord } from '../lib/schrift';
 
 // "Leef vandaag met de Kerk" (Vandaag, onder de kolommen): overweeg, bid, breng in praktijk en een schriftwoord.
 // Inhoud: lib/leefVandaag.ts (redactioneel, per liturgische dag). Het schriftwoord toont alleen een verwijzing, tenzij
@@ -19,6 +19,7 @@ export default function LeefVandaag({ inhoud }: { inhoud: LeefTekst }) {
     };
   }, [inhoud.schrift]);
   const tekst = citaat && citaat.voor === inhoud.schrift ? citaat.tekst : null;
+  const link = inhoud.schrift ? schriftLink(inhoud.schrift) : null;
 
   return (
     <section className="vg-leef" aria-labelledby="vg-leef-kop">
@@ -48,7 +49,16 @@ export default function LeefVandaag({ inhoud }: { inhoud: LeefTekst }) {
         <figure className="vg-leef-schrift">
           <figcaption className="vg-label">Schriftwoord</figcaption>
           {tekst && <blockquote>{tekst}</blockquote>}
-          <cite>{schriftRef(inhoud.schrift)}</cite>
+          <cite>
+            {link ? (
+              <a href={link.href} {...(link.extern ? { target: '_blank', rel: 'noreferrer', 'aria-label': `${schriftRef(inhoud.schrift)}, lezen in de NBV21 (opent debijbel.nl)` } : {})}>
+                {schriftRef(inhoud.schrift)}
+                <ChevronRight aria-hidden="true" />
+              </a>
+            ) : (
+              schriftRef(inhoud.schrift)
+            )}
+          </cite>
         </figure>
       )}
     </section>

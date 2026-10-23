@@ -56,9 +56,9 @@ export default function Instellingen() {
           <span className="vg-vk-symbool">{HANDEN}</span>
           <div>
             <h2 id="vk-pijlgebed">Pijlgebed</h2>
-            <p>Stel hier je persoonlijke pijlgebed in. Dit gebed verschijnt op verschillende plaatsen in de app.</p>
+            <p>Stel hier uw persoonlijke pijlgebed in. Dit gebed verschijnt op verschillende plaatsen in de app.</p>
             <label className="vg-vk-veld">
-              <span className="sr-only">Je pijlgebed</span>
+              <span className="sr-only">Uw pijlgebed</span>
               <textarea
                 value={tekst}
                 maxLength={MAX_LENGTE}
@@ -91,7 +91,7 @@ export default function Instellingen() {
           <span className="vg-vk-symbool"><CalendarCheck strokeWidth={1.3} aria-hidden="true" /></span>
           <div>
             <h2 id="vk-kalender">Kalender</h2>
-            <p>Kies welke kalender je wilt gebruiken voor de liturgische data.</p>
+            <p>Kies welke kalender u wilt gebruiken voor de liturgische data.</p>
           </div>
         </section>
         <fieldset className="vg-vk-keuzes">
@@ -106,7 +106,7 @@ export default function Instellingen() {
             </label>
           ))}
         </fieldset>
-        <p className="vg-vk-noot">De kalender bepaalt de liturgische datums in de hele app, zoals heiligen, feesten en vasten. Raadpleeg voor de praktijk ter plaatse je eigen parochie.</p>
+        <p className="vg-vk-noot">De kalender bepaalt de liturgische datums in de hele app, zoals heiligen, feesten en vasten. Raadpleeg voor de praktijk ter plaatse uw eigen parochie.</p>
 
         <p className="vg-verd-scheiding" aria-hidden="true"><span>✣</span></p>
 
@@ -114,7 +114,7 @@ export default function Instellingen() {
           <span className="vg-vk-symbool">{SIERKRUIS}</span>
           <div>
             <h2 id="vk-tradities">Andere tradities <span className="vg-vk-binnenkort">Binnenkort</span></h2>
-            <p>In de toekomst kun je hier ook voorkeuren voor andere tradities instellen.</p>
+            <p>In de toekomst kunt u hier ook voorkeuren voor andere tradities instellen.</p>
           </div>
         </section>
       </div>

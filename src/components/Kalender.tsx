@@ -5,7 +5,7 @@ import { MAANDEN, WEEKDAGEN_KORT, formatDag, hoofdletter, maandRooster, formatLa
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
 import { NIVEAUS, VASTEN_GROEPEN, vastenGroep, type VastenGroep } from '../lib/vasten';
-import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
+import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { VastenSymbool, KruisTeken } from './ui';
@@ -57,7 +57,10 @@ export default function Kalender() {
   useEffect(() => vraagRooster(geselecteerd.ymd), [geselecteerd.ymd, vraagRooster]);
 
   const heiligenVanDag = dagHeiligen(geselecteerd.kerkKey, heiligen?.HEILIGEN, geselecteerd.ymd);
-  const lezingen = rooster?.[geselecteerd.ymd] ?? [];
+  // Net als op Vandaag eerst de lezingen van de paascyclus (zonder die van de heilige); zijn die er niet, dan de andere.
+  const alleLezingen = rooster?.[geselecteerd.ymd] ?? [];
+  const paasLezingen = alleLezingen.filter(isPaascyclus);
+  const lezingen = paasLezingen.length ? paasLezingen : alleLezingen;
 
   const vorige = () => setCur((c) => (c.m === 1 ? { y: c.y - 1, m: 12 } : { y: c.y, m: c.m - 1 }));
   const volgende = () => setCur((c) => (c.m === 12 ? { y: c.y + 1, m: 1 } : { y: c.y, m: c.m + 1 }));
@@ -68,7 +71,7 @@ export default function Kalender() {
     setGeselecteerdeYmd(vandaagYmd);
   };
   const openVasten = () => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: geselecteerd.ymd } }));
-  const kerkRegel = `${mode === 'oud' ? 'Kerkelijke datum' : 'Kerkelijk'}: ${formatDag(geselecteerd.kerk)} (${mode === 'oud' ? 'Juliaans' : 'nieuwe kalender'})`;
+  const kerkRegel = mode === 'oud' ? `Juliaanse datum: ${formatDag(geselecteerd.kerk)}` : `Kerkelijk: ${formatDag(geselecteerd.kerk)} (nieuwe kalender)`;
   const groepGekozen = vastenGroep(geselecteerd.vasten.niveau);
 
   return (

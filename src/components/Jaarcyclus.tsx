@@ -96,7 +96,7 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
 };
 
 const PERIODS: Array<{ key: PeriodKey; label: string; short: string; movable: boolean }> = [
-  { key: 'kersttijd', label: 'Kersttijd', short: 'De komst van het Licht in de wereld', movable: false },
+  { key: 'kersttijd', label: 'Kersttijd', short: 'Van het kerkelijk nieuwjaar naar Kerstmis', movable: false },
   { key: 'openbaringstijd', label: 'Openbaringstijd', short: 'Christus wordt geopenbaard aan alle volken', movable: false },
   { key: 'vastentijd', label: 'Vastentijd', short: 'Voorbereiding op het heilige Pascha', movable: true },
   { key: 'passietijd', label: 'Passietijd', short: 'Het lijden van de Heer', movable: true },
@@ -109,7 +109,7 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
   { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.' },
   { key: 'jaarcyclus', title: 'De jaarcyclus', intro: 'Het kerkelijk jaar bestaat uit perioden, feesten en vasten die ons stap voor stap meenemen in het heilshandelen van God.' },
   { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het kerkelijk jaar vormt ons hart, richt onze blik op Christus en heiligt onze tijd, dagen en seizoenen.' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kunt u het kerkelijk jaar meeleven in uw gebed, thuis, in de parochie en in het dagelijkse leven?' },
 ];
 
 
@@ -221,9 +221,8 @@ export default function Jaarcyclus() {
       <CycleTransition
         quote="Hij maakt alle dingen nieuw."
         citation="Openbaring 21:5"
-        eyebrow="Meer dan een kalender"
         text="Het kerkelijk jaar is niet slechts een opeenvolging van feesten, maar een levende weg waarin heel de geschiedenis wordt samengevat: van de schepping, door de menswording en het Kruis, naar de Verrijzenis en de toekomstige eeuwigheid."
-        buttonLabel="Ontdek de paascyclus"
+        buttonLabel="Naar de paascyclus"
         buttonHref="#pascha"
       />
 

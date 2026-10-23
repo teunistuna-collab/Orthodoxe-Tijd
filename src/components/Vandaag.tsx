@@ -170,7 +170,7 @@ export default function Vandaag() {
               <p className="vg-cyclusregel vg-uurnaam">{uurMoment.title}</p>
               <blockquote className="vg-kernvers">“{uurMoment.kernvers.verses.join(' ')}”</blockquote>
               <p className="vg-bron"><a href={`#psalmen/${kernversRef.match(/\d+/)?.[0]}`}>{kernversRef}</a></p>
-              <Actie className="vg-knop" href="#etmaal" onClick={openDienst}>Open het gebed <span aria-hidden="true">→</span></Actie>
+              <Actie className="vg-knop" href="#etmaal" onClick={openDienst}>Open het gebed <span aria-hidden="true">›</span></Actie>
             </section>
             <Scheiding />
           </div>
@@ -193,7 +193,7 @@ export default function Vandaag() {
                 {/* De kerkelijke datum opent de volledige dag, de paascyclus het venster "Paascyclus" van vandaag */}
                 <button type="button" className="vg-cyclusregel vg-cyclus-link" onClick={() => openDag(dag.ymd)}>
                   <span>
-                    Kerkelijke datum{kerkDatumDeel ? `: ${kerkDatumDeel}` : ':'}
+                    {kerkDatumDeel ? `Juliaanse datum: ${kerkDatumDeel}` : 'Kerkelijke datum:'}
                     <span className="vg-cyclus-sub"><span className="vg-cyclus-punt">{kerkDatumDeel ? ' · ' : ' '}</span>{kalenderNaam}</span>
                   </span>
                   <ChevronRight aria-hidden="true" />

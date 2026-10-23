@@ -272,10 +272,10 @@ function PaschaInhoud({
           {stap ? (
             <>
               <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paascyclus'}</p>
-              <h1 className="ot-titel ot-pc-m-titel">
+              <h2 className="ot-titel ot-pc-m-titel">
                 {stap.label}
                 {isNu && <span className="ot-nu">Nu</span>}
-              </h1>
+              </h2>
               <p className="ot-pc-bereik">
                 {bereikLang(stap.van, stap.tot)} {stap.tot.getUTCFullYear()}
               </p>
@@ -288,7 +288,7 @@ function PaschaInhoud({
             </>
           ) : (
             <>
-              <h1 className="ot-titel ot-pc-m-titel">Naar Pascha</h1>
+              <h2 className="ot-titel ot-pc-m-titel">Naar Pascha</h2>
               <p className="ot-pc-bereik">{formatDatum(pascha)}</p>
             </>
           )}
@@ -364,7 +364,7 @@ function PaschaInhoud({
             <div className="ot-pc-m-acties">
               {heeftRooster && (
                 <button type="button" className="ot-actie" onClick={openDagLezingen}>
-                  Lees de lezingen <span aria-hidden="true">→</span>
+                  Lees de lezingen <span aria-hidden="true">›</span>
                 </button>
               )}
               <button type="button" className="ot-actie is-omlijnd" onClick={() => openDag(dag.ymd)}>
@@ -423,10 +423,10 @@ function PaschaInhoud({
           <>
             <header className="ot-pc-ctx-kop">
               <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paascyclus'}</p>
-              <h1 className="ot-titel">
+              <h2 className="ot-titel">
                 {stap.label}
                 {isNu && <span className="ot-nu">Nu</span>}
-              </h1>
+              </h2>
               <p className="ot-pc-bereik">
                 {bereikLang(stap.van, stap.tot)} {stap.tot.getUTCFullYear()}
               </p>
@@ -537,7 +537,7 @@ function PaschaInhoud({
         ) : (
           // Buiten de Paascyclus: geen periode is "nu"; het komende Pascha, de aftelling en het begin van de voorbereiding
           <header className="ot-pc-ctx-kop">
-            <h1 className="ot-titel">Naar Pascha</h1>
+            <h2 className="ot-titel">Naar Pascha</h2>
             <p className="ot-pc-datum">{formatDatum(pascha)}</p>
             <Sierlijn />
             <p className="ot-pc-nog">Nog {dagen(dagenTotPascha)} tot Pascha</p>

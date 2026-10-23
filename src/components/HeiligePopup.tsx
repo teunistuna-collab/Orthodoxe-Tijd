@@ -105,16 +105,16 @@ export default function HeiligePopup({ heilige, onClose }: { heilige: Resultaat 
           <div className="synax-blok synax-feest">
             <p className="synax-kop">Feest van de dag</p>
             {feesten.map((f) => (
-              <button key={f.id} type="button" onClick={() => setActief(f)}>{f.naam} <span aria-hidden="true">→</span></button>
+              <button key={f.id} type="button" onClick={() => setActief(f)}>{f.naam} <span aria-hidden="true">›</span></button>
             ))}
           </div>
         )}
 
         {(vorigeH || volgendeH) && (
           <nav className="synax-bladeren" aria-label="Vorige en volgende heilige van deze dag">
-            {vorigeH ? <button type="button" onClick={() => setActief(vorigeH)} aria-label={`Vorige: ${vorigeH.naam}`}><span aria-hidden="true">←</span> {vorigeH.naam}</button> : <span />}
+            {vorigeH ? <button type="button" onClick={() => setActief(vorigeH)} aria-label={`Vorige: ${vorigeH.naam}`}><span aria-hidden="true">‹</span> {vorigeH.naam}</button> : <span />}
             <span className="synax-krul" aria-hidden="true" />
-            {volgendeH ? <button type="button" onClick={() => setActief(volgendeH)} aria-label={`Volgende: ${volgendeH.naam}`}>{volgendeH.naam} <span aria-hidden="true">→</span></button> : <span />}
+            {volgendeH ? <button type="button" onClick={() => setActief(volgendeH)} aria-label={`Volgende: ${volgendeH.naam}`}>{volgendeH.naam} <span aria-hidden="true">›</span></button> : <span />}
           </nav>
         )}
       </div>

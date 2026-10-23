@@ -121,8 +121,11 @@
 .vg-kernvers { margin-top: 6px !important; font-size: 18px; font-style: italic; line-height: 1.3; color: #2a2620; }
 .vg-bron { margin-top: 2px !important; font-size: var(--t-klein); color: var(--gedempt); }
 .vg-bron a { text-decoration: underline !important; text-decoration-color: rgba(172, 121, 47, .45) !important; text-underline-offset: 3px; }
-.vg-knop { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 12px; padding: 8px 20px; border: 1px solid #a3542a; border-radius: 7px; background: linear-gradient(180deg, #96242a, var(--bordeaux) 55%, #6c161b); box-shadow: inset 0 1px rgba(255, 220, 180, .22), 0 3px 8px rgba(80, 20, 10, .25); font-size: 19px; color: var(--ivoor) !important; }
-.vg-knop:hover { filter: brightness(1.08); }
+/* Primaire knop: gedrukt perkament met een fijne goudrand (overal gelijk; Etmaal, Heiligen, de kathismaknoppen) */
+.vg-knop { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; margin-top: 12px; padding: 8px 22px; border: 1px solid rgba(167, 118, 52, .4); border-radius: 7px; background: rgba(255, 250, 238, .55); box-shadow: none; font-family: var(--font-lees); font-size: 19px; color: var(--inkt) !important; text-decoration: none; cursor: pointer; }
+.vg-knop > [aria-hidden] { color: var(--goud-pijl); }
+@media (hover: hover) { .vg-knop:hover { background: rgba(255, 248, 229, .9); border-color: var(--kaartrand); } }
+.vg-knop:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
 /* D. Lezingen, heiligen, vasten */
 .vg-lezingen { display: grid; grid-template-columns: 36px 1fr; gap: 0 12px; margin-top: 18px; padding: 10px 0 6px; border-top: 1px solid var(--lijn); border-bottom: 1px solid var(--lijn); }
@@ -449,7 +452,7 @@
 .vg-hl-ll .vg-knop svg { width: 18px; height: 18px; }
 .vg-hl-categorieen { margin-top: 24px; }
 .vg-hl-categorieen ul { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.vg-hl-categorieen a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid rgba(172, 121, 47, .45); border-radius: 999px; font-size: 16px; color: var(--inkt); }
+.vg-hl-categorieen a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid rgba(172, 121, 47, .55); border-radius: 4px; background: rgba(255, 249, 235, .45); font-size: 16px; color: var(--inkt); }
 .vg-hl-categorieen a:hover { background: rgba(255, 251, 236, .7); }
 .vg-hl-terug { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; margin-top: 4px; font-size: 16px; color: var(--gedempt) !important; }
 .vg-hl-terug svg { width: 18px; height: 18px; }
@@ -482,7 +485,7 @@
 .vg-vk-keuze input:checked { border-color: var(--bordeaux); background: radial-gradient(circle, var(--bordeaux) 0 5px, transparent 5.5px); box-shadow: 0 0 0 3px rgba(132, 28, 34, .15); }
 .vg-vk-keuze b { display: block; font-size: 19px; font-weight: 500; line-height: 1.2; color: var(--inkt); }
 .vg-vk-keuze b + span { display: block; margin-top: 3px; font-size: 15px; line-height: 1.35; color: var(--gedempt); }
-.vg-vk-noot { margin: 10px 0 0 !important; font-size: 15px; font-style: italic; line-height: 1.4; color: var(--gedempt); }
+.vg-vk-noot { margin: 10px 0 0 !important; font-size: 16px; font-style: italic; line-height: 1.4; color: var(--gedempt); }
 .vg-vk-binnenkort { display: inline-flex; align-items: center; padding: 3px 10px; border: 1px solid rgba(172, 121, 47, .45); border-radius: 999px; background: rgba(23, 32, 43, .07); font-family: var(--font-lees); font-size: 13px; font-weight: 400; color: var(--gedempt); }
 .vg-vk-later p { color: var(--gedempt); }
 
@@ -736,3 +739,12 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 /* De psalmverwijzing onder het kernvers: groter tikvlak (min. 24 px hoog) zonder dat de regel verspringt */
 #vandaag .vg-bron a { display: inline-block; padding: 6px 4px; margin: -6px -4px; }
 
+#vandaag .vg-leef-schrift cite a { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; color: var(--inkt); text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .55); text-underline-offset: 3px; }
+#vandaag .vg-leef-schrift cite a svg { flex: none; width: 16px; height: 16px; color: var(--goud-pijl); }
+#vandaag .vg-leef-schrift cite a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+/* Heiligen: bovenaan de heiligen van vandaag; de huidige maand gemarkeerd */
+#heiligen .vg-hl-vandaag { margin: 6px 0 22px; padding-bottom: 6px; border-bottom: 1px solid var(--lijn-zacht); }
+#heiligen .vg-hl-vandaag h2 { margin: 0 0 2px; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--bordeaux-diep); }
+#heiligen .vg-hl-meer { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 16px; color: var(--gedempt) !important; }
+#heiligen .vg-hl-meer svg { width: 18px; height: 18px; color: var(--goud-pijl); }
+#heiligen .vg-hl-maanden a.is-nu { border-color: var(--goud-pijl); background: rgba(255, 249, 235, .85); font-weight: 600; }

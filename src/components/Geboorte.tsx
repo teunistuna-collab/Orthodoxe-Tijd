@@ -110,10 +110,10 @@ export default function Geboorte() {
                 {stap ? (
                   <>
                     <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Geboortecyclus'}</p>
-                    <h1 className={desktop ? 'ot-titel' : 'ot-titel ot-pc-m-titel'}>
+                    <h2 className={desktop ? 'ot-titel' : 'ot-titel ot-pc-m-titel'}>
                       {stap.label}
                       {isNu && <span className="ot-nu">Nu</span>}
-                    </h1>
+                    </h2>
                     <p className="ot-pc-bereik">
                       {bereikLang(stap.van, stap.tot)} {stap.tot.getUTCFullYear()}
                     </p>
@@ -123,7 +123,7 @@ export default function Geboorte() {
                   </>
                 ) : (
                   <>
-                    <h1 className={desktop ? 'ot-titel' : 'ot-titel ot-pc-m-titel'}>Naar de Geboorte</h1>
+                    <h2 className={desktop ? 'ot-titel' : 'ot-titel ot-pc-m-titel'}>Naar de Geboorte</h2>
                     <p className="ot-pc-datum">{formatDatum(cyclus.geboorte)}</p>
                   </>
                 )}

@@ -79,7 +79,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
       kopDatum={formatDag(dag.civil)}
       vorigeLabel="Vorige dag"
       volgendeLabel="Volgende dag"
-      eyebrow={`${formatLang(dag.civil)}${mode === 'oud' ? ` · kerkelijk ${formatDag(dag.kerk)}` : ''}`}
+      eyebrow={`${formatLang(dag.civil)}${mode === 'oud' ? ` · Juliaans ${formatDag(dag.kerk)}` : ''}`}
       title={dag ? dag.feesten[0]?.naam ?? (eerste ? heiligeTitel(eerste.naam) : 'Dag door het jaar') : ''}
       centerTitle
       maxWidth="max-w-4xl"

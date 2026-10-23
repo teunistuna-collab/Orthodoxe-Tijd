@@ -14,7 +14,7 @@ export function FooterInhoud() {
         </p>
       </div>
       <div>
-        <h3 className="text-sm font-bold tracking-widest text-gold-light uppercase">Een woord vooraf</h3>
+        <h2 className="text-sm font-bold tracking-widest text-gold-light uppercase">Een woord vooraf</h2>
         <p className="mt-3 text-sm leading-relaxed">
           De kalender is een leidsman, geen wetboek. Zieken, zwangeren, kinderen, ouderen en reizigers vasten altijd in overleg met hun priester —
           barmhartigheid gaat boven de letter. In de kerkdienst geldt steeds het rooster van uw eigen parochie.
@@ -22,7 +22,7 @@ export function FooterInhoud() {
         <p className="font-display mt-4 text-lg text-gold-light italic">„Bidt zonder ophouden.” — 1 Tess. 5:17</p>
       </div>
       <div>
-        <h3 className="text-sm font-bold tracking-widest text-gold-light uppercase">Bronnen & verwijzingen</h3>
+        <h2 className="text-sm font-bold tracking-widest text-gold-light uppercase">Bronnen & verwijzingen</h2>
         <ul className="mt-3 space-y-2 text-sm">
           <li>Heiligen en feestteksten: het Heiligenjaar, teksten samengesteld door archimandriet Adriaan (eeuwige gedachtenis), overgenomen met toestemming van het klooster St. Jan de Voorloper in Den Haag.</li>
           <li>Leesrooster: holytrinityorthodox.com (Juliaanse kalender, 2026 t/m 2035).</li>

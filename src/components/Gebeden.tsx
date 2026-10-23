@@ -149,29 +149,22 @@ export default function Gebeden() {
       <section id="gebeden" className="vg ot-redesign ot-gebeden">
         <NisKop open={open} balk achter={<BannerBeeld naam="gebeden-banner" open={open} />} />
         <div className="vg-papier ot-inhoud">
-          <h1 className="ot-titel">Een moment<br />van gebed</h1>
+          <h1 className="ot-titel">Een moment <br />van gebed</h1>
           <Sierlijn />
           <span className="ot-gb-symbool" aria-hidden="true">{HANDEN}</span>
-          {!GEBEDEN_ZICHTBAAR && <p className="ot-gb-melding">De gebeden worden binnenkort toegevoegd.</p>}
-          <ul className="ot-gb-soorten">
-            {SOORTEN.map(({ cat, titel, onder, symbool }) => (
-              <li key={cat}>
-                {GEBEDEN_ZICHTBAAR ? (
+          {GEBEDEN_ZICHTBAAR && (
+            <ul className="ot-gb-soorten">
+              {SOORTEN.map(({ cat, titel, onder, symbool }) => (
+                <li key={cat}>
                   <button type="button" className="ot-rij ot-gb-kaart" onClick={() => openCategorie(cat)}>
                     <span className="ot-rij-symbool" aria-hidden="true">{symbool}</span>
                     <span className="ot-rij-tekst"><b>{titel}</b><span>{onder}</span></span>
                     <ChevronRight className="ot-rij-pijl" aria-hidden="true" />
                   </button>
-                ) : (
-                  <div className="ot-rij ot-gb-kaart is-binnenkort">
-                    <span className="ot-rij-symbool" aria-hidden="true">{symbool}</span>
-                    <span className="ot-rij-tekst"><b>{titel}</b><span>{onder}</span></span>
-                    <span className="ot-badge">Binnenkort</span>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          )}
           <ul className="ot-register ot-gb-verder">
             <li>
               <a className="ot-rij" href="#psalmen">
@@ -188,6 +181,7 @@ export default function Gebeden() {
               </a>
             </li>
           </ul>
+          {!GEBEDEN_ZICHTBAAR && <p className="ot-gb-melding">Binnenkort: ochtendgebeden, avondgebeden en gebeden door de dag.</p>}
         </div>
       </section>
 
@@ -243,7 +237,7 @@ export default function Gebeden() {
                 onClick={() => setActieveCat(null)}
                 className="btn-pill mb-6"
               >
-                ← Terug naar categorieën
+                ‹ Terug naar categorieën
               </button>
               <h3 className="ot-titel font-display text-2xl font-semibold sm:text-3xl">{huidigeCat.label}</h3>
               <p className="mt-2 text-sm text-ink-soft">{huidigeCat.omschrijving}</p>
@@ -257,7 +251,7 @@ export default function Gebeden() {
                   href="#adem"
                   className="btn-pill cyclus-verder mt-6"
                 >
-                  Ontdek de ademcyclus ›
+                  Naar de ademcyclus ›
                 </a>
               )}
             </div>
@@ -265,7 +259,7 @@ export default function Gebeden() {
             <>
             {favorieteGebeden.length > 0 && (
               <div className="mt-10">
-                <h3 className="ot-titel font-display text-2xl font-semibold sm:text-3xl">Jouw favorieten</h3>
+                <h3 className="ot-titel font-display text-2xl font-semibold sm:text-3xl">Uw favorieten</h3>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {favorieteGebeden.map((g) => (
                     <PrayerCard key={g.id} g={g} onOpen={() => setPopupGebed(g)} />
@@ -311,9 +305,8 @@ export default function Gebeden() {
       <CycleTransition
         quote="Er is geen noodzaak om veel woorden te gebruiken. Zeg: Heer, zoals U wilt en zoals U weet, ontferm U."
         citation="Abba Macarius de Grote"
-        eyebrow="Gebed als leven"
         text="De ademcyclus is geen afzonderlijke liturgische cyclus van de Kerk, maar het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus, die zich met iedere ademhaling kan verbinden."
-        buttonLabel="Ontdek de ademcyclus"
+        buttonLabel="Naar de ademcyclus"
         buttonHref="#adem"
       />
       </ExactPageFrame>

@@ -27,7 +27,7 @@ type ModalProps = {
   deel?: Deel;
   /** Datum (of korte kop) midden in de bovenbalk, in bordeaux. */
   kopDatum?: string;
-  /** Toon "← vorige" en "volgende →" in de bovenbalk (met onVorige/onVolgende). */
+  /** Toon "‹ vorige" en "volgende ›" in de bovenbalk (met onVorige/onVolgende). */
   kopNav?: boolean;
   vorigeLabel?: string;
   volgendeLabel?: string;
@@ -143,11 +143,11 @@ export default function Modal({ open, onClose, title, eyebrow, children, actions
         {/* Bovenbalk (blijft staan bij scrollen): vorige · datum · volgende · sluiten */}
         <header className="pk-kop">
           <div className="pk-links">
-            {kopNav && onVorige ? <button type="button" className="pk-nav" onClick={onVorige} aria-label={vorigeLabel}><span aria-hidden="true">←</span><span className="pk-nav-woord"> vorige</span></button> : leadingActions}
+            {kopNav && onVorige ? <button type="button" className="pk-nav" onClick={onVorige} aria-label={vorigeLabel}><span aria-hidden="true">‹</span><span className="pk-nav-woord"> vorige</span></button> : leadingActions}
           </div>
           <p className="pk-datum">{kopDatum}</p>
           <div className="pk-rechts">
-            {kopNav && onVolgende && <button type="button" className="pk-nav" onClick={onVolgende} aria-label={volgendeLabel}><span className="pk-nav-woord">volgende </span><span aria-hidden="true">→</span></button>}
+            {kopNav && onVolgende && <button type="button" className="pk-nav" onClick={onVolgende} aria-label={volgendeLabel}><span className="pk-nav-woord">volgende </span><span aria-hidden="true">›</span></button>}
             {actions}
             <button type="button" onClick={onClose} className="exact-modal-close pk-sluit" aria-label="Sluiten"><X /></button>
           </div>

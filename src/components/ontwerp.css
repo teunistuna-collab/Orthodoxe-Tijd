@@ -34,8 +34,8 @@
 .ot-kalender .ot-cel-nr { font-family: var(--font-lees); font-size: clamp(17px, 4.8cqw, 21px); line-height: 1; font-variant-numeric: lining-nums; }
 /* Liturgische kleur van de dag: een dun streepje onderaan de cel */
 .ot-kalender .ot-cel[style]::before { content: ""; position: absolute; left: 22%; right: 22%; bottom: 3px; height: 3px; border-radius: 2px; background: var(--lit); opacity: .8; }
-.ot-kalender .ot-cel-tekens { position: absolute; top: 2px; right: 3px; display: flex; align-items: center; gap: 1px; color: var(--ot-goud); font-size: 10px; line-height: 1; }
-.ot-kalender .ot-vastenteken { width: 10px; height: 10px; }
+.ot-kalender .ot-cel-tekens { position: absolute; top: 2px; right: 3px; display: flex; align-items: center; gap: 2px; color: var(--goud-pijl); font-size: 13px; line-height: 1; }
+.ot-kalender .ot-vastenteken { width: 13px; height: 13px; }
 .ot-kalender .ot-teken.is-groot { color: var(--ot-rood); }
 .ot-kalender .ot-cel:hover:not(.is-gekozen) { background: rgba(255, 248, 229, .55); }
 /* Vandaag: een stip onder het cijfer; gekozen: bordeaux vlak met lichte cijfers (vandaag blijft dan herkenbaar aan de stip) */
@@ -86,9 +86,10 @@
 .ot-redesign .ot-titel { margin: 6px 0 0; font-family: var(--font-lees); font-size: var(--t-titel); font-weight: 500; line-height: 1.05; letter-spacing: -.01em; overflow-wrap: anywhere; text-align: center; color: var(--ot-inkt); }
 #top#top#top#top#top#top#top .ot-redesign .ot-titel { font-family: var(--font-lees) !important; }
 .ot-redesign .ot-knoprij { display: flex; justify-content: center; margin-top: 18px; }
-.ot-redesign .ot-actie { display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-height: 48px; padding: 10px 28px; border: 1px solid #9b4a29; border-radius: 9px; background: linear-gradient(180deg, #991320, #740d15); box-shadow: inset 0 1px rgba(255, 220, 190, .2), 0 3px 6px rgba(87, 39, 17, .2); font: inherit; font-size: 19px; color: var(--ivoor) !important; text-decoration: none; cursor: pointer; }
-.ot-redesign .ot-actie.is-omlijnd { background: none; box-shadow: none; border-color: var(--ot-goud); color: var(--ot-rood) !important; }
-.ot-redesign .ot-actie:hover { filter: brightness(1.08); }
+.ot-redesign .ot-actie { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; padding: 10px 26px; border: 1px solid rgba(167, 118, 52, .4); border-radius: 7px; background: rgba(255, 250, 238, .55); box-shadow: none; font-family: var(--font-lees); font-size: 19px; color: var(--ot-inkt) !important; text-decoration: none; cursor: pointer; }
+.ot-redesign .ot-actie > [aria-hidden] { color: var(--goud-pijl); }
+@media (hover: hover) { .ot-redesign .ot-actie:hover { background: rgba(255, 248, 229, .9); border-color: var(--kaartrand); } }
+.ot-redesign .ot-actie:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .ot-redesign .ot-nu { display: inline-flex; margin-left: 8px; padding: 1px 8px; border: 1px solid currentColor; border-radius: 999px; font-family: var(--font-titel); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; vertical-align: 4px; opacity: .85; }
 
 /* Verticale tijdlijn: medaillon, dunne lijn met knoop, titel en periode, pijl */
@@ -149,15 +150,12 @@
 .ot-feesten .ot-fs-wanneer { margin: 4px 0 0; font-size: 16px; color: var(--ot-gedempt); }
 .ot-feesten .ot-fs-omschrijving { max-width: 34em; margin: 12px 0 16px; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--ot-inkt); }
 /* Registerrijen: datum in een smalle kolom links */
-.ot-feesten .ot-fs-datum { flex: none; width: 76px; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; color: var(--goud-pijl); } /* donker goud: leesbaar op perkament */
+.ot-feesten .ot-fs-datum { flex: none; width: 84px; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .04em; line-height: 1.3; text-transform: uppercase; color: var(--goud-pijl); } /* donker goud: leesbaar op perkament */
 .ot-feesten .ot-rij.is-pascha .ot-fs-datum, .ot-feesten .ot-rij.is-pascha b { color: var(--ot-rood); }
 .ot-feesten .ot-fs-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 12px; margin: 4px 0 0; }
 .ot-feesten .ot-fs-links .ot-tekstknop { color: var(--ot-rood); text-decoration: none; }
-.ot-feesten .ot-fs-ritmes > section + section { margin-top: 26px; }
-.ot-feesten .ot-fs-aantal { margin: 4px 0 6px; font-size: 14px; color: var(--ot-gedempt); }
+.ot-feesten .ot-fs-aantal { margin: 4px 0 6px; font-size: 16px; color: var(--ot-gedempt); }
 @container (min-width: 820px) {
-  .ot-feesten .ot-fs-ritmes { grid-template-columns: 1fr 1fr; }
-  .ot-feesten .ot-fs-ritmes > section + section { margin-top: 0; }
   .ot-feesten .ot-fs-maanden { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 .ot-redesign .ot-kop { margin: 4px 0 4px; font-family: var(--font-lees); font-size: var(--t-sectie); font-weight: 500; color: var(--ot-inkt); }
@@ -193,18 +191,10 @@
 .ot-gebeden .ot-titel { margin-top: 10px; }
 .ot-gebeden .ot-gb-symbool { display: block; width: 52px; height: 52px; margin: 6px auto 0; color: var(--ot-goud); }
 .ot-gebeden .ot-gb-symbool svg { width: 100%; height: 100%; }
-.ot-gebeden .ot-gb-melding { max-width: 20em; margin: 8px auto 14px; font-size: 20px; line-height: 1.3; text-align: center; color: var(--ot-gedempt); }
+.ot-gebeden .ot-gb-melding { max-width: 30em; margin: 14px auto 0; font-size: 17px; font-style: italic; line-height: 1.4; text-align: center; color: var(--ot-gedempt); }
 .ot-gebeden .ot-gb-soorten { display: grid; gap: 8px; margin-bottom: 14px; }
 .ot-redesign .ot-gb-kaart { padding: 10px 12px !important; border: 1px solid rgba(167, 118, 52, .45) !important; border-radius: 8px !important; background: rgba(255, 248, 229, .45) !important; box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .7); }
 .ot-redesign div.ot-rij { display: flex; align-items: center; gap: 16px; min-height: 64px; color: var(--ot-inkt); }
-.ot-redesign .ot-gb-kaart.is-binnenkort .ot-rij-symbool { opacity: .85; }
-/* Mobiel en tablet: "Binnenkort" onder de omschrijving, zodat de titel de volle breedte heeft en niet afbreekt */
-@media (max-width: 1023.98px) {
-  #gebeden div.ot-gb-kaart.is-binnenkort { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 16px; row-gap: 6px; align-items: center; }
-  #gebeden div.ot-gb-kaart.is-binnenkort .ot-rij-symbool { grid-row: 1 / span 2; }
-  #gebeden div.ot-gb-kaart.is-binnenkort .ot-badge { grid-column: 2; justify-self: start; }
-}
-.ot-redesign .ot-badge { flex: none; padding: 4px 9px; border-radius: 5px; background: rgba(167, 118, 52, .2); font-size: 13px; color: var(--ot-inkt); }
 .ot-redesign a.ot-rij { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 10px 2px; color: var(--ot-inkt) !important; text-decoration: none; }
 .ot-redesign a.ot-rij:hover { background: rgba(255, 248, 229, .5); }
 .ot-gb-intro { max-width: 640px; margin: 24px auto 0; padding: 0 16px; text-align: center; }
@@ -550,11 +540,12 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-knoppen > b
 button.vt-tegel-binnen { cursor: pointer; }
 .vt-tegel-binnen img { display: block; width: 100%; max-width: 92px; height: 46px; object-fit: contain; transition: opacity .35s ease, filter .35s ease; }
 .vt-naam { font-family: var(--font-lees); font-size: 14px; line-height: 1.2; }
-.vt-teken { position: absolute; top: 4px; right: 4px; display: grid; width: 20px; height: 20px; border-radius: 50%; color: #fff; background: #3f7a4f; transition: background-color .35s ease; }
+.vt-teken { position: absolute; top: 4px; right: 4px; display: grid; width: 20px; height: 20px; border: 1.5px solid var(--goud-pijl); border-radius: 50%; color: var(--ivoor); background: var(--goud-pijl); transition: background-color .35s ease, border-color .35s ease, color .35s ease; }
 .vt-teken svg { grid-area: 1 / 1; place-self: center; width: 13px; height: 13px; stroke-width: 3; transition: opacity .35s ease; }
 .vt-tegel .vt-nee, .vt-tegel.is-niet .vt-ja { opacity: 0; }
 .vt-tegel.is-niet .vt-nee { opacity: 1; }
-.vt-tegel.is-niet .vt-teken { background: #7d1a1f; }
+/* Statusmerk: toegestaan = gevuld diep goud met vinkje; niet = omlijnd in inkt met kruis (vorm én kleur, geen stoplicht) */
+.vt-tegel.is-niet .vt-teken { border-color: var(--inkt); background: transparent; color: var(--inkt); }
 .vt-tegel.is-niet .vt-tegel-binnen { background: #efe3c8; box-shadow: inset 0 0 0 3px #efe3c8, inset 0 0 0 4px rgba(185, 148, 85, .45); }
 .vt-tegel.is-niet .vt-tegel-binnen img { opacity: .45; filter: grayscale(.35) sepia(.15); }
 /* Accent: hover, focus of aantikken (tegel) en hover op het gerecht; antiek goud, zonder gloed */
@@ -572,9 +563,9 @@ button.vt-tegel-binnen { cursor: pointer; }
 .ot-vasten .vt-gerecht.is-licht { filter: drop-shadow(0 2px 1.5px rgba(58, 30, 10, .3)) drop-shadow(0 0 4px rgba(201, 160, 80, .75)) brightness(1.06); }
 /* De betekenis van de dag en de pastorale noot: rustig, zonder kader */
 .ot-vasten .ot-vs-betekenis { max-width: 36em; margin: 20px auto 0; text-align: center; }
-.ot-vasten .ot-vs-betekenis h2 { margin: 0 0 6px; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ot-goud); }
+.ot-vasten .ot-vs-betekenis h2 { margin: 0 0 6px; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--goud-pijl); }
 .ot-vasten .ot-vs-betekenis p { margin: 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.55; color: var(--ot-inkt); }
-.ot-vasten .ot-vs-betekenis .ot-vs-noot { margin-top: 10px; font-size: 14px; font-style: italic; line-height: 1.45; color: var(--ot-gedempt); }
+.ot-vasten .ot-vs-betekenis .ot-vs-noot { margin-top: 10px; font-size: 16px; font-style: italic; line-height: 1.45; color: var(--ot-gedempt); }
 .ot-vasten .ot-vs-morgen { margin: 14px 0 0; text-align: center; }
 .ot-vasten .ot-vs-morgen .ot-tekstknop { color: #7a5a2a; font-size: 17px; }
 @media (prefers-reduced-motion: reduce) { .vt-tegel-binnen, .vt-tegel-binnen img, .vt-teken, .vt-teken svg, .ot-vasten .vt-gerecht { transition: none; } }
@@ -586,3 +577,40 @@ button.vt-tegel-binnen { cursor: pointer; }
   :is(#pascha, #geboorte) .vg-niskop .vg-titel { font-size: 30px; }
   :is(#pascha, #geboorte) .vg-niskop .vg-nis-onder { font-size: 15px; line-height: 1.35; }
 }
+/* Vasten, Pascha, Geboorte en Jaar: het onderste deel krijgt hetzelfde papyrus als de bovenkant, in plaats van de vaste
+   achtergrond van de site (die een andere schaal heeft) */
+#top#top :is(#vasten, #pascha, #geboorte, #jaar) + .exact-design-page { background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto !important; }
+
+/* Bouw 205 — één ontwerptaal: het onderste deel van de cycluspagina's, Vasten en Gebeden (ExactPageFrame) en Bronnen in
+   de hoofdstijl: geen ingezet kader, EB Garamond in inkt en gedempt, labels 13 px in donker goud, het citaat gecentreerd.
+   Banners vallen hier buiten. */
+#top#top#top#top#top#top#top#top#top#top#top#top .exact-frame { border: 0 !important; box-shadow: none !important; background: transparent !important; }
+#top#top#top#top#top#top#top#top#top#top#top#top :is(.exact-design-page, .exact-content:has(#bronnen)) :is(p, li):not(.ot-label, .fasting-table *, .timeline-title) { font-family: var(--font-lees) !important; font-size: 17px !important; line-height: 1.5 !important; color: var(--gedempt) !important; }
+#top#top#top#top#top#top#top#top#top#top#top#top :is(.exact-design-page, .exact-content:has(#bronnen)) :is(h2, h3, h4):not(.ad-onderdeel-kop h3, .vg-label) { font-family: var(--font-lees) !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--inkt) !important; }
+#top#top#top#top#top#top#top#top#top#top#top#top .exact-design-page h3.font-display { font-size: var(--t-sectie, 26px) !important; line-height: 1.15 !important; }
+#top#top#top#top#top#top#top#top#top#top#top#top :is(.exact-design-page, .exact-content:has(#bronnen)) :is(.ot-label, cite) { font-family: var(--font-titel) !important; font-size: 13px !important; font-weight: 600 !important; letter-spacing: .14em !important; font-style: normal !important; color: var(--goud-pijl) !important; }
+/* Verdieping: registerregels zoals elders (EB Garamond 20 px), "Lees meer" als tekstlink */
+#top#top#top#top#top#top#top#top#top#top#top#top .ad-onderdeel-kop h3 { font-family: var(--font-lees) !important; font-size: 20px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--inkt) !important; }
+#top#top#top#top#top#top#top#top#top#top#top#top .ad-onderdeel-kop .ad-pijl { color: var(--goud-pijl) !important; }
+#top#top#top#top#top#top#top#top#top#top#top#top :is(.exact-design-page, .exact-content:has(#bronnen)) .fs-link { font-family: var(--font-lees) !important; font-size: 17px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--bordeaux-diep) !important; }
+/* Overgangsblok (CycleTransition): het citaat en de tekst gecentreerd, zonder zijlijn; knop in perkament */
+#top#top#top#top#top#top#top#top#top#top#top#top .exact-design-page .cyclus-overgang blockquote { font-family: var(--font-lees) !important; font-size: clamp(20px, 2.2vw, 24px) !important; line-height: 1.4 !important; color: var(--inkt) !important; text-wrap: balance; }
+#top#top#top#top#top#top#top#top#top#top#top#top .exact-design-page .cyclus-overgang p { max-width: 36em; margin-inline: auto !important; }
+#top#top#top#top#top#top#top#top#top#top#top#top .exact-design-page .cyclus-verder { align-items: center; gap: 10px; min-height: 48px !important; padding: 8px 22px !important; border: 1px solid rgba(167, 118, 52, .4) !important; border-radius: 7px !important; background: rgba(255, 250, 238, .55) !important; box-shadow: none !important; font-family: var(--font-lees) !important; font-size: 19px !important; font-weight: 500 !important; letter-spacing: 0 !important; text-transform: none !important; color: var(--inkt) !important; }
+@media (hover: hover) { #top#top#top#top#top#top#top#top#top#top#top#top .exact-design-page .cyclus-verder:hover { background: rgba(255, 248, 229, .9) !important; border-color: var(--kaartrand) !important; } }
+#top#top#top#top#top#top#top#top#top#top#top#top .exact-design-page .cyclus-verder > [aria-hidden] { color: var(--goud-pijl); }
+#top#top#top#top#top#top#top#top#top#top#top#top .exact-content:has(#bronnen) .bronnen-inhoud h2 { margin-top: 8px; font-size: 24px !important; line-height: 1.2 !important; }
+@media (max-width: 767.98px) { #top#top#top#top#top#top#top#top#top#top#top#top .exact-design-page :is(p.ot-label, h3.font-display) { text-align: center; } }
+/* Psalmen: psalmen zonder tekst zichtbaar gedempt (gestippelde rand, gedempte cijfers); keuze "alleen met tekst" */
+#top#top#top#top main .ot-psalmen .ot-psalmraster button:not(.heeft-tekst) { border-style: dashed; border-color: rgba(167, 118, 52, .35); background: transparent; color: #7b6a55; }
+#top#top#top#top main .ot-psalmen .ot-psalmraster button.heeft-tekst { border-color: var(--kaartrand); background: rgba(255, 250, 238, .8); font-weight: 600; }
+#top#top#top#top main .psalm-controls .pc-alleen { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; font-size: 16px; color: var(--gedempt); cursor: pointer; }
+.psalm-controls .pc-alleen input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--goud-pijl); }
+/* Zoekvelden op perkament: placeholder in de gedempte tekstkleur (contrast ≥ 4,5 : 1) */
+.vg input::placeholder { color: var(--gedempt); opacity: 1; }
+#top#top#top#top main .ot-psalmen .psr-rij.is-zonder-tekst .psr-titel { color: #7b6a55 !important; font-style: italic; }
+/* Typografie: leesregels hooguit ± 65 tekens */
+#top#top#top#top#top#top#top#top#top .ot-psalmen .ot-ps-intro { max-width: 62ch; }
+#top#top#top#top#top#top#top#top#top .pc-tropaar { max-width: 62ch; margin-inline: auto; }
+/* Psalmlezer: de hoofdletter aan het begin van een genummerd vers in het rood van het versnummer */
+#top#top#top#top#top#top .ps-vers.heeft-nr p::first-letter { font-weight: 700; color: var(--ot-rood, #850d17); }

@@ -226,6 +226,14 @@ export function nbv21Url(ref: string): string | null {
   return `${base}.${hoofdstuk}`;
 }
 
+/** Deeplink voor een Nederlandse verwijzing ("Johannes 1:14", "Galaten 5:22–23"): via de boeknaam terug naar de Engelse vorm. */
+export function nbv21UrlNl(refNl: string): string | null {
+  const boek = BOEKEN.find(([, nl]) => refNl.startsWith(`${nl} `));
+  if (!boek) return null;
+  const engels = boek[0].source.replace(/^\^|\\b|\?/g, '');
+  return nbv21Url(`${engels}${refNl.slice(boek[1].length).replace(/–/g, '-')}`);
+}
+
 export type LezingSoort = 'evangelie' | 'apostel' | 'oud';
 export function lezingSoort(refNl: string): LezingSoort {
   if (EVANGELIEN.test(refNl)) return 'evangelie';

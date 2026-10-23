@@ -6,44 +6,30 @@ export function GoldDivider() {
   return <div className="gold-rule my-8" />;
 }
 
-// Gedeeld donker overgangsblok (citaat links, tekst + knop rechts) voor alle cycluspagina's. De knop naar de volgende cyclus
+// Gedeeld overgangsblok (citaat, korte tekst en knop) voor alle cycluspagina's. De knop naar de volgende cyclus
 // alleen vanaf tablet; op mobiel staan de cycli al onder Cycli in de onderbalk.
 export function CycleTransition({
   quote,
   citation,
-  eyebrow,
   text,
   buttonLabel,
   buttonHref,
 }: {
   quote: string;
   citation: string;
-  eyebrow: string;
   text: string;
   buttonLabel: string;
   buttonHref: string;
 }) {
   return (
-    <section className="orthodox-pattern box-border w-full overflow-hidden bg-bark text-cream">
-      <div className="mx-auto box-border w-full max-w-[1500px] px-5 py-8 min-[900px]:px-16 min-[900px]:py-12">
-        <div className="grid min-w-0 gap-8 min-[900px]:grid-cols-[minmax(0,35fr)_minmax(0,65fr)] min-[900px]:items-center min-[900px]:gap-14">
-          <div className="min-w-0 border-l border-gold/50 pl-6 min-[900px]:pl-8">
-            <blockquote className="font-display text-xl leading-relaxed break-words text-gold-light italic sm:text-2xl min-[900px]:text-[26px]">
-              “{quote}”
-            </blockquote>
-            <cite className="ot-label ot-label-licht mt-4 block not-italic">{citation}</cite>
-          </div>
-          <div className="min-w-0 text-left">
-            <p className="ot-label ot-label-licht">{eyebrow}</p>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed break-words text-[#d9c6a3] min-[900px]:text-lg">{text}</p>
-            <a
-              href={buttonHref}
-              className="btn-pill cyclus-verder mt-6"
-            >
-              {buttonLabel} ›
-            </a>
-          </div>
-        </div>
+    <section className="cyclus-overgang">
+      <div className="mx-auto box-border w-full max-w-[760px] px-5 py-8 text-center min-[900px]:py-12">
+        <blockquote className="italic break-words">“{quote}”</blockquote>
+        <cite className="ot-label mt-3 block">{citation}</cite>
+        <p className="mt-5 break-words">{text}</p>
+        <a href={buttonHref} className="btn-pill cyclus-verder mt-5">
+          {buttonLabel} <span aria-hidden="true">›</span>
+        </a>
       </div>
     </section>
   );

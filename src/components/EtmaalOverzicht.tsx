@@ -64,7 +64,7 @@ export default function EtmaalOverzicht({ nuIndex, onOpen }: { nuIndex: number; 
           {/* Het kernvers van de dienst: op brede schermen rechts naast de naam, op de telefoon eronder */}
           <blockquote className="vg-kernvers vg-et-vers">“{dienst.kernvers.verses.join(' ')}”</blockquote>
           <p className="vg-bron">{kernversRef}</p>
-          <button type="button" className="vg-knop" onClick={() => onOpen(gekozen)}>Open het gebed <span aria-hidden="true">→</span></button>
+          <button type="button" className="vg-knop" onClick={() => onOpen(gekozen)}>Open het gebed <span aria-hidden="true">›</span></button>
         </section>
 
         <div className="vg-et-links">

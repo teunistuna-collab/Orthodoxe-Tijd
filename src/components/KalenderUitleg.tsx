@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { ChevronRight, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 import type { Mode } from '../lib/kalender';
 import { vergrendelScroll } from '../lib/scrollLock';
@@ -68,7 +68,7 @@ export default function KalenderUitleg({ open, onClose }: { open: boolean; onClo
         </div>
 
         <button type="button" className="ku-verder" onClick={verder}>
-          Verder naar vandaag <ArrowRight aria-hidden="true" />
+          Verder naar vandaag <ChevronRight aria-hidden="true" />
         </button>
         <p className="ku-noot">U kunt uw keuze later wijzigen bij Instellingen.</p>
       </div>

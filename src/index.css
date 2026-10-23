@@ -656,10 +656,10 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   header>div:first-child a[href="#vandaag"]{min-height:44px}
 }
 @media(max-width:700px){
-  #top#top :is(.text-\[9px\],.text-\[10px\]){font-size:11.5px!important}
+  #top#top :is(.text-\[9px\],.text-\[10px\]){font-size:13px!important}
   #top#top .text-\[11px\]{font-size:12.5px!important}
   #top#top :is(.text-xs,.text-\[12px\]){font-size:13px!important}
-  #top#top :is(.timeline-label,.feast-meta,.major-badge,.major-meta,.dienst-kaart-tijd){font-size:11.5px!important}
+  #top#top :is(.timeline-label,.feast-meta,.major-badge,.major-meta,.dienst-kaart-tijd){font-size:13px!important}
   #top#top :is(time,small,.saints-rule-title span,.vandaag-dayhead span){font-size:12.5px!important}
   #top#top table th{font-size:12px!important}
 }
@@ -778,9 +778,9 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 }
 
 /* Bouw 62 — ondergrens voor kleine labels: niets in de pagina's kleiner dan ±11,5px (A3) */
-#top main :is(.text-\[8px\],.text-\[9px\],.text-\[10px\],.text-\[10\.5px\]){font-size:11.5px}
+#top main :is(.text-\[8px\],.text-\[9px\],.text-\[10px\],.text-\[10\.5px\]){font-size:13px}
 /* labels die elders met !important op 9–10px staan */
-#top#top#top main :is(.timeline-label,.cal-saints-label,.major-badge,.saints-kicker,.feast-meta,.saints-rule-title span,.vandaag-dayhead>span,.saints-ending span,.dienst-kaart-tijd,.vandaag-item small){font-size:11.5px!important}
+#top#top#top main :is(.timeline-label,.cal-saints-label,.major-badge,.saints-kicker,.feast-meta,.saints-rule-title span,.vandaag-dayhead>span,.saints-ending span,.dienst-kaart-tijd,.vandaag-item small){font-size:13px!important}
 #top#top#top :is(.exact-popup-subtitle){font-size:11px!important}
 
 /* Bouw 63 — MobileListRow (ui.tsx): compacte liturgische lijstregel voor mobiel (feesten, weekdagen) */
@@ -788,7 +788,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top .mlr:hover,#top#top .mlr:focus-visible{background:rgba(201,162,39,.09)}
 #top#top .mlr-links{display:flex;flex:0 0 50px;flex-direction:column;align-items:center;gap:1px;font-family:var(--font-display);line-height:1.05;color:#0b1b2a}
 #top#top .mlr-links b{font-size:22px;font-weight:600}
-#top#top .mlr-links small{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7d5218}
+#top#top .mlr-links small{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7d5218}
 #top#top .mlr-icoon{display:grid;flex:0 0 auto;place-items:center}
 #top#top .mlr-tekst{display:flex;min-width:0;flex:1;flex-direction:column;gap:2px}
 #top#top .mlr-titel{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.25;color:#2b1d12;text-transform:none;letter-spacing:0}
@@ -802,7 +802,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 
 /* Bouw 64 — centrale typografie: één stijl voor labels, sectietitels, subtitels, kaarttitels en lopende tekst.
    Klassen: .ot-label (+ .ot-label-licht op donker), .ot-sectietitel, .ot-subtitel, .ot-tekst. Oudere Heiligen-/Feesten-koppen volgen mee. */
-#top#top#top .ot-label{font-family:var(--font-body);font-size:11.5px;font-weight:800;line-height:1.45;letter-spacing:.2em;text-transform:uppercase;color:#7d5218}
+#top#top#top .ot-label{font-family:var(--font-body);font-size:13px;font-weight:800;line-height:1.45;letter-spacing:.16em;text-transform:uppercase;color:#7a5a2a}
 #top#top#top .ot-label.ot-label-licht{color:#e3c27a}
 #top#top#top :is(.ot-sectietitel,.saints-section-head h2){font-family:var(--font-display);font-size:clamp(26px,3.2vw,36px);font-weight:600;line-height:1.15;letter-spacing:.01em;text-transform:none;color:#2b1d12}
 #top#top#top :is(.ot-subtitel,.saints-rule-title h2){font-family:var(--font-display);font-size:clamp(21px,2.2vw,26px);font-weight:600;line-height:1.2;letter-spacing:.01em;text-transform:none;color:#2b1d12}
@@ -879,10 +879,12 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 @media(max-width:1139.98px){
   .kop-merk .kop-naam{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 }
-/* smalle tablet (768–859px): negen menu-items passen alleen met iets kleinere tekst */
-@media(max-width:859.98px){
-  #top#top#top header .kop-link{font-size:14px}
-  #top#top#top header.site-header>div.bg-bark>div{gap:10px}
+/* smalle tablet (768–899px): negen menu-items passen alleen met kleinere tussenruimtes en iets kleinere tekst */
+@media(max-width:899.98px){
+  #top#top#top header .kop-link{font-size:15px}
+  #top#top#top header.site-header>div.bg-bark>div{gap:8px}
+  #top#top#top#top header .kop-nav{gap:8px}
+  #top#top#top#top#top header .kop-acties{gap:2px;padding-left:10px}
 }
 
 /* Bouw 70 — centraal zoeken. Zoekknop in de desktopkop, "Zoeken" onder Meer en een vergrootglas op Vandaag (mobiel).
@@ -1076,10 +1078,10 @@ html{scrollbar-color:rgba(138,90,30,.55) transparent}
 
 /* Bouw 81 — tijd en beweging: aftellen naar het volgende grote feest (Vandaag), één rustige overgang, leesvoortgang.
    Het ene vaste moment: een pop-up schuift zacht omhoog, de gouden lijnen in de kop tekenen zich uit en het ✣ bloeit op.
-   Pagina's vervagen alleen in bij wisselen. Alles uit bij "minder beweging". */
+   Alles uit bij "minder beweging". */
 
-html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease-out}
-@keyframes pagina-in{from{opacity:0}}
+/* Pagina's verschijnen direct (geen vervaging): de nieuwe pagina laadt bij het wisselen nog haar afbeeldingen, en een
+   vervaging die tijdens dat werk start, liet de pagina even leeg. */
 .exact-modal-backdrop{animation:venster-achtergrond .22s ease-out}
 @keyframes venster-achtergrond{from{opacity:0}}
 .exact-modal-frame{animation:venster-in .36s cubic-bezier(.22,1,.36,1)}
@@ -1091,7 +1093,7 @@ html[data-overgang] .pagina:not(.pagina-verborgen){animation:pagina-in .28s ease
 .lees-hervat{position:absolute;left:50%;bottom:14px;z-index:3;transform:translateX(-50%);min-height:44px;padding:0 20px;border:1px solid #b88628;border-radius:999px;background:#2b1707;box-shadow:0 8px 20px rgba(0,0,0,.28);font-family:var(--font-display);font-size:16px;font-weight:600;color:#f3dfae;cursor:pointer;animation:venster-in .36s cubic-bezier(.22,1,.36,1)}
 
 @media(prefers-reduced-motion:reduce){
-  html[data-overgang] .pagina:not(.pagina-verborgen),.exact-modal-backdrop,.exact-modal-frame,.lees-hervat{animation:none}
+  .exact-modal-backdrop,.exact-modal-frame,.lees-hervat{animation:none}
 }
 
 /* Bouw 82 — Vandaag mobiel als dagboek: één kolom van zeven donkere balken met een onderregel met het antwoord van vandaag,
@@ -1689,9 +1691,13 @@ html.lees-nacht #top#top .adem-gloed{background:radial-gradient(circle,rgba(214,
 /* Bouw 156 — mobiel: de tijdlijn "De heiliging van de tijd" onderaan de cycli-pagina's vervalt (de onderbalk leidt al naar de cycli) */
 @media(max-width:767.98px){#top#top#top#top .v15-cycle-timeline{display:none!important}}
 /* keuzemenu's naast de zoekbalk even hoog als die balk */
-/* Bouw 157 — kopbalk (web): navigatie groter en duidelijker leesbaar op het donkere leer */
+/* Bouw 157 — kopbalk (web): navigatie groter en duidelijker leesbaar op het donkere leer (vanaf 900px; daaronder de
+   kleinere maten van Bouw 69, anders botsen logo, menu en iconen op een staande tablet) */
 @media(min-width:768px){
-  #top#top#top#top#top header .kop-link{font-size:clamp(16px,1.42vw,21px)!important;font-weight:600!important;letter-spacing:.015em!important;text-shadow:0 1px 2px rgba(0,0,0,.75)}
+  #top#top#top#top#top header .kop-link{font-weight:600!important;letter-spacing:.015em!important;text-shadow:0 1px 2px rgba(0,0,0,.75)}
+}
+@media(min-width:900px){
+  #top#top#top#top#top header .kop-link{font-size:clamp(16px,1.42vw,21px)!important}
   #top#top#top#top#top header .kop-link svg{width:16px!important;height:16px!important}
 }
 /* Bouw 158 — ook mobiel geen sierkop meer op de pagina's; de paginatitel blijft als onzichtbare kop voor schermlezers.
@@ -2271,16 +2277,9 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Bouw 198 — Vandaag: overal hetzelfde pijltje, geen sierlijnen tussen de kaarten maar één rustige tussenruimte.
    Kleuren ongewijzigd. */
 
-/* Bouw 202 — Onderbalk en het Cycli/Meer-blad overal nachtblauw met gedempt goud (startpagina-pakket). */
-#top .bottom-nav{background:linear-gradient(180deg,#10243a,#0b1b2a);border-top-color:rgba(172,121,47,.55)}
-#top .bottom-nav svg{color:#d9cdb4}
-#top#top#top .bottom-nav :is(a,button){color:#e6dcc8}
-#top#top#top .bottom-nav .is-actief,#top .bottom-nav .is-actief svg{color:#e0b765}
-#top .bottom-nav .is-actief:after{background:#c9a04e}
-#top .bottom-nav-blad{background:#0b1b2a;border-color:rgba(172,121,47,.55)}
-#top .bottom-nav-blad :is(a,button){color:#e6dcc8}
-#top .bottom-nav-blad a.is-actief{color:#e0b765}
-#top .bottom-nav-blad a.is-actief:after{background:#c9a04e}
+/* Bouw 202 — Onderbalk en het Cycli/Meer-blad: Bark, net als de kopbalk op desktop (één kaderkleur, DESIGN.md). */
+#top .bottom-nav{background:linear-gradient(180deg,#24130d,#160b08);border-top-color:rgba(201,162,39,.6)}
+#top .bottom-nav-blad{background:#1b110d;border-color:rgba(201,162,39,.55)}
 
 /* Bouw 203 — alle paginatitels in het nachtblauw van de onderbalk. */
 #top#top#top#top#top#top#top#top#top#top#top .opening-titel{color:#0b1b2a!important}

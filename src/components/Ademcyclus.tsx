@@ -183,9 +183,8 @@ export default function Ademcyclus() {
       <CycleTransition
         quote="Er is geen noodzaak om veel woorden te gebruiken. Zeg: Heer, zoals U wilt en zoals U weet, ontferm U."
         citation="Abba Macarius de Grote"
-        eyebrow="Van adem naar etmaal"
         text="Wat in de adem begint als de voortdurende gedachtenis aan Christus, krijgt in de etmaalcyclus zijn vaste gestalte: de gebeden die de Kerk door dag en nacht heen bidt."
-        buttonLabel="Ontdek de etmaalcyclus"
+        buttonLabel="Naar de etmaalcyclus"
         buttonHref="#etmaal"
       />
 

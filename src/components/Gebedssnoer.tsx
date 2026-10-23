@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type PointerEvent } from 'react';
-import { ArrowRight, RotateCcw, Undo2 } from 'lucide-react';
+import { ChevronRight, RotateCcw, Undo2 } from 'lucide-react';
 import { SNOER_PAD } from '../lib/snoerPad';
 import { usePaginaOpen } from '../lib/paginaOpen';
 
@@ -280,7 +280,7 @@ export default function Gebedssnoer() {
         ontferm U over ons.
       </p>
       <button type="button" className="ot-actie snoer-verder" onClick={tel}>
-        Bid verder <ArrowRight aria-hidden="true" />
+        Bid verder <ChevronRight aria-hidden="true" />
       </button>
       <div className="snoer-bediening">
         <div className="snoer-acties">

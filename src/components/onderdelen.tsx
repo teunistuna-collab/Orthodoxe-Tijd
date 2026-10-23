@@ -47,6 +47,6 @@ export function TijdlijnRij({ beeld, kleur, titel, onder, nu, onClick }: { beeld
 /** Knop in bordeaux (of omlijnd met `omlijnd`), als link of als knop. */
 export function ActieKnop({ href, onClick, omlijnd, children }: { href?: string; onClick?: () => void; omlijnd?: boolean; children: ReactNode }) {
   const klasse = `ot-actie${omlijnd ? ' is-omlijnd' : ''}`;
-  const inhoud = <><span>{children}</span><span aria-hidden="true">→</span></>;
+  const inhoud = <><span>{children}</span><span aria-hidden="true">›</span></>;
   return href ? <a className={klasse} href={href}>{inhoud}</a> : <button type="button" className={klasse} onClick={onClick}>{inhoud}</button>;
 }

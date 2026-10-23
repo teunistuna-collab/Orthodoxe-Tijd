@@ -97,7 +97,7 @@ export default function BetekenisVanVandaag({ dag, opPascha = false }: { dag: Da
                   <b>{k.titel}</b>
                   {k.kort && <small>{k.kort}</small>}
                 </span>
-                <span className="bv-meer">Lees meer <span aria-hidden="true">→</span></span>
+                <span className="bv-meer">Lees meer <span aria-hidden="true">›</span></span>
               </button>
             </li>
           ))}

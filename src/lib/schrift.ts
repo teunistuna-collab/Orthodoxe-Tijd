@@ -1,3 +1,4 @@
+import { nbv21UrlNl } from './htc';
 import { laadPsalmTeksten } from './psalmen';
 
 // Schriftwoord: één plek voor verwijzingen en (later) gecontroleerde citaten, voor "Leef vandaag met de Kerk" en, zodra de
@@ -23,6 +24,13 @@ const LXX_EIGEN_VERTALING = false;
 
 export const schriftRef = (w: Schriftwoord): string =>
   w.soort === 'nbv21' ? w.ref : `Psalm ${w.lxx}:${w.vers} (LXX${w.mt ? `; ${w.mt} in de Hebreeuwse telling` : ''})`;
+
+/** Waar de lezer de tekst vindt: de NBV21 op debijbel.nl, of de psalm (en het vers) in de psalmlezer. */
+export const schriftLink = (w: Schriftwoord): { href: string; extern: boolean } | null => {
+  if (w.soort === 'psalm') return { href: `#psalmen/${w.lxx}/${w.vers}`, extern: false };
+  const href = nbv21UrlNl(w.ref);
+  return href ? { href, extern: true } : null;
+};
 
 /** Het gecontroleerde citaat, of null: dan wordt alleen de verwijzing getoond. */
 export async function schriftCitaat(w: Schriftwoord): Promise<string | null> {

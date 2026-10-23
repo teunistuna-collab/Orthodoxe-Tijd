@@ -53,7 +53,7 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
   { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.' },
   { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.' },
   { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe je als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe u als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.' },
 ];
 
 
@@ -223,9 +223,8 @@ export default function UrenCyclus() {
       <CycleTransition
         quote="Zevenmaal daags prijs ik U, omwille van Uw rechtvaardige oordelen."
         citation="Psalm 119:164"
-        eyebrow="Meer dan een dagindeling"
         text="Het etmaal is geen strak schema, maar een levensritme. Het herinnert er ons aan dat heel onze tijd in Gods handen ligt en dat elk moment een ontmoeting met Hem kan zijn."
-        buttonLabel="Ontdek de weekcyclus"
+        buttonLabel="Naar de weekcyclus"
         buttonHref="#week"
       />
 

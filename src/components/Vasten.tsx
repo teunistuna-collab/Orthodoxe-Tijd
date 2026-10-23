@@ -188,9 +188,9 @@ export default function Vasten() {
           <VastenTafel niveau={dagWeergave.vasten.niveau} />
           <p className="ot-vs-morgen">
             {morgen ? (
-              <button type="button" className="ot-tekstknop" onClick={() => setMorgen(false)}>← Terug naar vandaag</button>
+              <button type="button" className="ot-tekstknop" onClick={() => setMorgen(false)}>‹ Terug naar vandaag</button>
             ) : (
-              <button type="button" className="ot-tekstknop" onClick={() => setMorgen(true)}>Morgen bekijken →</button>
+              <button type="button" className="ot-tekstknop" onClick={() => setMorgen(true)}>Morgen bekijken ›</button>
             )}
           </p>
 
@@ -231,7 +231,7 @@ export default function Vasten() {
               Pinksteren, de Kersttijd en de week na Tollenaar en Farizeeër.
             </p>
             <a href="#week" className="btn-pill cyclus-verder mt-3">
-              Ontdek de weekcyclus ›
+              Naar de weekcyclus ›
             </a>
 
             {/* Vastenvrije periodes en strenge losse vastendagen — direct aansluitend, geen los dashboard */}
@@ -296,7 +296,6 @@ export default function Vasten() {
       <CycleTransition
         quote="Waakt en bidt, opdat gij niet in verzoeking komt."
         citation="Matteüs 26:41"
-        eyebrow="Vasten en gebed"
         text="Vasten zonder gebed en aalmoes is, naar het woord van de Vaders, slechts een dieet. Vasten en gebed horen bij elkaar."
         buttonLabel="Naar gebeden"
         buttonHref="#gebeden"
