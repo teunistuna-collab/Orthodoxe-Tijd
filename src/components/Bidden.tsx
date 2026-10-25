@@ -1,36 +1,31 @@
-import { useEffect, useState, type MouseEvent, type ReactNode } from 'react';
-import { BookOpen, ChevronRight, Clock } from 'lucide-react';
+import { useEffect, useState, type MouseEvent } from 'react';
+import { ChevronRight } from 'lucide-react';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { dienstVanHetUur } from '../lib/etmaal';
 import { OPEN_DIENST_EVENT } from '../lib/events';
-import NisKop from './NisKop';
-import { HANDEN, KRUIS } from './symbolen';
-import './Vandaag.css';
+import { Sierlijn } from './MobielLaag';
+import './bidden.css';
 
-// Bidden (#bidden): het overzicht achter Bidden in de onderbalk, alleen op mobiel (App.tsx), volgens de app-mapping
-// (mobile/docs/APP-MAPPING.md): het actuele gebedsuur, dan Gebeden, Psalter, Adem en Etmaal. Opmaak gedeeld met
-// Verdieping (Meer.tsx, Vandaag.css). Adem en Etmaal zijn dezelfde pagina's als onder Ontdek.
+// Bidden (#bidden): het overzicht achter Bidden in de onderbalk, alleen op mobiel (App.tsx), volgens mock-up 03_bidden:
+// een sfeerbanner en vier kaarten (het actuele gebedsuur, Gebeden, Psalter, Het Jezusgebed). Alle kaarten openen de
+// bestaande pagina's; Etmaal is bereikbaar via het actuele gebedsuur en "Bekijk alle gebedsuren".
+// Beelden: aangeleverd op 25-10-2026 (public/images/bidden), alleen uitgesneden en verkleind. In de banner is het
+// paneel met de Christusvoorstelling bedekt met het originele Sinaï-icoon (uitgesneden en geschaald, met een warme
+// kaarslichtlaag erover). Psalter gebruikt het goedgekeurde manuscriptbeeld van de Psalter-pagina; Gebeden het
+// evangelieboek; het gebedsuur en het Jezusgebed dezelfde kaartbeelden als Etmaal en Adem onder Ontdek.
 
-type Regel = { id: string; titel: string; ondertitel: string; symbool: ReactNode };
+type Kaart = { id: string; titel: string; onder: string; beeld: string; positie?: string };
 
-const REGELS: Regel[] = [
-  { id: 'gebeden', titel: 'Gebeden', ondertitel: 'Het gebed van de Kerk', symbool: HANDEN },
-  { id: 'psalmen', titel: 'Psalter', ondertitel: 'De Psalmen, per psalm of per kathisma', symbool: <BookOpen strokeWidth={1.3} aria-hidden="true" /> },
-  { id: 'adem', titel: 'Adem', ondertitel: 'Het Jezusgebed', symbool: KRUIS },
-  { id: 'etmaal', titel: 'Etmaal', ondertitel: 'De gebeden van dag en nacht', symbool: <Clock strokeWidth={1.3} aria-hidden="true" /> },
+const KAARTEN: Kaart[] = [
+  { id: 'gebeden', titel: 'Gebeden', onder: 'Een verzameling gebeden voor verschillende momenten', beeld: '/images/bidden/gebeden-kaart.webp' },
+  { id: 'psalmen', titel: 'Psalter', onder: 'De Psalmen lezen en bidden', beeld: '/images/psalmen/manuscript-800.webp', positie: '62% 50%' },
+  { id: 'adem', titel: 'Het Jezusgebed', onder: 'Adem · Gebed van het hart', beeld: '/images/ontdek/adem-kaart.webp' },
 ];
 
-const rij = ({ id, titel, ondertitel, symbool }: Regel) => (
-  <li key={id}>
-    <a className="vg-verd-rij" href={`#${id}`}>
-      <span className="vg-verd-symbool">{symbool}</span>
-      <span className="vg-verd-tekst">
-        <b>{titel}</b>
-        <span>{ondertitel}</span>
-      </span>
-      <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
-    </a>
-  </li>
+const Beeld = ({ src, positie }: { src: string; positie?: string }) => (
+  <span className="bd-beeld" aria-hidden="true">
+    <img src={src} alt="" loading="lazy" decoding="async" style={positie ? { objectPosition: positie } : undefined} />
+  </span>
 );
 
 export default function Bidden() {
@@ -44,7 +39,7 @@ export default function Bidden() {
     const t = setInterval(bij, 60_000);
     return () => clearInterval(t);
   }, [open]);
-  // Zoals op Vandaag: Etmaal opent meteen deze dienst.
+  // Zoals op Vandaag: de kaart opent meteen de dienst van nu op Etmaal.
   const openDienst = (e: MouseEvent) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault();
@@ -52,23 +47,53 @@ export default function Bidden() {
   };
 
   return (
-    <section id="bidden" className="vg vg-verdieping">
-      <NisKop titel="Bidden" open={open} balk />
-      <nav className="vg-papier vg-verd-lijst" aria-label="Bidden">
-        <ul>
-          <li>
-            <a className="vg-verd-rij" href="#etmaal" onClick={openDienst}>
-              <span className="vg-verd-symbool"><img src="/images/vandaag/iconen/01_gebedsuur_lamp.webp" alt="" width={40} height={37} decoding="async" /></span>
-              <span className="vg-verd-tekst">
-                <b>Het actuele gebedsuur</b>
-                <span>{uur.title} · {uur.time}</span>
+    <section id="bidden" className="am bd">
+      <div className="bd-banner">
+        <img
+          src="/images/bidden/banner-800.webp"
+          srcSet="/images/bidden/banner-800.webp 800w, /images/bidden/banner-1086.webp 1086w"
+          sizes="100vw"
+          alt=""
+          width={1086}
+          height={1000}
+          decoding="async"
+          loading={open ? 'eager' : 'lazy'}
+        />
+        <p className="am-merk">Orthodoxe Tijd</p>
+        <div className="bd-banner-tekst">
+          <h1 className="bd-titel">Bidden</h1>
+          <Sierlijn />
+          <p className="bd-banner-onder">Een moment van stilte en gebed</p>
+        </div>
+      </div>
+
+      <nav className="bd-kaarten" aria-label="Bidden">
+        <div className="bd-kaart bd-uur">
+          <Beeld src="/images/ontdek/etmaal-kaart.webp" />
+          <div className="bd-tekst">
+            <a className="bd-hoofd" href="#etmaal" onClick={openDienst}>
+              <small className="bd-label">De uren van de dag</small>
+              <b>Het actuele gebedsuur</b>
+              <span>
+                Nu: <strong>{uur.title}</strong> · Bid met de Kerk
               </span>
-              <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
             </a>
-          </li>
-        </ul>
-        <p className="vg-verd-scheiding" aria-hidden="true"><span>✣</span></p>
-        <ul>{REGELS.map(rij)}</ul>
+            <a className="bd-alle" href="#etmaal">
+              Bekijk alle gebedsuren <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <ChevronRight className="bd-pijl" aria-hidden="true" />
+        </div>
+        {KAARTEN.map(({ id, titel, onder, beeld, positie }) => (
+          <a key={id} className="bd-kaart" href={`#${id}`}>
+            <Beeld src={beeld} positie={positie} />
+            <span className="bd-tekst">
+              <b>{titel}</b>
+              <span>{onder}</span>
+            </span>
+            <ChevronRight className="bd-pijl" aria-hidden="true" />
+          </a>
+        ))}
       </nav>
     </section>
   );
