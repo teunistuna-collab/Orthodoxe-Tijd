@@ -1,31 +1,33 @@
 import { useEffect, useState, type CSSProperties } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
-import { ADEM_POPUPS } from '../lib/cyclusTeksten';
+import { ADEM_INLEIDING, ADEM_POPUPS } from '../lib/cyclusTeksten';
 import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
+import { terugNaarGroep } from '../lib/navigatie';
 import { BannerBeeld, Sierlijn } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import './Vandaag.css';
 import './ontwerp.css';
 import Verdieping from './Verdieping';
-import Gebedssnoer from './Gebedssnoer';
 import { usePijlgebed } from '../lib/pijlgebed';
+import { useMobiel } from '../lib/desktop';
+import AdemMobiel from './AdemMobiel';
 
 type PopupKey = 'wat' | 'jezusgebed' | 'gebedskoord' | 'hart';
 
-// Adem volgens het overdrachtspakket (referentie gebeden-psalmen-adem.png, paneel 4): donkere kop met titel; twee tabs
-// (het Jezusgebed, het gebedssnoer); daaronder de vier verdiepingen als rustig register (op mobiel uitklapbaar), het
+// Adem volgens het overdrachtspakket (referentie gebeden-psalmen-adem.png, paneel 4): donkere kop met titel; het
+// Jezusgebed (het gebedssnoer is weggehaald); daaronder de vier verdiepingen als rustig register (op mobiel uitklapbaar), het
 // citaat van Macarius en de cyclusweg. Het Jezusgebed staat centraal: het icoon en het gebed (het eigen pijlgebed uit
 // Instellingen, anders het standaardgebed) als één tekst. De ademondersteuning is optioneel en uitklapbaar; ze start pas
-// na "Start ondersteuning" en stopt bij inklappen, wisselen van tab, verlaten van de pagina of een tabblad op de achtergrond.
+// na "Start ondersteuning" en stopt bij inklappen, verlaten van de pagina of een tabblad op de achtergrond.
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe ademcyclus.docx".
 
 const CARDS: Array<{ key: PopupKey; title: string; intro: string }> = [
-  { key: 'wat', title: 'Wat is de ademcyclus?', intro: 'Het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus.' },
-  { key: 'jezusgebed', title: 'Het Jezusgebed', intro: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar — telkens opnieuw aangeroepen.' },
-  { key: 'gebedskoord', title: 'Het gebedskoord', intro: 'De chotki helpt het gebed aandachtig te herhalen zonder de ademhaling tot een teller te maken.' },
-  { key: 'hart', title: 'Gebed van het hart', intro: 'Van de lippen, naar het verstand, tot een gebed dat het hart zelf doordringt.' },
+  { key: 'wat', title: 'Wat is de ademcyclus?', intro: ADEM_INLEIDING.wat },
+  { key: 'jezusgebed', title: 'Het Jezusgebed', intro: ADEM_INLEIDING.jezusgebed },
+  { key: 'gebedskoord', title: 'Het gebedskoord', intro: ADEM_INLEIDING.gebedskoord },
+  { key: 'hart', title: 'Gebed van het hart', intro: ADEM_INLEIDING.hart },
 ];
 
 // Duur van één ademhaling (inademen + uitademen).
@@ -48,6 +50,8 @@ const leesTempo = (): Tempo => {
 };
 
 export default function Ademcyclus() {
+  // Mobiel: de vier weergaven van de mock-up (AdemMobiel.tsx); desktop: deze pagina.
+  const mobiel = useMobiel();
   const [popup, setPopup] = useState<PopupKey | null>(null);
   // Twee aparte toestanden: het onderdeel is uitgeklapt (steunOpen) en de begeleiding loopt (actief). Alleen de
   // tempovoorkeur wordt bewaard; de begeleiding nooit, zodat ze bij terugkeer niet vanzelf start.
@@ -65,9 +69,6 @@ export default function Ademcyclus() {
   const sec = TEMPI.find((t) => t.id === tempo)!.sec;
   const open = usePaginaOpen('adem');
   const pijlgebed = usePijlgebed();
-  // Het gebedssnoer blijft gemonteerd (hidden), zodat de snoerstand niet verspringt bij het wisselen van tab.
-  const [tab, setTab] = useState<'jezusgebed' | 'snoer'>('jezusgebed');
-  const TABS = [['jezusgebed', 'Jezusgebed'], ['snoer', 'Gebedssnoer']] as const;
 
   // Verlaat de bezoeker de pagina, dan stopt de begeleiding (en start bij terugkeer niet opnieuw).
   if (actief && !open) setActief(false);
@@ -80,15 +81,12 @@ export default function Ademcyclus() {
     document.addEventListener('visibilitychange', opZicht);
     return () => document.removeEventListener('visibilitychange', opZicht);
   }, [actief]);
-  const kiesTab = (id: 'jezusgebed' | 'snoer') => {
-    setTab(id);
-    if (id !== 'jezusgebed') setActief(false);
-  };
   const wisselSteun = () => {
     setSteunOpen((o) => !o);
     setActief(false);
   };
 
+  if (mobiel) return <AdemMobiel />;
   return (
     <>
       <section id="adem" className="vg ot-redesign ot-adem">
@@ -97,7 +95,7 @@ export default function Ademcyclus() {
         <NisKop
           open={open}
           balk
-          terug="#cycli"
+          terug={terugNaarGroep()}
           achter={
             <picture>
               <source media="(min-width: 768px)" srcSet="/images/vandaag/kerk-header-800.webp 800w, /images/vandaag/kerk-header-1536.webp 1536w" sizes="(min-width: 960px) 960px, 100vw" width={1536} height={1024} />
@@ -109,16 +107,8 @@ export default function Ademcyclus() {
           <h1 className="ot-titel">Het Jezusgebed</h1>
           <Sierlijn />
           <p className="ot-ad-onder">Het onophoudelijke gebed</p>
-          <div className="ot-ad-tabs" role="tablist" aria-label="Gebed">
-            {TABS.map(([id, label]) => (
-              <button key={id} type="button" role="tab" id={`ad-tab-${id}`} aria-controls={`ad-paneel-${id}`} aria-selected={tab === id} onClick={() => kiesTab(id)}>
-                {label}
-              </button>
-            ))}
-          </div>
             {/* Het Jezusgebed: het icoon en het gebed als één tekst; de ademondersteuning eronder, optioneel en uitklapbaar */}
-            <div className="ad-paneel" role="tabpanel" id="ad-paneel-jezusgebed" aria-labelledby="ad-tab-jezusgebed" hidden={tab !== 'jezusgebed'}>
-              <h2 className="sr-only">Het Jezusgebed</h2>
+            <div className="ad-paneel">
               <div className={`adem-ritme ad-ritme${actief ? ' is-actief' : ''}`} style={{ '--adem-duur': `${sec}s` } as CSSProperties}>
                 <div className="ad-icoon">
                   <div className="adem-gloed" aria-hidden="true" />
@@ -163,11 +153,6 @@ export default function Ademcyclus() {
                 </p>
               </div>
             </div>
-
-            {/* Het gebedssnoer: het Jezusgebed tellen per knoop */}
-          <div role="tabpanel" id="ad-paneel-snoer" aria-labelledby="ad-tab-snoer" hidden={tab !== 'snoer'}>
-            <Gebedssnoer />
-          </div>
         </div>
       </section>
 

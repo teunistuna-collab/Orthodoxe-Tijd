@@ -99,6 +99,14 @@ export const ADEM_POPUPS: Record<'wat' | 'jezusgebed' | 'gebedskoord' | 'hart', 
     ]
   }
 };
+/** Korte inleiding per onderwerp: op desktop onder de kaart, op mobiel bovenaan de leesweergave. */
+export const ADEM_INLEIDING: Record<keyof typeof ADEM_POPUPS, string> = {
+  wat: 'Het kleinste ritme van het gebedsleven: de voortdurende gedachtenis aan Christus.',
+  jezusgebed: 'Heer Jezus Christus, Zoon van God, ontferm U over mij, zondaar — telkens opnieuw aangeroepen.',
+  gebedskoord: 'De chotki helpt het gebed aandachtig te herhalen zonder de ademhaling tot een teller te maken.',
+  hart: 'Van de lippen, naar het verstand, tot een gebed dat het hart zelf doordringt.',
+};
+
 
 export const ETMAAL_INFO: Record<'wat' | 'diensten' | 'betekenis' | 'praktisch', PopupInhoud> = {
   "wat": {
