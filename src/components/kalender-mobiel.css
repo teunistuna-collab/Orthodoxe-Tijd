@@ -1,0 +1,71 @@
+/* Kalender op mobiel (Kalender.tsx, tak `mobiel`), volgens mock-up 02_kalender (rechtertelefoon). Bouwt op
+   adem-mobiel.css (.am-merk). Maten afgeleid van de mock-up op 390 px: lage banner (~150 px), de maand op perkament
+   (rijen ~36 px), de gekozen dag als één kaart met vier regels; op diep chocoladebruin. */
+
+.km { min-height: 100dvh; margin-bottom: -68px; padding-bottom: 80px; background: #2a1a0d; text-align: left; }
+
+/* Banner: laag, met merk en titel als tekst */
+.km-banner { position: relative; height: clamp(140px, 39vw, 180px); overflow: hidden; background: #150b06; color: var(--am-ivoor); }
+.km-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 78% 40%; }
+.km-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .55), rgba(10, 5, 2, .1) 45%, rgba(10, 5, 2, .45)), linear-gradient(90deg, rgba(10, 5, 2, .35), transparent 55%); }
+.km-banner .am-merk { position: absolute; top: 14px; left: 0; right: 0; z-index: 2; text-align: center; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
+#top#top#top#top#top#top#top#top#top#top .km-titel { position: absolute; left: 18%; top: 46%; z-index: 2; margin: 0; font-family: var(--font-lees) !important; font-size: 32px; font-weight: 400; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--am-ivoor) !important; text-shadow: 0 2px 10px rgba(0, 0, 0, .7); }
+
+/* Perkamentkaarten (maand en dag) */
+.km-maand, .km-dag { position: relative; z-index: 3; margin: 0 4px; border: 1px solid rgba(185, 148, 85, .7); background: #f3e4c6 url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: inset 0 0 0 2px rgba(255, 248, 232, .35), 0 2px 6px rgba(10, 5, 2, .35); color: #2b1a0e; }
+.km-maand { margin-top: -16px; padding: 8px 6px 4px; border-radius: 16px 16px 6px 6px; }
+.km-dag { margin-top: 6px; padding: 12px 14px 4px; border-radius: 6px; }
+
+/* Maandkop */
+.km-maandnav { display: flex; align-items: center; justify-content: space-between; }
+#top#top#top#top#top#top#top#top .km-maandnav button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: none; color: #4a3220; }
+.km-maandnav svg { width: 24px; height: 24px; stroke-width: 1.6; }
+#top#top#top#top#top#top#top#top#top#top .km-maandnav h2 { margin: 0; font-family: var(--font-lees) !important; font-size: clamp(25px, 7vw, 29px); font-weight: 500; line-height: 1.1; letter-spacing: 0; text-transform: none; color: #2b1a0e !important; }
+
+/* Raster: zeven gelijke kolommen, geen vakjes */
+.km-raster { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 1px; touch-action: pan-y; }
+.km-weekdag { padding: 4px 0 6px; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-align: center; text-transform: uppercase; color: #4a3220; }
+#top#top#top#top#top#top#top#top .km-cel { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 38px; height: 38px; margin: 0 auto; padding: 0; border: 0; border-radius: 50%; background: none; color: #2b1a0e; font-family: var(--font-lees); }
+.km-nr { font-size: 17px; line-height: 1; font-variant-numeric: lining-nums; }
+.km-tekens { display: flex; gap: 2px; align-items: center; height: 9px; margin-top: 1px; color: #8a5f2c; }
+.km-teken { font-size: 9px; line-height: 1; }
+.km-teken.is-groot { font-size: 10px; color: #850d17; }
+.km-teken svg { width: 9px; height: 9px; }
+.km-vastenteken { width: 8px; height: 8px; }
+#top#top#top#top#top#top#top#top .km-cel.is-buiten { opacity: .38; }
+#top#top#top#top#top#top#top#top .km-cel.is-vandaag { box-shadow: inset 0 0 0 1.5px rgba(138, 90, 43, .75); }
+.km-cel.is-vandaag .km-nr { font-weight: 600; }
+#top#top#top#top#top#top#top#top .km-cel.is-gekozen { background: #8a5a2b; box-shadow: 0 1px 3px rgba(60, 30, 10, .35); color: #fbf1dc; }
+.km-cel.is-gekozen .km-tekens, .km-cel.is-gekozen .km-teken.is-groot { color: #fbf1dc; }
+#top#top#top#top#top#top#top#top .km-cel:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 1px; }
+
+/* Naar vandaag en legenda: kleine tekstknoppen */
+#top#top#top#top#top#top#top#top .km-tekstknop { display: block; min-height: 32px; margin: 0 auto; padding: 4px 10px; border: 0; background: none; font-family: var(--font-lees); font-size: 15px; color: #8a5f2c; }
+#top#top#top#top#top#top#top#top .km-naar-vandaag { margin-top: -4px; }
+#top#top#top#top#top#top#top#top .km-legenda-knop { margin: 2px 4px 0 auto; font-size: 14px; }
+.km-legenda { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin: 0; padding: 4px 10px 10px; list-style: none; font-family: var(--font-lees); font-size: 14px; }
+.km-legenda li { display: flex; align-items: center; gap: 6px; }
+.km-legenda .km-teken { width: 12px; text-align: center; font-size: 11px; }
+.km-legenda .km-vastenteken { width: 11px; height: 11px; color: #8a5f2c; }
+.km-staal { width: 12px; height: 12px; border-radius: 50%; }
+.km-staal.is-vandaag { box-shadow: inset 0 0 0 1.5px #8a5a2b; }
+.km-staal.is-gekozen { background: #8a5a2b; }
+
+/* De gekozen dag */
+#top#top#top#top#top#top#top#top#top#top .km-dagtitel { margin: 0; font-family: var(--font-lees) !important; font-size: clamp(20px, 5.6vw, 23px); font-weight: 500; line-height: 1.15; letter-spacing: 0; text-transform: none; color: #2b1a0e !important; }
+.km-seizoen { margin: 2px 0 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.25; color: #5d4630; }
+.km-kerkdatum { margin: 1px 0 0; font-family: var(--font-lees); font-size: 14px; line-height: 1.3; color: #75624b; }
+.km-regels { margin: 10px 0 0; padding: 0; border-top: 1px solid rgba(172, 121, 47, .45); list-style: none; }
+.km-regels > li + li { border-top: 1px solid rgba(172, 121, 47, .3); }
+#top#top#top#top#top#top#top#top .km-regel { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; padding: 8px 0; border: 0; background: none; color: #2b1a0e !important; font: inherit; text-align: left; text-decoration: none; }
+.km-regel-beeld { flex: none; display: grid; place-items: center; width: 62px; height: 52px; overflow: hidden; border: 1px solid rgba(185, 148, 85, .65); border-radius: 3px; background: rgba(226, 204, 166, .55); color: #5d4630; }
+.km-regel-beeld img { max-width: 78%; max-height: 80%; object-fit: contain; }
+.km-regel-beeld img.km-heilige { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; object-position: 50% 22%; }
+.km-regel-beeld img.km-chirho { max-height: 86%; }
+.km-regel-vasten { width: 30px; height: 30px; }
+.km-regel-tekst { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; font-family: var(--font-lees); }
+.km-regel-tekst b { font-size: 17px; font-weight: 600; line-height: 1.2; }
+.km-regel-tekst span { font-size: 16px; line-height: 1.25; color: #3b2a1a; overflow-wrap: anywhere; }
+.km-regel-tekst small { font-size: 13.5px; line-height: 1.3; color: #6a5a48; }
+.km-pijl { flex: none; width: 20px; height: 20px; color: #7a5a2a; }
+#top#top#top#top#top#top#top#top .km-regel:focus-visible, #top#top#top#top#top#top#top#top .km-tekstknop:focus-visible, #top#top#top#top#top#top#top#top .km-maandnav button:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
