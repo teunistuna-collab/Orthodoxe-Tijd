@@ -239,6 +239,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
         <NisKop
           open={open}
           balk
+          terug="#bidden"
           achter={
             <picture>
               <source media="(min-width: 768px)" srcSet="/images/ontwerp/psalmen-banner-800.webp 800w, /images/ontwerp/psalmen-banner-1536.webp 1536w" sizes="1360px" width={1536} height={512} />

@@ -25,7 +25,7 @@ export interface ZoekGroep {
 const PAGINAS: { id: string; titel: string; onder: string; extra?: string }[] = [
   { id: 'vandaag', titel: 'Vandaag', onder: 'De dag van vandaag' },
   { id: 'kalender', titel: 'Kalender', onder: 'De kerkelijke kalender per maand', extra: 'maand datum' },
-  { id: 'adem', titel: 'Adem', onder: 'Het Jezusgebed en korte gebeden', extra: 'ademcyclus jezusgebed gebedssnoer' },
+  { id: 'adem', titel: 'Adem', onder: 'Het Jezusgebed en korte gebeden', extra: 'ademcyclus jezusgebed' },
   { id: 'etmaal', titel: 'Etmaal', onder: 'De gebeden van dag en nacht', extra: 'uren metten vespers completen middernachtdienst psalmen psalm' },
   { id: 'week', titel: 'Week', onder: 'Van zondag tot zaterdag', extra: 'weekcyclus weekdagen' },
   { id: 'jaar', titel: 'Jaar', onder: 'Het ritme van het kerkelijk jaar', extra: 'jaarcyclus kerkelijk jaar' },

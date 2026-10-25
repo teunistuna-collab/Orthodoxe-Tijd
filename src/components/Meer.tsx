@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { BookOpen, ChevronRight, Settings } from 'lucide-react';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import NisKop from './NisKop';
-import { BLAD, HANDEN, KERK, KRUIS } from './symbolen';
+import { BLAD, KERK, KRUIS } from './symbolen';
 import './Vandaag.css';
 
 // Pagina Verdieping (#meer): het overzicht achter Meer in de onderbalk, alleen op mobiel (App.tsx), volgens het Verdieping-pakket (referentie.png, scherm 2).
@@ -12,7 +12,6 @@ const BOEK = <BookOpen strokeWidth={1.3} aria-hidden="true" />;
 type Regel = { id: string; titel: string; ondertitel: string; symbool: ReactNode };
 
 const BOVEN: Regel[] = [
-  { id: 'gebeden', titel: 'Gebeden', ondertitel: 'Het gebed van de Kerk', symbool: HANDEN },
   { id: 'vasten', titel: 'Vasten', ondertitel: 'Tijd van bekering', symbool: BLAD },
   { id: 'heiligen', titel: 'Heiligen', ondertitel: 'Vrienden van God', symbool: KRUIS },
   { id: 'feesten', titel: 'Feesten', ondertitel: 'Het liturgisch jaar', symbool: KERK },

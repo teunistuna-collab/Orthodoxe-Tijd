@@ -1,73 +1,112 @@
 import { useEffect, useRef, useState } from 'react';
 import { BookOpen, ChevronDown, Search, Settings } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { KruisTeken } from './ui';
+import { groepVan } from '../lib/navigatie';
 
-const SECTIES = [
+// De kop volgt de vijf tabs van de app-mapping (mobile/docs/APP-MAPPING.md): Vandaag, Kalender, Bidden en Ontdek als
+// uitklapmenu, daarna de pagina's van Meer. Adem en Etmaal staan onder Bidden én Ontdek.
+const VOOR = [
   { id: 'vandaag', label: 'Vandaag' },
   { id: 'kalender', label: 'Kalender' },
-  { id: 'gebeden', label: 'Gebeden' },
-  { id: 'psalmen', label: 'Psalmen' },
+];
+const NA = [
   { id: 'vasten', label: 'Vasten' },
   { id: 'heiligen', label: 'Heiligen' },
-  { id: 'pascha', label: 'Pascha' },
   { id: 'feesten', label: 'Feesten' },
 ];
 
-// Vandaag/Kalender komen vóór de Cycli-dropdown, daarna Pascha en de rest.
-const NAV_LEADING = SECTIES.slice(0, 2);
-const PASCHA_NAV = SECTIES.find((s) => s.id === 'pascha')!;
-const NAV_TRAILING = SECTIES.slice(2).filter((s) => s.id !== 'pascha');
-
-
-const CYCLUS_ITEMS = [
-  { id: 'adem', label: 'ADEM', kruis: true, description: 'Het Jezusgebed en korte gebeden', href: '#adem' },
-  { id: 'etmaal', label: '◷ ETMAAL', description: 'De gebeden van dag en nacht', href: '#etmaal' },
-  { id: 'week', label: '☼ WEEK', description: 'Van zondag tot zaterdag', href: '#week' },
-  { id: 'jaar', label: '✣ JAAR', description: 'Het ritme van het kerkelijk jaar', href: '#jaar' },
-  { id: 'geboorte', label: '✶ GEBOORTE', description: 'Van de Geboortevasten tot Theofanie', href: '#geboorte' },
+type Item = { id: string; label: string; description: string };
+const ADEM: Item = { id: 'adem', label: 'Adem', description: 'Het Jezusgebed' };
+const ETMAAL: Item = { id: 'etmaal', label: 'Etmaal', description: 'De gebeden van dag en nacht' };
+const BIDDEN: Item[] = [
+  { id: 'gebeden', label: 'Gebeden', description: 'Het gebed van de Kerk' },
+  { id: 'psalmen', label: 'Psalter', description: 'De Psalmen, per psalm of per kathisma' },
+  ADEM,
+  ETMAAL,
 ];
+const ONTDEK: Item[] = [
+  ADEM,
+  ETMAAL,
+  { id: 'week', label: 'Week', description: 'Van zondag tot zaterdag' },
+  { id: 'jaar', label: 'Jaar', description: 'Het ritme van het kerkelijk jaar' },
+  { id: 'pascha', label: 'Pascha', description: 'Van het Kruis naar de Verrijzenis' },
+  { id: 'geboorte', label: 'Geboorte', description: 'Van de Geboortevasten tot Theofanie' },
+];
+
+/** Uitklapmenu in de kop: opent bij aanwijzen of klikken, sluit kort nadat de muis het verlaat, bij Escape of een klik erbuiten. */
+function Uitklap({ label, items, actief, groepActief }: { label: string; items: Item[]; actief: string; groepActief: boolean }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const sluitTimer = useRef<number | null>(null);
+  const annuleer = () => {
+    if (sluitTimer.current !== null) {
+      window.clearTimeout(sluitTimer.current);
+      sluitTimer.current = null;
+    }
+  };
+  const openMenu = () => {
+    annuleer();
+    setOpen(true);
+  };
+  const planSluiten = () => {
+    annuleer();
+    sluitTimer.current = window.setTimeout(() => setOpen(false), 400);
+  };
+  useEffect(() => {
+    const opKlik = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const opToets = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', opKlik);
+    document.addEventListener('keydown', opToets);
+    return () => {
+      document.removeEventListener('mousedown', opKlik);
+      document.removeEventListener('keydown', opToets);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="relative shrink-0" onMouseEnter={openMenu} onMouseLeave={planSluiten}>
+      <button type="button" onClick={openMenu} aria-expanded={open} className={`kop-link${groepActief ? ' is-actief' : ''}`}>
+        {label}
+        <ChevronDown className={`transition ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="absolute left-1/2 top-full z-[200] -translate-x-1/2 pt-3">
+          <div className="w-[320px] rounded-lg border border-[#c9a227]/55 bg-[#1b110d] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
+            {items.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={() => {
+                  annuleer();
+                  setOpen(false);
+                }}
+                aria-current={actief === item.id ? 'page' : undefined}
+                className={`block rounded-md border px-3 py-2.5 transition ${actief === item.id ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
+              >
+                <div className="ot-label ot-label-licht">{item.label}</div>
+                <p className="mt-1 text-[13px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 // Er staat één pagina tegelijk in beeld (App.tsx); de actieve link volgt die pagina.
 export default function Header({ pagina: actief }: { pagina: string }) {
   const { openZoeken } = useApp();
-  const [cyclusOpen, setCyclusOpen] = useState(false);
-  const cyclusRef = useRef<HTMLDivElement | null>(null);
-  const cyclusSluitTimer = useRef<number | null>(null);
-
-  // Het Cycli-menu sluit pas kort nadat de muis het verlaat en blijft open als je terugkeert.
-  const annuleerSluiten = () => {
-    if (cyclusSluitTimer.current !== null) {
-      window.clearTimeout(cyclusSluitTimer.current);
-      cyclusSluitTimer.current = null;
-    }
-  };
-  const openCyclus = () => {
-    annuleerSluiten();
-    setCyclusOpen(true);
-  };
-  const planCyclusSluiten = () => {
-    annuleerSluiten();
-    cyclusSluitTimer.current = window.setTimeout(() => setCyclusOpen(false), 400);
-  };
-
-  useEffect(() => {
-    const onPointerDown = (event: MouseEvent) => {
-      // een klik op het Cycli-menu zelf telt niet als "buiten"
-      if (!cyclusRef.current?.contains(event.target as Node)) setCyclusOpen(false);
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setCyclusOpen(false);
-    };
-    document.addEventListener('mousedown', onPointerDown);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onPointerDown);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, []);
-
-  const cyclusActief = ['adem', 'etmaal', 'week', 'jaar', 'geboorte'].includes(actief);
+  const groep = groepVan(actief);
+  const link = ({ id, label }: { id: string; label: string }) => (
+    <a key={id} href={`#${id}`} className={`kop-link${actief === id ? ' is-actief' : ''}`} aria-current={actief === id ? 'page' : undefined}>
+      {label}
+    </a>
+  );
 
   return (
     <header className="site-header sticky top-0 z-50 overflow-visible">
@@ -86,58 +125,10 @@ export default function Header({ pagina: actief }: { pagina: string }) {
           </a>
 
           <nav className="kop-nav" aria-label="Hoofdnavigatie">
-            {NAV_LEADING.map(({ id, label }) => (
-              <a key={id} href={`#${id}`} className={`kop-link${actief === id ? ' is-actief' : ''}`} aria-current={actief === id ? 'page' : undefined}>
-                {label}
-              </a>
-            ))}
-
-            <div
-              ref={cyclusRef}
-              className="relative shrink-0"
-              onMouseEnter={openCyclus}
-              onMouseLeave={planCyclusSluiten}
-            >
-              <button
-                type="button"
-                onClick={openCyclus}
-                aria-expanded={cyclusOpen}
-                className={`kop-link${cyclusActief ? ' is-actief' : ''}`}
-              >
-                Cycli
-                <ChevronDown className={`transition ${cyclusOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {cyclusOpen && (
-                <div className="absolute left-1/2 top-full z-[200] -translate-x-1/2 pt-3">
-                  <div className="w-[320px] rounded-lg border border-[#c9a227]/55 bg-[#1b110d] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)]">
-                    {CYCLUS_ITEMS.map((item) => {
-                      const itemActive = actief === item.id;
-                      return (
-                        <a
-                          key={`${item.id}-${item.label}`}
-                          href={item.href}
-                          onClick={() => {
-                            annuleerSluiten();
-                            setCyclusOpen(false);
-                          }}
-                          className={`block rounded-md border px-3 py-2.5 transition ${itemActive ? 'border-[#c9a227]/60 bg-[#2a1d16]' : 'border-transparent hover:border-[#c9a227]/35 hover:bg-[#241813]'}`}
-                        >
-                          <div className="ot-label ot-label-licht">{item.kruis && <><KruisTeken />{' '}</>}{item.label}</div>
-                          <p className="mt-1 text-[11px] leading-relaxed text-[#e9dcc0] opacity-90">{item.description}</p>
-                        </a>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {[PASCHA_NAV, ...NAV_TRAILING].map(({ id, label }) => (
-              <a key={id} href={`#${id}`} className={`kop-link${actief === id ? ' is-actief' : ''}`} aria-current={actief === id ? 'page' : undefined}>
-                {label}
-              </a>
-            ))}
+            {VOOR.map(link)}
+            <Uitklap label="Bidden" items={BIDDEN} actief={actief} groepActief={groep === 'bidden'} />
+            <Uitklap label="Ontdek" items={ONTDEK} actief={actief} groepActief={groep === 'ontdek'} />
+            {NA.map(link)}
           </nav>
 
           <div className="kop-acties">

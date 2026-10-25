@@ -402,8 +402,6 @@
 .vg-cy-kaart:before { left: -4px; top: -4px; }
 .vg-cy-kaart:after { right: -4px; bottom: -4px; }
 .vg-cy-kaart:hover { background: rgba(255, 251, 236, .5); }
-.vg-cy-beeld { flex: none; display: flex; width: 62px; height: 62px; }
-.vg-cy-beeld img { width: 100%; height: 100%; object-fit: contain; }
 @media (max-width: 370px) { .vg-cy-kaart { gap: 10px; } }
 
 /* Lezingen van vandaag: na twee lezingen klapt de rest uit (Vandaag.tsx) */
@@ -718,10 +716,6 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 #vandaag .vg-leef-link { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; font-family: var(--font-lees); font-size: 16px; color: #7a5a2a; text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .45); text-underline-offset: 3px; }
 #vandaag .vg-leef-link svg { width: 16px; height: 16px; }
 #vandaag .vg-leef-link:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-#vandaag .vg-leef-schrift { max-width: 30em; margin: 18px auto 0; padding-top: 12px; border-top: 1px solid rgba(172, 121, 47, .45); }
-#vandaag .vg-leef-schrift .vg-label { display: block; margin-bottom: 4px; color: #7a5a2a; }
-#vandaag .vg-leef-schrift blockquote { margin: 0 0 4px; font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; color: var(--inkt); }
-#vandaag .vg-leef-schrift cite { font-family: var(--font-lees); font-size: 16px; font-style: normal; color: #5d5040; }
 /* Desktop (vanaf 1024 px): Leef vandaag over de breedte van de twee kolommen; overweeg, bid en praktijk naast elkaar
    met fijne verticale lijnen, het schriftwoord gecentreerd eronder. Kleiner: alles onder elkaar. */
 @media (min-width: 1024px) {
@@ -739,12 +733,34 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 /* De psalmverwijzing onder het kernvers: groter tikvlak (min. 24 px hoog) zonder dat de regel verspringt */
 #vandaag .vg-bron a { display: inline-block; padding: 6px 4px; margin: -6px -4px; }
 
-#vandaag .vg-leef-schrift cite a { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; color: var(--inkt); text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .55); text-underline-offset: 3px; }
-#vandaag .vg-leef-schrift cite a svg { flex: none; width: 16px; height: 16px; color: var(--goud-pijl); }
-#vandaag .vg-leef-schrift cite a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 /* Heiligen: bovenaan de heiligen van vandaag; de huidige maand gemarkeerd */
 #heiligen .vg-hl-vandaag { margin: 6px 0 22px; padding-bottom: 6px; border-bottom: 1px solid var(--lijn-zacht); }
 #heiligen .vg-hl-vandaag h2 { margin: 0 0 2px; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--bordeaux-diep); }
 #heiligen .vg-hl-meer { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 16px; color: var(--gedempt) !important; }
 #heiligen .vg-hl-meer svg { width: 18px; height: 18px; color: var(--goud-pijl); }
 #heiligen .vg-hl-maanden a.is-nu { border-color: var(--goud-pijl); background: rgba(255, 249, 235, .85); font-weight: 600; }
+/* Vandaag mobiel: de foto "Christus Pantocrator in kaarslicht" als kop (Vandaag.tsx, .vg-kop-foto). Het medaillon blijft
+   onzichtbaar staan voor de hoogte; de kaarsgloed hoort bij de nis en vervalt hier. */
+@media (max-width: 767.98px) {
+  #vandaag .vg-kop-foto .vg-christus { visibility: hidden; }
+  #vandaag .vg-kop-foto .vg-kop-achter img { object-position: 50% 0; }
+  #vandaag .vg-kop-foto .kaarsgloed { display: none; }
+}
+@media (max-width: 767.98px) { #vandaag .vg-kop-pascha .vg-kop-achter img { object-position: 50% 18%; } }
+
+/* ---------- Ontdek (#cycli, Cycli.tsx) volgens mock-up 04: zes brede kaarten, beeld links, tekst rechts ---------- */
+.vg-cycli .vg-kop.vg-niskop { height: auto; padding: 0 var(--rand) calc(var(--boog) * .95); }
+.vg-cycli .vg-niskop .vg-kop-achter img { margin-top: 0; height: 100%; }
+.vg-papier.vg-ontdek { padding: 4px 8px 20px; }
+.vg-ontdek-lijst { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.vg-ontdek-kaart { display: flex; align-items: stretch; min-height: 96px; border: 1px solid var(--kaartrand); border-radius: 4px; background: rgba(255, 249, 235, .55); box-shadow: 0 2px 5px rgba(60, 35, 15, .22); overflow: hidden; color: var(--inkt); text-decoration: none; }
+.vg-ontdek-beeld { position: relative; flex: 0 0 42%; overflow: hidden; border-right: 1px solid var(--kaartrand); background: #2a1a10; }
+.vg-ontdek-beeld img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--fx) var(--fy); transform: scale(var(--zoom)); transform-origin: var(--fx) var(--fy); }
+.vg-ontdek-tekst { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; margin: 4px 0 4px 4px; padding: 8px 0 8px 9px; border: 1px solid rgba(185, 148, 85, .55); border-right: 0; border-radius: 3px 0 0 3px; }
+.vg-ontdek-tekst b { font-family: var(--font-lees); font-size: 23px; font-weight: 500; line-height: 1.1; }
+.vg-ontdek-tekst span { font-family: var(--font-lees); font-size: 14.5px; line-height: 1.25; }
+.vg-ontdek-tekst small { margin-top: 2px; font-family: var(--font-lees); font-size: 13px; line-height: 1.3; color: var(--gedempt); }
+.vg-ontdek-kaart .vg-verd-pijl { flex: none; align-self: center; width: 20px; height: 20px; margin: 0 4px 0 0; color: var(--goud-pijl); }
+@media (hover: hover) { .vg-ontdek-kaart:hover { background: rgba(255, 251, 236, .85); } }
+.vg-ontdek-kaart:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.vg-cycli .vg-niskop .vg-kop-achter:after { background: linear-gradient(rgba(10, 6, 4, .62), rgba(10, 6, 4, .5) 55%, rgba(10, 6, 4, .58)); }

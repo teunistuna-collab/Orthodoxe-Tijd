@@ -40,6 +40,12 @@ const woorden = (t: string) =>
   t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/[^a-z]+/).filter((w) => w.length >= 5 && !ALGEMEEN.has(w));
 const zelfdeGedachtenis = (a: string, b: string) => woorden(a).some((w) => woorden(b).includes(w));
 
+// Beelden voor de kop op mobiel (public/images/vandaag), aangeleverd en alleen verkleind.
+const FOTO_KOP = {
+  gewoon: { naam: 'kaarslicht', srcSet: '/images/vandaag/christus-kaarslicht-800.webp 800w, /images/vandaag/christus-kaarslicht-1086.webp 1086w', breedte: 1086, hoogte: 1003 },
+  pascha: { naam: 'pascha', srcSet: '/images/vandaag/pascha-verrijzenis-800.webp 800w, /images/vandaag/pascha-verrijzenis-1600.webp 1600w', breedte: 2000, hoogte: 1526 },
+};
+
 export default function Vandaag() {
   const open = usePaginaOpen('vandaag');
   const { mode, vandaag, vandaagYmd, rooster, heiligen, openDag, openLezing, openDagLezingen, openDagHeiligen, openDagPascha, openZoeken } = useApp();
@@ -63,6 +69,7 @@ export default function Vandaag() {
   // Feestdagen (lib/feestdagen.ts): tijdens Pascha en de Geboorte van Christus vervangt het feesticoon het Christusicoon
   // in de kop, met de begroeting en een feestlink eronder. Bij een dagwisseling of andere kalenderkeuze opnieuw bepaald.
   const feest = useMemo(() => feestVoorDag(vandaag, mode), [vandaag, mode]);
+  const fotoKop = !feest ? FOTO_KOP.gewoon : feest.id === 'pascha' ? FOTO_KOP.pascha : null;
   const feestNaam = feest?.id === 'pascha' ? 'De Verrijzenis van onze Heer' : 'De Geboorte van onze Heer Jezus Christus';
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));
@@ -94,9 +101,15 @@ export default function Vandaag() {
   return (
     <section id="vandaag" className="vg">
       {/* A. Kerkelijke kop: nis met sterren, het Christusmedaillon en de datum (de kop van de pagina). De onderrand volgt de sierboog. */}
-      <div className="vg-kop">
+      {/* Mobiel: een aangeleverd beeld vult de kop ("Christus Pantocrator in kaarslicht"; in de Paastijd het icoon van de
+          Verrijzenis); het medaillon of feesticoon blijft onzichtbaar op zijn plek, zodat de kop even hoog blijft. In de
+          Kersttijd en op het web: de nis met het medaillon of feesticoon. */}
+      <div className={`vg-kop${fotoKop ? ` vg-kop-foto vg-kop-${fotoKop.naam}` : ''}`}>
         <div className="vg-kop-achter" aria-hidden="true">
-          <img src={`${BEELD}/kerk-header-800.webp`} srcSet={`${BEELD}/kerk-header-800.webp 800w, ${BEELD}/kerk-header-1536.webp 1536w`} sizes="(min-width: 960px) 960px, 100vw" alt="" width={1536} height={1024} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+          <picture>
+            {fotoKop && <source media="(max-width: 767.98px)" srcSet={fotoKop.srcSet} sizes="100vw" width={fotoKop.breedte} height={fotoKop.hoogte} />}
+            <img src={`${BEELD}/kerk-header-800.webp`} srcSet={`${BEELD}/kerk-header-800.webp 800w, ${BEELD}/kerk-header-1536.webp 1536w`} sizes="(min-width: 960px) 960px, 100vw" alt="" width={1536} height={1024} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+          </picture>
           <Kaarsgloed />
         </div>
         <div className="vg-balk">

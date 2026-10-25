@@ -17,6 +17,7 @@ import Heiligen from './components/Heiligen';
 import Gebeden from './components/Gebeden';
 import Meer from './components/Meer';
 import Cycli from './components/Cycli';
+import Bidden from './components/Bidden';
 import DagModal from './components/DagModal';
 import DagLezingen from './components/DagLezingen';
 import DagHeiligen from './components/DagHeiligen';
@@ -25,7 +26,7 @@ import LezingModal from './components/LezingModal';
 import KalenderUitleg from './components/KalenderUitleg';
 import Instellingen from './components/Instellingen';
 import Zoeken from './components/Zoeken';
-import { gaNaar } from './lib/navigatie';
+import { gaNaar, onthoudGroep } from './lib/navigatie';
 import Ademcyclus from './components/Ademcyclus';
 import Weekcyclus from './components/Weekcyclus';
 import Jaarcyclus from './components/Jaarcyclus';
@@ -49,13 +50,13 @@ const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
 const STANDAARD_TITEL = document.title;
 
-const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'geboorte', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer', 'cycli'];
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'geboorte', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer', 'cycli', 'bidden'];
 
 // "#psalmen/50" hoort bij de pagina "psalmen" (de Psalmenpagina opent zelf Psalm 50).
 function paginaUitHash(): string | null {
   const id = decodeURIComponent(window.location.hash.slice(1)).split('/')[0];
-  // Verdieping (#meer) en Cycli (#cycli) horen bij de mobiele onderbalk; op het web staat alles al in de kopbalk.
-  if ((id === 'meer' || id === 'cycli') && window.matchMedia('(min-width: 768px)').matches) return null;
+  // Bidden (#bidden), Ontdek (#cycli) en Verdieping (#meer) horen bij de mobiele onderbalk; op het web staat alles al in de kopbalk.
+  if ((id === 'meer' || id === 'cycli' || id === 'bidden') && window.matchMedia('(min-width: 768px)').matches) return null;
   return PAGINAS.includes(id) ? id : null;
 }
 
@@ -85,6 +86,7 @@ const INHOUD = {
   feesten: <Feesten />,
   meer: <Meer />,
   cycli: <Cycli />,
+  bidden: <Bidden />,
   instellingen: <Instellingen />,
   // Bronnen: mobiel dezelfde bovenbalk (merk en zoeken) als de andere pagina's
   bronnen: <><div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><KopBalk /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></>,
@@ -101,7 +103,11 @@ export default function App() {
   const [heiligenDag, setHeiligenDag] = useState<string | null>(null);
   const [paschaDag, setPaschaDag] = useState<string | null>(null);
   const [lezing, setLezing] = useState<LezingKeuze | null>(null);
-  const [pagina, setPagina] = useState(() => paginaUitHash() ?? 'vandaag');
+  const [pagina, setPagina] = useState(() => {
+    const begin = paginaUitHash() ?? 'vandaag';
+    onthoudGroep(begin);
+    return begin;
+  });
   const [zoekOpen, setZoekOpen] = useState(false);
 
   // Er staat één pagina tegelijk in beeld (zie .pagina-verborgen in index.css); het anker in de url bepaalt welke.
@@ -124,6 +130,7 @@ export default function App() {
       // dus de volgende keer weer bovenaan beginnen. Halverwege weggaan onthoudt de plek wel.
       const totEinde = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
       scrollPosities.current[huidige.current] = totEinde < window.innerHeight ? 0 : window.scrollY;
+      onthoudGroep(p);
       huidige.current = p;
       setPagina(p);
     };
@@ -162,7 +169,7 @@ export default function App() {
 
   // De tabtitel volgt de pagina (handig bij delen, bladwijzers en voor schermlezers).
   useEffect(() => {
-    document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${pagina === 'meer' ? 'Verdieping' : hoofdletter(pagina)} — Orthodoxe Tijd`;
+    document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${pagina === 'meer' ? 'Verdieping' : pagina === 'cycli' ? 'Ontdek' : hoofdletter(pagina)} — Orthodoxe Tijd`;
   }, [pagina]);
 
   // Leesrooster: het huidige en het volgende kerkjaar meteen, andere jaren pas als je er een datum uit opent.
@@ -270,6 +277,7 @@ export default function App() {
           <div className={p('feesten')}>{INHOUD.feesten}</div>
           <div className={p('meer')}>{INHOUD.meer}</div>
           <div className={p('cycli')}>{INHOUD.cycli}</div>
+          <div className={p('bidden')}>{INHOUD.bidden}</div>
           <div className={p('instellingen')}>{INHOUD.instellingen}</div>
           <div className={p('psalmen')}><Psalmen actief={pagina === 'psalmen'} /></div>
           <div className={p('bronnen')}>{INHOUD.bronnen}</div>

@@ -3,6 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { INITIALEN, serviceConfig, type ServiceMapping } from '../lib/etmaal';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import NisKop from './NisKop';
+import { terugNaarGroep } from '../lib/navigatie';
 import './Vandaag.css';
 
 // Bovenkant van Etmaal (UrenCyclus.tsx), volgens het pakket Etmaal, Week en Jaar (ontwerp.png, paneel 2):
@@ -37,7 +38,7 @@ export default function EtmaalOverzicht({ nuIndex, onOpen }: { nuIndex: number; 
       <NisKop
         open={open}
         balk
-        terug="#cycli"
+        terug={terugNaarGroep()}
         achter={serviceConfig.map((s, i) =>
           geladen.has(i) ? (
             <picture key={s.title}>

@@ -147,7 +147,7 @@ export default function Gebeden() {
           de titel, het gebedssymbool, de drie soorten gebeden (zolang de gebeden niet zichtbaar zijn eerlijk "Binnenkort",
           zonder schijnbaar werkende link) en de wegen naar de Psalmen en het Jezusgebed. */}
       <section id="gebeden" className="vg ot-redesign ot-gebeden">
-        <NisKop open={open} balk achter={<BannerBeeld naam="gebeden-banner" open={open} />} />
+        <NisKop open={open} balk terug="#bidden" achter={<BannerBeeld naam="gebeden-banner" open={open} />} />
         <div className="vg-papier ot-inhoud">
           <h1 className="ot-titel">Een moment <br />van gebed</h1>
           <Sierlijn />
