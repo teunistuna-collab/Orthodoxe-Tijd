@@ -1,13 +1,10 @@
-import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react';
-import { BookOpen, ChevronLeft, ChevronRight, Heart, Settings } from 'lucide-react';
+import { useState, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react';
+import { BookOpen, ChevronRight, Heart, Settings } from 'lucide-react';
 import { ADEM_INLEIDING, ADEM_POPUPS } from '../lib/cyclusTeksten';
 import { GEBEDEN } from '../lib/gebeden';
 import { useEigenPijlgebed } from '../lib/pijlgebed';
-import { vergrendelScroll } from '../lib/scrollLock';
 import { BLAD, HANDEN, KRUIS } from './symbolen';
-import Leesbediening from './Leesbediening';
-import DeelKnop from './DeelKnop';
-import './adem-mobiel.css';
+import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 
 // Adem op mobiel (< 768 px), volgens de goedgekeurde mock-up (mobile/docs/mockups/goedgekeurd/08-adem.png), vier weergaven:
 //   #adem                  1. de gebedshoek met het Jezusgebed, "Begin met bidden" en de vier verdiepingen
@@ -71,43 +68,6 @@ function Gebedsregels({ tekst }: { tekst: string }) {
 
 const BEELD = '/images/adem/gebedshoek';
 const SRCSET = `${BEELD}-800.webp 800w, ${BEELD}-941.webp 941w`;
-
-function Sierlijn({ licht }: { licht?: boolean }) {
-  return (
-    <span className={`am-sierlijn${licht ? ' is-licht' : ''}`} aria-hidden="true">
-      <span />
-      <svg viewBox="0 0 24 24"><path d="M12 4v16M6 12h12" /><path d="m12 4-1.5 2.5h3ZM12 20l-1.5-2.5h3ZM6 12l2.5-1.5v3ZM18 12l-2.5-1.5v3Z" /></svg>
-      <span />
-    </span>
-  );
-}
-
-/** Schermvullende weergave (2, 3, 4): over de onderbalk heen, de pagina eronder scrolt niet mee. */
-function Laag({ className, label, children }: { className: string; label: string; children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const los = vergrendelScroll();
-    ref.current?.focus({ preventScroll: true });
-    return los;
-  }, []);
-  return (
-    <div ref={ref} className={`am-laag ${className}`} role="dialog" aria-modal="true" aria-label={label} tabIndex={-1}>
-      {children}
-    </div>
-  );
-}
-
-function Kop({ terug, licht, rechts }: { terug: string; licht?: boolean; rechts?: ReactNode }) {
-  return (
-    <div className={`am-kop${licht ? ' is-licht' : ''}`}>
-      <a className="am-terug" href={terug}>
-        <ChevronLeft aria-hidden="true" /> Terug
-      </a>
-      {licht ? <span className="am-merk">Orthodoxe Tijd</span> : <span />}
-      <span className="am-kop-rechts">{rechts}</span>
-    </div>
-  );
-}
 
 // 1. Beginweergave
 function Begin({ gebed }: { gebed: string }) {
@@ -218,51 +178,21 @@ function Bidden({ vorm }: { vorm: Vorm }) {
 function Lezen({ onderwerp }: { onderwerp: Onderwerp }) {
   const inhoud = ADEM_POPUPS[onderwerp];
   const info = ONDERWERPEN.find((o) => o.key === onderwerp)!;
-  const [bediening, setBediening] = useState(false);
   return (
-    <Laag className="am-lees" label={inhoud.title}>
-      <Kop
-        terug="#adem"
-        licht
-        rechts={
-          <>
-            <button type="button" className="am-knopje am-aa" aria-expanded={bediening} aria-label="Tekstgrootte en avondweergave" onClick={() => setBediening((b) => !b)}>
-              Aa
-            </button>
-            <DeelKnop titel={inhoud.title} pad={`adem/lees/${onderwerp}`} className="am-knopje" />
-          </>
-        }
-      />
-      {bediening && <Leesbediening className="am-lb" />}
-      <article className="am-lees-vlak lees-vlak">
-        <span className="am-tegel am-tegel-groot">{info.symbool}</span>
-        <p className="am-nr">{info.nr}</p>
-        <h1 className="am-lees-titel" tabIndex={-1}>{inhoud.title}</h1>
-        <Sierlijn />
-        <p className="am-lees-onder">{ADEM_INLEIDING[onderwerp]}</p>
-        {/* lees-tekst: volgt de tekstgrootte van de leesbediening (index.css, --lees-schaal) */}
-        <div className="lees-tekst">
-        {inhoud.highlight && <blockquote className="am-lees-citaat">{inhoud.highlight}</blockquote>}
-        {inhoud.paragraphs.map((p, i) => (
-          <p key={i}>{p}</p>
-        ))}
-        {inhoud.sections?.map((s, i) => (
-          <section key={i}>
-            {s.heading && <h2>{s.heading}</h2>}
-            {s.paragraphs?.map((p, j) => <p key={j}>{p}</p>)}
-            {s.items && (
-              <ul>
-                {s.items.map((it, j) => <li key={j}>{it}</li>)}
-              </ul>
-            )}
-            {s.after?.map((p, j) => <p key={j}>{p}</p>)}
-            {s.note && <p className="am-noot">{s.note}</p>}
-          </section>
-        ))}
-        </div>
-        <Sierlijn />
-      </article>
-    </Laag>
+    <LeesWeergave
+      titel={inhoud.title}
+      onder={ADEM_INLEIDING[onderwerp]}
+      terug="#adem"
+      deelPad={`adem/lees/${onderwerp}`}
+      boven={
+        <>
+          <span className="am-tegel am-tegel-groot">{info.symbool}</span>
+          <p className="am-nr">{info.nr}</p>
+        </>
+      }
+    >
+      <PopupTekst inhoud={inhoud} />
+    </LeesWeergave>
   );
 }
 

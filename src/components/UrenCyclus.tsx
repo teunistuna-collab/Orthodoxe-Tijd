@@ -4,9 +4,11 @@ import Modal from './Modal';
 import { vergrendelScroll } from '../lib/scrollLock';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
-import { ETMAAL_INFO } from '../lib/cyclusTeksten';
+import { ETMAAL_INFO, ETMAAL_INLEIDING } from '../lib/cyclusTeksten';
 import { dienstVanHetUur, serviceConfig, type PsalmMapping } from '../lib/etmaal';
 import EtmaalOverzicht from './EtmaalOverzicht';
+import EtmaalMobiel from './EtmaalMobiel';
+import { useMobiel } from '../lib/desktop';
 import ExactPageFrame from './ExactPageFrame';
 import { PsalmLezer } from './Psalmen';
 import Psalterlezing from './Psalterlezing';
@@ -50,14 +52,16 @@ type InfoKey = 'wat' | 'diensten' | 'betekenis' | 'praktisch';
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe etmaalcyclus.docx".
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
-  { key: 'wat', title: 'Wat is het etmaal?', intro: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.' },
-  { key: 'diensten', title: 'De liturgische diensten', intro: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.' },
-  { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe u als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.' },
+  { key: 'wat', title: 'Wat is het etmaal?', intro: ETMAAL_INLEIDING.wat },
+  { key: 'diensten', title: 'De liturgische diensten', intro: ETMAAL_INLEIDING.diensten },
+  { key: 'betekenis', title: 'De betekenis in ons leven', intro: ETMAAL_INLEIDING.betekenis },
+  { key: 'praktisch', title: 'Praktisch', intro: ETMAAL_INLEIDING.praktisch },
 ];
 
 
 export default function UrenCyclus() {
+  // Mobiel: de vier weergaven van de mock-up (EtmaalMobiel.tsx); desktop: deze pagina met het dienstvenster.
+  const mobiel = useMobiel();
   const [open, setOpen] = useState<number | null>(null);
   const [modalState, setModalState] = useState<ModalState | null>(null);
   const { mode, vandaag, vandaagYmd } = useApp();
@@ -205,6 +209,8 @@ export default function UrenCyclus() {
 
   const nuDienst = dienstVanHetUur(nu);
   const nuIndex = serviceConfig.indexOf(nuDienst);
+
+  if (mobiel) return <EtmaalMobiel />;
 
   return (
     <>

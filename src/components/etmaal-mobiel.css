@@ -1,0 +1,70 @@
+/* Etmaal op mobiel (EtmaalMobiel.tsx), volgens mock-up 09-etmaal. Bouwt op adem-mobiel.css (.am-…). */
+
+/* 1. Overzicht */
+.em-banner { position: relative; height: min(68vw, 300px); overflow: hidden; background: #150b06; color: var(--am-ivoor, #f6ead2); }
+.em-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 30%; }
+.em-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .3) 45%, rgba(10, 5, 2, .55)); }
+.em-banner-tekst { position: relative; z-index: 2; padding: 20px 20px 0; }
+#top#top#top#top#top#top#top#top#top#top .em-titel { margin: 4px 0 0; font-family: var(--font-lees) !important; font-size: 42px; font-weight: 400; line-height: 1.05; letter-spacing: 0; text-transform: none; color: var(--am-ivoor, #f6ead2) !important; text-shadow: 0 2px 10px rgba(0, 0, 0, .6); outline: none; }
+
+.em-papier { position: relative; z-index: 3; margin-top: -54px; padding: 0 10px 24px; background: linear-gradient(transparent 54px, var(--papyrus) 54px) ; text-align: left; }
+.em-papier > .am-sierlijn { margin: 12px auto 8px; color: rgba(172, 121, 47, .75); }
+#top#top#top#top#top#top#top#top .em-nu { display: flex; align-items: center; gap: 12px; min-height: 84px; padding: 10px 8px 10px 14px; border: 1px solid var(--kaartrand); border-radius: 5px; background: #f3e5c6 url('/images/vandaag/papyrus-licht.webp') center / cover; box-shadow: 0 4px 12px rgba(40, 20, 8, .35); color: var(--inkt) !important; text-decoration: none; }
+.em-nu-kruis { display: inline-flex; flex: none; width: 30px; height: 30px; color: var(--goud-pijl); }
+.em-nu-kruis svg, .em-kaart-kruis svg, .em-ornament svg { width: 100%; height: 100%; }
+.em-nu-tekst { display: flex; flex: 1; flex-direction: column; gap: 1px; min-width: 0; }
+.em-nu-tekst .am-label { margin: 0; font-size: 12px; }
+.em-nu-tekst b { font-family: var(--font-lees); font-size: 26px; font-weight: 400; line-height: 1.15; }
+.em-nu-tekst > span:last-child { font-family: var(--font-lees); font-size: 15px; color: var(--gedempt); }
+.em-kop { margin: 6px 6px 4px !important; }
+.em-lijst { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(172, 121, 47, .3); }
+.em-lijst li { border-bottom: 1px solid rgba(172, 121, 47, .3); }
+#top#top#top#top#top#top#top#top .em-lijst a { display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding: 0 6px 0 14px; border-radius: 4px; font-family: var(--font-lees); font-size: 17px; color: var(--inkt) !important; text-decoration: none; }
+#top#top#top#top#top#top#top#top .em-lijst a.is-nu { background: rgba(222, 186, 120, .45); font-weight: 500; }
+@media (hover: hover) { .em-lijst a:hover { background: rgba(255, 250, 238, .7); } }
+
+/* 2–4: schermvullend, maar de onderbalk blijft zichtbaar (zoals de mock-up) */
+.em-laag { z-index: 85; bottom: calc(58px + env(safe-area-inset-bottom)); }
+.em-dienst, .em-psalmen { --am-ivoor: #f6ead2; background: #140a05; color: var(--am-ivoor); }
+.em-dienst .am-kop, .em-psalmen .am-kop { position: absolute; top: 0; left: 0; right: 0; }
+.em-dienst .am-merk, .em-psalmen .am-merk { font-size: 12px; }
+.em-dienst-beeld { position: relative; flex: none; display: flex; align-items: flex-end; min-height: min(118vw, 500px); overflow: hidden; }
+.em-dienst-beeld img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.em-dienst-beeld:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .55), rgba(10, 5, 2, .1) 25%, rgba(10, 5, 2, .35) 55%, rgba(20, 10, 5, .92)); }
+.em-dienst-tekst { position: relative; z-index: 2; width: 100%; padding: 0 22px 22px; }
+.em-dienst-onder { max-width: 22em; margin: 10px auto 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.4; color: var(--am-ivoor, #f6ead2); }
+.em-kaarten { position: relative; z-index: 2; display: grid; gap: 8px; padding: 12px 10px; background: #f3e5c6 url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; }
+#top#top#top#top#top#top#top#top .em-kaart { display: flex; align-items: center; gap: 12px; min-height: 84px; padding: 10px 8px 10px 12px; border: 1px solid rgba(185, 148, 85, .45); border-radius: 5px; background: rgba(255, 250, 238, .55); color: var(--inkt) !important; text-align: left; text-decoration: none; }
+.em-kaart-kruis { display: inline-flex; flex: none; width: 26px; height: 26px; color: var(--goud-pijl); }
+.em-kaart-tekst { display: flex; flex: 1; flex-direction: column; gap: 2px; }
+.em-kaart-tekst b { font-family: var(--font-lees); font-size: 20px; font-weight: 400; line-height: 1.2; }
+.em-kaart-tekst span { font-family: var(--font-lees); font-size: 15px; line-height: 1.35; color: var(--gedempt); }
+.em-klooster { display: block; width: 100%; height: auto; min-height: 150px; object-fit: cover; object-position: 60% 60%; }
+
+/* 3. Over deze dienst */
+.em-ornament { display: flex; width: 36px; height: 36px; margin: 4px auto 6px; color: var(--goud-pijl); }
+.em-kernvers span { display: block; }
+.em-kernvers cite { display: block; margin-top: 6px; font-family: var(--font-titel); font-size: 13px; font-style: normal; letter-spacing: .1em; color: var(--goud-pijl); }
+.am-tabel-wrap { overflow-x: auto; margin-top: 14px; }
+.am-tabel { width: 100%; border-collapse: collapse; font-family: var(--font-lees); font-size: 15.5px; }
+.am-tabel :is(th, td) { padding: 6px 6px; border-bottom: 1px solid rgba(172, 121, 47, .3); text-align: left; vertical-align: top; }
+.am-tabel th { font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--goud-pijl); }
+
+/* 4. Psalmen */
+.em-boek { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 58%; object-fit: cover; object-position: 40% 70%; }
+.em-psalmen:before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 58%; z-index: 1; background: linear-gradient(#140a05, rgba(20, 10, 5, .2) 35%, rgba(20, 10, 5, .1)); pointer-events: none; }
+.em-psalmen-vlak { position: relative; z-index: 2; padding: 74px 14px 28px; }
+.em-psalm-lijst { display: grid; gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; }
+#top#top#top#top#top#top#top#top .em-psalm { display: flex; align-items: center; gap: 10px; min-height: 74px; padding: 10px 10px 10px 22px; border: 1px solid rgba(201, 162, 98, .55); border-radius: 4px; background: rgba(28, 15, 8, .82); color: var(--am-ivoor, #f6ead2) !important; text-align: left; text-decoration: none; }
+.em-psalm > span { display: flex; flex: 1; flex-direction: column; gap: 2px; }
+.em-psalm b { font-family: var(--font-lees); font-size: 21px; font-weight: 400; }
+.em-psalm span span { font-family: var(--font-lees); font-size: 16px; color: rgba(224, 183, 101, .9); }
+.em-psalm .am-pijl { color: rgba(224, 183, 101, .9); }
+.em-kathisma { margin-top: 18px; padding: 12px; border: 1px solid rgba(201, 162, 98, .45); border-radius: 4px; background: rgba(244, 230, 200, .92); color: var(--inkt); text-align: left; }
+.em-kathisma .am-label { margin: 0 0 6px; }
+.em-laag :is(.em-nu, .em-kaart, .em-psalm):focus-visible, .em-lijst a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Leesweergave van Etmaal: titel in inkt, ondertitel direct eronder (mock-up scherm 3) */
+#top#top#top#top#top#top#top#top#top#top#top .em-lees .am-lees-titel { color: var(--inkt) !important; }
+.am-lees-ondertitel { margin: 4px 0 0; font-family: var(--font-lees); font-size: 19px; text-align: center; color: var(--gedempt); }
+html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .em-lees .am-lees-titel { color: #e9dcc0 !important; }
