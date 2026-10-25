@@ -1,0 +1,89 @@
+/* Het Psalter op mobiel (PsalterMobiel.tsx), volgens mock-up 07-psalter. Bouwt op adem-mobiel.css (.am-…). */
+.pm { --pm-rood: #8f2a20; }
+
+/* 1. Overzicht */
+.pm-banner { position: relative; display: flex; flex-direction: column; justify-content: flex-end; height: min(88vw, 360px); overflow: hidden; background: #150b06; color: var(--am-ivoor, #f6ead2); }
+.pm-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 40%; }
+.pm-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .05) 22%, rgba(10, 5, 2, .15) 50%, rgba(10, 5, 2, .82)); }
+.pm-merk { position: absolute; top: 18px; left: 0; right: 0; z-index: 2; text-align: center; }
+.pm-banner-tekst { position: relative; z-index: 2; padding: 0 20px 20px; }
+#top#top#top#top#top#top#top#top#top#top .pm-titel { margin: 0; font-family: var(--font-lees) !important; font-size: 44px; font-weight: 400; line-height: 1.05; letter-spacing: 0; text-transform: none; color: var(--am-ivoor, #f6ead2) !important; text-shadow: 0 2px 10px rgba(0, 0, 0, .6); }
+.pm-papier { padding: 14px 12px 26px; background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; text-align: left; }
+#top#top#top#top#top#top#top#top .pm-zoek { display: flex; align-items: center; gap: 10px; min-height: 46px; margin: 0 0 12px; padding: 0 12px; border: 1px solid rgba(185, 148, 85, .55); border-radius: 4px; background: rgba(255, 250, 238, .7); }
+.pm-zoek svg { flex: none; width: 20px; height: 20px; color: var(--gedempt); }
+#top#top#top#top#top#top#top#top .pm-zoek input { flex: 1; min-width: 0; height: 44px; border: 0; background: none; font-family: var(--font-lees); font-size: 17px; color: var(--inkt); outline: none; box-shadow: none; }
+.pm-zoek:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+.pm-aantal { margin: 0 4px 6px; font-family: var(--font-lees); font-size: 15px; color: var(--gedempt); }
+#top#top#top#top#top#top#top#top :is(.pm-verder, .pm-stasis, .pm-psalm) { display: flex; align-items: center; gap: 14px; min-height: 70px; padding: 8px 8px 8px 10px; border: 1px solid rgba(185, 148, 85, .45); border-radius: 5px; background: rgba(255, 250, 238, .55); color: var(--inkt) !important; text-decoration: none; }
+.pm-verder-boek, .pm-tegel { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 60px; height: 52px; border: 1px solid rgba(185, 148, 85, .45); border-radius: 4px; background: rgba(233, 213, 168, .55); color: var(--goud-pijl); }
+.pm-tegel { width: 58px; height: 58px; }
+.pm-verder-boek svg { width: 30px; height: 30px; }
+.pm-tegel svg { width: 28px; height: 28px; }
+.pm-rij-tekst { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+.pm-rij-tekst b { font-family: var(--font-lees); font-size: 19px; font-weight: 400; line-height: 1.2; }
+.pm-rij-tekst span { font-family: var(--font-lees); font-size: 15px; line-height: 1.3; color: var(--gedempt); }
+#top#top#top#top#top#top#top#top#top#top .pm-kop { margin: 22px 4px 10px !important; color: var(--pm-rood) !important; }
+.pm-raster { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+#top#top#top#top#top#top#top#top .pm-raster a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 62px; border: 1px solid rgba(185, 148, 85, .5); border-radius: 4px; background: rgba(255, 250, 238, .55); box-shadow: inset 0 0 0 3px rgba(246, 231, 201, .6); color: var(--inkt) !important; text-decoration: none; }
+.pm-raster small { font-family: var(--font-titel); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--goud-pijl); }
+.pm-raster b { font-family: var(--font-lees); font-size: 23px; font-weight: 400; line-height: 1; }
+@media (hover: hover) { .pm-raster a:hover, .pm-verder:hover, .pm-stasis:hover, a.pm-psalm:hover { background: rgba(255, 250, 238, .85); } }
+#top#top#top#top#top#top#top#top .pm-alle { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 44px; margin-top: 14px; font-family: var(--font-lees); font-size: 16px; color: var(--gedempt) !important; text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .45); text-underline-offset: 3px; }
+.pm-alle svg { width: 18px; height: 18px; color: var(--goud-pijl); }
+.pm-lijst, .pm-stasen { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.pm-psalm.is-zonder-tekst { background: transparent; border-style: dashed; }
+.pm-psalm.is-zonder-tekst .pm-rij-tekst span { font-style: italic; }
+
+/* 2. Eén kathisma */
+.pm-kat-balk { position: relative; background: #1b0f09; }
+.pm-kat-balk .am-kop { min-height: 56px; }
+.pm-kat-balk .am-merk { font-size: 12px; }
+.pm-kat-papier { padding-top: 22px; }
+.pm-midden { margin: 0; text-align: center; color: var(--inkt) !important; }
+#top#top#top#top#top#top#top#top#top#top .pm-kat-titel { margin: 6px 0 0; font-family: var(--font-lees) !important; font-size: 34px; font-weight: 400; line-height: 1.1; letter-spacing: 0; text-align: center; text-transform: none; color: var(--inkt) !important; }
+.pm-kat-onder { margin: 4px 0 0; font-family: var(--font-lees); font-size: 20px; text-align: center; color: var(--gedempt); }
+.pm-kat .am-sierlijn { margin: 10px auto 16px; color: rgba(172, 121, 47, .75); }
+.pm-noot { margin: 0 4px 12px; font-family: var(--font-lees); font-size: 15px; font-style: italic; color: var(--gedempt); text-align: center; }
+#top#top#top#top#top#top#top#top .pm-geheel { display: flex; align-items: center; gap: 12px; min-height: 54px; margin: 14px 0 0; padding: 0 14px; border: 1px solid var(--kaartrand); border-radius: 5px; background: rgba(244, 230, 200, .95); box-shadow: inset 0 0 0 1px rgba(185, 148, 85, .45); font-family: var(--font-lees); font-size: 19px; color: var(--inkt) !important; text-decoration: none; }
+.pm-geheel > span { flex: 1; }
+.pm-geheel svg { flex: none; width: 24px; height: 24px; color: var(--goud-pijl); }
+.pm-geheel svg:last-child { width: 20px; height: 20px; }
+
+/* 3/4. Lezen */
+.pm-lees { --pm-rood: #8f2a20; }
+.pm-lees-vlak { width: 100%; max-width: 34em; margin: 0 auto; padding: 16px 20px calc(env(safe-area-inset-bottom) + 76px); text-align: left; }
+.pm-lees-kop { text-align: center; }
+.pm-context { margin: 4px 0 0; font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--pm-rood); }
+#top#top#top#top#top#top#top#top#top#top .pm-nummer { margin: 6px 0 0; font-family: var(--font-lees) !important; font-size: 46px; font-weight: 500; line-height: 1; letter-spacing: 0; color: var(--pm-rood) !important; outline: none; }
+.pm-nummer small { font-size: .55em; font-weight: 400; }
+#top#top#top#top#top#top#top#top#top#top .pm-nummer-tekst { font-size: 36px; }
+.pm-opschrift { margin: 8px 0 0; font-family: var(--font-lees); font-size: 17px; color: var(--pm-rood); }
+.pm-lees-kop .am-sierlijn { margin: 12px auto 18px; color: rgba(172, 121, 47, .75); }
+.pm-melding { margin: 8px 0; font-family: var(--font-lees); font-size: 17px; font-style: italic; text-align: center; color: var(--gedempt); }
+.pm-verzen { font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--inkt); }
+.pm-vers { display: grid; grid-template-columns: minmax(0, 1fr) 18px; gap: 6px; margin: 0 0 1.1em; scroll-margin-top: 70px; }
+.pm-vers p { margin: 0; }
+.pm-vers p span { display: block; }
+.pm-vers p span + span { padding-left: 1.1em; }
+.pm-vers p::first-letter { float: left; margin: .06em .1em 0 0; font-size: 2.6em; line-height: .82; color: var(--pm-rood); }
+.pm-versnr { padding-top: .25em; font-family: var(--font-lees); font-size: 12.5px; text-align: right; color: var(--pm-rood); }
+.pm-stasis-kop { margin: 1.2em 0 .8em; font-family: var(--font-titel); font-size: 13px; letter-spacing: .14em; text-align: center; text-transform: uppercase; color: var(--goud-pijl); }
+.pm-geheel-psalm + .pm-geheel-psalm { margin-top: 26px; padding-top: 18px; border-top: 1px solid rgba(172, 121, 47, .3); }
+.pm-geheel-stasis { margin: 0 0 6px !important; text-align: center; color: var(--pm-rood) !important; }
+#top#top#top#top#top#top#top#top#top#top .pm-geheel-titel { margin: 0 0 12px; font-family: var(--font-lees) !important; font-size: 26px; font-weight: 500; text-align: center; letter-spacing: 0; text-transform: none; color: var(--pm-rood) !important; }
+.pm-geheel-titel small { font-size: .6em; font-weight: 400; color: var(--gedempt); }
+.pm-blader { position: fixed; left: 0; right: 0; bottom: 0; z-index: 3; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 54px; padding: 0 6px env(safe-area-inset-bottom); border-top: 1px solid rgba(172, 121, 47, .35); background: #f3e5c6 url('/images/vandaag/papyrus-licht.webp') center bottom / 100% auto; }
+#top#top#top#top#top#top#top#top .pm-blader a { display: inline-flex; align-items: center; gap: 2px; min-height: 48px; padding: 0 6px; font-family: var(--font-lees); font-size: 15px; color: var(--inkt) !important; text-decoration: none; }
+.pm-blader a.is-volgende { justify-self: end; }
+.pm-blader svg { width: 18px; height: 18px; color: var(--pm-rood); }
+.pm-blader-nr { font-family: var(--font-lees); font-size: 15px; color: var(--gedempt); }
+.pm-lees :is(.pm-blader a):focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+
+/* 4. Avondweergave (de bestaande leesvoorkeur): diep chocoladebruin, ivoor, gedempt rood */
+html.lees-nacht .pm-lees { --pm-rood: #c4574a; background: #1c120c; color: #eadcc6; }
+html.lees-nacht .pm-lees .am-kop.is-licht { border-bottom-color: rgba(201, 162, 98, .22); }
+html.lees-nacht .pm-lees .pm-verzen, html.lees-nacht .pm-lees .pm-melding { color: #eadcc6; }
+html.lees-nacht .pm-lees .am-sierlijn { color: rgba(201, 162, 98, .55); }
+html.lees-nacht .pm-blader { border-top-color: rgba(201, 162, 98, .25); background: #1c120c; }
+html.lees-nacht #top#top#top#top#top#top#top#top .pm-blader a { color: #eadcc6 !important; }
+html.lees-nacht .pm-blader-nr { color: rgba(234, 220, 198, .7); }

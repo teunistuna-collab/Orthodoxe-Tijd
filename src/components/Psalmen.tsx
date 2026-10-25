@@ -14,10 +14,13 @@ import { useApp } from '../lib/context';
 import { WEEKDAGEN, formatDag, parseYmd, ymd } from '../lib/kalender';
 import { psalterlezingen, type Lezing } from '../lib/psalterlezing';
 import Psalterlezing from './Psalterlezing';
-import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, kathismaStappen, laadPsalmTeksten, psalmBereik, psalmVanHetUur, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type KathismaStuk, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
+import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, kathismaStappen, laadPsalmTeksten, psalmBereik, psalmVanHetUur, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 import './Vandaag.css';
 import './ontwerp.css';
 import './psalmen-knoppen.css';
+import { useMobiel } from '../lib/desktop';
+import { PsalterGeheel, PsalterKathisma, PsalterLezer, PsalterOverzicht } from './PsalterMobiel';
+import { LAATST, LEESPLEK, NIET_BESCHIKBAAR, kathismaPad, leesLaatst, leesPlek, stukNaam } from './psalmenAdres';
 
 // De psalmteksten (±12 KB gecomprimeerd) meteen bij het starten ophalen, niet pas als het psalter of een dienst ze vraagt.
 laadPsalmTeksten().catch(() => {});
@@ -49,29 +52,6 @@ const AANTAL = PSALMEN.length;
 const MET_TEKST = PSALMEN.filter((p) => p.hasText).length;
 const BLOKKEN = Array.from({ length: Math.ceil(AANTAL / 50) }, (_, b) => ({ van: b * 50 + 1, tot: Math.min(AANTAL, b * 50 + 50) }));
 
-// Laatst geopende psalm, voor "Verder lezen" (alleen op dit toestel).
-const LAATST = 'psalmen-laatst';
-const leesLaatst = () => {
-  try {
-    const n = Number(localStorage.getItem(LAATST));
-    return n >= 1 && n <= AANTAL ? n : null;
-  } catch {
-    return null;
-  }
-};
-
-// Leesplek binnen de laatst geopende psalm: het eerste zichtbare vers ("50:12"), zodat hervatten ook bij een andere
-// schermbreedte of tekstgrootte klopt. Alleen op dit toestel; ongeldig of ontbrekend = gewoon bovenaan beginnen.
-const LEESPLEK = 'psalmen-leesplek';
-const leesPlek = () => {
-  try {
-    const [nr, vers] = (localStorage.getItem(LEESPLEK) ?? '').split(':').map(Number);
-    return nr >= 1 && nr <= AANTAL && vers >= 1 ? { nr, vers } : null;
-  } catch {
-    return null;
-  }
-};
-
 // Deep link: #psalmen/50 opent Psalm 50 in de lezer (bovenaan), #psalmen/50/12 op vers 12. Vanaf Vandaag, Etmaal, zoeken.
 const psalmUitHash = () => {
   const m = /^#psalmen\/(\d+)(?:\/(\d+))?$/.exec(window.location.hash);
@@ -79,24 +59,21 @@ const psalmUitHash = () => {
   return nr >= 1 && nr <= AANTAL ? { nr, vers: Number(m?.[2]) || null } : null;
 };
 
-// Kathismata: #psalmen/kathisma (overzicht), #psalmen/kathisma/3 (één kathisma), #psalmen/kathisma/3/2/18 (lezen).
+// Kathismata: #psalmen/kathisma (overzicht), #psalmen/kathisma/3 (één kathisma), #psalmen/kathisma/3/2/18 (lezen),
+// #psalmen/kathisma/3/geheel (het hele kathisma, mobiel).
 // Een onbekend kathisma geeft het overzicht; een psalm die niet bij dat deel hoort het kathisma zelf.
 // Met ?datum=2026-10-17 (vanaf Vandaag en het etmaal) toont "Per kathisma" de psalterlezing van die datum; zonder: vandaag.
 const kathismaUitHash = () => {
-  const m = /^#psalmen\/kathisma(?:\/(\d+)(?:\/(\d)\/(\d+))?)?(?:\?datum=(\d{4}-\d{2}-\d{2}))?$/.exec(window.location.hash);
+  const m = /^#psalmen\/kathisma(?:\/(\d+)(?:\/(\d)\/(\d+)|\/(geheel))?)?(?:\?datum=(\d{4}-\d{2}-\d{2}))?$/.exec(window.location.hash);
   if (!m) return null;
   const k = KATHISMATA[Number(m[1]) - 1] ?? null;
   const i = k ? kathismaStappen(k).findIndex((s) => s.deel === Number(m[2]) && s.psalm === Number(m[3])) : -1;
-  const datum = m[4] && ymd(parseYmd(m[4])) === m[4] ? m[4] : null;
-  return { k, i: i >= 0 ? i : null, datum };
+  const datum = m[5] && ymd(parseYmd(m[5])) === m[5] ? m[5] : null;
+  // #psalmen/kathisma/3/geheel: het hele kathisma doorlopend (alleen op mobiel; op het web de delen)
+  return { k, i: i >= 0 ? i : null, datum, geheel: !!k && !!m[4] };
 };
-const kathismaPad = (k: Kathisma | null, s?: KathismaStap, datum?: string | null) =>
-  `#psalmen/kathisma${k ? `/${k.nr}` : ''}${k && s ? `/${s.deel}/${s.psalm}` : ''}${datum ? `?datum=${datum}` : ''}`;
 const bevat = (l: Lezing, nr: number): boolean => (l.soort === 'keuze' ? l.opties.some((o) => bevat(o, nr)) : l.soort !== 'polyeleos' && l.nr === nr);
 const datumTekst = (d: string) => `${WEEKDAGEN[parseYmd(d).getUTCDay()]} ${formatDag(parseYmd(d))} ${parseYmd(d).getUTCFullYear()}`;
-/** "Psalm 18" of "Psalm 118, verzen 73–131" */
-const stukNaam = (s: KathismaStuk) => `Psalm ${s.psalm}${s.vanVers ? `, verzen ${s.vanVers}–${s.totVers}` : ''}`;
-const NIET_BESCHIKBAAR = 'Tekst nog niet beschikbaar';
 
 // Diepte van een adres binnen de pagina: overzicht (0), één kathisma (1), lezer (2). Terug naar een minder diepe weergave
 // zet de onthouden scrollpositie terug; dieper (een kathisma openen) brengt de tabbladen in beeld.
@@ -111,6 +88,9 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const [laadFout, setLaadFout] = useState(false);
   const [lezen, setLezen] = useState(psalmUitHash);
   const [kat, setKat] = useState(kathismaUitHash);
+  // Mobiel: de weergaven van de mock-up (PsalterMobiel.tsx); #psalmen/lijst blijft de bestaande lijst van alle psalmen.
+  const mobiel = useMobiel();
+  const [alleLijst, setAlleLijst] = useState(() => window.location.hash === '#psalmen/lijst');
   // Scrollposities per adres binnen deze pagina, om na de lezer (of een kathisma) op dezelfde plek terug te komen.
   const posities = useRef<Record<string, number>>({});
   const vorigeHash = useRef(window.location.hash);
@@ -151,6 +131,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
       vorigeHash.current = h;
       setLezen(n);
       setKat(kathismaUitHash());
+      setAlleLijst(h === '#psalmen/lijst');
       if (n) {
         try {
           localStorage.setItem(LAATST, String(n.nr));
@@ -215,6 +196,16 @@ export default function Psalmen({ actief }: { actief: boolean }) {
     </button>
   );
 
+  if (mobiel) {
+    if (lezen) return <PsalterLezer key={lezen.nr} nr={lezen.nr} vers={lezen.vers} tekst={teksten?.[lezen.nr]} laadFout={laadFout} />;
+    if (kat?.k && kat.i !== null) {
+      const psalm = kathismaStappen(kat.k)[kat.i].psalm;
+      return <PsalterLezer key={`k${kat.k.nr}-${kat.i}`} nr={psalm} vers={null} tekst={teksten?.[psalm]} laadFout={laadFout} kathisma={{ k: kat.k, i: kat.i, datum: kat.datum }} />;
+    }
+    if (kat?.k && kat.geheel) return <PsalterGeheel k={kat.k} teksten={teksten} laadFout={laadFout} datum={kat.datum} />;
+    if (kat?.k) return <PsalterKathisma k={kat.k} datum={kat.datum} />;
+    if (!alleLijst) return <PsalterOverzicht teksten={teksten} laatst={laatst} />;
+  }
   // De lezer: één psalm als eigen weergave.
   if (lezen) return <Lezer key={lezen.nr} nr={lezen.nr} vers={lezen.vers} tekst={teksten?.[lezen.nr]} laadFout={laadFout} />;
   if (kat?.k && kat.i !== null) {

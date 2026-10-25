@@ -74,3 +74,9 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .em-lees .am-lees-t
 #top#top#top#top#top#top#top#top#top .em-dienst-pdf .etmaal-pdf p.etmaal-pdf-alinea { margin-top: 12px !important; }
 .em-dienst-pdf .etmaal-pdf-pagina + .etmaal-pdf-pagina { margin-top: 12px; }
 html.lees-nacht #top#top#top#top#top#top#top#top#top .em-dienst-pdf .etmaal-pdf p { color: #e9dcc0; }
+/* Dienst: het perkament met zacht afgeronde hoeken tegen het sfeerbeeld en het klooster, geen harde lijn */
+.em-dienst .em-kaarten { margin: -14px 0; border-radius: 16px; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35), 0 2px 10px rgba(10, 5, 2, .35); }
+.em-dienst .em-klooster { margin-top: 0; }
+/* Overzicht: het perkament onder de banner met zacht afgeronde hoeken, geen harde lijn */
+.em-papier { background: none; }
+.em-papier:before { content: ""; position: absolute; z-index: -1; top: 40px; left: 0; right: 0; bottom: 0; border-radius: 16px 16px 0 0; background: var(--papyrus); box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
