@@ -1,6 +1,6 @@
 /* Kalender op mobiel (Kalender.tsx, tak `mobiel`), volgens mock-up 02_kalender (rechtertelefoon). Bouwt op
    adem-mobiel.css (.am-merk). Maten afgeleid van de mock-up op 390 px: lage banner (~150 px), de maand op perkament
-   (rijen ~36 px), de gekozen dag als één kaart met vier regels; op diep chocoladebruin. */
+   (rijen ~35 px), de gekozen dag als één kaart met vier regels; op diep chocoladebruin. */
 
 .km { min-height: 100dvh; margin-bottom: -68px; padding-bottom: 80px; background: #2a1a0d; text-align: left; }
 
@@ -23,9 +23,9 @@
 #top#top#top#top#top#top#top#top#top#top .km-maandnav h2 { margin: 0; font-family: var(--font-lees) !important; font-size: clamp(25px, 7vw, 29px); font-weight: 500; line-height: 1.1; letter-spacing: 0; text-transform: none; color: #2b1a0e !important; }
 
 /* Raster: zeven gelijke kolommen, geen vakjes */
-.km-raster { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 1px; touch-action: pan-y; }
-.km-weekdag { padding: 4px 0 6px; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-align: center; text-transform: uppercase; color: #4a3220; }
-#top#top#top#top#top#top#top#top .km-cel { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 38px; height: 38px; margin: 0 auto; padding: 0; border: 0; border-radius: 50%; background: none; color: #2b1a0e; font-family: var(--font-lees); }
+.km-raster { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 0; touch-action: pan-y; }
+.km-weekdag { padding: 2px 0 4px; font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-align: center; text-transform: uppercase; color: #4a3220; }
+#top#top#top#top#top#top#top#top .km-cel { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 35px; height: 35px; margin: 0 auto; padding: 0; border: 0; border-radius: 50%; background: none; color: #2b1a0e; font-family: var(--font-lees); }
 .km-nr { font-size: 17px; line-height: 1; font-variant-numeric: lining-nums; }
 .km-tekens { display: flex; gap: 2px; align-items: center; height: 9px; margin-top: 1px; color: #8a5f2c; }
 .km-teken { font-size: 9px; line-height: 1; }
@@ -40,9 +40,9 @@
 #top#top#top#top#top#top#top#top .km-cel:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 1px; }
 
 /* Naar vandaag en legenda: kleine tekstknoppen */
-#top#top#top#top#top#top#top#top .km-tekstknop { display: block; min-height: 32px; margin: 0 auto; padding: 4px 10px; border: 0; background: none; font-family: var(--font-lees); font-size: 15px; color: #8a5f2c; }
+#top#top#top#top#top#top#top#top .km-tekstknop { display: block; min-height: 30px; margin: 0 auto; padding: 4px 10px; border: 0; background: none; font-family: var(--font-lees); font-size: 15px; color: #8a5f2c; }
 #top#top#top#top#top#top#top#top .km-naar-vandaag { margin-top: -4px; }
-#top#top#top#top#top#top#top#top .km-legenda-knop { margin: 2px 4px 0 auto; font-size: 14px; }
+#top#top#top#top#top#top#top#top .km-legenda-knop { margin: -2px 4px 0 auto; font-size: 14px; }
 .km-legenda { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin: 0; padding: 4px 10px 10px; list-style: none; font-family: var(--font-lees); font-size: 14px; }
 .km-legenda li { display: flex; align-items: center; gap: 6px; }
 .km-legenda .km-teken { width: 12px; text-align: center; font-size: 11px; }
