@@ -101,3 +101,6 @@ html.lees-nacht #top#top#top#top#top#top#top#top .am-lees-vlak :is(p, li, h2, .a
 /* De schermvullende leesweergaven (Adem, Etmaal, Psalter) hebben eigen avondkleuren: niet het omkeerfilter van
    index.css (html.lees-nacht .lees-vlak) gebruiken, anders wordt de tekst donker op donker. */
 html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top#top .am-laag .lees-vlak { filter: none !important; }
+/* Overgang van een donker beeld of donkere balk naar het perkament: zacht afgeronde hoeken, geen harde lijn
+   (zoals Etmaal). Adem: onder de gebedshoek. */
+.am-verdieping { position: relative; z-index: 3; margin-top: -16px; border-radius: 16px 16px 0 0; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }

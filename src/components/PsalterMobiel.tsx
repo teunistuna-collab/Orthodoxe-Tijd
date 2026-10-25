@@ -30,15 +30,7 @@ export function PsalterOverzicht({ teksten, laatst }: { teksten: PsalmTeksten | 
   const verder = laatst ? (plek?.nr === laatst ? `#psalmen/${laatst}/${plek.vers}` : `#psalmen/${laatst}`) : kathismaPad(KATHISMATA[0]);
   return (
     <section id="psalmen" className="am pm">
-      <div className="pm-banner">
-        <img src={`${BANNER}-800.webp`} srcSet={`${BANNER}-800.webp 800w, ${BANNER}-1600.webp 1600w`} sizes="100vw" alt="" width={1672} height={941} decoding="async" />
-        <p className="am-merk pm-merk">Orthodoxe Tijd</p>
-        <div className="pm-banner-tekst">
-          <h1 className="pm-titel">Psalter</h1>
-          <p className="am-onder">De psalmen als gebed</p>
-          <Sierlijn />
-        </div>
-      </div>
+      <PsalterBanner />
       <div className="pm-papier">
         <label className="pm-zoek">
           <Search aria-hidden="true" />
@@ -84,6 +76,27 @@ export function PsalterOverzicht({ teksten, laatst }: { teksten: PsalmTeksten | 
         )}
       </div>
     </section>
+  );
+}
+
+/** De manuscriptbanner van het Psalter (overzicht en de lijst van alle psalmen); met `terug` een terugpijl bovenin. */
+export function PsalterBanner({ terug }: { terug?: string }) {
+  return (
+    <div className="pm-banner">
+      <img src={`${BANNER}-800.webp`} srcSet={`${BANNER}-800.webp 800w, ${BANNER}-1600.webp 1600w`} sizes="100vw" alt="" width={1672} height={941} decoding="async" />
+      {terug ? (
+        <div className="pm-banner-kop">
+          <Kop terug={terug} merk />
+        </div>
+      ) : (
+        <p className="am-merk pm-merk">Orthodoxe Tijd</p>
+      )}
+      <div className="pm-banner-tekst">
+        <h1 className="pm-titel">Psalter</h1>
+        <p className="am-onder">De psalmen als gebed</p>
+        <Sierlijn />
+      </div>
+    </div>
   );
 }
 

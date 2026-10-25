@@ -19,7 +19,7 @@ import './Vandaag.css';
 import './ontwerp.css';
 import './psalmen-knoppen.css';
 import { useMobiel } from '../lib/desktop';
-import { PsalterGeheel, PsalterKathisma, PsalterLezer, PsalterOverzicht } from './PsalterMobiel';
+import { PsalterBanner, PsalterGeheel, PsalterKathisma, PsalterLezer, PsalterOverzicht } from './PsalterMobiel';
 import { LAATST, LEESPLEK, NIET_BESCHIKBAAR, kathismaPad, leesLaatst, leesPlek, stukNaam } from './psalmenAdres';
 
 // De psalmteksten (±12 KB gecomprimeerd) meteen bij het starten ophalen, niet pas als het psalter of een dienst ze vraagt.
@@ -213,6 +213,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
     return <Lezer key={`k${kat.k.nr}-${kat.i}`} nr={psalm} vers={null} tekst={teksten?.[psalm]} laadFout={laadFout} kathisma={{ k: kat.k, i: kat.i, datum: kat.datum }} />;
   }
   const perKathisma = !!kat;
+  const lijstMobiel = mobiel && alleLijst;
   // Tabbladen "Per psalm" en "Per kathisma": pijltjes, Home en End wisselen (en verplaatsen de focus), zoals bij tabs.
   const kiesWeergave = (kathisma: boolean) => gaNaar(kathisma ? 'psalmen/kathisma' : 'psalmen');
   const tabToets = (e: ToetsEvent<HTMLButtonElement>) => {
@@ -225,8 +226,12 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
   return (
     <>
-      <section id="psalmen" className="vg ot-redesign ot-psalmen">
-        {/* Mobiel: de kop van Verdieping (kerkgewelf) met het icoon van David in het midden; web: de brede banner met David */}
+      <section id="psalmen" className={`vg ot-redesign ot-psalmen${lijstMobiel ? ' pm pm-alle-pagina' : ''}`}>
+        {/* Mobiel (#psalmen/lijst): dezelfde manuscriptbanner als het Psalter-overzicht, zonder kathisma-tab en verder lezen;
+            web: de brede banner met David */}
+        {lijstMobiel ? (
+          <PsalterBanner terug="#psalmen" />
+        ) : (
         <NisKop
           open={open}
           balk
@@ -240,10 +245,11 @@ export default function Psalmen({ actief }: { actief: boolean }) {
         >
           <img className="ot-ps-icoon" src="/images/psalmen/david-icoon.webp" alt="Icoon van de heilige profeet en koning David" width={600} height={726} decoding="async" />
         </NisKop>
-        <div className="vg-papier ot-inhoud">
-          <h1 className="sr-only">Psalter</h1>
+        )}
+        <div className={`vg-papier ot-inhoud${lijstMobiel ? ' pm-papier' : ''}`}>
+          {!lijstMobiel && <h1 className="sr-only">Psalter</h1>}
 
-          <div ref={weergaveRef} className="ot-ps-weergave" role="tablist" aria-label="Indeling van de psalmen">
+          <div ref={weergaveRef} className="ot-ps-weergave" hidden={lijstMobiel} role="tablist" aria-label="Indeling van de psalmen">
             <button type="button" role="tab" id="ps-tab-psalm" aria-controls="ps-weergave" aria-selected={!perKathisma} tabIndex={perKathisma ? -1 : 0} onClick={() => kiesWeergave(false)} onKeyDown={tabToets}>
               Per psalm
             </button>
@@ -352,7 +358,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           </div>
 
           {/* Verder lezen: alleen met echte leesgeschiedenis op dit toestel; hervat op het laatst gelezen vers */}
-          {laatst && (() => {
+          {laatst && !lijstMobiel && (() => {
             const plek = leesPlek();
             return (
               <aside className="ot-verder" aria-label="Verder lezen">
