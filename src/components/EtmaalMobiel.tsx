@@ -7,6 +7,7 @@ import { OPEN_DIENST_EVENT } from '../lib/events';
 import { gaNaar } from '../lib/navigatie';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import Psalterlezing from './Psalterlezing';
+import DienstTekst from './DienstTekst';
 import { SIERKRUIS } from './symbolen';
 import './etmaal-mobiel.css';
 
@@ -17,7 +18,7 @@ import './etmaal-mobiel.css';
 //   #etmaal/<dienst>/psalmen   4. de psalmen van de dienst, met een link naar het Psalter
 //   #etmaal/lees/<onderwerp>   een verdieping (ETMAAL_INFO)
 // Inhoud alleen uit de site: lib/etmaal.ts (diensten, tijden, hoofdgedachtenis, kernvers, psalmen) en
-// lib/cyclusTeksten.ts (ETMAAL_INFO). Geen gebedsteksten van de diensten. Beelden: de aangeleverde kapellen, het
+// lib/cyclusTeksten.ts (ETMAAL_INFO); bij "Over deze dienst" ook de diensttekst uit de PDF, zoals op desktop. Beelden: de aangeleverde kapellen, het
 // klooster en het gebedenboek (public/images/etmaal/mobiel), alleen bijgesneden zodat er geen figuren in beeld staan.
 
 const BEELD = '/images/etmaal/mobiel';
@@ -169,6 +170,11 @@ function Over({ d }: { d: ServiceMapping }) {
         <h2>Psalmen van deze dienst</h2>
         <p>{d.psalms.map((p) => p.title).join(', ')}</p>
       </section>
+      {/* De dienst zelf, zoals in het dienstvenster op desktop (de PDF van de dienst) */}
+      <section className="em-dienst-pdf">
+        <h2>De dienst</h2>
+        <DienstTekst dienst={d} />
+      </section>
     </LeesWeergave>
   );
 }
@@ -179,7 +185,7 @@ function Psalmen({ d }: { d: ServiceMapping }) {
   const kathisma = d.title === 'Metten' ? 'metten' : d.title === 'Vespers' ? 'vespers' : null;
   return (
     <Laag className="em-laag em-psalmen" label={`${naamVan(d)}: psalmen`}>
-      <img className="em-boek" src={`${BEELD}/gebedenboek.webp`} alt="" width={760} height={1448} decoding="async" />
+      <img className="em-boek" src={`${BEELD}/gebedenboek.webp`} alt="" width={900} height={1200} decoding="async" />
       <Kop terug={`#etmaal/${slugVan(d)}`} merk />
       <div className="em-psalmen-vlak">
         <h1 className="em-titel" tabIndex={-1}>{naamVan(d)}</h1>

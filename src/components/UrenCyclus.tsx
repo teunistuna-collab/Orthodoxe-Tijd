@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Modal from './Modal';
+import { leesPdfTekst, pdfTekstUitCache, type PdfLine } from './dienstPdf';
 import { vergrendelScroll } from '../lib/scrollLock';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './CycleSections';
@@ -17,32 +18,12 @@ import { WEEKDAGEN, addDays, formatDag } from '../lib/kalender';
 import Verdieping from './Verdieping';
 import { PSALMEN, laadPsalmTeksten, type PsalmTeksten } from '../lib/psalmen';
 
-// De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
-let pdfjsLaden: Promise<typeof import('pdfjs-dist')> | null = null;
-function laadPdfjs() {
-  pdfjsLaden ??= import('pdfjs-dist')
-    .then((pdfjsLib) => {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
-      return pdfjsLib;
-    })
-    .catch((fout) => {
-      pdfjsLaden = null; // bij een netwerkfout de volgende keer opnieuw proberen
-      throw fout;
-    });
-  return pdfjsLaden;
-}
-
 type ModalState = {
   serviceIndex: number;
   selectedPsalm?: PsalmMapping;
 };
 
-type PdfLine = {
-  x: number;
-  text: string;
-};
 
-const pdfTextCache = new Map<string, Array<Array<PdfLine>>>();
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -88,67 +69,22 @@ export default function UrenCyclus() {
 
   // PDF-tekst: uit de cache, of het geladen resultaat zolang het bij de huidige url hoort; anders nog aan het laden.
   const pdfUrl = open !== null ? currentPdfUrl : '';
-  const cachedPages = pdfUrl ? pdfTextCache.get(pdfUrl) : undefined;
+  const cachedPages = pdfUrl ? pdfTekstUitCache(pdfUrl) : undefined;
   const pdfHuidig = pdf && pdf.url === pdfUrl ? pdf : null;
   const pdfPages = cachedPages ?? pdfHuidig?.pages ?? [];
   const pdfStatus = !pdfUrl ? 'idle' : cachedPages ? 'done' : (pdfHuidig?.status ?? 'loading');
 
   useEffect(() => {
-    if (!pdfUrl || pdfTextCache.has(pdfUrl)) return;
+    if (!pdfUrl || pdfTekstUitCache(pdfUrl)) return;
     let active = true;
 
-    const parsePdf = async () => {
-      try {
-        const pdfjsKlaar = laadPdfjs(); // tegelijk met het PDF-bestand ophalen
-        pdfjsKlaar.catch(() => {}); // een fout komt hieronder via Promise.all binnen
-        const response = await fetch(pdfUrl);
-        if (!response.ok) throw new Error(`PDF is niet beschikbaar (${response.status})`);
-
-        const [buffer, pdfjsLib] = await Promise.all([response.arrayBuffer(), pdfjsKlaar]);
-        const pdf = await pdfjsLib.getDocument({ data: buffer, verbosity: 0 }).promise;
-        const pages: Array<Array<PdfLine>> = [];
-
-        for (let pageIndex = 1; pageIndex <= pdf.numPages; pageIndex += 1) {
-          const page = await pdf.getPage(pageIndex);
-          const textContent = await page.getTextContent();
-          const rows = new Map<number, Array<PdfLine>>();
-
-          for (const item of textContent.items) {
-            if ('str' in item && typeof item.str === 'string') {
-              const text = item.str.trim();
-              if (!text) continue;
-              const yKey = Math.round(Number(item.transform?.[5] ?? 0));
-              const row = rows.get(yKey) ?? [];
-              row.push({ x: Number(item.transform?.[4] ?? 0), text });
-              rows.set(yKey, row);
-            }
-          }
-
-          const pageLines = Array.from(rows.entries())
-            .sort((a, b) => b[0] - a[0])
-            .map(([, items]) => ({
-              x: Math.min(...items.map((entry) => entry.x)),
-              text: items
-                .sort((a, b) => a.x - b.x)
-                .map((entry) => entry.text)
-                .join(' '),
-            }))
-            .filter((line) => line.text.length > 0);
-
-          pages.push(pageLines);
-        }
-
-        if (!active) return;
-        pdfTextCache.set(pdfUrl, pages);
-        setPdf({ url: pdfUrl, pages, status: 'done' });
-      } catch (error) {
+    leesPdfTekst(pdfUrl)
+      .then((pages) => active && setPdf({ url: pdfUrl, pages, status: 'done' }))
+      .catch((error) => {
         if (!active) return;
         console.error('PDF parsing failed', error);
         setPdf({ url: pdfUrl, pages: [], status: 'error' });
-      }
-    };
-
-    void parsePdf();
+      });
 
     return () => {
       active = false;
