@@ -1,23 +1,23 @@
 /* Bidden op mobiel (Bidden.tsx), volgens mock-up 03_bidden. Bouwt op adem-mobiel.css (.am-merk, .am-sierlijn).
    Maten afgeleid van de mock-up op 390 px: banner 0,95 × de breedte, uurkaart ~122 px, overige kaarten ~82 px,
-   7 px van de rand, 5 px ertussen, op diep chocoladebruin dat aansluit op de onderkant van de banner. */
+   7 px van de rand, 5 px ertussen. Achtergrond zoals Etmaal: perkament dat met afgeronde hoeken onder de banner begint. */
 
 /* Het bruin loopt door tot onder de onderbalk (#top houdt 68px vrij voor die balk) */
-.bd { min-height: 100dvh; margin-bottom: -68px; padding-bottom: 80px; background: #2a1a0d; }
+.bd { min-height: 100dvh; margin-bottom: -68px; padding-bottom: 80px; background: var(--papyrus, #f5e6c8); }
 
 /* Banner: beeld met titel als tekstlaag over de donkere onderkant */
 .bd-banner { position: relative; height: min(95vw, 430px); overflow: hidden; background: #150b06; color: var(--am-ivoor); }
 .bd-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
 .bd-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .5), rgba(10, 5, 2, 0) 22%, rgba(10, 5, 2, 0) 48%, rgba(26, 15, 7, .78) 80%, #2a1a0d); }
 .bd-banner .am-merk { position: absolute; top: 30px; left: 0; right: 0; z-index: 2; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
-.bd-banner-tekst { position: absolute; left: 0; right: 0; bottom: 12px; z-index: 2; padding: 0 20px; }
+.bd-banner-tekst { position: absolute; left: 0; right: 0; bottom: 26px; z-index: 2; padding: 0 20px; }
 #top#top#top#top#top#top#top#top#top#top .bd-titel { margin: 0; font-family: var(--font-lees) !important; font-size: 46px; font-weight: 400; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--am-ivoor) !important; text-shadow: 0 2px 12px rgba(0, 0, 0, .7); }
 .bd-banner .am-sierlijn { width: min(170px, 50%); margin-top: 8px; }
 .bd-banner-onder { margin: 6px 0 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.25; color: var(--am-ivoor); text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
 
 /* Kaarten: beeld links dat zacht overloopt in perkament, tekst rechts, dezelfde pijl */
-.bd-kaarten { position: relative; z-index: 3; display: grid; gap: 5px; margin-top: -2px; padding: 0 7px; text-align: left; }
-#top#top#top#top#top#top#top#top .bd-kaart { position: relative; display: flex; align-items: center; min-height: 82px; overflow: hidden; border: 1px solid #b99455; border-radius: 6px; background: #e5cdaf url('/images/bidden/perkament.webp') center / cover; box-shadow: inset 0 0 0 2px rgba(246, 230, 200, .45), 0 3px 8px rgba(10, 5, 2, .45); color: #2b1a0e !important; text-decoration: none; }
+.bd-kaarten { position: relative; z-index: 3; display: grid; gap: 5px; margin-top: -16px; padding: 10px 7px 0; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8); box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); text-align: left; }
+#top#top#top#top#top#top#top#top .bd-kaart { position: relative; display: flex; align-items: center; min-height: 82px; overflow: hidden; border: 1px solid #b99455; border-radius: 6px; background: #e5cdaf url('/images/bidden/perkament.webp') center / cover; box-shadow: inset 0 0 0 2px rgba(246, 230, 200, .45), 0 2px 5px rgba(60, 35, 15, .22); color: #2b1a0e !important; text-decoration: none; }
 .bd-beeld { position: relative; flex: 0 0 40%; align-self: stretch; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, #000 58%, transparent); mask-image: linear-gradient(90deg, #000 58%, transparent); }
 .bd-beeld img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 0 50%; }
 .bd-tekst { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; padding: 8px 0 8px 4px; }
