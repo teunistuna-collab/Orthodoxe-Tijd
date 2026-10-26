@@ -1,20 +1,21 @@
-/* Onderbalk op mobiel (BottomNav.tsx): het aangeleverde paneel (public/images/ui/navbalk-1000.webp, 26-10-2026: blauw
-   met gouden rand, kruis bovenaan en hoekornamenten) als achtergrond. Negen-vlaks schaling (border-image), zodat het kruis
-   en de hoeken niet vervormen; alleen het blauwe midden rekt mee. Het kruis steekt boven het paneel uit. */
+/* Onderbalk op mobiel (BottomNav.tsx): het aangeleverde paneel (public/images/ui/navbalk-1000.webp, 26-10-2026: blauw met
+   gouden lijst, ornament bovenaan en vier scheidingen) als achtergrond. Negen-vlaks schaling (border-image): het ornament
+   en de randen houden hun verhouding, alleen het midden rekt in de hoogte. De kolommen volgen de scheidingen in het beeld
+   (de middelste, onder het ornament, is breder). */
 @media (max-width: 767.98px) {
-  #top#top .bottom-nav { padding-top: 20px; border: 0; background: none; box-shadow: none; }
-  /* De balk is hoger (78px): ruimte onderaan de pagina en de lagen boven de balk laten eindigen */
-  #top { padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important; }
-  .em-laag { bottom: calc(66px + env(safe-area-inset-bottom)) !important; }
+  #top#top .bottom-nav { padding-top: 18px; border: 0; background: none; box-shadow: none; }
   #top#top .bottom-nav:before {
     content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    border-style: solid; border-width: 26px 36px 30px;
-    border-image: url('/images/ui/navbalk-1000.webp') 80 110 90 110 fill / 26px 36px 30px stretch;
+    border-style: solid; border-width: 23px 5.5px 6px;
+    border-image: url('/images/ui/navbalk-1000.webp') 60 14 16 fill / 23px 5.5px 6px stretch;
     filter: drop-shadow(0 -3px 8px rgba(10, 5, 2, .35));
   }
-  .bottom-nav ul { position: relative; z-index: 1; padding: 0 8px; }
-  #top#top#top#top .bottom-nav a { color: #e6d3a6; }
+  .bottom-nav ul { position: relative; z-index: 1; grid-template-columns: 394fr 331fr 476fr 330fr 397fr !important; }
+  #top#top#top#top .bottom-nav a { min-height: 50px !important; padding: 4px 0 8px; color: #e6d3a6; }
   .bottom-nav svg { color: #d8b56a; }
   #top#top#top#top .bottom-nav .is-actief, .bottom-nav .is-actief svg { color: #f3d27e; }
-  .bottom-nav .is-actief:after { bottom: 6px; background: #e8c46a; }
+  .bottom-nav .is-actief:after { bottom: 5px; background: #e8c46a; }
+  /* De balk is 68px hoog: ruimte onderaan de pagina en de lagen boven de balk laten eindigen */
+  #top { padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important; }
+  .em-laag { bottom: calc(60px + env(safe-area-inset-bottom)) !important; }
 }
