@@ -3,7 +3,7 @@ import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, ChevronRight, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { addDays, dagInfo, formatDag, formatDatum, formatKort, hoofdletter, ymd } from '../lib/kalender';
-import { vastenPeriodes } from '../lib/overzicht';
+import { vastenPeriodes, type Periode } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
 import { VastenBadge } from './ui';
@@ -18,8 +18,10 @@ import { voedselStatus } from '../lib/voedselgroepen';
 import { PASTORALE_NOOT, vastenBetekenis } from '../lib/vastenBetekenis';
 import { BannerBeeld, Sierlijn } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
+import { useMobiel } from '../lib/desktop';
 import './Vandaag.css';
 import './ontwerp.css';
+import './vasten-mobiel.css';
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
@@ -39,6 +41,9 @@ const FAQ = [
 ];
 
 type InfoKey = 'wat' | 'hoe' | 'periodes' | 'betekenis';
+
+const WEKELIJKS =
+  'De woensdag herinnert aan het verraad van Judas, de vrijdag aan de kruisiging. Beide dagen worden al sinds de eerste eeuwen gevast — het staat al in de Didachè. Vastenvrij zijn alleen de Lichte Week, de week na Pinksteren, de Kersttijd en de week na Tollenaar en Farizeeër.';
 
 // De negen treden van de vastenladder, als tekst (geen iconen) — rechtstreeks uit lib/vasten.ts,
 // zodat deze lijst niet los kan raken van de ladder die elders op de site gebruikt wordt.
@@ -124,7 +129,7 @@ export default function Vasten() {
     return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
   }, []);
   const [infoOpen, setInfoOpen] = useState<InfoKey | null>(null);
-  const [periodeOpen, setPeriodeOpen] = useState<string | null>(null);
+  const [periodeOpen, setPeriodeOpen] = useState<Periode | null>(null);
 
   const dagVandaag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
   // Weergavedatum van de vastentafel: vandaag (standaard) of morgen, de volgende kalenderdag; de systeemdatum blijft
@@ -142,9 +147,23 @@ export default function Vasten() {
   const vrijP = periodes.filter((p) => p.soort === 'vrij');
   const dagP = periodes.filter((p) => p.soort === 'dag');
   const geselecteerdeDagInfo = geselecteerdeDag ? dagInfo(new Date(`${geselecteerdeDag}T00:00:00Z`), mode) : null;
-  const periodeGeopend = periodeOpen ? vastenP.find((p) => p.id === periodeOpen) : null;
+  const periodeGeopend = periodeOpen;
 
-  // Voedselkaarten in het dagvenster: dezelfde status als de vastentafel (lib/voedselgroepen.ts)
+  // Mobiel (mock-up vasten): de vastenregel van de dag met "Wat mag ik vandaag eten?" als uitklapper (tegels en
+  // vorige/volgende dag), de huidige (of volgende) vastenperiode en drie verdiepingsregels. Zelfde gegevens en vensters.
+  const mobiel = useMobiel();
+  const [etenOpen, setEtenOpen] = useState(false);
+  const [verschuiving, setVerschuiving] = useState(0);
+  const [wekelijksOpen, setWekelijksOpen] = useState(false);
+  const dagM = useMemo(() => dagInfo(addDays(vandaag, verschuiving), mode, vandaagYmd), [vandaag, verschuiving, mode, vandaagYmd]);
+  const periodeNu = useMemo(() => {
+    const alle = [jaar - 1, jaar, jaar + 1].flatMap((j) => vastenPeriodes(j, mode)).filter((p) => p.soort === 'vasten');
+    const nu = alle.find((p) => p.start <= vandaag && vandaag <= p.eind);
+    if (nu) return { p: nu, huidig: true };
+    const volgende = alle.filter((p) => p.start > vandaag).sort((x, y) => x.start.getTime() - y.start.getTime())[0];
+    return volgende ? { p: volgende, huidig: false } : null;
+  }, [jaar, mode, vandaag]);
+
 
   const infoKaarten = (
     <Verdieping
@@ -159,6 +178,136 @@ export default function Vasten() {
       onOpen={setInfoOpen}
     />
   );
+
+  const vensters = (
+    <>
+      {geselecteerdeDagInfo && (
+        <Modal open={Boolean(geselecteerdeDagInfo)} onClose={() => setGeselecteerdeDag(null)} eyebrow="Vasteninformatie" title={formatDatum(geselecteerdeDagInfo.civil)} centerTitle maxWidth="max-w-2xl">
+            <div className="space-y-3">
+              <VastenBadge regel={geselecteerdeDagInfo.vasten} size="lg" />
+              <div>
+                {/* De weekdag alleen als het vastenlabel hem nog niet noemt ("Vrijdag — vastendag"). */}
+                {!geselecteerdeDagInfo.vasten.label.toLowerCase().startsWith(geselecteerdeDagInfo.weekdagNaam.toLowerCase()) && (
+                  <h3 className="font-display text-2xl font-semibold text-ink">{hoofdletter(geselecteerdeDagInfo.weekdagNaam)}</h3>
+                )}
+                <p className="mt-1 font-display text-lg italic leading-relaxed text-ink-soft">{geselecteerdeDagInfo.vasten.detail}</p>
+              </div>
+              <div className="gold-rule my-5" />
+              <div>
+                <p className="ot-label mb-2">Toegestaan op deze dag</p>
+                <VoedselTegels status={voedselStatus(geselecteerdeDagInfo.vasten.niveau)} />
+              </div>
+              {geselecteerdeDagInfo.vasten.periode && <p className="text-sm font-semibold text-gold-deep">{geselecteerdeDagInfo.vasten.periode}</p>}
+              <div className="gold-rule mt-5" />
+              <blockquote className="font-display pt-1 text-center text-lg italic leading-relaxed text-ink-soft">
+                “Waakt en bidt, opdat gij niet in verzoeking komt.”
+                <cite className="ot-label mt-1 block not-italic">Matteüs 26:41</cite>
+              </blockquote>
+            </div>
+        </Modal>
+      )}
+
+      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? INFO_POPUPS[infoOpen] : null} />
+      <LiturgicalPopup
+        open={periodeGeopend !== null && periodeGeopend !== undefined}
+        onClose={() => setPeriodeOpen(null)}
+        content={
+          periodeGeopend
+            ? {
+                title: PERIODE_INFO[periodeGeopend.id]?.label ?? periodeGeopend.naam,
+                subtitle: `${formatDag(periodeGeopend.start)} – ${formatDatum(periodeGeopend.eind)} · ${periodeGeopend.dagen} dagen`,
+                paragraphs: [periodeGeopend.omschrijving, ...periodeGeopend.regels],
+              }
+            : null
+        }
+      />
+    </>
+  );
+
+  if (mobiel) {
+    const isVandaag = verschuiving === 0;
+    return (
+      <>
+        <section id="vasten" className="vg ot-redesign ot-vasten vsm">
+          <NisKop open={open} balk achter={<BannerBeeld naam="vasten-banner" open={open} />} />
+          <div className="vg-papier vsm-papier">
+            <h2 className="vsm-label"><span>Vasten vandaag</span></h2>
+            <div className="vsm-kaart vsm-regel" aria-live="polite">
+              <h3 className="vsm-titel">{isVandaag ? 'De vastenregel van vandaag' : `De vastenregel van ${formatDatum(dagM.civil)}`}</h3>
+              <p className="vsm-hoofd">{dagM.vasten.label}</p>
+              <p className="vsm-tekst">{dagM.vasten.detail}</p>
+              {dagM.vasten.periode && <p className="vsm-periode">{dagM.vasten.periode}</p>}
+              <button type="button" className="vsm-uitklap" aria-expanded={etenOpen} aria-controls="vsm-eten" onClick={() => setEtenOpen((o) => !o)}>
+                <span>{isVandaag ? 'Wat mag ik vandaag eten?' : 'Wat mag ik deze dag eten?'}</span>
+                <ChevronDown className={etenOpen ? 'is-open' : undefined} aria-hidden="true" />
+              </button>
+              {etenOpen && (
+                <div id="vsm-eten" className="vsm-eten">
+                  <VoedselTegels status={voedselStatus(dagM.vasten.niveau)} />
+                  <div className="vsm-dagnav">
+                    <button type="button" onClick={() => setVerschuiving((v) => v - 1)}><span aria-hidden="true">←</span> Vorige dag</button>
+                    {!isVandaag && <button type="button" className="vsm-vandaag" onClick={() => setVerschuiving(0)}>Vandaag</button>}
+                    <button type="button" onClick={() => setVerschuiving((v) => v + 1)}>Volgende dag <span aria-hidden="true">→</span></button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {periodeNu && (
+              <>
+                <h2 className="vsm-label"><span>{periodeNu.huidig ? 'Huidige vastenperiode' : 'Volgende vastenperiode'}</span></h2>
+                <button type="button" className="vsm-kaart vsm-rij vsm-periodekaart" onClick={() => setPeriodeOpen(periodeNu.p)}>
+                  <span className="vsm-rij-tekst">
+                    <b className="vsm-titel">{PERIODE_INFO[periodeNu.p.id]?.label ?? periodeNu.p.naam}</b>
+                    <span className="vsm-datum">{formatDag(periodeNu.p.start)} – {formatDag(periodeNu.p.eind)}</span>
+                    <span className="vsm-tekst">{periodeNu.p.omschrijving}</span>
+                  </span>
+                  <ChevronRight className="vsm-pijl" aria-hidden="true" />
+                </button>
+              </>
+            )}
+
+            <h2 className="vsm-label"><span>Verdieping</span></h2>
+            <ul className="vsm-kaart vsm-lijst">
+              {[
+                { titel: 'Het wekelijkse vasten', onder: 'Woensdag en vrijdag', open: () => setWekelijksOpen(true) },
+                { titel: 'De vastenperioden', onder: 'Het ritme van het kerkelijk jaar', open: () => setInfoOpen('periodes') },
+                { titel: 'De betekenis van vasten', onder: 'Gebed, onthouding en barmhartigheid', open: () => setInfoOpen('betekenis') },
+              ].map((v) => (
+                <li key={v.titel}>
+                  <button type="button" className="vsm-rij" onClick={v.open}>
+                    <span className="vsm-rij-tekst">
+                      <b>{v.titel}</b>
+                      <span>{v.onder}</span>
+                    </span>
+                    <ChevronRight className="vsm-pijl" aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            {/* De vier grote vasten van dit jaar; elke regel opent het bestaande periodevenster */}
+            <h2 className="vsm-label"><span>De vier grote vasten</span></h2>
+            <ul className="vsm-kaart vsm-lijst">
+              {grotevier.map((p) => (
+                <li key={p.id}>
+                  <button type="button" className="vsm-rij" onClick={() => setPeriodeOpen(p)}>
+                    <span className="vsm-rij-tekst">
+                      <b>{PERIODE_INFO[p.id]?.label ?? p.naam}</b>
+                      <span>{formatDag(p.start)} – {formatDatum(p.eind)}{PERIODE_INFO[p.id]?.beweeglijk ? ' · beweeglijk' : ''}</span>
+                    </span>
+                    <ChevronRight className="vsm-pijl" aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+        {vensters}
+        <LiturgicalPopup open={wekelijksOpen} onClose={() => setWekelijksOpen(false)} content={{ title: 'Het wekelijkse vasten', subtitle: 'Woensdag en vrijdag', paragraphs: [WEKELIJKS] }} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -200,7 +349,7 @@ export default function Vasten() {
               <ul className="ot-register">
                 {grotevier.map((p) => (
                   <li key={p.id}>
-                    <button type="button" className="ot-rij" onClick={() => setPeriodeOpen(p.id)}>
+                    <button type="button" className="ot-rij" onClick={() => setPeriodeOpen(p)}>
                       <span className="ot-rij-tekst">
                         <b>{PERIODE_INFO[p.id]?.label ?? p.naam}</b>
                         <span>{formatDag(p.start)} – {formatDatum(p.eind)}{PERIODE_INFO[p.id]?.beweeglijk ? ' · beweeglijk' : ''}</span>
@@ -226,9 +375,7 @@ export default function Vasten() {
             <p className="ot-label">Het wekelijkse vasten</p>
             <h3 className="font-display mt-2 text-2xl font-semibold text-ink sm:text-3xl">Woensdag en vrijdag</h3>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-ink-soft sm:text-base">
-              De woensdag herinnert aan het verraad van Judas, de vrijdag aan de kruisiging. Beide dagen worden al sinds de
-              eerste eeuwen gevast — het staat al in de Didachè. Vastenvrij zijn alleen de Lichte Week, de week na
-              Pinksteren, de Kersttijd en de week na Tollenaar en Farizeeër.
+              {WEKELIJKS}
             </p>
             <a href="#week" className="btn-pill cyclus-verder mt-3">
               Naar de weekcyclus ›
@@ -302,46 +449,7 @@ export default function Vasten() {
       />
       </ExactPageFrame>
 
-      {geselecteerdeDagInfo && (
-        <Modal open={Boolean(geselecteerdeDagInfo)} onClose={() => setGeselecteerdeDag(null)} eyebrow="Vasteninformatie" title={formatDatum(geselecteerdeDagInfo.civil)} centerTitle maxWidth="max-w-2xl">
-            <div className="space-y-3">
-              <VastenBadge regel={geselecteerdeDagInfo.vasten} size="lg" />
-              <div>
-                {/* De weekdag alleen als het vastenlabel hem nog niet noemt ("Vrijdag — vastendag"). */}
-                {!geselecteerdeDagInfo.vasten.label.toLowerCase().startsWith(geselecteerdeDagInfo.weekdagNaam.toLowerCase()) && (
-                  <h3 className="font-display text-2xl font-semibold text-ink">{hoofdletter(geselecteerdeDagInfo.weekdagNaam)}</h3>
-                )}
-                <p className="mt-1 font-display text-lg italic leading-relaxed text-ink-soft">{geselecteerdeDagInfo.vasten.detail}</p>
-              </div>
-              <div className="gold-rule my-5" />
-              <div>
-                <p className="ot-label mb-2">Toegestaan op deze dag</p>
-                <VoedselTegels status={voedselStatus(geselecteerdeDagInfo.vasten.niveau)} />
-              </div>
-              {geselecteerdeDagInfo.vasten.periode && <p className="text-sm font-semibold text-gold-deep">{geselecteerdeDagInfo.vasten.periode}</p>}
-              <div className="gold-rule mt-5" />
-              <blockquote className="font-display pt-1 text-center text-lg italic leading-relaxed text-ink-soft">
-                “Waakt en bidt, opdat gij niet in verzoeking komt.”
-                <cite className="ot-label mt-1 block not-italic">Matteüs 26:41</cite>
-              </blockquote>
-            </div>
-        </Modal>
-      )}
-
-      <LiturgicalPopup open={infoOpen !== null} onClose={() => setInfoOpen(null)} content={infoOpen ? INFO_POPUPS[infoOpen] : null} />
-      <LiturgicalPopup
-        open={periodeGeopend !== null && periodeGeopend !== undefined}
-        onClose={() => setPeriodeOpen(null)}
-        content={
-          periodeGeopend
-            ? {
-                title: PERIODE_INFO[periodeGeopend.id]?.label ?? periodeGeopend.naam,
-                subtitle: `${formatDag(periodeGeopend.start)} – ${formatDatum(periodeGeopend.eind)} · ${periodeGeopend.dagen} dagen`,
-                paragraphs: [periodeGeopend.omschrijving, ...periodeGeopend.regels],
-              }
-            : null
-        }
-      />
+      {vensters}
     </>
   );
 }

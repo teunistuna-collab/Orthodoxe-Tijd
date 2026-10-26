@@ -1,0 +1,27 @@
+/* Week op mobiel (WeekMobiel.tsx), volgens de mock-up week. Bouwt op etmaal-mobiel.css (.em-…) en adem-mobiel.css. */
+
+/* Overzicht */
+.wm-banner img { object-position: 50% 32%; }
+.wm-lijst a { min-height: 54px !important; }
+.wm-dag { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 6px 0; }
+.wm-dag b { font-size: 18px; font-weight: 400; line-height: 1.2; }
+.wm-dag small { font-size: 14px; line-height: 1.3; color: var(--gedempt); }
+#top#top#top#top#top#top#top#top .wm-verdieping a { justify-content: flex-start; gap: 12px; }
+.wm-verdieping .em-kaart-kruis { width: 22px; height: 22px; }
+.wm-verd-titel { flex: 1; }
+
+/* Een dag: banner met titel, daaronder de tekst op perkament (geen beeld onderaan) */
+.wm-dagweergave { background: var(--papyrus, #f5e6c8); }
+.wm-dag-beeld { min-height: min(92vw, 400px); }
+.wm-dag-beeld img { object-position: 50% 30%; }
+.wm-dagweergave .em-dienst-tekst { text-align: center; }
+.wm-dagweergave .am-sierlijn { margin-inline: auto; }
+.wm-lb { position: relative; z-index: 6; }
+.wm-tekst { position: relative; z-index: 3; margin-top: -16px; padding: 18px 22px 40px; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); text-align: left; }
+.wm-tekst section + section { margin-top: 6px; }
+.wm-tekst .am-sierlijn { margin: 16px auto 14px; color: rgba(172, 121, 47, .75); }
+#top#top#top#top#top#top#top#top#top#top .wm-tekst h2.am-label { margin: 0 0 6px; font-family: var(--font-titel) !important; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6a4a24 !important; }
+.wm-tekst p { margin: 0 0 10px; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--inkt); }
+#top#top#top#top#top#top#top#top .wm-kalender { width: 100%; margin-top: 4px; font: inherit; text-align: left; }
+.wm .em-nu-tekst .am-label { font-size: 11px; letter-spacing: .12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wm-inleiding { margin: 0 4px 10px; font-family: var(--font-lees); font-size: 17px; line-height: 1.45; color: var(--gedempt); text-align: left; }

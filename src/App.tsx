@@ -169,7 +169,7 @@ export default function App() {
 
   // De tabtitel volgt de pagina (handig bij delen, bladwijzers en voor schermlezers).
   useEffect(() => {
-    document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${pagina === 'meer' ? 'Verdieping' : pagina === 'cycli' ? 'Ontdek' : hoofdletter(pagina)} — Orthodoxe Tijd`;
+    document.title = pagina === 'vandaag' ? STANDAARD_TITEL : `${pagina === 'meer' ? 'Meer' : pagina === 'cycli' ? 'Ontdek' : hoofdletter(pagina)} — Orthodoxe Tijd`;
   }, [pagina]);
 
   // Leesrooster: het huidige en het volgende kerkjaar meteen, andere jaren pas als je er een datum uit opent.

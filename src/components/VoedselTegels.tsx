@@ -1,12 +1,12 @@
 import { Check, X } from 'lucide-react';
 import { VOEDSELGROEPEN, type Voedselgroep } from '../lib/voedselgroepen';
 
-// Voedseltegels: per voedselgroep het gerecht van de vastentafel, de naam en een vinkje (toegestaan) of kruis (niet
+// Voedseltegels: per voedselgroep het aangeleverde icoon (public/images/vasten/iconen, 26-10-2026) met de naam en een vinkje (toegestaan) of kruis (niet
 // toegestaan). Gedeeld door de vastentafel en het dagvenster van de Vasten-pagina; de status komt altijd uit
 // lib/voedselgroepen.ts. Met `onKies` zijn de tegels knoppen (hover, focus en aantikken lichten de groep op).
 // Opmaak: ontwerp.css (.vt-tegels).
 
-const MAP = '/images/vasten/tafel';
+const MAP = '/images/vasten/iconen';
 
 export default function VoedselTegels({ status, licht = null, gekozen = null, onLicht, onKies }: {
   status: Record<Voedselgroep, boolean>;
@@ -21,7 +21,7 @@ export default function VoedselTegels({ status, licht = null, gekozen = null, on
         const ok = status[groep];
         const inhoud = (
           <>
-            <img src={`${MAP}/${groep}.webp`} alt="" loading="lazy" decoding="async" />
+            <img src={`${MAP}/${groep}.webp`} alt="" width={360} height={360} loading="lazy" decoding="async" />
             <span className="vt-naam">{naam}</span>
             <span className="vt-teken" aria-hidden="true">
               <Check className="vt-ja" />

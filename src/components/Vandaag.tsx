@@ -12,7 +12,7 @@ import { heiligeTitel } from '../lib/heiligenPopup';
 import { vastenGroep } from '../lib/vasten';
 import { feestVoorDag } from '../lib/feestdagen';
 import { actieveCyclus } from '../lib/seizoen';
-import { geboorteBannerTitel } from '../lib/geboortecyclus';
+import { geboorteBannerTitel, geboortecyclusVoor } from '../lib/geboortecyclus';
 import Kaarsgloed from './Kaarsgloed';
 import BetekenisVanVandaag from './BetekenisVanVandaag';
 import LeefVandaag from './LeefVandaag';
@@ -44,6 +44,10 @@ const zelfdeGedachtenis = (a: string, b: string) => woorden(a).some((w) => woord
 const FOTO_KOP = {
   gewoon: { naam: 'kaarslicht', srcSet: '/images/vandaag/christus-kaarslicht-800.webp 800w, /images/vandaag/christus-kaarslicht-1086.webp 1086w', breedte: 1086, hoogte: 1003 },
   pascha: { naam: 'pascha', srcSet: '/images/vandaag/pascha-verrijzenis-800.webp 800w, /images/vandaag/pascha-verrijzenis-1600.webp 1600w', breedte: 2000, hoogte: 1526 },
+  // De Geboorte van Christus en de Kersttijd (lib/feestdagen.ts): het geboorte-icoon in kaarslicht (aangeleverd 26-10-2026)
+  // Theofanie en het nafeest (lib/geboortecyclus.ts): het icoon van de Doop van Christus (aangeleverd 26-10-2026)
+  theofanie: { naam: 'theofanie', srcSet: '/images/vandaag/theofanie-800.webp 800w, /images/vandaag/theofanie-1536.webp 1536w', breedte: 1536, hoogte: 1024 },
+  kerst: { naam: 'kerst', srcSet: '/images/vandaag/kerst-geboorte-800.webp 800w, /images/vandaag/kerst-geboorte-1086.webp 1086w', breedte: 1086, hoogte: 1448 },
 };
 
 export default function Vandaag() {
@@ -69,7 +73,9 @@ export default function Vandaag() {
   // Feestdagen (lib/feestdagen.ts): tijdens Pascha en de Geboorte van Christus vervangt het feesticoon het Christusicoon
   // in de kop, met de begroeting en een feestlink eronder. Bij een dagwisseling of andere kalenderkeuze opnieuw bepaald.
   const feest = useMemo(() => feestVoorDag(vandaag, mode), [vandaag, mode]);
-  const fotoKop = !feest ? FOTO_KOP.gewoon : feest.id === 'pascha' ? FOTO_KOP.pascha : null;
+  const geboorteNu = useMemo(() => geboortecyclusVoor(vandaag, mode).huidige, [vandaag, mode]);
+  const theofanie = geboorteNu === 'theofanie' || geboorteNu === 'nafeest-theofanie';
+  const fotoKop = !feest ? (theofanie ? FOTO_KOP.theofanie : FOTO_KOP.gewoon) : feest.id === 'pascha' ? FOTO_KOP.pascha : FOTO_KOP.kerst;
   const feestNaam = feest?.id === 'pascha' ? 'De Verrijzenis van onze Heer' : 'De Geboorte van onze Heer Jezus Christus';
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));

@@ -1,7 +1,8 @@
 /* Etmaal op mobiel (EtmaalMobiel.tsx), volgens mock-up 09-etmaal. Bouwt op adem-mobiel.css (.am-…). */
 
 /* 1. Overzicht */
-.em-banner { position: relative; height: min(68vw, 300px); overflow: hidden; background: #150b06; color: var(--am-ivoor, #f6ead2); }
+/* Bannerhoogte gelijk op alle nieuwe mobiele pagina's (behalve Vandaag, Kalender en het Adem-scherm): min(82vw, 350px) */
+.em-banner { position: relative; height: min(82vw, 350px); overflow: hidden; background: #150b06; color: var(--am-ivoor, #f6ead2); }
 .em-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 30%; }
 .em-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .3) 45%, rgba(10, 5, 2, .55)); }
 .em-banner-tekst { position: relative; z-index: 2; padding: 20px 20px 0; }

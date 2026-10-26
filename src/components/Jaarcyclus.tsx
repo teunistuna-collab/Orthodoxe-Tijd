@@ -12,6 +12,8 @@ import ExactPageFrame from './ExactPageFrame';
 import NisKop from './NisKop';
 import { letterBeeld } from '../lib/letters';
 import { usePaginaOpen } from '../lib/paginaOpen';
+import { useMobiel } from '../lib/desktop';
+import JaarMobiel from './JaarMobiel';
 import './Vandaag.css';
 
 type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
@@ -142,6 +144,18 @@ export default function Jaarcyclus() {
 
   // Het komende grote feest.
   const komend = DERTIEN.map((f) => ({ f, d: volgendeFeestDatum(f, vandaag, mode) })).sort((a, b) => a.d.getTime() - b.d.getTime())[0];
+  const mobiel = useMobiel();
+  if (mobiel)
+    return (
+      <JaarMobiel
+        tijden={PERIODS}
+        teksten={PERIOD_POPUPS}
+        noten={[{ tekst: VOORFEEST_NOOT, kop: 'Voorfeest en nafeest' }, { tekst: PASCHALE_NOOT, kop: 'De Paascyclus' }]}
+        nu={nu}
+        inleiding={INFO_CARDS.find((c) => c.key === 'jaarcyclus')?.intro ?? ''}
+        komend={{ titel: komend.d.getTime() === vandaag.getTime() ? 'Feest van vandaag' : 'Komend feest', tekst: `${komend.f.naam} · ${formatDag(komend.d)}` }}
+      />
+    );
 
   // De vier informatietegels: vanaf tablet bovenaan, op mobiel onder de hoofdinhoud (zoals bij Vasten).
   const infoTegels = (zicht: string) => (

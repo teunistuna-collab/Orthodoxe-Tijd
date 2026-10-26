@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useApp } from '../lib/context';
-import { useDesktop } from '../lib/desktop';
+import { useDesktop, useMobiel } from '../lib/desktop';
+import GeboorteMobiel from './GeboorteMobiel';
 import { bereikLang, dagInfo, formatDag, formatDatum, ymd } from '../lib/kalender';
 import { GROTE_FEESTEN } from '../lib/feesten';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
@@ -86,6 +87,9 @@ export default function Geboorte() {
   const isNu = !!stap && stap.key === huidige;
   const [popup, setPopup] = useState<PopupInhoud | null>(null);
   const eerste = cyclus.stappen[0];
+  // Mobiel: de eigen weergave volgens de mock-up (GeboorteMobiel.tsx), met dezelfde gegevens en verdieping.
+  const mobiel = useMobiel();
+  if (mobiel) return <GeboorteMobiel info={INFO} />;
 
   const periodePopup = (k: GeboorteKey): PopupInhoud => {
     const s = cyclus.stappen.find((x) => x.key === k)!;

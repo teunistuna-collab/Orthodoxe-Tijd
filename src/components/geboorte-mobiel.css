@@ -1,0 +1,110 @@
+/* De Geboortecyclus op mobiel (GeboorteMobiel.tsx), volgens de mock-up geboorte. Bouwt op adem-mobiel.css (.am-kop,
+   .am-sierlijn, .am-label) en etmaal-mobiel.css (.em-laag, .em-titel). Kerstsfeer met licht en warmte: een gouden
+   gloed achter de aftelling, kaarslicht onderaan, perkament met dubbele gouden lijn; geen ronde iconen in de dagenlijst. */
+
+.gm { --gm-goud: #a97720; --gm-rood: #8e1b1b; --gm-inkt: #2b1a0e; --gm-gedempt: #6a5a48; min-height: 100dvh; margin-bottom: -68px; padding-bottom: 68px; background: #1d1009; text-align: center; color: var(--gm-inkt); }
+
+/* Banners: gelijke hoogte als de andere nieuwe pagina's; het geboorte-icoon zonder de lichte onderrand van het beeld */
+.gm-banner { position: relative; height: min(82vw, 350px); overflow: hidden; background: #150b06; color: var(--am-ivoor, #f6ead2); }
+.gm-banner img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.gm-banner.is-feest img { height: 165%; object-position: 50% 0; }
+.gm-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(12, 6, 2, .62), rgba(12, 6, 2, .08) 26%, rgba(12, 6, 2, .2) 55%, rgba(24, 12, 5, .9)); }
+.gm-banner.is-feest:after { content: ""; position: absolute; inset: 0; z-index: 1; background: radial-gradient(60% 45% at 50% 42%, rgba(255, 214, 140, .16), transparent 70%); pointer-events: none; }
+.gm-banner-tekst { position: absolute; inset: 0; z-index: 2; }
+.gm-banner .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; }
+.gm-banner .am-merk, .gm-periodelaag > .am-kop .am-merk { font-size: 12px; }
+.gm-titels { position: absolute; left: 0; right: 0; bottom: 30px; padding: 0 20px; }
+.gm-titels .em-titel { font-size: 44px; }
+.gm-titels .am-onder { font-size: 19px; }
+.gm-titels .am-sierlijn { margin: 8px auto 0; }
+
+/* Perkament met afgeronde overgang */
+.gm-papier { position: relative; z-index: 3; margin-top: -16px; padding: 18px 12px 8px; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+.gm-inleiding { margin: 0 10px 16px; font-family: var(--font-lees); font-size: 17px; font-style: italic; line-height: 1.45; color: var(--gm-gedempt); }
+
+/* Kaarten: verweerd perkament, dubbele gouden lijn, zachte schaduw */
+.gm-kaart { position: relative; display: block; margin: 0 0 12px; padding: 16px 16px 14px; border: 1px solid rgba(185, 148, 85, .75); border-radius: 6px; background: rgba(250, 240, 218, .82); box-shadow: inset 0 0 0 3px rgba(250, 240, 218, .9), inset 0 0 0 4px rgba(185, 148, 85, .4), 0 3px 10px rgba(60, 35, 15, .18); color: var(--gm-inkt); text-decoration: none; }
+.gm-ornament { display: flex; justify-content: center; width: 26px; height: 26px; margin: 0 auto 4px; color: var(--gm-goud); }
+.gm-ornament svg { width: 100%; height: 100%; }
+.gm-kaart .am-label { margin: 0; font-size: 13px; letter-spacing: .14em; }
+
+/* Aftelling met kaarsgloed */
+.gm-aftel { background: radial-gradient(55% 60% at 50% 42%, rgba(255, 220, 150, .55), rgba(250, 240, 218, .85) 70%); }
+.gm-getal { margin: 2px 0 0; font-family: var(--font-lees); font-size: 76px; font-weight: 500; line-height: 1; color: #6a3e10; text-shadow: 0 0 18px rgba(232, 176, 82, .55); font-variant-numeric: lining-nums; }
+.gm-dagen { margin: 0; font-family: var(--font-lees); font-size: 28px; line-height: 1.1; }
+.gm-tot { margin: 4px 0 0; font-family: var(--font-lees); font-size: 18px; }
+.gm-aftel .am-sierlijn { margin: 10px auto 8px; color: rgba(172, 121, 47, .75); }
+.gm-klein { margin: 0; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--gm-gedempt); }
+.gm-groet { margin: 4px 0; font-family: var(--font-lees); font-size: 28px; line-height: 1.2; color: var(--gm-rood); }
+
+/* Vandaag in de Geboortecyclus */
+.gm-vandaag { text-align: left; }
+#top#top#top#top#top#top#top#top#top#top .gm-kaart-titel { margin: 0; font-family: var(--font-lees) !important; font-size: 24px; font-weight: 500; line-height: 1.15; letter-spacing: 0; text-transform: none; color: var(--gm-inkt) !important; }
+.gm-datumregel { margin: 2px 0 6px; font-family: var(--font-lees); font-size: 17px; color: var(--gm-gedempt); }
+.gm-periode { margin: 0; font-family: var(--font-lees); font-size: 30px; line-height: 1.1; color: var(--gm-rood); }
+.gm-bereik { margin: 2px 0 0; font-family: var(--font-lees); font-size: 19px; color: var(--gm-inkt); }
+.gm-tekst { margin: 8px 0 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.45; color: var(--gm-gedempt); text-align: left; }
+.gm-midden { text-align: center; }
+
+/* Informatieregels */
+.gm-info { margin: 12px 0 4px; padding: 0; list-style: none; text-align: left; }
+.gm-info li { display: flex; align-items: center; gap: 14px; padding: 8px 0; border-top: 1px solid rgba(172, 121, 47, .28); }
+.gm-info-teken { display: grid; flex: none; place-items: center; width: 36px; height: 36px; color: var(--gm-goud); }
+.gm-info-teken svg { width: 26px; height: 26px; }
+.gm-kleur { width: 30px; height: 30px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(250, 240, 218, .9), 0 0 0 3px rgba(185, 148, 85, .6); }
+.gm-vasten { width: 26px; height: 26px; }
+.gm-info b { display: block; font-family: var(--font-lees); font-size: 17px; font-weight: 500; line-height: 1.2; }
+.gm-info b + span { display: block; font-family: var(--font-lees); font-size: 15px; line-height: 1.3; color: var(--gm-gedempt); }
+
+/* Knoppen */
+#top#top#top#top#top#top#top#top .gm-knop { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 46px; margin: 10px 0 0; padding: 0 16px; border: 1px solid rgba(185, 148, 85, .7); border-radius: 6px; background: rgba(255, 250, 236, .7); font-family: var(--font-lees); font-size: 17px; color: var(--gm-inkt) !important; text-decoration: none; }
+.gm-knop svg { width: 18px; height: 18px; }
+#top#top#top#top#top#top#top#top .gm-knop-donker { display: inline-flex; margin-top: 14px; border-color: #5a3519; background: #5a3519; color: #fbf1dc !important; }
+#top#top#top#top#top#top#top#top .gm-knop-breed { margin: 12px 0 4px; }
+
+/* Link naar de cyclus en de lijsten: geen ronde iconen, rustige regels met datum eronder */
+.gm-cycluslink { display: flex; align-items: center; gap: 12px; text-align: left; }
+.gm-rij-tekst { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; font-family: var(--font-lees); }
+.gm-rij-tekst b { font-size: 19px; font-weight: 500; line-height: 1.2; color: var(--gm-inkt); }
+.gm-rij-tekst span { font-size: 15px; line-height: 1.3; color: var(--gm-gedempt); }
+#top#top#top#top#top#top#top#top#top#top .gm-kop { margin: 22px 4px 8px; font-size: 13px; letter-spacing: .16em; text-align: left; }
+.gm-lijst { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(172, 121, 47, .35); text-align: left; }
+.gm-lijst li { border-bottom: 1px solid rgba(172, 121, 47, .35); }
+#top#top#top#top#top#top#top#top .gm-rij { position: relative; display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 8px 8px 8px 16px; color: var(--gm-inkt) !important; text-decoration: none; }
+.gm-rij:before { content: ""; position: absolute; left: 4px; top: 50%; width: 5px; height: 5px; margin-top: -3px; background: rgba(169, 119, 32, .55); transform: rotate(45deg); }
+#top#top#top#top#top#top#top#top .gm-rij.is-nu { background: linear-gradient(90deg, rgba(222, 186, 120, .45), rgba(222, 186, 120, .12)); }
+.gm-rij.is-nu:before { top: 10px; bottom: 10px; width: 3px; height: auto; margin: 0; background: var(--gm-goud); transform: none; }
+@media (hover: hover) { .gm-rij:hover { background: rgba(255, 250, 238, .6); } }
+.gm-slot { display: block; width: 100%; height: 170px; margin-top: 18px; object-fit: cover; object-position: 50% 60%; -webkit-mask-image: linear-gradient(transparent, #000 40%); mask-image: linear-gradient(transparent, #000 40%); }
+
+/* Lagen: overzicht en periode */
+.gm-laag { background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; text-align: center; color: var(--gm-inkt); --gm-goud: #a97720; --gm-rood: #8e1b1b; --gm-inkt: #2b1a0e; --gm-gedempt: #6a5a48; }
+.gm-periodelaag > .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 5; }
+.gm-laag-papier { position: relative; z-index: 3; padding: 16px 14px 32px; }
+.gm-periodelaag .gm-laag-papier { margin-top: -16px; border-radius: 16px 16px 0 0; background: inherit; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+#top#top#top#top#top#top#top#top#top#top .gm-laag-titel { margin: 0; font-family: var(--font-lees) !important; font-size: clamp(28px, 8vw, 34px); font-weight: 500; line-height: 1.12; letter-spacing: 0; text-transform: none; color: var(--gm-inkt) !important; outline: none; }
+.gm-laag-onder { margin: 4px 0 0; font-family: var(--font-lees); font-size: 19px; color: var(--gm-gedempt); }
+.gm-laag .am-sierlijn { margin: 10px auto 10px; color: rgba(172, 121, 47, .75); }
+.gm-dagen { margin-top: 8px; }
+.gm-over { margin-top: 18px; text-align: center; }
+.gm-over .gm-tekst { text-align: center; }
+#top#top#top#top#top#top#top#top#top#top .gm-sectie { margin: 18px 2px 4px; font-family: var(--font-lees) !important; font-size: 22px; font-weight: 500; letter-spacing: 0; text-align: left; text-transform: none; color: var(--gm-inkt) !important; }
+.gm-concept { margin: 6px 0 0; font-family: var(--font-lees); font-size: 13px; font-style: italic; color: var(--gm-gedempt); text-align: left; }
+.gm-sfeer { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; margin-top: 16px; border: 1px solid rgba(185, 148, 85, .6); border-radius: 6px; object-fit: cover; box-shadow: 0 3px 10px rgba(60, 35, 15, .2); }
+
+/* Hoogfeest: de Geboorte van Christus */
+.gm-feestgroet { margin: 4px 0 6px; font-family: var(--font-lees); font-size: clamp(26px, 7.4vw, 31px); line-height: 1.2; color: var(--gm-rood); text-shadow: 0 0 14px rgba(232, 176, 82, .35); }
+#top#top#top#top#top#top#top#top .gm-feestkaart { position: relative; display: block; margin-top: 16px; overflow: hidden; border: 1px solid rgba(185, 148, 85, .7); border-radius: 8px; box-shadow: 0 4px 14px rgba(60, 35, 15, .3); text-decoration: none; }
+.gm-feestkaart img { display: block; width: 100%; height: 180px; object-fit: cover; object-position: 50% 55%; }
+.gm-feestkaart > span { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 48px; border-radius: 6px; background: rgba(250, 240, 218, .94); font-family: var(--font-lees); font-size: 18px; color: var(--gm-inkt); box-shadow: 0 2px 8px rgba(30, 15, 5, .3); }
+.gm-feestkaart svg { width: 18px; height: 18px; }
+
+#top#top#top#top#top#top#top#top :is(.gm-rij, .gm-knop, .gm-feestkaart, .gm-cycluslink):focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+.gm-lees-icoon { display: block; width: min(70%, 260px); height: auto; margin: 6px auto 10px; border: 1px solid rgba(185, 148, 85, .6); border-radius: 4px; box-shadow: 0 4px 12px rgba(60, 35, 15, .25); }
+.gm-banner.is-kerst img { object-position: 50% 40%; }
+/* In de laag (flex-kolom) niet laten krimpen, anders valt de banner weg en daarmee de afgeronde overgang */
+.gm-laag .gm-banner, .gm-laag .gm-laag-papier { flex: none; }
+.gm-banner.is-theofanie img { object-position: 50% 35%; }
+/* Onderkant: het perkament eindigt ook met afgeronde hoeken en ligt over het kaarslicht heen (geen donkere strook) */
+.gm-papier { border-radius: 16px; padding-bottom: 18px; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35), 0 3px 10px rgba(10, 5, 2, .4); }
+.gm-slot { position: relative; z-index: 2; height: 190px; margin-top: -16px; -webkit-mask-image: none; mask-image: none; }

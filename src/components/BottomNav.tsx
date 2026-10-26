@@ -1,5 +1,6 @@
 import { CalendarDays, Compass, HandHeart, House, Menu } from 'lucide-react';
 import { groepVan } from '../lib/navigatie';
+import './bottom-nav.css';
 
 // Onderbalk voor mobiel (max-width: 767px), met de vijf tabs van de app-mapping (mobile/docs/APP-MAPPING.md):
 // Vandaag · Kalender · Bidden · Ontdek · Meer. Op desktop is hij verborgen via CSS en blijft de koptekst in gebruik.

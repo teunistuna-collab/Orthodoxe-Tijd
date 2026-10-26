@@ -1,48 +1,68 @@
-import type { ReactNode } from 'react';
-import { BookOpen, ChevronRight, Settings } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { usePaginaOpen } from '../lib/paginaOpen';
-import NisKop from './NisKop';
-import { BLAD, KERK, KRUIS } from './symbolen';
-import './Vandaag.css';
+import { Sierlijn } from './MobielLaag';
+import './etmaal-mobiel.css';
+import './meer-mobiel.css';
 
-// Pagina Verdieping (#meer): het overzicht achter Meer in de onderbalk, alleen op mobiel (App.tsx), volgens het Verdieping-pakket (referentie.png, scherm 2).
+// Meer (#meer): het overzicht achter Meer in de onderbalk, alleen op mobiel (App.tsx), volgens de mock-up meer: banner met
+// de kloostergang (aangeleverd 26-10-2026, alleen verkleind) en twee groepen kaarten, Verdieping en Overige.
 
-const BOEK = <BookOpen strokeWidth={1.3} aria-hidden="true" />;
+type Regel = { id: string; titel: string; ondertitel: string };
 
-type Regel = { id: string; titel: string; ondertitel: string; symbool: ReactNode };
-
-const BOVEN: Regel[] = [
-  { id: 'vasten', titel: 'Vasten', ondertitel: 'Tijd van bekering', symbool: BLAD },
-  { id: 'heiligen', titel: 'Heiligen', ondertitel: 'Vrienden van God', symbool: KRUIS },
-  { id: 'feesten', titel: 'Feesten', ondertitel: 'Het liturgisch jaar', symbool: KERK },
+const VERDIEPING: Regel[] = [
+  { id: 'vasten', titel: 'Vasten', ondertitel: 'Vastenregels en vastenperioden' },
+  { id: 'heiligen', titel: 'Heiligen', ondertitel: 'De heiligen en hun levens' },
+  { id: 'feesten', titel: 'Feesten', ondertitel: 'De feesten van het kerkelijk jaar' },
 ];
-const ONDER: Regel[] = [
-  { id: 'instellingen', titel: 'Instellingen', ondertitel: 'Jouw voorkeuren', symbool: <Settings strokeWidth={1.3} aria-hidden="true" /> },
-  { id: 'bronnen', titel: 'Bronnen', ondertitel: 'Traditie en verdieping', symbool: BOEK },
+const OVERIGE: Regel[] = [
+  { id: 'instellingen', titel: 'Instellingen', ondertitel: 'Jouw voorkeuren en pijlgebed' },
+  { id: 'bronnen', titel: 'Bronnen', ondertitel: 'Teksten, vertalingen en verantwoording' },
 ];
 
-const rij = ({ id, titel, ondertitel, symbool }: Regel) => (
-  <li key={id}>
-    <a className="vg-verd-rij" href={`#${id}`}>
-      <span className="vg-verd-symbool">{symbool}</span>
-      <span className="vg-verd-tekst">
-        <b>{titel}</b>
-        <span>{ondertitel}</span>
-      </span>
-      <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
-    </a>
-  </li>
+const Groep = ({ kop, regels }: { kop: string; regels: Regel[] }) => (
+  <>
+    <h2 className="mm-label">{kop}</h2>
+    <ul className="mm-lijst">
+      {regels.map(({ id, titel, ondertitel }) => (
+        <li key={id}>
+          <a className="mm-kaart" href={`#${id}`}>
+            <span className="mm-tekst">
+              <b>{titel}</b>
+              <span>{ondertitel}</span>
+            </span>
+            <ChevronRight className="mm-pijl" aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </>
 );
 
 export default function Meer() {
   const open = usePaginaOpen('meer');
   return (
-    <section id="meer" className="vg vg-verdieping">
-      <NisKop titel="Verdieping" open={open} balk />
-      <nav className="vg-papier vg-verd-lijst" aria-label="Verdieping">
-        <ul>{BOVEN.map(rij)}</ul>
-        <p className="vg-verd-scheiding" aria-hidden="true"><span>✣</span></p>
-        <ul>{ONDER.map(rij)}</ul>
+    <section id="meer" className="am mm">
+      <div className="em-banner mm-banner">
+        <img
+          src="/images/ontwerp/meer-gang-800.webp"
+          srcSet="/images/ontwerp/meer-gang-800.webp 800w, /images/ontwerp/meer-gang-1536.webp 1536w"
+          sizes="100vw"
+          alt=""
+          width={1536}
+          height={1024}
+          loading={open ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+        <p className="am-merk mm-merk">Orthodoxe Tijd</p>
+        <div className="em-banner-tekst">
+          <h1 className="em-titel">Meer</h1>
+          <Sierlijn />
+          <p className="am-onder">Verdieping en informatie</p>
+        </div>
+      </div>
+      <nav className="mm-papier" aria-label="Meer">
+        <Groep kop="Verdieping" regels={VERDIEPING} />
+        <Groep kop="Overige" regels={OVERIGE} />
       </nav>
     </section>
   );

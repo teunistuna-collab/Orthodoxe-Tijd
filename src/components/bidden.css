@@ -6,7 +6,7 @@
 .bd { min-height: 100dvh; margin-bottom: -68px; padding-bottom: 80px; background: var(--papyrus, #f5e6c8); }
 
 /* Banner: beeld met titel als tekstlaag over de donkere onderkant */
-.bd-banner { position: relative; height: min(95vw, 430px); overflow: hidden; background: #150b06; color: var(--am-ivoor); }
+.bd-banner { position: relative; height: min(82vw, 350px); overflow: hidden; background: #150b06; color: var(--am-ivoor); }
 .bd-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
 .bd-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .5), rgba(10, 5, 2, 0) 22%, rgba(10, 5, 2, 0) 48%, rgba(26, 15, 7, .78) 80%, #2a1a0d); }
 .bd-banner .am-merk { position: absolute; top: 30px; left: 0; right: 0; z-index: 2; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }

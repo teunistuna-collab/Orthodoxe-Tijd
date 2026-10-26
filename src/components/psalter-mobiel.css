@@ -2,7 +2,7 @@
 .pm { --pm-rood: #8f2a20; }
 
 /* 1. Overzicht */
-.pm-banner { position: relative; display: flex; flex-direction: column; justify-content: flex-end; height: min(88vw, 360px); overflow: hidden; background: #150b06; color: var(--am-ivoor, #f6ead2); }
+.pm-banner { position: relative; display: flex; flex-direction: column; justify-content: flex-end; height: min(82vw, 350px); overflow: hidden; background: #150b06; color: var(--am-ivoor, #f6ead2); }
 .pm-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 40%; }
 .pm-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .05) 22%, rgba(10, 5, 2, .15) 50%, rgba(10, 5, 2, .82)); }
 .pm-merk { position: absolute; top: 18px; left: 0; right: 0; z-index: 2; text-align: center; }

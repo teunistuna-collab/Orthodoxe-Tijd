@@ -12,6 +12,9 @@ import NisKop from './NisKop';
 import { letterBeeld } from '../lib/letters';
 import { HANDEN } from './symbolen';
 import { usePaginaOpen } from '../lib/paginaOpen';
+import { useMobiel } from '../lib/desktop';
+import { gaNaar } from '../lib/navigatie';
+import WeekMobiel from './WeekMobiel';
 import './Vandaag.css';
 
 type DayKey = 'zondag' | 'maandag' | 'dinsdag' | 'woensdag' | 'donderdag' | 'vrijdag' | 'zaterdag';
@@ -131,7 +134,11 @@ export default function Weekcyclus() {
   useEffect(() => {
     const opPopup = (event: Event) => {
       const { pagina, sleutel } = (event as CustomEvent<OpenPopupDetail>).detail;
-      if (pagina === 'week') setDayOpen(sleutel as DayKey);
+      // Mobiel: de dag als eigen weergave (WeekMobiel.tsx); web: het venster.
+      if (pagina === 'week') {
+        if (window.matchMedia('(max-width: 767.98px)').matches) gaNaar(`week/${sleutel}`);
+        else setDayOpen(sleutel as DayKey);
+      }
     };
     window.addEventListener(OPEN_POPUP_EVENT, opPopup);
     return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
@@ -147,6 +154,8 @@ export default function Weekcyclus() {
   const tekst = DAY_POPUPS[gekozen];
 
   const naarKalender = () => openDag(ymd(datum));
+  const mobiel = useMobiel();
+  if (mobiel) return <WeekMobiel dagen={DAY_POPUPS} vandaagKey={vandaagKey} />;
 
   return (
     <>
