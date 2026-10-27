@@ -20,6 +20,28 @@ export interface Boek {
 /** Omslagen pas aanzetten na toestemming (de definitieve omslagen worden later aangeleverd). */
 export const OMSLAGEN_AAN = false;
 
+/** Tijdelijke afbeelding per categorie (aangeleverd 27-10-2026, public/images/boeken; geen echte omslag): hetzelfde neutrale
+ *  boek in een eigen kaftkleur. Een boek krijgt die van zijn eerste categorie met een afbeelding. */
+const CATEGORIE_BEELD: Record<string, string> = {
+  'Gebed en het Jezusgebed': 'gebed_en_het_jezusgebed',
+  'Geestelijk leven': 'geestelijk_leven',
+  Heiligenlevens: 'heiligenlevens',
+  'Liturgie en sacramenten': 'liturgie_en_sacramenten',
+  'Theologie en geloofsleer': 'theologie_en_geloofsleer',
+  Kinderboeken: 'kinderboeken',
+  'Iconen en kerkelijke kunst': 'iconen_en_kerkelijke_kunst',
+  'Verhalen en getuigenissen': 'verhalen_en_getuigenissen',
+  'Bijbel en kerkvaders': 'bijbel_en_kerkvaders',
+  'Kerk en samenleving': 'kerk_en_samenleving',
+  'Iveron boeken': 'iveron_boeken',
+  Partneruitgeverijen: 'partneruitgeverijen',
+  'Abdij Bethlehem': 'abdij_bethlehem',
+};
+export function tijdelijkeOmslag(b: Boek): string | null {
+  const c = b.categorieen.find((x) => CATEGORIE_BEELD[x]);
+  return c ? `/images/boeken/${CATEGORIE_BEELD[c]}.webp` : null;
+}
+
 let laden: Promise<Boek[]> | null = null;
 export function laadBoeken(): Promise<Boek[]> {
   laden ??= fetch('/data/boeken.json')

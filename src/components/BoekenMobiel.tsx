@@ -1,6 +1,6 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { BookOpen, Bookmark, ChevronRight, ExternalLink, Search, User, X } from 'lucide-react';
-import { AANBEVOLEN, FILTERS, OMSLAGEN_AAN, laadBoeken, onderwerpen, veiligeLink, zoekBoeken, type Boek } from '../lib/boeken';
+import { AANBEVOLEN, FILTERS, OMSLAGEN_AAN, laadBoeken, onderwerpen, tijdelijkeOmslag, veiligeLink, zoekBoeken, type Boek } from '../lib/boeken';
 import { useFavorieten, wisselFavoriet } from '../lib/favorieten';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
 import './etmaal-mobiel.css';
@@ -23,11 +23,14 @@ const volgHash = (f: () => void) => {
 };
 const useOnderdeel = () => useSyncExternalStore(volgHash, () => decodeURIComponent(window.location.hash).match(/^#boeken\/(.+)$/)?.[1] ?? '');
 
-/** De omslag in vaste verhouding 2 : 3; zolang de omslagen uit staan een rustig perkamentvlak met een boeksymbool. */
+/** De omslag in vaste verhouding 2 : 3. Zolang de echte omslagen uit staan: de tijdelijke afbeelding van de categorie
+ *  (lib/boeken.ts), anders een rustig perkamentvlak met een boeksymbool. */
 function Omslag({ boek, groot }: { boek: Boek; groot?: boolean }) {
+  const echt = OMSLAGEN_AAN && boek.omslag;
+  const src = echt ? boek.omslag : tijdelijkeOmslag(boek);
   return (
-    <span className={`bkm-omslag${groot ? ' is-groot' : ''}`} aria-hidden="true">
-      {OMSLAGEN_AAN && boek.omslag ? <img src={boek.omslag} alt="" loading="lazy" decoding="async" /> : <BookOpen strokeWidth={1.1} />}
+    <span className={`bkm-omslag${groot ? ' is-groot' : ''}${src && !echt ? ' is-tijdelijk' : ''}`} aria-hidden="true">
+      {src ? <img src={src} alt="" loading="lazy" decoding="async" /> : <BookOpen strokeWidth={1.1} />}
     </span>
   );
 }
@@ -99,7 +102,7 @@ function Overzicht({ boeken, fout, zoek, setZoek, filter, setFilter }: { boeken:
   return (
     <section id="boeken" className="am hm bkm">
       <div className="em-banner bkm-banner">
-        <img src="/images/ontwerp/instellingen-banner.webp" alt="" width={1024} height={420} decoding="async" />
+        <img src="/images/boeken/boeken-banner.webp" alt="" width={1280} height={720} decoding="async" />
         <Kop terug="#meer" merk />
         <div className="em-banner-tekst">
           <h1 className="em-titel">Boeken</h1>
