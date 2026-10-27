@@ -13,12 +13,12 @@ import './etmaal-mobiel.css';
 
 // Etmaal op mobiel (< 768 px), volgens de goedgekeurde mock-up (09-etmaal), vier weergaven via het adres:
 //   #etmaal                    1. overzicht: banner, het actuele gebedsuur, de acht diensten en de verdieping
-//   #etmaal/<dienst>           2. de dienst: sfeerbeeld, "Over deze dienst" en "Psalmen uit het Psalter"
-//   #etmaal/<dienst>/over      3. over deze dienst (leesweergave)
+//   #etmaal/<dienst>           2. de dienst: sfeerbeeld, "Over dit moment" en "Psalmen uit het Psalter"
+//   #etmaal/<dienst>/over      3. over dit moment (leesweergave)
 //   #etmaal/<dienst>/psalmen   4. de psalmen van de dienst, met een link naar het Psalter
 //   #etmaal/lees/<onderwerp>   een verdieping (ETMAAL_INFO)
 // Inhoud alleen uit de site: lib/etmaal.ts (diensten, tijden, hoofdgedachtenis, kernvers, psalmen) en
-// lib/cyclusTeksten.ts (ETMAAL_INFO); bij "Over deze dienst" ook de diensttekst uit de PDF, zoals op desktop. Beelden: de aangeleverde kapellen, het
+// lib/cyclusTeksten.ts (ETMAAL_INFO); bij "Over dit moment" ook de diensttekst uit de PDF, zoals op desktop. Beelden: de aangeleverde kapellen, het
 // klooster en het gebedenboek (public/images/etmaal/mobiel), alleen bijgesneden zodat er geen figuren in beeld staan.
 
 const BEELD = '/images/etmaal/mobiel';
@@ -124,7 +124,7 @@ function Dienst({ d }: { d: ServiceMapping }) {
         <a className="em-kaart" href={`#etmaal/${slug}/over`}>
           <span className="em-kaart-kruis">{SIERKRUIS}</span>
           <span className="em-kaart-tekst">
-            <b>Over deze dienst</b>
+            <b>Over dit moment</b>
             <span>Het moment in het etmaal, de hoofdgedachtenis en het kernvers.</span>
           </span>
           <ChevronRight className="am-pijl" aria-hidden="true" />
@@ -133,7 +133,7 @@ function Dienst({ d }: { d: ServiceMapping }) {
           <span className="em-kaart-kruis">{SIERKRUIS}</span>
           <span className="em-kaart-tekst">
             <b>Psalmen uit het Psalter</b>
-            <span>Ga rechtstreeks naar de psalmen die in deze dienst worden gelezen.</span>
+            <span>Ga rechtstreeks naar de psalmen die op dit moment worden gelezen.</span>
           </span>
           <ChevronRight className="am-pijl" aria-hidden="true" />
         </a>
@@ -143,12 +143,12 @@ function Dienst({ d }: { d: ServiceMapping }) {
   );
 }
 
-// 3. Over deze dienst
+// 3. Over dit moment
 function Over({ d }: { d: ServiceMapping }) {
   const moment = momentVan(d);
   const kernvers = d.kernvers.reference.replace('Psalm Kernvers:', 'Psalm');
   return (
-    <LeesWeergave className="em-laag em-lees" titel={naamVan(d)} ondertitel="Over deze dienst" terug={`#etmaal/${slugVan(d)}`} deelPad={`etmaal/${slugVan(d)}/over`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+    <LeesWeergave className="em-laag em-lees" titel={naamVan(d)} ondertitel="Over dit moment" terug={`#etmaal/${slugVan(d)}`} deelPad={`etmaal/${slugVan(d)}/over`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
       {moment && (
         <section>
           <h2>Plaats in het etmaal</h2>
@@ -167,7 +167,7 @@ function Over({ d }: { d: ServiceMapping }) {
         </blockquote>
       </section>
       <section>
-        <h2>Psalmen van deze dienst</h2>
+        <h2>Psalmen van dit moment</h2>
         <p>{d.psalms.map((p) => p.title).join(', ')}</p>
       </section>
       {/* De dienst zelf, zoals in het dienstvenster op desktop (de PDF van de dienst) */}
@@ -207,7 +207,7 @@ function Psalmen({ d }: { d: ServiceMapping }) {
         {kathisma && (
           // De psalterlezing (kathisma's) van vandaag, zoals in het dienstvenster op desktop (lib/psalterlezing.ts)
           <section className="em-kathisma" aria-labelledby="em-kathisma-kop">
-            <h2 id="em-kathisma-kop" className="am-label">Kathisma’s bij deze dienst</h2>
+            <h2 id="em-kathisma-kop" className="am-label">Kathisma’s bij dit moment</h2>
             <Psalterlezing datum={vandaagYmd} mode={mode} dienst={kathisma} />
           </section>
         )}

@@ -6,7 +6,8 @@
   "lang": "nl",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
   "background_color": "#faf6ec",
   "theme_color": "#160b08",
   "icons": [

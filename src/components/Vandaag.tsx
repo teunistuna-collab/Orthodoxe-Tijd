@@ -15,8 +15,6 @@ import { actieveCyclus } from '../lib/seizoen';
 import { geboorteBannerTitel, geboortecyclusVoor } from '../lib/geboortecyclus';
 import Kaarsgloed from './Kaarsgloed';
 import BetekenisVanVandaag from './BetekenisVanVandaag';
-import LeefVandaag from './LeefVandaag';
-import { leefVoor } from '../lib/leefVandaag';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -88,7 +86,6 @@ export default function Vandaag() {
   const feestLabel = hoofdFeest && (hoofdFeest.groot || hoofdFeest.soort === 'pascha' || (hoofdFeest.rang ?? 0) >= 4) ? 'Feest van vandaag' : 'Gedachtenis van vandaag';
   const groep = vastenGroep(dag.vasten.niveau);
   const betekenis = useMemo(() => actieveCyclus(dag.civil, mode) !== null, [dag, mode]);
-  const leef = useMemo(() => leefVoor(dag), [dag]);
   const seizoenTitel = useMemo(() => (actieveCyclus(dag.civil, mode) === 'geboorte' ? geboorteBannerTitel(dag.civil, mode) : null), [dag, mode]);
   const lezingRij = (l: HtcLezingRef, i: number) => {
     const ref = vertaalRef(l.ref);
@@ -310,9 +307,6 @@ export default function Vandaag() {
             )}
           </div>
         </div>
-        {/* 5. Leef vandaag met de Kerk (components/LeefVandaag.tsx, teksten in lib/leefVandaag.ts): onder beide kolommen. */}
-        <Scheiding />
-        <LeefVandaag inhoud={leef} />
       </div>
 
       {/* E. Stilte: olijftak en stenen rand, met de lamp van de site erop. */}

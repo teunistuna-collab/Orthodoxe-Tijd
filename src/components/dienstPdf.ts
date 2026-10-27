@@ -1,5 +1,5 @@
 // De diensttekst uit de PDF van een dienst (lib/etmaal.ts, public/data/pdfs): regels met hun inspringing, per pagina.
-// Gedeeld door het dienstvenster op desktop (UrenCyclus.tsx) en "Over deze dienst" op mobiel (EtmaalMobiel.tsx).
+// Gedeeld door het dienstvenster op desktop (UrenCyclus.tsx) en "Over dit moment" op mobiel (EtmaalMobiel.tsx).
 
 // De PDF-lezer (±420 KB) wordt pas geladen als iemand een dienst of psalm opent, niet bij het openen van de site.
 let pdfjsLaden: Promise<typeof import('pdfjs-dist')> | null = null;

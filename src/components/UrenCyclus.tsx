@@ -227,7 +227,7 @@ export default function UrenCyclus() {
             {!modalState?.selectedPsalm && (currentService.title === 'Metten' || currentService.title === 'Vespers') && (
               // Psalterlezing van vandaag (lib/psalterlezing.ts), zelfde uitkomst als op Vandaag en Psalmen
               <section className="etmaal-kathisma" aria-labelledby="etmaal-kathisma-kop">
-                <h3 id="etmaal-kathisma-kop">Kathisma’s bij deze dienst</h3>
+                <h3 id="etmaal-kathisma-kop">Kathisma’s bij dit moment</h3>
                 <p className="psl-datum">
                   {WEEKDAGEN[vandaag.getUTCDay()]} {formatDag(vandaag)}
                   {currentService.title === 'Vespers' && ` (avond) · vesper van ${WEEKDAGEN[addDays(vandaag, 1).getUTCDay()]} ${formatDag(addDays(vandaag, 1))}`}

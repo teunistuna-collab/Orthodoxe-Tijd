@@ -19,7 +19,8 @@ import './psalter-mobiel.css';
 
 const AANTAL = PSALMEN.length;
 const BANNER = '/images/psalmen/manuscript';
-const nummer = (p: Psalm) => `${p.septuagintNumber}${p.masoreticNumber ? ` (${p.masoreticNumber})` : ''}`;
+// Alleen de Septuagint-nummering (LXX).
+const nummer = (p: Psalm) => `${p.septuagintNumber}`;
 const kathismaVan = (nr: number) => KATHISMATA.find((k) => k.delen.flat().some((s) => s.psalm === nr));
 
 // 1. Overzicht
@@ -277,7 +278,6 @@ export function PsalterLezer({ nr, vers, tekst, laadFout, kathisma }: { nr: numb
           {k && <p className="pm-context">Kathisma {k.nr}{stap ? ` · Stasis ${stap.deel}` : ''}</p>}
           <h1 className="pm-nummer" tabIndex={-1}>
             {psalm.septuagintNumber}
-            {psalm.masoreticNumber ? <small> ({psalm.masoreticNumber})</small> : null}
           </h1>
           <span className="sr-only">{psalm.title}</span>
           {psalm.subtitle && <p className="pm-opschrift">{psalm.subtitle}</p>}

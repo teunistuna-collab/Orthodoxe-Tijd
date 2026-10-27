@@ -42,7 +42,7 @@
 .em-kaart-tekst span { font-family: var(--font-lees); font-size: 15px; line-height: 1.35; color: var(--gedempt); }
 .em-klooster { display: block; width: 100%; height: auto; min-height: 150px; object-fit: cover; object-position: 60% 60%; }
 
-/* 3. Over deze dienst */
+/* 3. Over dit moment */
 .em-ornament { display: flex; width: 36px; height: 36px; margin: 4px auto 6px; color: var(--goud-pijl); }
 .em-kernvers span { display: block; }
 .em-kernvers cite { display: block; margin-top: 6px; font-family: var(--font-titel); font-size: 13px; font-style: normal; letter-spacing: .1em; color: var(--goud-pijl); }

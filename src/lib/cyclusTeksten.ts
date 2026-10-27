@@ -230,7 +230,7 @@ export const ETMAAL_INFO: Record<'wat' | 'diensten' | 'betekenis' | 'praktisch',
 };
 /** Korte inleiding per verdieping van het etmaal: op desktop onder de kaart, op mobiel bovenaan de leesweergave. */
 export const ETMAAL_INLEIDING: Record<keyof typeof ETMAAL_INFO, string> = {
-  wat: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsdiensten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.',
+  wat: 'Het kerkelijk etmaal bestaat uit een vaste reeks gebedsmomenten die de dag heiligen en ons in Gods tegenwoordigheid plaatsen.',
   diensten: 'Van de Metten tot de Completen: elke dienst heeft een eigen karakter, psalmen en gebeden.',
   betekenis: 'Het etmaal helpt ons om ons hart te richten op God en de dag in Zijn licht te leven.',
   praktisch: 'Hoe u als leek meeleeft met het kerkelijk etmaal, thuis of onderweg.',

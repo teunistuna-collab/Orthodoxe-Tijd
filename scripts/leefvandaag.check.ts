@@ -30,7 +30,7 @@ assert.match(leef(2027, 1, 13).overweeg, /Kersttijd/);
 assert.match(leef(2026, 12, 19).overweeg, /^Vandaag gedenkt de Kerk: H\. Nicolaas van Myra/);
 // Schriftwoord: verwijzing in NBV21-vorm of LXX-nummering, nooit een citaat zolang niets gecontroleerd is
 assert.equal(schriftRef(leef(2026, 10, 23).schrift!), 'Johannes 15:13');
-assert.equal(schriftRef(leef(2026, 10, 25).schrift!), 'Psalm 117:24 (LXX; 118 in de Hebreeuwse telling)');
+assert.equal(schriftRef(leef(2026, 10, 25).schrift!), 'Psalm 117:24 (LXX)');
 
 // Elke dag 2026–2028, beide kalenders: alles ingevuld, overweeg ≤ 3 zinnen, bid ≤ 2 zinnen, geen citaat
 for (const mode of ['oud', 'nieuw'] as Mode[])

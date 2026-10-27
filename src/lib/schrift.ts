@@ -23,7 +23,7 @@ const NBV21_CITATEN: Record<string, string> = {};
 const LXX_EIGEN_VERTALING = false;
 
 export const schriftRef = (w: Schriftwoord): string =>
-  w.soort === 'nbv21' ? w.ref : `Psalm ${w.lxx}:${w.vers} (LXX${w.mt ? `; ${w.mt} in de Hebreeuwse telling` : ''})`;
+  w.soort === 'nbv21' ? w.ref : `Psalm ${w.lxx}:${w.vers} (LXX)`;
 
 /** Waar de lezer de tekst vindt: de NBV21 op debijbel.nl, of de psalm (en het vers) in de psalmlezer. */
 export const schriftLink = (w: Schriftwoord): { href: string; extern: boolean } | null => {

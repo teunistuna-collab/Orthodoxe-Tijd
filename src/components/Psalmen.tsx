@@ -577,7 +577,7 @@ function Lezer({ nr, vers, tekst, laadFout, kathisma }: { nr: number; vers: numb
           {k && stap && <p className="ot-lezer-context">Kathisma {k.nr} · Deel {stap.deel}</p>}
           <h1 id="ps-lezer-titel">{psalm.title}</h1>
           {stap?.vanVers && <p className="ot-lezer-verzen">Verzen {stap.vanVers}–{stap.totVers}</p>}
-          <p>Septuagint (NL){psalm.masoreticNumber ? ` · Psalm ${psalm.masoreticNumber} in de Hebreeuwse nummering` : ''}</p>
+          <p>Septuagint (NL)</p>
           <Sierlijn />
         </header>
         {/* Geen betrouwbare versnummers voor dit deel: niet knippen, de hele psalm tonen */}
