@@ -37,6 +37,13 @@ const ICONEN: Record<string, string> = {
   'kinderen-bethlehem': 'kinderen-bethlehem.webp',
   'synaxis-moeder-gods': 'synaxis-moeder-gods.webp',
   filippus: 'filippus.webp',
+  // Aangeleverd op 27-10-2026
+  ontslaping: 'ontslaping.webp',
+  'geboorte-moeder-gods': 'geboorte-moeder-gods.webp',
+  ontmoeting: 'ontmoeting.webp',
+  annunciatie: 'annunciatie.webp',
+  transfiguratie: 'transfiguratie.webp',
+  pinksteren: 'pinksteren.webp',
 };
 const icoonVan = (id: string) => (ICONEN[id] ? `/images/feesten/${ICONEN[id]}` : null);
 
@@ -234,7 +241,7 @@ function Groot({ groot }: { groot: FeestItem[] }) {
 }
 
 // 4. Een feest
-function Detail({ item }: { item: FeestItem }) {
+function Detail({ item, terug }: { item: FeestItem; terug: string }) {
   const { openDag, mode } = useApp();
   const { f, datum } = item;
   const t = titels(f);
@@ -244,7 +251,7 @@ function Detail({ item }: { item: FeestItem }) {
   const kerk = f.md && mode === 'oud' ? ` (Juliaans ${formatMd(f.md)})` : '';
   return (
     <Laag className="em-laag fm-laag fm-detail" label={t.titel}>
-      <Kop terug="#feesten" merk />
+      <Kop terug={terug} merk />
       <div className={`fm-icoon${icoon ? '' : ' is-leeg'}`}>
         {icoon ? <img src={icoon} alt={`Icoon: ${t.titel}`} decoding="async" /> : <span className="hm-kader">{SIERKRUIS}</span>}
       </div>
@@ -291,13 +298,17 @@ export default function FeestenMobiel({ alle, groot }: { alle: FeestItem[]; groo
   // Zoekopdracht en gekozen dag blijven bewaard zolang de pagina open is (ook bij terugkeer uit een feest).
   const [zoek, setZoek] = useState('');
   const [verschuiving, setVerschuiving] = useState(0);
-  const item = onderdeel && onderdeel !== 'zoek' && onderdeel !== 'groot' ? alle.find(({ f }) => f.id === onderdeel) : undefined;
+  const lijst = onderdeel === '' || onderdeel === 'zoek' || onderdeel === 'groot';
+  const item = !lijst ? alle.find(({ f }) => f.id === onderdeel) : undefined;
+  // Terug uit een feest gaat naar de lijst waar het feest geopend werd (overzicht, zoekresultaten of de grote feesten).
+  const [herkomst, setHerkomst] = useState('');
+  if (lijst && herkomst !== onderdeel) setHerkomst(onderdeel);
   return (
     <>
       <Overzicht alle={alle} groot={groot} zoek={zoek} setZoek={setZoek} verschuiving={verschuiving} setVerschuiving={setVerschuiving} />
       {onderdeel === 'zoek' && <Zoeken alle={alle} zoek={zoek} setZoek={setZoek} />}
       {onderdeel === 'groot' && <Groot groot={groot} />}
-      {item && <Detail item={item} />}
+      {item && <Detail item={item} terug={herkomst ? `#feesten/${herkomst}` : '#feesten'} />}
     </>
   );
 }

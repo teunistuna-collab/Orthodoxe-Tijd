@@ -27,11 +27,11 @@ export default function Cycli() {
       {/* Banner zoals Etmaal: het aangeleverde beeld van de kapel met het wierookvat, titel en sierlijn als tekst */}
       <div className="em-banner vg-ontdek-banner">
         <img src="/images/ontdek/banner.webp" alt="" width={1200} height={800} loading={open ? 'eager' : 'lazy'} decoding="async" />
+        <p className="am-merk vg-ontdek-merk">Orthodoxe Tijd</p>
         <div className="em-banner-tekst">
-          <p className="am-merk">Orthodoxe Tijd</p>
           <h1 className="em-titel">Ontdek</h1>
-          <p className="am-onder">De ritmes van het orthodoxe leven</p>
           <Sierlijn />
+          <p className="am-onder">De ritmes van het orthodoxe leven</p>
         </div>
       </div>
       <div className="vg-papier vg-ontdek">

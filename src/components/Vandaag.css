@@ -776,3 +776,7 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 .vg-ontdek-kaart .vg-ontdek-tekst { position: relative; margin-left: -4%; border-color: transparent; }
 @media (max-width: 767.98px) { #vandaag .vg-kop-kerst .vg-kop-achter img { object-position: 50% 40%; } }
 @media (max-width: 767.98px) { #vandaag .vg-kop-theofanie .vg-kop-achter img { object-position: 50% 30%; } }
+/* Ontdek: merk bovenaan, titel en ondertitel op de bodem van de banner (zoals Heiligen, Meer en Feesten) */
+.vg-ontdek-banner .vg-ontdek-merk { position: absolute; top: 22px; left: 0; right: 0; z-index: 2; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
+.vg-ontdek-banner .em-banner-tekst { position: absolute; left: 0; right: 0; bottom: 36px; padding: 0 20px; }
+.vg-ontdek-banner .am-sierlijn { margin: 6px auto 4px; }
