@@ -70,7 +70,7 @@ export default function KalenderUitleg({ open, onClose }: { open: boolean; onClo
         <button type="button" className="ku-verder" onClick={verder}>
           Verder naar vandaag <ChevronRight aria-hidden="true" />
         </button>
-        <p className="ku-noot">U kunt uw keuze later wijzigen bij Instellingen.</p>
+        <p className="ku-noot">Je kunt je keuze later wijzigen bij Instellingen.</p>
       </div>
     </div>
   );

@@ -28,12 +28,6 @@
 .gm-ornament svg { width: 100%; height: 100%; }
 .gm-kaart .am-label { margin: 0; font-size: 13px; letter-spacing: .14em; }
 
-/* Aftelling met kaarsgloed */
-.gm-aftel { background: radial-gradient(55% 60% at 50% 42%, rgba(255, 220, 150, .55), rgba(250, 240, 218, .85) 70%); }
-.gm-getal { margin: 2px 0 0; font-family: var(--font-lees); font-size: 76px; font-weight: 500; line-height: 1; color: #6a3e10; text-shadow: 0 0 18px rgba(232, 176, 82, .55); font-variant-numeric: lining-nums; }
-.gm-dagen { margin: 0; font-family: var(--font-lees); font-size: 28px; line-height: 1.1; }
-.gm-tot { margin: 4px 0 0; font-family: var(--font-lees); font-size: 18px; }
-.gm-aftel .am-sierlijn { margin: 10px auto 8px; color: rgba(172, 121, 47, .75); }
 .gm-klein { margin: 0; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--gm-gedempt); }
 .gm-groet { margin: 4px 0; font-family: var(--font-lees); font-size: 28px; line-height: 1.2; color: var(--gm-rood); }
 
@@ -108,3 +102,7 @@
 /* Onderkant: het perkament eindigt ook met afgeronde hoeken en ligt over het kaarslicht heen (geen donkere strook) */
 .gm-papier { border-radius: 16px; padding-bottom: 18px; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35), 0 3px 10px rgba(10, 5, 2, .4); }
 .gm-slot { position: relative; z-index: 2; height: 190px; margin-top: -16px; -webkit-mask-image: none; mask-image: none; }
+/* Aftelling als kaart zoals het actuele gebedsuur op Etmaal (.em-nu) */
+#top#top#top#top#top#top#top#top .gm-aftel { margin-bottom: 12px; text-align: left; }
+.gm-aftel .em-nu-tekst b { font-size: 30px; }
+.gm-aftel .gm-groet { margin: 0; font-size: 22px; }

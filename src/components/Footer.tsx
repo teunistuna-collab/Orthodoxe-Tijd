@@ -17,7 +17,7 @@ export function FooterInhoud() {
         <h2 className="text-sm font-bold tracking-widest text-gold-light uppercase">Een woord vooraf</h2>
         <p className="mt-3 text-sm leading-relaxed">
           De kalender is een leidsman, geen wetboek. Zieken, zwangeren, kinderen, ouderen en reizigers vasten altijd in overleg met hun priester —
-          barmhartigheid gaat boven de letter. In de kerkdienst geldt steeds het rooster van uw eigen parochie.
+          barmhartigheid gaat boven de letter. In de kerkdienst geldt steeds het rooster van je eigen parochie.
         </p>
         <p className="font-display mt-4 text-lg text-gold-light italic">„Bidt zonder ophouden.” — 1 Tess. 5:17</p>
       </div>

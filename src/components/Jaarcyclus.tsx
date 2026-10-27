@@ -111,7 +111,7 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
   { key: 'wat', title: 'Wat is het kerkelijk jaar?', intro: 'Het kerkelijk jaar is de heilige tijd waarin de Kerk het leven van Christus herleeft, van Zijn Geboorte tot Zijn Verrijzenis.' },
   { key: 'jaarcyclus', title: 'De jaarcyclus', intro: 'Het kerkelijk jaar bestaat uit perioden, feesten en vasten die ons stap voor stap meenemen in het heilshandelen van God.' },
   { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Het kerkelijk jaar vormt ons hart, richt onze blik op Christus en heiligt onze tijd, dagen en seizoenen.' },
-  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kunt u het kerkelijk jaar meeleven in uw gebed, thuis, in de parochie en in het dagelijkse leven?' },
+  { key: 'praktisch', title: 'Praktisch', intro: 'Hoe kun je het kerkelijk jaar meeleven in je gebed, thuis, in de parochie en in het dagelijkse leven?' },
 ];
 
 

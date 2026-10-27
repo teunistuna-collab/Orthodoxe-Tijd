@@ -134,8 +134,8 @@ export default function Ademcyclus() {
               </button>
               <div id="ad-steun" className="ad-steun" hidden={!steunOpen}>
                 <p className="ad-steun-tekst">
-                  Bid rustig en zonder haast. U hoeft uw ademhaling niet aan te passen om dit gebed te bidden. De ondersteuning hieronder is optioneel. Volg
-                  voor persoonlijke begeleiding het advies van uw geestelijke.
+                  Bid rustig en zonder haast. Je hoeft je ademhaling niet aan te passen om dit gebed te bidden. De ondersteuning hieronder is optioneel. Volg
+                  voor persoonlijke begeleiding het advies van je geestelijke.
                 </p>
                 <p className="ad-tempo-label" id="ad-tempo-label">Tempo</p>
                 <div className="ad-tempo" role="group" aria-labelledby="ad-tempo-label">

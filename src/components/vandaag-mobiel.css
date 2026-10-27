@@ -1,0 +1,48 @@
+/* Vandaag op mobiel (VandaagMobiel.tsx), volgens de mock-up vandaag: perkamentkaarten op papyrus onder de kop.
+   Het pijlgebed gebruikt .em-nu van Etmaal (etmaal-mobiel.css), de andere kaarten dezelfde afwerking. */
+
+/* Papyrus zoals de rest van Vandaag; de eerste kaart (pijlgebed) ligt over de onderrand van de kop, zoals op Etmaal */
+#vandaag .vg-papier.vm2-papier { position: relative; z-index: 3; margin-top: -22px; padding: 0 14px 24px; }
+.vm2 { display: grid; gap: 8px; text-align: left; }
+
+/* Pijlgebed: zoals het actuele gebedsuur op Etmaal */
+#top#top#top#top#top#top#top#top .vm2-pijlgebed { position: relative; min-height: 104px; }
+/* Tekst gecentreerd; het kruis links en de pijl rechts houden hun plek */
+.vm2-pijlgebed .em-nu-tekst { align-items: center; text-align: center; }
+.vm2-pijlgebed .em-nu-tekst b { font-size: 24px; line-height: 1.2; }
+
+/* Kaarten */
+#top#top#top#top#top#top#top#top .vm2-kaart { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 76px; padding: 10px 10px 10px 12px; border: 1px solid var(--kaartrand, #b99455); border-radius: 5px; background: #f3e5c6 url('/images/vandaag/papyrus-licht.webp') center / cover; box-shadow: inset 0 0 0 2px rgba(255, 248, 232, .35), 0 4px 12px rgba(20, 10, 4, .45); font: inherit; color: var(--inkt) !important; text-align: left; text-decoration: none; }
+.vm2-icoon { display: grid; flex: none; place-items: center; width: 52px; height: 52px; }
+.vm2-icoon img { max-width: 50px; max-height: 46px; width: auto; height: auto; object-fit: contain; }
+.vm2-icoon img.vm2-chirho { max-height: 50px; }
+.vm2-vasten { width: 34px; height: 34px; color: #7a5a2a; }
+.vm2-tekst { display: flex; flex: 1; flex-direction: column; gap: 1px; min-width: 0; font-family: var(--font-lees); }
+.vm2-label { font-family: var(--font-titel); font-size: 11px; font-weight: 600; letter-spacing: .12em; line-height: 1.3; text-transform: uppercase; color: #5d4630; }
+.vm2-tekst b { font-size: 20px; font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
+.vm2-tekst > span:not(.vm2-label) { font-size: 15px; line-height: 1.3; color: var(--gedempt, #6a5a48); }
+.vm2-pijl { flex: none; width: 22px; height: 22px; color: #4a3220; }
+
+/* Gecentreerde kaarten: het gebedsuur en de aftelling naar de Geboorte */
+.vm2-midden .vm2-tekst { align-items: center; padding-left: 22px; text-align: center; }
+.vm2-tekst b.vm2-groot { font-size: 32px; font-weight: 500; line-height: 1.1; }
+
+/* Twee kaarten naast elkaar: vasten en feesten & heiligen */
+.vm2-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart { gap: 6px; padding: 10px 6px 10px 8px; }
+.vm2-duo .vm2-icoon { width: 36px; height: 44px; }
+.vm2-duo .vm2-icoon img { max-width: 36px; max-height: 40px; }
+.vm2-duo .vm2-tekst b { font-size: 17px; }
+.vm2-duo .vm2-label { font-size: 10px; letter-spacing: .08em; }
+.vm2-duo .vm2-pijl { width: 18px; height: 18px; }
+
+#top#top#top#top#top#top#top#top :is(.vm2-kaart, .vm2-pijlgebed):focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+
+/* Banneronderrand zoals op de andere nieuwe pagina's: geen sierboog maar een rechte kop, waarop het perkament met zacht
+   afgeronde hoeken begint; het pijlgebed ligt er half overheen, zoals het actuele gebedsuur op Etmaal. */
+@media (max-width: 767.98px) {
+  #vandaag .vg-sierboog { display: none; }
+  #vandaag .vg-kop-achter { -webkit-mask: none; mask: none; }
+  #vandaag .vg-papier.vm2-papier { background: none; }
+  #vandaag .vg-papier.vm2-papier:before { content: ""; position: absolute; z-index: -1; top: 26px; left: 0; right: 0; bottom: 0; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+}

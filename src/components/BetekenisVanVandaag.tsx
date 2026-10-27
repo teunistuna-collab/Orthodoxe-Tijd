@@ -51,7 +51,7 @@ export default function BetekenisVanVandaag({ dag, opPascha = false }: { dag: Da
       titel: b.liturgie.titel,
       kort: kortVan(b.liturgie),
       icoon: icoon('02_vasten_feesten_kalender.webp', 66, 71),
-      popup: metBron(b.liturgie.titel, b.liturgie, { paragraphs: [b.liturgie.tekst, 'Dit is de liturgische gedachtenis van de dag. De diensten en hun tijden verschillen per parochie; kijk in het rooster van uw eigen parochie.'] }),
+      popup: metBron(b.liturgie.titel, b.liturgie, { paragraphs: [b.liturgie.tekst, 'Dit is de liturgische gedachtenis van de dag. De diensten en hun tijden verschillen per parochie; kijk in het rooster van je eigen parochie.'] }),
     });
   if (b.hymne)
     kaarten.push({

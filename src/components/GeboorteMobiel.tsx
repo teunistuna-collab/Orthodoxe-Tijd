@@ -110,21 +110,27 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
       <div className="gm-papier">
         <p className="gm-inleiding">De Geboorte van Christus opent de weg naar de Menswording en laat ons Gods liefde voor de wereld zien.</p>
 
-        <div className="gm-kaart gm-aftel">
-          <span className="gm-ornament" aria-hidden="true">{SIERKRUIS}</span>
-          {dagenTot > 0 ? (
-            <>
-              <p className="am-label">Op weg naar de Geboorte</p>
-              <p className="gm-getal">{dagenTot}</p>
-              <p className="gm-dagen">{dagenTot === 1 ? 'dag' : 'dagen'}</p>
-              <p className="gm-tot">Tot de heilige Geboorte van Christus</p>
-              <Sierlijn />
-              <p className="gm-klein">Een tijd van verwachting, vasten en gebed.</p>
-            </>
-          ) : (
-            <p className="gm-groet">{groet ?? 'Christus wordt geboren, verheerlijkt Hem!'}</p>
-          )}
-        </div>
+        {/* De aftelling zoals het actuele gebedsuur op Etmaal: kruis links, label, het aantal dagen groot, pijl rechts */}
+        {dagenTot > 0 ? (
+          <a className="em-nu gm-aftel" href="#geboorte/cyclus">
+            <span className="em-nu-kruis">{SIERKRUIS}</span>
+            <span className="em-nu-tekst">
+              <span className="am-label">Op weg naar de Geboorte</span>
+              <b>{dagenTot} {dagenTot === 1 ? 'dag' : 'dagen'}</b>
+              <span>Tot de heilige Geboorte van Christus</span>
+            </span>
+            <ChevronRight className="am-pijl" aria-hidden="true" />
+          </a>
+        ) : (
+          <a className="em-nu gm-aftel" href="#geboorte/geboorte">
+            <span className="em-nu-kruis">{SIERKRUIS}</span>
+            <span className="em-nu-tekst">
+              <span className="am-label">De Geboorte van Christus</span>
+              <b className="gm-groet">{groet ?? 'Christus wordt geboren, verheerlijkt Hem!'}</b>
+            </span>
+            <ChevronRight className="am-pijl" aria-hidden="true" />
+          </a>
+        )}
 
         <div className="gm-kaart gm-vandaag">
           <h2 className="gm-kaart-titel">Vandaag in de Geboortecyclus</h2>

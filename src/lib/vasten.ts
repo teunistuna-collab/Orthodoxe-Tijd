@@ -201,7 +201,7 @@ export function berekenVasten({ kerk, offset, weekdag, feesten }: Ctx): VastenRe
     if (weekend) return regel('vis', 'Apostelvasten — vis toegestaan (weekend)', 'Zaterdag en zondag: vis, wijn en olie.', 'Apostelvasten');
     if (polyeleos) return regel('vis', 'Apostelvasten — vis toegestaan (feest)', 'Bij een polyeleosfeest in de Apostelvasten is vis toegestaan.', 'Apostelvasten');
     if (diDo) return regel('wijn-olie', 'Apostelvasten — wijn & olie', 'Dinsdag en donderdag: plantaardig voedsel met wijn en olie.', 'Apostelvasten');
-    return regel('streng', 'Apostelvasten — onthouding (ma/wo/vr)', 'Volgens het Typikon droog voedsel; in de parochiepraktijk vaak versoepeld tot wijn en olie. Raadpleeg uw priester.', 'Apostelvasten');
+    return regel('streng', 'Apostelvasten — onthouding (ma/wo/vr)', 'Volgens het Typikon droog voedsel; in de parochiepraktijk vaak versoepeld tot wijn en olie. Raadpleeg je priester.', 'Apostelvasten');
   }
 
   /* --- Vaste periodes --- */

@@ -15,6 +15,8 @@ import { actieveCyclus } from '../lib/seizoen';
 import { geboorteBannerTitel, geboortecyclusVoor } from '../lib/geboortecyclus';
 import Kaarsgloed from './Kaarsgloed';
 import BetekenisVanVandaag from './BetekenisVanVandaag';
+import VandaagMobiel from './VandaagMobiel';
+import { useMobiel } from '../lib/desktop';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -87,6 +89,27 @@ export default function Vandaag() {
   const groep = vastenGroep(dag.vasten.niveau);
   const betekenis = useMemo(() => actieveCyclus(dag.civil, mode) !== null, [dag, mode]);
   const seizoenTitel = useMemo(() => (actieveCyclus(dag.civil, mode) === 'geboorte' ? geboorteBannerTitel(dag.civil, mode) : null), [dag, mode]);
+  // Mobiel (mock-up vandaag): kaarten onder de kop (VandaagMobiel.tsx), met dezelfde gegevens en vensters.
+  const mobiel = useMobiel();
+  const cyclusNu = actieveCyclus(dag.civil, mode);
+  const geboorteDagen = useMemo(() => geboortecyclusVoor(vandaag, mode).dagenTotGeboorte, [vandaag, mode]);
+  const alleLezingen = rooster?.[dag.ymd];
+  const mobielKaarten = (
+    <VandaagMobiel
+      dag={dag}
+      pijlgebed={pijlgebed}
+      uur={{ titel: uurMoment.title, onder: uurMoment.hoofdgedachtenis, open: openDienst }}
+      vasten={{ groep, open: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }) }}
+      feest={
+        hoofdFeest
+          ? { label: 'Feesten & heiligen', naam: hoofdFeest.naam, open: () => openDag(dag.ymd) }
+          : { label: 'Feesten & heiligen', naam: heiligenRegel, open: () => openDagHeiligen(dag.ymd) }
+      }
+      lezingen={{ lijst: lezingen?.length ? lezingen : alleLezingen, geladen: !!rooster, open: () => openDagLezingen(dag.ymd) }}
+      ritme={cyclusNu === 'pascha' ? { href: '#pascha', onClick: () => openDagPascha(dag.ymd) } : { href: cyclusNu === 'geboorte' ? '#geboorte' : '#jaar' }}
+      geboorte={geboorteDagen > 0 ? { dagen: geboorteDagen } : null}
+    />
+  );
   const lezingRij = (l: HtcLezingRef, i: number) => {
     const ref = vertaalRef(l.ref);
     const soort = lezingSoort(ref);
@@ -132,7 +155,7 @@ export default function Vandaag() {
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>
 
-      <div className="vg-papier">
+      <div className={`vg-papier${mobiel ? ' vm2-papier' : ''}`}>
         {/* Feesttijd: de begroeting en de link naar het feest, in de stijl van de andere rijen op Vandaag */}
         {feest && (
           <section className="vg-feest" aria-labelledby="vg-feest-kop">
@@ -165,6 +188,7 @@ export default function Vandaag() {
         {/* Vier hoofdonderdelen met dezelfde sectiekop (.vg-sectiekop): Pijlgebed, Dit gebedsuur, Vasten & feesten,
             Lezingen van vandaag. Vanaf 1024 px twee kolommen (Vandaag.css): links het gebed, rechts de dag. De kleine
             gecentreerde regels (.vg-cyclusregel) zijn de naam van het gebedsuur en de week-, kerkelijke en paascyclus. */}
+        {mobiel ? mobielKaarten : (
         <div className="vg-kolommen">
           <div className="vg-kol">
             {/* 1. Het pijlgebed: het eigen pijlgebed uit Instellingen, anders het standaardgebed; de tekst linkt naar Instellingen. */}
@@ -307,9 +331,11 @@ export default function Vandaag() {
             )}
           </div>
         </div>
+        )}
       </div>
 
-      {/* E. Stilte: olijftak en stenen rand, met de lamp van de site erop. */}
+      {/* E. Stilte: olijftak en stenen rand, met de lamp van de site erop (mobiel niet: de mock-up eindigt met de kaarten). */}
+      {!mobiel && (
       <div className="vg-stilte">
         <img className="vg-stilte-achter" src={`${BEELD}/stilte-olijftak-900.webp`} srcSet={`${BEELD}/stilte-olijftak-900.webp 900w, ${BEELD}/stilte-olijftak-1774.webp 1774w`} sizes="(min-width: 960px) 960px, 100vw" alt="" aria-hidden="true" width={1774} height={887} loading="lazy" decoding="async" />
         <span className="vg-lamp">
@@ -320,6 +346,7 @@ export default function Vandaag() {
         </span>
         <p className="vg-stilte-tekst">Een moment van stilte.<img src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} /></p>
       </div>
+      )}
     </section>
   );
 }

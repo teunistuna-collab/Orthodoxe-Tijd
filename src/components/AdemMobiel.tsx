@@ -50,7 +50,7 @@ const VASTE_VORMEN: Vorm[] = [
 
 function useVormen(): Vorm[] {
   const eigen = useEigenPijlgebed().trim();
-  return eigen ? [...VASTE_VORMEN.slice(0, 3), { id: 'eigen', titel: 'Uw pijlgebed', tekst: eigen }, ...VASTE_VORMEN.slice(3)] : VASTE_VORMEN;
+  return eigen ? [...VASTE_VORMEN.slice(0, 3), { id: 'eigen', titel: 'Jouw pijlgebed', tekst: eigen }, ...VASTE_VORMEN.slice(3)] : VASTE_VORMEN;
 }
 
 const volgHash = (f: () => void) => {

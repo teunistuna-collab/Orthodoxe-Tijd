@@ -183,7 +183,7 @@ Heer, maak mij waardig U lief te hebben met geheel mijn ziel en verstand. Amen.`
   {
     id: 'gebeden-voor-het-slapengaan-pdf',
     titel: 'Gebeden voor het slapengaan',
-    wanneer: 'Vlak voordat u gaat slapen',
+    wanneer: 'Vlak voordat je gaat slapen',
     bron: BRON,
     categorie: 'avond',
     tekst: `GEBED VAN DE HEILIGE JOHANNES VAN DAMASKUS

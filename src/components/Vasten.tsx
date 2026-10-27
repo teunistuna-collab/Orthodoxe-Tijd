@@ -411,7 +411,7 @@ export default function Vasten() {
               </p>
               <div className="mt-4 flex items-start gap-2 border-y border-gold/45 bg-[#ead9b7]/65 p-4 text-xs text-ink">
                 <Info className="mt-0.5 h-4 w-4 shrink-0 text-gold-deep" />
-                De kalender is een leidsman, geen wetboek: volg voor het vasten het woord van uw geestelijke. Dit is
+                De kalender is een leidsman, geen wetboek: volg voor het vasten het woord van je geestelijke. Dit is
                 liturgische informatie, geen medisch of pastoraal advies.
               </div>
             </div>
