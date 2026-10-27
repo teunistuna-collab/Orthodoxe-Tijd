@@ -1,14 +1,12 @@
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { bereikLang, dagInfo, daysBetween, formatLang, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
+import { bereikLang, daysBetween, formatLang, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
 import { geboorteBannerTitel, geboortecyclusVoor, type GeboorteKey, type GeboorteStap } from '../lib/geboortecyclus';
 import { BRON_CONCEPT, GEBOORTE_DAGICONEN, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_VERDIEPING, GEBOORTE_WEETJES, GEBOORTE_ZONDAGICOON, KERKVADER_PER_PERIODE, KERKVADERS, type GeboorteInfoKey } from '../lib/geboorteInhoud';
-import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
-import { vastenGroep } from '../lib/vasten';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
-import { VastenSymbool } from './ui';
+import { AftelKaart, InfoRegels, Rij } from './CyclusMobiel';
 import { SIERKRUIS } from './symbolen';
 import './etmaal-mobiel.css';
 import './geboorte-mobiel.css';
@@ -37,43 +35,6 @@ function plaatsIn(stap: GeboorteStap, stappen: GeboorteStap[]): string {
     .filter((s) => s.key !== stap.key && s.van <= stap.van && stap.van <= s.tot && daysBetween(s.van, s.tot) > daysBetween(stap.van, stap.tot))
     .sort((a, b) => daysBetween(a.van, a.tot) - daysBetween(b.van, b.tot))[0];
   return (omvat ?? stap).label;
-}
-
-/** Informatieregels: liturgische kleur, vasten en plaats in de cyclus (voor de eerste dag van de periode). */
-function InfoRegels({ datum, mode, plaats }: { datum: Date; mode: Mode; plaats: string }) {
-  const d = dagInfo(datum, mode);
-  const kleur = LITURGISCHE_KLEUREN[liturgischeKleur(d)];
-  const groep = vastenGroep(d.vasten.niveau);
-  return (
-    <ul className="gm-info">
-      <li>
-        <span className="gm-info-teken" aria-hidden="true"><span className="gm-kleur" style={{ background: kleur.hex }} /></span>
-        <span><b>Liturgische kleur</b><span>{hoofdletter(kleur.naam)} ({kleur.uitleg})</span></span>
-      </li>
-      <li>
-        <span className="gm-info-teken" aria-hidden="true">{groep ? <VastenSymbool groep={groep} className="gm-vasten" /> : SIERKRUIS}</span>
-        <span><b>Vasten</b><span>{d.vasten.label}</span></span>
-      </li>
-      <li>
-        <span className="gm-info-teken" aria-hidden="true">{SIERKRUIS}</span>
-        <span><b>Plaats in de cyclus</b><span>{plaats}</span></span>
-      </li>
-    </ul>
-  );
-}
-
-function Rij({ href, titel, onder, nu }: { href: string; titel: string; onder: string; nu?: boolean }) {
-  return (
-    <li>
-      <a className={`gm-rij${nu ? ' is-nu' : ''}`} href={href} aria-current={nu ? 'true' : undefined}>
-        <span className="gm-rij-tekst">
-          <b>{titel}</b>
-          <span>{onder}</span>
-        </span>
-        <ChevronRight className="am-pijl" aria-hidden="true" />
-      </a>
-    </li>
-  );
 }
 
 // Tijdens het feest zelf en het nafeest: het geboorte-icoon in kaarslicht (aangeleverd 26-10-2026) in plaats van de banner.
@@ -110,27 +71,15 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
       <div className="gm-papier">
         <p className="gm-inleiding">De Geboorte van Christus opent de weg naar de Menswording en laat ons Gods liefde voor de wereld zien.</p>
 
-        {/* De aftelling zoals het actuele gebedsuur op Etmaal: kruis links, label, het aantal dagen groot, pijl rechts */}
-        {dagenTot > 0 ? (
-          <a className="em-nu gm-aftel" href="#geboorte/cyclus">
-            <span className="em-nu-kruis">{SIERKRUIS}</span>
-            <span className="em-nu-tekst">
-              <span className="am-label">Op weg naar de Geboorte</span>
-              <b>{dagenTot} {dagenTot === 1 ? 'dag' : 'dagen'}</b>
-              <span>Tot de heilige Geboorte van Christus</span>
-            </span>
-            <ChevronRight className="am-pijl" aria-hidden="true" />
-          </a>
-        ) : (
-          <a className="em-nu gm-aftel" href="#geboorte/geboorte">
-            <span className="em-nu-kruis">{SIERKRUIS}</span>
-            <span className="em-nu-tekst">
-              <span className="am-label">De Geboorte van Christus</span>
-              <b className="gm-groet">{groet ?? 'Christus wordt geboren, verheerlijkt Hem!'}</b>
-            </span>
-            <ChevronRight className="am-pijl" aria-hidden="true" />
-          </a>
-        )}
+        {/* De aftelling: het gedeelde onderdeel (CyclusMobiel.tsx), ook op Pascha en Vandaag */}
+        <AftelKaart
+          label={dagenTot > 0 ? 'Op weg naar de Geboorte' : 'De Geboorte van Christus'}
+          dagen={dagenTot}
+          onder="Tot de heilige Geboorte van Christus"
+          voet="Een tijd van verwachting, vasten en gebed."
+          groet={[groet ?? 'Christus wordt geboren, verheerlijkt Hem!']}
+          href={dagenTot > 0 ? '#geboorte/cyclus' : '#geboorte/geboorte'}
+        />
 
         <div className="gm-kaart gm-vandaag">
           <h2 className="gm-kaart-titel">Vandaag in de Geboortecyclus</h2>

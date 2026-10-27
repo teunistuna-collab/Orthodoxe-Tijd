@@ -17,6 +17,7 @@ import Kaarsgloed from './Kaarsgloed';
 import BetekenisVanVandaag from './BetekenisVanVandaag';
 import VandaagMobiel from './VandaagMobiel';
 import { useMobiel } from '../lib/desktop';
+import { aftellingVoor } from '../lib/aftellen';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -92,7 +93,7 @@ export default function Vandaag() {
   // Mobiel (mock-up vandaag): kaarten onder de kop (VandaagMobiel.tsx), met dezelfde gegevens en vensters.
   const mobiel = useMobiel();
   const cyclusNu = actieveCyclus(dag.civil, mode);
-  const geboorteDagen = useMemo(() => geboortecyclusVoor(vandaag, mode).dagenTotGeboorte, [vandaag, mode]);
+  const aftelling = useMemo(() => aftellingVoor(vandaag, mode), [vandaag, mode]);
   const alleLezingen = rooster?.[dag.ymd];
   const mobielKaarten = (
     <VandaagMobiel
@@ -107,7 +108,7 @@ export default function Vandaag() {
       }
       lezingen={{ lijst: lezingen?.length ? lezingen : alleLezingen, geladen: !!rooster, open: () => openDagLezingen(dag.ymd) }}
       ritme={cyclusNu === 'pascha' ? { href: '#pascha', onClick: () => openDagPascha(dag.ymd) } : { href: cyclusNu === 'geboorte' ? '#geboorte' : '#jaar' }}
-      geboorte={geboorteDagen > 0 ? { dagen: geboorteDagen } : null}
+      aftelling={aftelling}
     />
   );
   const lezingRij = (l: HtcLezingRef, i: number) => {

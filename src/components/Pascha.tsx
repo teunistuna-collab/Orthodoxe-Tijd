@@ -3,7 +3,8 @@ import { ChevronRight } from 'lucide-react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 
 import { useApp } from '../lib/context';
-import { useDesktop } from '../lib/desktop';
+import { useDesktop, useMobiel } from '../lib/desktop';
+import PaschaMobiel from './PaschaMobiel';
 import { PAASCYCLUS, type Feest } from '../lib/feesten';
 import { addDays, bereikLang, dagInfo, formatDag, formatDatum, formatKort, ymd, type DagInfo } from '../lib/kalender';
 import { isPaascyclus, lezingSoort, vertaalRef, type HtcLezingRef } from '../lib/htc';
@@ -83,6 +84,8 @@ export default function Pascha() {
   const gekozen = keuze?.cyclus === cyclusId ? keuze.stap : null;
   const bekeken = gekozen ?? cyclus.huidige;
   const pascha = cyclus.pascha;
+  // Mobiel: de eigen weergave volgens de mock-up (PaschaMobiel.tsx), met dezelfde gegevens.
+  const mobiel = useMobiel();
 
   // Iedere stap-pop-up krijgt de datums van de getoonde cyclus als eyebrow.
   const basis = pascha;
@@ -91,6 +94,8 @@ export default function Pascha() {
     const [start, eind] = stap.offsetRange;
     stapInhoud[stap.key] = { ...STAP_INHOUD[stap.key], title: stap.label, eyebrow: formatBereik(addDays(basis, start), addDays(basis, eind)) };
   }
+
+  if (mobiel) return <PaschaMobiel />;
 
   return (
     <>

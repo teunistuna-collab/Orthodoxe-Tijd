@@ -106,3 +106,16 @@
 #top#top#top#top#top#top#top#top .gm-aftel { margin-bottom: 12px; text-align: left; }
 .gm-aftel .em-nu-tekst b { font-size: 30px; }
 .gm-aftel .gm-groet { margin: 0; font-size: 22px; }
+
+/* Gedeelde aftelkaart (CyclusMobiel.tsx): voetregel en de feestgroet met een zachte gouden gloed */
+.gm-voet { display: block; margin-top: 2px; font-family: var(--font-lees); font-size: 14px; font-style: italic; color: var(--gedempt, #6a5a48); }
+.gm-aftel .gm-groet > span { display: block; }
+#top#top#top#top#top#top#top#top .gm-aftel.is-feest { background: radial-gradient(70% 90% at 45% 50%, rgba(255, 222, 150, .75), rgba(243, 229, 198, 0) 75%), #f3e5c6 url('/images/vandaag/papyrus-licht.webp') center / cover; }
+.gm-aftel.is-feest .gm-groet { color: var(--gm-rood, #8e1b1b); line-height: 1.2; }
+
+/* Lijstregel met een korte datum links (Paschacyclus) */
+#top#top#top#top#top#top#top#top .gm-rij.met-datum { gap: 14px; padding-left: 10px; }
+.gm-rij.met-datum:before { display: none; }
+.gm-rij-datum { flex: none; width: 96px; font-family: var(--font-lees); font-size: 15px; line-height: 1.25; color: #3b2a1a; }
+.gm-rij.met-datum .gm-rij-tekst { padding-left: 14px; border-left: 1px solid rgba(172, 121, 47, .35); }
+.gm-rij.met-datum.is-nu:after { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; background: var(--gm-goud, #a97720); }

@@ -6,6 +6,8 @@ import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import type { VastenGroep } from '../lib/vasten';
 import { VastenSymbool } from './ui';
 import { SIERKRUIS } from './symbolen';
+import { AftelKaart } from './CyclusMobiel';
+import type { Aftelling } from '../lib/aftellen';
 import './etmaal-mobiel.css';
 import './vandaag-mobiel.css';
 
@@ -53,10 +55,11 @@ export interface VandaagMobielProps {
   feest: { label: string; naam: string; open: () => void };
   lezingen: { lijst: HtcLezingRef[] | undefined; geladen: boolean; open: () => void };
   ritme: Klik;
-  geboorte: { dagen: number } | null;
+  /** De aftelling naar het eerstvolgende grote feest (lib/aftellen.ts), met dezelfde kaart als Pascha en Geboorte */
+  aftelling: Aftelling;
 }
 
-export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezingen, ritme, geboorte }: VandaagMobielProps) {
+export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezingen, ritme, aftelling }: VandaagMobielProps) {
   const refs = (lezingen.lijst ?? []).slice(0, 2).map((l) => vertaalRef(l.ref));
   return (
     <div className="vm2">
@@ -133,16 +136,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         <ChevronRight className="vm2-pijl" aria-hidden="true" />
       </Kaart>
 
-      {geboorte && (
-        <Kaart className="vm2-kaart vm2-midden" href="#geboorte">
-          <span className="vm2-tekst">
-            <span className="vm2-label">Op weg naar de Geboorte</span>
-            <b className="vm2-groot">{geboorte.dagen} {geboorte.dagen === 1 ? 'dag' : 'dagen'}</b>
-            <span>Tot de viering van de Geboorte van Christus</span>
-          </span>
-          <ChevronRight className="vm2-pijl" aria-hidden="true" />
-        </Kaart>
-      )}
+      <AftelKaart label={aftelling.label} dagen={aftelling.dagen} onder={aftelling.onder} voet={aftelling.voet} groet={aftelling.groet} href={aftelling.href} />
     </div>
   );
 }

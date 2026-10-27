@@ -1,0 +1,46 @@
+/* De Paschacyclus op mobiel (PaschaMobiel.tsx), volgens mock-up 12_pascha. Bouwt op geboorte-mobiel.css (.gm-…) en
+   etmaal-mobiel.css. De periode bepaalt alleen licht en kleur (geen beweging): sober in de Grote Vasten, verstild in de
+   Goede Week, licht en goud rond Pascha. */
+
+.pm2 { --pm2-accent: #a97720; }
+.pm2-banner img { object-position: 50% 22%; }
+/* Iconen van de dag (staand): het beeld vult de banner met de kern van de icoon in beeld */
+.pm2-banner.is-icoon img { object-position: 50% 30%; }
+.pm2-label { margin: 0 0 2px; font-size: 12px; letter-spacing: .14em; color: #5d4630; }
+#top#top#top#top#top#top#top#top#top#top .pm2-sectie { margin: 18px 2px 4px; font-family: var(--font-titel) !important; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-align: left; text-transform: uppercase; color: #6a4a24 !important; }
+.pm2-laag .gm-laag-papier > .pm2-sectie:first-of-type { margin-top: 4px; }
+
+/* Hoogfeest: de feestgroet groot op de banner, met meer licht */
+.pm2-banner.is-hoogfeest { height: min(100vw, 430px); }
+.pm2-banner.is-hoogfeest:before { background: linear-gradient(rgba(12, 6, 2, .45), rgba(12, 6, 2, 0) 30%, rgba(40, 22, 6, .15) 55%, rgba(30, 16, 5, .78)); }
+.pm2-banner.is-hoogfeest:after { content: ""; position: absolute; inset: 0; z-index: 1; background: radial-gradient(70% 50% at 50% 70%, rgba(255, 226, 160, .28), transparent 70%); pointer-events: none; }
+.pm2-groet { position: absolute; left: 0; right: 0; bottom: 34px; margin: 0; padding: 0 18px; font-family: var(--font-lees); font-size: clamp(27px, 7.6vw, 33px); line-height: 1.25; text-align: center; color: #fbf1dc; text-shadow: 0 2px 14px rgba(0, 0, 0, .7), 0 0 24px rgba(232, 176, 82, .45); }
+.pm2-hymne { margin: 4px 0 0; padding: 0 10px; font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; text-align: center; color: #3b2a1a; }
+
+/* Meer over Pascha: compacte links */
+.pm2-meer { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0; padding: 0; list-style: none; }
+#top#top#top#top#top#top#top#top .pm2-meer a { display: flex; align-items: center; gap: 8px; min-height: 54px; padding: 6px 6px 6px 10px; border: 1px solid rgba(185, 148, 85, .55); border-radius: 5px; background: rgba(250, 241, 222, .7); font-family: var(--font-lees); font-size: 16px; line-height: 1.2; color: var(--inkt) !important; text-align: left; text-decoration: none; }
+.pm2-meer a > span:nth-child(2) { flex: 1; }
+.pm2-meer .em-kaart-kruis { width: 18px; height: 18px; }
+
+/* Sfeer per periode */
+/* Voorbereidende zondagen: rustig en warm (de basis) */
+/* Grote Vasten: soberder, donkerder bruin, gedempt violet, minder goud */
+.pm2.is-vasten { background: #170c06; --gm-goud: #7a5a3a; }
+.pm2.is-vasten .gm-papier, .pm2-laag.is-vasten { background-color: #efe0c2; }
+.pm2.is-vasten .gm-periode, .pm2-laag.is-vasten .gm-laag-titel { color: #4a2f5a !important; }
+.pm2.is-vasten .gm-rij.is-nu, .pm2-laag.is-vasten .gm-rij.is-nu { background: linear-gradient(90deg, rgba(92, 45, 145, .14), rgba(92, 45, 145, .03)); }
+/* Goede Week: verstild, diepe schaduwen, spaarzaam licht */
+.pm2.is-goede-week { background: #100704; }
+.pm2.is-goede-week .gm-papier, .pm2-laag.is-goede-week { background-color: #eadabb; }
+.pm2.is-goede-week .gm-banner:before, .pm2-laag.is-goede-week .gm-banner:before { background: linear-gradient(rgba(8, 4, 2, .72), rgba(8, 4, 2, .3) 35%, rgba(8, 4, 2, .5) 60%, rgba(12, 6, 3, .94)); }
+.pm2.is-goede-week .gm-periode { color: #5a1e1e; }
+/* Pascha en de Lichte Week: licht, warm goud en ivoor */
+.pm2.is-pascha .gm-papier, .pm2-laag.is-pascha { background-color: #f8edd4; }
+.pm2.is-pascha .gm-aftel, .pm2-laag.is-pascha .gm-info { box-shadow: 0 0 0 1px rgba(201, 162, 39, .35), 0 4px 16px rgba(201, 162, 39, .25); }
+.pm2.is-pascha .gm-periode { color: #9b2c22; }
+/* Paastijd en Hemelvaart: de vreugde blijft, iets ingetogener */
+.pm2.is-paastijd .gm-papier, .pm2-laag.is-paastijd { background-color: #f6e9cd; }
+/* Pinksteren: de liturgische kleur groen als accent */
+.pm2.is-pinksteren .gm-periode, .pm2-laag.is-pinksteren .gm-laag-titel { color: #1b5e36 !important; }
+.pm2.is-pinksteren .gm-rij.is-nu { background: linear-gradient(90deg, rgba(27, 122, 67, .16), rgba(27, 122, 67, .03)); }
