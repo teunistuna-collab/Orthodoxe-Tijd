@@ -1,5 +1,6 @@
 import { useState, useSyncExternalStore, type ReactNode } from 'react';
 import { BookOpen, CalendarDays, ChevronRight, Clock, Info, Lock, Sun } from 'lucide-react';
+import type { Mode } from '../lib/kalender';
 import { useApp } from '../lib/context';
 import { STANDAARD_PIJLGEBED, bewaarPijlgebed, useEigenPijlgebed } from '../lib/pijlgebed';
 import { useLeesvoorkeur, zetKleur, zetStap, type Kleurweergave } from '../lib/leesvoorkeur';
@@ -11,7 +12,8 @@ import './instellingen-mobiel.css';
 // Instellingen op mobiel (mock-up instellingen): een overzicht en eigen schermen (#instellingen/<onderdeel>) voor het
 // pijlgebed, de gebedsuren, de kleurweergave, de tekstgrootte en de Psalter-leesvoorkeuren. Alles gebruikt de bestaande
 // opslag: lib/pijlgebed.ts (localStorage "pijlgebed", ook op Vandaag) en lib/leesvoorkeur.ts (tekstgrootte en licht of
-// donker voor alle leesweergaven: gebeden, Psalter, Adem, Etmaal). De kalendertraditie is hier alleen informatief.
+// donker voor alle leesweergaven: gebeden, Psalter, Adem, Etmaal). De kalender: de bestaande keuze uit App.tsx
+// (localStorage "orthodoxe-kalender-mode"), dezelfde als op desktop; de berekeningen zelf veranderen niet.
 
 const MAX = 150;
 const BANNER = '/images/ontwerp/instellingen-banner.webp';
@@ -29,6 +31,12 @@ const KLEUREN: Array<{ id: Kleurweergave; label: string; onder: string }> = [
   { id: 'systeem', label: 'Systeem', onder: 'Volgt de donkere modus van je apparaat' },
   { id: 'licht', label: 'Licht', onder: 'Warm perkament' },
   { id: 'donker', label: 'Donker', onder: 'Ivoor op diep bruin, voor de avond' },
+];
+
+// Dezelfde twee kalenders en uitleg als de desktopversie (Instellingen.tsx).
+const KALENDERS: Array<{ id: Mode; naam: string; uitleg: string }> = [
+  { id: 'oud', naam: 'Juliaanse kalender', uitleg: 'Gebruikt in de meeste orthodoxe kerken.' },
+  { id: 'nieuw', naam: 'Gregoriaanse kalender', uitleg: 'Gebruikt door enkele orthodoxe kerken: de vaste feesten op de burgerlijke datum, Pascha blijft juliaans.' },
 ];
 
 const volgHash = (f: () => void) => {
@@ -156,6 +164,25 @@ function Psalter() {
   );
 }
 
+function Kalender() {
+  const { mode, setMode } = useApp();
+  return (
+    <Scherm titel="Kalendertraditie" onder="Kies je kerkelijke kalender" label="Kalendertraditie" beeld="70% 50%">
+      <ul className="ism-lijst ism-keuzes" role="radiogroup" aria-label="Kalender">
+        {KALENDERS.map((k) => (
+          <li key={k.id}>
+            <button type="button" role="radio" aria-checked={mode === k.id} className={`ism-regel${mode === k.id ? ' is-gekozen' : ''}`} onClick={() => setMode(k.id)}>
+              <span className="ism-tekst"><b>{k.naam}</b><span>{k.uitleg}</span></span>
+              <span className="ism-bolletje" aria-hidden="true" />
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p className="ism-klein ism-midden">De kalender bepaalt de liturgische datums in de hele app, zoals heiligen, feesten en vasten. Slavische traditie; andere tradities volgen later. Raadpleeg voor de praktijk ter plaatse je eigen parochie.</p>
+    </Scherm>
+  );
+}
+
 function Gebedsuren() {
   return (
     <Scherm titel="Gebedsuren" onder="Weergave en herinneringen" label="Gebedsuren" beeld="80% 40%">
@@ -197,7 +224,7 @@ function Overzicht() {
         </ul>
         <h2 className="ism-label">Kerkelijke kalender</h2>
         <ul className="ism-lijst">
-          <Regel symbool={<CalendarDays strokeWidth={1.4} />} titel="Kalendertraditie" onder={`${mode === 'oud' ? 'Juliaanse kalender' : 'Gregoriaanse kalender'} · Slavische traditie`} slot />
+          <Regel href="#instellingen/kalender" symbool={<CalendarDays strokeWidth={1.4} />} titel="Kalendertraditie" onder={`${mode === 'oud' ? 'Juliaanse kalender' : 'Gregoriaanse kalender'} · Slavische traditie`} />
         </ul>
         <h2 className="ism-label">Overige</h2>
         <ul className="ism-lijst">
@@ -218,6 +245,7 @@ export default function InstellingenMobiel() {
       {onderdeel === 'kleur' && <Kleur />}
       {onderdeel === 'psalter' && <Psalter />}
       {onderdeel === 'gebedsuren' && <Gebedsuren />}
+      {onderdeel === 'kalender' && <Kalender />}
     </>
   );
 }
