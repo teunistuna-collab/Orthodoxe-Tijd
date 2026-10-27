@@ -12,6 +12,9 @@ import { ActieKnop, Sierlijn, TijdlijnRij } from './onderdelen';
 import './Vandaag.css';
 import './ontwerp.css';
 import Modal from './Modal';
+import { useMobiel } from '../lib/desktop';
+import { gaNaar } from '../lib/navigatie';
+import FeestenMobiel from './FeestenMobiel';
 
 // Feesten: het feestelijke hoofdstuk van het kerkboek (opmaak: ontwerp.css). Volgorde: opening, het feest van
 // vandaag of het eerstvolgende grote feest, de grote feesten, vaste en beweeglijke feesten als
@@ -39,7 +42,11 @@ export default function Feesten() {
   useEffect(() => {
     const opPopup = (event: Event) => {
       const { pagina, sleutel } = (event as CustomEvent<OpenPopupDetail>).detail;
-      if (pagina === 'feesten') setOpen(sleutel);
+      // Mobiel: het feest als eigen weergave (FeestenMobiel.tsx); web: het venster.
+      if (pagina === 'feesten') {
+        if (window.matchMedia('(max-width: 767.98px)').matches) gaNaar(`feesten/${sleutel}`);
+        else setOpen(sleutel);
+      }
     };
     window.addEventListener(OPEN_POPUP_EVENT, opPopup);
     return () => window.removeEventListener(OPEN_POPUP_EVENT, opPopup);
@@ -80,6 +87,15 @@ export default function Feesten() {
     if (i !== -1 && volgende) setOpen(volgende.f.id);
   };
 
+  // Mobiel: alle feesten (ook van lagere rang, zodat elk feest van een dag een eigen bladzijde heeft) en de grote feesten in
+  // de volgorde van het kerkelijk jaar (lib/feesten.ts: Pascha, dan vanaf 1 september).
+  const mobiel = useMobiel();
+  const alleMobiel = useMemo(
+    () => metDatum([...DERTIEN, ...OVERIGE_VASTE, ...BEWEEGLIJKE_FEESTEN.filter((f) => f.offset !== undefined && !DERTIEN.includes(f)), ...(heiligen ? hjFeesten(heiligen.ALLE_HEILIGEN) : [])], vandaag, mode),
+    [vandaag, mode, heiligen],
+  );
+  const grootInVolgorde = useMemo(() => DERTIEN.map((f) => groot.find((x) => x.f.id === f.id)!), [groot]);
+
   // Pascha heeft een eigen pagina; de andere feesten openen als bladzijde.
   const openFeest = (f: Feest) => (f.id === 'pascha' ? window.location.assign('#pascha') : setOpen(f.id));
   const soortTekst = (f: Feest) => (f.id.startsWith('hj-') ? 'uit het Heiligenjaar' : f.offset !== undefined ? 'beweeglijk feest' : 'vaste gedachtenis');
@@ -99,6 +115,8 @@ export default function Feesten() {
       </button>
     </li>
   );
+
+  if (mobiel) return <FeestenMobiel alle={alleMobiel} groot={grootInVolgorde} />;
 
   return (
     <>

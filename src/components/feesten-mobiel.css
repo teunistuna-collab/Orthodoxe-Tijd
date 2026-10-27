@@ -1,0 +1,52 @@
+/* Feesten op mobiel (FeestenMobiel.tsx), volgens mock-up 16_feesten. Bouwt op heiligen-mobiel.css (zoeken, datumbalk,
+   kaarten met icoon) en etmaal-mobiel.css (banner, lagen). */
+
+/* Banner: het Laatste Avondmaal, liggend; de tafel en Christus in beeld, titel eronder */
+.fm-banner { text-align: center; }
+.fm-banner img { object-position: 50% 30%; }
+.fm-banner:before { background: linear-gradient(rgba(10, 5, 2, .72), rgba(10, 5, 2, .3) 32%, rgba(10, 5, 2, .45) 58%, rgba(10, 5, 2, .85)); }
+.fm-banner .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; }
+.fm-banner .am-merk { font-size: 12px; }
+.fm-banner .em-banner-tekst { position: absolute; left: 0; right: 0; bottom: 28px; padding: 0 20px; }
+.fm-banner .em-titel { font-size: 40px; }
+.fm-banner .am-sierlijn { margin: 6px auto 4px; }
+.fm-banner .am-onder { font-size: 18px; }
+
+/* Zoekveld met wisknop */
+.fm-zoek { position: relative; }
+#top#top#top#top#top#top#top#top .fm-wis { display: grid; flex: none; place-items: center; width: 32px; height: 32px; margin-right: -8px; padding: 0; border: 0; border-radius: 50%; background: #4a3220; color: #f6ead2; }
+.fm-wis svg { width: 16px; height: 16px; }
+.fm-zoek input::-webkit-search-cancel-button { display: none; }
+
+/* Kaarten met een rechthoekig icoon (de feesten) */
+#top#top#top#top#top#top#top#top .fm-kaart { min-height: 96px; }
+.fm-kaart .hm-beeld { width: 30%; max-width: 116px; min-height: 96px; }
+.fm-kaart .hm-beeld img { object-position: 50% 28%; }
+.fm-kop { margin-top: 22px; }
+#top#top#top#top#top#top#top#top .fm-kop a { display: inline-flex; align-items: center; gap: 2px; min-height: 32px; font-family: var(--font-lees); font-size: 15px; color: #6a4a24 !important; text-decoration: none; }
+.fm-kop a svg { width: 16px; height: 16px; }
+.fm-aantal { margin: 0 4px; font-family: var(--font-lees); font-size: 15px; color: var(--gedempt); }
+
+/* Lagen: zoekresultaten, grote feesten, een feest */
+.fm-laag { background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; }
+.fm-laag > .am-kop { background: #1d1009; }
+.fm-laag-papier { padding: 14px 12px 36px; text-align: left; }
+#top#top#top#top#top#top#top#top#top#top .fm-titel { margin: 4px 0 0; font-family: var(--font-lees) !important; font-size: clamp(28px, 8vw, 34px); font-weight: 500; line-height: 1.12; letter-spacing: 0; text-align: center; text-transform: none; color: var(--inkt) !important; outline: none; }
+.fm-onder { margin: 4px 0 0; font-family: var(--font-lees); font-size: 18px; line-height: 1.3; text-align: center; color: var(--gedempt); }
+.fm-laag .am-sierlijn { margin: 10px auto 12px; color: rgba(172, 121, 47, .75); }
+
+/* Een feest: groot icoon bovenaan, met de afgeronde overgang naar het perkament */
+.fm-detail > .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 5; background: linear-gradient(rgba(12, 6, 2, .75), rgba(12, 6, 2, 0)); }
+.fm-icoon { flex: none; display: flex; justify-content: center; height: min(82vw, 350px); overflow: hidden; background: #1d1009; }
+.fm-icoon img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.fm-icoon.is-leeg { align-items: center; }
+.fm-icoon.is-leeg .hm-kader { width: 120px; height: 120px; border-radius: 6px; }
+.fm-detail .fm-laag-papier { position: relative; z-index: 3; flex: none; margin-top: -16px; border-radius: 16px 16px 0 0; background: inherit; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+.fm-datum { display: flex; align-items: flex-start; gap: 10px; margin: 0 4px 4px; font-family: var(--font-lees); font-size: 16px; line-height: 1.35; color: #3b2a1a; }
+.fm-datum svg { flex: none; width: 22px; height: 22px; margin-top: 1px; color: #6a4a24; stroke-width: 1.5; }
+.fm-tekst { margin: 0 4px 10px; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--inkt); }
+.fm-leeg { font-style: italic; color: var(--gedempt); }
+.fm-klein { margin: 0 4px 2px; font-family: var(--font-titel); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6a4a24; }
+.fm-troparion { margin: 0 4px 12px; padding: 0 0 0 12px; border-left: 2px solid rgba(172, 121, 47, .6); font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; color: #3b2a1a; }
+.fm-links { display: grid; gap: 8px; margin-top: 18px; }
+#top#top#top#top#top#top#top#top .fm-links .gm-knop { width: 100%; margin: 0; font: inherit; font-family: var(--font-lees); font-size: 17px; }
