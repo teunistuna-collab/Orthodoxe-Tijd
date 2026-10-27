@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BookOpen, Bookmark, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useFavorieten, wisselFavoriet } from '../lib/favorieten';
-import { KATHISMATA, PSALMEN, kathismaStappen, psalmBereik, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type Psalm, type PsalmBlok, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
+import { KATHISMATA, PSALMEN, beginMetHoofdletter, kathismaStappen, psalmBereik, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type Psalm, type PsalmBlok, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 import DeelKnop from './DeelKnop';
 import Leesbediening from './Leesbediening';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
@@ -172,6 +172,8 @@ export function PsalterKathisma({ k, datum }: { k: Kathisma; datum: string | nul
 }
 
 /** De verzen van een psalm: grote rode beginletter per vers, versnummer rechts, regels in de leeskolom. */
+// Initialen zoals de uitgave: een grote initiaal aan het begin van de psalm (PsalmBlok.begin, lib/psalmen.ts), daarna een
+// rode, vette hoofdletter op regelhoogte bij elk vers dat met een hoofdletter begint.
 function Verzen({ verzen, idVoorvoegsel }: { verzen: PsalmBlok[]; idVoorvoegsel: string }) {
   return (
     <div className="pm-verzen lees-tekst">
@@ -179,7 +181,7 @@ function Verzen({ verzen, idVoorvoegsel }: { verzen: PsalmBlok[]; idVoorvoegsel:
         v.kop ? (
           <p key={i} className="pm-stasis-kop">{v.kop}</p>
         ) : (
-          <div key={i} className="pm-vers" id={v.n ? `${idVoorvoegsel}-${v.n}` : undefined}>
+          <div key={i} className={`pm-vers${beginMetHoofdletter(v.regels) ? ' met-initiaal' : ''}${v.begin ? ' is-begin' : ''}`} id={v.n ? `${idVoorvoegsel}-${v.n}` : undefined}>
             <p>
               {v.regels.map((r, j) => (
                 <span key={j}>{r}</span>

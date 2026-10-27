@@ -14,7 +14,7 @@ import { useApp } from '../lib/context';
 import { WEEKDAGEN, formatDag, parseYmd, ymd } from '../lib/kalender';
 import { psalterlezingen, type Lezing } from '../lib/psalterlezing';
 import Psalterlezing from './Psalterlezing';
-import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, THEMAS, kathismaStappen, laadPsalmTeksten, psalmBereik, psalmVanHetUur, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
+import { ETMAAL_GROEPEN, KATHISMATA, PSALMEN, beginMetHoofdletter, THEMAS, kathismaStappen, laadPsalmTeksten, psalmBereik, psalmVanHetUur, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type Psalm, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 import './Vandaag.css';
 import './ontwerp.css';
 import './psalmen-knoppen.css';
@@ -707,7 +707,7 @@ export function PsalmLezer({ psalm, tekst, laadFout, idVoorvoegsel, ontwerp, zon
                     {v.kop}
                   </p>
                 ) : (
-                  <div key={k} className={`ps-vers${v.n ? ' heeft-nr' : ''}`} id={ontwerp && v.n ? `ps-vers-${v.n}` : undefined}>
+                  <div key={k} className={`ps-vers${v.n ? ' heeft-nr' : ''}${beginMetHoofdletter(v.regels) ? ' met-initiaal' : ''}${v.begin ? ' is-begin' : ''}`} id={ontwerp && v.n ? `ps-vers-${v.n}` : undefined}>
                     <span className="ps-versnr">{v.n ?? ''}</span>
                     <p>
                       {v.regels.map((r, j) => <span key={j}>{r}</span>)}

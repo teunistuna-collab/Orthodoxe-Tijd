@@ -37,3 +37,4 @@
 .bd-uur .bd-tekst { padding-right: 0; }
 .bd-uur .bd-alle { width: calc(100% + 24px); }
 #top#top#top#top#top#top#top#top .bd-kaart:focus-visible, #top#top#top#top#top#top#top#top .bd-hoofd:focus-visible, #top#top#top#top#top#top#top#top .bd-alle:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+#top#top#top#top#top#top#top#top .bd-alle { display: flex; align-items: center; min-height: 44px; padding-top: 4px; padding-bottom: 0; }

@@ -64,8 +64,15 @@
 .pm-vers { display: grid; grid-template-columns: minmax(0, 1fr) 18px; gap: 6px; margin: 0 0 1.1em; scroll-margin-top: 70px; }
 .pm-vers p { margin: 0; }
 .pm-vers p span { display: block; }
-.pm-vers p span + span { padding-left: 1.1em; }
-.pm-vers p::first-letter { float: left; margin: .06em .1em 0 0; font-size: 2.6em; line-height: .82; color: var(--pm-rood); }
+/* Inspringen zoals de uitgave: de eerste regel van een vers zonder inspringing, de volgende regels één stap, een
+   afgebroken (te lange) regel twee stappen. Zo blijven de eenheden van twee of drie regels zichtbaar. */
+.pm-vers p span { padding-left: 2.2em; text-indent: -2.2em; }
+.pm-vers p span + span { text-indent: -1.1em; }
+/* Naast de grote initiaal (het begin van de psalm) geen hangende inspringing: de initiaal zelf staat in de kantlijn */
+.pm-vers.is-begin p span:first-child { padding-left: 0; text-indent: 0; }
+.pm-vers.is-begin p span + span { padding-left: 1.1em; text-indent: 0; }
+.pm-vers.met-initiaal p::first-letter { font-weight: 700; color: var(--pm-rood); }
+.pm-vers.met-initiaal.is-begin p::first-letter { float: left; margin: .06em .1em 0 0; font-size: 2.6em; font-weight: 400; line-height: .82; }
 .pm-versnr { padding-top: .25em; font-family: var(--font-lees); font-size: 12.5px; text-align: right; color: var(--pm-rood); }
 .pm-stasis-kop { margin: 1.2em 0 .8em; font-family: var(--font-titel); font-size: 13px; letter-spacing: .14em; text-align: center; text-transform: uppercase; color: var(--goud-pijl); }
 .pm-geheel-psalm + .pm-geheel-psalm { margin-top: 26px; padding-top: 18px; border-top: 1px solid rgba(172, 121, 47, .3); }

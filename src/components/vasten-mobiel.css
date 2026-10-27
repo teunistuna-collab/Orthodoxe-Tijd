@@ -48,3 +48,6 @@
 #top#top#top#top#top#top#top#top .vsm-rij:focus-visible, #top#top#top#top#top#top#top#top .vsm-uitklap:focus-visible, #top#top#top#top#top#top#top#top .vsm-dagnav button:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
 /* Bannerhoogte gelijk aan de andere nieuwe mobiele pagina's */
 #top #vasten.vsm .vg-kop { height: min(82vw, 350px); }
+/* Banneronderrand zoals de andere nieuwe pagina's: geen sierboog, een rechte kop; alleen het perkament is afgerond */
+#top #vasten.vsm .vg-sierboog { display: none; }
+#top #vasten.vsm .vg-kop-achter { -webkit-mask: none; mask: none; }

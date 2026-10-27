@@ -613,7 +613,7 @@ button.vt-tegel-binnen { cursor: pointer; }
 #top#top#top#top#top#top#top#top#top .ot-psalmen .ot-ps-intro { max-width: 62ch; }
 #top#top#top#top#top#top#top#top#top .pc-tropaar { max-width: 62ch; margin-inline: auto; }
 /* Psalmlezer: de hoofdletter aan het begin van een genummerd vers in het rood van het versnummer */
-#top#top#top#top#top#top .ps-vers.heeft-nr p::first-letter { font-weight: 700; color: var(--ot-rood, #850d17); }
+#top#top#top#top#top#top :is(.ps-vers.heeft-nr, .ps-vers.is-begin).met-initiaal p::first-letter { font-weight: 700; color: var(--ot-rood, #850d17); }
 /* Voedseltegels met de aangeleverde iconen: het icoon is de hele tegel (eigen lijst en perkamentstrook), de naam staat
    in die strook; vinkje of kruis rechtsboven. Niet toegestaan: het icoon gedempt, de naam blijft leesbaar. */
 .vt-tegel-binnen { justify-content: flex-start; min-height: 0; padding: 0; border: 0; border-radius: 6px; background: none; box-shadow: none; }
@@ -625,3 +625,11 @@ button.vt-tegel-binnen { cursor: pointer; }
 .vt-tegel.is-licht .vt-tegel-binnen, .vt-tegel.is-niet.is-licht .vt-tegel-binnen { box-shadow: 0 0 0 2px #a97720; }
 /* Mobiel: geen vastentafel, alleen de tegels */
 @media (max-width: 767.98px) { .ot-vasten .vg-papier > .vt { display: none; } }
+/* Bronnen mobiel: één doorlopend perkament achter de kop en de inhoud (geen naad tussen de twee vlakken) */
+@media (max-width: 767.98px) {
+  #top#top#top .exact-content:has(> div > .bronnen-inhoud) { background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto !important; }
+  .exact-content:has(> div > .bronnen-inhoud) .bronnen-inhoud { background: none; }
+}
+/* Psalmverzen (desktop en de psalmen in Etmaal): inspringen zoals de uitgave, zie psalter-mobiel.css */
+#top#top#top#top#top#top .ps-vers p span { padding-left: 2.2em; text-indent: -2.2em; }
+#top#top#top#top#top#top .ps-vers p span + span { text-indent: -1.1em; }

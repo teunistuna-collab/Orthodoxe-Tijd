@@ -231,6 +231,7 @@ export default function Vasten() {
         <section id="vasten" className="vg ot-redesign ot-vasten vsm">
           <NisKop open={open} balk achter={<BannerBeeld naam="vasten-banner" open={open} />} />
           <div className="vg-papier vsm-papier">
+            <h1 className="sr-only">Vasten</h1>
             <h2 className="vsm-label"><span>Vasten vandaag</span></h2>
             <div className="vsm-kaart vsm-regel" aria-live="polite">
               <h3 className="vsm-titel">{isVandaag ? 'De vastenregel van vandaag' : `De vastenregel van ${formatDatum(dagM.civil)}`}</h3>

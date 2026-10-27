@@ -194,6 +194,8 @@ export interface PsalmBlok {
   /** Tussenkop, zoals "tweede stasis" in Psalm 118. */
   kop?: string;
   regels: string[];
+  /** Het begin van de psalm (na het weggelaten opschrift): hier staat de grote initiaal. */
+  begin?: boolean;
 }
 export interface PsalmTekst {
   lxx: number;
@@ -203,6 +205,24 @@ export interface PsalmTekst {
 }
 export type PsalmTeksten = Record<string, PsalmTekst>;
 
+/** Opschriften worden niet hardop gelezen en blijven weg (zoals de uitgave ze in het rood zet): per psalm het aantal
+ *  regels aan het begin van het eerste blok (en eventueel verzen die geheel tot het opschrift horen). Met de hand
+ *  nagekeken voor de aangeleverde psalmen; een nieuwe psalm hier toevoegen. Psalm 50:2 en "Alleluja." (Psalm 118)
+ *  blijven staan. Tekst en nummering blijven verder gelijk. */
+const OPSCHRIFT: Record<string, { regels: number; verzen?: number[] }> = {
+  24: { regels: 1 }, 50: { regels: 1 }, 62: { regels: 1 }, 84: { regels: 1 }, 89: { regels: 1 },
+  90: { regels: 1 }, 102: { regels: 1 }, 103: { regels: 1 }, 140: { regels: 1 },
+};
+function zonderOpschrift(nr: string, t: PsalmTekst): PsalmTekst {
+  const o = OPSCHRIFT[nr];
+  const verzen = t.verzen
+    .map((v, i) => (o && i === 0 && !v.n ? { ...v, regels: v.regels.slice(o.regels) } : v))
+    .filter((v) => v.kop || (v.regels.length > 0 && !(v.n && o?.verzen?.includes(v.n))));
+  const eerste = verzen.findIndex((v) => !v.kop);
+  if (eerste >= 0) verzen[eerste] = { ...verzen[eerste], begin: true };
+  return { ...t, verzen };
+}
+
 let tekstenLaden: Promise<PsalmTeksten> | null = null;
 export function laadPsalmTeksten(): Promise<PsalmTeksten> {
   tekstenLaden ??= fetch('/data/psalmen.json')
@@ -210,6 +230,7 @@ export function laadPsalmTeksten(): Promise<PsalmTeksten> {
       if (!r.ok) throw new Error('psalmen.json ontbreekt');
       return r.json() as Promise<PsalmTeksten>;
     })
+    .then((teksten) => Object.fromEntries(Object.entries(teksten).map(([nr, t]) => [nr, zonderOpschrift(nr, t)])))
     .catch((fout) => {
       tekstenLaden = null;
       throw fout;
@@ -255,3 +276,7 @@ export function zoekPsalmen(lijst: Psalm[], invoer: string, teksten: PsalmTekste
     return !!tekst && tekst.verzen.some((v) => v.regels.some((r) => normaal(r).includes(q)));
   });
 }
+
+/** Begint een vers met een hoofdletter (na eventuele leestekens, zoals een aanhalingsteken)? Alleen dan krijgt het een
+ *  initiaal, zoals in de uitgave; een vers dat midden in een zin begint ("mijn God, …") niet. */
+export const beginMetHoofdletter = (regels: string[]) => /^[^\p{L}]*\p{Lu}/u.test(regels[0] ?? '');
