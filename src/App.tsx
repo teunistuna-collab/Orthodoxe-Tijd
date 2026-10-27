@@ -16,6 +16,7 @@ import Geboorte from './components/Geboorte';
 import Heiligen from './components/Heiligen';
 import Gebeden from './components/Gebeden';
 import Meer from './components/Meer';
+import BoekenMobiel from './components/BoekenMobiel';
 import Cycli from './components/Cycli';
 import Bidden from './components/Bidden';
 import DagModal from './components/DagModal';
@@ -50,13 +51,13 @@ const UITLEG_KEY = 'orthodoxe-kalender-uitleg-gezien';
 
 const STANDAARD_TITEL = document.title;
 
-const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'geboorte', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer', 'cycli', 'bidden'];
+const PAGINAS = ['vandaag', 'kalender', 'adem', 'etmaal', 'week', 'jaar', 'pascha', 'geboorte', 'gebeden', 'vasten', 'heiligen', 'feesten', 'psalmen', 'bronnen', 'instellingen', 'meer', 'cycli', 'bidden', 'boeken'];
 
 // "#psalmen/50" hoort bij de pagina "psalmen" (de Psalmenpagina opent zelf Psalm 50).
 function paginaUitHash(): string | null {
   const id = decodeURIComponent(window.location.hash.slice(1)).split('/')[0];
   // Bidden (#bidden), Ontdek (#cycli) en Verdieping (#meer) horen bij de mobiele onderbalk; op het web staat alles al in de kopbalk.
-  if ((id === 'meer' || id === 'cycli' || id === 'bidden') && window.matchMedia('(min-width: 768px)').matches) return null;
+  if ((id === 'meer' || id === 'cycli' || id === 'bidden' || id === 'boeken') && window.matchMedia('(min-width: 768px)').matches) return null;
   return PAGINAS.includes(id) ? id : null;
 }
 
@@ -85,6 +86,7 @@ const INHOUD = {
   heiligen: <Heiligen />,
   feesten: <Feesten />,
   meer: <Meer />,
+  boeken: <BoekenMobiel />,
   cycli: <Cycli />,
   bidden: <Bidden />,
   instellingen: <Instellingen />,
@@ -276,6 +278,7 @@ export default function App() {
           <div className={p('heiligen')}>{INHOUD.heiligen}</div>
           <div className={p('feesten')}>{INHOUD.feesten}</div>
           <div className={p('meer')}>{INHOUD.meer}</div>
+          <div className={p('boeken')}>{INHOUD.boeken}</div>
           <div className={p('cycli')}>{INHOUD.cycli}</div>
           <div className={p('bidden')}>{INHOUD.bidden}</div>
           <div className={p('instellingen')}>{INHOUD.instellingen}</div>

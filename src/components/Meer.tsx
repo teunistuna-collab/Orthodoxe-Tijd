@@ -13,6 +13,7 @@ const VERDIEPING: Regel[] = [
   { id: 'vasten', titel: 'Vasten', ondertitel: 'Vastenregels en vastenperioden' },
   { id: 'heiligen', titel: 'Heiligen', ondertitel: 'De heiligen en hun levens' },
   { id: 'feesten', titel: 'Feesten', ondertitel: 'De feesten van het kerkelijk jaar' },
+  { id: 'boeken', titel: 'Boeken', ondertitel: 'Een kleine orthodoxe bibliotheek' },
 ];
 const OVERIGE: Regel[] = [
   { id: 'instellingen', titel: 'Instellingen', ondertitel: 'Jouw voorkeuren en pijlgebed' },
