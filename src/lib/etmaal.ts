@@ -122,5 +122,10 @@ export function dienstVanHetUur(nu: Date): ServiceMapping {
   );
 }
 
+// Weergavenamen zoals in de mock-up van Etmaal (mobiel) en het adres #etmaal/<slug>; de dienst zelf blijft die hierboven.
+const NAMEN: Record<string, string> = { Middernachtdienst: 'Middernacht', 'Eerste Uur': 'Eerste uur', 'Derde Uur': 'Derde uur', 'Zesde Uur': 'Zesde uur', 'Negende Uur': 'Negende uur' };
+export const naamVan = (d: ServiceMapping) => NAMEN[d.title] ?? d.title;
+export const slugVan = (d: ServiceMapping) => naamVan(d).toLowerCase().replace(/\s+/g, '-');
+
 /** Versierde initiaal per dienst: de eerste letter van de dienstnaam uit het alfabet (lib/letters.ts). */
 export const INITIALEN: Record<string, string | undefined> = Object.fromEntries(serviceConfig.map((s) => [s.title, letterBeeld(s.title)]));

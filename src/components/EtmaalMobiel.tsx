@@ -2,7 +2,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { ETMAAL_INFO, ETMAAL_INLEIDING } from '../lib/cyclusTeksten';
-import { dienstVanHetUur, serviceConfig, type ServiceMapping } from '../lib/etmaal';
+import { dienstVanHetUur, naamVan, serviceConfig, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { gaNaar } from '../lib/navigatie';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
@@ -22,10 +22,6 @@ import './etmaal-mobiel.css';
 // klooster en het gebedenboek (public/images/etmaal/mobiel), alleen bijgesneden zodat er geen figuren in beeld staan.
 
 const BEELD = '/images/etmaal/mobiel';
-// Weergavenamen zoals in de mock-up; de dienst zelf blijft die uit lib/etmaal.ts.
-const NAMEN: Record<string, string> = { Middernachtdienst: 'Middernacht', 'Eerste Uur': 'Eerste uur', 'Derde Uur': 'Derde uur', 'Zesde Uur': 'Zesde uur', 'Negende Uur': 'Negende uur' };
-const naamVan = (d: ServiceMapping) => NAMEN[d.title] ?? d.title;
-const slugVan = (d: ServiceMapping) => naamVan(d).toLowerCase().replace(/\s+/g, '-');
 
 const DIENSTEN_TABEL = ETMAAL_INFO.diensten.sections?.[0];
 const ORIENTATIE = DIENSTEN_TABEL?.paragraphs?.[0]?.split(/(?<=\.)\s+/).pop() ?? '';

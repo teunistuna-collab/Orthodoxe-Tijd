@@ -1,6 +1,7 @@
 // Minimale service worker van Orthodoxe Tijd. Bewaart niets en maakt de site NIET offline beschikbaar:
 // alleen als een pagina niet geladen kan worden (geen verbinding) toont hij een korte melding in plaats van een foutpagina.
 // Geregistreerd in src/main.tsx (alleen in de productiebuild).
+// Daarnaast: een tik op een herinnering (lib/herinneringen.ts) opent het juiste scherm.
 
 const MELDING = `<!doctype html>
 <html lang="nl">
@@ -31,6 +32,21 @@ const MELDING = `<!doctype html>
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
+
+// Tik op een herinnering: een open venster naar voren halen en het scherm laten openen, anders de app openen op dat scherm.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const data = event.notification.data || {};
+  const hash = typeof data.url === 'string' && data.url.startsWith('#') ? data.url : '#vandaag';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((vensters) => {
+      const venster = vensters.find((v) => new URL(v.url).origin === self.location.origin);
+      if (!venster) return self.clients.openWindow('/' + hash);
+      venster.postMessage({ type: 'herinnering-open', url: hash });
+      return venster.focus();
+    }),
+  );
+});
 
 self.addEventListener('fetch', (event) => {
   if (event.request.mode !== 'navigate') return; // al het andere gaat gewoon via het netwerk

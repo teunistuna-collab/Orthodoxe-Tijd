@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, ChevronRight, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { addDays, dagInfo, formatDag, formatDatum, formatKort, hoofdletter, ymd } from '../lib/kalender';
+import { addDays, dagInfo, daysBetween, formatDag, formatDatum, formatKort, hoofdletter, parseYmd, ymd } from '../lib/kalender';
 import { vastenPeriodes, type Periode } from '../lib/overzicht';
 import { LADDER, NIVEAUS } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
@@ -111,6 +111,11 @@ function FastingTable({ titel, rijen, noot }: { titel: string; rijen: FastingRij
   );
 }
 
+const volgHash = (f: () => void) => {
+  window.addEventListener('hashchange', f);
+  return () => window.removeEventListener('hashchange', f);
+};
+
 export default function Vasten() {
   const { mode, vandaag, vandaagYmd } = useApp();
   const open = usePaginaOpen('vasten');
@@ -155,6 +160,16 @@ export default function Vasten() {
   const [etenOpen, setEtenOpen] = useState(false);
   const [verschuiving, setVerschuiving] = useState(0);
   const [wekelijksOpen, setWekelijksOpen] = useState(false);
+  // Een herinnering (Instellingen) opent #vasten/<datum>: mobiel toont die dag, desktop het bestaande dagvenster.
+  const hashDag = useSyncExternalStore(volgHash, () => decodeURIComponent(window.location.hash).match(/^#vasten\/(\d{4}-\d{2}-\d{2})$/)?.[1] ?? '');
+  const [gezienHashDag, setGezienHashDag] = useState('');
+  if (hashDag !== gezienHashDag) {
+    setGezienHashDag(hashDag);
+    if (hashDag && mobiel) {
+      setVerschuiving(daysBetween(vandaag, parseYmd(hashDag)));
+      setEtenOpen(true);
+    } else if (hashDag) setGeselecteerdeDag(hashDag);
+  }
   const dagM = useMemo(() => dagInfo(addDays(vandaag, verschuiving), mode, vandaagYmd), [vandaag, verschuiving, mode, vandaagYmd]);
   const periodeNu = useMemo(() => {
     const alle = [jaar - 1, jaar, jaar + 1].flatMap((j) => vastenPeriodes(j, mode)).filter((p) => p.soort === 'vasten');

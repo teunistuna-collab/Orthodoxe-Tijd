@@ -35,6 +35,7 @@ import PaginaOpening from './components/PaginaOpening';
 import { AppContext, type HeiligenData, type LezingKeuze } from './lib/context';
 import { vandaag as bepaalVandaag, hoofdletter, ymd, type Mode } from './lib/kalender';
 import { kerkjaarVan, laadRoosterJaar, type Rooster } from './lib/htc';
+import { useHerinneringPlanner } from './lib/herinneringen';
 
 const MODE_KEY = 'orthodoxe-kalender-mode';
 
@@ -111,6 +112,8 @@ export default function App() {
     return begin;
   });
   const [zoekOpen, setZoekOpen] = useState(false);
+  // Herinneringen (Instellingen): tonen wat aan de beurt is zolang de app open is.
+  useHerinneringPlanner(mode);
 
   // Er staat één pagina tegelijk in beeld (zie .pagina-verborgen in index.css); het anker in de url bepaalt welke.
   // Elke pagina onthoudt hoe ver je gescrold was: terug naar een pagina brengt je weer op die plek.

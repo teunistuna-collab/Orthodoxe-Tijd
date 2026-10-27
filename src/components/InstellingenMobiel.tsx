@@ -1,18 +1,21 @@
 import { useState, useSyncExternalStore, type ReactNode } from 'react';
-import { BookOpen, CalendarDays, ChevronRight, Clock, Info, Lock, Sun } from 'lucide-react';
+import { Bell, BookOpen, CalendarDays, ChevronRight, Clock, Info, Lock, Sun } from 'lucide-react';
 import type { Mode } from '../lib/kalender';
 import { useApp } from '../lib/context';
 import { STANDAARD_PIJLGEBED, bewaarPijlgebed, useEigenPijlgebed } from '../lib/pijlgebed';
 import { useLeesvoorkeur, zetKleur, zetStap, type Kleurweergave } from '../lib/leesvoorkeur';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
 import { HANDEN } from './symbolen';
+import { naamVan, serviceConfig } from '../lib/etmaal';
+import { DERTIEN } from '../lib/feesten';
+import { AVOND, OCHTEND, ietsAan, toestemming, toon, useHerinneringen, volgendeMelding, vraagToestemming, zetHerinneringen, type Herinneringen as HerinneringKeuzes, type Toestemming } from '../lib/herinneringen';
 import './etmaal-mobiel.css';
 import './instellingen-mobiel.css';
 
 // Instellingen op mobiel (mock-up instellingen): een overzicht en eigen schermen (#instellingen/<onderdeel>) voor het
 // pijlgebed, de gebedsuren, de kleurweergave, de tekstgrootte en de Psalter-leesvoorkeuren. Alles gebruikt de bestaande
 // opslag: lib/pijlgebed.ts (localStorage "pijlgebed", ook op Vandaag) en lib/leesvoorkeur.ts (tekstgrootte en licht of
-// donker voor alle leesweergaven: gebeden, Psalter, Adem, Etmaal). De kalender: de bestaande keuze uit App.tsx
+// donker voor alle leesweergaven: gebeden, Psalter, Adem, Etmaal) en lib/herinneringen.ts (herinneringen). De kalender: de bestaande keuze uit App.tsx
 // (localStorage "orthodoxe-kalender-mode"), dezelfde als op desktop; de berekeningen zelf veranderen niet.
 
 const MAX = 150;
@@ -189,8 +192,168 @@ function Gebedsuren() {
       <p className="ism-uitleg">Het actuele gebedsuur op Vandaag en Bidden volgt de klok van je apparaat: van de Middernacht tot de Completen.</p>
       <ul className="ism-lijst">
         <Regel href="#etmaal" symbool={<Clock strokeWidth={1.4} />} titel="De uren van de dag" onder="Bekijk alle gebedsuren op Etmaal" />
+        <Regel href="#instellingen/herinneringen" symbool={<Bell strokeWidth={1.4} />} titel="Herinneringen" onder="Een melding bij de gebedsuren" />
       </ul>
-      <p className="ism-klein ism-midden">Herinneringen voor de gebedsuren komen later beschikbaar.</p>
+    </Scherm>
+  );
+}
+
+// Herinneringen: gebedsuren, vastendagen en feesten (lib/herinneringen.ts). Zolang er geen server is, komen meldingen
+// alleen terwijl de app open is; dat staat er eerlijk bij, net als ontbrekende ondersteuning of toestemming.
+const VOORAF = [
+  { id: 0, label: 'Op het moment zelf' },
+  { id: 15, label: '15 minuten vooraf' },
+  { id: 30, label: '30 minuten vooraf' },
+] as const;
+const uurTekst = (u: number) => `${u}.00 uur`;
+const VASTEN_MOMENT = [
+  { id: 'avond', label: 'De avond ervoor', onder: `Om ${uurTekst(AVOND)}` },
+  { id: 'ochtend', label: 'De ochtend van de vastendag', onder: `Om ${uurTekst(OCHTEND)}` },
+  { id: 'beide', label: 'Beide', onder: `Om ${uurTekst(AVOND)} en om ${uurTekst(OCHTEND)}` },
+] as const;
+const FEEST_KEUZE = [
+  { id: 'alle', label: 'Alle grote feesten', onder: 'Pascha en de twaalf grote feesten' },
+  { id: 'eigen', label: 'Zelf kiezen' },
+] as const;
+const FEEST_MOMENT = [
+  { id: 'ervoor', label: 'De dag ervoor', onder: `Om ${uurTekst(AVOND)}` },
+  { id: 'dag', label: 'Op de feestdag', onder: `Om ${uurTekst(OCHTEND)}` },
+] as const;
+const feestNaam = (naam: string) => naam.split(' — ')[0];
+
+function Schakel({ titel, onder, aan, uit, onWissel }: { titel: string; onder?: string; aan: boolean; uit?: boolean; onWissel: () => void }) {
+  return (
+    <li>
+      <button type="button" role="switch" aria-checked={aan} disabled={uit} className="ism-regel" onClick={onWissel}>
+        <span className="ism-tekst"><b>{titel}</b>{onder && <span>{onder}</span>}</span>
+        <span className="ism-schakel" aria-hidden="true" />
+      </button>
+    </li>
+  );
+}
+
+function Keuzes<T extends string | number>({ label, keuzes, waarde, uit, onKies }: { label: string; keuzes: ReadonlyArray<{ id: T; label: string; onder?: string }>; waarde: T; uit?: boolean; onKies: (id: T) => void }) {
+  return (
+    <ul className="ism-lijst ism-keuzes" role="radiogroup" aria-label={label}>
+      {keuzes.map((k) => (
+        <li key={k.id}>
+          <button type="button" role="radio" aria-checked={waarde === k.id} disabled={uit} className={`ism-regel${waarde === k.id ? ' is-gekozen' : ''}`} onClick={() => onKies(k.id)}>
+            <span className="ism-tekst"><b>{k.label}</b>{k.onder && <span>{k.onder}</span>}</span>
+            <span className="ism-bolletje" aria-hidden="true" />
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const STATUS: Partial<Record<Toestemming, { titel: string; tekst: string }>> = {
+  'niet-ondersteund': {
+    titel: 'Meldingen niet beschikbaar',
+    tekst: 'Deze browser kan geen meldingen tonen. Op een iPhone of iPad werkt dit alleen als je Orthodoxe Tijd eerst via Deel → Zet op beginscherm installeert (iOS 16.4 of nieuwer) en de app daarna vanaf het beginscherm opent.',
+  },
+  denied: {
+    titel: 'Meldingen zijn geblokkeerd',
+    tekst: 'Je hebt meldingen voor Orthodoxe Tijd niet toegestaan. Sta ze toe in de instellingen van je browser of telefoon; daarna kun je hier herinneringen kiezen.',
+  },
+};
+
+function HerinneringScherm() {
+  const h = useHerinneringen();
+  const { mode } = useApp();
+  const [status, setStatus] = useState(toestemming);
+  const [melding, setMelding] = useState('');
+  const fout = STATUS[status];
+  const uit = Boolean(fout);
+  // Toestemming pas vragen als je zelf iets aanzet.
+  const zet = async (w: Partial<HerinneringKeuzes>, aanzetten = false) => {
+    if (aanzetten && status !== 'granted') {
+      const t = await vraagToestemming();
+      setStatus(t);
+      if (t !== 'granted') return;
+    }
+    zetHerinneringen(w);
+  };
+  const wisselUur = (titel: string) => {
+    const aan = h.uren.includes(titel);
+    void zet({ uren: aan ? h.uren.filter((u) => u !== titel) : [...h.uren, titel] }, !aan);
+  };
+  const wisselFeest = (id: string) => {
+    const aan = h.feestIds.includes(id);
+    void zet({ feestIds: aan ? h.feestIds.filter((f) => f !== id) : [...h.feestIds, id] }, !aan);
+  };
+  const volgende = status === 'granted' && ietsAan(h) ? volgendeMelding(h, mode) : undefined;
+  const proef = async () => {
+    const t = await vraagToestemming();
+    setStatus(t);
+    if (t !== 'granted') return;
+    await toon({ id: 'proef', titel: 'Orthodoxe Tijd', tekst: 'Zo ziet een herinnering eruit.', url: '#instellingen/herinneringen' }).then(
+      () => setMelding('De proefmelding is verstuurd.'),
+      () => setMelding('Deze melding kon niet worden getoond.'),
+    );
+  };
+  return (
+    <Scherm titel="Herinneringen" onder="Gebedsuren, vastendagen en feesten" label="Herinneringen" beeld="40% 50%">
+      {fout && (
+        <div className="ism-kaart ism-waarschuwing" role="status">
+          <p className="ism-veldlabel">{fout.titel}</p>
+          <p className="ism-tekstblok">{fout.tekst}</p>
+        </div>
+      )}
+      <div className="ism-kaart ism-let-op">
+        <p className="ism-veldlabel">Goed om te weten</p>
+        <p className="ism-tekstblok">Herinneringen verschijnen alleen terwijl Orthodoxe Tijd geopend is op dit apparaat. Is de app gesloten, of legt je telefoon hem op de achtergrond stil, dan komt er geen melding. Meldingen bij een gesloten app vragen een server; die is er nog niet.</p>
+        {volgende && <p className="ism-klein">Volgende herinnering: {volgende.titel}, {volgende.tijd.toLocaleString('nl-NL', { weekday: 'long', hour: '2-digit', minute: '2-digit' })}.</p>}
+      </div>
+
+      <h2 className="ism-label">Gebedsuren</h2>
+      <ul className="ism-lijst">
+        {serviceConfig.map((s) => (
+          <Schakel key={s.title} titel={naamVan(s)} onder={`${s.time} uur`} aan={h.uren.includes(s.title)} uit={uit} onWissel={() => wisselUur(s.title)} />
+        ))}
+      </ul>
+      <p className="ism-veldlabel ism-sublabel">Wanneer</p>
+      <Keuzes label="Wanneer bij een gebedsuur" keuzes={VOORAF} waarde={h.vooraf} uit={uit} onKies={(id) => void zet({ vooraf: id })} />
+
+      <h2 className="ism-label">Vastendagen</h2>
+      <ul className="ism-lijst">
+        <Schakel titel="Herinner mij aan vastendagen" onder="Volgens de vastenkalender van de app" aan={h.vasten} uit={uit} onWissel={() => void zet({ vasten: !h.vasten }, !h.vasten)} />
+        {h.vasten && <Schakel titel="Alleen de grote vastenperioden" onder="Grote Vasten, Apostelvasten, Ontslapingsvasten en Kerstvasten" aan={h.alleenGroteVasten} uit={uit} onWissel={() => void zet({ alleenGroteVasten: !h.alleenGroteVasten })} />}
+      </ul>
+      {h.vasten && (
+        <>
+          <p className="ism-veldlabel ism-sublabel">Wanneer</p>
+          <Keuzes label="Wanneer bij een vastendag" keuzes={VASTEN_MOMENT} waarde={h.vastenMoment} uit={uit} onKies={(id) => void zet({ vastenMoment: id })} />
+        </>
+      )}
+
+      <h2 className="ism-label">Heilige feesten</h2>
+      <ul className="ism-lijst">
+        <Schakel titel="Herinner mij aan feesten" onder="Volgens de kerkelijke kalender, ook de beweeglijke feesten" aan={h.feesten} uit={uit} onWissel={() => void zet({ feesten: !h.feesten }, !h.feesten)} />
+      </ul>
+      {h.feesten && (
+        <>
+          <p className="ism-veldlabel ism-sublabel">Welke feesten</p>
+          <Keuzes label="Welke feesten" keuzes={FEEST_KEUZE} waarde={h.feestKeuze} uit={uit} onKies={(id) => void zet({ feestKeuze: id })} />
+          {h.feestKeuze === 'eigen' && (
+            <ul className="ism-lijst ism-feestkeuze">
+              {DERTIEN.map((f) => (
+                <Schakel key={f.id} titel={feestNaam(f.naam)} aan={h.feestIds.includes(f.id)} uit={uit} onWissel={() => wisselFeest(f.id)} />
+              ))}
+            </ul>
+          )}
+          <p className="ism-veldlabel ism-sublabel">Wanneer</p>
+          <Keuzes label="Wanneer bij een feest" keuzes={FEEST_MOMENT} waarde={h.feestMoment} uit={uit} onKies={(id) => void zet({ feestMoment: id })} />
+        </>
+      )}
+
+      {!uit && (
+        <>
+          <button type="button" className="ism-herstel" onClick={() => void proef()}>Stuur een proefmelding</button>
+          <p className="ism-melding" role="status">{melding}</p>
+        </>
+      )}
+      <p className="ism-klein ism-midden">Je keuzes worden alleen op dit apparaat bewaard. Tijden volgen de klok en tijdzone van je apparaat, ook bij zomer- en wintertijd.</p>
     </Scherm>
   );
 }
@@ -199,6 +362,8 @@ function Overzicht() {
   const eigen = useEigenPijlgebed();
   const { stap, kleur } = useLeesvoorkeur();
   const { mode } = useApp();
+  const h = useHerinneringen();
+  const actief = [h.uren.length > 0 && 'Gebedsuren', h.vasten && 'Vastendagen', h.feesten && 'Feesten'].filter(Boolean).join(' · ');
   return (
     <section id="instellingen" className="am ism">
       <div className="em-banner ism-banner">
@@ -215,6 +380,7 @@ function Overzicht() {
         <ul className="ism-lijst">
           <Regel href="#instellingen/pijlgebed" symbool={HANDEN} titel="Mijn pijlgebed" onder={eigen.trim() || STANDAARD_PIJLGEBED} />
           <Regel href="#instellingen/gebedsuren" symbool={<Clock strokeWidth={1.4} />} titel="Gebedsuren" onder="Weergave en herinneringen" />
+          <Regel href="#instellingen/herinneringen" symbool={<Bell strokeWidth={1.4} />} titel="Herinneringen" onder={actief || 'Gebedsuren, vastendagen en feesten'} waarde={actief ? undefined : 'Uit'} />
         </ul>
         <h2 className="ism-label">Weergave</h2>
         <ul className="ism-lijst">
@@ -246,6 +412,7 @@ export default function InstellingenMobiel() {
       {onderdeel === 'psalter' && <Psalter />}
       {onderdeel === 'gebedsuren' && <Gebedsuren />}
       {onderdeel === 'kalender' && <Kalender />}
+      {onderdeel === 'herinneringen' && <HerinneringScherm />}
     </>
   );
 }
