@@ -3,7 +3,7 @@
 
 .ism { min-height: 100dvh; margin-bottom: -60px; padding-bottom: 60px; background: var(--papyrus, #f5e6c8); text-align: center; }
 .ism-banner { text-align: center; }
-.ism-banner img { object-position: 40% 50%; }
+.ism-banner img { object-position: 88% 50%; }
 .ism-banner:before { background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .15) 30%, rgba(10, 5, 2, .35) 58%, rgba(10, 5, 2, .82)); }
 .ism-banner .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; }
 .ism-banner .am-merk { font-size: 12px; }
