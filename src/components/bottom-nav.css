@@ -1,21 +1,37 @@
-/* Onderbalk op mobiel (BottomNav.tsx): het aangeleverde paneel (public/images/ui/navbalk-1000.webp, 26-10-2026: blauw met
-   gouden lijst, ornament bovenaan en vier scheidingen) als achtergrond. Negen-vlaks schaling (border-image): het ornament
-   en de randen houden hun verhouding, alleen het midden rekt in de hoogte. De kolommen volgen de scheidingen in het beeld
-   (de middelste, onder het ornament, is breder). */
+/* Onderbalk op mobiel (BottomNav.tsx), volgens de mock-up: diep Byzantijns blauw met een fijne verweerde textuur, gouden
+   lijniconen en tekst, dunne verticale scheidingen, rechte hoeken. Alleen vormgeving: routes en gedrag blijven gelijk. */
 @media (max-width: 767.98px) {
-  #top#top .bottom-nav { padding-top: 18px; border: 0; background: none; box-shadow: none; }
-  #top#top .bottom-nav:before {
-    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    border-style: solid; border-width: 23px 5.5px 6px;
-    border-image: url('/images/ui/navbalk-1000.webp') 60 14 16 fill / 23px 5.5px 6px stretch;
-    filter: drop-shadow(0 -3px 8px rgba(10, 5, 2, .35));
+  #top#top .bottom-nav {
+    --nav-blauw: #103b59;
+    --nav-licht: #1c4b68;
+    --nav-donker: #09283d;
+    --nav-goud: #d8ad63;
+    padding-top: 0;
+    border: 0;
+    border-top: 1px solid rgba(216, 173, 99, .35);
+    border-radius: 0;
+    /* verweerde verf: zachte lichte en donkere vlekken, een korrel (feTurbulence) en een donkerder onderrand */
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .9 0 0 0 0 .7 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23k)'/%3E%3C/svg%3E"),
+      radial-gradient(60% 120% at 18% 20%, rgba(28, 75, 104, .75), transparent 70%),
+      radial-gradient(50% 120% at 78% 70%, rgba(28, 75, 104, .55), transparent 70%),
+      radial-gradient(40% 90% at 52% 100%, rgba(9, 40, 61, .8), transparent 70%),
+      linear-gradient(180deg, var(--nav-licht), var(--nav-blauw) 35%, var(--nav-donker));
+    box-shadow: inset 0 1px 0 rgba(255, 236, 200, .06), 0 -4px 14px rgba(5, 18, 28, .35);
   }
-  .bottom-nav ul { position: relative; z-index: 1; grid-template-columns: 394fr 331fr 476fr 330fr 397fr !important; }
-  #top#top#top#top .bottom-nav a { min-height: 50px !important; padding: 4px 0 8px; color: #e6d3a6; }
-  .bottom-nav svg { color: #d8b56a; }
-  #top#top#top#top .bottom-nav .is-actief, .bottom-nav .is-actief svg { color: #f3d27e; }
-  .bottom-nav .is-actief:after { bottom: 5px; background: #e8c46a; }
-  /* De balk is 68px hoog: ruimte onderaan de pagina en de lagen boven de balk laten eindigen */
-  #top { padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important; }
+  #top#top .bottom-nav:before { content: none; }
+  .bottom-nav ul { position: relative; z-index: 1; grid-template-columns: repeat(5, minmax(0, 1fr)) !important; padding: 0; }
+  /* fijne verticale scheidingen tussen de tabbladen */
+  .bottom-nav li + li { box-shadow: inset 1px 0 0 rgba(216, 173, 99, .18); }
+  #top#top#top#top .bottom-nav a { min-height: 60px !important; padding: 7px 0 8px; color: rgba(216, 173, 99, .82); }
+  .bottom-nav svg { width: 24px; height: 24px; color: rgba(216, 173, 99, .82); stroke-width: 1.4; }
+  .bottom-nav span { font-family: var(--font-lees); font-size: 13px; font-weight: 500; letter-spacing: .01em; }
+  /* actief: helder goud, iets prominenter, met een dunne gouden lijn onder het label */
+  #top#top#top#top .bottom-nav .is-actief, .bottom-nav .is-actief svg { color: #f0c977; }
+  .bottom-nav .is-actief svg { stroke-width: 1.8; filter: drop-shadow(0 0 4px rgba(240, 201, 119, .35)); }
+  .bottom-nav .is-actief span { font-weight: 700; }
+  .bottom-nav .is-actief:after { bottom: 3px; width: 28px; margin-left: -14px; height: 1.5px; background: #f0c977; }
+  /* De balk is 60px hoog: ruimte onderaan de pagina en de lagen boven de balk laten eindigen */
+  #top { padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important; }
   .em-laag { bottom: calc(60px + env(safe-area-inset-bottom)) !important; }
 }
