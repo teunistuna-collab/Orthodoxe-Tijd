@@ -2,7 +2,7 @@
    Het pijlgebed gebruikt .em-nu van Etmaal (etmaal-mobiel.css), de andere kaarten dezelfde afwerking. */
 
 /* Papyrus zoals de rest van Vandaag; de eerste kaart (pijlgebed) ligt over de onderrand van de kop, zoals op Etmaal */
-#vandaag .vg-papier.vm2-papier { position: relative; z-index: 3; margin-top: -22px; padding: 0 14px 24px; }
+#vandaag .vg-papier.vm2-papier { position: relative; z-index: 3; margin-top: -32px; padding: 0 14px 24px; }
 .vm2 { display: grid; gap: 8px; text-align: left; }
 
 /* Pijlgebed: zoals het actuele gebedsuur op Etmaal */
@@ -44,5 +44,5 @@
   #vandaag .vg-sierboog { display: none; }
   #vandaag .vg-kop-achter { -webkit-mask: none; mask: none; }
   #vandaag .vg-papier.vm2-papier { background: none; }
-  #vandaag .vg-papier.vm2-papier:before { content: ""; position: absolute; z-index: -1; top: 26px; left: 0; right: 0; bottom: 0; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+  #vandaag .vg-papier.vm2-papier:before { content: ""; position: absolute; z-index: -1; top: 16px; left: 0; right: 0; bottom: 0; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
 }

@@ -120,14 +120,6 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
           )}
         </div>
 
-        <a className="gm-kaart gm-cycluslink" href="#pascha/cyclus">
-          <span className="gm-rij-tekst">
-            <b>De Paschacyclus</b>
-            <span>Van het Kruis naar de Verrijzenis</span>
-          </span>
-          <ChevronRight className="am-pijl" aria-hidden="true" />
-        </a>
-
         <h2 className="am-label gm-kop">De Paschacyclus</h2>
         <ul className="gm-lijst">
           {cyclus.stappen.map((s) => <Rij key={s.key} href={`#pascha/${s.key}`} titel={s.label} onder={bereik(s)} nu={s.key === cyclus.huidige} />)}
