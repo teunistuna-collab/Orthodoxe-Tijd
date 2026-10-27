@@ -5,6 +5,8 @@ import type { Mode } from '../lib/kalender';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { MAX_LENGTE, STANDAARD_PIJLGEBED, bewaarPijlgebed, useEigenPijlgebed } from '../lib/pijlgebed';
 import NisKop from './NisKop';
+import { useMobiel } from '../lib/desktop';
+import InstellingenMobiel from './InstellingenMobiel';
 import { HANDEN, SIERKRUIS } from './symbolen';
 import './Vandaag.css';
 
@@ -47,6 +49,10 @@ export default function Instellingen() {
     window.clearTimeout(wacht.current);
     wacht.current = window.setTimeout(() => bewaar(t), 600);
   };
+
+  // Mobiel: de eigen weergave volgens de mock-up (InstellingenMobiel.tsx), met dezelfde opslag.
+  const mobiel = useMobiel();
+  if (mobiel) return <InstellingenMobiel />;
 
   return (
     <section id="instellingen" className="vg vg-voorkeuren">
