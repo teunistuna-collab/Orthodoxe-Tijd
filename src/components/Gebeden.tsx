@@ -8,6 +8,8 @@ import NisKop from './NisKop';
 import { BannerBeeld, Sierlijn } from './onderdelen';
 import { HANDEN, KRUIS } from './symbolen';
 import { usePaginaOpen } from '../lib/paginaOpen';
+import { useMobiel } from '../lib/desktop';
+import GebedenMobiel from './GebedenMobiel';
 import './Vandaag.css';
 import './ontwerp.css';
 
@@ -140,6 +142,10 @@ export default function Gebeden() {
         paragraphs: popupGebed.tekst.split('\n\n'),
       }
     : null;
+
+  // Mobiel: de eigen weergave volgens de mock-up (GebedenMobiel.tsx), met dezelfde gebeden en dezelfde vrijgave.
+  const mobiel = useMobiel();
+  if (mobiel) return <GebedenMobiel />;
 
   return (
     <>

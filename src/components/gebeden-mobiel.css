@@ -1,0 +1,41 @@
+/* Gebeden op mobiel (GebedenMobiel.tsx), volgens mock-up 06_gebeden. Bouwt op heiligen-mobiel.css (zoeken, kaarten),
+   feesten-mobiel.css (lagen, wisknop) en adem-mobiel.css (leesweergave). */
+@import './feesten-mobiel.css';
+
+/* Banner: het aangeleverde beeld (staand); de icoon van de Moeder Gods rechts in beeld, titel onderaan */
+.gbm-banner { text-align: center; }
+.gbm-banner img { object-position: 62% 30%; }
+.gbm-banner:before { background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .05) 30%, rgba(10, 5, 2, .2) 55%, rgba(10, 5, 2, .85)); }
+.gbm-banner .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; }
+.gbm-banner .am-merk { font-size: 12px; }
+.gbm-banner .em-banner-tekst { position: absolute; left: 0; right: 0; bottom: 30px; padding: 0 20px; }
+.gbm-banner .em-titel { font-size: 42px; }
+.gbm-banner .am-sierlijn { margin: 6px auto 4px; }
+.gbm-banner .am-onder { font-size: 18px; }
+#top#top#top#top#top#top#top#top#top#top .gbm-kop { margin: 6px 4px 8px; }
+
+/* Kaarten met een klein sober lijnsymbool in een perkamentvak */
+#top#top#top#top#top#top#top#top .gbm-kaart { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 72px; padding: 8px 12px 8px 8px; border: 1px solid rgba(185, 148, 85, .6); border-radius: 4px; background: rgba(250, 241, 222, .75); box-shadow: inset 0 0 0 2px rgba(255, 250, 238, .4), 0 2px 6px rgba(60, 35, 15, .16); color: var(--inkt) !important; text-decoration: none; }
+.gbm-symbool { display: grid; flex: none; place-items: center; width: 56px; height: 56px; border: 1px solid rgba(185, 148, 85, .55); border-radius: 3px; background: #eedcb8 url('/images/vandaag/papyrus-licht.webp') center / cover; box-shadow: inset 0 0 0 3px #eedcb8, inset 0 0 0 4px rgba(172, 121, 47, .35); color: #8a5f2c; }
+.gbm-symbool svg { width: 30px; height: 30px; }
+#top#top#top#top#top#top#top#top .gbm-kaart:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+
+/* De melding zolang een gebed nog niet is vrijgegeven */
+.gbm-melding { margin: 18px 6px 8px; padding: 22px 16px 18px; border: 1px solid rgba(185, 148, 85, .55); border-radius: 6px; background: rgba(250, 241, 222, .6); text-align: center; }
+.gbm-melding-kruis { display: inline-flex; width: 30px; height: 30px; color: #8a5f2c; }
+.gbm-melding-kruis svg { width: 100%; height: 100%; }
+.gbm-melding p { margin: 6px 0 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.45; color: var(--gedempt, #6a5a48); }
+.gbm-melding .gbm-melding-titel { margin-top: 8px; font-size: 22px; line-height: 1.25; color: var(--inkt); }
+#top#top#top#top#top#top#top#top .gbm-terug { display: inline-flex; margin-top: 14px; }
+.gbm-gebedstekst { white-space: pre-line; }
+
+/* Donkere leesweergave (avondweergave in de leesinstellingen): diep chocoladebruin, ivoor en gedempt goud, een zachte
+   kaarsgloed onderaan */
+html.lees-nacht .gbm-lees { background: radial-gradient(90% 40% at 80% 100%, rgba(232, 168, 82, .16), transparent 70%), #1d1009; }
+html.lees-nacht .gbm-lees .am-sierlijn, html.lees-nacht .gbm-lees .em-ornament { color: rgba(201, 162, 98, .75); }
+html.lees-nacht .gbm-lees .gbm-melding { border-color: rgba(201, 162, 98, .4); background: rgba(40, 22, 10, .6); }
+html.lees-nacht #top#top#top#top#top#top#top#top .gbm-lees .gbm-melding p { color: #d8c7a6 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .gbm-lees .gbm-melding .gbm-melding-titel { color: #f3e6c8 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .gbm-lees .gbm-terug { border-color: rgba(201, 162, 98, .5); background: rgba(40, 22, 10, .7); color: #f3e6c8 !important; }
+#top#top#top#top#top#top#top#top .gbm-kaart { text-align: left; }
+#top#top#top#top#top#top#top#top .gbm-melding .gbm-melding-titel { font-size: 22px; line-height: 1.25; }
