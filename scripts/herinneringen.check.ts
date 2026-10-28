@@ -2,13 +2,8 @@
 // Draaien: npm run check:herinneringen (TZ=Europe/Amsterdam voor de zomertijdcontrole).
 import assert from 'node:assert/strict';
 
-const opslag = new Map<string, string>();
-Object.assign(globalThis, {
-  window: { addEventListener() {} },
-  localStorage: { getItem: (k: string) => opslag.get(k) ?? null, setItem: (k: string, v: string) => void opslag.set(k, v) },
-});
-const { meldingenRond, STANDAARD } = await import('../src/lib/herinneringen');
-const { utc, orthodoxPascha, ymd } = await import('../src/lib/kalender');
+import { STANDAARD, aanDeBeurt, kloktijd, meldingenRond, schoonVoorkeuren, vandaagIn } from '../src/lib/herinneringPlanning';
+import { orthodoxPascha, utc, ymd } from '../src/lib/kalender';
 
 const uur = (d: Date) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
@@ -53,5 +48,26 @@ assert.equal(uur(jaar.tijd), '23:45');
 // Unieke id's: geen dubbele meldingen binnen een planning.
 const alles = meldingenRond(utc(2026, 12, 24), { ...STANDAARD, uren: ['Vespers', 'Metten'], vasten: true, vastenMoment: 'beide', feesten: true }, 'oud');
 assert.equal(new Set(alles.map((m) => m.id)).size, alles.length);
+
+// Tijdzone van de gebruiker (voor de server): 18:00 in Amsterdam is 17:00 UTC in de winter, 16:00 UTC in de zomer;
+// in New York 23:00 UTC in de winter. Middernacht min 30 minuten in Amsterdam: de avond ervoor.
+assert.equal(kloktijd(utc(2026, 11, 2), 18, 0, 'Europe/Amsterdam').toISOString(), '2026-11-02T17:00:00.000Z');
+assert.equal(kloktijd(utc(2026, 7, 2), 18, 0, 'Europe/Amsterdam').toISOString(), '2026-07-02T16:00:00.000Z');
+assert.equal(kloktijd(utc(2026, 11, 2), 18, 0, 'America/New_York').toISOString(), '2026-11-02T23:00:00.000Z');
+assert.equal(kloktijd(utc(2026, 3, 29), 0, -30, 'Europe/Amsterdam').toISOString(), '2026-03-28T22:30:00.000Z');
+// Dag waarop de zomertijd eindigt (25-10-2026): 18:00 is dan al wintertijd.
+assert.equal(kloktijd(utc(2026, 10, 25), 18, 0, 'Europe/Amsterdam').toISOString(), '2026-10-25T17:00:00.000Z');
+// "Vandaag" in de tijdzone van de gebruiker: 23:30 UTC op 31-12 is in Amsterdam al 1 januari.
+assert.equal(ymd(vandaagIn('Europe/Amsterdam', Date.UTC(2026, 11, 31, 23, 30))), '2027-01-01');
+assert.equal(ymd(vandaagIn('America/New_York', Date.UTC(2026, 11, 31, 23, 30))), '2026-12-31');
+// Aan de beurt (server): Vespers in Amsterdam, een minuut na 17:00 UTC; daarna niet nog eens; 11 minuten te laat niet.
+const vk = { ...STANDAARD, uren: ['Vespers'] };
+const nu = Date.UTC(2026, 10, 2, 17, 1);
+const eerst = aanDeBeurt(vk, 'oud', {}, nu, 'Europe/Amsterdam');
+assert.deepEqual(eerst.map((m) => m.id), ['uur:Vespers:2026-11-02']);
+assert.equal(aanDeBeurt(vk, 'oud', { [eerst[0].id]: nu }, nu + 60_000, 'Europe/Amsterdam').length, 0);
+assert.equal(aanDeBeurt(vk, 'oud', {}, Date.UTC(2026, 10, 2, 17, 11), 'Europe/Amsterdam').length, 0);
+// Voorkeuren van buiten worden geschoond: onbekende uren, feesten en waarden verdwijnen.
+assert.deepEqual(schoonVoorkeuren({ uren: ['Vespers', 'Onzin', 'Vespers'], vooraf: 99, feestIds: ['theofanie', '<script>'], vasten: 'ja' }), { ...STANDAARD, uren: ['Vespers'], feestIds: ['theofanie'] });
 
 console.log('herinneringen: alle controles geslaagd');

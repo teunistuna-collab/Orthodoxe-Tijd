@@ -33,6 +33,27 @@ const MELDING = `<!doctype html>
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
 
+// Een herinnering van de meldingenserver (server/pushserver.ts), ook als de app gesloten is. Altijd een melding tonen
+// (Safari en Chrome eisen dat bij elke push).
+self.addEventListener('push', (event) => {
+  let m = {};
+  try {
+    m = event.data ? event.data.json() : {};
+  } catch {
+    /* geen geldige inhoud: dan een algemene melding */
+  }
+  const tekst = (v) => (typeof v === 'string' ? v.slice(0, 200) : '');
+  event.waitUntil(
+    self.registration.showNotification(tekst(m.titel) || 'Orthodoxe Tijd', {
+      body: tekst(m.tekst),
+      tag: tekst(m.id) || undefined,
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      data: { url: tekst(m.url) },
+    }),
+  );
+});
+
 // Tik op een herinnering: een open venster naar voren halen en het scherm laten openen, anders de app openen op dat scherm.
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();

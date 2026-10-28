@@ -17,7 +17,11 @@
     "check:paascyclus": "esbuild scripts/paascyclus.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/paascyclus.check.mjs --log-level=warning && node node_modules/.cache/paascyclus.check.mjs",
     "check:psalterlezing": "esbuild scripts/psalterlezing.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/psalterlezing.check.mjs --log-level=warning && node node_modules/.cache/psalterlezing.check.mjs",
     "check:herinneringen": "esbuild scripts/herinneringen.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/herinneringen.check.mjs --log-level=warning && node node_modules/.cache/herinneringen.check.mjs",
-    "check:zoeken": "esbuild scripts/zoeken.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/zoeken.check.mjs --log-level=warning && node node_modules/.cache/zoeken.check.mjs"
+    "check:zoeken": "esbuild scripts/zoeken.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/zoeken.check.mjs --log-level=warning && node node_modules/.cache/zoeken.check.mjs",
+    "check:pushserver": "esbuild scripts/pushserver.check.ts --bundle --platform=node --format=esm --packages=external --outfile=node_modules/.cache/pushserver.check.mjs --log-level=warning && node node_modules/.cache/pushserver.check.mjs",
+    "push:sleutels": "web-push generate-vapid-keys",
+    "push:bouw": "esbuild server/pushserver.ts --bundle --platform=node --format=esm --packages=external --outfile=server/dist/pushserver.mjs --log-level=warning",
+    "push:start": "node server/dist/pushserver.mjs"
   },
   "dependencies": {
     "@fontsource/cinzel": "^5.3.0",
@@ -28,13 +32,15 @@
     "pdfjs-dist": "^6.3.289",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.1",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@types/web-push": "^3.6.4",
     "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",

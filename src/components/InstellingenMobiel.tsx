@@ -8,7 +8,7 @@ import { Kop, Laag, Sierlijn } from './MobielLaag';
 import { HANDEN } from './symbolen';
 import { naamVan, serviceConfig } from '../lib/etmaal';
 import { DERTIEN } from '../lib/feesten';
-import { AVOND, OCHTEND, ietsAan, toestemming, toon, useHerinneringen, volgendeMelding, vraagToestemming, zetHerinneringen, type Herinneringen as HerinneringKeuzes, type Toestemming } from '../lib/herinneringen';
+import { AVOND, OCHTEND, ietsAan, toestemming, toon, useHerinneringen, usePushStatus, volgendeMelding, vraagToestemming, zetHerinneringen, type Herinneringen as HerinneringKeuzes, type PushStatus, type Toestemming } from '../lib/herinneringen';
 import './etmaal-mobiel.css';
 import './instellingen-mobiel.css';
 
@@ -198,8 +198,9 @@ function Gebedsuren() {
   );
 }
 
-// Herinneringen: gebedsuren, vastendagen en feesten (lib/herinneringen.ts). Zolang er geen server is, komen meldingen
-// alleen terwijl de app open is; dat staat er eerlijk bij, net als ontbrekende ondersteuning of toestemming.
+// Herinneringen: gebedsuren, vastendagen en feesten (lib/herinneringen.ts). Met de meldingenserver komen ze ook als de app
+// gesloten is; anders alleen terwijl de app open is. Wat op dit apparaat geldt, staat er eerlijk bij, net als ontbrekende
+// ondersteuning of toestemming en wat de server bewaart.
 const VOORAF = [
   { id: 0, label: 'Op het moment zelf' },
   { id: 15, label: '15 minuten vooraf' },
@@ -247,6 +248,14 @@ function Keuzes<T extends string | number>({ label, keuzes, waarde, uit, onKies 
   );
 }
 
+const BEZORGING: Record<PushStatus, string> = {
+  aan: 'Herinneringen komen ook als Orthodoxe Tijd gesloten is. Daarvoor bewaart de meldingenserver je keuzes, je kalender, je tijdzone en het meldingsadres van je browser, geen naam of e-mailadres. Zet je alles uit, dan wordt dat daar verwijderd.',
+  uit: 'Zet je een herinnering aan, dan meldt Orthodoxe Tijd zich aan bij de meldingenserver, zodat herinneringen ook komen als de app gesloten is.',
+  fout: 'De meldingenserver is nu niet bereikbaar. Herinneringen komen daarom alleen terwijl Orthodoxe Tijd geopend is; de app probeert het opnieuw als je hem weer opent.',
+  'niet-ondersteund': 'Deze browser kan geen meldingen ontvangen als de app gesloten is. Herinneringen komen alleen terwijl Orthodoxe Tijd geopend is.',
+  'geen-server': 'Herinneringen verschijnen alleen terwijl Orthodoxe Tijd geopend is op dit apparaat. Is de app gesloten, of legt je telefoon hem op de achtergrond stil, dan komt er geen melding. Meldingen bij een gesloten app vragen een server; die is er nog niet.',
+};
+
 const STATUS: Partial<Record<Toestemming, { titel: string; tekst: string }>> = {
   'niet-ondersteund': {
     titel: 'Meldingen niet beschikbaar',
@@ -261,6 +270,7 @@ const STATUS: Partial<Record<Toestemming, { titel: string; tekst: string }>> = {
 function HerinneringScherm() {
   const h = useHerinneringen();
   const { mode } = useApp();
+  const pushStatus = usePushStatus();
   const [status, setStatus] = useState(toestemming);
   const [melding, setMelding] = useState('');
   const fout = STATUS[status];
@@ -302,7 +312,7 @@ function HerinneringScherm() {
       )}
       <div className="ism-kaart ism-let-op">
         <p className="ism-veldlabel">Goed om te weten</p>
-        <p className="ism-tekstblok">Herinneringen verschijnen alleen terwijl Orthodoxe Tijd geopend is op dit apparaat. Is de app gesloten, of legt je telefoon hem op de achtergrond stil, dan komt er geen melding. Meldingen bij een gesloten app vragen een server; die is er nog niet.</p>
+        <p className="ism-tekstblok" role="status">{BEZORGING[pushStatus]}</p>
         {volgende && <p className="ism-klein">Volgende herinnering: {volgende.titel}, {volgende.tijd.toLocaleString('nl-NL', { weekday: 'long', hour: '2-digit', minute: '2-digit' })}.</p>}
       </div>
 
