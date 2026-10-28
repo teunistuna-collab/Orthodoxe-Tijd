@@ -8,7 +8,8 @@ export const LAATST = 'psalmen-laatst';
 export const leesLaatst = () => {
   try {
     const n = Number(localStorage.getItem(LAATST));
-    return n >= 1 && n <= AANTAL ? n : null;
+    // Een eerder onthouden psalm zonder tekst telt niet: "Verder lezen" wijst nooit naar een lege pagina.
+    return n >= 1 && n <= AANTAL && PSALMEN[n - 1].hasText ? n : null;
   } catch {
     return null;
   }
@@ -32,3 +33,5 @@ export const kathismaPad = (k: Kathisma | null, s?: KathismaStap, datum?: string
 /** "Psalm 18" of "Psalm 118, verzen 73–131" */
 export const stukNaam = (s: KathismaStuk) => `Psalm ${s.psalm}${s.vanVers ? `, verzen ${s.vanVers}–${s.totVers}` : ''}`;
 export const NIET_BESCHIKBAAR = 'Tekst nog niet beschikbaar';
+/** Uitleg bij de kathisma's (dezelfde tekst als op de webversie). */
+export const KATHISMA_UITLEG = 'Het Psalter is verdeeld in twintig kathisma’s. Elk kathisma bestaat uit drie delen. De nummering volgt de Septuaginta.';

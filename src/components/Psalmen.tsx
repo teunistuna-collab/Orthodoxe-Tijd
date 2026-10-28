@@ -19,7 +19,8 @@ import './Vandaag.css';
 import './ontwerp.css';
 import './psalmen-knoppen.css';
 import { useMobiel } from '../lib/desktop';
-import { PsalterBanner, PsalterGeheel, PsalterKathisma, PsalterLezer, PsalterOverzicht } from './PsalterMobiel';
+import { PsalterBanner, PsalterGeheel, PsalterKathisma, PsalterLezer, PsalterOverzicht, PsalterVandaag, VerderLezen } from './PsalterMobiel';
+import { KATHISMA_UITLEG } from './psalmenAdres';
 import { LAATST, LEESPLEK, NIET_BESCHIKBAAR, kathismaPad, leesLaatst, leesPlek, stukNaam } from './psalmenAdres';
 
 // De psalmteksten (±12 KB gecomprimeerd) meteen bij het starten ophalen, niet pas als het psalter of een dienst ze vraagt.
@@ -88,9 +89,9 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const [laadFout, setLaadFout] = useState(false);
   const [lezen, setLezen] = useState(psalmUitHash);
   const [kat, setKat] = useState(kathismaUitHash);
-  // Mobiel: de weergaven van de mock-up (PsalterMobiel.tsx); #psalmen/lijst blijft de bestaande lijst van alle psalmen.
+  // Mobiel: de weergaven van de mock-up (PsalterMobiel.tsx). Het begin (#psalmen, ook het oude #psalmen/lijst) is de lijst
+  // van alle psalmen met een knop naar de kathisma's (#psalmen/kathisma).
   const mobiel = useMobiel();
-  const [alleLijst, setAlleLijst] = useState(() => window.location.hash === '#psalmen/lijst');
   // Scrollposities per adres binnen deze pagina, om na de lezer (of een kathisma) op dezelfde plek terug te komen.
   const posities = useRef<Record<string, number>>({});
   const vorigeHash = useRef(window.location.hash);
@@ -100,7 +101,8 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   const [zoek, setZoek] = useState('');
   const [filter, setFilter] = useState<Filter>('alle');
   // Zolang niet alle psalmen tekst hebben: desgewenst alleen de psalmen met tekst tonen.
-  const [alleenTekst, setAlleenTekst] = useState(false);
+  // Mobiel: standaard alleen de psalmen die je nu kunt bidden (zolang niet alle teksten er zijn); web: alles.
+  const [alleenTekst, setAlleenTekst] = useState(() => window.matchMedia('(max-width: 767.98px)').matches);
   const [thema, setThema] = useState(THEMAS[0]);
   const favorieten = useFavorieten();
 
@@ -131,8 +133,8 @@ export default function Psalmen({ actief }: { actief: boolean }) {
       vorigeHash.current = h;
       setLezen(n);
       setKat(kathismaUitHash());
-      setAlleLijst(h === '#psalmen/lijst');
-      if (n) {
+      // Alleen psalmen met tekst onthouden: anders wijst "Verder lezen" naar een lege pagina.
+      if (n && PSALMEN[n.nr - 1].hasText) {
         try {
           localStorage.setItem(LAATST, String(n.nr));
         } catch {
@@ -175,26 +177,40 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   );
 
   const raster = filter === 'alle' && !zoek.trim() && !alleenTekst;
+  const zoekt = !!zoek.trim();
   // Het raster in delen van vijftig; begint bij het deel met de psalm van het uur.
   const [uurPsalm] = useState(() => psalmVanHetUur(new Date()));
   const [blok, setBlok] = useState(() => Math.floor((uurPsalm - 1) / 50));
 
   const kies = (p: Psalm) => gaNaar(`psalmen/${p.septuagintNumber}`);
 
-  const rij = (p: Psalm, onder?: string) => (
-    <button key={p.id} type="button" className={`psr-rij${p.hasText ? '' : ' is-zonder-tekst'}`} onClick={() => kies(p)}>
-      <span className="psr-tekst">
-        <span className="psr-titel">
-          {p.title}
-          {!p.hasText && <span className="sr-only">, tekst wordt nog toegevoegd</span>}
+  const rij = (p: Psalm, onder?: string) => {
+    const nu = mobiel && p.septuagintNumber === uurPsalm;
+    const inhoud = (
+      <>
+        <span className="psr-tekst">
+          <span className="psr-titel">
+            {p.title}
+            {!p.hasText && <span className="sr-only">, tekst wordt nog toegevoegd</span>}
+          </span>
+          {(onder || nu) && <span className="psr-onder">{nu ? `Nu, bij dit gebedsuur${onder ? ` · ${onder}` : ''}` : onder}</span>}
+          {mobiel && !p.hasText && <span className="psr-onder psr-nog">Tekst volgt nog</span>}
         </span>
-        {onder && <span className="psr-onder">{onder}</span>}
-      </span>
-      <span className="psr-pijl" aria-hidden="true">
-        ›
-      </span>
-    </button>
-  );
+        {(p.hasText || !mobiel) && (
+          <span className="psr-pijl" aria-hidden="true">
+            ›
+          </span>
+        )}
+      </>
+    );
+    // Mobiel: een psalm zonder tekst is geen knop (geen lege pagina); web: ongewijzigd.
+    if (mobiel && !p.hasText) return <div key={p.id} className="psr-rij is-zonder-tekst">{inhoud}</div>;
+    return (
+      <button key={p.id} type="button" className={`psr-rij${p.hasText ? '' : ' is-zonder-tekst'}${nu ? ' is-uur' : ''}`} aria-current={nu ? 'time' : undefined} onClick={() => kies(p)}>
+        {inhoud}
+      </button>
+    );
+  };
 
   if (mobiel) {
     if (lezen) return <PsalterLezer key={lezen.nr} nr={lezen.nr} vers={lezen.vers} tekst={teksten?.[lezen.nr]} laadFout={laadFout} />;
@@ -204,7 +220,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
     }
     if (kat?.k && kat.geheel) return <PsalterGeheel k={kat.k} teksten={teksten} laadFout={laadFout} datum={kat.datum} />;
     if (kat?.k) return <PsalterKathisma k={kat.k} datum={kat.datum} />;
-    if (!alleLijst) return <PsalterOverzicht teksten={teksten} laatst={laatst} />;
+    if (kat) return <PsalterOverzicht teksten={teksten} />;
   }
   // De lezer: één psalm als eigen weergave.
   if (lezen) return <Lezer key={lezen.nr} nr={lezen.nr} vers={lezen.vers} tekst={teksten?.[lezen.nr]} laadFout={laadFout} />;
@@ -213,7 +229,7 @@ export default function Psalmen({ actief }: { actief: boolean }) {
     return <Lezer key={`k${kat.k.nr}-${kat.i}`} nr={psalm} vers={null} tekst={teksten?.[psalm]} laadFout={laadFout} kathisma={{ k: kat.k, i: kat.i, datum: kat.datum }} />;
   }
   const perKathisma = !!kat;
-  const lijstMobiel = mobiel && alleLijst;
+  const lijstMobiel = mobiel;
   // Tabbladen "Per psalm" en "Per kathisma": pijltjes, Home en End wisselen (en verplaatsen de focus), zoals bij tabs.
   const kiesWeergave = (kathisma: boolean) => gaNaar(kathisma ? 'psalmen/kathisma' : 'psalmen');
   const tabToets = (e: ToetsEvent<HTMLButtonElement>) => {
@@ -227,10 +243,10 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   return (
     <>
       <section id="psalmen" className={`vg ot-redesign ot-psalmen${lijstMobiel ? ' pm pm-alle-pagina' : ''}`}>
-        {/* Mobiel (#psalmen/lijst): dezelfde manuscriptbanner als het Psalter-overzicht, zonder kathisma-tab en verder lezen;
+        {/* Mobiel (#psalmen): dezelfde manuscriptbanner als het kathisma-overzicht, met een knop naar de kathisma's;
             web: de brede banner met David */}
         {lijstMobiel ? (
-          <PsalterBanner terug="#psalmen" />
+          <PsalterBanner terug="#bidden" />
         ) : (
         <NisKop
           open={open}
@@ -267,10 +283,21 @@ export default function Psalmen({ actief }: { actief: boolean }) {
             <Search aria-hidden="true" />
             <input type="search" value={zoek} onChange={(e) => setZoek(e.target.value)} placeholder="Zoek een psalm, woord of dienst" aria-label="Zoek een psalm op nummer, woord of dienst" />
           </label>
+          {/* Mobiel: tijdens het zoeken alleen de resultaten; anders eerst wat je vandaag bidt */}
+          {lijstMobiel && zoekt && <p className="pm-aantal" aria-live="polite">{lijst.length === 1 ? '1 psalm' : `${lijst.length} psalmen`}</p>}
+          {lijstMobiel && !zoekt && (
+            <>
+              <VerderLezen laatst={laatst} />
+              <PsalterVandaag />
+              <a className="pm-alle pm-naar-kathismas" href="#psalmen/kathisma">
+                De twintig kathisma’s <ChevronRight aria-hidden="true" />
+              </a>
+            </>
+          )}
 
           {/* Bediening volgens het pakket "Psalmen tabbladen en boekrollen" (psalmen-knoppen.css): perkamenten tabbladen
               voor de filters, tekstkoppen op een gouden lijn voor de delen van vijftig. Zelfde state, filters en aantallen als hiervoor. */}
-          <section className="psalm-controls" aria-label="Psalmen selecteren">
+          <section className="psalm-controls" aria-label="Psalmen selecteren" hidden={lijstMobiel && zoekt}>
             <div className="pc-filters" role="group" aria-label="Psalmfilter">
               {FILTERS.map(([id, label]) => (
                 <button key={id} type="button" className="pc-tab" aria-pressed={filter === id} onClick={() => setFilter(id)}>
@@ -309,14 +336,26 @@ export default function Psalmen({ actief }: { actief: boolean }) {
 
           {raster ? (
             <>
+              {lijstMobiel && <p className="ot-ps-legenda"><span className="ot-ps-stip" aria-hidden="true" /> heeft al tekst · de andere psalmen volgen nog</p>}
               <div className="ot-psalmraster" role="group" aria-label={`Psalm ${BLOKKEN[blok].van} tot ${BLOKKEN[blok].tot}`}>
-                {PSALMEN.slice(BLOKKEN[blok].van - 1, BLOKKEN[blok].tot).map((p) => (
-                  <button key={p.id} type="button" className={p.hasText ? 'heeft-tekst' : undefined} aria-label={`${p.title}${p.hasText ? '' : ', tekst wordt nog toegevoegd'}`} onClick={() => kies(p)}>
-                    {p.septuagintNumber}
-                  </button>
-                ))}
+                {PSALMEN.slice(BLOKKEN[blok].van - 1, BLOKKEN[blok].tot).map((p) => {
+                  const nu = lijstMobiel && p.septuagintNumber === uurPsalm;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      className={[p.hasText ? 'heeft-tekst' : '', nu ? 'is-uur' : ''].filter(Boolean).join(' ') || undefined}
+                      aria-label={`${p.title}${p.hasText ? '' : ', tekst wordt nog toegevoegd'}${nu ? ', bij dit gebedsuur' : ''}`}
+                      aria-current={nu ? 'time' : undefined}
+                      disabled={lijstMobiel && !p.hasText}
+                      onClick={() => kies(p)}
+                    >
+                      {p.septuagintNumber}
+                    </button>
+                  );
+                })}
               </div>
-              <p className="ot-ps-legenda"><span className="ot-ps-stip" aria-hidden="true" /> heeft al tekst</p>
+              {!lijstMobiel && <p className="ot-ps-legenda"><span className="ot-ps-stip" aria-hidden="true" /> heeft al tekst</p>}
             </>
           ) : (
             <div className="psr-lijst ot-ps-lijst">
@@ -324,7 +363,11 @@ export default function Psalmen({ actief }: { actief: boolean }) {
                 (filter === 'favorieten' && !zoek.trim() ? (
                   <p className="ps-leeg">Nog geen favorieten. Tik bij een psalm op de bladwijzer om hem hier te bewaren.</p>
                 ) : (
-                  <p className="ps-leeg">Geen psalmen gevonden{zoek.trim() ? ` voor “${zoek.trim()}”` : ''}.</p>
+                  <p className="ps-leeg">
+                    Geen psalmen gevonden{zoek.trim() ? ` voor “${zoek.trim()}”` : ''}.
+                    {lijstMobiel && zoek.trim() && ' Probeer een psalmnummer, zoals 50, of een ander woord.'}
+                    {lijstMobiel && !zoek.trim() && alleenTekst && ' Zet “Alleen psalmen met tekst” uit om alle psalmen te zien.'}
+                  </p>
                 ))}
               {filter === 'themas' && (
                 <div className="ps-groep">
@@ -380,7 +423,6 @@ export default function Psalmen({ actief }: { actief: boolean }) {
   );
 }
 
-const KATHISMA_UITLEG = 'Het Psalter is verdeeld in twintig kathisma’s. Elk kathisma bestaat uit drie delen. De nummering volgt de Septuaginta.';
 
 /** Per kathisma: de psalterlezing van de datum, en de twintig kathismata als klikbare kaarten (vaste volgorde). */
 function KathismaOverzicht({ datum }: { datum: string | null }) {

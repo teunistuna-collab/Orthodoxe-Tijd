@@ -6,7 +6,7 @@
 .pm-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 40%; }
 .pm-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .05) 22%, rgba(10, 5, 2, .15) 50%, rgba(10, 5, 2, .82)); }
 .pm-merk { position: absolute; top: 18px; left: 0; right: 0; z-index: 2; text-align: center; }
-.pm-banner-tekst { position: relative; z-index: 2; padding: 0 20px 20px; }
+.pm-banner-tekst { position: relative; z-index: 2; padding: 0 20px 20px; text-align: center; }
 #top#top#top#top#top#top#top#top#top#top .pm-titel { margin: 0; font-family: var(--font-lees) !important; font-size: 44px; font-weight: 400; line-height: 1.05; letter-spacing: 0; text-transform: none; color: var(--am-ivoor, #f6ead2) !important; text-shadow: 0 2px 10px rgba(0, 0, 0, .6); }
 .pm-papier { padding: 14px 12px 26px; background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; text-align: left; }
 #top#top#top#top#top#top#top#top .pm-zoek { display: flex; align-items: center; gap: 10px; min-height: 46px; margin: 0 0 12px; padding: 0 12px; border: 1px solid rgba(185, 148, 85, .55); border-radius: 4px; background: rgba(255, 250, 238, .7); }
@@ -17,6 +17,16 @@
 #top#top#top#top#top#top#top#top :is(.pm-verder, .pm-stasis, .pm-psalm) { display: flex; align-items: center; gap: 14px; min-height: 70px; padding: 8px 8px 8px 10px; border: 1px solid rgba(185, 148, 85, .45); border-radius: 5px; background: rgba(255, 250, 238, .55); color: var(--inkt) !important; text-decoration: none; }
 .pm-verder-boek, .pm-tegel { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 60px; height: 52px; border: 1px solid rgba(185, 148, 85, .45); border-radius: 4px; background: rgba(233, 213, 168, .55); color: var(--goud-pijl); }
 .pm-tegel { width: 58px; height: 58px; }
+/* Beginpagina (lijst): verder lezen en de knop naar de kathisma's onder het zoekveld */
+.ot-psalmen.pm .pm-verder { margin: 0; }
+/* Kathisma's: een kleine tekstlink links, direct onder Verder lezen (box-sizing/padding herstellen tegen de regel voor icoonlinks) */
+#top#top#top#top#top#top#top#top#top .pm-alle.pm-naar-kathismas { justify-content: flex-start; box-sizing: border-box; min-height: 36px; margin: 2px 0 6px; padding: 0 4px; }
+/* Luisteren in de lezer: een sobere regel met lijn, ook in de avondweergave leesbaar (currentColor) */
+#top#top#top#top#top#top#top#top .pm-podcast { display: flex; align-items: center; gap: 12px; min-height: 52px; margin: 0 0 16px; padding: 6px 10px 6px 12px; border: 1px solid rgba(172, 121, 47, .45); border-radius: 5px; background: rgba(255, 250, 238, .35); font-family: var(--font-lees); font-size: 17px; line-height: 1.3; color: inherit !important; text-decoration: none; }
+.pm-podcast > svg:first-child { flex: none; width: 24px; height: 24px; color: var(--goud-pijl, #8a5f2c); stroke-width: 1.5; }
+.pm-podcast > span { flex: 1; }
+html.lees-nacht .pm-podcast { background: rgba(255, 250, 238, .06); }
+#top#top#top#top#top#top#top#top .pm-podcast:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .pm-verder-boek svg { width: 30px; height: 30px; }
 .pm-tegel svg { width: 28px; height: 28px; }
 .pm-rij-tekst { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
@@ -108,5 +118,48 @@ html.lees-nacht .pm-blader-nr { color: rgba(234, 220, 198, .7); }
 #top#top#top#top#top#top#top main .pm-alle-pagina .ot-psalmraster button.heeft-tekst { border-color: var(--kaartrand) !important; font-weight: 500; }
 #top#top#top#top#top#top#top main .pm-alle-pagina .psr-lijst { display: grid; gap: 8px; }
 #top#top#top#top#top#top#top main .pm-alle-pagina .psr-rij { min-height: 60px !important; padding: 8px 10px 8px 14px; border: 1px solid rgba(185, 148, 85, .45) !important; border-radius: 5px; background: rgba(255, 250, 238, .55) !important; }
-#top#top#top#top#top#top#top main .pm-alle-pagina .psr-titel { font-family: var(--font-lees); font-size: 19px; color: var(--inkt); }
+#top#top#top#top#top#top#top main .pm-alle-pagina .psr-titel { font-family: var(--font-lees); font-size: 19px; font-weight: 500; color: var(--inkt); }
 #top#top#top#top#top#top#top main .pm-alle-pagina .psr-pijl { color: var(--goud-pijl); }
+
+/* ---------- Kritiek 28-10-2026: beginpagina, toegankelijkheid en warme inkt (alleen het mobiele Psalter) ---------- */
+/* Warme inkt (DESIGN.md: #2B1D12) in plaats van het koele nachtblauw, ook in de bediening van de psalmlijst */
+.pm, .pm .psalm-controls { --inkt: #2b1d12; --pc-ink: #2b1d12; }
+/* Eén warme focusrand: diep goud, 3 px (contrast ≥ 3:1 op perkament) */
+#top#top#top#top#top#top#top#top#top .pm :is(a, button, input, summary, [tabindex]):focus-visible { outline: 3px solid #7d5218 !important; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top .pm .ot-zoekveld:focus-within, #top#top#top#top#top#top#top#top#top .pm .pm-zoek:focus-within { outline: 3px solid #7d5218; outline-offset: 2px; }
+/* Zoektekst leesbaar (≥ 4,5:1) */
+.pm input::placeholder { color: #6b5b45; opacity: 1; }
+
+/* Vandaag in het Psalter: de psalterlezing als rustige kaart onder Verder lezen */
+.pm-vandaag { margin: 0 0 4px; padding: 2px 14px 4px; border: 1px solid rgba(185, 148, 85, .45); border-radius: 5px; background: rgba(255, 250, 238, .55); }
+#top#top#top#top#top#top#top#top#top#top .pm-vandaag .pm-kop { margin: 12px 0 2px !important; }
+.pm-vandaag .psl-dienst:last-child { border-bottom: 0; }
+.ot-psalmen.pm .pm-vandaag { margin-top: 8px; }
+
+/* De kathisma-link blijft een tekstlink, maar met een tikvlak van 44 px */
+#top#top#top#top#top#top#top#top#top .pm-alle.pm-naar-kathismas { min-height: 44px; }
+
+/* Uitleg bij de kathisma's en het bereik op de tegels */
+.pm-uitleg { margin: 0 4px 12px; font-family: var(--font-lees); font-size: 16px; line-height: 1.45; color: var(--gedempt, #5d5040); }
+.pm-raster .pm-bereik { font-family: var(--font-lees); font-size: 13.5px; line-height: 1.1; color: var(--gedempt, #5d5040); }
+#top#top#top#top#top#top#top#top .pm-raster a { min-height: 72px; }
+
+/* Thema's: eigen, lichte knoppen (geen derde rij tabbladen); gekozen = donker met kaarsgoud (DESIGN.md) */
+#top#top#top#top#top#top#top#top#top main .pm-alle-pagina .ot-segmenten { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; border: 0; background: none; box-shadow: none; }
+#top#top#top#top#top#top#top#top#top main .pm-alle-pagina .ot-segmenten button { flex: none; min-height: 40px; padding: 0 14px; border: 1px solid rgba(185, 148, 85, .6) !important; border-radius: 20px !important; background: rgba(250, 241, 222, .75) !important; box-shadow: none !important; font-family: var(--font-lees); font-size: 15.5px; font-weight: 400; color: var(--inkt) !important; text-decoration: none; }
+#top#top#top#top#top#top#top#top#top main .pm-alle-pagina .ot-segmenten button[aria-pressed="true"] { border-color: #2c180f !important; background: #2c180f !important; color: #e0b95a !important; }
+#top#top#top#top#top#top#top#top#top main .pm-alle-pagina .ot-segmenten button:after, #top#top#top#top#top#top#top#top#top main .pm-alle-pagina .ot-segmenten button:before { display: none; }
+
+/* Raster: legenda boven het raster, leesbaar; lege psalmen zichtbaar maar niet aanklikbaar; de psalm van het uur */
+#top#top#top#top#top#top#top main .pm-alle-pagina .ot-ps-legenda { margin: 6px 4px 10px; font-size: 15px; color: var(--gedempt, #5d5040); }
+#top#top#top#top#top#top#top main .pm-alle-pagina .ot-psalmraster button:not(.heeft-tekst) { color: #5d4c39; }
+#top#top#top#top#top#top#top main .pm-alle-pagina .ot-psalmraster button:disabled { cursor: default; opacity: 1; background: rgba(255, 250, 238, .3) !important; box-shadow: none !important; border-style: dashed !important; }
+#top#top#top#top#top#top#top#top main .pm-alle-pagina .ot-psalmraster button.is-uur { border: 2px solid var(--pm-rood) !important; color: var(--pm-rood); }
+#top#top#top#top#top#top#top#top main .pm-alle-pagina .psr-rij.is-uur { border-color: var(--pm-rood) !important; box-shadow: inset 3px 0 0 var(--pm-rood); }
+.pm-alle-pagina .psr-rij.is-uur .psr-onder:first-of-type { color: var(--pm-rood); }
+#top#top#top#top#top#top#top main .pm-alle-pagina div.psr-rij.is-zonder-tekst { min-height: 60px; background: rgba(255, 250, 238, .25) !important; border-style: dashed !important; }
+#top#top#top#top#top#top#top main .pm-alle-pagina .psr-rij.is-zonder-tekst .psr-titel { color: #5d4c39 !important; }
+.pm-alle-pagina .psr-nog { font-style: italic; }
+
+/* Zoeken: het aantal resultaten direct onder het zoekveld */
+.ot-psalmen.pm .pm-aantal { margin: 2px 4px 8px; }
