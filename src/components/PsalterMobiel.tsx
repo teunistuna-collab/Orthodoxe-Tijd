@@ -31,7 +31,7 @@ export function PsalterOverzicht({ teksten, laatst }: { teksten: PsalmTeksten | 
   const verder = laatst ? (plek?.nr === laatst ? `#psalmen/${laatst}/${plek.vers}` : `#psalmen/${laatst}`) : kathismaPad(KATHISMATA[0]);
   return (
     <section id="psalmen" className="am pm">
-      <PsalterBanner />
+      <PsalterBanner terug="#bidden" />
       <div className="pm-papier">
         <label className="pm-zoek">
           <Search aria-hidden="true" />

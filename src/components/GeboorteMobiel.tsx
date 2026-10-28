@@ -69,8 +69,6 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
         </div>
       </Banner>
       <div className="gm-papier">
-        <p className="gm-inleiding">De Geboorte van Christus opent de weg naar de Menswording en laat ons Gods liefde voor de wereld zien.</p>
-
         {/* De aftelling: het gedeelde onderdeel (CyclusMobiel.tsx), ook op Pascha en Vandaag */}
         <AftelKaart
           label={dagenTot > 0 ? 'Op weg naar de Geboorte' : 'De Geboorte van Christus'}

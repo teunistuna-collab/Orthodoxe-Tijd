@@ -19,6 +19,9 @@ import { PASTORALE_NOOT, vastenBetekenis } from '../lib/vastenBetekenis';
 import { BannerBeeld, Sierlijn } from './onderdelen';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { useMobiel } from '../lib/desktop';
+import { Kop, Sierlijn as MobielSierlijn } from './MobielLaag';
+import './adem-mobiel.css';
+import './etmaal-mobiel.css';
 import './Vandaag.css';
 import './ontwerp.css';
 import './vasten-mobiel.css';
@@ -244,9 +247,16 @@ export default function Vasten() {
     return (
       <>
         <section id="vasten" className="vg ot-redesign ot-vasten vsm">
-          <NisKop open={open} balk achter={<BannerBeeld naam="vasten-banner" open={open} />} />
+          {/* Banner zoals op de andere mobiele pagina's: Terug (naar Meer) en het merk bovenin, de titel onderaan */}
+          <div className="em-banner vsm-banner">
+            <img src="/images/ontwerp/vasten-banner-800.webp" srcSet="/images/ontwerp/vasten-banner-800.webp 800w, /images/ontwerp/vasten-banner-1536.webp 1536w" sizes="100vw" alt="" width={1536} height={1024} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
+            <Kop terug="#meer" merk />
+            <div className="em-banner-tekst">
+              <h1 className="em-titel">Vasten</h1>
+              <MobielSierlijn />
+            </div>
+          </div>
           <div className="vg-papier vsm-papier">
-            <h1 className="sr-only">Vasten</h1>
             <h2 className="vsm-label"><span>Vasten vandaag</span></h2>
             <div className="vsm-kaart vsm-regel" aria-live="polite">
               <h3 className="vsm-titel">{isVandaag ? 'De vastenregel van vandaag' : `De vastenregel van ${formatDatum(dagM.civil)}`}</h3>

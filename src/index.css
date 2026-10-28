@@ -693,7 +693,11 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 @media(max-width: 767.98px){
   header.site-header{display:none!important}
   section[id]{scroll-margin-top:0}
-  #top{padding-top:env(safe-area-inset-top);padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+  /* Geen ruimte boven: de banners lopen in volledig scherm door tot de bovenrand (onder de statusbalk of camera); de
+     kopbalken (.am-kop) houden zelf afstand met env(safe-area-inset-top). */
+  #top{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+  :is(.bd-banner .am-merk,.km-banner .am-merk,.mm-merk,.vg-ontdek-merk,.pm-merk,.vg-kop>.vg-balk){margin-top:env(safe-area-inset-top)}
+  .vg.vg-losse-balk{padding-top:env(safe-area-inset-top)}
 
   /* Onderbalk */
   /* Donkere balk in de huisstijl van de desktopkop: chocolade, fijne gouden dubbele lijn boven, lijniconen in gedempt goud. */
