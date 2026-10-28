@@ -190,10 +190,10 @@ function Detail({ boek, terug }: { boek: Boek; terug: string }) {
         </button>
         {link && (
           <>
-            <a className="ism-opslaan bkm-extern" href={link} target="_blank" rel="noopener noreferrer">
-              <ExternalLink aria-hidden="true" /> Bekijk bij Orthodox Logos
+            <a className="ism-opslaan bkm-extern" href={link.url} target="_blank" rel="noopener noreferrer">
+              <ExternalLink aria-hidden="true" /> {link.knop}
             </a>
-            <p className="ism-klein ism-midden">Je verlaat Orthodoxe Tijd en gaat naar de website van Orthodox Logos.</p>
+            <p className="ism-klein ism-midden">Je verlaat Orthodoxe Tijd en gaat naar de website van {link.naam}.</p>
           </>
         )}
         <Sierlijn />
@@ -223,7 +223,7 @@ export default function BoekenMobiel() {
   return (
     <>
       <Overzicht boeken={boeken} fout={fout} zoek={zoek} setZoek={setZoek} filter={filter} setFilter={setFilter} />
-      {onderdeel === 'alle' && boeken && <Lijst titel="De hele bibliotheek" onder={`${boeken.length} boeken van Orthodox Logos`} boeken={boeken} leeg="Geen boeken." />}
+      {onderdeel === 'alle' && boeken && <Lijst titel="De hele bibliotheek" onder={`${boeken.length} Nederlandstalige boeken`} boeken={boeken} leeg="Geen boeken." />}
       {onderdeel === 'lijst' && boeken && <Lijst titel="Mijn boekenlijst" onder="Bewaard op dit apparaat" boeken={bewaard} leeg="Je hebt nog geen boeken bewaard. Open een boek en tik op ‘Bewaar in mijn boekenlijst’." />}
       {boek && <Detail boek={boek} terug={herkomst ? `#boeken/${herkomst}` : '#boeken'} />}
     </>

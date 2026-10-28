@@ -1,5 +1,6 @@
-// De boekenbibliotheek (#boeken, alleen mobiel): de catalogus van Orthodox Logos uit public/data/boeken.json (aangeleverd
-// als orthodox_logos_boeken.json; een bijgewerkte catalogus vervangt gewoon dat bestand). Alle velden blijven bewaard,
+// De boekenbibliotheek (#boeken, alleen mobiel): de catalogus uit public/data/boeken.json (aangeleverd als
+// orthodox_logos_boeken.json, aangevuld uit Orthodox_Logos_Nederlandstalige_boeken 2.xlsx: vier boeken van het
+// Nederlands-Vlaams Bijbelgenootschap; een bijgewerkte catalogus vervangt gewoon dat bestand). Alle velden blijven bewaard,
 // maar prijzen en voorraad worden nergens getoond. Geen webshop: een boek opent de officiële productpagina.
 
 export interface Boek {
@@ -76,7 +77,7 @@ const GEEN_ONDERWERP = new Set(['Iveron boeken', 'Partneruitgeverijen', 'Abdij B
 export const onderwerpen = (b: Boek) => b.categorieen.filter((c) => !GEEN_ONDERWERP.has(c));
 
 /** Aanbevolen boeken (aanpasbaar): slugs uit de catalogus. */
-export const AANBEVOLEN = ['de-geestelijke-ladder', 'de-orthodoxe-weg', 'de-kracht-van-de-naam'];
+export const AANBEVOLEN = ['orthodox-psalter', 'een-inleiding-tot-de-oosters-orthodoxe-theologie', 'zoals-in-de-schriften-staat'];
 
 const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 /** Zoeken op titel, auteur, categorie en samenvatting, binnen een filter. */
@@ -86,5 +87,12 @@ export function zoekBoeken(boeken: Boek[], zoek: string, filter: string): Boek[]
   return boeken.filter((b) => (!cat || b.categorieen.includes(cat)) && (!q || norm(`${b.titel} ${b.auteur} ${b.categorieen.join(' ')} ${b.samenvatting}`).includes(q)));
 }
 
-/** Alleen de officiële productpagina's van Orthodox Logos openen. */
-export const veiligeLink = (b: Boek) => (/^https:\/\/(www\.)?orthodoxlogos\.(com|nl)\//.test(b.link) ? b.link : null);
+/** Alleen de officiële productpagina's van de bekende winkels openen, met de naam van die winkel. */
+const WINKELS = [
+  { patroon: /^https:\/\/(www\.)?orthodoxlogos\.(com|nl)\//, naam: 'Orthodox Logos', knop: 'Bekijk bij Orthodox Logos' },
+  { patroon: /^https:\/\/shop\.bijbelgenootschap\.nl\//, naam: 'het Nederlands-Vlaams Bijbelgenootschap', knop: 'Bekijk bij het Bijbelgenootschap' },
+];
+export function veiligeLink(b: Boek) {
+  const w = WINKELS.find((x) => x.patroon.test(b.link));
+  return w ? { url: b.link, naam: w.naam, knop: w.knop } : null;
+}

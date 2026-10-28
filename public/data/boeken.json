@@ -432,6 +432,21 @@
     "samenvatting": "Het aangrijpende verhaal van drie monniken van het Optina-klooster die met Pasen 1993 werden vermoord, en een inkijk in het hedendaagse Russische kloosterleven."
   },
   {
+    "slug": "een-inleiding-tot-de-oosters-orthodoxe-theologie",
+    "titel": "Een inleiding tot de Oosters-orthodoxe theologie",
+    "auteur": "Andrew Louth",
+    "taal": "Nederlands",
+    "prijs": 19.95,
+    "vanPrijs": null,
+    "categorieen": [
+      "Theologie en geloofsleer"
+    ],
+    "opVoorraad": true,
+    "link": "https://shop.bijbelgenootschap.nl/boeken/geloofsopbouw/een-inleiding-tot-de-oosters-orthodoxe-theologie/",
+    "omslag": "https://shop.bijbelgenootschap.nl/app/data/uploads/sites/2/2026/06/Inleiding-tot-de-OOT-omslag-2D.png",
+    "samenvatting": "Toegankelijke inleiding van theoloog en aartspriester Andrew Louth op leer en praktijk van de Orthodoxe Kerk, gebaseerd op zijn colleges aan de Vrije Universiteit, met de ontmoeting tussen mens en God in het gebed als rode draad."
+  },
+  {
     "slug": "een-vlam-vervulde-zijn-hart-het-leven-van-starets-siloean-op-de-athos",
     "titel": "Een Vlam Vervulde Zijn Hart",
     "auteur": "Onbekend (over starets Siloean)",
@@ -834,6 +849,22 @@
     "samenvatting": "Gedachten en raad van de heilige Thaddeus van Vitovnica over hoe onze gedachten ons leven bepalen en hoe we innerlijke vrede vinden."
   },
   {
+    "slug": "orthodox-psalter",
+    "titel": "Orthodox Psalter",
+    "auteur": "Psalter (vert. uit de Septuagint), miniaturen Natalia Ermakova",
+    "taal": "Nederlands",
+    "prijs": 49.95,
+    "vanPrijs": null,
+    "categorieen": [
+      "Bijbel en kerkvaders",
+      "Gebed en het Jezusgebed"
+    ],
+    "opVoorraad": true,
+    "link": "https://shop.bijbelgenootschap.nl/boeken/geloofsopbouw/orthodox-psalter/",
+    "omslag": "https://shop.bijbelgenootschap.nl/app/data/uploads/sites/2/2026/06/2D-orthodox-psalter.png",
+    "samenvatting": "Gebonden uitgave van de 151 psalmen en de eerste negen oden uit de Septuaginta in hedendaags Nederlands (vertaling van Psalmen van de Vroege Kerk), met gerestaureerde miniaturen uit Griekse en Slavische handschriften."
+  },
+  {
     "slug": "orthodoxe-spiritualiteit-archimandriet-adriaan-korporaal",
     "titel": "Orthodoxe spiritualiteit",
     "auteur": "Archimandriet Adriaan (Korporaal)",
@@ -862,6 +893,22 @@
     "link": "https://orthodoxlogos.com/store/orthodoxie-en-de-religie-van-de-toekomst-vader-serafim-rose/",
     "omslag": "https://orthodoxlogos.com/wp-content/uploads/Orthodoxie-webcover.webp",
     "samenvatting": "Vader Serafim Rose over de geestelijke gevaren van moderne religieuze stromingen en de vraag of christenen en niet-christenen dezelfde God aanbidden."
+  },
+  {
+    "slug": "psalmen-van-de-vroege-kerk",
+    "titel": "Psalmen van de Vroege Kerk",
+    "auteur": "Psalter (vert. uit de Septuagint)",
+    "taal": "Nederlands",
+    "prijs": 24.95,
+    "vanPrijs": null,
+    "categorieen": [
+      "Bijbel en kerkvaders",
+      "Gebed en het Jezusgebed"
+    ],
+    "opVoorraad": true,
+    "link": "https://shop.bijbelgenootschap.nl/boeken/geloofsopbouw/psalmen-van-de-vroege-kerk/",
+    "omslag": "https://shop.bijbelgenootschap.nl/app/data/uploads/sites/2/2024/09/Psalmen-van-de-Vroege-Kerk-1-e1775742005799.png",
+    "samenvatting": "Nieuwe vertaling van de psalmen uit de Septuaginta in hedendaags Nederlands, gemaakt voor de orthodoxe kerk in Nederland en Vlaanderen en geschikt voor liturgisch en persoonlijk gebed."
   },
   {
     "slug": "sacramentarion",
@@ -1033,5 +1080,21 @@
     "link": "https://orthodoxlogos.com/store/weest-ook-gij-uitgebreid/",
     "omslag": "https://orthodoxlogos.com/wp-content/uploads/Weest-ook-gij-uitgebreid-Archimandriet-Zacharias-image.webp",
     "samenvatting": "Over het lezen van de Heilige Schrift in het licht van het leven en onderricht van de heilige Vaders van de Orthodoxe Kerk."
+  },
+  {
+    "slug": "zoals-in-de-schriften-staat",
+    "titel": "Zoals in de Schriften staat",
+    "auteur": "John Behr",
+    "taal": "Nederlands",
+    "prijs": 19.95,
+    "vanPrijs": null,
+    "categorieen": [
+      "Theologie en geloofsleer",
+      "Bijbel en kerkvaders"
+    ],
+    "opVoorraad": true,
+    "link": "https://shop.bijbelgenootschap.nl/boeken/geloofsopbouw/zoals-in-de-schriften-staat/",
+    "omslag": "https://shop.bijbelgenootschap.nl/app/data/uploads/sites/2/2026/06/zoals-in-de-schriften-2d.png",
+    "samenvatting": "John Behr laat aan de hand van Irenaeus van Lyon en andere vroege kerkvaders zien hoe de eerste christenen de Schriften lazen in het licht van Christus' kruisiging en opstanding."
   }
 ]
