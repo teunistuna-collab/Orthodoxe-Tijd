@@ -44,3 +44,41 @@
 /* Pinksteren: de liturgische kleur groen als accent */
 .pm2.is-pinksteren .gm-periode, .pm2-laag.is-pinksteren .gm-laag-titel { color: #1b5e36 !important; }
 .pm2.is-pinksteren .gm-rij.is-nu { background: linear-gradient(90deg, rgba(27, 122, 67, .16), rgba(27, 122, 67, .03)); }
+
+/* ---------- Kritiek 30-10-2026: navigatie, sfeer per periode en afwerking ---------- */
+/* Link naar de tien perioden en de indeling in drie delen */
+.pm2-naar-cyclus { margin-top: 12px; }
+#top#top#top#top#top#top#top#top#top#top .pm2-deel { margin-top: 20px; }
+#top#top#top#top#top#top#top#top#top#top .pm2-deel:first-of-type { margin-top: 8px; }
+
+/* Plaatshouder zolang een banner laadt: warm donkerbruin in plaats van zwart */
+.pm2 .gm-banner, .pm2-laag .gm-banner { background: radial-gradient(80% 70% at 50% 40%, #3a2414, #1d1009 70%); }
+
+/* Lopende tekst niet tegen de schermrand */
+.pm2-laag .gm-laag-papier { padding-left: 18px; padding-right: 18px; }
+
+/* Labels en bijtekst halen ook op de donkere plekken van het perkament de norm */
+.pm2 .am-label, .pm2-laag .am-label { color: #5e3f1c; }
+.pm2 .gm-voet { font-size: 14px; color: #594834; }
+.pm2-laag .gm-tekst, .pm2-laag .gm-laag-onder, .pm2 .gm-tekst { color: #4f4030; }
+
+/* Eén warme focusrand: diep goud op perkament, kaarsgoud op de donkere banner (ook de aftelkaart) */
+#top#top#top#top#top#top#top#top#top :is(.pm2, .pm2-laag) :is(a, button, summary):focus-visible { outline: 3px solid #7d5218 !important; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top :is(.pm2, .pm2-laag) .am-kop :is(a, button):focus-visible { outline-color: #e0b95a !important; }
+
+/* Sfeer per periode, duidelijker (alleen kleur en licht) */
+/* Grote Vasten: paarse lijnen en accenten */
+.pm2.is-vasten .am-sierlijn, .pm2-laag.is-vasten .am-sierlijn { color: rgba(92, 58, 120, .85); }
+#top#top#top#top#top#top#top#top#top#top :is(.pm2.is-vasten, .pm2-laag.is-vasten) .pm2-sectie { color: #4a2f5a !important; }
+.pm2-laag.is-vasten .gm-rij .am-pijl { color: #5c3a78; }
+/* Goede Week: stiller en donkerder: dieper perkament, bijna geen goud, rode lijnen */
+.pm2.is-goede-week .gm-papier, .pm2-laag.is-goede-week { background-color: #e2cfaa; }
+.pm2.is-goede-week .am-sierlijn, .pm2-laag.is-goede-week .am-sierlijn { color: rgba(110, 30, 30, .7); }
+#top#top#top#top#top#top#top#top#top#top :is(.pm2.is-goede-week, .pm2-laag.is-goede-week) .pm2-sectie { color: #5a1e1e !important; }
+.pm2-laag.is-goede-week .gm-banner img { filter: saturate(.75) brightness(.9); }
+/* Pascha, Lichte Week en Paastijd: goud */
+.pm2.is-pascha .am-sierlijn, .pm2-laag.is-pascha .am-sierlijn, .pm2-laag.is-paastijd .am-sierlijn { color: rgba(184, 134, 43, .95); }
+#top#top#top#top#top#top#top#top#top#top :is(.pm2.is-pascha, .pm2-laag.is-pascha) .pm2-sectie { color: #7a4f12 !important; }
+/* Pinksteren: groen */
+.pm2-laag.is-pinksteren .am-sierlijn { color: rgba(27, 94, 54, .8); }
+#top#top#top#top#top#top#top#top#top#top .pm2-laag.is-pinksteren .pm2-sectie { color: #1b5e36 !important; }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { vergrendelScroll } from '../lib/scrollLock';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
@@ -19,25 +19,57 @@ export function Sierlijn({ licht }: { licht?: boolean }) {
   );
 }
 
-/** Schermvullende weergave (2, 3, 4): over de onderbalk heen, de pagina eronder scrolt niet mee. */
+/** Schermvullende weergave (2, 3, 4): over de onderbalk heen, de pagina eronder scrolt niet mee. De focus gaat naar de
+ *  titel (een h1 met tabIndex -1), zodat een schermlezer meldt waar je bent; Esc doet hetzelfde als "Terug". */
 export function Laag({ className, label, children }: { className: string; label: string; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const los = vergrendelScroll();
-    ref.current?.focus({ preventScroll: true });
+    const titel = ref.current?.querySelector<HTMLElement>('h1[tabindex="-1"]');
+    (titel ?? ref.current)?.focus({ preventScroll: true });
     return los;
   }, []);
   return (
-    <div ref={ref} className={`am-laag ${className}`} role="dialog" aria-modal="true" aria-label={label} tabIndex={-1}>
+    <div
+      ref={ref}
+      className={`am-laag ${className}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={label}
+      tabIndex={-1}
+      onKeyDown={(e) => {
+        if (e.key !== 'Escape') return;
+        e.stopPropagation();
+        ref.current?.querySelector<HTMLAnchorElement>('.am-kop .am-terug')?.click();
+      }}
+    >
       {children}
     </div>
   );
 }
 
-export function Kop({ terug, licht, merk = licht, rechts }: { terug: string; licht?: boolean; merk?: boolean; rechts?: ReactNode }) {
+// Het vorige adres binnen de app, voor een "Terug" die echt een stap teruggaat (zie Kop, `slim`).
+let vorigAdres = '';
+let huidigAdres = window.location.hash;
+window.addEventListener('hashchange', () => {
+  vorigAdres = huidigAdres;
+  huidigAdres = window.location.hash;
+});
+
+/** Kopbalk met "Terug". Met `slim`: kwam je van een ander scherm van dezelfde pagina (bijv. #pascha → #pascha/goede-week),
+ *  dan gaat Terug echt een stap terug (ook de terugknop van de telefoon blijft kloppen); anders naar `terug`, zonder een
+ *  extra stap in de geschiedenis. */
+export function Kop({ terug, licht, merk = licht, rechts, slim }: { terug: string; licht?: boolean; merk?: boolean; rechts?: ReactNode; slim?: boolean }) {
+  const opKlik = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (!slim || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    const pagina = (h: string) => h.split('/')[0];
+    if (vorigAdres && vorigAdres !== huidigAdres && pagina(vorigAdres) === pagina(huidigAdres)) window.history.back();
+    else window.location.replace(terug);
+  };
   return (
     <div className={`am-kop${licht ? ' is-licht' : ''}`}>
-      <a className="am-terug" href={terug}>
+      <a className="am-terug" href={terug} onClick={opKlik}>
         <ChevronLeft aria-hidden="true" /> Terug
       </a>
       {merk ? <span className="am-merk">Orthodoxe Tijd</span> : <span />}
@@ -49,13 +81,14 @@ export function Kop({ terug, licht, merk = licht, rechts }: { terug: string; lic
 
 /** Leesweergave op warm perkament (Adem en Etmaal): kopbalk met Terug, tekstgrootte en delen; daaronder het ornament,
  *  de titel, een sierlijn, de inleiding en de tekst. De tekst volgt de leesbediening (lees-vlak / lees-tekst). */
-export function LeesWeergave({ titel, ondertitel, onder, boven, terug, deelPad, className = '', children }: { titel: string; ondertitel?: string; onder?: ReactNode; boven?: ReactNode; terug: string; deelPad: string; className?: string; children: ReactNode }) {
+export function LeesWeergave({ titel, ondertitel, onder, boven, terug, deelPad, className = '', slim, children }: { titel: string; ondertitel?: string; onder?: ReactNode; boven?: ReactNode; terug: string; deelPad: string; className?: string; slim?: boolean; children: ReactNode }) {
   const [bediening, setBediening] = useState(false);
   return (
     <Laag className={`am-lees ${className}`} label={titel}>
       <Kop
         terug={terug}
         licht
+        slim={slim}
         rechts={
           <>
             <button type="button" className="am-knopje am-aa" aria-expanded={bediening} aria-label="Tekstgrootte en avondweergave" onClick={() => setBediening((b) => !b)}>

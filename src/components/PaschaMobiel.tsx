@@ -1,7 +1,7 @@
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { formatDag, formatKort, formatLang, hoofdletter } from '../lib/kalender';
+import { daysBetween, formatDag, formatKort, formatLang, hoofdletter } from '../lib/kalender';
 import { paascyclusVoor, type Paascyclus, type StapKey } from '../lib/paascyclus';
 import { PAASCYCLUS } from '../lib/feesten';
 import { PASCHA_DAGICONEN, PERIODE_POPUPS, STAP_INHOUD } from '../lib/paascyclusTeksten';
@@ -53,6 +53,15 @@ const SFEER: Record<StapKey, string> = {
 };
 
 const bereik = (s: Stap) => (s.van.getTime() === s.tot.getTime() ? formatKort(s.van) : `${formatKort(s.van)} – ${formatKort(s.tot)}`);
+/** Met het jaartal erbij als de periode niet in het lopende jaar valt (eind oktober: "21 feb – 14 mrt 2027"). */
+const bereikMetJaar = (s: Stap, jaar: number) => (s.tot.getUTCFullYear() !== jaar ? `${bereik(s)} ${s.tot.getUTCFullYear()}` : bereik(s));
+
+// De tien perioden in drie delen (alleen een indeling voor het overzicht; volgorde en datums uit lib/paascyclus.ts).
+const DELEN: Array<{ titel: string; keys: StapKey[] }> = [
+  { titel: 'Voorbereiding en Grote Vasten', keys: ['voorbereiding', 'grote-vasten', 'lazarus', 'palmzondag'] },
+  { titel: 'Goede Week en Pascha', keys: ['goede-week', 'pascha', 'lichte-week'] },
+  { titel: 'Paastijd tot Pinksteren', keys: ['paastijd', 'hemelvaart', 'pinksteren'] },
+];
 const eersteAlinea = (k: StapKey) => STAP_INHOUD[k].sections?.[0]?.paragraphs?.[0] ?? STAP_INHOUD[k].paragraphs[0] ?? '';
 
 const volgHash = (f: () => void) => {
@@ -98,31 +107,32 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
           href={cyclus.offset === 0 ? '#pascha/pascha' : '#pascha/cyclus'}
         />
 
+        {/* Binnen de cyclus: de periode van vandaag met de kleur en het vasten van vandaag. Daarbuiten (het grootste deel van
+            het jaar) eerlijk de eerstvolgende periode, zonder de gegevens van vandaag erbij (die horen niet bij die periode). */}
         <div className="gm-kaart gm-vandaag">
-          <p className="am-label pm2-label">Vandaag in de Paschacyclus</p>
-          <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
           {stap ? (
             <>
+              <p className="am-label pm2-label">Vandaag in de Paschacyclus</p>
+              <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
               <p className="gm-periode">{stap.label}</p>
               <p className="gm-bereik">{bereik(stap)}</p>
               <p className="gm-tekst">{stap.short}</p>
               <InfoRegels datum={vandaag} mode={mode} />
-              <a className="gm-knop" href={`#pascha/${stap.key}`}>Lees meer over deze periode <ChevronRight aria-hidden="true" /></a>
+              <a className="gm-knop" href={`#pascha/${stap.key}`}>Naar deze periode <ChevronRight aria-hidden="true" /></a>
             </>
           ) : (
             <>
+              <p className="am-label pm2-label">De Paschacyclus begint over {daysBetween(vandaag, eerste.van)} dagen</p>
               <p className="gm-periode">{eerste.label}</p>
-              <p className="gm-bereik">Begint op {formatDag(eerste.van)} {eerste.van.getUTCFullYear()}</p>
+              <p className="gm-bereik">Vanaf {formatDag(eerste.van)} {eerste.van.getUTCFullYear()}</p>
               <p className="gm-tekst">{eerste.short}</p>
-              <InfoRegels datum={vandaag} mode={mode} />
-              <a className="gm-knop" href={`#pascha/${eerste.key}`}>Lees meer over deze periode <ChevronRight aria-hidden="true" /></a>
+              <a className="gm-knop" href={`#pascha/${eerste.key}`}>Naar deze periode <ChevronRight aria-hidden="true" /></a>
             </>
           )}
         </div>
 
-        <h2 className="am-label gm-kop">De Paschacyclus</h2>
-        <ul className="gm-lijst">
-          {cyclus.stappen.map((s) => <Rij key={s.key} href={`#pascha/${s.key}`} titel={s.label} onder={bereik(s)} nu={s.key === cyclus.huidige} />)}
+        <ul className="gm-lijst pm2-naar-cyclus">
+          <Rij href="#pascha/cyclus" titel="De tien perioden" onder="Van de voorbereidende zondagen tot Pinksteren" />
         </ul>
 
         <h2 className="am-label gm-kop">Meer over Pascha</h2>
@@ -136,17 +146,23 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
 
 // 2. De Paschacyclus
 function Overzicht({ cyclus }: { cyclus: Paascyclus }) {
+  const jaar = useApp().vandaag.getUTCFullYear();
   return (
     <Laag className="em-laag gm-laag gm-overzicht pm2-laag" label="De Paschacyclus">
-      <Kop terug="#pascha" licht />
+      <Kop terug="#pascha" licht slim />
       <div className="gm-laag-papier">
         <h1 className="gm-laag-titel" tabIndex={-1}>De Paschacyclus</h1>
         <p className="gm-laag-onder">Van het Kruis naar de Verrijzenis</p>
         <Sierlijn />
         <p className="gm-tekst gm-midden">{INLEIDING}</p>
-        <ul className="gm-lijst gm-dagen">
-          {cyclus.stappen.map((s) => <Rij key={s.key} href={`#pascha/${s.key}`} datum={bereik(s)} titel={s.label} onder={s.short} nu={s.key === cyclus.huidige} />)}
-        </ul>
+        {DELEN.map((d) => (
+          <section key={d.titel} aria-label={d.titel}>
+            <h2 className="am-label pm2-sectie pm2-deel">{d.titel}</h2>
+            <ul className="gm-lijst gm-dagen">
+              {d.keys.map((k) => cyclus.stappen.find((s) => s.key === k)!).map((s) => <Rij key={s.key} href={`#pascha/${s.key}`} datum={bereikMetJaar(s, jaar)} titel={s.label} onder={s.short} nu={s.key === cyclus.huidige} />)}
+            </ul>
+          </section>
+        ))}
         <h2 className="am-label gm-kop">Meer over Pascha</h2>
         <ul className="pm2-meer">
           {VERDIEPING.map((v) => (
@@ -169,6 +185,7 @@ function Periode({ stap, cyclus }: { stap: Stap; cyclus: Paascyclus }) {
   const { mode, vandaag } = useApp();
   const i = cyclus.stappen.findIndex((s) => s.key === stap.key);
   const verwant = [cyclus.stappen[i - 1], cyclus.stappen[i + 1]].filter((s): s is Stap => !!s);
+
   const feest = stap.key === 'pascha';
   const icoon = PASCHA_DAGICONEN[stap.offsetRange[0]];
   const inhoud = STAP_INHOUD[stap.key];
@@ -176,14 +193,14 @@ function Periode({ stap, cyclus }: { stap: Stap; cyclus: Paascyclus }) {
   const isVandaag = feest && vandaag.getTime() === stap.van.getTime();
   return (
     <Laag className={`em-laag gm-laag gm-periodelaag pm2-laag ${SFEER[stap.key]}${feest ? ' is-feest' : ''}`} label={stap.label}>
-      <Kop terug="#pascha/cyclus" merk />
+      <Kop terug="#pascha/cyclus" merk slim />
       <Banner beeld={bannerVoor(stap.key, stap.offsetRange[0])} className={feest ? 'is-hoogfeest' : ''}>
         {feest ? (
           <p className="pm2-groet">„{GROET[0]}”<br />„{GROET[1]}”</p>
         ) : (
-          <div className="gm-titels">
+          <div className="gm-titels" aria-hidden="true">
             <p className="em-titel">{stap.label}</p>
-            <p className="am-onder">{bereik(stap)}</p>
+            <p className="am-onder">{bereikMetJaar(stap, vandaag.getUTCFullYear())}</p>
           </div>
         )}
       </Banner>
@@ -207,7 +224,7 @@ function Periode({ stap, cyclus }: { stap: Stap; cyclus: Paascyclus }) {
           </>
         ) : (
           <>
-            <h1 className="sr-only" tabIndex={-1}>{stap.label}</h1>
+            <h1 className="sr-only" tabIndex={-1}>{stap.label}, {bereikMetJaar(stap, vandaag.getUTCFullYear())}</h1>
             <h2 className="am-label pm2-sectie">Plaats in de Paschacyclus</h2>
             <p className="gm-tekst">
               {stap.label} ({bereik(stap)} {stap.tot.getUTCFullYear()}) is de {i + 1}e van de tien perioden van de Paschacyclus: {stap.short.charAt(0).toLowerCase() + stap.short.slice(1)}.
@@ -227,12 +244,13 @@ function Periode({ stap, cyclus }: { stap: Stap; cyclus: Paascyclus }) {
                 )}
               </>
             )}
-            <a className="gm-knop gm-knop-breed" href={`#pascha/${stap.key}/lees`}>Lees meer over deze periode <ChevronRight aria-hidden="true" /></a>
+            <a className="gm-knop gm-knop-breed" href={`#pascha/${stap.key}/lees`}>Lees de volledige tekst <ChevronRight aria-hidden="true" /></a>
           </>
         )}
-        <h2 className="gm-sectie">Gerelateerde perioden</h2>
+        {/* De cyclus als een weg: de vorige en de volgende periode */}
+        <h2 className="am-label pm2-sectie">Verder in de Paschacyclus</h2>
         <ul className="gm-lijst gm-dagen">
-          {verwant.map((s) => <Rij key={s.key} href={`#pascha/${s.key}`} titel={s.label} onder={bereik(s)} />)}
+          {verwant.map((s) => <Rij key={s.key} href={`#pascha/${s.key}`} titel={s.label} onder={`${cyclus.stappen.indexOf(s) < i ? 'Vorige periode' : 'Volgende periode'} · ${bereik(s)}`} />)}
         </ul>
       </div>
     </Laag>
@@ -250,14 +268,15 @@ export default function PaschaMobiel() {
     <>
       <Hoofd cyclus={cyclus} />
       {eerste === 'cyclus' && <Overzicht cyclus={cyclus} />}
-      {stap && !tweede && <Periode stap={stap} cyclus={cyclus} />}
+      {/* key: elke periode een eigen venster, zodat hij bovenaan opent en de focus op de titel komt */}
+      {stap && !tweede && <Periode key={stap.key} stap={stap} cyclus={cyclus} />}
       {stap && tweede === 'lees' && (
-        <LeesWeergave className="em-laag em-lees" titel={stap.label} ondertitel={bereik(stap)} terug={`#pascha/${stap.key}`} deelPad={`pascha/${stap.key}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+        <LeesWeergave key={stap.key} slim className="em-laag em-lees" titel={stap.label} ondertitel={bereik(stap)} terug={`#pascha/${stap.key}`} deelPad={`pascha/${stap.key}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
           <PopupTekst inhoud={STAP_INHOUD[stap.key]} />
         </LeesWeergave>
       )}
       {info && (
-        <LeesWeergave className="em-laag em-lees" titel={PASCHA_INFO[info].title} ondertitel={PASCHA_INFO[info].subtitle} terug="#pascha" deelPad={`pascha/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+        <LeesWeergave key={info} slim className="em-laag em-lees" titel={PASCHA_INFO[info].title} ondertitel={PASCHA_INFO[info].subtitle} terug="#pascha" deelPad={`pascha/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
           <PopupTekst inhoud={PASCHA_INFO[info]} />
         </LeesWeergave>
       )}
