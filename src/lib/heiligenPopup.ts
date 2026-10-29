@@ -14,6 +14,27 @@ export function normaliseer(tekst: string) {
   return tekst.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
+// Gangbare Nederlandse namen naar de schrijfwijze in de bron (al in zoekvorm: kleine letters, c als k).
+const ALIASSEN: [RegExp, string][] = [
+  [/\bservaas\b/g, 'servatius'],
+  [/\b(niklaas|klaas)\b/g, 'nikolaas'],
+  [/\bjoris\b/g, 'georgios'],
+  [/\bmaarten\b/g, 'martinus'],
+];
+/** Zoekvorm van een naam of zoekopdracht: zonder accenten, "sint", "st.", "h." of "heilige", met c en k (en ph en f)
+ *  gelijk, zodat "Sint-Nicolaas", "Servaas" en "H. Nikolaas" de heiligen uit de bron vinden. */
+export function zoekVorm(tekst: string) {
+  let t = normaliseer(tekst)
+    .replace(/[-–.,;:()]/g, ' ')
+    .replace(/\b(sint|st|h|heilige|heiligen)\b/g, ' ')
+    .replace(/c/g, 'k')
+    .replace(/ph/g, 'f')
+    .replace(/\s+/g, ' ')
+    .trim();
+  for (const [r, v] of ALIASSEN) t = t.replace(r, v);
+  return t;
+}
+
 const metBron = (md: string) => (h: Heilige): Resultaat => ({ ...h, md, bron: h.nl ? 'nl' : 'hj' });
 
 /** Alle vermeldingen van één kerkelijke dag (sleutel zoals '9-7'); ymd is de getoonde burgerlijke dag.

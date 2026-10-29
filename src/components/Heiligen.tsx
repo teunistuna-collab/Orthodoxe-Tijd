@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { addDays, civilVanKerkdatum, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum, MAANDEN, parseYmd, ymd } from '../lib/kalender';
+import NaarBoven from './NaarBoven';
 import HeiligePopup from './HeiligePopup';
-import { normaliseer, tekstVoorIndeling, type Resultaat } from '../lib/heiligenPopup';
+import { tekstVoorIndeling, zoekVorm, type Resultaat } from '../lib/heiligenPopup';
 import { CATEGORIEEN, categorieenVan } from '../lib/heiligenSoort';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import NisKop from './NisKop';
@@ -33,6 +34,16 @@ const sorteerMd = (a: string, b: string) => {
 };
 
 const CATEGORIE_LIJST = [...CATEGORIEEN.map((c) => ({ id: c.id, label: c.label })), { id: 'overige', label: 'Overige heiligen' }];
+// Mobiel zonder "Overige heiligen" (1301 namen, geen echte groep); die heiligen blijven vindbaar per dag, maand en zoeken.
+const CATEGORIE_MOBIEL = CATEGORIE_LIJST.filter((c) => c.id !== 'overige');
+
+/** Korte onderregel uit de eigen bron, om heiligen met dezelfde naam te onderscheiden (niets bedacht): bij de Lage
+ *  Landen de titel of korte omschrijving, anders het begin van de tekst uit het Heiligenjaar, tot de eerste zin. */
+function onderregel(h: Resultaat): string {
+  if (h.nl) return h.titel && h.titel !== h.naam ? h.titel : h.kort || 'Heilige van de Lage Landen';
+  const zin = (h.opening ?? '').split(/(?<=[.;])\s/)[0].trim();
+  return zin.length > 92 ? `${zin.slice(0, zin.lastIndexOf(' ', 90))}…` : zin;
+}
 
 export default function Heiligen() {
   const open = usePaginaOpen('heiligen');
@@ -40,18 +51,15 @@ export default function Heiligen() {
   const onderdeel = useOnderdeel();
   const [zoek, setZoek] = useState('');
   const [geselecteerde, setGeselecteerde] = useState<Resultaat | null>(null);
-  // Een maand of lijst openen (of terug naar het overzicht): bovenaan beginnen.
-  useEffect(() => {
-    if (open) window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [onderdeel]); // eslint-disable-line react-hooks/exhaustive-deps
-
   // Alleen heiligen; feesten en andere gedachtenissen horen bij de dag (Kalender, Vandaag).
   const alle = useMemo<Resultaat[]>(() => (heiligen?.ALLE_HEILIGEN ?? []).filter((h) => h.type === 'saint').map((h) => ({ ...h, bron: h.nl ? 'nl' : 'hj' })), [heiligen]);
 
-  const maand = /^\d+$/.test(onderdeel) ? Number(onderdeel) : null;
+  // Alleen januari t/m december; een ander getal (een oude of verkeerde link) toont gewoon het overzicht.
+  const maandNr = /^\d+$/.test(onderdeel) ? Number(onderdeel) : 0;
+  const maand = maandNr >= 1 && maandNr <= 12 ? maandNr : null;
   const categorie = onderdeel.startsWith('categorie-') ? CATEGORIE_LIJST.find((c) => `categorie-${c.id}` === onderdeel) : undefined;
   const lageLanden = onderdeel === 'lage-landen';
-  const query = normaliseer(zoek.trim());
+  const query = zoekVorm(zoek);
 
   // Op naam (en de andere namen uit de bron) zoeken; op het overzicht vervangen de resultaten dan de maanden.
   const gevonden = useMemo(() => {
@@ -59,7 +67,16 @@ export default function Heiligen() {
     if (lageLanden) return alle.filter((h) => h.nl);
     if (categorie) return alle.filter((h) => categorieenVan(tekstVoorIndeling(h)).includes(categorie.id));
     if (!query) return [];
-    return alle.filter((h) => normaliseer(`${h.naam} ${h.titel} ${(h.namen ?? []).join(' ')}`).includes(query));
+    // Eerst wie precies zo heet, dan wie met die naam begint, dan de rest; daarbinnen de volgorde van het jaar.
+    const score = (h: Resultaat) => {
+      const naam = zoekVorm(h.naam);
+      return naam === query ? 0 : naam.startsWith(query) && !h.naam.includes(',') ? 1 : naam.includes(query) ? 2 : 3;
+    };
+    return alle
+      .filter((h) => zoekVorm(`${h.naam} ${h.titel} ${(h.namen ?? []).join(' ')}`).includes(query))
+      .map((h) => ({ h, s: score(h) }))
+      .sort((a, b) => a.s - b.s || sorteerMd(a.h.md, b.h.md))
+      .map((x) => x.h);
   }, [alle, maand, lageLanden, categorie, query]);
 
   const groepen = useMemo(() => {
@@ -80,6 +97,19 @@ export default function Heiligen() {
 
   // Mobiel (mock-up heiligen): de heiligen van een dag met vorige/volgende dag en een datumkiezer; standaard vandaag.
   const mobiel = useMobiel();
+  // Een maand of lijst openen (of terug naar het overzicht): bovenaan beginnen.
+  // Mobiel: de lopende maand opent bij vandaag (de dagkop blijft bovenaan staan).
+  const naarVandaag = mobiel && maand === huidigeMaand && !!heiligen;
+  useEffect(() => {
+    if (!open) return;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (!naarVandaag) return;
+    const r = requestAnimationFrame(() => {
+      const el = document.getElementById(`hl-dag-${vandaagMd}`);
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 8, behavior: 'instant' });
+    });
+    return () => cancelAnimationFrame(r);
+  }, [onderdeel, naarVandaag]); // eslint-disable-line react-hooks/exhaustive-deps
   const [verschuiving, setVerschuiving] = useState(0);
   const [alleVanDag, setAlleVanDag] = useState(false);
   const dagDatum = addDays(vandaag, verschuiving);
@@ -100,32 +130,47 @@ export default function Heiligen() {
     </li>
   );
 
-  const rijKnop = (h: Resultaat) => (
-    <li key={h.id}>
-      <button type="button" className="vg-hl-rij" onClick={() => setGeselecteerde(h)}>
-        <span>
-          <b>{h.naam}</b>
-          {h.titel && h.titel !== h.naam && <span>{h.titel}</span>}
-        </span>
-        <ChevronRight aria-hidden="true" />
-      </button>
-    </li>
-  );
+  const rijKnop = (h: Resultaat, metDatum = false) => {
+    const onder = mobiel ? onderregel(h) : h.titel && h.titel !== h.naam ? h.titel : '';
+    return (
+      <li key={h.id}>
+        <button type="button" className="vg-hl-rij" onClick={() => setGeselecteerde(h)}>
+          <span>
+            <b>{h.naam}</b>
+            {mobiel && (metDatum || h.nl) && <small className="hm-rij-meta">{[metDatum ? datum(h.md) : '', h.nl ? 'Lage Landen' : ''].filter(Boolean).join(' · ')}</small>}
+            {onder && <span>{onder}</span>}
+          </span>
+          <ChevronRight aria-hidden="true" />
+        </button>
+      </li>
+    );
+  };
+
+  // Mobiel: per dag eerst drie namen, met "nog n" om de rest te tonen.
+  const [openDagen, setOpenDagen] = useState<string[]>([]);
 
   const lijst = (
     <>
       {!heiligen ? (
         <p className="vg-hl-leeg">De heiligen worden geladen…</p>
       ) : groepen.length === 0 ? (
-        <p className="vg-hl-leeg">{query ? `Geen heilige gevonden voor “${zoek.trim()}”. Probeer een andere schrijfwijze of een deel van de naam.` : 'Geen heiligen gevonden.'}</p>
+        <p className="vg-hl-leeg">{query ? `Geen heilige gevonden voor “${zoek.trim()}”. Probeer een andere schrijfwijze, een deel van de naam, of kies een datum bij Heiligen van de dag.` : 'Geen heiligen gevonden.'}</p>
       ) : (
         <ol className="vg-hl-dagen">
-          {groepen.map(([md, items]) => (
-            <li key={md}>
-              <h3>{datum(md)}</h3>
-              <ul>{items.map(rijKnop)}</ul>
-            </li>
-          ))}
+          {groepen.map(([md, items]) => {
+            const kort = mobiel && items.length > 4 && !openDagen.includes(md);
+            return (
+              <li key={md} id={`hl-dag-${md}`} className={md === vandaagMd ? 'is-vandaag' : undefined}>
+                <h3>{datum(md)}{md === vandaagMd && <span className="hm-vandaag-merk"> · vandaag</span>}</h3>
+                <ul>{(kort ? items.slice(0, 3) : items).map((h) => rijKnop(h))}</ul>
+                {kort && (
+                  <button type="button" className="hm-meer hm-dag-meer" onClick={() => setOpenDagen((d) => [...d, md])}>
+                    Nog {items.length - 3} heiligen op deze dag <ChevronRight aria-hidden="true" />
+                  </button>
+                )}
+              </li>
+            );
+          })}
         </ol>
       )}
     </>
@@ -250,7 +295,7 @@ export default function Heiligen() {
                 <nav className="vg-hl-categorieen" aria-labelledby="hm-cat-kop">
                   <h2 id="hm-cat-kop" className="hm-label hm-lijnlabel">Naar categorie</h2>
                   <ul>
-                    {CATEGORIE_LIJST.map((c) => (
+                    {CATEGORIE_MOBIEL.map((c) => (
                       <li key={c.id}>
                         <a href={`#heiligen/categorie-${c.id}`}>{c.label}</a>
                       </li>
@@ -259,16 +304,16 @@ export default function Heiligen() {
                 </nav>
               </>
             ) : query ? (
-              <section aria-live="polite" aria-label="Zoekresultaten">
-                <p className="vg-hl-uitleg">{gevonden.length === 1 ? '1 heilige' : `${gevonden.length} heiligen`}</p>
-                {lijst}
+              <section aria-label="Zoekresultaten">
+                <p className="vg-hl-uitleg" aria-live="polite">{gevonden.length === 0 ? '' : gevonden.length === 1 ? '1 heilige' : `${gevonden.length} heiligen`}</p>
+                {mobiel && gevonden.length > 0 ? <ul className="hm-treffers">{gevonden.slice(0, 120).map((h) => rijKnop(h, true))}</ul> : lijst}
               </section>
             ) : (
               <>
                 {vanVandaag.length > 0 && (
                   <section className="vg-hl-vandaag vg-hl-dagen" aria-labelledby="vg-hl-vandaag-kop">
                     <h2 id="vg-hl-vandaag-kop">Vandaag · {datum(vandaagMd)}</h2>
-                    <ul>{vanVandaag.slice(0, 4).map(rijKnop)}</ul>
+                    <ul>{vanVandaag.slice(0, 4).map((h) => rijKnop(h))}</ul>
                     {vanVandaag.length > 4 && (
                       <a className="vg-hl-meer" href={`#heiligen/${huidigeMaand}`}>
                         <span>Nog {vanVandaag.length - 4} heiligen van vandaag in {MAANDEN[huidigeMaand - 1]}</span> <ChevronRight aria-hidden="true" />
@@ -318,6 +363,7 @@ export default function Heiligen() {
         )}
       </div>
       <HeiligePopup heilige={geselecteerde} onClose={() => setGeselecteerde(null)} />
+      {mobiel && <NaarBoven />}
     </section>
   );
 }

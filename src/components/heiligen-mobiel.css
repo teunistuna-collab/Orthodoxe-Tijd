@@ -54,3 +54,41 @@
 /* Heiligen van de dag: alleen de naam */
 #top#top#top#top#top#top#top#top .hm-kaart.hm-naam { min-height: 56px; padding: 0 12px 0 16px; }
 .hm-naam .hm-tekst { padding: 8px 0; }
+
+/* ---------- Kritiek 29-10-2026: lange lijsten, zoeken, leesvenster en afwerking (alleen mobiel) ---------- */
+/* Lijsten (maand, Lage Landen, categorie, zoeken): rijen in de kaartstijl van het overzicht, met ademruimte */
+.hm .vg-hl-uitleg { margin: 0 6px 10px; }
+.hm .vg-hl-dagen { margin: 0; padding: 0; list-style: none; }
+.hm .vg-hl-dagen > li { padding: 0 0 6px; border-top: 0; }
+.hm .vg-hl-dagen ul, .hm .hm-treffers { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+/* De dagkop blijft bovenaan staan tijdens het scrollen */
+#top#top#top#top#top#top#top#top .hm .vg-hl-dagen h3 { position: sticky; top: 0; z-index: 2; margin: 0 -10px 6px; padding: 10px 16px 6px; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center / cover; box-shadow: 0 1px 0 rgba(172, 121, 47, .35); }
+.hm .hm-vandaag-merk { font-family: var(--font-lees); text-transform: none; letter-spacing: 0; }
+#top#top#top#top#top#top#top#top .hm .vg-hl-rij { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 56px; padding: 8px 12px 8px 14px; border: 1px solid rgba(185, 148, 85, .6); border-radius: 4px; background: rgba(250, 241, 222, .75); box-shadow: inset 0 0 0 2px rgba(255, 250, 238, .4), 0 1px 4px rgba(60, 35, 15, .14); text-align: left; }
+.hm .vg-hl-rij > span { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+#top#top#top#top#top#top#top#top .hm .vg-hl-rij b { font-family: var(--font-lees); font-size: 18px; font-weight: 500; line-height: 1.32; overflow-wrap: anywhere; }
+#top#top#top#top#top#top#top#top .hm .vg-hl-rij > span > span { font-family: var(--font-lees); font-size: 15px; line-height: 1.35; color: var(--gedempt, #5d5040); }
+.hm .hm-rij-meta { font-family: var(--font-lees); font-size: 14px; color: #6e4a20; }
+.hm .vg-hl-rij > svg { flex: none; width: 20px; height: 20px; color: #4a3220; }
+#top#top#top#top#top#top#top#top .hm .hm-dag-meer { margin: 2px 0 0 4px; }
+
+/* Links in licht oranjebruin halen nu AA (≥ 4,5:1) */
+#top#top#top#top#top#top#top#top :is(.hm-meer, .hm-vandaag) { color: #6e4a20; }
+#top#top#top#top#top#top#top#top .hm-vandaag { min-height: 44px; }
+
+/* Eén warme focusrand: diep goud, 3 px (ook op de donkere banner zichtbaar) */
+#top#top#top#top#top#top#top#top#top .hm :is(a, button, input, summary):focus-visible, #top#top#top#top#top#top#top#top#top .hm .hm-datum:focus-within, #top#top#top#top#top#top#top#top#top .hm .vg-hl-zoek:focus-within { outline: 3px solid #7d5218 !important; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top .hm .hm-banner :is(a, button):focus-visible { outline-color: #e0b95a !important; }
+
+/* Het wiskruisje in het zoekveld in de kleur van de app (diep goud) */
+.hm .vg-hl-zoek input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; margin-left: 6px; cursor: pointer; background: center / 18px no-repeat url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237d5218' stroke-width='2' stroke-linecap='round'><path d='M6 6l12 12M18 6L6 18'/></svg>"); }
+
+/* Leesvenster van een heilige (ook vanaf Vandaag en Kalender): tekst links uitgelijnd en tikvlakken van 44 px */
+@media (max-width: 767.98px) {
+  #top#top#top#top#top .synax .exact-popup-prose p, #top#top#top#top#top .synax .exact-popup-sectie p { text-align: left; }
+  #top#top#top#top#top .pk-nav { min-width: 44px; justify-content: center; }
+  #top#top#top#top#top#top#top#top#top .pk-lees .leesbediening button { width: 44px !important; height: 44px !important; min-height: 44px !important; }
+  #top#top#top#top#top#top .synax-blok button { min-height: 44px; }
+}
+/* Meeschuivende dagkoppen: de pagina knipt (clip) in plaats van te verbergen (hidden), anders werkt 'sticky' niet */
+#top#top#top#top#top#top#top#top section.vg.hm { overflow: clip; }

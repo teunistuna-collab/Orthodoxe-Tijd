@@ -18,6 +18,7 @@ import '@fontsource/eb-garamond/500.css'
 import '@fontsource/eb-garamond/400-italic.css'
 import './index.css'
 import App from './App.tsx'
+import Vangnet from './components/Vangnet.tsx'
 
 // Alleen voor de melding "Geen verbinding" (public/sw.js); niet in de ontwikkelserver.
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
@@ -26,6 +27,8 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <Vangnet>
+      <App />
+    </Vangnet>
   </StrictMode>,
 )
