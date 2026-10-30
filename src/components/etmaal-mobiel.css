@@ -85,3 +85,38 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top .em-dienst-pdf .etmaal-pdf 
 /* Overzicht: het perkament onder de banner met zacht afgeronde hoeken, geen harde lijn */
 .em-papier { background: none; }
 .em-papier:before { content: ""; position: absolute; z-index: -1; top: 40px; left: 0; right: 0; bottom: 0; border-radius: 16px 16px 0 0; background: var(--papyrus); box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+
+/* ---------- Kritiek 30-10-2026: tijden, leesweergave, avondweergave en afwerking ---------- */
+/* De tijd van elke dienst in het overzicht en onder de titel */
+.em-lijst a > span { flex: 1; }
+.em-tijd { flex: none; margin-right: 8px; font-family: var(--font-lees); font-size: 15px; font-variant-numeric: lining-nums; color: #5d4630; }
+.em-dienst-tijd { margin: 8px 0 0; font-family: var(--font-titel); font-size: 13px; letter-spacing: .16em; color: #ecc97e; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
+
+/* Leesweergave: de kopbalk met Terug en Aa blijft bovenaan staan */
+#top#top#top#top#top#top#top#top .em-lees > .am-kop { position: sticky; top: 0; z-index: 6; background: #f3e4c6 url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: 0 1px 0 rgba(172, 121, 47, .3); }
+html.lees-nacht #top#top#top#top#top#top#top#top .em-lees > .am-kop { background: var(--nacht-vlak, #0e1722); box-shadow: 0 1px 0 rgba(224, 183, 101, .2); }
+
+/* Psalmen van dit moment als links */
+#top#top#top#top#top#top#top#top .em-psalmlinks a { color: #6e4a20 !important; text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .5); text-underline-offset: 3px; }
+
+/* Bron van het kernvers leesbaar (ook op de donkere vezels van het perkament) */
+#top#top#top#top#top .em-kernvers cite { color: #6e4a20; }
+
+/* Avondweergave: koppen, kernvers, bron, tabelkoppen en ornament leesbaar op donker */
+html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top#top .am-lees-vlak h2 { color: #e9dcc0 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .am-lees-vlak .am-lees-citaat { color: #e9dcc0; }
+html.lees-nacht #top#top#top#top#top#top#top#top .am-lees-vlak :is(cite, .am-tabel th, .em-ornament, .am-lees-ondertitel) { color: #e0b765 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .am-lees-vlak .am-tabel :is(td, th) { border-color: rgba(224, 183, 101, .3); }
+html.lees-nacht #top#top#top#top#top#top#top#top .em-psalmlinks a { color: #e0b765 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .am-lees-vlak .am-lees-onder { color: #e9dcc0; }
+
+/* Eén warme focusrand, ook op de kaart van het actuele uur in het overzicht */
+#top#top#top#top#top#top#top#top#top :is(.em, .em-laag) :is(.em-nu, .em-kaart, .em-psalm, .em-lijst a, .em-psalmlinks a):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top .em-laag .am-kop :is(a, button):focus-visible { outline: 3px solid #e0b95a; outline-offset: 2px; }
+
+/* De knoppen voor de kathisma's minstens 44 px */
+#top#top#top#top#top#top#top#top .em-kathisma .psl a.psl-kathisma { min-height: 44px; }
+
+/* Het tussenscherm scrolt niet meer een paar pixels mee */
+.em-dienst { overflow-y: auto; }
+.em-dienst .em-klooster { flex: 1 1 0; min-height: 96px; height: auto; margin-bottom: 0; }

@@ -3,6 +3,7 @@ import { ChevronLeft } from 'lucide-react';
 import { vergrendelScroll } from '../lib/scrollLock';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
 import DeelKnop from './DeelKnop';
+import { huidigAdres, vorigeAdres } from '../lib/vorigAdres';
 import Leesbediening from './Leesbediening';
 import './adem-mobiel.css';
 
@@ -25,9 +26,14 @@ export function Laag({ className, label, children }: { className: string; label:
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const los = vergrendelScroll();
+    // Na het sluiten de focus terug op wat het venster opende (als dat er nog is)
+    const opener = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
     const titel = ref.current?.querySelector<HTMLElement>('h1[tabindex="-1"]');
     (titel ?? ref.current)?.focus({ preventScroll: true });
-    return los;
+    return () => {
+      los();
+      if (opener?.isConnected) requestAnimationFrame(() => opener.focus({ preventScroll: true }));
+    };
   }, []);
   return (
     <div
@@ -48,13 +54,6 @@ export function Laag({ className, label, children }: { className: string; label:
   );
 }
 
-// Het vorige adres binnen de app, voor een "Terug" die echt een stap teruggaat (zie Kop, `slim`).
-let vorigAdres = '';
-let huidigAdres = window.location.hash;
-window.addEventListener('hashchange', () => {
-  vorigAdres = huidigAdres;
-  huidigAdres = window.location.hash;
-});
 
 /** Kopbalk met "Terug". Met `slim`: kwam je van een ander scherm van dezelfde pagina (bijv. #pascha → #pascha/goede-week),
  *  dan gaat Terug echt een stap terug (ook de terugknop van de telefoon blijft kloppen); anders naar `terug`, zonder een
@@ -64,7 +63,9 @@ export function Kop({ terug, licht, merk = licht, rechts, slim }: { terug: strin
     if (!slim || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault();
     const pagina = (h: string) => h.split('/')[0];
-    if (vorigAdres && vorigAdres !== huidigAdres && pagina(vorigAdres) === pagina(huidigAdres)) window.history.back();
+    const vorigAdres = vorigeAdres();
+    const nu = huidigAdres();
+    if (vorigAdres && vorigAdres !== nu && (vorigAdres === terug || pagina(vorigAdres) === pagina(nu))) window.history.back();
     else window.location.replace(terug);
   };
   return (

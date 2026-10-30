@@ -112,7 +112,7 @@ export const ETMAAL_INFO: Record<'wat' | 'diensten' | 'betekenis' | 'praktisch',
   "wat": {
     "title": "Wat is het etmaal?",
     "subtitle": "De dag geheiligd door gebed",
-    "highlight": "“Zevenmaal daags heb ik U geloofd om Uw rechtvaardige oordelen.” — Psalm 118 (119):164",
+    "highlight": "“Zevenmaal daags heb ik U geloofd om Uw rechtvaardige oordelen.” — Psalm 118:164",
     "paragraphs": [],
     "sections": [
       {

@@ -5,6 +5,7 @@ import { KATHISMATA, PSALMEN, beginMetHoofdletter, kathismaStappen, psalmBereik,
 import DeelKnop from './DeelKnop';
 import Leesbediening from './Leesbediening';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
+import { vorigeAdres } from '../lib/vorigAdres';
 import { KATHISMA_UITLEG, LEESPLEK, NIET_BESCHIKBAAR, kathismaPad, leesPlek, stukNaam } from './psalmenAdres';
 import { useApp } from '../lib/context';
 import Psalterlezing from './Psalterlezing';
@@ -212,7 +213,7 @@ function Verzen({ verzen, idVoorvoegsel }: { verzen: PsalmBlok[]; idVoorvoegsel:
   );
 }
 
-function LeesKop({ terug, titel, deelPad, audioSrc, leeg }: { terug: string; titel: string; deelPad: string; audioSrc?: string; leeg?: boolean }) {
+function LeesKop({ terug, titel, deelPad, audioSrc, leeg, slim }: { terug: string; titel: string; deelPad: string; audioSrc?: string; leeg?: boolean; slim?: boolean }) {
   const [bediening, setBediening] = useState(false);
   const bewaard = useFavorieten().includes(deelPad);
   return (
@@ -220,6 +221,7 @@ function LeesKop({ terug, titel, deelPad, audioSrc, leeg }: { terug: string; tit
       <Kop
         terug={terug}
         licht
+        slim={slim}
         rechts={
           <>
             <button type="button" className="am-knopje am-aa" aria-expanded={bediening} aria-label="Tekstgrootte, avondweergave en audio" onClick={() => setBediening((b) => !b)}>
@@ -295,11 +297,13 @@ export function PsalterLezer({ nr, vers, tekst, laadFout, kathisma }: { nr: numb
   const volgendeMetTekst = PSALMEN.slice(nr).find((p) => p.hasText);
   const vorige = kathisma ? (i > 0 ? kathismaPad(kathisma.k, stappen[i - 1], kathisma.datum) : kathismaPad(kathisma.k, undefined, kathisma.datum)) : vorigeMetTekst ? `#psalmen/${vorigeMetTekst.septuagintNumber}` : null;
   const volgende = kathisma ? (i < stappen.length - 1 ? kathismaPad(kathisma.k, stappen[i + 1], kathisma.datum) : kathismaPad(kathisma.k, undefined, kathisma.datum)) : volgendeMetTekst ? `#psalmen/${volgendeMetTekst.septuagintNumber}` : null;
-  const terug = kathisma ? kathismaPad(kathisma.k, undefined, kathisma.datum) : '#psalmen';
+  // Kwam je vanuit Etmaal (een psalm van een gebedsuur), dan gaat Terug daarheen terug.
+  const [herkomst] = useState(() => (vorigeAdres().startsWith('#etmaal') ? vorigeAdres() : null));
+  const terug = kathisma ? kathismaPad(kathisma.k, undefined, kathisma.datum) : herkomst ?? '#psalmen';
 
   return (
     <Laag className="am-lees pm-lees" label={psalm.title}>
-      <LeesKop terug={terug} titel={psalm.title} deelPad={pad} audioSrc={psalm.hasText ? psalm.audioSrc : undefined} leeg={!psalm.hasText} />
+      <LeesKop terug={terug} slim={!!herkomst} titel={psalm.title} deelPad={pad} audioSrc={psalm.hasText ? psalm.audioSrc : undefined} leeg={!psalm.hasText} />
       <article ref={vlakRef} className="pm-lees-vlak lees-vlak">
         <header className="pm-lees-kop">
           {k && <p className="pm-context">Kathisma {k.nr}{stap ? ` · Stasis ${stap.deel}` : ''}</p>}

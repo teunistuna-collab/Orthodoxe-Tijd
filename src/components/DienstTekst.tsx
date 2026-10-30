@@ -38,17 +38,27 @@ export default function DienstTekst({ dienst }: { dienst: ServiceMapping }) {
         if (lines.length === 0) return null;
         const minX = Math.min(...lines.map((line) => line.x));
         const langste = Math.max(...lines.map((line) => line.text.length));
+        // Regels van één alinea worden één lopende alinea; een nieuwe alinea na een korte regel die met een leesteken
+        // eindigt (zoals voorheen). Een afgebroken woord ("ver-") wordt weer heel. De tekst zelf verandert niet.
+        const alineas: { tekst: string; inspring: number }[] = [];
+        lines.forEach((line, lineIndex) => {
+          const vorige = lines[lineIndex - 1];
+          const nieuweAlinea = !vorige || (vorige.text.length < langste * 0.7 && /[.!?:”"’)]$/.test(vorige.text));
+          const tekst = line.text.trim();
+          if (nieuweAlinea || !alineas.length) alineas.push({ tekst, inspring: Math.min(48, Math.max(0, (line.x - minX) / 2)) });
+          else {
+            const laatste = alineas[alineas.length - 1];
+            laatste.tekst = /[a-zà-ÿ]-$/i.test(laatste.tekst) ? laatste.tekst.slice(0, -1) + tekst : `${laatste.tekst} ${tekst}`;
+          }
+        });
         return (
           <div key={`${url}-${pageIndex}`} className="etmaal-pdf-pagina">
-            {lines.map((line, lineIndex) => {
-              const vorige = lines[lineIndex - 1];
-              const nieuweAlinea = !!vorige && vorige.text.length < langste * 0.7 && /[.!?:”"’)]$/.test(vorige.text);
-              return (
-                <p key={lineIndex} className={nieuweAlinea ? 'etmaal-pdf-alinea' : undefined} style={{ paddingLeft: `${Math.min(48, Math.max(0, (line.x - minX) / 2))}px` }}>
-                  {line.text}
-                </p>
-              );
-            })}
+            {alineas.map((a, i) => (
+              <p key={i} className={i > 0 ? 'etmaal-pdf-alinea' : undefined} style={a.inspring ? { paddingLeft: `${a.inspring}px` } : undefined}>
+                {/* Alleen de LXX-nummering: "Psalm 103 (104)" wordt "Psalm 103" (ook als het over twee regels liep) */}
+                {a.tekst.replace(/(Psalm(?:en)? \d+) ?\(\d+\)/g, '$1')}
+              </p>
+            ))}
           </div>
         );
       })}

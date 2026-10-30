@@ -26,6 +26,9 @@ const BEELD = '/images/etmaal/mobiel';
 const DIENSTEN_TABEL = ETMAAL_INFO.diensten.sections?.[0];
 const ORIENTATIE = DIENSTEN_TABEL?.paragraphs?.[0]?.split(/(?<=\.)\s+/).pop() ?? '';
 const momentVan = (d: ServiceMapping) => DIENSTEN_TABEL?.table?.rows.find((r) => r[0] === d.title)?.[1];
+// Beeld naar het uur: de kapel met de lamp in de avond en de nacht, de zonnige kapel overdag (eigen beelden).
+const NACHT = ['Completen', 'Middernachtdienst', 'Metten'];
+const beeldVan = (d: ServiceMapping) => (NACHT.includes(d.title) ? { src: `${BEELD}/kapel-lamp.webp`, b: 900, h: 572 } : { src: `${BEELD}/kapel-zon.webp`, b: 786, h: 1120 });
 
 type InfoKey = keyof typeof ETMAAL_INFO;
 const VERDIEPING: { key: InfoKey; titel: string }[] = [
@@ -80,6 +83,7 @@ function Overzicht({ nu }: { nu: ServiceMapping }) {
             <li key={d.title}>
               <a className={d === nu ? 'is-nu' : undefined} href={`#etmaal/${slugVan(d)}`} aria-current={d === nu ? 'time' : undefined}>
                 <span>{naamVan(d)}</span>
+                {momentVan(d) && <small className="em-tijd">{momentVan(d)}</small>}
                 <ChevronRight className="am-pijl" aria-hidden="true" />
               </a>
             </li>
@@ -97,6 +101,7 @@ function Overzicht({ nu }: { nu: ServiceMapping }) {
             </li>
           ))}
         </ul>
+        <Sierlijn />
       </div>
     </section>
   );
@@ -107,12 +112,13 @@ function Dienst({ d }: { d: ServiceMapping }) {
   const slug = slugVan(d);
   return (
     <Laag className="em-laag em-dienst" label={naamVan(d)}>
-      <Kop terug="#etmaal" merk />
+      <Kop terug="#etmaal" merk slim />
       <div className="em-dienst-beeld">
-        <img src={`${BEELD}/kapel-zon.webp`} alt="" width={786} height={1120} decoding="async" />
+        <img src={beeldVan(d).src} alt="" width={beeldVan(d).b} height={beeldVan(d).h} decoding="async" />
         <div className="em-dienst-tekst">
           <h1 className="em-titel" tabIndex={-1}>{naamVan(d)}</h1>
           <Sierlijn />
+          {momentVan(d) && <p className="em-dienst-tijd">{momentVan(d)}</p>}
           <p className="em-dienst-onder">{d.hoofdgedachtenis}</p>
         </div>
       </div>
@@ -144,17 +150,13 @@ function Over({ d }: { d: ServiceMapping }) {
   const moment = momentVan(d);
   const kernvers = d.kernvers.reference.replace('Psalm Kernvers:', 'Psalm');
   return (
-    <LeesWeergave className="em-laag em-lees" titel={naamVan(d)} ondertitel="Over dit moment" terug={`#etmaal/${slugVan(d)}`} deelPad={`etmaal/${slugVan(d)}/over`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+    <LeesWeergave slim className="em-laag em-lees" titel={naamVan(d)} ondertitel="Over dit moment" onder={d.hoofdgedachtenis} terug={`#etmaal/${slugVan(d)}`} deelPad={`etmaal/${slugVan(d)}/over`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
       {moment && (
         <section>
           <h2>Plaats in het etmaal</h2>
           <p>Schematisch moment: {moment}. {ORIENTATIE}</p>
         </section>
       )}
-      <section>
-        <h2>Hoofdgedachtenis</h2>
-        <p>{d.hoofdgedachtenis}</p>
-      </section>
       <section>
         <h2>Kernvers</h2>
         <blockquote className="am-lees-citaat em-kernvers">
@@ -164,11 +166,18 @@ function Over({ d }: { d: ServiceMapping }) {
       </section>
       <section>
         <h2>Psalmen van dit moment</h2>
-        <p>{d.psalms.map((p) => p.title).join(', ')}</p>
+        <p className="em-psalmlinks">
+          {d.psalms.map((p, i) => (
+            <span key={p.title}>
+              {i > 0 && ', '}
+              <a href={`#psalmen/${p.title.replace('Psalm ', '')}`}>{p.title}</a>
+            </span>
+          ))}
+        </p>
       </section>
       {/* De dienst zelf, zoals in het dienstvenster op desktop (de PDF van de dienst) */}
       <section className="em-dienst-pdf">
-        <h2>De dienst</h2>
+        <h2>Bij deze dienst</h2>
         <DienstTekst dienst={d} />
       </section>
     </LeesWeergave>
@@ -182,7 +191,7 @@ function Psalmen({ d }: { d: ServiceMapping }) {
   return (
     <Laag className="em-laag em-psalmen" label={`${naamVan(d)}: psalmen`}>
       <img className="em-boek" src={`${BEELD}/gebedenboek.webp`} alt="" width={900} height={1200} decoding="async" />
-      <Kop terug={`#etmaal/${slugVan(d)}`} merk />
+      <Kop terug={`#etmaal/${slugVan(d)}`} merk slim />
       <div className="em-psalmen-vlak">
         <h1 className="em-titel" tabIndex={-1}>{naamVan(d)}</h1>
         <p className="em-dienst-onder">Psalmen uit het Psalter</p>
@@ -235,7 +244,7 @@ export default function EtmaalMobiel() {
       {dienst && tweede === 'over' && <Over d={dienst} />}
       {dienst && tweede === 'psalmen' && <Psalmen d={dienst} />}
       {info && (
-        <LeesWeergave className="em-laag em-lees" titel={ETMAAL_INFO[info].title} ondertitel={ETMAAL_INFO[info].subtitle} onder={ETMAAL_INLEIDING[info]} terug="#etmaal" deelPad={`etmaal/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+        <LeesWeergave slim className="em-laag em-lees" titel={ETMAAL_INFO[info].title} ondertitel={ETMAAL_INFO[info].subtitle} onder={ETMAAL_INLEIDING[info]} terug="#etmaal" deelPad={`etmaal/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
           <PopupTekst inhoud={ETMAAL_INFO[info]} />
         </LeesWeergave>
       )}
