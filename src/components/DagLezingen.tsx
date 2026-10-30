@@ -46,7 +46,7 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
                     <span className="block text-[11px] font-bold tracking-wider text-gold-deep uppercase">{vertaalTag(l.tag, refNl)}</span>
                     <span className="font-display text-xl font-semibold">{refNl}</span>
                   </span>
-                  <span className={`shrink-0 rounded-sm px-1.5 py-0.5 text-[11px] font-bold uppercase ${soort === 'evangelie' ? 'bg-wine text-gold-light' : soort === 'oud' ? 'bg-parchment-3 text-ink' : 'bg-gold-pale text-gold-deep'}`}>
+                  <span className={`dl-soort shrink-0 rounded-sm px-1.5 py-0.5 text-[11px] font-bold uppercase ${soort === 'evangelie' ? 'bg-wine text-gold-light' : soort === 'oud' ? 'bg-parchment-3 text-ink' : 'bg-gold-pale text-gold-deep'}`}>
                     {soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'OT' : 'Apostel'}
                   </span>
                 </button>

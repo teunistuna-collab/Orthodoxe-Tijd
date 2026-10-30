@@ -9,7 +9,7 @@ import { BRON_CONCEPT, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_WEETJES, KE
 import { actieveCyclus, type Cyclus } from './seizoen';
 
 /*
- * "De betekenis van vandaag": daginformatie die alleen tijdens de Paascyclus verschijnt (Zondag van de Tollenaar en de
+ * "De betekenis van vandaag": daginformatie die alleen tijdens de Paschacyclus verschijnt (Zondag van de Tollenaar en de
  * Farizeeër t/m Pinksteren; paascyclusActief in lib/paascyclus.ts). Gebruikt door Vandaag en Pascha.
  *
  * Alleen bestaande, aangeleverde inhoud, steeds met de bron:
@@ -105,10 +105,10 @@ function weetje(key: StapKey, offset: number): Tekstdeel | undefined {
   return deel(titel, per[key], BRON_DOCX);
 }
 
-/** De beweeglijke gedachtenis van de dag (Paascyclus), anders het eerste feest van de kalender. */
+/** De beweeglijke gedachtenis van de dag (Paschacyclus), anders het eerste feest van de kalender. */
 const feestVan = (dag: DagInfo): Feest | undefined => dag.feesten.find((f) => f.offset !== undefined) ?? dag.feesten[0];
 
-/** Alle onderdelen voor een dag in de actieve seizoensuitbreiding (Paascyclus of Geboortecyclus); null daarbuiten. */
+/** Alle onderdelen voor een dag in de actieve seizoensuitbreiding (Paschacyclus of Geboortecyclus); null daarbuiten. */
 export function betekenisVoor(dag: DagInfo, mode: Mode): BetekenisVanVandaag | null {
   const cyclus = actieveCyclus(dag.civil, mode);
   return cyclus === 'pascha' ? betekenisPascha(dag) : cyclus === 'geboorte' ? betekenisGeboorte(dag, mode) : null;

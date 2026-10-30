@@ -218,7 +218,7 @@ export default function Feesten() {
             <ol className="ot-register">{alle.slice(0, 40).map((x) => rij(x, `${soortTekst(x.f)}${mode === 'oud' && x.f.md ? ` · Juliaans ${formatDag(kerkDatum(x.datum, mode))}` : ''}`))}</ol>
             <p className="ot-fs-links">
               <a className="ot-tekstknop" href="#jaar">Vaste feesten: naar de jaarcyclus ›</a>
-              <a className="ot-tekstknop" href="#pascha">Beweeglijke feesten: naar de Paascyclus ›</a>
+              <a className="ot-tekstknop" href="#pascha">Beweeglijke feesten: naar de Paschacyclus ›</a>
             </p>
           </section>
         </div>

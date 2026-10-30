@@ -29,7 +29,7 @@ const PAGINAS: { id: string; titel: string; onder: string; extra?: string }[] = 
   { id: 'etmaal', titel: 'Etmaal', onder: 'De gebeden van dag en nacht', extra: 'uren metten vespers completen middernachtdienst psalmen psalm' },
   { id: 'week', titel: 'Week', onder: 'Van zondag tot zaterdag', extra: 'weekcyclus weekdagen' },
   { id: 'jaar', titel: 'Jaar', onder: 'Het ritme van het kerkelijk jaar', extra: 'jaarcyclus kerkelijk jaar' },
-  { id: 'pascha', titel: 'Pascha', onder: 'De paascyclus', extra: 'pasen paascyclus paschale cyclus paschacyclus' },
+  { id: 'pascha', titel: 'Pascha', onder: 'De Paschacyclus', extra: 'pasen paascyclus paschale cyclus paschacyclus' },
   { id: 'gebeden', titel: 'Gebeden', onder: 'Het gebedenboek', extra: 'gebedenboek' },
   { id: 'vasten', titel: 'Vasten', onder: 'Vasten vandaag en de vastenperioden', extra: 'vastendag vastenperiode' },
   { id: 'heiligen', titel: 'Heiligen', onder: 'Alle heiligen per dag en maand' },

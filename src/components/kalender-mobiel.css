@@ -76,3 +76,55 @@
 .km-maand, .km-dag { margin-left: 0; margin-right: 0; border-left: 0; border-right: 0; box-shadow: none; }
 .km-maand { border-radius: 16px 16px 0 0; border-bottom: 0; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
 .km-dag { margin-top: 12px; border-radius: 0; border-bottom: 0; border-top: 1px solid rgba(172, 121, 47, .45); background: none; }
+
+/* ---------- Kritiek 30-10-2026: liturgische kleur, feesten, gekozen dag en afwerking ---------- */
+/* Tikvlak van 44 px; de ronde markering (gekozen dag, vandaag, feest) is een binnenring van 36 px */
+#top#top#top#top#top#top#top#top#top .km-cel { width: 44px; height: 44px; border-radius: 0; background: none !important; box-shadow: none !important; isolation: isolate; }
+.km-cel::before { content: ""; position: absolute; top: 50%; left: 50%; z-index: -1; width: 36px; height: 36px; border-radius: 50%; transform: translate(-50%, -50%); }
+/* Pascha en de twaalf grote feesten: zacht goud gevuld, rood cijfer */
+.km-cel.is-feest::before { background: rgba(224, 185, 90, .38); box-shadow: inset 0 0 0 1px rgba(172, 121, 47, .5); }
+.km-cel.is-feest .km-nr { color: #850d17; font-weight: 600; }
+/* Zondag: wijnrode cijfers */
+.km-cel.is-zondag .km-nr { color: #7d1f25; }
+/* Vandaag: een buitenring, die ook zichtbaar blijft als vandaag gekozen is */
+.km-cel.is-vandaag::before { box-shadow: 0 0 0 2px rgba(138, 90, 43, .85); }
+/* De gekozen dag: gevuld */
+.km-cel.is-gekozen::before { background: #8a5a2b; box-shadow: 0 1px 3px rgba(60, 30, 10, .35); }
+.km-cel.is-gekozen.is-vandaag::before { box-shadow: 0 0 0 2px #fbf1dc, 0 0 0 4px #8a5a2b; }
+#top#top#top#top#top#top#top#top#top .km-cel.is-gekozen { color: #fbf1dc; }
+.km-cel.is-gekozen .km-nr { color: #fbf1dc !important; }
+/* Liturgische kleur: een dun streepje onder het cijfer (het teken blijft, kleur is nooit het enige signaal) */
+.km-lit { position: absolute; left: 50%; bottom: 5px; width: 14px; height: 2.5px; border-radius: 2px; background: var(--lit); transform: translateX(-50%); }
+.km-cel.is-gekozen .km-lit { box-shadow: 0 0 0 1px #fbf1dc; }
+.km-tekens { margin-top: 2px; }
+/* Dagen buiten de maand: leesbaarder */
+#top#top#top#top#top#top#top#top .km-cel.is-buiten { opacity: .58; }
+/* Focusrand: buiten de cirkel, zodat hij ook op de gekozen dag zichtbaar is */
+#top#top#top#top#top#top#top#top#top .km-cel:focus-visible { outline: 3px solid #7d5218; outline-offset: 0; border-radius: 6px; }
+#top#top#top#top#top#top#top#top#top :is(.km-regel, .km-tekstknop, .km-maandnav button):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+
+/* Legenda: een pijltje omlaag/omhoog; stalen voor feest, zondag en de liturgische kleuren */
+#top#top#top#top#top#top#top#top .km-legenda-knop { display: flex; align-items: center; gap: 2px; min-height: 44px; color: #6e4a20; }
+.km-legenda-knop svg { width: 16px; height: 16px; transition: transform .2s; }
+.km-legenda-knop svg.is-open { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .km-legenda-knop svg { transition: none; } }
+.km-staal.is-feestcel { background: rgba(224, 185, 90, .5); box-shadow: inset 0 0 0 1px rgba(172, 121, 47, .6); }
+.km-nr-staal { width: 12px; font-family: var(--font-lees); font-size: 14px; font-weight: 600; text-align: center; color: #7d1f25; }
+.km-lijn-staal { flex: none; width: 14px; height: 3px; border-radius: 2px; }
+.km-legenda .km-legenda-kleur { grid-column: 1 / -1; font-size: 13.5px; }
+
+/* Leesbaarder: juliaanse datum, de kleine tekstknoppen en onderregels */
+.km-kerkdatum { color: #5d4630; }
+#top#top#top#top#top#top#top#top .km-tekstknop { color: #6e4a20; }
+.km-regel-tekst small { font-size: 14px; color: #5d4a36; }
+.km-geenvasten { display: grid; place-items: center; color: #7a5a2a; }
+.km-geenvasten svg { width: 100%; height: 100%; }
+
+/* Dagvensters op mobiel: geen lege donkerblauwe kopbalk als er geen datum in staat; geen dubbel label bij de lezingen */
+@media (max-width: 767.98px) {
+  #top#top#top#top#top .pk-kop:has(> .pk-datum:empty) { background: none; }
+  #top#top#top#top#top#top .pk-kop:has(> .pk-datum:empty) .pk-sluit { color: #3b2314 !important; }
+  .dl-soort { display: none !important; }
+}
+/* Wit valt weg op perkament: een fijne rand om streepje en staal */
+.km-lit, .km-lijn-staal { box-shadow: 0 0 0 .75px rgba(90, 60, 30, .45); }

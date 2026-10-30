@@ -93,7 +93,7 @@ function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: 
           </li>
           <li>
             <a href="#pascha">
-              <span className="wm-dag"><b>Beweeglijke feesten</b><small>De feesten van de Paascyclus</small></span>
+              <span className="wm-dag"><b>Beweeglijke feesten</b><small>De feesten van de Paschacyclus</small></span>
               <ChevronRight className="am-pijl" aria-hidden="true" />
             </a>
           </li>

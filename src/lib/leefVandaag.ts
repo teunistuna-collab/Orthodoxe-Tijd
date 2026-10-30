@@ -20,7 +20,7 @@ export interface LeefTekst {
 
 const JEZUSGEBED = { label: 'Bid het Jezusgebed', href: '#adem' };
 const GEBEDSUUR = { label: 'Open het gebedsuur van nu', href: '#etmaal' };
-const PAASCYCLUS = { label: 'Naar de Paascyclus', href: '#pascha' };
+const PAASCYCLUS = { label: 'Naar de Paschacyclus', href: '#pascha' };
 const GEBOORTECYCLUS = { label: 'Naar de Geboortecyclus', href: '#geboorte' };
 const nbv = (ref: string): Schriftwoord => ({ soort: 'nbv21', ref });
 const psalm = (lxx: number, vers: number, mt?: number): Schriftwoord => ({ soort: 'psalm', lxx, vers, mt });

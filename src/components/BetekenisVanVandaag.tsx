@@ -7,8 +7,8 @@ import { LiturgicalPopup } from './CycleSections';
 import KleurVanDeDag from './KleurVanDeDag';
 import { useApp } from '../lib/context';
 
-// "De betekenis van vandaag" (lib/betekenisVanVandaag.ts): alleen tijdens de Paascyclus of de Geboortecyclus, anders niets. Bovenaan direct
-// zichtbaar de liturgische kleur en (op Vandaag) de periode in de Paascyclus; daaronder compacte rijen met "Lees meer →",
+// "De betekenis van vandaag" (lib/betekenisVanVandaag.ts): alleen tijdens de Paschacyclus of de Geboortecyclus, anders niets. Bovenaan direct
+// zichtbaar de liturgische kleur en (op Vandaag) de periode in de Paschacyclus; daaronder compacte rijen met "Lees meer →",
 // die de inhoud in het bestaande venster openen. Onderdelen zonder inhoud worden weggelaten. Opmaak: Vandaag.css (.bv).
 
 const I = '/images/vandaag/iconen';
@@ -76,7 +76,7 @@ export default function BetekenisVanVandaag({ dag, opPascha = false }: { dag: Da
         {!opPascha && (
           <a className="bv-fase" href={b.link}>
             <span className="bv-fase-tekst">
-              <span className="bv-fase-label">{b.cyclus === 'pascha' ? 'Paascyclus' : 'Geboortecyclus'}</span> {b.periode.label}
+              <span className="bv-fase-label">{b.cyclus === 'pascha' ? 'Paschacyclus' : 'Geboortecyclus'}</span> {b.periode.label}
               <span className="bv-fase-bereik">
                 {' · '}
                 {formatKort(b.periode.van)}

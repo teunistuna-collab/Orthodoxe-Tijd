@@ -223,7 +223,11 @@ export default function App() {
     }
   }, []);
 
-  const openDag = useCallback((y: string) => setDagOpen(y), []);
+  const openDag = useCallback((y: string) => {
+    setDagOpen(y);
+    // De mobiele kalender loopt mee als je in het dagvenster naar een andere dag bladert
+    window.dispatchEvent(new CustomEvent('kalender-dag', { detail: y }));
+  }, []);
   const openLezing = useCallback((l: LezingKeuze) => setLezing(l), []);
   const sluitDag = useCallback(() => setDagOpen(null), []);
   const openDagLezingen = useCallback((y: string) => setLezingenDag(y), []);

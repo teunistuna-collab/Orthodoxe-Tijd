@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
-import { BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { MAANDEN, WEEKDAGEN_KORT, formatDag, hoofdletter, maandRooster, formatLang } from '../lib/kalender';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
 import { NIVEAUS, VASTEN_GROEPEN, vastenGroep, type VastenGroep } from '../lib/vasten';
-import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
+import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, vertaalTag, type HtcLezingRef } from '../lib/htc';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { useMobiel } from '../lib/desktop';
@@ -16,7 +16,7 @@ import { VastenSymbool, KruisTeken } from './ui';
 import { eersteHeilige, heiligeTitel, heiligenVanDag as dagHeiligen } from '../lib/heiligenPopup';
 import NisKop from './NisKop';
 import { BannerBeeld, MaandNav, Sierlijn } from './onderdelen';
-import { BLAD, KERK, KRUIS } from './symbolen';
+import { BLAD, KERK, KRUIS, SIERKRUIS } from './symbolen';
 import './Vandaag.css';
 import './ontwerp.css';
 import './kalender-mobiel.css';
@@ -24,7 +24,7 @@ import './kalender-mobiel.css';
 // Kalender volgens het overdrachtspakket (referentie kalender-pascha-feesten-vasten.png, paneel 1): de kop met het
 // verluchte boek, de maand (maandag eerst, de gekozen dag in bordeaux, vandaag met een stip; tekens voor feest, groot
 // feest en vasten en een streepje in de liturgische kleur) met de legenda, en de gekozen dag als register: heiligen,
-// lezingen, vasten, feesten en Paascyclus. Alle gegevens uit de bestaande kalender, het leesrooster en het Heiligenjaar;
+// lezingen, vasten, feesten en Paschacyclus. Alle gegevens uit de bestaande kalender, het leesrooster en het Heiligenjaar;
 // elke regel opent het bestaande venster. Op brede schermen staan maand en dag naast elkaar.
 
 const TEKEN = { pascha: <KruisTeken />, groot: '✠', ander: '✦' };
@@ -79,6 +79,18 @@ export default function Kalender() {
   const [cur, setCur] = useState({ y: vandaag.getUTCFullYear(), m: vandaag.getUTCMonth() + 1 });
   const [geselecteerdeYmd, setGeselecteerdeYmd] = useState(vandaagYmd);
   const [legendaOpen, setLegendaOpen] = useState(false);
+  // Bladert iemand in het dagvenster naar een andere dag, dan loopt de kalender mee (App.tsx: openDag).
+  useEffect(() => {
+    const opDag = (e: Event) => {
+      const y = (e as CustomEvent<string>).detail;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(y)) return;
+      const [jj, mm] = y.split('-').map(Number);
+      setCur({ y: jj, m: mm });
+      setGeselecteerdeYmd(y);
+    };
+    window.addEventListener('kalender-dag', opDag);
+    return () => window.removeEventListener('kalender-dag', opDag);
+  }, []);
 
   const alleCellen = useMemo(() => maandRooster(cur.y, cur.m, mode, vandaagYmd), [cur, mode, vandaagYmd]);
   // Alleen zoveel weken als de maand nodig heeft (5 of 6).
@@ -89,10 +101,13 @@ export default function Kalender() {
   useEffect(() => vraagRooster(geselecteerd.ymd), [geselecteerd.ymd, vraagRooster]);
 
   const heiligenVanDag = dagHeiligen(geselecteerd.kerkKey, heiligen?.HEILIGEN, geselecteerd.ymd);
-  // Net als op Vandaag eerst de lezingen van de paascyclus (zonder die van de heilige); zijn die er niet, dan de andere.
+  // Net als op Vandaag eerst de lezingen van de paschacyclus (zonder die van de heilige); zijn die er niet, dan de andere.
   const alleLezingen = rooster?.[geselecteerd.ymd] ?? [];
   const paasLezingen = alleLezingen.filter(isPaascyclus);
   const lezingen = paasLezingen.length ? paasLezingen : alleLezingen;
+  // Samenvatting: eerst de lezingen van de Liturgie (apostel en evangelie), daarna Metten, Uren en Vespers.
+  const neven = (l: HtcLezingRef) => /Matins|Hour|Vespers/i.test(l.tag);
+  const lezingenEerst = [...lezingen.filter((l) => !neven(l)), ...lezingen.filter(neven)];
 
   const vorige = () => setCur((c) => (c.m === 1 ? { y: c.y - 1, m: 12 } : { y: c.y, m: c.m - 1 }));
   const volgende = () => setCur((c) => (c.m === 12 ? { y: c.y + 1, m: 1 } : { y: c.y, m: c.m + 1 }));
@@ -125,6 +140,13 @@ export default function Kalender() {
     const kies = (c: DagInfo) => {
       if (c.maand !== cur.m) setCur({ y: c.civil.getUTCFullYear(), m: c.maand });
       setGeselecteerdeYmd(c.ymd);
+      // Staat de dagweergave (grotendeels) onder de vouw, dan er zacht naartoe schuiven.
+      requestAnimationFrame(() => {
+        const dag = document.getElementById('km-dag-datum');
+        if (!dag) return;
+        const top = dag.getBoundingClientRect().top;
+        if (top > window.innerHeight - 260) window.scrollTo({ top: window.scrollY + top - 96, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      });
     };
     const feesten = geselecteerd.feesten;
     const eerste = heiligenVanDag[0];
@@ -170,18 +192,21 @@ export default function Kalender() {
               const teken = isPascha ? TEKEN.pascha : groot ? TEKEN.groot : feest ? TEKEN.ander : null;
               const groep = vastenGroep(c.vasten.niveau);
               const buiten = c.maand !== cur.m;
+              const lit = LITURGISCHE_KLEUREN[liturgischeKleur(c)];
               return (
                 <button
                   key={c.ymd}
                   type="button"
                   onClick={() => kies(c)}
-                  className={`km-cel${buiten ? ' is-buiten' : ''}${c.isVandaag ? ' is-vandaag' : ''}${c.ymd === geselecteerd.ymd ? ' is-gekozen' : ''}`}
+                  className={`km-cel${buiten ? ' is-buiten' : ''}${c.isVandaag ? ' is-vandaag' : ''}${c.ymd === geselecteerd.ymd ? ' is-gekozen' : ''}${c.isZondag ? ' is-zondag' : ''}${!buiten && (isPascha || groot) ? ' is-feest' : ''}`}
+                  style={!buiten && lit.css ? ({ '--lit': lit.css } as CSSProperties) : undefined}
                   aria-label={celLabel(c)}
                   aria-pressed={c.ymd === geselecteerd.ymd}
                   aria-current={c.isVandaag ? 'date' : undefined}
                   tabIndex={buiten ? -1 : undefined}
                 >
                   <span className="km-nr">{c.dag}</span>
+                  {!buiten && lit.css && <span className="km-lit" aria-hidden="true" />}
                   <span className="km-tekens" aria-hidden="true">
                     {!buiten && teken && <span className={`km-teken${isPascha || groot ? ' is-groot' : ''}`}>{teken}</span>}
                     {!buiten && groep && <VastenSymbool groep={groep} className="km-vastenteken" />}
@@ -191,7 +216,7 @@ export default function Kalender() {
             })}
           </div>
           <button type="button" className="km-tekstknop km-legenda-knop" aria-expanded={legendaOpen} onClick={() => setLegendaOpen((o) => !o)}>
-            Legenda {legendaOpen ? '‹' : '›'}
+            Legenda <ChevronDown className={legendaOpen ? 'is-open' : undefined} aria-hidden="true" />
           </button>
           {legendaOpen && (
             <ul className="km-legenda">
@@ -203,12 +228,17 @@ export default function Kalender() {
               ))}
               <li><span className="km-staal is-vandaag" aria-hidden="true" /> Vandaag</li>
               <li><span className="km-staal is-gekozen" aria-hidden="true" /> Geselecteerd</li>
+              <li><span className="km-staal is-feestcel" aria-hidden="true" /> Pascha en grote feesten</li>
+              <li><span className="km-nr-staal" aria-hidden="true">7</span> Zondag</li>
+              {Object.values(LITURGISCHE_KLEUREN).filter((k) => k.css).map((k) => (
+                <li key={k.naam} className="km-legenda-kleur"><span className="km-lijn-staal" style={{ background: k.css }} aria-hidden="true" /> {hoofdletter(k.naam)}: {k.uitleg}</li>
+              ))}
             </ul>
           )}
         </div>
 
         <div className="km-dag">
-          <h2 id="km-dag-datum" className="km-dagtitel">{hoofdletter(formatLang(geselecteerd.civil))}</h2>
+          <h2 id="km-dag-datum" className="km-dagtitel" aria-live="polite">{hoofdletter(formatLang(geselecteerd.civil))}</h2>
           <p className="km-seizoen">{periode}</p>
           <p className="km-kerkdatum">{kerkRegel}</p>
           <ul className="km-regels" aria-labelledby="km-dag-datum">
@@ -226,30 +256,33 @@ export default function Kalender() {
             </MRegel>
             <MRegel
               titel="Vasten"
-              beeld={groepGekozen && groepGekozen !== 'vis' ? <VastenSymbool groep={groepGekozen} className="km-regel-vasten" /> : <img src={`${ICONEN}/04_vasten_vis.webp`} alt="" width={70} height={32} decoding="async" />}
+              beeld={groepGekozen === 'vis' ? <img src={`${ICONEN}/04_vasten_vis.webp`} alt="" width={70} height={32} decoding="async" /> : groepGekozen ? <VastenSymbool groep={groepGekozen} className="km-regel-vasten" /> : <span className="km-regel-vasten km-geenvasten">{SIERKRUIS}</span>}
               onClick={openVasten}
             >
-              <span>{geselecteerd.vasten.label}{geselecteerd.vasten.periode ? ` · ${geselecteerd.vasten.periode}` : ''}</span>
+              <span>{geselecteerd.vasten.label}{geselecteerd.vasten.periode && !geselecteerd.vasten.label.includes(geselecteerd.vasten.periode) ? ` · ${geselecteerd.vasten.periode}` : ''}</span>
             </MRegel>
             <MRegel titel="Schriftlezingen" beeld={<img src={`${ICONEN}/05_lezingen_boek.webp`} alt="" width={68} height={63} decoding="async" />} onClick={() => openDagLezingen(geselecteerd.ymd)}>
               {lezingen.length ? (
-                lezingen.slice(0, 2).map((l, i) => {
-                  const ref = vertaalRef(l.ref);
-                  return <span key={i}>{SOORT_LABEL[lezingSoort(ref)]}: {ref}</span>;
-                })
+                <>
+                  {lezingenEerst.slice(0, 2).map((l, i) => {
+                    const ref = vertaalRef(l.ref);
+                    return <span key={i}>{vertaalTag(l.tag, ref)}: {ref}</span>;
+                  })}
+                  {lezingen.length > 2 && <small>en nog {lezingen.length - 2} {lezingen.length - 2 === 1 ? 'lezing' : 'lezingen'}</small>}
+                </>
               ) : (
                 <span>{roosterMelding(geselecteerd.ymd)}</span>
               )}
             </MRegel>
             {cyclus === 'pascha' ? (
-              <MRegel titel="Het kerkelijk ritme" beeld={<img className="km-chirho" src="/images/Chi-Rho.webp" alt="" width={496} height={640} decoding="async" />} onClick={() => openDagPascha(geselecteerd.ymd)}>
-                <span>{periode}</span>
-                <small>Ontdek de betekenis van deze periode</small>
+              <MRegel titel="Het kerkelijk ritme" beeld={<img className="km-chirho" src="/images/Chi-Rho-112.webp" alt="" width={87} height={112} decoding="async" />} onClick={() => openDagPascha(geselecteerd.ymd)}>
+                <span>De Paschacyclus</span>
+                <small>Deze dag in de Paschacyclus</small>
               </MRegel>
             ) : (
-              <MRegel titel="Het kerkelijk ritme" beeld={<img className="km-chirho" src="/images/Chi-Rho.webp" alt="" width={496} height={640} decoding="async" />} href={cyclus === 'geboorte' ? '#geboorte' : '#jaar'}>
-                <span>{periode}</span>
-                <small>Ontdek de betekenis van deze periode</small>
+              <MRegel titel="Het kerkelijk ritme" beeld={<img className="km-chirho" src="/images/Chi-Rho-112.webp" alt="" width={87} height={112} decoding="async" />} href={cyclus === 'geboorte' ? '#geboorte' : '#jaar'}>
+                <span>{cyclus === 'geboorte' ? 'De Geboortecyclus' : 'Het kerkelijk jaar'}</span>
+                <small>{cyclus === 'geboorte' ? 'Naar de Geboortecyclus' : 'Naar het kerkelijk jaar'}</small>
               </MRegel>
             )}
           </ul>
@@ -363,7 +396,7 @@ export default function Kalender() {
             <Regel titel="Feesten" symbool={KERK} onClick={() => openDag(geselecteerd.ymd)}>
               {geselecteerd.feesten.map((f) => f.naam).join(' · ') || 'Geen groot feest'}
             </Regel>
-            <Regel titel="Paascyclus" symbool={<span className="ot-rij-teken"><KruisTeken /></span>} onClick={() => openDagPascha(geselecteerd.ymd)}>
+            <Regel titel="Paschacyclus" symbool={<span className="ot-rij-teken"><KruisTeken /></span>} onClick={() => openDagPascha(geselecteerd.ymd)}>
               {geselecteerd.seizoen}
               {geselecteerd.toon ? ` · Toon ${geselecteerd.toon}` : ''}
             </Regel>

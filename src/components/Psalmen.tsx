@@ -35,7 +35,7 @@ laadPsalmTeksten().catch(() => {});
 //   drie delen, #psalmen/kathisma/3/2/18 Psalm 18 in de lezer als deel 2 van kathisma 3 (vorige/volgende binnen het kathisma).
 // Alleen echte data: teksten uit public/data/psalmen.json, gebruik uit het etmaal (lib/etmaal.ts).
 
-// ponytail: introductietekst overgenomen uit de aangeleverde referentieontwerpen; nog door de redactie te bevestigen.
+// Introductietekst uit de aangeleverde referentieontwerpen, goedgekeurd op 30-10-2026.
 const INTRO = 'De Psalmen zijn het gebed van de Kerk.';
 const INTRO_VERVOLG = 'Zij verwoorden de vreugde, de wanhoop, de dank, de smeekbede en het vertrouwen van de mens voor God. Door alle tijden heen bidden de christenen de Psalmen, in het ritme van het etmaal en in alle omstandigheden van het leven.';
 
@@ -264,6 +264,12 @@ export default function Psalmen({ actief }: { actief: boolean }) {
         )}
         <div className={`vg-papier ot-inhoud${lijstMobiel ? ' pm-papier' : ''}`}>
           {!lijstMobiel && <h1 className="sr-only">Psalter</h1>}
+          {/* Mobiel: de inleiding bovenaan (goedgekeurd 30-10-2026); web: onderaan, zoals het was */}
+          {lijstMobiel && (
+            <p className="ot-ps-intro pm-intro">
+              {INTRO} {INTRO_VERVOLG}
+            </p>
+          )}
 
           <div ref={weergaveRef} className="ot-ps-weergave" hidden={lijstMobiel} role="tablist" aria-label="Indeling van de psalmen">
             <button type="button" role="tab" id="ps-tab-psalm" aria-controls="ps-weergave" aria-selected={!perKathisma} tabIndex={perKathisma ? -1 : 0} onClick={() => kiesWeergave(false)} onKeyDown={tabToets}>
@@ -413,9 +419,11 @@ export default function Psalmen({ actief }: { actief: boolean }) {
               </aside>
             );
           })()}
-          <p className="ot-ps-intro">
-            {INTRO} {INTRO_VERVOLG}
-          </p>
+          {!lijstMobiel && (
+            <p className="ot-ps-intro">
+              {INTRO} {INTRO_VERVOLG}
+            </p>
+          )}
         </div>
       </section>
       <NaarBoven />

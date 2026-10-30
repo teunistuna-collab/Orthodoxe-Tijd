@@ -30,9 +30,9 @@ type PopupContent = {
 const VOORFEEST_NOOT =
   'De Kerk beleeft een groot feest vaak niet als één geïsoleerde dag. Belangrijke feesten kunnen liturgisch worden voorbereid door een voorfeest en vervolgens nog enige tijd worden voortgezet in een nafeest. Daardoor krijgt de gelovige tijd om het gevierde mysterie te ontvangen, te bezingen en opnieuw te overwegen.';
 
-// Gedeelde notitie: deze periode behoort tot de beweeglijke Paascyclus, niet tot de vaste jaarcyclus (bron: docx).
+// Gedeelde notitie: deze periode behoort tot de beweeglijke Paschacyclus, niet tot de vaste jaarcyclus (bron: docx).
 const PASCHALE_NOOT =
-  'Deze periode behoort tot de beweeglijke Paascyclus, waarvan de data verschuiven met de datum van het heilige Pascha — en dus niet tot de vaste jaarcyclus. Niet al deze perioden behoren uitsluitend tot de vaste jaarcyclus: de Grote Vasten en het begin van de Apostelvasten zijn afhankelijk van de Paascyclus.';
+  'Deze periode behoort tot de beweeglijke Paschacyclus, waarvan de data verschuiven met de datum van het heilige Pascha — en dus niet tot de vaste jaarcyclus. Niet al deze perioden behoren uitsluitend tot de vaste jaarcyclus: de Grote Vasten en het begin van de Apostelvasten zijn afhankelijk van de Paschacyclus.';
 
 // Inhoud rechtstreeks gebaseerd op "De orthodoxe jaarcyclus.docx".
 const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
@@ -62,7 +62,7 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
   vastentijd: {
     title: 'Vastentijd',
-    subtitle: 'Paascyclus — beweeglijk',
+    subtitle: 'Paschacyclus — beweeglijk',
     paragraphs: [
       'De Orthodoxe Kerk kent vier grote vastenperioden: de Grote Vasten, de Apostelvasten, de vasten vóór de Geboorte van Christus en de vasten vóór de Ontslapenis van de Moeder Gods. Daarnaast kent de Kerk vaste vastendagen en gewoonlijk de wekelijkse vasten op woensdag en vrijdag, met liturgische uitzonderingen en plaatselijke verschillen.',
       PASCHALE_NOOT,
@@ -70,7 +70,7 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
   passietijd: {
     title: 'Passietijd',
-    subtitle: 'Paascyclus — beweeglijk',
+    subtitle: 'Paschacyclus — beweeglijk',
     highlight: 'Palmzondag — Intocht van de Heer in Jeruzalem (beweeglijk)',
     paragraphs: [
       'Sommige van de Twaalf Grote Feesten behoren tot de vaste kalender, terwijl Palmzondag, Hemelvaart en Pinksteren door Pascha worden bepaald. Het heilige Pascha zelf staat boven deze twaalf als het Feest der feesten.',
@@ -79,19 +79,19 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
   paschatijd: {
     title: 'Paschatijd',
-    subtitle: 'Paascyclus — beweeglijk',
+    subtitle: 'Paschacyclus — beweeglijk',
     highlight: 'Hemelvaart van de Heer — beweeglijk',
     paragraphs: [
-      'Het heilige Pascha zelf staat boven de Twaalf Grote Feesten als het Feest der feesten. De volledige, beweeglijke Paascyclus — met onder meer de Grote Vasten, de Heilige Week en Hemelvaart — vind je op de Paschapagina.',
+      'Het heilige Pascha zelf staat boven de Twaalf Grote Feesten als het Feest der feesten. De volledige, beweeglijke Paschacyclus — met onder meer de Grote Vasten, de Heilige Week en Hemelvaart — vind je op de Paschapagina.',
       PASCHALE_NOOT,
     ],
   },
   pinkstertijd: {
     title: 'Pinkstertijd',
-    subtitle: 'Paascyclus — beweeglijk',
+    subtitle: 'Paschacyclus — beweeglijk',
     highlight: 'Pinksteren — neerdaling van de Heilige Geest (beweeglijk)',
     paragraphs: [
-      'Pinksteren, de neerdaling van de Heilige Geest, wordt door Pascha bepaald en behoort daarmee tot de beweeglijke Paascyclus.',
+      'Pinksteren, de neerdaling van de Heilige Geest, wordt door Pascha bepaald en behoort daarmee tot de beweeglijke Paschacyclus.',
       PASCHALE_NOOT,
     ],
   },
@@ -150,7 +150,7 @@ export default function Jaarcyclus() {
       <JaarMobiel
         tijden={PERIODS}
         teksten={PERIOD_POPUPS}
-        noten={[{ tekst: VOORFEEST_NOOT, kop: 'Voorfeest en nafeest' }, { tekst: PASCHALE_NOOT, kop: 'De Paascyclus' }]}
+        noten={[{ tekst: VOORFEEST_NOOT, kop: 'Voorfeest en nafeest' }, { tekst: PASCHALE_NOOT, kop: 'De Paschacyclus' }]}
         nu={nu}
         inleiding={INFO_CARDS.find((c) => c.key === 'jaarcyclus')?.intro ?? ''}
         komend={{ titel: komend.d.getTime() === vandaag.getTime() ? 'Feest van vandaag' : 'Komend feest', tekst: `${komend.f.naam} · ${formatDag(komend.d)}` }}
@@ -236,7 +236,7 @@ export default function Jaarcyclus() {
         quote="Hij maakt alle dingen nieuw."
         citation="Openbaring 21:5"
         text="Het kerkelijk jaar is niet slechts een opeenvolging van feesten, maar een levende weg waarin heel de geschiedenis wordt samengevat: van de schepping, door de menswording en het Kruis, naar de Verrijzenis en de toekomstige eeuwigheid."
-        buttonLabel="Naar de paascyclus"
+        buttonLabel="Naar de paschacyclus"
         buttonHref="#pascha"
       />
 

@@ -29,7 +29,7 @@ type InfoKey = 'wat' | 'cyclus' | 'betekenis' | 'tradities';
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
   { key: 'wat', title: 'Wat is Pascha?', intro: 'De Verrijzenis van Christus als het hart van het kerkelijk jaar en van ons leven.' },
-  { key: 'cyclus', title: 'De Paascyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.' },
+  { key: 'cyclus', title: 'De Paschacyclus', intro: 'Van de voorbereidende vasten tot Pinksteren: één beweging van dood naar nieuw leven.' },
   { key: 'betekenis', title: 'De betekenis in ons leven', intro: 'Pascha vernieuwt de tijd, onze blik en ons bestaan.' },
   { key: 'tradities', title: 'Tradities en viering', intro: 'De rijke schoonheid van de Paasdiensten en de Orthodoxe tradities.' },
 ];
@@ -100,7 +100,7 @@ export default function Pascha() {
   return (
     <>
       {/* Bovenkant volgens het overdrachtspakket (referentie kalender-pascha-feesten-vasten.png, paneel 2): de boog met
-          uitzicht, de datum van het komende Pascha en de zes stappen van de Paascyclus als tijdlijn, met hun begin- en
+          uitzicht, de datum van het komende Pascha en de zes stappen van de Paschacyclus als tijdlijn, met hun begin- en
           einddatum uit de bestaande berekening. Elke stap opent de bestaande uitleg. */}
       <section id="pascha" className="vg ot-redesign ot-pascha">
         <NisKop
@@ -132,11 +132,11 @@ export default function Pascha() {
       <ExactPageFrame title="Pascha">
       <div className="pc-pagina bg-parchment text-ink">
         <div className={CONTENT}>
-          {/* De hele Paascyclus van dit jaar, dag voor dag — ingeklapt */}
+          {/* De hele Paschacyclus van dit jaar, dag voor dag — ingeklapt */}
           <div className="pc-cyclus">
             <button type="button" onClick={() => setCyclusOpen((o) => !o)} aria-expanded={cyclusOpen} className="pc-cyclus-knop">
               <span>
-                <span className="pc-cyclus-titel">Paascyclus {pascha.getUTCFullYear()}</span>
+                <span className="pc-cyclus-titel">Paschacyclus {pascha.getUTCFullYear()}</span>
                 <span className="pc-cyclus-onder">Alles wat van de Paasdatum afhangt, dag voor dag</span>
               </span>
               <ChevronRight className={`h-5 w-5 shrink-0 text-gold-deep transition-transform ${cyclusOpen ? 'rotate-90' : ''}`} />
@@ -276,7 +276,7 @@ function PaschaInhoud({
         <header className="ot-pc-ctx-kop">
           {stap ? (
             <>
-              <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paascyclus'}</p>
+              <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paschacyclus'}</p>
               <h2 className="ot-titel ot-pc-m-titel">
                 {stap.label}
                 {isNu && <span className="ot-nu">Nu</span>}
@@ -379,7 +379,7 @@ function PaschaInhoud({
           </section>
         )}
 
-        {/* Alleen tijdens de Paascyclus en bij de huidige periode: de betekenis van vandaag (kleur, icoon, hymne …) */}
+        {/* Alleen tijdens de Paschacyclus en bij de huidige periode: de betekenis van vandaag (kleur, icoon, hymne …) */}
         {isNu && <BetekenisVanVandaag dag={dag} opPascha />}
 
         {/* Een andere periode bekijken: geen "vandaag", maar de gedachtenissen van die periode met hun datums */}
@@ -427,7 +427,7 @@ function PaschaInhoud({
         {stap ? (
           <>
             <header className="ot-pc-ctx-kop">
-              <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paascyclus'}</p>
+              <p className="vg-label">{isNu ? 'De huidige periode' : 'Periode in de Paschacyclus'}</p>
               <h2 className="ot-titel">
                 {stap.label}
                 {isNu && <span className="ot-nu">Nu</span>}
@@ -540,7 +540,7 @@ function PaschaInhoud({
             )}
           </>
         ) : (
-          // Buiten de Paascyclus: geen periode is "nu"; het komende Pascha, de aftelling en het begin van de voorbereiding
+          // Buiten de Paschacyclus: geen periode is "nu"; het komende Pascha, de aftelling en het begin van de voorbereiding
           <header className="ot-pc-ctx-kop">
             <h2 className="ot-titel">Naar Pascha</h2>
             <p className="ot-pc-datum">{formatDatum(pascha)}</p>
