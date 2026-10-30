@@ -17,6 +17,7 @@ import Kaarsgloed from './Kaarsgloed';
 import BetekenisVanVandaag from './BetekenisVanVandaag';
 import VandaagMobiel from './VandaagMobiel';
 import { useMobiel } from '../lib/desktop';
+import { onthoudGroep } from '../lib/navigatie';
 import { aftellingVoor } from '../lib/aftellen';
 import './Vandaag.css';
 
@@ -66,7 +67,7 @@ export default function Vandaag() {
 
   const dag = useMemo(() => dagInfo(vandaag, mode, vandaagYmd), [vandaag, mode, vandaagYmd]);
   const weekthema = WEEKTHEMAS[dag.weekdag];
-  // Op Vandaag alleen de lezingen van de paascyclus; alle lezingen van de dag staan achter "Lezingen van vandaag".
+  // Op Vandaag alleen de lezingen van de paschacyclus; alle lezingen van de dag staan achter "Lezingen van vandaag".
   const lezingen = rooster?.[dag.ymd]?.filter(isPaascyclus);
   const hoofdFeest = dag.feesten[0];
   // De eerste echte heilige van de dag (geen voorfeest, "Zaterdag vóór …" of icoon) die niet al het feest van de dag is.
@@ -86,6 +87,7 @@ export default function Vandaag() {
   const kerkDatumDeel = mode === 'oud' ? formatDag(dag.kerk) : null;
   const kalenderNaam = mode === 'oud' ? 'Juliaanse kalender' : 'Nieuwe kalender (gereviseerd juliaans)';
   const heiligenRegel = heilige ? heiligeTitel(heilige.naam) : heiligen ? 'Bekijk de heiligen van vandaag' : 'Heiligen worden geladen…';
+  const aantalHeiligen = heiligen?.HEILIGEN[dag.kerkKey]?.filter((h) => h.type === 'saint').length ?? 0;
   const feestLabel = hoofdFeest && (hoofdFeest.groot || hoofdFeest.soort === 'pascha' || (hoofdFeest.rang ?? 0) >= 4) ? 'Feest van vandaag' : 'Gedachtenis van vandaag';
   const groep = vastenGroep(dag.vasten.niveau);
   const betekenis = useMemo(() => actieveCyclus(dag.civil, mode) !== null, [dag, mode]);
@@ -99,16 +101,26 @@ export default function Vandaag() {
     <VandaagMobiel
       dag={dag}
       pijlgebed={pijlgebed}
-      uur={{ titel: uurMoment.title, onder: uurMoment.hoofdgedachtenis, open: openDienst }}
+      uur={{
+        titel: uurMoment.title,
+        onder: uurMoment.hoofdgedachtenis,
+        kernvers: uurMoment.kernvers.verses.join(' '),
+        // Het gebedsuur hoort bij Bidden: de onderbalk markeert dan Bidden (Etmaal volgt de laatst bezochte groep)
+        open: () => {
+          onthoudGroep('bidden');
+          openDienst();
+        },
+      }}
       vasten={{ groep, open: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }) }}
       feest={
         hoofdFeest
-          ? { label: 'Feesten & heiligen', naam: hoofdFeest.naam, open: () => openDag(dag.ymd) }
-          : { label: 'Feesten & heiligen', naam: heiligenRegel, open: () => openDagHeiligen(dag.ymd) }
+          ? { label: 'Feesten & heiligen', naam: hoofdFeest.naam, meer: 0, open: () => openDag(dag.ymd) }
+          : { label: 'Feesten & heiligen', naam: heiligenRegel, meer: heilige ? aantalHeiligen - 1 : 0, open: () => openDagHeiligen(dag.ymd) }
       }
       lezingen={{ lijst: lezingen?.length ? lezingen : alleLezingen, geladen: !!rooster, open: () => openDagLezingen(dag.ymd) }}
       ritme={cyclusNu === 'pascha' ? { href: '#pascha', onClick: () => openDagPascha(dag.ymd) } : { href: cyclusNu === 'geboorte' ? '#geboorte' : '#jaar' }}
       aftelling={aftelling}
+      betekenis={betekenis ? <BetekenisVanVandaag dag={dag} /> : undefined}
     />
   );
   const lezingRij = (l: HtcLezingRef, i: number) => {
@@ -152,7 +164,8 @@ export default function Vandaag() {
         ) : (
           <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
         )}
-        <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time></h1>
+        <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time>{mobiel && kerkDatumDeel && <span className="vm2-jul"><span className="sr-only">, </span>{kerkDatumDeel} (juliaans)</span>}</h1>
+        {mobiel && fotoKop && <p className="sr-only">{feest ? feest.alt : 'Icoon van Christus Pantocrator in kaarslicht'}</p>}
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>
 
@@ -231,7 +244,7 @@ export default function Vandaag() {
                   <span>{hoofdletter(dag.weekdagNaam)} · {weekthema.titel}</span>
                   <ChevronRight aria-hidden="true" />
                 </Actie>
-                {/* De kerkelijke datum opent de volledige dag, de paascyclus het venster "Paascyclus" van vandaag */}
+                {/* De kerkelijke datum opent de volledige dag, de paschacyclus het venster "Paschacyclus" van vandaag */}
                 <button type="button" className="vg-cyclusregel vg-cyclus-link" onClick={() => openDag(dag.ymd)}>
                   <span>
                     {kerkDatumDeel ? `Juliaanse datum: ${kerkDatumDeel}` : 'Kerkelijke datum:'}
@@ -281,7 +294,7 @@ export default function Vandaag() {
             </section>
             <Scheiding />
 
-            {/* 4. Lezingen van vandaag: de lezingen van de paascyclus uit het leesrooster; alle lezingen van de dag erachter. */}
+            {/* 4. Lezingen van vandaag: de lezingen van de paschacyclus uit het leesrooster; alle lezingen van de dag erachter. */}
             <section className="vg-lezingen-sectie" aria-labelledby="vg-lezingen-kop">
               <h2 id="vg-lezingen-kop" className="vg-label vg-sectiekop">Lezingen van vandaag</h2>
               <div className="vg-lezingen">
@@ -292,7 +305,7 @@ export default function Vandaag() {
                     {lezingen === undefined ? (
                       <li className="vg-leeg">{rooster ? roosterMelding(dag.ymd) : 'Lezingen worden geladen…'}</li>
                     ) : lezingen.length === 0 ? (
-                      <li className="vg-leeg">Vandaag geen lezingen uit de paascyclus.</li>
+                      <li className="vg-leeg">Vandaag geen lezingen uit de paschacyclus.</li>
                     ) : (
                       <>
                         {lezingen.slice(0, 2).map(lezingRij)}
@@ -308,7 +321,7 @@ export default function Vandaag() {
                       </>
                     )}
                     <li>
-                      <Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}>{/* Opent het venster met alle lezingen van de dag (ook buiten de paascyclus); mobiel met een korter label */}
+                      <Actie className="vg-rij vg-rij-kop" href="#kalender" onClick={() => openDagLezingen(dag.ymd)}>{/* Opent het venster met alle lezingen van de dag (ook buiten de paschacyclus); mobiel met een korter label */}
                       <span className="vg-niet-mobiel">Alle lezingen van vandaag</span><span className="vg-alleen-mobiel">Open de lezingen</span><ChevronRight aria-hidden="true" /></Actie>
                     </li>
                   </ul>
@@ -316,7 +329,7 @@ export default function Vandaag() {
               </div>
             </section>
 
-            {/* Alleen tijdens de Paascyclus of de Geboortecyclus (lib/seizoen.ts): de betekenis van vandaag */}
+            {/* Alleen tijdens de Paschacyclus of de Geboortecyclus (lib/seizoen.ts): de betekenis van vandaag */}
             {betekenis && (
               <>
                 <Scheiding />
@@ -335,8 +348,8 @@ export default function Vandaag() {
         )}
       </div>
 
-      {/* E. Stilte: olijftak en stenen rand, met de lamp van de site erop (mobiel niet: de mock-up eindigt met de kaarten). */}
-      {!mobiel && (
+      {/* E. Stilte: olijftak en stenen rand, met de lamp van de site erop (ook op mobiel, als rustige afsluiting). */}
+      {(
       <div className="vg-stilte">
         <img className="vg-stilte-achter" src={`${BEELD}/stilte-olijftak-900.webp`} srcSet={`${BEELD}/stilte-olijftak-900.webp 900w, ${BEELD}/stilte-olijftak-1774.webp 1774w`} sizes="(min-width: 960px) 960px, 100vw" alt="" aria-hidden="true" width={1774} height={887} loading="lazy" decoding="async" />
         <span className="vg-lamp">

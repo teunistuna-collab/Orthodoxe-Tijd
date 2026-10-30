@@ -35,3 +35,8 @@
   #top { padding-bottom: calc(60px + env(safe-area-inset-bottom)) !important; }
   .em-laag { bottom: calc(60px + env(safe-area-inset-bottom)) !important; }
 }
+
+/* Toetsenbordfocus in de onderbalk: een zichtbare rand van 3 px in kaarsgoud */
+@media (max-width: 767.98px) {
+  #top#top#top#top#top#top#top#top .bottom-nav a:focus-visible { outline: 3px solid #e8cf7a !important; outline-offset: -4px; }
+}

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import type { DagInfo } from '../lib/kalender';
 import type { HtcLezingRef } from '../lib/htc';
@@ -6,17 +6,20 @@ import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import type { VastenGroep } from '../lib/vasten';
 import { VastenSymbool } from './ui';
 import { SIERKRUIS } from './symbolen';
-import { AftelKaart } from './CyclusMobiel';
 import type { Aftelling } from '../lib/aftellen';
+import { Kop, Laag, Sierlijn } from './MobielLaag';
 import './etmaal-mobiel.css';
 import './vandaag-mobiel.css';
 
-// Vandaag op mobiel (mock-up vandaag): onder de bestaande kop een reeks perkamentkaarten op diep bruin. Het pijlgebed
-// staat zoals het actuele gebedsuur op Etmaal (kruis links, label, de tekst groot, pijl rechts). Alle gegevens en
-// vensters komen uit Vandaag.tsx; dit onderdeel tekent alleen.
+// Vandaag op mobiel (mock-up vandaag): onder de bestaande kop een reeks perkamentkaarten. Het pijlgebed staat bovenaan
+// als het stille middelpunt van de pagina; een tik opent een rustig scherm om het te bidden (#vandaag/pijlgebed), met
+// het gebedssnoer en een kleine link om het aan te passen. Alle gegevens en vensters komen uit Vandaag.tsx; dit
+// onderdeel tekent alleen.
 
 const ICONEN = '/images/vandaag/iconen';
 const SOORT = { apostel: 'Apostel', evangelie: 'Evangelie', oud: 'Oude Testament' } as const;
+// Dezelfde uitleg als in Instellingen (Mijn pijlgebed); geen nieuwe tekst.
+const PIJLGEBED_UITLEG = 'Het pijlgebed is een kort gebed dat je gedurende de dag in je hart kunt herhalen.';
 
 type Klik = { href?: string; onClick?: () => void };
 
@@ -47,38 +50,63 @@ function Kaart({ href, onClick, className, children }: Klik & { className: strin
   );
 }
 
+const volgHash = (f: () => void) => {
+  window.addEventListener('hashchange', f);
+  return () => window.removeEventListener('hashchange', f);
+};
+const usePijlgebedOpen = () => useSyncExternalStore(volgHash, () => window.location.hash === '#vandaag/pijlgebed');
+
+/** Het pijlgebed bidden: een stil, schermvullend venster met alleen het gebed. */
+function PijlgebedBidden({ pijlgebed }: { pijlgebed: string }) {
+  return (
+    <Laag className="em-laag vm2-bidden" label="Het pijlgebed">
+      <Kop terug="#vandaag" merk slim />
+      <div className="vm2-bidden-vlak">
+        <span className="vm2-bidden-kruis" aria-hidden="true">{SIERKRUIS}</span>
+        <p className="vm2-bidden-label">Het pijlgebed</p>
+        <h1 className="vm2-bidden-gebed" tabIndex={-1}>{pijlgebed}</h1>
+        <Sierlijn />
+        <p className="vm2-bidden-uitleg">{PIJLGEBED_UITLEG}</p>
+        <a className="vm2-bidden-snoer" href="#adem/bidden">Bid met het gebedssnoer <ChevronRight aria-hidden="true" /></a>
+        <a className="vm2-bidden-aanpassen" href="#instellingen/pijlgebed">Pas je pijlgebed aan</a>
+      </div>
+    </Laag>
+  );
+}
+
 export interface VandaagMobielProps {
   dag: DagInfo;
   pijlgebed: string;
-  uur: { titel: string; onder: string; open: () => void };
+  uur: { titel: string; onder: string; kernvers: string; open: () => void };
   vasten: { groep: VastenGroep | null; open: () => void };
-  feest: { label: string; naam: string; open: () => void };
+  feest: { label: string; naam: string; meer: number; open: () => void };
   lezingen: { lijst: HtcLezingRef[] | undefined; geladen: boolean; open: () => void };
   ritme: Klik;
-  /** De aftelling naar het eerstvolgende grote feest (lib/aftellen.ts), met dezelfde kaart als Pascha en Geboorte */
+  /** De aftelling naar het eerstvolgende grote feest (lib/aftellen.ts) */
   aftelling: Aftelling;
+  /** Tijdens de Pascha- en Geboortecyclus: de betekenis van vandaag (BetekenisVanVandaag), zoals op het web */
+  betekenis?: ReactNode;
 }
 
-export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezingen, ritme, aftelling }: VandaagMobielProps) {
+export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezingen, ritme, aftelling, betekenis }: VandaagMobielProps) {
   const refs = (lezingen.lijst ?? []).slice(0, 2).map((l) => vertaalRef(l.ref));
+  const bidden = usePijlgebedOpen();
+  const aftelRegel = aftelling.dagen > 0 ? `${aftelling.label}: nog ${aftelling.dagen} ${aftelling.dagen === 1 ? 'dag' : 'dagen'}` : (aftelling.groet?.[0] ?? aftelling.label);
   return (
     <div className="vm2">
-      {/* Het pijlgebed, zoals het actuele gebedsuur op Etmaal; de kaart opent Instellingen om het aan te passen */}
-      <a className="em-nu vm2-pijlgebed" href="#instellingen">
-        <span className="em-nu-kruis">{SIERKRUIS}</span>
-        <span className="em-nu-tekst">
-          <span className="am-label">Het pijlgebed</span>
-          <b>{pijlgebed}</b>
-          <span>Tik om het pijlgebed aan te passen</span>
-        </span>
-        <ChevronRight className="am-pijl" aria-hidden="true" />
+      {/* Het pijlgebed: het stille middelpunt; een tik opent het om te bidden */}
+      <a className="vm2-pijlgebed" href="#vandaag/pijlgebed">
+        <h2 className="vm2-label">Het pijlgebed</h2>
+        <b>{pijlgebed}</b>
+        <span className="vm2-pijlgebed-onder">Bid het in stilte <ChevronRight aria-hidden="true" /></span>
       </a>
 
       <Kaart className="vm2-kaart vm2-midden" href="#etmaal" onClick={uur.open}>
         <span className="vm2-tekst">
-          <span className="vm2-label">Het actuele gebedsuur</span>
+          <h2 className="vm2-label">Het actuele gebedsuur</h2>
           <b className="vm2-groot">{uur.titel}</b>
           <span>{uur.onder}</span>
+          {uur.kernvers && <i className="vm2-kernvers">“{uur.kernvers}”</i>}
         </span>
         <ChevronRight className="vm2-pijl" aria-hidden="true" />
       </Kaart>
@@ -86,10 +114,17 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
       <div className="vm2-duo">
         <Kaart className="vm2-kaart" href="#vasten" onClick={vasten.open}>
           <span className="vm2-icoon" aria-hidden="true">
-            {vasten.groep && vasten.groep !== 'vis' ? <VastenSymbool groep={vasten.groep} className="vm2-vasten" /> : <img src={`${ICONEN}/04_vasten_vis.webp`} alt="" width={70} height={32} decoding="async" />}
+            {/* Vis alleen als vis is toegestaan; op een dag zonder vasten een rustig sierkruis (alleen de weergave) */}
+            {vasten.groep === 'vis' ? (
+              <img src={`${ICONEN}/04_vasten_vis.webp`} alt="" width={70} height={32} decoding="async" />
+            ) : vasten.groep ? (
+              <VastenSymbool groep={vasten.groep} className="vm2-vasten" />
+            ) : (
+              <span className="vm2-vasten vm2-geenvasten">{SIERKRUIS}</span>
+            )}
           </span>
           <span className="vm2-tekst">
-            <span className="vm2-label">Vasten vandaag</span>
+            <h2 className="vm2-label">Vasten vandaag</h2>
             <b>{dag.vasten.label}</b>
           </span>
           <ChevronRight className="vm2-pijl" aria-hidden="true" />
@@ -99,8 +134,9 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
             <img src={`${ICONEN}/03_heiligen_kruis.webp`} alt="" width={69} height={77} decoding="async" />
           </span>
           <span className="vm2-tekst">
-            <span className="vm2-label">{feest.label}</span>
+            <h2 className="vm2-label">{feest.label}</h2>
             <b>{feest.naam}</b>
+            {feest.meer > 0 && <span>en nog {feest.meer} {feest.meer === 1 ? 'heilige' : 'heiligen'}</span>}
           </span>
           <ChevronRight className="vm2-pijl" aria-hidden="true" />
         </Kaart>
@@ -111,7 +147,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
           <img src={`${ICONEN}/05_lezingen_boek.webp`} alt="" width={68} height={63} decoding="async" />
         </span>
         <span className="vm2-tekst">
-          <span className="vm2-label">Schriftlezingen van vandaag</span>
+          <h2 className="vm2-label">Schriftlezingen van vandaag</h2>
           {refs.length ? (
             <>
               <b>{refs.join(' · ')}</b>
@@ -124,19 +160,23 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         <ChevronRight className="vm2-pijl" aria-hidden="true" />
       </Kaart>
 
+      {/* Het kerkelijk jaar: de periode, de toon en de aftelling naar het eerstvolgende grote feest in één kaart */}
       <Kaart className="vm2-kaart" {...ritme}>
         <span className="vm2-icoon" aria-hidden="true">
-          <img className="vm2-chirho" src="/images/Chi-Rho.webp" alt="" width={496} height={640} decoding="async" />
+          <img className="vm2-chirho" src="/images/Chi-Rho-112.webp" alt="" width={87} height={112} decoding="async" />
         </span>
         <span className="vm2-tekst">
-          <span className="vm2-label">Het kerkelijk ritme</span>
+          <h2 className="vm2-label">Het kerkelijk jaar</h2>
           <b>{dag.seizoen}</b>
-          <span>{dag.toon ? `Toon ${dag.toon} · ` : ''}Ontdek de betekenis van deze periode</span>
+          {dag.toon ? <span>Toon {dag.toon}</span> : null}
+          <span className="vm2-aftel">{aftelRegel}</span>
         </span>
         <ChevronRight className="vm2-pijl" aria-hidden="true" />
       </Kaart>
 
-      <AftelKaart label={aftelling.label} dagen={aftelling.dagen} onder={aftelling.onder} voet={aftelling.voet} groet={aftelling.groet} href={aftelling.href} />
+      {betekenis && <div className="vm2-betekenis">{betekenis}</div>}
+
+      {bidden && <PijlgebedBidden pijlgebed={pijlgebed} />}
     </div>
   );
 }
