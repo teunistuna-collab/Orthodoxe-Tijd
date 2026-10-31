@@ -140,7 +140,8 @@ function Dienst({ d }: { d: ServiceMapping }) {
           <ChevronRight className="am-pijl" aria-hidden="true" />
         </a>
       </div>
-      <img className="em-klooster" src={`${BEELD}/klooster.webp`} alt="" width={900} height={507} loading="lazy" decoding="async" />
+      {/* Onderbanner per uur (aangeleverd 30-10-2026): het klooster in het licht van dit gebedsuur */}
+      <img className="em-klooster" src={`/images/etmaal/onder/${slug}.webp`} alt="" width={900} height={507} decoding="async" />
     </Laag>
   );
 }

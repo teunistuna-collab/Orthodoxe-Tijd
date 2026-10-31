@@ -329,16 +329,15 @@ export const WEEK_INFO: Record<'wat' | 'dagen' | 'betekenis' | 'praktisch', Popu
       {
         "heading": "Wekelijkse vastendagen",
         "paragraphs": [
-          "Woensdag — Daarom draagt deze dag een boetvaardig karakter en is woensdag, buiten de vastenvrije perioden en bijzondere liturgische uitzonderingen, een wekelijkse vastendag.",
-          "Vrijdag — Daarom is vrijdag, behoudens liturgische uitzonderingen, eveneens een wekelijkse vastendag."
+          "Woensdag — Deze dag draagt een boetvaardig karakter en is, buiten de vastenvrije perioden en bijzondere liturgische uitzonderingen, een wekelijkse vastendag.",
+          "Vrijdag — Ook vrijdag is, behoudens liturgische uitzonderingen, een wekelijkse vastendag."
         ]
       },
       {
         "heading": "De week begint op zaterdagavond",
         "paragraphs": [
-          "Iedere zondag draagt daarom het karakter van een klein Pascha.",
-          "Liturgisch vangt de zondag reeds aan op zaterdagavond met de Vespers.",
-          "Met de Vespers van zaterdagavond opent zich opnieuw de zondag."
+          "Iedere zondag draagt het karakter van een klein Pascha.",
+          "Liturgisch vangt de zondag reeds aan op zaterdagavond met de Vespers."
         ]
       }
     ]

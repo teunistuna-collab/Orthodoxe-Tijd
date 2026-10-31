@@ -30,7 +30,11 @@ export function Laag({ className, label, children }: { className: string; label:
     const opener = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null;
     const titel = ref.current?.querySelector<HTMLElement>('h1[tabindex="-1"]');
     (titel ?? ref.current)?.focus({ preventScroll: true });
+    // De rest van de pagina achter het venster is niet bereikbaar met Tab of een schermlezer (aria-modal alleen is niet genoeg)
+    const achter = [...(ref.current?.parentElement?.children ?? [])].filter((e): e is HTMLElement => e !== ref.current && e instanceof HTMLElement && !e.inert);
+    achter.forEach((e) => (e.inert = true));
     return () => {
+      achter.forEach((e) => (e.inert = false));
       los();
       if (opener?.isConnected) requestAnimationFrame(() => opener.focus({ preventScroll: true }));
     };

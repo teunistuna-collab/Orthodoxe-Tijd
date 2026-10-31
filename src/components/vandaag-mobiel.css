@@ -94,16 +94,13 @@
 }
 
 /* Het pijlgebed bidden: stil scherm in warm donker, alleen het gebed */
-.vm2-bidden { background: radial-gradient(90% 60% at 50% 35%, #3a2414, #150b06 75%); color: #f6ead2; }
-.vm2-bidden-vlak { display: flex; flex-direction: column; align-items: center; min-height: calc(100dvh - 60px); padding: 40px 28px 48px; text-align: center; }
-.vm2-bidden-kruis { width: 44px; height: 44px; margin-top: 4vh; color: #e0b95a; }
-.vm2-bidden-kruis svg { width: 100%; height: 100%; }
-.vm2-bidden-label { margin: 18px 0 10px; font-family: var(--font-titel); font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: #e0b95a; }
+/* Achtergrond: de iconenhoek bij kaarslicht (aangeleverd 31-10-2026); onderaan donkerder, zodat het gebed leesbaar blijft */
+.vm2-bidden { background: linear-gradient(rgba(21, 11, 6, .35), rgba(21, 11, 6, 0) 18%, rgba(21, 11, 6, 0) 42%, rgba(21, 11, 6, .82) 66%, rgba(21, 11, 6, .94)), url('/images/vandaag/pijlgebed-hoek.webp') center top / cover no-repeat, #150b06; color: #f6ead2; }
+.vm2-bidden-gebed { text-shadow: 0 2px 12px rgba(0, 0, 0, .8); }
+/* Het gebed onderin het scherm, dicht bij de duim en weg van de kopbalk */
+.vm2-bidden-vlak { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-height: calc(100dvh - 60px); padding: 40px 28px 72px; text-align: center; }
 #top#top#top#top#top#top#top#top#top#top .vm2-bidden-gebed { margin: 0; font-family: var(--font-lees) !important; font-size: clamp(30px, 9vw, 38px); font-style: italic; font-weight: 400; line-height: 1.3; letter-spacing: 0; text-transform: none; color: #f6ead2 !important; outline: none; }
-.vm2-bidden .am-sierlijn { margin: 22px auto 18px; color: rgba(224, 185, 90, .8); }
-.vm2-bidden-uitleg { max-width: 30ch; margin: 0 0 28px; font-family: var(--font-lees); font-size: 17px; line-height: 1.5; color: #e8d6b0; }
-#top#top#top#top#top#top#top#top#top .vm2-bidden-snoer { display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; min-height: 50px; margin: 0; padding: 0 24px; border: 1px solid #09283d; border-radius: 4px; background: linear-gradient(#1c4b68, #103b59 45%, #09283d); font-family: var(--font-lees); font-size: 19px; color: #f3d48e !important; text-decoration: none; box-shadow: 0 2px 8px rgba(0, 0, 0, .4); }
-.vm2-bidden-snoer svg { width: 18px; height: 18px; }
+.vm2-bidden .am-sierlijn { margin: 22px auto 12px; color: rgba(224, 185, 90, .8); }
 #top#top#top#top#top#top#top#top .vm2-bidden-aanpassen { display: inline-flex; align-items: center; min-height: 44px; margin-top: 10px; font-family: var(--font-lees); font-size: 16px; color: #e0c48a !important; text-decoration: underline; text-underline-offset: 3px; }
 #top#top#top#top#top#top#top#top#top .vm2-bidden :is(a, button):focus-visible { outline: 3px solid #e0b95a !important; outline-offset: 2px; }
 

@@ -5,7 +5,7 @@
 .wm-lijst a { min-height: 54px !important; }
 .wm-dag { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 6px 0; }
 .wm-dag b { font-size: 18px; font-weight: 400; line-height: 1.2; }
-.wm-dag small { font-size: 14px; line-height: 1.3; color: var(--gedempt); }
+.wm-dag > span { font-size: 15px; line-height: 1.3; color: var(--gedempt); }
 #top#top#top#top#top#top#top#top .wm-verdieping a { justify-content: flex-start; gap: 12px; }
 .wm-verdieping .em-kaart-kruis { width: 22px; height: 22px; }
 .wm-verd-titel { flex: 1; }
@@ -25,3 +25,57 @@
 #top#top#top#top#top#top#top#top .wm-kalender { width: 100%; margin-top: 4px; font: inherit; text-align: left; }
 .wm .em-nu-tekst .am-label { font-size: 11px; letter-spacing: .12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .wm-inleiding { margin: 0 4px 10px; font-family: var(--font-lees); font-size: 17px; line-height: 1.45; color: var(--gedempt); text-align: left; }
+
+/* ---------- Kritiek 30-10-2026: avondweergave, kopbalk, ritme en afwerking ---------- */
+/* Verdieping: het kruisje een vaste breedte, de titel begint links */
+#top#top#top#top#top#top#top#top#top .wm-verdieping a > .em-kaart-kruis { flex: 0 0 22px; width: 22px; }
+#top#top#top#top#top#top#top#top#top .wm-verdieping a > .wm-verd-titel { flex: 1 1 auto; }
+
+/* Overzicht: het label op de kaart van vandaag en de onderregels groter; een rustig label op vastendagen */
+#top#top#top#top#top#top#top#top .wm .em-nu-tekst .am-label { font-size: 12px; white-space: normal; }
+#top#top#top#top#top#top#top#top .wm-dag > span { font-size: 15px; }
+.em-lijst a > .wm-vastendag { flex: none; align-self: center; margin-right: 6px; padding: 1px 7px; border: 1px solid rgba(172, 121, 47, .55); border-radius: 10px; font-family: var(--font-lees); font-size: 13.5px; color: #6e4a20; }
+.wm-banner .am-merk { text-shadow: 0 1px 3px rgba(0, 0, 0, .9), 0 0 10px rgba(0, 0, 0, .7); }
+
+/* Een dag: de kopbalk blijft bovenaan staan (donker, ook boven het perkament); het paneel Aa ligt eronder, zonder de
+   banner te verschuiven */
+#top#top#top#top#top#top#top#top .wm-dagweergave > .am-kop { position: sticky; top: 0; margin-bottom: -52px; background: linear-gradient(rgba(20, 10, 5, .9), rgba(20, 10, 5, .72)); }
+.wm-lb-houder { position: sticky; top: 52px; z-index: 6; height: 0; overflow: visible; }
+#top#top#top#top#top#top#top#top .wm-lb { width: fit-content; margin: 0 auto; padding: 4px 8px; border-radius: 0 0 8px 8px; background: rgba(20, 10, 5, .85); }
+.wm-dag-beeld { background: radial-gradient(80% 70% at 50% 40%, #3a2414, #1d1009 70%); }
+
+/* Labels op perkament iets donkerder (ook op de donkere vezels) */
+#top#top#top#top#top#top#top#top#top#top .wm-tekst h2.am-label { color: #5e3f1c !important; }
+
+/* Toon van deze week en verder bladeren */
+.wm-toon a { color: #6e4a20; text-decoration: underline; text-decoration-color: rgba(172, 121, 47, .5); text-underline-offset: 3px; }
+.wm-blader { display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; padding-top: 12px; border-top: 1px solid rgba(172, 121, 47, .35); }
+#top#top#top#top#top#top#top#top .wm-blader a { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-family: var(--font-lees); font-size: 17px; color: #4a3220 !important; text-decoration: none; }
+.wm-blader svg { width: 20px; height: 20px; color: #7a5a2a; }
+#top#top#top#top#top#top#top#top#top :is(.wm, .wm-dagweergave) :is(a, button):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top .wm-dagweergave .am-kop :is(a, button):focus-visible { outline-color: #e0b95a; }
+
+/* Avondweergave in de dagweergave: donker vlak, ivoren tekst, gouden labels en lijnen */
+html.lees-nacht .wm-dagweergave { background: var(--nacht-vlak, #0e1722); }
+html.lees-nacht #top#top#top#top#top#top#top#top .wm-tekst { background: var(--nacht-vlak, #0e1722); box-shadow: 0 -2px 10px rgba(0, 0, 0, .5); }
+html.lees-nacht #top#top#top#top#top#top#top#top .wm-tekst p { color: #e9dcc0; }
+html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .wm-tekst h2.am-label { color: #e0b765 !important; }
+html.lees-nacht .wm-tekst .am-sierlijn { color: rgba(224, 183, 101, .7); }
+html.lees-nacht #top#top#top#top#top#top#top#top .wm-tekst :is(.wm-toon a, .wm-blader a, .wm-blader svg) { color: #e0b765 !important; }
+html.lees-nacht .wm-blader { border-top-color: rgba(224, 183, 101, .25); }
+html.lees-nacht #top#top#top#top#top#top#top#top .wm-kalender { background: rgba(233, 220, 192, .08); border-color: rgba(224, 183, 101, .35); color: #e9dcc0 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top .wm-kalender :is(b, span) { color: #e9dcc0 !important; }
+
+/* Jaar: een tijd. Datum en plaats onder de titel, de feesten als rustige lijst; de eerste sectie zonder sierlijn
+   (die staat al onder de titel) */
+.jm-nu { margin-right: .6em; padding: 1px 7px; border: 1px solid rgba(236, 201, 126, .7); border-radius: 10px; }
+.jm-plaats { margin: 6px 0 0; font-family: var(--font-lees); font-size: 15px; font-style: italic; color: var(--am-ivoor, #f6ead2); opacity: .85; }
+.jm-tekst .lees-tekst > section:first-child > .am-sierlijn:first-child { display: none; }
+.jm-feesten { margin: 0; padding: 0; list-style: none; }
+#top#top#top#top#top#top#top#top .jm-feesten li { padding: 8px 0; border-bottom: 1px solid rgba(172, 121, 47, .3); font-family: var(--font-lees); font-size: 18px; line-height: 1.4; color: var(--inkt, #0b1b2a); }
+.jm-feesten li:last-child { border-bottom: 0; }
+#top#top#top#top#top#top#top#top .jm-datum { display: block; font-size: 15px; font-variant-numeric: lining-nums; color: #5e3f1c; }
+html.lees-nacht #top#top#top#top#top#top#top#top .jm-feesten li { color: #e9dcc0; border-bottom-color: rgba(224, 183, 101, .25); }
+html.lees-nacht #top#top#top#top#top#top#top#top .jm-datum { color: #e0b765; }
+/* "Nu in het kerkelijk jaar" en "Vandaag in de kerkelijke week": donkerder, ook op de donkere korrels van het papyrus */
+#top#top#top#top#top#top#top#top .wm .em-nu-tekst .am-label { color: #5e3f1c; }

@@ -5,7 +5,7 @@ import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './
 import { JAAR_INFO } from '../lib/cyclusTeksten';
 import { useApp } from '../lib/context';
 import { DERTIEN } from '../lib/feesten';
-import { daysBetween, formatDag, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
+import { addDays, civilVanKerkdatum, daysBetween, formatDag, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
 import { volgendeFeestDatum } from '../lib/overzicht';
 import Verdieping from './Verdieping';
 import ExactPageFrame from './ExactPageFrame';
@@ -133,6 +133,28 @@ function huidigeTijd(vandaag: Date, mode: Mode): PeriodKey {
   return 'pinkstertijd';
 }
 
+// Begin en einde van elke tijd, met dezelfde grenzen als huidigeTijd hierboven, voor het kerkelijk jaar dat eindigt in
+// de zomer van `jaar` (van 1 september ervoor tot 31 augustus). Alleen voor de weergave op mobiel.
+function grenzenVan(jaar: number, mode: Mode): Record<PeriodKey, [Date, Date]> {
+  const p = orthodoxPascha(jaar);
+  const kerk = (md: string, y: number) => civilVanKerkdatum(md, y, mode);
+  return {
+    kersttijd: [kerk('9-1', jaar - 1), kerk('1-5', jaar)],
+    openbaringstijd: [kerk('1-6', jaar), addDays(p, -71)],
+    vastentijd: [addDays(p, -70), addDays(p, -9)],
+    passietijd: [addDays(p, -8), addDays(p, -1)],
+    paschatijd: [p, addDays(p, 48)],
+    pinkstertijd: [addDays(p, 49), kerk('8-31', jaar)],
+  };
+}
+// Per tijd de lopende of eerstvolgende keer.
+function tijdGrenzen(vandaag: Date, mode: Mode): Record<PeriodKey, [Date, Date]> {
+  const kerk = kerkDatum(vandaag, mode);
+  const jaar = kerk.getUTCFullYear() + (kerk.getUTCMonth() >= 8 ? 1 : 0);
+  const dit = grenzenVan(jaar, mode);
+  const volgend = grenzenVan(jaar + 1, mode);
+  return Object.fromEntries(PERIODS.map(({ key }) => [key, dit[key][1].getTime() >= vandaag.getTime() ? dit[key] : volgend[key]])) as Record<PeriodKey, [Date, Date]>;
+}
 
 export default function Jaarcyclus() {
   const [periodOpen, setPeriodOpen] = useState<PeriodKey | null>(null);
@@ -150,10 +172,12 @@ export default function Jaarcyclus() {
       <JaarMobiel
         tijden={PERIODS}
         teksten={PERIOD_POPUPS}
-        noten={[{ tekst: VOORFEEST_NOOT, kop: 'Voorfeest en nafeest' }, { tekst: PASCHALE_NOOT, kop: 'De Paschacyclus' }]}
+        // Bij een tijd alleen de eerste zin van de Paschacyclus-noot (wat "beweeglijk" betekent); de rest staat in de verdieping.
+        noten={[{ tekst: VOORFEEST_NOOT, kop: 'Voorfeest en nafeest' }, { tekst: PASCHALE_NOOT, kop: 'De Paschacyclus', toon: PASCHALE_NOOT.slice(0, PASCHALE_NOOT.indexOf('. ') + 1) }]}
         nu={nu}
+        grenzen={tijdGrenzen(vandaag, mode)}
         inleiding={INFO_CARDS.find((c) => c.key === 'jaarcyclus')?.intro ?? ''}
-        komend={{ titel: komend.d.getTime() === vandaag.getTime() ? 'Feest van vandaag' : 'Komend feest', tekst: `${komend.f.naam} · ${formatDag(komend.d)}` }}
+        komend={{ id: komend.f.id, naam: komend.f.naam, onder: `${komend.d.getTime() === vandaag.getTime() ? 'Feest van vandaag' : 'Komend feest'} · ${formatDag(komend.d)}` }}
       />
     );
 

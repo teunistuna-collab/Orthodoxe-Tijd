@@ -1,5 +1,5 @@
 import { useState, useSyncExternalStore } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { addDays, bepaalToon, dagInfo, formatDag, ymd } from '../lib/kalender';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
@@ -23,7 +23,12 @@ const BANNER = { src: '/images/week/banner-800.webp', srcSet: '/images/week/bann
 // Per dag een eigen banner (aangeleverd 26-10-2026): zondag de Verrijzenis, maandag de engelen, dinsdag Johannes de
 // Voorloper, woensdag het verraad, donderdag de heilige Nicolaas, vrijdag de Kruisiging, zaterdag alle heiligen.
 const dagBanner = (dag: WeekDag) => ({ src: `/images/week/${dag}-800.webp`, srcSet: `/images/week/${dag}-800.webp 800w, /images/week/${dag}-1086.webp 1086w` });
-const VERDIEPING = (Object.keys(WEEK_INFO) as Array<keyof typeof WEEK_INFO>).map((key) => ({ key, titel: WEEK_INFO[key].title }));
+// Zonder "De dagen van de week": dat herhaalt de zeven dagpagina's (de pagina blijft bereikbaar via #week/lees/dagen).
+const VERDIEPING = (Object.keys(WEEK_INFO) as Array<keyof typeof WEEK_INFO>).filter((key) => key !== 'dagen').map((key) => ({ key, titel: WEEK_INFO[key].title }));
+// De datum van een dag in de huidige week (zondag tot en met zaterdag)
+const datumIn = (vandaag: Date, dag: WeekDag) => addDays(addDays(vandaag, -vandaag.getUTCDay()), DAGEN.indexOf(dag));
+// Thema's met dezelfde hoofdletters: "Verraad · Kruis · berouw" wordt "Verraad · Kruis · Berouw"
+const themas = (t: string) => t.split(' · ').map((x) => x.charAt(0).toUpperCase() + x.slice(1)).join(' · ');
 
 const volgHash = (f: () => void) => {
   window.addEventListener('hashchange', f);
@@ -33,6 +38,13 @@ const useOnderdeel = () => useSyncExternalStore(volgHash, () => decodeURICompone
 
 function Overzicht({ dagen, vandaagKey }: { dagen: Record<WeekDag, WeekTekst>; vandaagKey: WeekDag }) {
   const vandaag = dagen[vandaagKey];
+  const app = useApp();
+  const toon = bepaalToon(app.vandaag);
+  // Vastendagen van deze week, uit de bestaande vastenberekening
+  const vast = (d: WeekDag) => {
+    const n = dagInfo(datumIn(app.vandaag, d), app.mode).vasten.niveau;
+    return n !== 'vrij' && n !== 'geen';
+  };
   return (
     <section id="week" className="am em wm">
       <div className="em-banner wm-banner">
@@ -49,7 +61,7 @@ function Overzicht({ dagen, vandaagKey }: { dagen: Record<WeekDag, WeekTekst>; v
           <span className="em-nu-tekst">
             <span className="am-label">Vandaag in de kerkelijke week</span>
             <b>{vandaag.title}</b>
-            <span>{vandaag.subtitle}</span>
+            <span>{vandaag.subtitle}{toon ? ` · Toon ${toon}` : ''}</span>
           </span>
           <ChevronRight className="am-pijl" aria-hidden="true" />
         </a>
@@ -61,8 +73,9 @@ function Overzicht({ dagen, vandaagKey }: { dagen: Record<WeekDag, WeekTekst>; v
               <a className={d === vandaagKey ? 'is-nu' : undefined} href={`#week/${d}`} aria-current={d === vandaagKey ? 'date' : undefined}>
                 <span className="wm-dag">
                   <b>{dagen[d].title}</b>
-                  <small>{dagen[d].subtitle}</small>
+                  <span>{dagen[d].subtitle}</span>
                 </span>
+                {vast(d) && <span className="wm-vastendag">vastendag</span>}
                 <ChevronRight className="am-pijl" aria-hidden="true" />
               </a>
             </li>
@@ -91,15 +104,20 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
   const { vandaag, mode, openDag } = useApp();
   const [bediening, setBediening] = useState(false);
   // De datum van deze dag in de huidige week (zondag tot en met zaterdag), zoals op de webpagina.
-  const datum = addDays(addDays(vandaag, -vandaag.getUTCDay()), DAGEN.indexOf(dag));
+  const datum = datumIn(vandaag, dag);
+  const i = DAGEN.indexOf(dag);
+  const vorige = DAGEN[(i + 6) % 7];
+  const volgende = DAGEN[(i + 1) % 7];
   const info = dagInfo(datum, mode);
   const toon = bepaalToon(vandaag);
-  const [betekenis, ...noten] = tekst.paragraphs;
+  // De vaste alinea's over de Octoechos (op alle dagen gelijk) staan in de verdieping; hier één regel met de toon.
+  const [betekenis] = tekst.paragraphs;
   return (
     <Laag className="em-laag em-dienst wm-dagweergave" label={tekst.title}>
       <Kop
         terug="#week"
         merk
+        slim
         rechts={
           <>
             <button type="button" className="am-knopje am-aa" aria-expanded={bediening} aria-label="Tekstgrootte en avondweergave" onClick={() => setBediening((b) => !b)}>
@@ -109,7 +127,12 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
           </>
         }
       />
-      {bediening && <Leesbediening className="am-lb wm-lb" />}
+      {/* Het paneel Aa ligt over de banner, direct onder de kopbalk (verschuift niets) */}
+      {bediening && (
+        <div className="wm-lb-houder">
+          <Leesbediening className="am-lb wm-lb" />
+        </div>
+      )}
       <div className="em-dienst-beeld wm-dag-beeld">
         <img src={dagBanner(dag).src} srcSet={dagBanner(dag).srcSet} sizes="100vw" alt="" width={1086} height={1448} decoding="async" />
         <div className="em-dienst-tekst">
@@ -128,33 +151,38 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
             <section>
               <Sierlijn />
               <h2 className="am-label">De thema’s van de dag</h2>
-              <p>{tekst.highlight}</p>
-            </section>
-          )}
-          {noten.length > 0 && (
-            <section>
-              <Sierlijn />
-              <h2 className="am-label">De tonen van de Octoechos</h2>
-              {noten.map((p, i) => <p key={i}>{p}</p>)}
+              <p>{themas(tekst.highlight)}</p>
             </section>
           )}
           <section>
             <Sierlijn />
             <h2 className="am-label">Deze week</h2>
+            {toon && (
+              <p className="wm-toon">
+                Deze week klinkt toon {toon}. <a href="#week/lees/betekenis">Over de tonen van de Octoechos</a>
+              </p>
+            )}
             <button type="button" className="em-kaart wm-kalender" onClick={() => openDag(ymd(datum))}>
               <span className="em-kaart-kruis">{SIERKRUIS}</span>
               <span className="em-kaart-tekst">
-                <b>{tekst.title} {formatDag(datum)}</b>
-                <span>{info.vasten.label}{toon ? ` · Toon ${toon}` : ''}</span>
+                <b>{formatDag(datum)}</b>
+                <span>{info.vasten.label}</span>
               </span>
               <ChevronRight className="am-pijl" aria-hidden="true" />
             </button>
           </section>
+          {/* Verder door de week: de vorige en de volgende dag */}
+          <nav className="wm-blader" aria-label="Andere dagen van de week">
+            <a href={`#week/${vorige}`}><ChevronLeft aria-hidden="true" /> {hoofd(vorige)}</a>
+            <a href={`#week/${volgende}`}>{hoofd(volgende)} <ChevronRight aria-hidden="true" /></a>
+          </nav>
         </div>
       </article>
     </Laag>
   );
 }
+
+const hoofd = (d: WeekDag) => d.charAt(0).toUpperCase() + d.slice(1);
 
 export default function WeekMobiel({ dagen, vandaagKey }: { dagen: Record<WeekDag, WeekTekst>; vandaagKey: WeekDag }) {
   const onderdeel = useOnderdeel();
@@ -164,9 +192,9 @@ export default function WeekMobiel({ dagen, vandaagKey }: { dagen: Record<WeekDa
   return (
     <>
       <Overzicht dagen={dagen} vandaagKey={vandaagKey} />
-      {dag && <Dag dag={dag} tekst={dagen[dag]} />}
+      {dag && <Dag key={dag} dag={dag} tekst={dagen[dag]} />}
       {info && (
-        <LeesWeergave className="em-laag em-lees" titel={WEEK_INFO[info].title} ondertitel={WEEK_INFO[info].subtitle} terug="#week" deelPad={`week/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+        <LeesWeergave slim className="em-laag em-lees" titel={WEEK_INFO[info].title} ondertitel={WEEK_INFO[info].subtitle} terug="#week" deelPad={`week/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
           <PopupTekst inhoud={WEEK_INFO[info]} />
         </LeesWeergave>
       )}

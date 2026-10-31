@@ -120,3 +120,5 @@ html.lees-nacht #top#top#top#top#top#top#top#top .am-lees-vlak .am-lees-onder { 
 /* Het tussenscherm scrolt niet meer een paar pixels mee */
 .em-dienst { overflow-y: auto; }
 .em-dienst .em-klooster { flex: 1 1 0; min-height: 96px; height: auto; margin-bottom: 0; }
+/* Onderbanner per uur: het klooster met de lucht erboven in beeld */
+.em-dienst .em-klooster { object-position: 72% 42%; }

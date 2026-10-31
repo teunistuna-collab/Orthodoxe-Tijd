@@ -18,8 +18,6 @@ import './vandaag-mobiel.css';
 
 const ICONEN = '/images/vandaag/iconen';
 const SOORT = { apostel: 'Apostel', evangelie: 'Evangelie', oud: 'Oude Testament' } as const;
-// Dezelfde uitleg als in Instellingen (Mijn pijlgebed); geen nieuwe tekst.
-const PIJLGEBED_UITLEG = 'Het pijlgebed is een kort gebed dat je gedurende de dag in je hart kunt herhalen.';
 
 type Klik = { href?: string; onClick?: () => void };
 
@@ -62,12 +60,8 @@ function PijlgebedBidden({ pijlgebed }: { pijlgebed: string }) {
     <Laag className="em-laag vm2-bidden" label="Het pijlgebed">
       <Kop terug="#vandaag" merk slim />
       <div className="vm2-bidden-vlak">
-        <span className="vm2-bidden-kruis" aria-hidden="true">{SIERKRUIS}</span>
-        <p className="vm2-bidden-label">Het pijlgebed</p>
         <h1 className="vm2-bidden-gebed" tabIndex={-1}>{pijlgebed}</h1>
         <Sierlijn />
-        <p className="vm2-bidden-uitleg">{PIJLGEBED_UITLEG}</p>
-        <a className="vm2-bidden-snoer" href="#adem/bidden">Bid met het gebedssnoer <ChevronRight aria-hidden="true" /></a>
         <a className="vm2-bidden-aanpassen" href="#instellingen/pijlgebed">Pas je pijlgebed aan</a>
       </div>
     </Laag>

@@ -1,6 +1,7 @@
 import { useState, useSyncExternalStore } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { JAAR_INFO } from '../lib/cyclusTeksten';
+import { bereikLang } from '../lib/kalender';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import DeelKnop from './DeelKnop';
 import Leesbediening from './Leesbediening';
@@ -15,7 +16,8 @@ import './week-mobiel.css';
 
 export type JaarTijd = { key: string; label: string; short: string; movable: boolean };
 export type JaarTekst = { title: string; subtitle?: string; paragraphs: string[]; highlight?: string };
-export type JaarNoot = { tekst: string; kop: string };
+export type JaarNoot = { tekst: string; kop: string; toon?: string };
+type Komend = { id: string; naam: string; onder: string };
 
 const BANNER = { src: '/images/jaar/banner-900.webp', srcSet: '/images/jaar/banner-900.webp 900w, /images/jaar/banner-1672.webp 1672w' };
 const VERDIEPING = (Object.keys(JAAR_INFO) as Array<keyof typeof JAAR_INFO>).map((key) => ({ key, titel: JAAR_INFO[key].title }));
@@ -38,7 +40,7 @@ const volgHash = (f: () => void) => {
 };
 const useOnderdeel = () => useSyncExternalStore(volgHash, () => decodeURIComponent(window.location.hash).match(/^#jaar\/(.+)$/)?.[1] ?? '');
 
-function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: string; komend: { titel: string; tekst: string }; inleiding: string }) {
+function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: string; komend: Komend; inleiding: string }) {
   const nuTijd = tijden.find((t) => t.key === nu) ?? tijden[0];
   return (
     <section id="jaar" className="am em wm">
@@ -68,8 +70,8 @@ function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: 
             <li key={t.key}>
               <a className={t.key === nu ? 'is-nu' : undefined} href={`#jaar/${t.key}`} aria-current={t.key === nu ? 'true' : undefined}>
                 <span className="wm-dag">
-                  <b>{t.label}</b>
-                  <small>{t.short}{t.movable ? ' · beweeglijk' : ''}</small>
+                  <b>{t.label}{t.key === nu && <span className="sr-only"> (nu)</span>}</b>
+                  <span>{t.short}{t.movable ? ' · beweeglijk' : ''}</span>
                 </span>
                 <ChevronRight className="am-pijl" aria-hidden="true" />
               </a>
@@ -80,20 +82,20 @@ function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: 
         <h2 className="am-label em-kop">Feesten</h2>
         <ul className="em-lijst wm-lijst">
           <li>
-            <a href="#feesten">
-              <span className="wm-dag"><b>{komend.titel}</b><small>{komend.tekst}</small></span>
+            <a href={`#feesten/${komend.id}`}>
+              <span className="wm-dag"><b>{komend.naam}</b><span>{komend.onder}</span></span>
               <ChevronRight className="am-pijl" aria-hidden="true" />
             </a>
           </li>
           <li>
             <a href="#feesten">
-              <span className="wm-dag"><b>Vaste feesten</b><small>De feesten van de vaste jaarcyclus</small></span>
+              <span className="wm-dag"><b>Vaste feesten</b><span>De feesten van de vaste jaarcyclus</span></span>
               <ChevronRight className="am-pijl" aria-hidden="true" />
             </a>
           </li>
           <li>
             <a href="#pascha">
-              <span className="wm-dag"><b>Beweeglijke feesten</b><small>De feesten van de Paschacyclus</small></span>
+              <span className="wm-dag"><b>Pascha en de beweeglijke feesten</b><span>De feesten van de Paschacyclus</span></span>
               <ChevronRight className="am-pijl" aria-hidden="true" />
             </a>
           </li>
@@ -117,9 +119,15 @@ function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: 
 }
 
 // Een seizoen: banner met de naam en de korte omschrijving, daaronder de bestaande tekst; geen beeld onderaan.
-function Seizoen({ tijd, tekst, noten }: { tijd: JaarTijd; tekst: JaarTekst; noten: JaarNoot[] }) {
+// Een feestregel uit de bron: "8 september — Geboorte van de Moeder Gods."
+const FEESTREGEL = /^(\d+ [a-z]+) — (.+)$/;
+
+function Seizoen({ tijd, tekst, noten, grens, isNu, vorige, volgende, elders }: { tijd: JaarTijd; tekst: JaarTekst; noten: JaarNoot[]; grens?: [Date, Date]; isNu: boolean; vorige: JaarTijd; volgende: JaarTijd; elders: string[] }) {
   const [bediening, setBediening] = useState(false);
-  const eigen = tekst.paragraphs.filter((p) => !noten.some((n) => n.tekst === p));
+  const feesten = tekst.paragraphs.map((p) => p.match(FEESTREGEL)).filter((m): m is RegExpMatchArray => !!m);
+  // Zonder de feestregels, de gedeelde noten en alinea's die bij een andere tijd volledig terugkomen (de vier
+  // vastenperioden staan bij Vastentijd).
+  const eigen = tekst.paragraphs.filter((p) => !FEESTREGEL.test(p) && !noten.some((n) => n.tekst === p) && !elders.some((q) => q !== p && q.startsWith(p)));
   const gedeeld = noten.filter((n) => tekst.paragraphs.includes(n.tekst));
   const verbonden = VERBONDEN[tijd.key] ?? [];
   return (
@@ -127,6 +135,7 @@ function Seizoen({ tijd, tekst, noten }: { tijd: JaarTijd; tekst: JaarTekst; not
       <Kop
         terug="#jaar"
         merk
+        slim
         rechts={
           <>
             <button type="button" className="am-knopje am-aa" aria-expanded={bediening} aria-label="Tekstgrootte en avondweergave" onClick={() => setBediening((b) => !b)}>
@@ -136,28 +145,49 @@ function Seizoen({ tijd, tekst, noten }: { tijd: JaarTijd; tekst: JaarTekst; not
           </>
         }
       />
-      {bediening && <Leesbediening className="am-lb wm-lb" />}
+      {bediening && (
+        <div className="wm-lb-houder">
+          <Leesbediening className="am-lb wm-lb" />
+        </div>
+      )}
       <div className="em-dienst-beeld wm-dag-beeld">
         <img src={BANNER.src} srcSet={BANNER.srcSet} sizes="100vw" alt="" width={1672} height={941} decoding="async" />
         <div className="em-dienst-tekst">
           <h1 className="em-titel" tabIndex={-1}>{tijd.label}</h1>
+          {grens && (
+            <p className="em-dienst-tijd">
+              {isNu && <span className="jm-nu">Nu</span>}
+              {bereikLang(grens[0], grens[1])}
+            </p>
+          )}
           <p className="em-dienst-onder">{tijd.short}</p>
+          {tekst.subtitle && <p className="jm-plaats">{tekst.subtitle}</p>}
           <Sierlijn />
         </div>
       </div>
-      <article className="wm-tekst lees-vlak">
+      <article className="wm-tekst jm-tekst lees-vlak">
         <div className="lees-tekst">
-          {tekst.subtitle && (
+          {feesten.length > 0 ? (
             <section>
-              <h2 className="am-label">Plaats in het kerkelijk jaar</h2>
-              <p>{tekst.subtitle}</p>
+              <Sierlijn />
+              <h2 className="am-label">De feesten</h2>
+              <ul className="jm-feesten">
+                {feesten.map(([, datum, naam]) => (
+                  <li key={datum}>
+                    <span className="jm-datum">{datum}</span>
+                    {naam}
+                  </li>
+                ))}
+              </ul>
             </section>
-          )}
-          {tekst.highlight && (
-            <section>
-              <h2 className="am-label">Feesten</h2>
-              <p>{tekst.highlight}</p>
-            </section>
+          ) : (
+            tekst.highlight && (
+              <section>
+                <Sierlijn />
+                <h2 className="am-label">Feest</h2>
+                <p>{tekst.highlight}</p>
+              </section>
+            )
           )}
           {eigen.length > 0 && (
             <section>
@@ -170,7 +200,7 @@ function Seizoen({ tijd, tekst, noten }: { tijd: JaarTijd; tekst: JaarTekst; not
             <section key={n.kop}>
               <Sierlijn />
               <h2 className="am-label">{n.kop}</h2>
-              <p>{n.tekst}</p>
+              <p>{n.toon ?? n.tekst}</p>
             </section>
           ))}
           {verbonden.length > 0 && (
@@ -194,29 +224,47 @@ function Seizoen({ tijd, tekst, noten }: { tijd: JaarTijd; tekst: JaarTekst; not
             <a className="em-kaart wm-kalender" href="#jaar/lees/jaarcyclus">
               <span className="em-kaart-kruis">{SIERKRUIS}</span>
               <span className="em-kaart-tekst">
-                <b>Lees meer</b>
-                <span>{JAAR_INFO.jaarcyclus.title}</span>
+                <b>{JAAR_INFO.jaarcyclus.title}</b>
+                <span>{JAAR_INFO.jaarcyclus.subtitle}</span>
               </span>
               <ChevronRight className="am-pijl" aria-hidden="true" />
             </a>
           </section>
+          {/* Verder door het jaar: de vorige en de volgende tijd */}
+          <nav className="wm-blader" aria-label="Andere tijden van het jaar">
+            <a href={`#jaar/${vorige.key}`}><ChevronLeft aria-hidden="true" /> {vorige.label}</a>
+            <a href={`#jaar/${volgende.key}`}>{volgende.label} <ChevronRight aria-hidden="true" /></a>
+          </nav>
         </div>
       </article>
     </Laag>
   );
 }
 
-export default function JaarMobiel({ tijden, teksten, noten, nu, komend, inleiding }: { tijden: JaarTijd[]; teksten: Record<string, JaarTekst>; noten: JaarNoot[]; nu: string; komend: { titel: string; tekst: string }; inleiding: string }) {
+export default function JaarMobiel({ tijden, teksten, noten, nu, grenzen, komend, inleiding }: { tijden: JaarTijd[]; teksten: Record<string, JaarTekst>; noten: JaarNoot[]; nu: string; grenzen: Record<string, [Date, Date]>; komend: Komend; inleiding: string }) {
   const onderdeel = useOnderdeel();
   const [eerste, tweede] = onderdeel.split('/');
-  const tijd = tijden.find((t) => t.key === eerste);
+  const i = tijden.findIndex((t) => t.key === eerste);
+  const tijd = tijden[i];
   const info = eerste === 'lees' && tweede && tweede in JAAR_INFO ? (tweede as keyof typeof JAAR_INFO) : null;
   return (
     <>
       <Overzicht tijden={tijden} nu={nu} komend={komend} inleiding={inleiding} />
-      {tijd && <Seizoen tijd={tijd} tekst={teksten[tijd.key]} noten={noten} />}
+      {tijd && (
+        <Seizoen
+          key={tijd.key}
+          tijd={tijd}
+          tekst={teksten[tijd.key]}
+          noten={noten}
+          grens={grenzen[tijd.key]}
+          isNu={tijd.key === nu}
+          vorige={tijden[(i + tijden.length - 1) % tijden.length]}
+          volgende={tijden[(i + 1) % tijden.length]}
+          elders={tijden.filter((t) => t.key !== tijd.key).flatMap((t) => teksten[t.key].paragraphs)}
+        />
+      )}
       {info && (
-        <LeesWeergave className="em-laag em-lees" titel={JAAR_INFO[info].title} ondertitel={JAAR_INFO[info].subtitle} terug="#jaar" deelPad={`jaar/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+        <LeesWeergave slim className="em-laag em-lees" titel={JAAR_INFO[info].title} ondertitel={JAAR_INFO[info].subtitle} terug="#jaar" deelPad={`jaar/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
           <PopupTekst inhoud={JAAR_INFO[info]} />
         </LeesWeergave>
       )}
