@@ -14,7 +14,7 @@
 
 /* Zoekveld met wisknop */
 .fm-zoek { position: relative; }
-#top#top#top#top#top#top#top#top .fm-wis { display: grid; flex: none; place-items: center; width: 32px; height: 32px; margin-right: -8px; padding: 0; border: 0; border-radius: 50%; background: #4a3220; color: #f6ead2; }
+#top#top#top#top#top#top#top#top .fm-wis { display: grid; flex: none; place-items: center; width: 44px; height: 44px; margin-right: -14px; padding: 0; border: 0; border-radius: 50%; background: radial-gradient(circle, #4a3220 15.5px, transparent 16px); color: #f6ead2; }
 .fm-wis svg { width: 16px; height: 16px; }
 .fm-zoek input::-webkit-search-cancel-button { display: none; }
 

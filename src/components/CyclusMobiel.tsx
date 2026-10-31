@@ -40,7 +40,7 @@ export function AftelKaart({ label, dagen, onder, voet, groet, href, className =
           <>
             <b>{dagen} {dagen === 1 ? 'dag' : 'dagen'}</b>
             <span>{onder}</span>
-            {voet && <small className="gm-voet">{voet}</small>}
+            {voet && <span className="gm-voet">{voet}</span>}
           </>
         )}
       </span>
@@ -53,11 +53,13 @@ export function AftelKaart({ label, dagen, onder, voet, groet, href, className =
 export function InfoRegels({ datum, mode, plaats }: { datum: Date; mode: Mode; plaats?: string }) {
   const d = dagInfo(datum, mode);
   const kleur = LITURGISCHE_KLEUREN[liturgischeKleur(d)];
+  // Wit als ivoor (DESIGN.md); de gouden rand van de stip houdt het zichtbaar op perkament
+  const vlak = liturgischeKleur(d) === 'wit' ? '#f4e6c8' : kleur.hex;
   const groep = vastenGroep(d.vasten.niveau);
   return (
     <ul className="gm-info">
       <li>
-        <span className="gm-info-teken" aria-hidden="true"><span className="gm-kleur" style={{ background: kleur.hex }} /></span>
+        <span className="gm-info-teken" aria-hidden="true"><span className="gm-kleur" style={{ background: vlak }} /></span>
         <span><b>Liturgische kleur</b><span>{hoofdletter(kleur.naam)} ({kleur.uitleg})</span></span>
       </li>
       <li>

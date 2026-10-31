@@ -1002,6 +1002,7 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
 #top#top#top .leesbediening button:disabled{cursor:default;opacity:.4}
 #top#top#top .leesbediening button[aria-pressed=true]{color:#f3e2b8}
 #top#top#top .leesbediening button[aria-pressed=true]:before{border-color:#b88628;background:#3a2418}
+#top#top#top#top#top#top#top .leesbediening button[aria-pressed=true]{color:#f3e2b8!important}
 #top#top#top .leesbediening button:focus-visible{outline:none}
 #top#top#top .leesbediening button:focus-visible:before{box-shadow:0 0 0 2px #fbf5e7,0 0 0 4px #b88628}
 .leesbediening svg{width:18px;height:18px;stroke-width:1.6}

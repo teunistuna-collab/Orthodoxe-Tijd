@@ -1,7 +1,8 @@
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { bereikLang, daysBetween, formatLang, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
+import { GROTE_FEESTEN } from '../lib/feesten';
 import { geboorteBannerTitel, geboortecyclusVoor, type GeboorteKey, type GeboorteStap } from '../lib/geboortecyclus';
 import { BRON_CONCEPT, GEBOORTE_DAGICONEN, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_VERDIEPING, GEBOORTE_WEETJES, GEBOORTE_ZONDAGICOON, KERKVADER_PER_PERIODE, KERKVADERS, type GeboorteInfoKey } from '../lib/geboorteInhoud';
 import type { PopupInhoud } from '../lib/cyclusTeksten';
@@ -10,6 +11,7 @@ import { AftelKaart, InfoRegels, Rij } from './CyclusMobiel';
 import { SIERKRUIS } from './symbolen';
 import './etmaal-mobiel.css';
 import './geboorte-mobiel.css';
+import './week-mobiel.css';
 
 // De Geboortecyclus op mobiel (mock-up geboorte), opbouw zoals Etmaal en Week:
 // 1. #geboorte: hero met het geboorte-icoon, de aftelling en "Vandaag in de Geboortecyclus";
@@ -21,7 +23,19 @@ import './geboorte-mobiel.css';
 
 const BEELD = '/images/geboorte';
 const beeld = (naam: string) => ({ src: `${BEELD}/${naam}-800.webp`, srcSet: `${BEELD}/${naam}-800.webp 800w, ${BEELD}/${naam}-1200.webp 1200w` });
-const CONCEPT = `Concept: ${BRON_CONCEPT}.`;
+const CONCEPT = `${BRON_CONCEPT}.`;
+// De twee hoogfeesten van de cyclus, met hun troparion uit lib/feesten.ts (geen nieuwe tekst)
+const FEESTEN: Partial<Record<GeboorteKey, (typeof GROTE_FEESTEN)[number] | undefined>> = {
+  geboorte: GROTE_FEESTEN.find((f) => f.id === 'kerstmis'),
+  theofanie: GROTE_FEESTEN.find((f) => f.id === 'theofanie'),
+};
+const isDag = (s: GeboorteStap) => s.van.getTime() === s.tot.getTime();
+const meerOver = (s: GeboorteStap) => `Lees meer over deze ${isDag(s) ? 'dag' : 'periode'}`;
+// Burgerlijke datums, bij de oude kalender met de kerkelijke datums erbij (de teksten noemen de kerkelijke)
+const bereik = (s: GeboorteStap, mode: Mode) => {
+  const burgerlijk = bereikLang(s.van, s.tot);
+  return mode === 'oud' ? `${burgerlijk} · kerkelijk ${bereikLang(kerkDatum(s.van, mode), kerkDatum(s.tot, mode))}` : burgerlijk;
+};
 
 const volgHash = (f: () => void) => {
   window.addEventListener('hashchange', f);
@@ -29,12 +43,12 @@ const volgHash = (f: () => void) => {
 };
 const useOnderdeel = () => useSyncExternalStore(volgHash, () => decodeURIComponent(window.location.hash).match(/^#geboorte\/(.+)$/)?.[1] ?? '');
 
-/** De periode waarin een periode valt (de kortste andere periode die haar begindag omvat), anders de periode zelf. */
-function plaatsIn(stap: GeboorteStap, stappen: GeboorteStap[]): string {
+/** De periode waarin een periode valt (de kortste andere periode die haar begindag omvat); geen als ze nergens in valt. */
+function plaatsIn(stap: GeboorteStap, stappen: GeboorteStap[]): string | undefined {
   const omvat = stappen
     .filter((s) => s.key !== stap.key && s.van <= stap.van && stap.van <= s.tot && daysBetween(s.van, s.tot) > daysBetween(stap.van, stap.tot))
     .sort((a, b) => daysBetween(a.van, a.tot) - daysBetween(b.van, b.tot))[0];
-  return (omvat ?? stap).label;
+  return omvat?.label;
 }
 
 // Tijdens het feest zelf en het nafeest: het geboorte-icoon in kaarslicht (aangeleverd 26-10-2026) in plaats van de banner.
@@ -70,28 +84,31 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
       </Banner>
       <div className="gm-papier">
         {/* De aftelling: het gedeelde onderdeel (CyclusMobiel.tsx), ook op Pascha en Vandaag */}
+        {/* Zoals Pascha: vóór het feest de aftelling, op en na het feest de groet met de lopende periode; buiten de cyclus
+            geen "vandaag" en geen vastenregel */}
         <AftelKaart
-          label={dagenTot > 0 ? 'Op weg naar de Geboorte' : 'De Geboorte van Christus'}
+          label={dagenTot > 0 ? 'Op weg naar de Geboorte' : huidige === 'geboorte' ? 'Vandaag is de Geboorte van Christus' : (stap?.label ?? 'De Geboorte van Christus')}
           dagen={dagenTot}
           onder="Tot de heilige Geboorte van Christus"
-          voet="Een tijd van verwachting, vasten en gebed."
+          voet={stap ? 'Een tijd van verwachting, vasten en gebed.' : undefined}
           groet={[groet ?? 'Christus wordt geboren, verheerlijkt Hem!']}
-          href={dagenTot > 0 ? '#geboorte/cyclus' : '#geboorte/geboorte'}
+          href={dagenTot > 0 ? '#geboorte/cyclus' : `#geboorte/${huidige ?? 'geboorte'}`}
         />
 
         <div className="gm-kaart gm-vandaag">
-          <h2 className="gm-kaart-titel">Vandaag in de Geboortecyclus</h2>
-          <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
           {stap ? (
             <>
+              <h2 className="gm-kaart-titel">Vandaag in de Geboortecyclus</h2>
+              <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
               <p className="gm-periode">{stap.label}</p>
               <p className="gm-bereik">{bereikLang(stap.van, stap.tot)}</p>
               <p className="gm-tekst">{stap.short}</p>
               <InfoRegels datum={vandaag} mode={mode} plaats={plaatsIn(stap, stappen)} />
-              <a className="gm-knop" href={`#geboorte/${stap.key}`}>Lees meer over deze dag <ChevronRight aria-hidden="true" /></a>
+              <a className="gm-knop" href={`#geboorte/${stap.key}`}>{meerOver(stap)} <ChevronRight aria-hidden="true" /></a>
             </>
           ) : (
             <>
+              <h2 className="gm-kaart-titel">De Geboortecyclus begint over {daysBetween(vandaag, eerste.van)} dagen</h2>
               <p className="gm-periode">{eerste.label}</p>
               <p className="gm-bereik">Begint op {bereikLang(eerste.van, eerste.van)} {eerste.van.getUTCFullYear()}</p>
               <p className="gm-tekst">{eerste.short}</p>
@@ -122,7 +139,7 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
 function Overzicht({ stappen, huidige }: { stappen: GeboorteStap[]; huidige: GeboorteKey | null }) {
   return (
     <Laag className="em-laag gm-laag gm-overzicht" label="De Geboortecyclus">
-      <Kop terug="#geboorte" licht />
+      <Kop terug="#geboorte" licht slim />
       <div className="gm-laag-papier">
         <h1 className="gm-laag-titel" tabIndex={-1}>De Geboortecyclus</h1>
         <p className="gm-laag-onder">Van verwachting tot openbaring</p>
@@ -132,8 +149,7 @@ function Overzicht({ stappen, huidige }: { stappen: GeboorteStap[]; huidige: Geb
         </ul>
         <div className="gm-kaart gm-over">
           <h2 className="gm-kaart-titel">Over de Geboortecyclus</h2>
-          <p className="gm-tekst">Ontdek de betekenis, tradities en de rijkdom van deze heilige tijd in de Orthodoxe Kerk.</p>
-          <a className="gm-knop gm-knop-donker" href="#geboorte/lees/menswording">Lees meer <ChevronRight aria-hidden="true" /></a>
+          <a className="gm-knop gm-knop-donker" href="#geboorte/lees/menswording">Over de menswording <ChevronRight aria-hidden="true" /></a>
         </div>
       </div>
     </Laag>
@@ -143,28 +159,35 @@ function Overzicht({ stappen, huidige }: { stappen: GeboorteStap[]; huidige: Geb
 // 3. Een periode (de Geboorte van Christus als hoogfeest)
 function Periode({ stap, stappen }: { stap: GeboorteStap; stappen: GeboorteStap[] }) {
   const { mode } = useApp();
-  const feest = stap.key === 'geboorte';
+  const feestdata = FEESTEN[stap.key];
+  const feest = !!feestdata;
   const i = stappen.findIndex((s) => s.key === stap.key);
   const verwant = [stappen[i - 1], stappen[i + 1]].filter((s): s is GeboorteStap => !!s);
   return (
     <Laag className={`em-laag gm-laag gm-periodelaag${feest ? ' is-feest' : ''}`} label={stap.label}>
-      <Kop terug="#geboorte/cyclus" merk />
+      <Kop terug="#geboorte/cyclus" merk slim />
       <Banner naam={feest ? 'geboorte-icoon' : 'kaarsen'} feest={feest} theofanie={isTheofanie(stap.key)}>
         <span />
       </Banner>
       <div className="gm-laag-papier">
         <span className="gm-ornament" aria-hidden="true">{SIERKRUIS}</span>
         <h1 className="gm-laag-titel" tabIndex={-1}>{stap.label}</h1>
-        <p className="gm-laag-onder">{bereikLang(stap.van, stap.tot)}</p>
+        <p className="gm-laag-onder">{bereik(stap, mode)}</p>
         <Sierlijn />
-        {feest && <p className="gm-feestgroet">Christus wordt geboren!<br />Verheerlijk Hem!</p>}
+        {stap.key === 'geboorte' && <p className="gm-feestgroet">Christus wordt geboren,<br />verheerlijkt Hem!</p>}
         <p className="gm-tekst gm-midden">{stap.short}</p>
         <InfoRegels datum={stap.van} mode={mode} plaats={plaatsIn(stap, stappen)} />
-        <Sierlijn />
         <h2 className="gm-sectie">Betekenis</h2>
         <p className="gm-tekst">{GEBOORTE_UITLEG[stap.key]}</p>
         <p className="gm-concept">{CONCEPT}</p>
-        {feest ? (
+        {feestdata?.troparion && (
+          <>
+            <h2 className="gm-sectie">Uit de liturgie</h2>
+            <blockquote className="gm-hymne">„{feestdata.troparion}”</blockquote>
+            <p className="gm-concept">Troparion van het feest.</p>
+          </>
+        )}
+        {stap.key === 'geboorte' ? (
           <a className="gm-feestkaart" href={`#geboorte/${stap.key}/lees`}>
             <img src={beeld('kerstkaarsen').src} srcSet={beeld('kerstkaarsen').srcSet} sizes="100vw" alt="" width={1672} height={941} loading="lazy" decoding="async" />
             <span>Lees meer over de Geboorte <ChevronRight aria-hidden="true" /></span>
@@ -172,12 +195,12 @@ function Periode({ stap, stappen }: { stap: GeboorteStap; stappen: GeboorteStap[
         ) : (
           <>
             <img className="gm-sfeer" src={beeld('klooster-sneeuw').src} srcSet={beeld('klooster-sneeuw').srcSet} sizes="100vw" alt="" width={1672} height={941} loading="lazy" decoding="async" />
-            <a className="gm-knop gm-knop-breed" href={`#geboorte/${stap.key}/lees`}>Lees meer over deze dag <ChevronRight aria-hidden="true" /></a>
+            <a className="gm-knop gm-knop-breed" href={`#geboorte/${stap.key}/lees`}>{meerOver(stap)} <ChevronRight aria-hidden="true" /></a>
           </>
         )}
-        <h2 className="gm-sectie">Gerelateerde dagen</h2>
+        <h2 className="gm-sectie">Verder in de Geboortecyclus</h2>
         <ul className="gm-lijst gm-dagen">
-          {verwant.map((s) => <Rij key={s.key} href={`#geboorte/${s.key}`} titel={s.label} onder={bereikLang(s.van, s.tot)} />)}
+          {verwant.map((s) => <Rij key={s.key} href={`#geboorte/${s.key}`} titel={s.label} onder={`${stappen.indexOf(s) < i ? 'Vorige' : 'Volgende'} · ${bereikLang(s.van, s.tot)}`} />)}
         </ul>
       </div>
     </Laag>
@@ -209,20 +232,28 @@ export default function GeboorteMobiel({ info }: { info: Record<GeboorteInfoKey,
   const onderdeel = useOnderdeel();
   const cyclus = useMemo(() => geboortecyclusVoor(vandaag, mode), [vandaag, mode]);
   const [eerste, tweede] = onderdeel.split('/');
-  const stap = cyclus.stappen.find((s) => s.key === eerste);
+  const i = cyclus.stappen.findIndex((s) => s.key === eerste);
+  const stap = cyclus.stappen[i];
+  const vorige = cyclus.stappen[i - 1];
+  const volgende = cyclus.stappen[i + 1];
   const onderwerp = eerste === 'lees' && tweede && tweede in info ? (tweede as GeboorteInfoKey) : null;
   return (
     <>
       <Hoofd stappen={cyclus.stappen} huidige={cyclus.huidige} dagenTot={cyclus.dagenTotGeboorte} groet={cyclus.huidige ? geboorteBannerTitel(vandaag, mode) : null} />
       {eerste === 'cyclus' && <Overzicht stappen={cyclus.stappen} huidige={cyclus.huidige} />}
-      {stap && !tweede && <Periode stap={stap} stappen={cyclus.stappen} />}
+      {stap && !tweede && <Periode key={stap.key} stap={stap} stappen={cyclus.stappen} />}
       {stap && tweede === 'lees' && (
-        <LeesWeergave className="em-laag em-lees" titel={stap.label} ondertitel={bereikLang(stap.van, stap.tot)} terug={`#geboorte/${stap.key}`} deelPad={`geboorte/${stap.key}`} boven={<>{periodeInhoud(stap, mode).image && <img className="gm-lees-icoon" src={periodeInhoud(stap, mode).image!.src} alt={periodeInhoud(stap, mode).image!.alt} loading="lazy" decoding="async" />}<span className="em-ornament">{SIERKRUIS}</span></>}>
+        <LeesWeergave key={stap.key} slim className="em-laag em-lees" titel={stap.label} ondertitel={bereik(stap, mode)} terug={`#geboorte/${stap.key}`} deelPad={`geboorte/${stap.key}`} boven={<>{periodeInhoud(stap, mode).image && <img className="gm-lees-icoon" src={periodeInhoud(stap, mode).image!.src} alt={periodeInhoud(stap, mode).image!.alt} decoding="async" />}<span className="em-ornament">{SIERKRUIS}</span></>}>
           <PopupTekst inhoud={periodeInhoud(stap, mode)} />
+          {/* Verder lezen: de vorige en de volgende periode */}
+          <nav className="wm-blader gm-blader" aria-label="Andere perioden">
+            {vorige ? <a href={`#geboorte/${vorige.key}/lees`}><ChevronLeft aria-hidden="true" /> {vorige.label}</a> : <span />}
+            {volgende && <a href={`#geboorte/${volgende.key}/lees`}>{volgende.label} <ChevronRight aria-hidden="true" /></a>}
+          </nav>
         </LeesWeergave>
       )}
       {onderwerp && (
-        <LeesWeergave className="em-laag em-lees" titel={info[onderwerp].title} ondertitel={GEBOORTE_VERDIEPING.find((v) => v.key === onderwerp)?.intro} terug="#geboorte" deelPad={`geboorte/lees/${onderwerp}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+        <LeesWeergave key={onderwerp} slim className="em-laag em-lees" titel={info[onderwerp].title} ondertitel={GEBOORTE_VERDIEPING.find((v) => v.key === onderwerp)?.intro} terug="#geboorte" deelPad={`geboorte/lees/${onderwerp}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
           <PopupTekst inhoud={info[onderwerp]} />
         </LeesWeergave>
       )}

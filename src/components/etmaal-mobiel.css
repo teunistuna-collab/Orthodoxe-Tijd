@@ -113,6 +113,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top .am-lees-vlak .am-lees-onder { 
 /* Eén warme focusrand, ook op de kaart van het actuele uur in het overzicht */
 #top#top#top#top#top#top#top#top#top :is(.em, .em-laag) :is(.em-nu, .em-kaart, .em-psalm, .em-lijst a, .em-psalmlinks a):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
 #top#top#top#top#top#top#top#top#top .em-laag .am-kop :is(a, button):focus-visible { outline: 3px solid #e0b95a; outline-offset: 2px; }
+html:not(.lees-nacht) #top#top#top#top#top#top#top#top#top .em-laag .am-kop.is-licht :is(a, button):focus-visible { outline-color: #7d5218; }
 
 /* De knoppen voor de kathisma's minstens 44 px */
 #top#top#top#top#top#top#top#top .em-kathisma .psl a.psl-kathisma { min-height: 44px; }

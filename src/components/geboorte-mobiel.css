@@ -82,17 +82,17 @@
 .gm-over { margin-top: 18px; text-align: center; }
 .gm-over .gm-tekst { text-align: center; }
 #top#top#top#top#top#top#top#top#top#top .gm-sectie { margin: 18px 2px 4px; font-family: var(--font-lees) !important; font-size: 22px; font-weight: 500; letter-spacing: 0; text-align: left; text-transform: none; color: var(--gm-inkt) !important; }
-.gm-concept { margin: 6px 0 0; font-family: var(--font-lees); font-size: 13px; font-style: italic; color: var(--gm-gedempt); text-align: left; }
+.gm-concept { margin: 6px 0 0; font-family: var(--font-lees); font-size: 15px; font-style: italic; color: var(--gm-gedempt); text-align: left; }
 .gm-sfeer { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; margin-top: 16px; border: 1px solid rgba(185, 148, 85, .6); border-radius: 6px; object-fit: cover; box-shadow: 0 3px 10px rgba(60, 35, 15, .2); }
 
 /* Hoogfeest: de Geboorte van Christus */
-.gm-feestgroet { margin: 4px 0 6px; font-family: var(--font-lees); font-size: clamp(26px, 7.4vw, 31px); line-height: 1.2; color: var(--gm-rood); text-shadow: 0 0 14px rgba(232, 176, 82, .35); }
+.gm-feestgroet { margin: 4px 0 6px; font-family: var(--font-lees); font-size: clamp(26px, 7.4vw, 31px); line-height: 1.2; color: var(--gm-rood); }
 #top#top#top#top#top#top#top#top .gm-feestkaart { position: relative; display: block; margin-top: 16px; overflow: hidden; border: 1px solid rgba(185, 148, 85, .7); border-radius: 8px; box-shadow: 0 4px 14px rgba(60, 35, 15, .3); text-decoration: none; }
 .gm-feestkaart img { display: block; width: 100%; height: 180px; object-fit: cover; object-position: 50% 55%; }
 .gm-feestkaart > span { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 48px; border-radius: 6px; background: rgba(250, 240, 218, .94); font-family: var(--font-lees); font-size: 18px; color: var(--gm-inkt); box-shadow: 0 2px 8px rgba(30, 15, 5, .3); }
 .gm-feestkaart svg { width: 18px; height: 18px; }
 
-#top#top#top#top#top#top#top#top :is(.gm-rij, .gm-knop, .gm-feestkaart, .gm-cycluslink):focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+#top#top#top#top#top#top#top#top :is(.gm-rij, .gm-knop, .gm-feestkaart, .gm-cycluslink, .gm-aftel):focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
 .gm-lees-icoon { display: block; width: min(70%, 260px); height: auto; margin: 6px auto 10px; border: 1px solid rgba(185, 148, 85, .6); border-radius: 4px; box-shadow: 0 4px 12px rgba(60, 35, 15, .25); }
 .gm-banner.is-kerst img { object-position: 50% 40%; }
 /* In de laag (flex-kolom) niet laten krimpen, anders valt de banner weg en daarmee de afgeronde overgang */
@@ -107,7 +107,7 @@
 .gm-aftel .gm-groet { margin: 0; font-size: 22px; }
 
 /* Gedeelde aftelkaart (CyclusMobiel.tsx): voetregel en de feestgroet met een zachte gouden gloed */
-.gm-voet { display: block; margin-top: 2px; font-family: var(--font-lees); font-size: 14px; font-style: italic; color: var(--gedempt, #6a5a48); }
+.gm-voet { display: block; margin-top: 2px; font-family: var(--font-lees); font-size: 15px; font-style: italic; color: var(--gedempt, #6a5a48); }
 .gm-aftel .gm-groet > span { display: block; }
 #top#top#top#top#top#top#top#top .gm-aftel.is-feest { background: radial-gradient(70% 90% at 45% 50%, rgba(255, 222, 150, .75), rgba(243, 229, 198, 0) 75%), #f3e5c6 url('/images/vandaag/papyrus-licht.webp') center / cover; }
 .gm-aftel.is-feest .gm-groet { color: var(--gm-rood, #8e1b1b); line-height: 1.2; }
@@ -118,3 +118,13 @@
 .gm-rij-datum { flex: none; width: 96px; font-family: var(--font-lees); font-size: 15px; line-height: 1.25; color: #3b2a1a; }
 .gm-rij.met-datum .gm-rij-tekst { padding-left: 14px; border-left: 1px solid rgba(172, 121, 47, .35); }
 .gm-rij.met-datum.is-nu:after { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; background: var(--gm-goud, #a97720); }
+
+/* Sectiekoppen als kleine kapitalen, zoals Pascha (pm2-sectie); het troparion als hymne */
+#top#top#top#top#top#top#top#top#top#top#top .gm-laag .gm-sectie { margin: 22px 2px 4px; font-family: var(--font-titel) !important; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6a4a24 !important; }
+.gm-hymne { margin: 4px 0 0; padding: 0 10px; font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; text-align: center; color: #3b2a1a; }
+/* Het merk in de kopbalk leesbaar op lichte plekken van de banner (Theofanie) */
+.gm-periodelaag > .am-kop .am-merk { text-shadow: 0 1px 3px rgba(0, 0, 0, .9), 0 0 10px rgba(0, 0, 0, .7); }
+/* Bladeren in de leesweergave */
+#top#top#top#top#top#top#top#top .am-lees-vlak .gm-blader a { color: #4a3220 !important; }
+html.lees-nacht #top#top#top#top#top#top#top#top#top .am-lees-vlak .gm-blader a { color: #e0b765 !important; }
+html.lees-nacht .am-lees-vlak .gm-blader { border-top-color: rgba(224, 183, 101, .25); }

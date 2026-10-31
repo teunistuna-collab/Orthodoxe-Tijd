@@ -26,7 +26,7 @@ import './ontwerp.css';
 const KERSTMIS = GROTE_FEESTEN.find((f) => f.id === 'kerstmis')!;
 const THEOFANIE = GROTE_FEESTEN.find((f) => f.id === 'theofanie')!;
 const dagen = (n: number) => `${n} ${n === 1 ? 'dag' : 'dagen'}`;
-const CONCEPT_NOOT = { note: `Concept: ${BRON_CONCEPT}.` };
+const CONCEPT_NOOT = { note: `${BRON_CONCEPT}.` };
 
 const INFO: Record<GeboorteInfoKey, PopupInhoud> = {
   menswording: {
@@ -44,7 +44,7 @@ const INFO: Record<GeboorteInfoKey, PopupInhoud> = {
       'Op de traditionele icoon van de Geboorte ligt het Kind in een kribbe in een grot, gewikkeld in doeken; de os en de ezel buigen zich over Hem. De Moeder Gods rust naast de kribbe. Boven straalt de ster; engelen verkondigen het nieuws aan de herders en de wijzen naderen met hun geschenken. Onderaan zit Jozef in gedachten, terwijl het Kind wordt gewassen (Lucas 2:1–20; Matteüs 2:1–12).',
       'Op de icoon van Theofanie staat Christus in de Jordaan; Johannes de Voorloper legt zijn hand op Zijn hoofd. Van boven daalt de Heilige Geest neer als een duif, in een lichtstraal uit de hemel waar de stem van de Vader klinkt; aan de oever staan engelen met doeken (Matteüs 3:13–17).',
     ],
-    sections: [{ heading: 'Belangrijke iconen van de cyclus', items: ['De heilige voorouders van Christus', 'De heilige vaders vóór de Geboorte', 'De Geboorte van Christus', 'De Synaxis van de Moeder Gods', 'De heilige Jozef de Verloofde', 'De Besnijdenis des Heren', 'De heilige Basilius de Grote', 'De Doop van Christus (Theofanie)', 'De Synaxis van Johannes de Voorloper'] }, { note: 'Op de site: de Geboorte, de Synaxis van de Moeder Gods, de Besnijdenis, Theofanie en Johannes de Voorloper, en daarnaast Filippus, de Intrede, Nicolaas, Stefanus en de kinderen van Bethlehem. Nog te verzamelen: de voorouders, de vaders en Jozef. Teksten: concept.' }],
+    sections: [{ heading: 'Belangrijke iconen van de cyclus', items: ['De heilige voorouders van Christus', 'De heilige vaders vóór de Geboorte', 'De Geboorte van Christus', 'De Synaxis van de Moeder Gods', 'De heilige Jozef de Verloofde', 'De Besnijdenis des Heren', 'De heilige Basilius de Grote', 'De Doop van Christus (Theofanie)', 'De Synaxis van Johannes de Voorloper'] }, CONCEPT_NOOT],
   },
   liturgie: {
     title: 'Voorbereiding en viering',
