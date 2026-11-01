@@ -46,7 +46,25 @@
 .fm-datum svg { flex: none; width: 22px; height: 22px; margin-top: 1px; color: #6a4a24; stroke-width: 1.5; }
 .fm-tekst { margin: 0 4px 10px; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--inkt); }
 .fm-leeg { font-style: italic; color: var(--gedempt); }
-.fm-klein { margin: 0 4px 2px; font-family: var(--font-titel); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6a4a24; }
+.fm-klein { margin: 0 4px 2px; font-family: var(--font-titel); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #6a4a24; }
 .fm-troparion { margin: 0 4px 12px; padding: 0 0 0 12px; border-left: 2px solid rgba(172, 121, 47, .6); font-family: var(--font-lees); font-size: 18px; font-style: italic; line-height: 1.5; color: #3b2a1a; }
 .fm-links { display: grid; gap: 8px; margin-top: 18px; }
-#top#top#top#top#top#top#top#top .fm-links .gm-knop { width: 100%; margin: 0; font: inherit; font-family: var(--font-lees); font-size: 17px; }
+#top#top#top#top#top#top#top#top .fm-links .gm-knop { box-sizing: border-box; width: 100%; margin: 0; font: inherit; font-family: var(--font-lees); font-size: 17px; }
+
+/* Datum onder een kaart, de soort van het feest, lege staten met een vervolg */
+.fm-kaart .fm-klein-datum { font-family: var(--font-lees); font-size: 15px; line-height: 1.3; color: var(--gedempt, #5d5040); }
+.fm-soort { margin: 4px 0 0; font-family: var(--font-lees); font-size: 16px; font-style: italic; text-align: center; color: #6a4a24; }
+.fm-leegblok p { margin: 0 0 10px; }
+#top#top#top#top#top#top#top#top .fm-actie { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px; border: 1px solid rgba(138, 95, 44, .7); border-radius: 4px; background: rgba(255, 250, 236, .8); font-family: var(--font-lees); font-size: 17px; color: var(--inkt) !important; text-decoration: none; }
+/* Een feest zonder icoon: een rustig, kleiner vlak */
+.fm-icoon.is-leeg { height: 170px; padding-top: 44px; box-sizing: border-box; }
+.fm-icoon.is-leeg .hm-kader { width: 84px; height: 84px; }
+/* Focus: goud op donker, warm bruin op perkament; het zoekveld en de datum met één rand */
+#top#top#top#top#top#top#top#top#top#top .hm .fm-banner .am-kop :is(a, button):focus-visible { outline-color: #e0b95a !important; }
+#top#top#top#top#top#top#top#top#top .fm-laag .fm-laag-papier :is(a, button):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top .fm-laag .vg-hl-zoek:focus-within { outline: 3px solid #7d5218; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top#top :is(.hm, .fm-laag) :is(.vg-hl-zoek, .hm-datum) input:focus-visible { outline: none !important; }
+#top#top#top#top#top#top#top#top#top#top .fm-wis:focus-visible { outline: 3px solid #7d5218 !important; outline-offset: 2px; }
+/* Het kruis van de site in een kader zonder icoon */
+#top#top#top#top#top#top#top#top :is(.hm-beeld, .fm-icoon) .hm-kader img.fm-kruis { position: static; width: auto; height: 100%; max-height: 64px; object-fit: contain; filter: drop-shadow(0 1px 1px rgba(60, 35, 15, .25)); }
+#top#top#top#top#top#top#top#top .fm-icoon.is-leeg .hm-kader { flex: none; width: 96px; height: 96px; padding: 14px; box-sizing: border-box; border-radius: 6px; }
