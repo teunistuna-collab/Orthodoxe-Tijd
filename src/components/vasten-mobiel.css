@@ -34,7 +34,6 @@
 @media (prefers-reduced-motion: reduce) { .vsm-uitklap svg { transition: none; } }
 .vsm-eten { padding: 0 0 4px; }
 .vsm-eten .vt-tegels { margin-top: 2px; gap: 6px; }
-.vsm-eten .vt-tegel.is-niet .vt-tegel-binnen img { opacity: 1; filter: none; }
 .vsm-eten .vt-teken { width: 24px; height: 24px; border: 2px solid #9b2c22; background: rgba(247, 236, 212, .92); color: #9b2c22; box-shadow: 0 0 0 1.5px rgba(247, 236, 212, .9); }
 .vsm-eten .vt-tegel.is-toegestaan .vt-teken { border-color: #4d6b3c; color: #4d6b3c; }
 .vsm-eten .vt-tegel.is-niet .vt-teken { border-color: #9b2c22; background: rgba(247, 236, 212, .92); color: #9b2c22; }
@@ -54,9 +53,30 @@
 .vsm-lijst b { font-size: 21px; font-weight: 500; line-height: 1.2; }
 .vsm-lijst .vsm-rij-tekst span { font-size: 16px; line-height: 1.3; color: #6a5a48; }
 .vsm-pijl { flex: none; width: 22px; height: 22px; color: #4a3220; }
-#top#top#top#top#top#top#top#top .vsm-rij:focus-visible, #top#top#top#top#top#top#top#top .vsm-uitklap:focus-visible, #top#top#top#top#top#top#top#top .vsm-dagnav button:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+#top#top#top#top#top#top#top#top :is(.vsm-rij, .vsm-uitklap, .vsm-dagnav button):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top .vsm-banner .am-kop :is(a, button):focus-visible { outline: 3px solid #e0b95a; outline-offset: 2px; }
 /* Bannerhoogte gelijk aan de andere nieuwe mobiele pagina's */
 #top #vasten.vsm .vg-kop { height: min(82vw, 350px); }
 /* Banneronderrand zoals de andere nieuwe pagina's: geen sierboog, een rechte kop; alleen het perkament is afgerond */
 #top #vasten.vsm .vg-sierboog { display: none; }
 #top #vasten.vsm .vg-kop-achter { -webkit-mask: none; mask: none; }
+
+/* Een dag: eerst de dag, dan het antwoord groot */
+.vsm-dag { margin: 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.3; color: #6a4a24; }
+#top#top#top#top#top#top#top#top#top#top .vsm-antwoord { margin: 2px 0 0; font-family: var(--font-lees) !important; font-size: clamp(24px, 6.8vw, 28px); font-weight: 500; line-height: 1.15; letter-spacing: 0; text-transform: none; color: #2b1a0e !important; }
+.vsm-juliaans { margin: 6px 0 0; font-family: var(--font-lees); font-size: 15px; font-style: italic; color: #6a5a48; }
+.vsm-melding { margin: 0 4px 8px; font-family: var(--font-lees); font-size: 16px; color: #6e2a1e; }
+/* Bladeren: direct onder de regel, boven het eten */
+.vsm-dagnav { margin-top: 12px; }
+#top#top#top#top#top#top#top#top .vsm-dagnav button { display: inline-flex; align-items: center; gap: 2px; min-height: 48px; }
+.vsm-dagnav svg { width: 18px; height: 18px; color: #6a4a24; }
+#top#top#top#top#top#top#top#top .vsm-dagnav .vsm-vandaag[aria-disabled="true"] { color: #8a7a64; cursor: default; }
+#top#top#top#top#top#top#top#top#top .vsm-uitklap { min-height: 52px; }
+/* Tegels: namen leesbaar; niet-toegestaan gedimd (zoals op desktop) */
+#top#top#top#top#top#top#top#top .vsm-eten .vt-naam { font-size: 15px; }
+/* De betekenis van de dag en de pastorale noot */
+.vsm-betekenis { margin-top: 12px; padding: 14px 16px; }
+.vsm-noot { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid rgba(172, 121, 47, .3); font-family: var(--font-lees); font-size: 15px; font-style: italic; line-height: 1.4; color: #6a5a48; }
+/* Rijen zijn links */
+#top#top#top#top#top#top#top#top a.vsm-rij { color: #2b1a0e !important; text-decoration: none; }
+.vsm-verder { margin-top: 18px; }

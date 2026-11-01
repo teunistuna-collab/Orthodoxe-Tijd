@@ -25,7 +25,7 @@ const PERIODE: Record<string, string> = {
   Kaasweek: 'In de Kaasweek bereidt de Kerk zich voor op de Grote Vasten: het vlees is al losgelaten, zuivel en eieren nog niet. Zo leidt de Kerk de gelovigen stap voor stap naar de vasten, die begint na de Vergevingsvespers van zondagavond.',
   Kerstvasten: 'De Geboortevasten bereidt de gelovigen veertig dagen voor op de Menswording en de Geboorte van Christus. In gebed, inkeer en barmhartigheid maakt de Kerk ruimte voor de komst van het Woord, dat mens werd om de mens met God te verenigen.',
   Apostelvasten: 'De Apostelvasten volgt op Pinksteren en bereidt voor op het feest van de heilige apostelen Petrus en Paulus. Zoals de apostelen vastten en baden voordat zij uitgingen om het Evangelie te verkondigen (vgl. Handelingen 13:2–3), zo vast de Kerk in hun voetspoor.',
-  Dormitionvasten: 'De Ontslapingsvasten is een tijd van gebed en inkeer ter voorbereiding op het feest van de Ontslaping van de Moeder Gods. De gelovigen zoeken haar voorbede en leren van haar leven van volledige overgave aan God.',
+  Dormitionvasten: 'De Ontslapenisvasten is een tijd van gebed en inkeer ter voorbereiding op het feest van de Ontslapenis van de Moeder Gods. De gelovigen zoeken haar voorbede en leren van haar leven van volledige overgave aan God.',
 };
 
 const VRIJ = 'In deze feestperiode laat de Kerk het vasten los, ook op woensdag en vrijdag. De vreugde van het feest staat voorop: zolang de Bruidegom bij hen is, vasten de bruiloftsgasten niet (vgl. Matteüs 9:15).';
