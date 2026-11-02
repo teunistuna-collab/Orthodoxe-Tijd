@@ -5,12 +5,12 @@
 
 /* 1. De gebedshoek */
 .am-held { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: min(132vw, 600px); padding: calc(18px + env(safe-area-inset-top)) 20px 22px; overflow: hidden; background: #150b06; color: var(--am-ivoor); }
-.am-held-beeld { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 46%; }
+.am-held-beeld { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
 .am-held:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .55), rgba(10, 5, 2, .25) 30%, rgba(10, 5, 2, .3) 55%, rgba(10, 5, 2, .7)); }
 .am-held > :not(img) { position: relative; z-index: 2; }
 .am-merk { margin: 0; font-family: var(--font-titel); font-size: 13px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--am-goud, #e0b765); }
 #top#top#top#top#top#top#top#top#top#top .am-titel { margin: 6px 0 0; font-family: var(--font-lees) !important; font-size: 44px; font-weight: 400; line-height: 1.05; letter-spacing: 0; text-transform: none; color: var(--am-ivoor) !important; text-shadow: 0 2px 10px rgba(0, 0, 0, .6); }
-.am-onder { margin: 4px 0 0; font-family: var(--font-lees); font-size: 20px; line-height: 1.2; color: var(--am-ivoor); text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+.am-onder { margin: 4px 0 0; font-family: var(--font-lees); font-size: 20px; line-height: 1.2; color: var(--am-ivoor); text-shadow: 0 1px 3px rgba(0, 0, 0, .9), 0 0 12px rgba(0, 0, 0, .7); }
 .am-gebed { max-width: 13em; margin: 24px auto 0; font-family: var(--font-lees); font-size: 27px; line-height: 1.25; color: var(--am-ivoor); text-shadow: 0 2px 10px rgba(0, 0, 0, .75); }
 #top#top#top#top#top#top#top#top#top#top .am-begin { display: flex; align-items: center; gap: 12px; width: min(80%, 300px); min-height: 50px; margin: 26px auto 0; padding: 0 16px; border: 1px solid rgba(201, 162, 98, .75); border-radius: 6px; background: rgba(244, 230, 200, .9); box-shadow: 0 4px 14px rgba(0, 0, 0, .35); font-family: var(--font-lees); font-size: 18px; color: var(--inkt) !important; text-align: left; text-decoration: none; }
 .am-begin > span:nth-child(2) { flex: 1; }
@@ -47,7 +47,9 @@
 .am-kop-rechts { display: flex; justify-self: end; align-items: center; gap: 2px; }
 #top#top#top#top#top#top#top#top .am-knopje { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--am-ivoor, #f6ead2); font-family: var(--font-lees); font-size: 19px; cursor: pointer; }
 .am-knopje svg { width: 21px; height: 21px; stroke-width: 1.5; }
-.am-terug:focus-visible, .am-knopje:focus-visible, .am-rij:focus-visible, .am-vorm:focus-visible, .am-begin:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+/* Focus: goud op donker, warm bruin op perkament */
+#top#top#top#top#top#top#top#top :is(.am-terug, .am-knopje, .am-begin, .am-tempo button, .am-start):focus-visible { outline: 3px solid #e0b95a; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top#top :is(.am-rij, .am-vorm, .am-kop.is-licht .am-terug, .am-kop.is-licht .am-knopje):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
 
 /* 2. De gebedsweergave */
 .am-bid { --am-ivoor: #f6ead2; background: #120904; color: var(--am-ivoor); }
@@ -104,3 +106,19 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top#top .am-laag .lees-
 /* Overgang van een donker beeld of donkere balk naar het perkament: zacht afgeronde hoeken, geen harde lijn
    (zoals Etmaal). Adem: onder de gebedshoek. */
 .am-verdieping { position: relative; z-index: 3; margin-top: -16px; border-radius: 16px 16px 0 0; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+
+/* Gebedshoek: titel klein bovenin, het gebed en de knop onderaan; het gelaat op het icoon blijft vrij */
+#top#top#top#top#top#top#top#top#top#top .am-held .am-titel { font-size: 34px; }
+.am-held-onder { display: flex; flex-direction: column; align-items: center; }
+.am-held-onder .am-sierlijn { margin: 0 auto; }
+.am-held-onder .am-gebed { margin: 12px auto 0; font-size: 24px; text-shadow: 0 1px 4px rgba(0, 0, 0, .9), 0 0 16px rgba(0, 0, 0, .8); }
+.am-held-onder .am-begin { margin-top: 18px; }
+.am-held:before { background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .2) 24%, rgba(10, 5, 2, .15) 48%, rgba(10, 5, 2, .65) 70%, rgba(10, 5, 2, .88)); }
+/* Gebedsweergave: welke vorm, en de knop voor de vormkeuze als woord */
+.am-bid-vorm { margin: 0 0 8px; font-family: var(--font-titel); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--am-goud, #e0b765); }
+#top#top#top#top#top#top#top#top#top .am-vormknop { width: auto; padding: 0 12px; border: 1px solid rgba(224, 183, 101, .55); border-radius: 22px; font-size: 16px; text-decoration: none; }
+.am-sec { opacity: .75; font-size: .9em; }
+/* Geen zijwaartse marge van de algemene regel voor icoonlinks: anders scrolt het venster opzij */
+#top#top#top#top#top#top#top#top#top .am-laag .am-kop :is(.am-terug, .am-knopje) { margin: 0; }
+/* Avondweergave: de titel van een leesweergave leesbaar (ook bij Etmaal, Week en Jaar) */
+html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .am-lees-titel { color: #e0b765 !important; }

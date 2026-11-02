@@ -1,10 +1,11 @@
-import { useState, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react';
-import { BookOpen, ChevronRight, Heart, Settings } from 'lucide-react';
+import { useEffect, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { BookOpen, ChevronRight, Heart } from 'lucide-react';
 import { ADEM_INLEIDING, ADEM_POPUPS } from '../lib/cyclusTeksten';
 import { GEBEDEN } from '../lib/gebeden';
 import { useEigenPijlgebed } from '../lib/pijlgebed';
 import { BLAD, HANDEN, KRUIS } from './symbolen';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
+import { vorigeAdres } from '../lib/vorigAdres';
 
 // Adem op mobiel (< 768 px), volgens de goedgekeurde mock-up (mobile/docs/mockups/goedgekeurd/08-adem.png), vier weergaven:
 //   #adem                  1. de gebedshoek met het Jezusgebed, "Begin met bidden" en de vier verdiepingen
@@ -45,13 +46,29 @@ const VASTE_VORMEN: Vorm[] = [
   { id: 'standaard', titel: 'Standaard', tekst: STANDAARD },
   { id: 'korter', titel: 'Korter', tekst: regelNa('korter') },
   { id: 'kortst', titel: 'Kortst', tekst: regelNa('kortst') },
-  { id: 'adem', titel: 'Met ademcyclus', tekst: STANDAARD, onder: 'Met rustig inademen en uitademen (optionele ondersteuning).' },
 ].filter((v) => v.tekst);
 
 function useVormen(): Vorm[] {
   const eigen = useEigenPijlgebed().trim();
-  return eigen ? [...VASTE_VORMEN.slice(0, 3), { id: 'eigen', titel: 'Jouw pijlgebed', tekst: eigen }, ...VASTE_VORMEN.slice(3)] : VASTE_VORMEN;
+  return eigen ? [...VASTE_VORMEN, { id: 'eigen', titel: 'Jouw pijlgebed', tekst: eigen }] : VASTE_VORMEN;
 }
+
+// De laatst gekozen gebedsvorm, op dit apparaat ("Begin met bidden" gaat daarheen)
+const VORM_SLEUTEL = 'adem-vorm';
+const leesVorm = () => {
+  try {
+    return localStorage.getItem(VORM_SLEUTEL) ?? '';
+  } catch {
+    return '';
+  }
+};
+const bewaarVorm = (id: string) => {
+  try {
+    localStorage.setItem(VORM_SLEUTEL, id);
+  } catch {
+    /* geen opslag */
+  }
+};
 
 const volgHash = (f: () => void) => {
   window.addEventListener('hashchange', f);
@@ -70,23 +87,26 @@ const BEELD = '/images/adem/gebedshoek';
 const SRCSET = `${BEELD}-800.webp 800w, ${BEELD}-941.webp 941w`;
 
 // 1. Beginweergave
-function Begin({ gebed }: { gebed: string }) {
+function Begin({ gebed, laatste }: { gebed: string; laatste: string }) {
   return (
     <section id="adem" className="am">
       <div className="am-held">
         <img className="am-held-beeld" src={`${BEELD}-800.webp`} srcSet={SRCSET} sizes="100vw" alt="" width={941} height={1672} decoding="async" />
+        {/* Titel bovenin en het gebed onderaan: niets over het gelaat op het icoon */}
         <div className="am-held-tekst">
           <p className="am-merk">Orthodoxe Tijd</p>
           <h1 className="am-titel">Adem</h1>
           <p className="am-onder">Het Jezusgebed</p>
+        </div>
+        <div className="am-held-onder">
           <Sierlijn />
           <p className="am-gebed"><Gebedsregels tekst={gebed} /></p>
+          <a className="am-begin" href={`#adem/bidden/${laatste}`}>
+            <span className="am-begin-symbool">{HANDEN}</span>
+            <span>Begin met bidden</span>
+            <span className="am-begin-pijl" aria-hidden="true">›</span>
+          </a>
         </div>
-        <a className="am-begin" href="#adem/bidden">
-          <span className="am-begin-symbool">{HANDEN}</span>
-          <span>Begin met bidden</span>
-          <span className="am-begin-pijl" aria-hidden="true">→</span>
-        </a>
       </div>
       <section className="am-verdieping" aria-labelledby="am-verd-kop">
         <p className="am-label">Verdieping</p>
@@ -112,13 +132,15 @@ function Begin({ gebed }: { gebed: string }) {
 
 // 2. Gebedsweergave
 const TEMPI = [
-  { id: 'rustig', label: 'Rustig', sec: 10 },
   { id: 'normaal', label: 'Normaal', sec: 8 },
+  { id: 'rustig', label: 'Rustig', sec: 10 },
   { id: 'langzaam', label: 'Langzaam', sec: 12 },
 ] as const;
 
-function Bidden({ vorm }: { vorm: Vorm }) {
+function Bidden({ vorm, metAdem }: { vorm: Vorm; metAdem: boolean }) {
   const [actief, setActief] = useState(false);
+  const [hulp, setHulp] = useState(metAdem);
+  useEffect(() => bewaarVorm(vorm.id), [vorm.id]);
   const [tempo, setTempo] = useState<(typeof TEMPI)[number]>(() => {
     try {
       return TEMPI.find((t) => t.id === localStorage.getItem('adem-tempo')) ?? TEMPI[0];
@@ -139,36 +161,43 @@ function Bidden({ vorm }: { vorm: Vorm }) {
       <img className="am-bid-beeld" src={`${BEELD}-800.webp`} srcSet={SRCSET} sizes="100vw" alt="" width={941} height={1672} decoding="async" />
       <Kop
         terug="#adem"
+        slim
         rechts={
-          <a className="am-knopje" href={`#adem/vormen/${vorm.id}`} aria-label="Kies een gebedsvorm" title="Kies een gebedsvorm">
-            <Settings aria-hidden="true" />
+          <a className="am-knopje am-vormknop" href={`#adem/vormen/${vorm.id}`} aria-label={`Gebedsvorm: ${vorm.titel}. Kies een andere vorm`}>
+            Vorm
           </a>
         }
       />
       <div className={`am-bid-tekst adem-ritme${actief ? ' is-actief' : ''}`} style={{ '--adem-duur': `${tempo.sec}s` } as CSSProperties}>
+        <h1 className="sr-only" tabIndex={-1}>Het Jezusgebed, {vorm.titel.toLowerCase()}</h1>
+        <p className="am-bid-vorm" aria-hidden="true">{vorm.titel}</p>
         <Sierlijn licht />
         <p className="am-bid-gebed"><Gebedsregels tekst={vorm.tekst} /></p>
-        {actief && (
-          <p className="am-fasen" aria-hidden="true">
-            <span className="adem-in">Inademen</span> · <span className="adem-uit">Uitademen</span>
-          </p>
-        )}
+        {/* Altijd dezelfde ruimte, zodat het gebed niet verspringt als de ademhulp begint */}
+        <p className="am-fasen" aria-hidden="true" style={{ visibility: actief ? 'visible' : 'hidden' }}>
+          <span className="adem-in">Inademen</span> · <span className="adem-uit">Uitademen</span>
+        </p>
         <Sierlijn licht />
-        {vorm.id === 'adem' && (
-          <div className="am-steun">
-            <div className="am-tempo" role="group" aria-label="Tempo">
-              {TEMPI.map((t) => (
-                <button key={t.id} type="button" aria-pressed={tempo.id === t.id} onClick={() => kies(t)}>
-                  {t.label}
-                </button>
-              ))}
-            </div>
-            <button type="button" className="am-start" onClick={() => setActief((a) => !a)}>
-              {actief ? 'Stop ondersteuning' : 'Start ondersteuning'}
-            </button>
-            <p className="sr-only" aria-live="polite">{actief ? `Ondersteuning gestart: adem rustig in en uit, ongeveer ${tempo.sec / 2} seconden per fase.` : ''}</p>
-          </div>
-        )}
+        {/* De ademhulp: bij elke vorm aan te zetten */}
+        <div className="am-steun">
+          {!hulp ? (
+            <button type="button" className="am-start" onClick={() => setHulp(true)}>Ademhulp</button>
+          ) : (
+            <>
+              <div className="am-tempo" role="group" aria-label="Tempo van de ademhulp">
+                {TEMPI.map((t) => (
+                  <button key={t.id} type="button" aria-pressed={tempo.id === t.id} onClick={() => kies(t)}>
+                    {t.label} <span className="am-sec">{t.sec} s</span>
+                  </button>
+                ))}
+              </div>
+              <button type="button" className="am-start" onClick={() => setActief((a) => !a)}>
+                {actief ? 'Stop de ademhulp' : 'Start de ademhulp'}
+              </button>
+            </>
+          )}
+          <p className="sr-only" aria-live="polite">{actief ? `Ademhulp gestart: adem rustig in en uit, ongeveer ${tempo.sec / 2} seconden per fase.` : ''}</p>
+        </div>
       </div>
     </Laag>
   );
@@ -183,13 +212,9 @@ function Lezen({ onderwerp }: { onderwerp: Onderwerp }) {
       titel={inhoud.title}
       onder={ADEM_INLEIDING[onderwerp]}
       terug="#adem"
+      slim
       deelPad={`adem/lees/${onderwerp}`}
-      boven={
-        <>
-          <span className="am-tegel am-tegel-groot">{info.symbool}</span>
-          <p className="am-nr">{info.nr}</p>
-        </>
-      }
+      boven={<span className="am-tegel am-tegel-groot">{info.symbool}</span>}
     >
       <PopupTekst inhoud={inhoud} />
     </LeesWeergave>
@@ -198,16 +223,27 @@ function Lezen({ onderwerp }: { onderwerp: Onderwerp }) {
 
 // 4. Keuze van de gebedsvorm
 function Vormen({ huidig, vormen }: { huidig: string; vormen: Vorm[] }) {
+  const kies = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    const doel = `#adem/bidden/${id}`;
+    // Kwam je uit het gebed, dan eerst terug naar dat gebed en het daar vervangen: zo staat er één gebed in de
+    // geschiedenis en brengt Terug je daarna naar de gebedshoek
+    if (vorigeAdres().startsWith('#adem/bidden')) {
+      window.addEventListener('hashchange', () => window.location.replace(doel), { once: true });
+      window.history.back();
+    } else window.location.replace(doel);
+  };
   return (
     <Laag className="am-lees am-vormen" label="Kies een gebedsvorm">
-      <Kop terug={`#adem/bidden/${huidig}`} licht />
+      <Kop terug={`#adem/bidden/${huidig}`} licht slim />
       <div className="am-vormen-vlak">
         <h1 className="am-lees-titel am-vormen-titel" tabIndex={-1}>Het Jezusgebed</h1>
-        <p className="am-vormen-onder">Kies een gebedsvorm</p>
+        <p className="am-vormen-onder">Kies een gebedsvorm. De ademhulp kun je bij elke vorm aanzetten.</p>
         <ul className="am-vormen-lijst">
           {vormen.map((v) => (
             <li key={v.id}>
-              <a className={`am-vorm${v.id === huidig ? ' is-gekozen' : ''}`} href={`#adem/bidden/${v.id}`} aria-current={v.id === huidig ? 'true' : undefined}>
+              <a className={`am-vorm${v.id === huidig ? ' is-gekozen' : ''}`} href={`#adem/bidden/${v.id}`} aria-current={v.id === huidig ? 'true' : undefined} onClick={(e) => kies(e, v.id)}>
                 <span>
                   <b>{v.titel}</b>
                   <span>{v.onder ?? v.tekst}</span>
@@ -234,11 +270,13 @@ export default function AdemMobiel() {
   const onderdeel = useOnderdeel();
   const vormen = useVormen();
   const [soort, sleutel] = onderdeel.split('/');
-  const vorm = vormen.find((v) => v.id === sleutel) ?? vormen[0];
+  // "adem" (de vroegere vorm met ademcyclus) opent het standaardgebed met de ademhulp
+  const vorm = vormen.find((v) => v.id === sleutel) ?? vormen.find((v) => v.id === leesVorm()) ?? vormen[0];
+  const laatste = vormen.find((v) => v.id === leesVorm())?.id ?? vormen[0].id;
   return (
     <>
-      <Begin gebed={STANDAARD} />
-      {soort === 'bidden' && <Bidden key={vorm.id} vorm={vorm} />}
+      <Begin gebed={STANDAARD} laatste={laatste} />
+      {soort === 'bidden' && <Bidden key={vorm.id} vorm={sleutel === 'adem' ? vormen[0] : vorm} metAdem={sleutel === 'adem'} />}
       {soort === 'vormen' && <Vormen huidig={vorm.id} vormen={vormen} />}
       {soort === 'lees' && sleutel in ADEM_POPUPS && <Lezen key={sleutel} onderwerp={sleutel as Onderwerp} />}
     </>
