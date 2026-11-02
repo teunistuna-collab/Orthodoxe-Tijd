@@ -5,6 +5,7 @@ import { ETMAAL_INFO, ETMAAL_INLEIDING } from '../lib/cyclusTeksten';
 import { dienstVanHetUur, naamVan, serviceConfig, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { gaNaar } from '../lib/navigatie';
+import { vorigeAdres } from '../lib/vorigAdres';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import Psalterlezing from './Psalterlezing';
 import DienstTekst from './DienstTekst';
@@ -110,9 +111,11 @@ function Overzicht({ nu }: { nu: ServiceMapping }) {
 // 2. De dienst
 function Dienst({ d }: { d: ServiceMapping }) {
   const slug = slugVan(d);
+  // Kwam je vanaf Bidden of Vandaag (de kaart van het actuele uur), dan gaat Terug daarheen terug
+  const [herkomst] = useState(() => (/^#(bidden|vandaag)$/.test(vorigeAdres()) ? vorigeAdres() : null));
   return (
     <Laag className="em-laag em-dienst" label={naamVan(d)}>
-      <Kop terug="#etmaal" merk slim />
+      <Kop terug={herkomst ?? '#etmaal'} merk slim />
       <div className="em-dienst-beeld">
         <img src={beeldVan(d).src} alt="" width={beeldVan(d).b} height={beeldVan(d).h} decoding="async" />
         <div className="em-dienst-tekst">

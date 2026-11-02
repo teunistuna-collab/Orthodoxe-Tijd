@@ -9,7 +9,7 @@
 .bd-banner { position: relative; height: min(82vw, 350px); overflow: hidden; background: #150b06; color: var(--am-ivoor); }
 .bd-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
 .bd-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .5), rgba(10, 5, 2, 0) 22%, rgba(10, 5, 2, 0) 48%, rgba(26, 15, 7, .78) 80%, #2a1a0d); }
-.bd-banner .am-merk { position: absolute; top: 30px; left: 0; right: 0; z-index: 2; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
+.bd-banner .am-merk { position: absolute; top: 30px; left: 0; right: 0; z-index: 2; text-shadow: 0 1px 3px rgba(0, 0, 0, .9), 0 0 10px rgba(0, 0, 0, .75); }
 .bd-banner-tekst { position: absolute; left: 0; right: 0; bottom: 26px; z-index: 2; padding: 0 20px; }
 #top#top#top#top#top#top#top#top#top#top .bd-titel { margin: 0; font-family: var(--font-lees) !important; font-size: 46px; font-weight: 400; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--am-ivoor) !important; text-shadow: 0 2px 12px rgba(0, 0, 0, .7); }
 .bd-banner .am-sierlijn { width: min(170px, 50%); margin-top: 8px; }
@@ -22,7 +22,7 @@
 .bd-beeld img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 0 50%; }
 .bd-tekst { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; padding: 8px 0 8px 4px; }
 .bd-tekst b { font-family: var(--font-lees); font-size: clamp(20px, 5.65vw, 22px); font-weight: 500; line-height: 1.1; }
-.bd-tekst > span, .bd-hoofd > span { font-family: var(--font-lees); font-size: clamp(14px, 3.85vw, 15px); line-height: 1.25; color: #5d4630; }
+.bd-tekst > span, .bd-hoofd > span { font-family: var(--font-lees); font-size: clamp(14px, 3.85vw, 15px); line-height: 1.35; color: #5d4630; }
 .bd-pijl { flex: none; width: 20px; height: 20px; margin: 0 8px 0 4px; color: #7a5a2a; }
 @media (hover: hover) { #top#top#top#top#top#top#top#top .bd-kaart:hover { background-color: #ecd6b9; } }
 
@@ -32,9 +32,15 @@
 #top#top#top#top#top#top#top#top .bd-hoofd { display: flex; flex-direction: column; gap: 2px; color: inherit !important; text-decoration: none; }
 .bd-hoofd:after { content: ""; position: absolute; inset: 0; }
 .bd-hoofd strong { font-weight: 600; color: #2b1a0e; }
-.bd-label { font-family: var(--font-titel); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #654c2e; }
-#top#top#top#top#top#top#top#top .bd-alle { position: relative; z-index: 1; align-self: flex-start; margin-top: 6px; padding: 6px 0 2px; border-top: 1px solid rgba(172, 121, 47, .45); font-family: var(--font-lees); font-size: 15px; color: #8a5f2c !important; text-decoration: none; }
+.bd-label { font-family: var(--font-titel); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #654c2e; }
+#top#top#top#top#top#top#top#top .bd-alle { position: relative; z-index: 1; align-self: flex-start; margin-top: 6px; padding: 6px 0 2px; border-top: 1px solid rgba(172, 121, 47, .45); font-family: var(--font-lees); font-size: 15px; color: #6e4a20 !important; text-decoration: none; }
 .bd-uur .bd-tekst { padding-right: 0; }
 .bd-uur .bd-alle { width: calc(100% + 24px); }
-#top#top#top#top#top#top#top#top .bd-kaart:focus-visible, #top#top#top#top#top#top#top#top .bd-hoofd:focus-visible, #top#top#top#top#top#top#top#top .bd-alle:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
-#top#top#top#top#top#top#top#top .bd-alle { display: flex; align-items: center; min-height: 44px; padding-top: 4px; padding-bottom: 0; }
+/* Warme focusrand; bij de uurkaart om de hele kaart */
+#top#top#top#top#top#top#top#top :is(.bd-kaart, .bd-alle):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top .bd-hoofd:focus-visible { outline: none; }
+#top#top#top#top#top#top#top#top .bd-uur:has(.bd-hoofd:focus-visible) { outline: 3px solid #7d5218; outline-offset: 2px; }
+#top#top#top#top#top#top#top#top .bd-alle { display: flex; align-items: center; gap: 6px; min-height: 44px; padding-top: 4px; padding-bottom: 0; }
+/* Het uur van nu groot, zoals op Etmaal */
+.bd-uur .bd-hoofd b { font-size: clamp(22px, 6.2vw, 25px); }
+.bd-uur .bd-label { line-height: 1.25; }

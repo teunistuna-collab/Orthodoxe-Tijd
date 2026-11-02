@@ -1,8 +1,8 @@
-import { useEffect, useState, type MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { usePaginaOpen } from '../lib/paginaOpen';
-import { dienstVanHetUur } from '../lib/etmaal';
-import { OPEN_DIENST_EVENT } from '../lib/events';
+import { dienstVanHetUur, naamVan, slugVan } from '../lib/etmaal';
+import { GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
 import { Sierlijn } from './MobielLaag';
 import './bidden.css';
 
@@ -16,15 +16,22 @@ import './bidden.css';
 
 type Kaart = { id: string; titel: string; onder: string; beeld: string; positie?: string };
 
-const KAARTEN: Kaart[] = [
-  { id: 'gebeden', titel: 'Gebeden', onder: 'Een verzameling gebeden voor verschillende momenten', beeld: '/images/bidden/gebeden-kaart.webp' },
+const GEBEDEN: Kaart = {
+  id: 'gebeden',
+  titel: 'Gebeden',
+  onder: GEBEDEN_ZICHTBAAR ? 'Een verzameling gebeden voor verschillende momenten' : 'Binnenkort: ochtend- en avondgebeden',
+  beeld: '/images/bidden/gebeden-kaart.webp',
+};
+const ANDERE: Kaart[] = [
   { id: 'psalmen', titel: 'Psalter', onder: 'De Psalmen lezen en bidden', beeld: '/images/psalmen/manuscript-800.webp', positie: '62% 50%' },
   { id: 'adem', titel: 'Het Jezusgebed', onder: 'Adem · Gebed van het hart', beeld: '/images/ontdek/adem-kaart.webp' },
 ];
+// Zolang de gebeden nog niet zichtbaar zijn, staat Gebeden onderaan (de werkende ingangen eerst)
+const KAARTEN: Kaart[] = GEBEDEN_ZICHTBAAR ? [GEBEDEN, ...ANDERE] : [...ANDERE, GEBEDEN];
 
 const Beeld = ({ src, positie }: { src: string; positie?: string }) => (
   <span className="bd-beeld" aria-hidden="true">
-    <img src={src} alt="" loading="lazy" decoding="async" style={positie ? { objectPosition: positie } : undefined} />
+    <img src={src} alt="" decoding="async" style={positie ? { objectPosition: positie } : undefined} />
   </span>
 );
 
@@ -39,12 +46,6 @@ export default function Bidden() {
     const t = setInterval(bij, 60_000);
     return () => clearInterval(t);
   }, [open]);
-  // Zoals op Vandaag: de kaart opent meteen de dienst van nu op Etmaal.
-  const openDienst = (e: MouseEvent) => {
-    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
-    e.preventDefault();
-    window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uur.title }));
-  };
 
   return (
     <section id="bidden" className="am bd">
@@ -67,19 +68,18 @@ export default function Bidden() {
         </div>
       </div>
 
-      <nav className="bd-kaarten" aria-label="Bidden">
+      <nav className="bd-kaarten" aria-label="Ingangen om te bidden">
         <div className="bd-kaart bd-uur">
           <Beeld src="/images/ontdek/etmaal-kaart.webp" />
           <div className="bd-tekst">
-            <a className="bd-hoofd" href="#etmaal" onClick={openDienst}>
-              <small className="bd-label">De uren van de dag</small>
-              <b>Het actuele gebedsuur</b>
-              <span>
-                Nu: <strong>{uur.title}</strong> · Bid met de Kerk
-              </span>
+            {/* Zoals Etmaal en Vandaag: klein het label, groot het uur van nu; de kaart opent die dienst */}
+            <a className="bd-hoofd" href={`#etmaal/${slugVan(uur)}`}>
+              <span className="bd-label">Het actuele gebedsuur</span>
+              <b>{naamVan(uur)}</b>
+              <span>Bid met de Kerk</span>
             </a>
             <a className="bd-alle" href="#etmaal">
-              Bekijk alle gebedsuren <span aria-hidden="true">→</span>
+              Bekijk alle gebedsuren <span aria-hidden="true">›</span>
             </a>
           </div>
           <ChevronRight className="bd-pijl" aria-hidden="true" />

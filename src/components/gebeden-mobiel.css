@@ -39,3 +39,6 @@ html.lees-nacht #top#top#top#top#top#top#top#top .gbm-lees .gbm-melding .gbm-mel
 html.lees-nacht #top#top#top#top#top#top#top#top .gbm-lees .gbm-terug { border-color: rgba(201, 162, 98, .5); background: rgba(40, 22, 10, .7); color: #f3e6c8 !important; }
 #top#top#top#top#top#top#top#top .gbm-kaart { text-align: left; }
 #top#top#top#top#top#top#top#top .gbm-melding .gbm-melding-titel { font-size: 22px; line-height: 1.25; }
+/* Lege gebedspagina: wat je intussen al kunt bidden */
+.gbm-intussen { margin: 18px 0 0; font-family: var(--font-lees); font-size: 15px; font-style: italic; color: var(--gedempt, #5d5040); }
+#top#top#top#top#top#top#top#top .gbm-intussen ~ .gbm-terug { margin: 8px 4px 0; }

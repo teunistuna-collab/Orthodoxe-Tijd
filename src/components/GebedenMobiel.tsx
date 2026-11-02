@@ -70,6 +70,10 @@ function Melding({ terug }: { terug: string }) {
       <p className="gbm-melding-titel">Dit gebed wordt binnenkort toegevoegd</p>
       <p>We werken aan een zorgvuldige verzameling orthodoxe gebeden.</p>
       <a className="gm-knop gbm-terug" href={terug}>Terug naar gebeden</a>
+      {/* Intussen: wat je nu al kunt bidden */}
+      <p className="gbm-intussen">Intussen kun je bidden met</p>
+      <a className="gm-knop gbm-terug" href="#adem/bidden">Het Jezusgebed</a>
+      <a className="gm-knop gbm-terug" href="#psalmen">De Psalter</a>
     </div>
   );
 }
