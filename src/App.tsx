@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from './lib/events';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import { KopBalk } from './components/NisKop';
@@ -118,6 +119,33 @@ export default function App() {
     onthoudGroep(begin);
     return begin;
   });
+  // Een pagina wordt pas opgebouwd bij het eerste bezoek en blijft daarna staan (snel wisselen, scrollplek bewaard). Zo laadt
+  // het openen van de site alleen wat je ziet, niet de banners van alle andere pagina's.
+  const [bezocht, setBezocht] = useState<ReadonlySet<string>>(() => new Set([pagina]));
+  const bezochtRef = useRef(bezocht);
+  // Vandaag, Kalender en Psalmen vragen soms een andere pagina om een venster te openen (lib/events.ts). Bestaat die
+  // pagina nog niet, dan eerst opbouwen en het verzoek daarna opnieuw sturen, zodat het niet verloren gaat.
+  const wachtend = useRef<CustomEvent[]>([]);
+  useEffect(() => {
+    const opVerzoek = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      const doel = e.type === OPEN_DIENST_EVENT ? 'etmaal' : (detail as OpenPopupDetail).pagina;
+      if (bezochtRef.current.has(doel)) return;
+      wachtend.current.push(new CustomEvent(e.type, { detail }));
+      setBezocht((b) => new Set(b).add(doel));
+    };
+    window.addEventListener(OPEN_POPUP_EVENT, opVerzoek);
+    window.addEventListener(OPEN_DIENST_EVENT, opVerzoek);
+    return () => {
+      window.removeEventListener(OPEN_POPUP_EVENT, opVerzoek);
+      window.removeEventListener(OPEN_DIENST_EVENT, opVerzoek);
+    };
+  }, []);
+  // De luisteraars van een nieuw opgebouwde pagina staan klaar vóór dit effect (React voert die van kinderen eerst uit).
+  useEffect(() => {
+    bezochtRef.current = bezocht;
+    for (const e of wachtend.current.splice(0)) window.dispatchEvent(e);
+  }, [bezocht]);
   const [zoekOpen, setZoekOpen] = useState(false);
   // Herinneringen (Instellingen): tonen wat aan de beurt is zolang de app open is.
   useHerinneringPlanner(mode);
@@ -144,6 +172,7 @@ export default function App() {
       scrollPosities.current[huidige.current] = totEinde < window.innerHeight ? 0 : window.scrollY;
       onthoudGroep(p);
       huidige.current = p;
+      setBezocht((b) => (b.has(p) ? b : new Set(b).add(p)));
       setPagina(p);
     };
     // Interne paginalinks zelf afhandelen: zo springt de browser niet eerst naar het element met die id.
@@ -178,6 +207,8 @@ export default function App() {
     window.scrollTo({ top: scrollPosities.current[pagina] ?? 0, behavior: 'instant' });
   }, [pagina]);
   const p = (id: string) => (id === pagina ? 'pagina' : 'pagina pagina-verborgen');
+  // Alleen bezochte pagina's staan in de DOM; de rest wordt pas bij het eerste bezoek opgebouwd.
+  const blad = (id: string, inhoud: ReactNode) => (bezocht.has(id) ? <div className={p(id)}>{inhoud}</div> : null);
 
   // De tabtitel volgt de pagina (handig bij delen, bladwijzers en voor schermlezers).
   useEffect(() => {
@@ -279,25 +310,25 @@ export default function App() {
       <div id="top" className="min-h-screen bg-parchment text-ink">
         <Header pagina={pagina} />
         <main id="inhoud" tabIndex={-1}>
-          <div className={p('vandaag')}>{INHOUD.vandaag}</div>
-          <div className={p('kalender')}>{INHOUD.kalender}</div>
-          <div className={p('adem')}>{INHOUD.adem}</div>
-          <div className={p('etmaal')}>{INHOUD.etmaal}</div>
-          <div className={p('week')}>{INHOUD.week}</div>
-          <div className={p('jaar')}>{INHOUD.jaar}</div>
-          <div className={p('pascha')}>{INHOUD.pascha}</div>
-          <div className={p('geboorte')}>{INHOUD.geboorte}</div>
-          <div className={p('gebeden')}>{INHOUD.gebeden}</div>
-          <div className={p('vasten')}>{INHOUD.vasten}</div>
-          <div className={p('heiligen')}>{INHOUD.heiligen}</div>
-          <div className={p('feesten')}>{INHOUD.feesten}</div>
-          <div className={p('meer')}>{INHOUD.meer}</div>
-          <div className={p('boeken')}>{INHOUD.boeken}</div>
-          <div className={p('cycli')}>{INHOUD.cycli}</div>
-          <div className={p('bidden')}>{INHOUD.bidden}</div>
-          <div className={p('instellingen')}>{INHOUD.instellingen}</div>
-          <div className={p('psalmen')}><Psalmen actief={pagina === 'psalmen'} /></div>
-          <div className={p('bronnen')}>{INHOUD.bronnen}</div>
+          {blad('vandaag', INHOUD.vandaag)}
+          {blad('kalender', INHOUD.kalender)}
+          {blad('adem', INHOUD.adem)}
+          {blad('etmaal', INHOUD.etmaal)}
+          {blad('week', INHOUD.week)}
+          {blad('jaar', INHOUD.jaar)}
+          {blad('pascha', INHOUD.pascha)}
+          {blad('geboorte', INHOUD.geboorte)}
+          {blad('gebeden', INHOUD.gebeden)}
+          {blad('vasten', INHOUD.vasten)}
+          {blad('heiligen', INHOUD.heiligen)}
+          {blad('feesten', INHOUD.feesten)}
+          {blad('meer', INHOUD.meer)}
+          {blad('boeken', INHOUD.boeken)}
+          {blad('cycli', INHOUD.cycli)}
+          {blad('bidden', INHOUD.bidden)}
+          {blad('instellingen', INHOUD.instellingen)}
+          {blad('psalmen', <Psalmen actief={pagina === 'psalmen'} />)}
+          {blad('bronnen', INHOUD.bronnen)}
         </main>
         <BottomNav pagina={pagina} />
         <DagModal ymd={dagOpen} onClose={sluitDag} onNavigate={openDag} />
