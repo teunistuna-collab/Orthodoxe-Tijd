@@ -24,7 +24,7 @@ const metBron = (titel: string, d: Tekstdeel, voor: Partial<PopupInhoud> = {}): 
 const kortVan = (d: Tekstdeel, tekst = d.soort ?? '') => (d.concept ? `Concept · ${tekst}` : tekst);
 const icoon = (bestand: string, b: number, h: number) => <img className="bv-icoon" src={`${I}/${bestand}`} alt="" aria-hidden="true" width={b} height={h} decoding="async" />;
 
-export default function BetekenisVanVandaag({ dag, opPascha = false }: { dag: DagInfo; opPascha?: boolean }) {
+export default function BetekenisVanVandaag({ dag, opPascha = false, kop = true }: { dag: DagInfo; opPascha?: boolean; kop?: boolean }) {
   const { mode } = useApp();
   const b = useMemo(() => betekenisVoor(dag, mode), [dag, mode]);
   const [open, setOpen] = useState<PopupInhoud | null>(null);
@@ -61,16 +61,11 @@ export default function BetekenisVanVandaag({ dag, opPascha = false }: { dag: Da
       icoon: icoon('01_gebedsuur_lamp.webp', 81, 75),
       popup: metBron(b.hymne.titel, b.hymne, { highlight: b.hymne.tekst, paragraphs: [] }),
     });
-  if (b.traditie)
-    kaarten.push({ sleutel: 'traditie', titel: b.traditie.titel, kort: kortVan(b.traditie), icoon: icoon('03_heiligen_kruis.webp', 69, 77), popup: metBron(b.traditie.titel, b.traditie) });
-  if (b.kerkvader)
-    kaarten.push({ sleutel: 'kerkvader', titel: b.kerkvader.titel, kort: kortVan(b.kerkvader), icoon: icoon('05_lezingen_boek.webp', 68, 63), popup: metBron(b.kerkvader.titel, b.kerkvader, { highlight: b.kerkvader.tekst, paragraphs: [] }) });
-  if (b.weetje)
-    kaarten.push({ sleutel: 'weetje', titel: b.weetje.titel, kort: kortVan(b.weetje, b.weetje.tekst), icoon: icoon('02_vasten_feesten_kalender.webp', 66, 71), popup: metBron(b.weetje.titel, b.weetje) });
+  // Orthodoxe traditie thuis, Woord van de kerkvaders en Bijzonder weetje worden bewust niet getoond (besluit 3-11-2026).
 
   return (
-    <section className="bv" aria-labelledby={opPascha ? 'bv-kop-pascha' : 'bv-kop'}>
-      <h2 id={opPascha ? 'bv-kop-pascha' : 'bv-kop'} className="vg-label bv-kop">De betekenis van vandaag</h2>
+    <section className="bv" {...(kop ? { 'aria-labelledby': opPascha ? 'bv-kop-pascha' : 'bv-kop' } : { 'aria-label': 'De betekenis van vandaag' })}>
+      {kop && <h2 id={opPascha ? 'bv-kop-pascha' : 'bv-kop'} className="vg-label bv-kop">De betekenis van vandaag</h2>}
       <div className="bv-direct">
         <KleurVanDeDag dag={dag} />
         {!opPascha && (

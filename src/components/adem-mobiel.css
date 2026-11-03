@@ -126,3 +126,10 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .am-lees-titel { co
 .am-held > .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; padding-left: 8px; padding-right: 8px; }
 .am-held > .am-kop .am-merk { font-size: 12px; }
 .am-held { padding-top: calc(48px + env(safe-area-inset-top)); }
+
+/* Minder beweging: geen ademende ring, wel het ritme. Inademen en Uitademen wisselen zonder overgang,
+   zodat de ademhulp blijft werken (de algemene regel in index.css zet alle animaties uit). */
+@media (prefers-reduced-motion: reduce) {
+  .am-bid-tekst.adem-ritme.is-actief .adem-in { animation: adem-in var(--adem-duur, 10s) steps(1, end) infinite !important; }
+  .am-bid-tekst.adem-ritme.is-actief .adem-uit { animation: adem-uit var(--adem-duur, 10s) steps(1, end) infinite !important; }
+}

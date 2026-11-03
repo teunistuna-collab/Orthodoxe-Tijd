@@ -120,7 +120,7 @@ export default function Vandaag() {
       lezingen={{ lijst: lezingen?.length ? lezingen : alleLezingen, geladen: !!rooster, open: () => openDagLezingen(dag.ymd) }}
       ritme={cyclusNu === 'pascha' ? { href: '#pascha', onClick: () => openDagPascha(dag.ymd) } : { href: cyclusNu === 'geboorte' ? '#geboorte' : '#jaar' }}
       aftelling={aftelling}
-      betekenis={betekenis ? <BetekenisVanVandaag dag={dag} /> : undefined}
+      betekenis={betekenis && !feest ? <BetekenisVanVandaag dag={dag} /> : undefined}
     />
   );
   const lezingRij = (l: HtcLezingRef, i: number) => {
@@ -194,6 +194,16 @@ export default function Vandaag() {
                   </Actie>
                 )}
                 <p className="vg-feest-sub">{feestNaam}</p>
+                {/* Kerst- en Paschatijd: de betekenis van vandaag klapt hier uit, in plaats van onderaan de pagina */}
+                {betekenis && (
+                  <details className="vg-feest-betekenis">
+                    <summary className="vg-rij vg-rij-kop">
+                      <span>De betekenis van vandaag</span>
+                      <ChevronRight aria-hidden="true" />
+                    </summary>
+                    <BetekenisVanVandaag dag={dag} kop={false} />
+                  </details>
+                )}
               </div>
             </div>
           </section>
@@ -340,7 +350,7 @@ export default function Vandaag() {
                     <ChevronRight aria-hidden="true" />
                   </a>
                 )}
-                <BetekenisVanVandaag dag={dag} />
+                {!feest && <BetekenisVanVandaag dag={dag} />}
               </>
             )}
           </div>

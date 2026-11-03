@@ -275,6 +275,8 @@
   #vandaag .vg-lezingen-sectie > .vg-sectiekop::before, #vandaag .vg-lezingen-sectie > .vg-sectiekop::after { content: ""; width: 40px; border-top: 1px solid rgba(172, 121, 47, .7); }
   #vandaag .vg-lezingen { grid-template-columns: 30px minmax(0, 1fr); gap: 0 16px; padding: 0 0 4px; border: 0; }
   #vandaag .vg-lezingen > .vg-boek { display: none; }
+  /* Feestrij (Geboorte, Pascha): het symbool is hierboven verborgen, dus één kolom over de volle breedte */
+  #vandaag .vg-feest-rij { grid-template-columns: minmax(0, 1fr); }
   #vandaag .vg-boek-m { width: 30px; margin: 12px auto 0; }
   #vandaag .vg-lezingen > div > ul > li:first-child { border-top: 0; }
   #vandaag .vg-lezingen li .vg-rij, #vandaag .vg-lezingen .vg-rij-kop { min-height: 52px !important; font-size: 18px; color: var(--inkt); }
@@ -786,3 +788,12 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 #top#top#top#top#top#top#top#top .vg-ontdek-kaart { min-height: 112px; }
 #top#top#top#top#top#top#top#top .vg-ontdek-kaart:focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
 .vg-ontdek-kaart:active { background: #f1dcbd; }
+
+/* Kerst- en Paschatijd: "De betekenis van vandaag" als uitklapper onder de feestlink */
+.vg-feest-betekenis { margin-top: 4px; border-top: 1px solid var(--lijn-zacht); }
+.vg-feest-betekenis > summary { list-style: none; cursor: pointer; }
+.vg-feest-betekenis > summary::-webkit-details-marker { display: none; }
+.vg-feest-betekenis > summary svg { transform: rotate(90deg); transition: transform .2s; }
+.vg-feest-betekenis[open] > summary svg { transform: rotate(-90deg); }
+.vg-feest-betekenis .bv { margin-top: 0; }
+@media (prefers-reduced-motion: reduce) { .vg-feest-betekenis > summary svg { transition: none; } }

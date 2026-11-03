@@ -165,4 +165,7 @@ html.lees-nacht .pm-blader-nr { color: rgba(234, 220, 198, .7); }
 .ot-psalmen.pm .pm-aantal { margin: 2px 4px 8px; }
 
 /* Inleiding bovenaan de beginpagina (goedgekeurd 30-10-2026) */
-#top#top#top#top#top#top#top#top main .pm-alle-pagina .pm-intro { margin: 2px 6px 14px; font-family: var(--font-lees); font-size: 17px; font-style: italic; line-height: 1.5; text-align: center; color: #4f4030; }
+#top#top#top#top#top#top#top#top main .pm-alle-pagina .pm-intro { margin: 2px 0 14px; padding: 0 6px; font-family: var(--font-lees); font-size: 17px; font-style: italic; line-height: 1.5; text-align: center; color: #4f4030; }
+
+/* Kathisma-knoppen bij "Vandaag in het Psalter": tikvlak van 44 px */
+.pm-papier .psl a.psl-kathisma { min-height: 44px; }

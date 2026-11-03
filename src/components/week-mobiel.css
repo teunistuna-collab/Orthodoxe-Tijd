@@ -24,7 +24,7 @@
 .wm-tekst p { margin: 0 0 10px; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--inkt); }
 #top#top#top#top#top#top#top#top .wm-kalender { width: 100%; margin-top: 4px; font: inherit; text-align: left; }
 .wm .em-nu-tekst .am-label { font-size: 11px; letter-spacing: .12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.wm-inleiding { margin: 0 4px 10px; font-family: var(--font-lees); font-size: 17px; line-height: 1.45; color: var(--gedempt); text-align: left; }
+.wm-inleiding { margin: 0 10px 10px; font-family: var(--font-lees); font-size: 17px; line-height: 1.45; color: var(--gedempt); text-align: left; }
 
 /* ---------- Kritiek 30-10-2026: avondweergave, kopbalk, ritme en afwerking ---------- */
 /* Verdieping: het kruisje een vaste breedte, de titel begint links */
