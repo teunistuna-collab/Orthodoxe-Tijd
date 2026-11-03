@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import { BookOpen, ChevronRight, Settings } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { useApp } from '../lib/context';
 import { dagInfo, formatDag } from '../lib/kalender';
@@ -13,7 +12,7 @@ import './meer-mobiel.css';
 // Meer (#meer): het overzicht achter Meer in de onderbalk, alleen op mobiel (App.tsx), volgens de mock-up meer: banner met
 // de kloostergang (aangeleverd 26-10-2026, alleen verkleind), Heiligen met het icoon Christus de Ware Wijnstok
 // (aangeleverd 03-11-2026, alleen omgezet naar webp), de verdieping als kaarten met een uitsnede van hun eigen
-// banner en een regel van vandaag, en onderaan compact Instellingen en Bronnen met een rond icoon.
+// banner en een regel van vandaag, en onderaan Instellingen en Bronnen als sobere tekstregels (mock-up: geen ronde pictogrammen).
 
 type Regel = { id: string; titel: string; ondertitel: string; beeld: string; positie?: string };
 
@@ -23,9 +22,9 @@ const VERDIEPING: Regel[] = [
   { id: 'feesten', titel: 'Feesten', ondertitel: 'De feesten van het kerkelijk jaar', beeld: '/images/feesten/laatste-avondmaal-banner.webp', positie: '50% 30%' },
   { id: 'boeken', titel: 'Boeken', ondertitel: 'Een kleine orthodoxe bibliotheek', beeld: '/images/boeken/boeken-banner.webp', positie: '40% 50%' },
 ];
-const OVER: Array<{ id: string; titel: string; ondertitel: string; icoon: ReactNode }> = [
-  { id: 'instellingen', titel: 'Instellingen', ondertitel: 'Jouw voorkeuren en pijlgebed', icoon: <Settings strokeWidth={1.5} aria-hidden="true" /> },
-  { id: 'bronnen', titel: 'Bronnen', ondertitel: 'Bronnen en verwijzingen', icoon: <BookOpen strokeWidth={1.5} aria-hidden="true" /> },
+const OVER: Array<{ id: string; titel: string; ondertitel: string }> = [
+  { id: 'instellingen', titel: 'Instellingen', ondertitel: 'Jouw voorkeuren en pijlgebed' },
+  { id: 'bronnen', titel: 'Bronnen', ondertitel: 'Bronnen en verwijzingen' },
 ];
 
 export default function Meer() {
@@ -79,12 +78,11 @@ export default function Meer() {
             </li>
           ))}
         </ul>
-        <h2 className="mm-label">Over de app</h2>
+        <h2 className="mm-label">Overige</h2>
         <ul className="mm-lijst mm-klein">
-          {OVER.map(({ id, titel, ondertitel, icoon }) => (
+          {OVER.map(({ id, titel, ondertitel }) => (
             <li key={id}>
               <a className="mm-kaart" href={`#${id}`}>
-                <span className="mm-icoon">{icoon}</span>
                 <span className="mm-tekst">
                   <b>{titel}</b>
                   <span>{ondertitel}</span>

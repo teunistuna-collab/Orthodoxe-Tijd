@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { addDays, civilVanKerkdatum, daysBetween, formatDag, formatLang, formatMd, hoofdletter, kerkDatum, MAANDEN, parseYmd, ymd } from '../lib/kalender';
+import { addDays, civilVanKerkdatum, daysBetween, formatDag, formatKerkLang, formatMd, hoofdletter, kerkDatum, MAANDEN, parseYmd, ymd } from '../lib/kalender';
 import NaarBoven from './NaarBoven';
 import HeiligePopup from './HeiligePopup';
-import { tekstVoorIndeling, zoekVorm, type Resultaat } from '../lib/heiligenPopup';
+import { heiligeTitel, tekstVoorIndeling, zoekVorm, type Resultaat } from '../lib/heiligenPopup';
+import { heiligeIcoon } from '../lib/heiligenIconen';
 import { CATEGORIEEN, categorieenVan } from '../lib/heiligenSoort';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import NisKop from './NisKop';
@@ -121,15 +122,27 @@ export default function Heiligen() {
     setVerschuiving(v);
     setAlleVanDag(false);
   };
-  // Alleen de naam van de heilige; het leesvenster toont de rest.
-  const heiligeKaart = (h: Resultaat) => (
-    <li key={h.id}>
-      <button type="button" className="hm-kaart hm-naam" onClick={() => setGeselecteerde(h)}>
-        <span className="hm-tekst"><b>{h.naam}</b></span>
-        <ChevronRight className="hm-pijl" aria-hidden="true" />
-      </button>
-    </li>
-  );
+  // Mock-up 15: icoon (alleen waar een aangeleverd icoon bestaat, anders het sobere kader met kruisornament), naam,
+  // een onderscheidende regel uit de eigen bron (zo zijn twee heiligen met dezelfde naam uit elkaar te houden) en de herdenking.
+  const heiligeKaart = (h: Resultaat) => {
+    const icoon = heiligeIcoon(h);
+    const onder = onderregel(h);
+    return (
+      <li key={h.id}>
+        <button type="button" className="hm-kaart hm-dagkaart" onClick={() => setGeselecteerde(h)}>
+          <span className="hm-beeld" aria-hidden="true">
+            {icoon ? <img src={icoon.src} alt="" loading="lazy" decoding="async" /> : <span className="hm-kader"><img className="hm-kruis" src="/images/ui/kruis.webp" alt="" width={218} height={256} decoding="async" /></span>}
+          </span>
+          <span className="hm-tekst">
+            <b>{heiligeTitel(h.naam)}</b>
+            {onder && <span className="hm-onder">{onder}</span>}
+            <small>Herdenking: {formatMd(h.md)}</small>
+          </span>
+          <ChevronRight className="hm-pijl" aria-hidden="true" />
+        </button>
+      </li>
+    );
+  };
 
   const rijKnop = (h: Resultaat, metDatum = false) => {
     const onder = mobiel ? onderregel(h) : h.titel && h.titel !== h.naam ? h.titel : '';
@@ -238,7 +251,7 @@ export default function Heiligen() {
                 <div className="hm-dagnav">
                   <button type="button" className="hm-stap" aria-label="Vorige dag" onClick={() => naarDag(verschuiving - 1)}><ChevronLeft aria-hidden="true" /></button>
                   <label className="hm-datum">
-                    <span aria-live="polite">{hoofdletter(formatLang(dagDatum))}</span>
+                    <span aria-live="polite">{hoofdletter(formatKerkLang(dagDatum, mode))}</span>
                     <CalendarDays aria-hidden="true" />
                     <input
                       type="date"

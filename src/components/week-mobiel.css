@@ -34,7 +34,7 @@
 /* Overzicht: het label op de kaart van vandaag en de onderregels groter; een rustig label op vastendagen */
 #top#top#top#top#top#top#top#top .wm .em-nu-tekst .am-label { font-size: 12px; white-space: normal; }
 #top#top#top#top#top#top#top#top .wm-dag > span { font-size: 15px; }
-.em-lijst a > .wm-vastendag { flex: none; align-self: center; margin-right: 6px; padding: 1px 7px; border: 1px solid rgba(172, 121, 47, .55); border-radius: 10px; font-family: var(--font-lees); font-size: 13.5px; color: #6e4a20; }
+.em-lijst a > .wm-vastendag { flex: none; align-self: center; margin-right: 6px; padding: 0; border: 0; font-style: italic; font-family: var(--font-lees); font-size: 13.5px; color: #6e4a20; }
 .wm-banner .am-merk { text-shadow: 0 1px 3px rgba(0, 0, 0, .9), 0 0 10px rgba(0, 0, 0, .7); }
 
 /* Een dag: de kopbalk blijft bovenaan staan (donker, ook boven het perkament); het paneel Aa ligt eronder, zonder de

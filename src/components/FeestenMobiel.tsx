@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 import type { Feest } from '../lib/feesten';
-import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, formatMd, hoofdletter, parseYmd, ymd } from '../lib/kalender';
+import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, hoofdletter, kerkDatum, parseYmd, ymd } from '../lib/kalender';
 import { FEEST_HEILIGENJAAR, GEKOPPELDE_FEESTTEKSTEN } from '../lib/feestHeiligenjaar';
 import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
 import { normaliseer } from '../lib/heiligenPopup';
@@ -270,7 +270,7 @@ function Groot({ groot }: { groot: FeestItem[] }) {
         <Sierlijn />
         <ul className="hm-lijst">
           {groot.map(({ f, datum }) => (
-            <Kaart key={f.id} f={f} direct onder={f.offset !== undefined ? `Beweeglijk · ${metJaar(datum, jaar)}` : mode === 'oud' ? `${metJaar(datum, jaar)} · kerkelijk ${formatMd(f.md!)}` : metJaar(datum, jaar)} />
+            <Kaart key={f.id} f={f} direct onder={f.offset !== undefined ? `Beweeglijk · ${metJaar(datum, jaar)}` : metJaar(f.md ? kerkDatum(datum, mode) : datum, jaar)} />
           ))}
         </ul>
       </div>

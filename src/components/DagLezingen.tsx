@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { useMobiel } from '../lib/desktop';
 import { dagInfo, formatKerkLang, formatLang, parseYmd } from '../lib/kalender';
@@ -42,7 +43,7 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
                 <button
                   type="button"
                   onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: dag.civil })}
-                  className="flex w-full items-center justify-between gap-3 rounded-lg border border-parchment-3 bg-white/70 px-4 py-3 text-left transition hover:border-gold hover:bg-gold-pale"
+                  className="dl-rij flex w-full items-center justify-between gap-3 rounded-lg border border-parchment-3 bg-white/70 px-4 py-3 text-left transition hover:border-gold hover:bg-gold-pale"
                 >
                   <span>
                     <span className="block text-[11px] font-bold tracking-wider text-gold-deep uppercase">{vertaalTag(l.tag, refNl)}</span>
@@ -51,6 +52,8 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
                   <span className={`dl-soort shrink-0 rounded-sm px-1.5 py-0.5 text-[11px] font-bold uppercase ${soort === 'evangelie' ? 'bg-wine text-gold-light' : soort === 'oud' ? 'bg-parchment-3 text-ink' : 'bg-gold-pale text-gold-deep'}`}>
                     {soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'OT' : 'Apostel'}
                   </span>
+                  {/* Mobiel: een pijl, zoals bij alle andere rijen die iets openen */}
+                  {mobiel && <ChevronRight className="dl-pijl" aria-hidden="true" />}
                 </button>
               </li>
             );

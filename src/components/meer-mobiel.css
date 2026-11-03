@@ -35,8 +35,6 @@
 #top#top#top#top#top#top#top#top .mm-tekst .mm-nu { margin-top: 1px; font-size: 15px; font-style: italic; color: #6a4a24; }
 /* Over de app: compacter, met een donker rond icoon (zoals de mock-up) */
 .mm-klein { gap: 8px; }
-#top#top#top#top#top#top#top#top .mm-klein .mm-kaart { min-height: 64px; padding: 8px 12px; }
+#top#top#top#top#top#top#top#top .mm-klein .mm-kaart { min-height: 64px; padding: 8px 12px 8px 18px; } /* sobere tekstregel, zonder pictogram */
 .mm-klein .mm-tekst b { font-size: 20px; }
 .mm-klein .mm-tekst span { font-size: 15px; }
-.mm-icoon { display: grid; flex: none; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: #2c180f; box-shadow: 0 0 0 1px rgba(201, 162, 98, .6); color: #e0b95a; }
-.mm-icoon svg { width: 20px; height: 20px; }

@@ -92,3 +92,8 @@
 }
 /* Meeschuivende dagkoppen: de pagina knipt (clip) in plaats van te verbergen (hidden), anders werkt 'sticky' niet */
 #top#top#top#top#top#top#top#top section.vg.hm { overflow: clip; }
+
+/* Heiligen van de dag (mock-up 15): beeld of kruiskader, naam, onderscheidende regel en herdenking */
+#top#top#top#top#top#top#top#top .hm-kaart.hm-dagkaart { min-height: 104px; }
+.hm-dagkaart .hm-onder { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hm-kader .hm-kruis { width: 100%; height: auto; max-width: 46px; }

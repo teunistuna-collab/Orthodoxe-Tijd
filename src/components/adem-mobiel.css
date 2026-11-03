@@ -116,7 +116,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top#top .am-laag .lees-
 .am-held:before { background: linear-gradient(rgba(10, 5, 2, .6), rgba(10, 5, 2, .2) 24%, rgba(10, 5, 2, .15) 48%, rgba(10, 5, 2, .65) 70%, rgba(10, 5, 2, .88)); }
 /* Gebedsweergave: welke vorm, en de knop voor de vormkeuze als woord */
 .am-bid-vorm { margin: 0 0 8px; font-family: var(--font-titel); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--am-goud, #e0b765); }
-#top#top#top#top#top#top#top#top#top .am-vormknop { width: auto; padding: 0 12px; border: 1px solid rgba(224, 183, 101, .55); border-radius: 22px; font-size: 16px; text-decoration: none; }
+#top#top#top#top#top#top#top#top#top .am-vormknop { width: auto; padding: 0 12px; border: 1px solid rgba(224, 183, 101, .55); border-radius: 6px; font-size: 16px; text-decoration: none; }
 .am-sec { opacity: .75; font-size: .9em; }
 /* Geen zijwaartse marge van de algemene regel voor icoonlinks: anders scrolt het venster opzij */
 #top#top#top#top#top#top#top#top#top .am-laag .am-kop :is(.am-terug, .am-knopje) { margin: 0; }

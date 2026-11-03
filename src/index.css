@@ -2312,3 +2312,20 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top .lz-nbv-noot{margin:6px 0 0;font-family:var(--font-display);font-size:15px;font-style:italic;color:var(--color-ink-soft)}
   #top#top#top#top .lz-engels{font-size:15px!important;font-weight:600!important;color:var(--color-ink-soft)!important}
 }
+
+/* Mobiel: "Op deze dag" in het heiligen-venster als uitklapper met een lijst (één naam per regel, tikvlak 44 px) */
+#top#top#top#top .synax-klap > summary.synax-kop{display:flex;align-items:center;justify-content:space-between;min-height:44px;margin:0!important;list-style:none;cursor:pointer}
+#top#top#top#top .synax-klap > summary::-webkit-details-marker{display:none}
+#top#top#top#top .synax-klap > summary::after{content:"›";font-size:22px;line-height:1;transform:rotate(90deg);transition:transform .2s}
+#top#top#top#top .synax-klap[open] > summary::after{transform:rotate(-90deg)}
+#top#top#top#top .synax-klap ul{display:grid;gap:0}
+#top#top#top#top .synax-klap li{display:block;border-top:1px solid rgba(172,121,47,.25)}
+#top#top#top#top .synax-klap li::after{content:none!important}
+#top#top#top#top#top#top .synax-klap button{display:block;width:100%;min-height:44px;text-align:left}
+@media (prefers-reduced-motion:reduce){#top#top#top#top .synax-klap > summary::after{transition:none}}
+
+/* Mobiel: cijfers in vensters (lezingen, bijbelverwijzingen) als rechte cijfers, en de pijl op lezingrijen */
+@media (max-width:767.98px){
+  #top#top#top#top .exact-modal-frame{font-variant-numeric:lining-nums}
+  .dl-pijl{flex:none;width:18px;height:18px;margin-left:-4px;color:var(--color-gold-deep);stroke-width:1.8}
+}

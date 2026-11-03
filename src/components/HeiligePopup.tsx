@@ -91,7 +91,19 @@ export default function HeiligePopup({ heilige, onClose }: { heilige: Resultaat 
           </section>
         )}
 
-        {vandeDag.length > 1 && (
+        {vandeDag.length > 1 && (mobiel ? (
+          // Mobiel: de andere vermeldingen van de dag achter een uitklapper, als lijst in plaats van een rij namen
+          <details className="synax-blok synax-dag synax-klap">
+            <summary className="synax-kop">Op deze dag ({vandeDag.length})</summary>
+            <ul>
+              {vandeDag.map((h) => (
+                <li key={h.id}>
+                  <button type="button" onClick={() => setActief(h)} aria-current={h.id === actief.id ? 'true' : undefined}>{h.naam}</button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ) : (
           <nav className="synax-blok synax-dag" aria-label="Op deze dag">
             <p className="synax-kop">Op deze dag</p>
             <ul>
@@ -102,7 +114,7 @@ export default function HeiligePopup({ heilige, onClose }: { heilige: Resultaat 
               ))}
             </ul>
           </nav>
-        )}
+        ))}
 
         {feesten.length > 0 && (
           <div className="synax-blok synax-feest">

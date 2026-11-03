@@ -1,7 +1,7 @@
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { bereikLang, daysBetween, formatLang, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
+import { bereikLang, daysBetween, formatKerkLang, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
 import { GROTE_FEESTEN } from '../lib/feesten';
 import { geboorteBannerTitel, geboortecyclusVoor, type GeboorteKey, type GeboorteStap } from '../lib/geboortecyclus';
 import { BRON_CONCEPT, GEBOORTE_DAGICONEN, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_VERDIEPING, GEBOORTE_WEETJES, GEBOORTE_ZONDAGICOON, KERKVADER_PER_PERIODE, KERKVADERS, type GeboorteInfoKey } from '../lib/geboorteInhoud';
@@ -31,10 +31,9 @@ const FEESTEN: Partial<Record<GeboorteKey, (typeof GROTE_FEESTEN)[number] | unde
 };
 const isDag = (s: GeboorteStap) => s.van.getTime() === s.tot.getTime();
 const meerOver = (s: GeboorteStap) => `Lees meer over deze ${isDag(s) ? 'dag' : 'periode'}`;
-// Burgerlijke datums, bij de oude kalender met de kerkelijke datums erbij (de teksten noemen de kerkelijke)
+// Mobiel: alleen de kerkelijke datums (de teksten noemen de kerkelijke)
 const bereik = (s: GeboorteStap, mode: Mode) => {
-  const burgerlijk = bereikLang(s.van, s.tot);
-  return mode === 'oud' ? `${burgerlijk} · kerkelijk ${bereikLang(kerkDatum(s.van, mode), kerkDatum(s.tot, mode))}` : burgerlijk;
+  return bereikLang(kerkDatum(s.van, mode), kerkDatum(s.tot, mode));
 };
 
 const volgHash = (f: () => void) => {
@@ -99,7 +98,7 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
           {stap ? (
             <>
               <h2 className="gm-kaart-titel">Vandaag in de Geboortecyclus</h2>
-              <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
+              <p className="gm-datumregel">{hoofdletter(formatKerkLang(vandaag, mode))}</p>
               <p className="gm-periode">{stap.label}</p>
               <p className="gm-bereik">{bereikLang(stap.van, stap.tot)}</p>
               <p className="gm-tekst">{stap.short}</p>
@@ -110,7 +109,7 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
             <>
               <h2 className="gm-kaart-titel">De Geboortecyclus begint over {daysBetween(vandaag, eerste.van)} dagen</h2>
               <p className="gm-periode">{eerste.label}</p>
-              <p className="gm-bereik">Begint op {bereikLang(eerste.van, eerste.van)} {eerste.van.getUTCFullYear()}</p>
+              <p className="gm-bereik">Begint op {bereikLang(kerkDatum(eerste.van, mode), kerkDatum(eerste.van, mode))} {kerkDatum(eerste.van, mode).getUTCFullYear()}</p>
               <p className="gm-tekst">{eerste.short}</p>
               <a className="gm-knop" href={`#geboorte/${eerste.key}`}>Lees meer over deze periode <ChevronRight aria-hidden="true" /></a>
             </>

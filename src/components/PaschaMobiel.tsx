@@ -1,7 +1,7 @@
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { daysBetween, formatDag, formatKort, formatLang, hoofdletter } from '../lib/kalender';
+import { daysBetween, formatDag, formatKerkLang, formatKort, hoofdletter, kerkDatum } from '../lib/kalender';
 import { paascyclusVoor, type Paascyclus, type StapKey } from '../lib/paascyclus';
 import { PAASCYCLUS } from '../lib/feesten';
 import { PASCHA_DAGICONEN, PERIODE_POPUPS, STAP_INHOUD } from '../lib/paascyclusTeksten';
@@ -112,21 +112,21 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
         <div className="gm-kaart gm-vandaag">
           {stap ? (
             <>
-              <p className="am-label pm2-label">Vandaag in de Paschacyclus</p>
-              <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
+              <h2 className="gm-kaart-titel">Vandaag in de Paschacyclus</h2>
+              <p className="gm-datumregel">{hoofdletter(formatKerkLang(vandaag, mode))}</p>
               <p className="gm-periode">{stap.label}</p>
               <p className="gm-bereik">{bereik(stap)}</p>
               <p className="gm-tekst">{stap.short}</p>
               <InfoRegels datum={vandaag} mode={mode} />
-              <a className="gm-knop" href={`#pascha/${stap.key}`}>Naar deze periode <ChevronRight aria-hidden="true" /></a>
+              <a className="gm-knop" href={`#pascha/${stap.key}`}>Lees meer over deze periode <ChevronRight aria-hidden="true" /></a>
             </>
           ) : (
             <>
-              <p className="am-label pm2-label">De Paschacyclus begint over {daysBetween(vandaag, eerste.van)} dagen</p>
+              <h2 className="gm-kaart-titel">De Paschacyclus begint over {daysBetween(vandaag, eerste.van)} dagen</h2>
               <p className="gm-periode">{eerste.label}</p>
-              <p className="gm-bereik">Vanaf {formatDag(eerste.van)} {eerste.van.getUTCFullYear()}</p>
+              <p className="gm-bereik">Begint op {formatDag(kerkDatum(eerste.van, mode))} {kerkDatum(eerste.van, mode).getUTCFullYear()}</p>
               <p className="gm-tekst">{eerste.short}</p>
-              <a className="gm-knop" href={`#pascha/${eerste.key}`}>Naar deze periode <ChevronRight aria-hidden="true" /></a>
+              <a className="gm-knop" href={`#pascha/${eerste.key}`}>Lees meer over deze periode <ChevronRight aria-hidden="true" /></a>
             </>
           )}
         </div>
