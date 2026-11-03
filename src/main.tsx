@@ -32,3 +32,16 @@ createRoot(document.getElementById('root')!).render(
     </Vangnet>
   </StrictMode>,
 )
+
+// Intro (index.html, alleen mobiel): weg zodra de eerste pagina staat en het bovenste beeld klaar is, hooguit 2,5 s na het laden.
+const intro = document.getElementById('intro')
+if (intro) {
+  const weg = () => {
+    intro.classList.add('is-weg')
+    setTimeout(() => intro.remove(), 600)
+  }
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const beeld = document.querySelector<HTMLImageElement>('main .pagina:not(.pagina-verborgen) img')
+    void Promise.race([beeld ? beeld.decode().catch(() => {}) : Promise.resolve(), new Promise((r) => setTimeout(r, 2500))]).then(weg)
+  }))
+}
