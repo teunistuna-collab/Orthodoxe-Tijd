@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useApp } from '../lib/context';
-import { dagInfo, formatLang, parseYmd } from '../lib/kalender';
+import { useMobiel } from '../lib/desktop';
+import { dagInfo, formatKerkLang, formatLang, parseYmd } from '../lib/kalender';
 import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
 import Modal from './Modal';
 import { vergrendelScroll } from '../lib/scrollLock';
@@ -14,6 +15,7 @@ interface Props {
 // Een tik op een lezing opent de lezing zelf in de bestaande lezingen-pop-up.
 export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
   const { mode, vandaagYmd, rooster, vraagRooster, openLezing } = useApp();
+  const mobiel = useMobiel(); // mobiel: alleen de kerkelijke datum
   useEffect(() => {
     if (gekozen) vraagRooster(gekozen);
   }, [gekozen, vraagRooster]);
@@ -29,7 +31,7 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
   const lezingen = rooster?.[dag.ymd] ?? [];
 
   return (
-    <Modal open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
+    <Modal open onClose={onClose} eyebrow={mobiel ? formatKerkLang(dag.civil, mode) : formatLang(dag.civil)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
       {lezingen.length > 0 ? (
         <ul className="grid gap-2">
           {lezingen.map((l, i) => {

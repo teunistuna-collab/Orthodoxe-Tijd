@@ -85,9 +85,10 @@ export default function Heiligen() {
     return [...map.entries()].sort(([a], [b]) => sorteerMd(a, b));
   }, [gevonden]);
 
-  // Datum van de gedachtenis: de kerkelijke datum; bij de oude kalender ook de burgerlijke datum dit jaar.
+  // Datum van de gedachtenis: de kerkelijke datum; bij de oude kalender op desktop ook de burgerlijke datum dit jaar
+  // (mobiel: alleen de kerkelijke datum).
   const jaar = vandaag.getUTCFullYear();
-  const datum = (md: string) => (mode === 'oud' ? `Jul. ${formatMd(md)} · Greg. ${formatDag(civilVanKerkdatum(md, jaar, mode))}` : formatMd(md));
+  const datum = (md: string) => (mode === 'oud' && !mobiel ? `Jul. ${formatMd(md)} · Greg. ${formatDag(civilVanKerkdatum(md, jaar, mode))}` : formatMd(md));
 
   // Het overzicht opent met de heiligen van vandaag (kerkelijke datum) en markeert de huidige maand.
   const kerkVandaag = kerkDatum(vandaag, mode);

@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useApp } from '../lib/context';
-import { dagInfo, daysBetween, formatDatum, formatLang, orthodoxPascha, parseYmd } from '../lib/kalender';
+import { useMobiel } from '../lib/desktop';
+import { dagInfo, daysBetween, formatDatum, formatKerkLang, formatLang, orthodoxPascha, parseYmd } from '../lib/kalender';
 import { PAASCYCLUS } from '../lib/feesten';
 import Modal from './Modal';
 import { vergrendelScroll } from '../lib/scrollLock';
@@ -26,6 +27,7 @@ function Regel({ label, waarde, klein }: { label: string; waarde: string; klein?
 // anders het aantal dagen tot Pascha, de kerkelijke tijd (bijv. "11e week na Pinksteren") en de toon.
 export default function DagPascha({ ymd: gekozen, onClose }: Props) {
   const { mode, vandaagYmd } = useApp();
+  const mobiel = useMobiel(); // mobiel: alleen de kerkelijke datum
   const dag = useMemo(() => (gekozen ? dagInfo(parseYmd(gekozen), mode, vandaagYmd) : null), [gekozen, mode, vandaagYmd]);
 
   // Scroll vastzetten; Escape en de terugknop sluiten via de gedeelde pop-upstapel (lib/terug.ts).
@@ -44,7 +46,7 @@ export default function DagPascha({ ymd: gekozen, onClose }: Props) {
   const totPascha = daysBetween(dag.civil, volgendePascha);
 
   return (
-    <Modal open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Paschacyclus" centerTitle maxWidth="max-w-xl">
+    <Modal open onClose={onClose} eyebrow={mobiel ? formatKerkLang(dag.civil, mode) : formatLang(dag.civil)} title="Paschacyclus" centerTitle maxWidth="max-w-xl">
       {cyclusDagen.length > 0 ? (
         <div className="grid gap-3">
           {cyclusDagen.map((f) => (

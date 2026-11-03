@@ -2292,3 +2292,23 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 /* Bouw 204 — de achtergrond van alle pagina's: het lichte papyrus van Vandaag (public/images/vandaag/papyrus-licht.webp). */
 #top#top#top{background-color:#f5e6c8}
 #top#top#top::before{background:#f5e6c8 url(/images/vandaag/papyrus-licht.webp) center top/cover no-repeat}
+
+/* Mobiel: de bovenbalk van een venster past altijd. De datum breekt af in plaats van × en "volgende" uit beeld te duwen;
+   vorige/volgende alleen als pijl (met aria-label), met een tikvlak van 44 px. */
+@media (max-width:767.98px){
+  #top#top#top#top .pk-kop{grid-template-columns:auto minmax(0,1fr) auto;gap:4px;padding:6px 6px 2px 8px}
+  #top#top#top#top .pk-datum{min-width:0;font-size:13px;line-height:1.25;letter-spacing:.06em;white-space:normal;text-wrap:balance}
+  #top#top#top#top .pk-nav{justify-content:center;min-width:44px;font-size:22px}
+  #top#top#top#top .pk-nav-woord{display:none}
+}
+
+/* Mobiel: de lezing verwijst rustig door naar debijbel.nl (geen wijnrode knop), met de melding dat de link de app verlaat;
+   de Engelse tekst als leesbare tekstlink. */
+@media (max-width:767.98px){
+  #top#top#top#top .lz-nbv{padding:14px 0 10px!important;border:0!important;border-top:1px solid color-mix(in srgb,var(--ot-gold) 45%,transparent)!important;border-bottom:1px solid color-mix(in srgb,var(--ot-gold) 45%,transparent)!important;border-radius:0!important;background:none!important;text-align:center}
+  #top#top#top#top .lz-nbv .ot-label{justify-content:center}
+  #top#top#top#top .lz-nbv-knop{gap:8px;padding:0 18px!important;border:1px solid var(--color-gold-deep)!important;border-radius:4px!important;background:none!important;font-family:var(--font-display);font-size:18px!important;font-weight:500!important;color:var(--color-ink)!important}
+  #top#top#top#top .lz-nbv-knop svg{width:16px;height:16px;color:var(--color-gold-deep)}
+  #top#top#top#top .lz-nbv-noot{margin:6px 0 0;font-family:var(--font-display);font-size:15px;font-style:italic;color:var(--color-ink-soft)}
+  #top#top#top#top .lz-engels{font-size:15px!important;font-weight:600!important;color:var(--color-ink-soft)!important}
+}

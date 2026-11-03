@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 import type { Feest } from '../lib/feesten';
-import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatMd, hoofdletter, parseYmd, ymd } from '../lib/kalender';
+import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, formatMd, hoofdletter, parseYmd, ymd } from '../lib/kalender';
 import { FEEST_HEILIGENJAAR, GEKOPPELDE_FEESTTEKSTEN } from '../lib/feestHeiligenjaar';
 import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
 import { normaliseer } from '../lib/heiligenPopup';
@@ -318,7 +318,6 @@ function Detail({ item, terug }: { item: FeestItem; terug: string }) {
   const t = titels(f);
   const hjId = FEEST_HEILIGENJAAR[f.id] ?? (f.id.startsWith('hj-') ? f.id : undefined);
   const icoon = icoonVan(f.id);
-  const kerk = f.md && mode === 'oud' ? ` (kerkelijk ${formatMd(f.md)})` : '';
   return (
     <Laag className="em-laag fm-laag fm-detail" label={t.titel}>
       <Kop terug={terug} merk slim />
@@ -337,7 +336,7 @@ function Detail({ item, terug }: { item: FeestItem; terug: string }) {
               ? `Eerstvolgend: ${formatLang(datum)}`
               : f.offset !== undefined
                 ? `Beweeglijk, met de datum van Pascha; eerstvolgend: ${formatLang(datum)}`
-                : `Eerstvolgend: ${formatLang(datum)}${kerk}`}
+                : `Eerstvolgend: ${(f.md ? formatKerkLang(datum, mode) : formatLang(datum))}`}
           </span>
         </p>
         {/* De toelichting is de betekenis; de langere tekst uit het Heiligenjaar volgt apart na de liturgie */}

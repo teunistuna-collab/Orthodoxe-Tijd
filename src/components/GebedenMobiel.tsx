@@ -63,13 +63,13 @@ function Regel({ href, symbool, titel, onder }: { href: string; symbool: ReactNo
   );
 }
 
-function Melding({ terug }: { terug: string }) {
+function Melding({ terug, titel = 'Dit gebed wordt binnenkort toegevoegd' }: { terug?: string; titel?: string }) {
   return (
     <div className="gbm-melding">
       <span className="gbm-melding-kruis" aria-hidden="true">{SIERKRUIS}</span>
-      <p className="gbm-melding-titel">Dit gebed wordt binnenkort toegevoegd</p>
+      <p className="gbm-melding-titel">{titel}</p>
       <p>We werken aan een zorgvuldige verzameling orthodoxe gebeden.</p>
-      <a className="gm-knop gbm-terug" href={terug}>Terug naar gebeden</a>
+      {terug && <a className="gm-knop gbm-terug" href={terug}>Terug naar gebeden</a>}
       {/* Intussen: wat je nu al kunt bidden */}
       <p className="gbm-intussen">Intussen kun je bidden met</p>
       <a className="gm-knop gbm-terug" href="#adem/bidden">Het Jezusgebed</a>
@@ -95,6 +95,11 @@ function Overzicht({ zoek, setZoek }: { zoek: string; setZoek: (z: string) => vo
         </div>
       </div>
       <div className="vg-papier hm-papier">
+        {/* Zolang de gebeden niet zijn vrijgegeven: één eerlijke melding met wat je nu al kunt bidden, geen zoekveld of lege categorieën */}
+        {!GEBEDEN_ZICHTBAAR ? (
+          <Melding titel="De gebeden worden binnenkort toegevoegd" />
+        ) : (
+        <>
         <label className="vg-hl-zoek fm-zoek">
           <Search aria-hidden="true" />
           <span className="sr-only">Zoek een gebed</span>
@@ -125,6 +130,8 @@ function Overzicht({ zoek, setZoek }: { zoek: string; setZoek: (z: string) => vo
             <h2 className="hm-label gbm-kop">Categorieën</h2>
             <ul className="hm-lijst">{CATEGORIEEN.map((c) => <Regel key={c.key} href={`#gebeden/${c.key}`} symbool={c.symbool} titel={c.titel} onder={c.onder} />)}</ul>
           </>
+        )}
+        </>
         )}
       </div>
     </section>
@@ -160,15 +167,12 @@ export default function GebedenMobiel() {
   return (
     <>
       <Overzicht zoek={zoek} setZoek={setZoek} />
-      {cat && !gebedId && <Categorie cat={cat} />}
-      {cat && gebed && (
-        // 3. en 4. De leesweergave: licht, of donker via de avondweergave (Aa). De tekst pas na vrijgave (GEBEDEN_ZICHTBAAR).
+      {/* Categorieën en de leesweergave pas na vrijgave (GEBEDEN_ZICHTBAAR); daarvoor toont het overzicht de melding */}
+      {GEBEDEN_ZICHTBAAR && cat && !gebedId && <Categorie cat={cat} />}
+      {GEBEDEN_ZICHTBAAR && cat && gebed && (
+        // 3. en 4. De leesweergave: licht, of donker via de avondweergave (Aa).
         <LeesWeergave className="em-laag em-lees gbm-lees" titel={gebed.titel} ondertitel="Orthodoxe gebeden" terug={`#gebeden/${cat.key}`} deelPad={`gebeden/${cat.key}/${gebed.id}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
-          {GEBEDEN_ZICHTBAAR ? (
-            gebed.tekst.split(/\n\s*\n/).map((alinea, i) => <p key={i} className="gbm-gebedstekst">{alinea}</p>)
-          ) : (
-            <Melding terug={`#gebeden/${cat.key}`} />
-          )}
+          {gebed.tekst.split(/\n\s*\n/).map((alinea, i) => <p key={i} className="gbm-gebedstekst">{alinea}</p>)}
         </LeesWeergave>
       )}
     </>

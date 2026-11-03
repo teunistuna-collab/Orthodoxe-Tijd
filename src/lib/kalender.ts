@@ -108,6 +108,12 @@ export function orthodoxPascha(jaar: number): Date {
 export function formatLang(d: Date): string {
   return `${WEEKDAGEN[d.getUTCDay()]} ${d.getUTCDate()} ${MAANDEN[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
+/** Volledige kerkelijke datum van een burgerlijke dag: de weekdag van die dag zelf (een juliaanse datum als Date heeft
+ *  een verkeerde weekdag), met dag, maand en jaar volgens de gekozen kalender. */
+export function formatKerkLang(civil: Date, mode: Mode): string {
+  const k = kerkDatum(civil, mode);
+  return `${WEEKDAGEN[civil.getUTCDay()]} ${k.getUTCDate()} ${MAANDEN[k.getUTCMonth()]} ${k.getUTCFullYear()}`;
+}
 export function formatDatum(d: Date): string {
   return `${d.getUTCDate()} ${MAANDEN[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }

@@ -12,9 +12,11 @@ export const BIDDEN_PAGINAS = ['bidden', 'gebeden', 'psalmen'];
 export const ONTDEK_PAGINAS = ['cycli', 'week', 'jaar', 'pascha', 'geboorte'];
 export const GEDEELD = ['adem', 'etmaal'];
 let laatste: Groep = 'ontdek';
-/** Door App.tsx aangeroepen bij elke paginawissel. */
+/** Door App.tsx aangeroepen bij elke paginawissel. Alleen de overzichten waarvandaan je Adem of Etmaal opent (Bidden,
+ *  Ontdek en zijn cycli) bepalen de groep; Psalter en Gebeden niet, anders verspringt de groep als je vanuit Etmaal een
+ *  psalm opent en terugkomt. */
 export function onthoudGroep(pagina: string) {
-  if (BIDDEN_PAGINAS.includes(pagina)) laatste = 'bidden';
+  if (pagina === 'bidden') laatste = 'bidden';
   else if (ONTDEK_PAGINAS.includes(pagina)) laatste = 'ontdek';
 }
 /** De groep van een pagina; Adem en Etmaal volgen de laatst bezochte groep. */

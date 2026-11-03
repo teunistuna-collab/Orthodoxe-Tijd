@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { BookOpenText, ChevronDown, ExternalLink } from 'lucide-react';
 import type { LezingKeuze } from '../lib/context';
 import { laadLezingen, nbv21Url, vertaalRef, vertaalTag, type HtcLezing } from '../lib/htc';
-import { formatLang, kerkDatum } from '../lib/kalender';
+import { formatKerkLang, formatLang, kerkDatum } from '../lib/kalender';
 import Modal from './Modal';
+import { useApp } from '../lib/context';
+import { useMobiel } from '../lib/desktop';
 
 interface Props {
   keuze: LezingKeuze | null;
@@ -18,6 +20,9 @@ export default function LezingModal({ keuze, onClose }: Props) {
   const lezing = klaar?.lezing ?? null;
   const status = !klaar ? 'laden' : lezing ? 'ok' : 'fout';
   const toonEngels = engelsVoor !== null && engelsVoor === keuze;
+  // Mobiel: alleen de kerkelijke datum, en een rustige link die duidelijk zegt dat hij de app verlaat.
+  const mobiel = useMobiel();
+  const { mode } = useApp();
 
   useEffect(() => {
     if (!keuze) return;
@@ -41,10 +46,10 @@ export default function LezingModal({ keuze, onClose }: Props) {
   const nbv = keuze ? nbv21Url(keuze.ref) : null;
 
   return (
-    <Modal lezen open={Boolean(keuze)} onClose={onClose} eyebrow={`${keuze ? vertaalTag(keuze.tag, refNl) : ''} · ${keuze ? formatLang(keuze.civil) : ''}`} title={refNl} centerTitle maxWidth="max-w-2xl">
+    <Modal lezen open={Boolean(keuze)} onClose={onClose} eyebrow={`${keuze ? vertaalTag(keuze.tag, refNl) : ''} · ${keuze ? (mobiel ? formatKerkLang(keuze.civil, mode) : formatLang(keuze.civil)) : ''}`} title={refNl} centerTitle maxWidth="max-w-2xl">
             <div>
               {/* NBV21 */}
-              <div className="rounded-xl border border-gold/40 bg-gold-pale/60 p-5">
+              <div className="lz-nbv rounded-xl border border-gold/40 bg-gold-pale/60 p-5">
                 <div className="ot-label flex items-center gap-2">
                   <BookOpenText className="h-4 w-4" /> Lezen in de NBV21
                 </div>
@@ -57,11 +62,13 @@ export default function LezingModal({ keuze, onClose }: Props) {
                     href={nbv}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-wine px-5 py-2.5 text-sm font-bold text-gold-light transition hover:bg-wine-deep"
+                    className="lz-nbv-knop mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-wine px-5 py-2.5 text-sm font-bold text-gold-light transition hover:bg-wine-deep"
                   >
-                    Open {refNl} in de NBV21 <ExternalLink className="h-4 w-4" />
+                    {mobiel ? 'Lees verder op debijbel.nl' : `Open ${refNl} in de NBV21`} <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>
-                ) : (
+                ) : null}
+                {nbv && mobiel && <p className="lz-nbv-noot">Opent buiten de app, in een nieuw venster.</p>}
+                {nbv ? null : (
                   <p className="mt-3 text-sm text-ink-mute">Voor dit bijbelboek is geen NBV21-verwijzing beschikbaar.</p>
                 )}
               </div>
@@ -70,7 +77,7 @@ export default function LezingModal({ keuze, onClose }: Props) {
               <button
                 type="button"
                 onClick={() => setEngelsVoor((v) => (v === keuze ? null : keuze))}
-                className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-ink-mute underline-offset-2 hover:text-gold-deep hover:underline"
+                className="lz-engels mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-ink-mute underline-offset-2 hover:text-gold-deep hover:underline"
               >
                 {toonEngels ? 'Engelse tekst verbergen' : 'Engelse tekst tonen (NKJV)'} <ChevronDown className={`h-3.5 w-3.5 transition ${toonEngels ? 'rotate-180' : ''}`} />
               </button>

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import Modal from './Modal';
 import { useApp } from '../lib/context';
+import { useMobiel } from '../lib/desktop';
 import { civilVanKerkdatum, formatKort, formatMd } from '../lib/kalender';
 import { lageLandenTekst } from '../lib/heiligenIconen';
 import type { Resultaat } from '../lib/heiligenPopup';
@@ -29,6 +30,7 @@ function label(h: Resultaat) {
 export default function HeiligePopup({ heilige, onClose }: { heilige: Resultaat | null; onClose: () => void }) {
   // Bij de juliaanse kalender beide datums in de kop (zoals in de lijsten), zodat de dag niet "verspringt".
   const { heiligen, mode, vandaag } = useApp();
+  const mobiel = useMobiel(); // mobiel: alleen de kerkelijke datum in de kop
   const [actief, setActief] = useState<Resultaat | null>(heilige);
   // Een andere heilige van buitenaf geopend: die tonen (state afleiden van de prop, zonder effect).
   const [vorigeProp, setVorigeProp] = useState(heilige);
@@ -67,7 +69,7 @@ export default function HeiligePopup({ heilige, onClose }: { heilige: Resultaat 
       onClose={onClose}
       lezen
       kopNav
-      kopDatum={mode === 'oud' ? `Jul. ${formatMd(actief.md)} · Greg. ${formatKort(civilVanKerkdatum(actief.md, vandaag.getUTCFullYear(), mode))}` : formatMd(actief.md)}
+      kopDatum={mode === 'oud' && !mobiel ? `Jul. ${formatMd(actief.md)} · Greg. ${formatKort(civilVanKerkdatum(actief.md, vandaag.getUTCFullYear(), mode))}` : formatMd(actief.md)}
       onVorige={() => naarDag(-1)}
       onVolgende={() => naarDag(1)}
       vorigeLabel="Vorige dag"

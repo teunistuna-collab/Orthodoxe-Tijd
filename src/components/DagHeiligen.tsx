@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useApp } from '../lib/context';
-import { dagInfo, formatLang, parseYmd } from '../lib/kalender';
+import { useMobiel } from '../lib/desktop';
+import { dagInfo, formatKerkLang, formatLang, parseYmd } from '../lib/kalender';
 import { heiligenVanDag, type Resultaat } from '../lib/heiligenPopup';
 import HeiligePopup from './HeiligePopup';
 import Modal from './Modal';
@@ -15,6 +16,7 @@ interface Props {
 // levensbeschrijving in dezelfde leespop-up als op de Heiligen-pagina.
 export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
   const { mode, vandaagYmd, heiligen: eigen } = useApp();
+  const mobiel = useMobiel(); // mobiel: alleen de kerkelijke datum
   const [gekozen, setGekozen] = useState<Resultaat | null>(null);
   const dag = useMemo(() => (gekozenDag ? dagInfo(parseYmd(gekozenDag), mode, vandaagYmd) : null), [gekozenDag, mode, vandaagYmd]);
   const heiligen = useMemo(() => (dag ? heiligenVanDag(dag.kerkKey, eigen?.HEILIGEN, dag.ymd) : []), [dag, eigen]);
@@ -28,7 +30,7 @@ export default function DagHeiligen({ ymd: gekozenDag, onClose }: Props) {
   return (
     <>
       {dag && (
-        <Modal open onClose={onClose} eyebrow={formatLang(dag.civil)} title="Heiligen van de dag" centerTitle maxWidth="max-w-xl">
+        <Modal open onClose={onClose} eyebrow={mobiel ? formatKerkLang(dag.civil, mode) : formatLang(dag.civil)} title="Heiligen van de dag" centerTitle maxWidth="max-w-xl">
           {heiligen.length > 0 ? (
             <ul className="grid gap-2">
               {heiligen.map((h, i) => (

@@ -164,7 +164,7 @@ export default function Vandaag() {
         ) : (
           <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
         )}
-        <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time>{mobiel && kerkDatumDeel && <span className="vm2-jul"><span className="sr-only">, </span>{kerkDatumDeel} (juliaans)</span>}</h1>
+        <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(mobiel && kerkDatumDeel ? dag.kerk : dag.civil)}</time></h1>{/* Mobiel: alleen de kerkelijke datum, geen tweede datum */}
         {mobiel && fotoKop && <p className="sr-only">{feest ? feest.alt : 'Icoon van Christus Pantocrator in kaarslicht'}</p>}
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>
