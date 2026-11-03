@@ -633,3 +633,19 @@ button.vt-tegel-binnen { cursor: pointer; }
 /* Psalmverzen (desktop en de psalmen in Etmaal): inspringen zoals de uitgave, zie psalter-mobiel.css */
 #top#top#top#top#top#top .ps-vers p span { padding-left: 2.2em; text-indent: -2.2em; }
 #top#top#top#top#top#top .ps-vers p span + span { text-indent: -1.1em; }
+/* Bronnen mobiel (critique 03-11-2026): het perkament schuift met afgeronde bovenhoeken onder de donkere balk, het
+   label en de ondertitel in de openingsstijl (de leesregel hierboven vangt ze anders mee), de bronnen met een eigen
+   kopje en ruimte ertussen, sectiekoppen in Cormorant, warme focusringen */
+@media (max-width: 767.98px) {
+  .vg.vg-losse-balk .ot-strook { padding-bottom: 16px; } /* ruimte waar het perkament overheen schuift; Terug blijft vrij */
+  #top#top#top .exact-content:has(> div > .bronnen-inhoud) { position: relative; z-index: 3; margin-top: -16px; border-radius: 16px 16px 0 0; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .exact-content:has(#bronnen) #bronnen .opening-label { font-family: var(--font-titel) !important; font-size: 13px !important; font-weight: 600 !important; line-height: normal !important; letter-spacing: .16em; text-transform: uppercase; color: var(--color-gold-deep) !important; }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .exact-content:has(#bronnen) #bronnen .opening-onder { font-family: var(--font-display) !important; font-size: 19px !important; font-style: italic; color: var(--gedempt, #5d5040) !important; }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .exact-content:has(#bronnen) .bronnen-inhoud h2 { margin-top: 0; font-family: var(--font-display) !important; font-size: 26px !important; font-weight: 600 !important; }
+  .bronnen-lijst { display: grid; gap: 18px; margin: 0; }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .bronnen-inhoud .bronnen-lijst dt { font-family: var(--font-display); font-size: 21px; font-weight: 600; line-height: 1.2; color: var(--inkt, #0b1b2a); }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .bronnen-inhoud .bronnen-lijst dd { margin: 2px 0 0; font-family: var(--font-lees); font-size: 17px; line-height: 1.5; color: var(--gedempt, #5d5040); }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .bronnen-inhoud .bronnen-lijst a { font-family: var(--font-lees) !important; font-size: 17px !important; color: var(--bordeaux-diep, #850d17) !important; text-decoration: underline; text-underline-offset: 2px; }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .bronnen-inhoud a:focus-visible { outline: 3px solid #7d5218 !important; outline-offset: 2px; border-radius: 2px; }
+  #top#top#top#top#top#top#top#top#top#top#top#top#top .vg-losse-balk :focus-visible { outline: 3px solid #e0b95a !important; outline-offset: 2px; }
+}
