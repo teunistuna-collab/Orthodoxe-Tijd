@@ -780,3 +780,9 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 .vg-ontdek-banner .vg-ontdek-merk { position: absolute; top: 22px; left: 0; right: 0; z-index: 2; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
 .vg-ontdek-banner .em-banner-tekst { position: absolute; left: 0; right: 0; bottom: 36px; padding: 0 20px; }
 .vg-ontdek-banner .am-sierlijn { margin: 6px auto 4px; }
+
+/* Ontdek: de levende derde regel (15 px), gelijke kaarthoogte, warme focus en zichtbare reactie bij aantikken */
+#top#top#top#top#top#top#top#top .vg-ontdek-tekst .vg-ontdek-nu { margin-top: 2px; font-size: 15px; line-height: 1.3; color: #5d4630; }
+#top#top#top#top#top#top#top#top .vg-ontdek-kaart { min-height: 112px; }
+#top#top#top#top#top#top#top#top .vg-ontdek-kaart:focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+.vg-ontdek-kaart:active { background: #f1dcbd; }

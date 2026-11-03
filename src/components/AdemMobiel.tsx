@@ -6,6 +6,7 @@ import { useEigenPijlgebed } from '../lib/pijlgebed';
 import { BLAD, HANDEN, KRUIS } from './symbolen';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import { vorigeAdres } from '../lib/vorigAdres';
+import { terugNaarGroep } from '../lib/navigatie';
 
 // Adem op mobiel (< 768 px), volgens de goedgekeurde mock-up (mobile/docs/mockups/goedgekeurd/08-adem.png), vier weergaven:
 //   #adem                  1. de gebedshoek met het Jezusgebed, "Begin met bidden" en de vier verdiepingen
@@ -70,6 +71,8 @@ const bewaarVorm = (id: string) => {
   }
 };
 
+// Bidden of Ontdek, gelezen na de paginawissel in App (die de groep bijhoudt)
+const useTerugNaarGroep = () => useSyncExternalStore((f) => volgHash(() => queueMicrotask(f)), terugNaarGroep);
 const volgHash = (f: () => void) => {
   window.addEventListener('hashchange', f);
   return () => window.removeEventListener('hashchange', f);
@@ -88,13 +91,14 @@ const SRCSET = `${BEELD}-800.webp 800w, ${BEELD}-941.webp 941w`;
 
 // 1. Beginweergave
 function Begin({ gebed, laatste }: { gebed: string; laatste: string }) {
+  const terug = useTerugNaarGroep();
   return (
     <section id="adem" className="am">
       <div className="am-held">
         <img className="am-held-beeld" src={`${BEELD}-800.webp`} srcSet={SRCSET} sizes="100vw" alt="" width={941} height={1672} decoding="async" />
         {/* Titel bovenin en het gebed onderaan: niets over het gelaat op het icoon */}
+        <Kop terug={terug} merk slim />
         <div className="am-held-tekst">
-          <p className="am-merk">Orthodoxe Tijd</p>
           <h1 className="am-titel">Adem</h1>
           <p className="am-onder">Het Jezusgebed</p>
         </div>

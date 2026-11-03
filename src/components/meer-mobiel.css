@@ -5,7 +5,7 @@
 .mm-banner img { object-position: 60% 45%; }
 .mm-banner .em-banner-tekst { position: absolute; left: 0; right: 0; bottom: 36px; padding: 0 20px; }
 .mm-banner .mm-merk { position: absolute; top: 22px; left: 0; right: 0; z-index: 2; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
-.mm-banner .em-titel { font-size: 48px; }
+#top#top#top#top#top#top#top#top#top#top#top .mm-banner .em-titel { font-size: 48px; }
 .mm-banner .am-sierlijn { width: min(190px, 56%); margin: 8px auto 6px; }
 
 .mm-papier { position: relative; z-index: 3; margin-top: -16px; padding: 10px 12px 24px; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: 0 -2px 10px rgba(10, 5, 2, .35); text-align: left; }
@@ -23,4 +23,20 @@
 .mm-tekst b { font-size: 25px; font-weight: 500; line-height: 1.15; }
 .mm-tekst span { font-size: 17px; line-height: 1.3; color: #5d4630; }
 .mm-pijl { flex: none; width: 24px; height: 24px; color: #4a3220; stroke-width: 1.6; }
-#top#top#top#top#top#top#top#top .mm-kaart:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+#top#top#top#top#top#top#top#top .mm-kaart:focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+.mm-kaart:active { background: #f1dcbd; }
+
+/* Verdieping: links een uitsnede van de eigen banner die overloopt in perkament (zoals Bidden en Ontdek) */
+#top#top#top#top#top#top#top#top .mm-met-beeld { position: relative; min-height: 96px; padding: 10px 12px 10px 0; overflow: hidden; }
+.mm-beeld { position: relative; flex: 0 0 34%; align-self: stretch; margin: -10px 0 -10px 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, #000 55%, transparent); mask-image: linear-gradient(90deg, #000 55%, transparent); }
+.mm-beeld img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mm-met-beeld .mm-tekst b { font-size: 23px; }
+.mm-met-beeld .mm-tekst > span { font-size: 15px; }
+#top#top#top#top#top#top#top#top .mm-tekst .mm-nu { margin-top: 1px; font-size: 15px; font-style: italic; color: #6a4a24; }
+/* Over de app: compacter, met een donker rond icoon (zoals de mock-up) */
+.mm-klein { gap: 8px; }
+#top#top#top#top#top#top#top#top .mm-klein .mm-kaart { min-height: 64px; padding: 8px 12px; }
+.mm-klein .mm-tekst b { font-size: 20px; }
+.mm-klein .mm-tekst span { font-size: 15px; }
+.mm-icoon { display: grid; flex: none; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: #2c180f; box-shadow: 0 0 0 1px rgba(201, 162, 98, .6); color: #e0b95a; }
+.mm-icoon svg { width: 20px; height: 20px; }

@@ -5,7 +5,7 @@ import { CycleTransition, LiturgicalPopup, TimeSanctificationTimeline } from './
 import { JAAR_INFO } from '../lib/cyclusTeksten';
 import { useApp } from '../lib/context';
 import { DERTIEN } from '../lib/feesten';
-import { addDays, civilVanKerkdatum, daysBetween, formatDag, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
+import { addDays, civilVanKerkdatum, formatDag, kerkDatum, orthodoxPascha, type Mode } from '../lib/kalender';
 import { volgendeFeestDatum } from '../lib/overzicht';
 import Verdieping from './Verdieping';
 import ExactPageFrame from './ExactPageFrame';
@@ -14,9 +14,9 @@ import { letterBeeld } from '../lib/letters';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { useMobiel } from '../lib/desktop';
 import JaarMobiel from './JaarMobiel';
+import { PERIODS, huidigeTijd, type PeriodKey } from '../lib/jaartijd';
 import './Vandaag.css';
 
-type PeriodKey = 'kersttijd' | 'openbaringstijd' | 'vastentijd' | 'passietijd' | 'paschatijd' | 'pinkstertijd';
 type InfoKey = 'wat' | 'jaarcyclus' | 'betekenis' | 'praktisch';
 
 type PopupContent = {
@@ -97,14 +97,6 @@ const PERIOD_POPUPS: Record<PeriodKey, PopupContent> = {
   },
 };
 
-const PERIODS: Array<{ key: PeriodKey; label: string; short: string; movable: boolean }> = [
-  { key: 'kersttijd', label: 'Kersttijd', short: 'Van het kerkelijk nieuwjaar naar Kerstmis', movable: false },
-  { key: 'openbaringstijd', label: 'Openbaringstijd', short: 'Christus wordt geopenbaard aan alle volken', movable: false },
-  { key: 'vastentijd', label: 'Vastentijd', short: 'Voorbereiding op het heilige Pascha', movable: true },
-  { key: 'passietijd', label: 'Passietijd', short: 'Het lijden van de Heer', movable: true },
-  { key: 'paschatijd', label: 'Paschatijd', short: 'De Verrijzenis van Christus', movable: true },
-  { key: 'pinkstertijd', label: 'Pinkstertijd', short: 'De gave van de Heilige Geest', movable: true },
-];
 
 
 const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
@@ -117,21 +109,6 @@ const INFO_CARDS: Array<{ key: InfoKey; title: string; intro: string }> = [
 
 const CONTENT = 'mx-auto w-full max-w-[1500px] px-4 sm:px-8 lg:px-12';
 
-// In welke tijd van het jaar we nu zitten. ponytail: eigen grenzen op basis van de feesten in de popups hierboven —
-// Kersttijd vanaf het kerkelijk nieuwjaar (1 september) tot Theofanie, Openbaringstijd tot het begin van de Triodion
-// (Pascha − 70), Vastentijd tot Lazaruszaterdag, Passietijd tot Pascha, Paschatijd tot Pinksteren, daarna Pinkstertijd
-// tot 31 augustus. Vaste grenzen in kerkelijke datums, beweeglijke via de Pascha-berekening.
-function huidigeTijd(vandaag: Date, mode: Mode): PeriodKey {
-  const kerk = kerkDatum(vandaag, mode);
-  const maand = kerk.getUTCMonth() + 1;
-  if (maand >= 9 || (maand === 1 && kerk.getUTCDate() < 6)) return 'kersttijd';
-  const offset = daysBetween(orthodoxPascha(vandaag.getUTCFullYear()), vandaag);
-  if (offset < -70) return 'openbaringstijd';
-  if (offset < -8) return 'vastentijd';
-  if (offset < 0) return 'passietijd';
-  if (offset < 49) return 'paschatijd';
-  return 'pinkstertijd';
-}
 
 // Begin en einde van elke tijd, met dezelfde grenzen als huidigeTijd hierboven, voor het kerkelijk jaar dat eindigt in
 // de zomer van `jaar` (van 1 september ervoor tot 31 augustus). Alleen voor de weergave op mobiel.

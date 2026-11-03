@@ -46,8 +46,8 @@ function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: 
     <section id="jaar" className="am em wm">
       <div className="em-banner wm-banner">
         <img src={BANNER.src} srcSet={BANNER.srcSet} sizes="100vw" alt="" width={1672} height={941} decoding="async" />
+        <Kop terug="#cycli" merk slim />
         <div className="em-banner-tekst">
-          <p className="am-merk">Orthodoxe Tijd</p>
           <h1 className="em-titel">Jaar</h1>
           <p className="am-onder">Het kerkelijk jaar</p>
           <Sierlijn />

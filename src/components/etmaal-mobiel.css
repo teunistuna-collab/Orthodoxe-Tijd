@@ -123,3 +123,10 @@ html:not(.lees-nacht) #top#top#top#top#top#top#top#top#top .em-laag .am-kop.is-l
 .em-dienst .em-klooster { flex: 1 1 0; min-height: 96px; height: auto; margin-bottom: 0; }
 /* Onderbanner per uur: het klooster met de lucht erboven in beeld */
 .em-dienst .em-klooster { object-position: 72% 42%; }
+
+/* Terug en het merk bovenin de banners van de hoofdpagina's (Etmaal, Week, Jaar) */
+.em-banner > .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; }
+.em-banner > .am-kop .am-merk { font-size: 12px; text-shadow: 0 1px 3px rgba(0, 0, 0, .9), 0 0 10px rgba(0, 0, 0, .7); }
+#top#top#top#top#top#top#top#top#top .em-banner > .am-kop :is(a, button):focus-visible { outline: 3px solid #e0b95a; outline-offset: 2px; }
+/* Zonder merk in de tekst (staat nu in de kopbalk): de titel blijft onderaan in de banner */
+#top#top#top#top#top#top#top#top#top#top#top :is(#etmaal, #week, #jaar) > .em-banner > .em-banner-tekst > .em-titel { margin-top: auto !important; }

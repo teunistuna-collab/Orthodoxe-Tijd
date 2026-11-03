@@ -2,6 +2,12 @@ import type { CSSProperties } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Sierlijn } from './MobielLaag';
 import { usePaginaOpen } from '../lib/paginaOpen';
+import { useApp } from '../lib/context';
+import { WEEKDAGEN, daysBetween } from '../lib/kalender';
+import { dienstVanHetUur, naamVan } from '../lib/etmaal';
+import { PERIODS, huidigeTijd } from '../lib/jaartijd';
+import { paascyclusVoor } from '../lib/paascyclus';
+import { geboortecyclusVoor } from '../lib/geboortecyclus';
 import './Vandaag.css';
 
 // Ontdek (#cycli): het overzicht achter Ontdek in de onderbalk, alleen op mobiel (App.tsx), volgens de goedgekeurde
@@ -20,8 +26,23 @@ const CYCLI = [
   { id: 'geboorte', titel: 'Geboorte', onder: 'Het Licht komt in de wereld', zin: 'De weg naar de Geboorte van Christus.', beeld: '/images/ontdek/geboorte.webp', zoom: 1.05, fx: 50, fy: 58 },
 ];
 
+const aantal = (n: number) => (n === 1 ? '1 dag' : `${n} dagen`);
+
 export default function Cycli() {
   const open = usePaginaOpen('cycli');
+  const { vandaag, mode } = useApp();
+  // Waar je nu bent in elk ritme, uit de bestaande berekeningen (Adem houdt zijn vaste zin)
+  const pascha = paascyclusVoor(vandaag);
+  const paschaStap = pascha.huidige ? pascha.stappen.find((s) => s.key === pascha.huidige) : null;
+  const geboorte = geboortecyclusVoor(vandaag, mode);
+  const geboorteStap = geboorte.huidige ? geboorte.stappen.find((s) => s.key === geboorte.huidige) : null;
+  const nu: Record<string, string> = {
+    etmaal: `Nu: ${naamVan(dienstVanHetUur(new Date()))}`,
+    week: `Vandaag: ${WEEKDAGEN[vandaag.getUTCDay()]}`,
+    jaar: `Nu: ${PERIODS.find((p) => p.key === huidigeTijd(vandaag, mode))?.label ?? ''}`,
+    pascha: paschaStap ? `Nu: ${paschaStap.label}` : `Nog ${aantal(pascha.dagenTotPascha)} tot Pascha`,
+    geboorte: geboorteStap ? `Nu: ${geboorteStap.label}` : `De vasten begint over ${aantal(daysBetween(vandaag, geboorte.stappen[0].van))}`,
+  };
   return (
     <section id="cycli" className="vg vg-cycli">
       {/* Banner zoals Etmaal: het aangeleverde beeld van de kapel met het wierookvat, titel en sierlijn als tekst */}
@@ -35,18 +56,18 @@ export default function Cycli() {
         </div>
       </div>
       <div className="vg-papier vg-ontdek">
-        <nav aria-label="De zes cycli">
+        <nav aria-label="De zes ritmes">
           <ul className="vg-ontdek-lijst">
-            {CYCLI.map(({ id, titel, onder, zin, beeld, zoom, fx, fy }) => (
+            {CYCLI.map(({ id, titel, onder, zin, beeld, zoom, fx, fy }, i) => (
               <li key={id}>
                 <a className="vg-ontdek-kaart" href={`#${id}`}>
                   <span className="vg-ontdek-beeld" style={{ '--zoom': zoom, '--fx': `${fx}%`, '--fy': `${fy}%` } as CSSProperties}>
-                    <img src={beeld} alt="" loading="lazy" decoding="async" />
+                    <img src={beeld} alt="" loading={open && i < 4 ? undefined : 'lazy'} decoding="async" />
                   </span>
                   <span className="vg-ontdek-tekst">
                     <b>{titel}</b>
                     <span>{onder}</span>
-                    <small>{zin}</small>
+                    <span className="vg-ontdek-nu">{nu[id] ?? zin}</span>
                   </span>
                   <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
                 </a>

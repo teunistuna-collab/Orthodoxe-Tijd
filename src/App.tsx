@@ -91,8 +91,8 @@ const INHOUD = {
   cycli: <Cycli />,
   bidden: <Bidden />,
   instellingen: <Instellingen />,
-  // Bronnen: mobiel dezelfde bovenbalk (merk en zoeken) als de andere pagina's
-  bronnen: <><div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><KopBalk /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></>,
+  // Bronnen: mobiel dezelfde bovenbalk (merk en zoeken) als de andere pagina's, met Terug naar Meer (desktop toont deze balk niet)
+  bronnen: <><div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><KopBalk terug="#meer" /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></>,
 };
 
 export default function App() {

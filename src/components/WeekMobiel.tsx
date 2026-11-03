@@ -49,8 +49,8 @@ function Overzicht({ dagen, vandaagKey }: { dagen: Record<WeekDag, WeekTekst>; v
     <section id="week" className="am em wm">
       <div className="em-banner wm-banner">
         <img src={BANNER.src} srcSet={BANNER.srcSet} sizes="100vw" alt="" width={1086} height={1448} decoding="async" />
+        <Kop terug="#cycli" merk slim />
         <div className="em-banner-tekst">
-          <p className="am-merk">Orthodoxe Tijd</p>
           <h1 className="em-titel">Week</h1>
           <p className="am-onder">De zeven dagen</p>
           <Sierlijn />

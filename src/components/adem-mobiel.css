@@ -122,3 +122,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top#top .am-laag .lees-
 #top#top#top#top#top#top#top#top#top .am-laag .am-kop :is(.am-terug, .am-knopje) { margin: 0; }
 /* Avondweergave: de titel van een leesweergave leesbaar (ook bij Etmaal, Week en Jaar) */
 html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .am-lees-titel { color: #e0b765 !important; }
+/* Terug en het merk bovenin de gebedshoek */
+.am-held > .am-kop { position: absolute; top: 0; left: 0; right: 0; z-index: 3; padding-left: 8px; padding-right: 8px; }
+.am-held > .am-kop .am-merk { font-size: 12px; }
+.am-held { padding-top: calc(48px + env(safe-area-inset-top)); }

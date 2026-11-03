@@ -4,7 +4,7 @@ import { useApp } from '../lib/context';
 import { ETMAAL_INFO, ETMAAL_INLEIDING } from '../lib/cyclusTeksten';
 import { dienstVanHetUur, naamVan, serviceConfig, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { OPEN_DIENST_EVENT } from '../lib/events';
-import { gaNaar } from '../lib/navigatie';
+import { gaNaar, terugNaarGroep } from '../lib/navigatie';
 import { vorigeAdres } from '../lib/vorigAdres';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import Psalterlezing from './Psalterlezing';
@@ -39,6 +39,8 @@ const VERDIEPING: { key: InfoKey; titel: string }[] = [
   { key: 'praktisch', titel: 'Praktisch' },
 ];
 
+// Bidden of Ontdek, gelezen na de paginawissel in App (die de groep bijhoudt)
+const useTerugNaarGroep = () => useSyncExternalStore((f) => volgHash(() => queueMicrotask(f)), terugNaarGroep);
 const volgHash = (f: () => void) => {
   window.addEventListener('hashchange', f);
   return () => window.removeEventListener('hashchange', f);
@@ -56,12 +58,13 @@ function useNuDienst() {
 
 // 1. Overzicht
 function Overzicht({ nu }: { nu: ServiceMapping }) {
+  const terug = useTerugNaarGroep();
   return (
     <section id="etmaal" className="am em">
       <div className="em-banner">
         <img src={`${BEELD}/kapel-lamp.webp`} alt="" width={900} height={572} decoding="async" />
+        <Kop terug={terug} merk slim />
         <div className="em-banner-tekst">
-          <p className="am-merk">Orthodoxe Tijd</p>
           <h1 className="em-titel">Etmaal</h1>
           <p className="am-onder">De uren van de dag</p>
           <Sierlijn />

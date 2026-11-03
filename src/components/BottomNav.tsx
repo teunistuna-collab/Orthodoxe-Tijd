@@ -26,7 +26,7 @@ export default function BottomNav({ pagina: actief }: { pagina: string }) {
       <ul>
         {ITEMS.map(({ id, label, Icon }) => (
           <li key={id}>
-            <a href={`#${id}`} className={isAan(id) ? 'is-actief' : undefined} aria-current={actief === id ? 'page' : undefined}>
+            <a href={`#${id}`} className={isAan(id) ? 'is-actief' : undefined} aria-current={actief === id ? 'page' : isAan(id) ? 'true' : undefined}>
               <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
               <span>{label}</span>
             </a>
