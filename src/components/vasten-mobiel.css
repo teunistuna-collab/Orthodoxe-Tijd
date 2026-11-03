@@ -80,3 +80,6 @@
 /* Rijen zijn links */
 #top#top#top#top#top#top#top#top a.vsm-rij { color: #2b1a0e !important; text-decoration: none; }
 .vsm-verder { margin-top: 18px; }
+
+/* Vasten vandaag: datum, antwoord en uitleg gecentreerd */
+#top#top#top#top#top#top#top#top#top#top .vsm-regel :is(.vsm-dag, .vsm-antwoord, .vsm-tekst) { text-align: center; }

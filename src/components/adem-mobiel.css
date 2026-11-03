@@ -109,7 +109,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top#top .am-laag .lees-
 
 /* Gebedshoek: titel klein bovenin, het gebed en de knop onderaan; het gelaat op het icoon blijft vrij */
 #top#top#top#top#top#top#top#top#top#top .am-held .am-titel { font-size: 34px; }
-.am-held-onder { display: flex; flex-direction: column; align-items: center; }
+.am-held-onder { display: flex; flex-direction: column; align-items: center; margin-top: auto; } /* onderaan de banner */
 .am-held-onder .am-sierlijn { margin: 0 auto; }
 .am-held-onder .am-gebed { margin: 12px auto 0; font-size: 24px; text-shadow: 0 1px 4px rgba(0, 0, 0, .9), 0 0 16px rgba(0, 0, 0, .8); }
 .am-held-onder .am-begin { margin-top: 18px; }

@@ -90,21 +90,18 @@ const BEELD = '/images/adem/gebedshoek';
 const SRCSET = `${BEELD}-800.webp 800w, ${BEELD}-941.webp 941w`;
 
 // 1. Beginweergave
-function Begin({ gebed, laatste }: { gebed: string; laatste: string }) {
+function Begin({ laatste }: { laatste: string }) {
   const terug = useTerugNaarGroep();
   return (
     <section id="adem" className="am">
       <div className="am-held">
         <img className="am-held-beeld" src={`${BEELD}-800.webp`} srcSet={SRCSET} sizes="100vw" alt="" width={941} height={1672} decoding="async" />
-        {/* Titel bovenin en het gebed onderaan: niets over het gelaat op het icoon */}
+        {/* Titel en ondertitel onderaan, boven de knop: niets over het gelaat op het icoon */}
         <Kop terug={terug} merk slim />
-        <div className="am-held-tekst">
-          <h1 className="am-titel">Adem</h1>
-          <p className="am-onder">Het Jezusgebed</p>
-        </div>
         <div className="am-held-onder">
           <Sierlijn />
-          <p className="am-gebed"><Gebedsregels tekst={gebed} /></p>
+          <h1 className="am-titel">Adem</h1>
+          <p className="am-onder">Het Jezusgebed</p>
           <a className="am-begin" href={`#adem/bidden/${laatste}`}>
             <span className="am-begin-symbool">{HANDEN}</span>
             <span>Begin met bidden</span>
@@ -279,7 +276,7 @@ export default function AdemMobiel() {
   const laatste = vormen.find((v) => v.id === leesVorm())?.id ?? vormen[0].id;
   return (
     <>
-      <Begin gebed={STANDAARD} laatste={laatste} />
+      <Begin laatste={laatste} />
       {soort === 'bidden' && <Bidden key={vorm.id} vorm={sleutel === 'adem' ? vormen[0] : vorm} metAdem={sleutel === 'adem'} />}
       {soort === 'vormen' && <Vormen huidig={vorm.id} vormen={vormen} />}
       {soort === 'lees' && sleutel in ADEM_POPUPS && <Lezen key={sleutel} onderwerp={sleutel as Onderwerp} />}
