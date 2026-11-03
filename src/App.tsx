@@ -2,6 +2,13 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import { KopBalk } from './components/NisKop';
+import { Kop } from './components/MobielLaag';
+import { useMobiel } from './lib/desktop';
+
+// Bronnen: op mobiel dezelfde kopbalk als de andere pagina's (Terug, merk), op desktop de bestaande balk.
+function BronnenBalk() {
+  return useMobiel() ? <Kop terug="#meer" merk slim /> : <KopBalk terug="#meer" />;
+}
 import './components/Vandaag.css';
 import './components/ontwerp.css';
 import { FooterInhoud } from './components/Footer';
@@ -92,7 +99,7 @@ const INHOUD = {
   bidden: <Bidden />,
   instellingen: <Instellingen />,
   // Bronnen: mobiel dezelfde bovenbalk (merk en zoeken) als de andere pagina's, met Terug naar Meer (desktop toont deze balk niet)
-  bronnen: <><div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><KopBalk terug="#meer" /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></>,
+  bronnen: <><div className="vg ot-redesign vg-losse-balk"><div className="ot-strook"><BronnenBalk /></div></div><div className="exact-content"><PaginaOpening id="bronnen" label="Verantwoording" titel="Bronnen" ondertitel="Bronnen en verwijzingen" /><div><section className="bronnen-inhoud"><FooterInhoud /></section></div></div></>,
 };
 
 export default function App() {

@@ -2329,3 +2329,14 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top .exact-modal-frame{font-variant-numeric:lining-nums}
   .dl-pijl{flex:none;width:18px;height:18px;margin-left:-4px;color:var(--color-gold-deep);stroke-width:1.8}
 }
+
+/* Mobiel: één kopbalk door de hele app (behalve Vandaag). Het merk op de tab-pagina's (Kalender, Bidden, Ontdek, Meer,
+   Psalter) op dezelfde plek en in dezelfde maat als in de kopbalk met Terug (MobielLaag Kop); vensters en de strook van
+   Bronnen in het bruin van de onderbalk in plaats van het oude nachtblauw. */
+@media (max-width:767.98px){
+  #top#top#top#top#top#top#top#top#top#top :is(.bd-banner .am-merk,.km-banner .am-merk,.mm-merk,.vg-ontdek-merk,.pm-merk){position:absolute;top:18px;left:0;right:0;z-index:2;margin:env(safe-area-inset-top) 0 0;font-size:12px;line-height:18px;letter-spacing:.2em;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.7)}
+  #top#top#top#top#top#top#top#top#top#top .pk-kop{background:linear-gradient(180deg,#24130d,#160b08)}
+  #top#top#top#top#top#top#top#top#top#top .vg-losse-balk .ot-strook{background:linear-gradient(180deg,#24130d,#160b08)}
+  #top#top#top#top#top#top#top#top#top#top .vg-losse-balk .am-kop{padding-left:0;padding-right:0}
+  #top#top#top#top#top#top#top#top#top#top .vg-losse-balk .am-kop .am-merk{font-size:12px;line-height:18px}
+}
