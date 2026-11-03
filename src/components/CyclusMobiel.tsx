@@ -5,6 +5,7 @@ import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { vastenGroep } from '../lib/vasten';
 import { VastenSymbool } from './ui';
 import { SIERKRUIS } from './symbolen';
+import { Sierlijn } from './MobielLaag';
 import './etmaal-mobiel.css';
 import './geboorte-mobiel.css';
 
@@ -25,26 +26,25 @@ export function AftelKaart({ label, dagen, onder, voet, groet, href, className =
   className?: string;
 }) {
   const feest = dagen <= 0 && !!groet?.length;
+  // Kaartvorm (.m-kader, index.css): kader met ingebogen hoeken, titel, cursieve onderregel, sierlijn en het label als onderstreepte
+  // tekst onderaan.
   return (
-    <a className={`em-nu gm-aftel${feest ? ' is-feest' : ''} ${className}`} href={href}>
-      <span className="em-nu-kruis">{SIERKRUIS}</span>
-      <span className="em-nu-tekst">
-        <span className="am-label">{label}</span>
-        {feest ? (
-          <b className="gm-groet">
-            {groet!.map((r, i) => (
-              <span key={i}>{r}</span>
-            ))}
-          </b>
-        ) : (
-          <>
-            <b>{dagen} {dagen === 1 ? 'dag' : 'dagen'}</b>
-            <span>{onder}</span>
-            {voet && <span className="gm-voet">{voet}</span>}
-          </>
-        )}
-      </span>
-      <ChevronRight className="am-pijl" aria-hidden="true" />
+    <a className={`m-kader gm-aftel${feest ? ' is-feest' : ''} ${className}`} href={href}>
+      {feest ? (
+        <b className="m-kader-titel gm-groet">
+          {groet!.map((r, i) => (
+            <span key={i}>{r}</span>
+          ))}
+        </b>
+      ) : (
+        <>
+          <b className="m-kader-titel">{dagen} {dagen === 1 ? 'dag' : 'dagen'}</b>
+          <span className="m-kader-onder">{onder}</span>
+          {voet && <span className="m-kader-onder">{voet}</span>}
+        </>
+      )}
+      <Sierlijn />
+      <span className="m-kader-pil">{label}</span>
     </a>
   );
 }

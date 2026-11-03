@@ -89,10 +89,12 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
   return (
     <div className="vm2">
       {/* Het pijlgebed: het stille middelpunt; een tik opent het om te bidden */}
-      <a className="vm2-pijlgebed" href="#vandaag/pijlgebed">
-        <h2 className="vm2-label">Het pijlgebed</h2>
-        <b>{pijlgebed}</b>
-        <span className="vm2-pijlgebed-onder">Bid het in stilte <ChevronRight aria-hidden="true" /></span>
+      {/* Kaartvorm (.m-kader): het gebed als titel, "Bid het in stilte" eronder, sierlijn, en "Het pijlgebed" als onderstreepte tekst onderaan */}
+      <a className="vm2-pijlgebed m-kader" href="#vandaag/pijlgebed">
+        <h2 className="vm2-label m-kader-pil">Het pijlgebed</h2>
+        <b className="m-kader-titel">{pijlgebed}</b>
+        <span className="m-kader-onder">Bid het in stilte</span>
+        <Sierlijn />
       </a>
 
       <Kaart className="vm2-kaart vm2-midden" href="#etmaal" onClick={uur.open}>

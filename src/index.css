@@ -2332,11 +2332,41 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 
 /* Mobiel: één kopbalk door de hele app (behalve Vandaag). Het merk op de tab-pagina's (Kalender, Bidden, Ontdek, Meer,
    Psalter) op dezelfde plek en in dezelfde maat als in de kopbalk met Terug (MobielLaag Kop); vensters en de strook van
-   Bronnen in het bruin van de onderbalk in plaats van het oude nachtblauw. */
+   Bronnen in het blauwgrijs van de onderbalk (bottom-nav.css: --nav-licht, --nav-blauw, --nav-donker). */
 @media (max-width:767.98px){
   #top#top#top#top#top#top#top#top#top#top :is(.bd-banner .am-merk,.km-banner .am-merk,.mm-merk,.vg-ontdek-merk,.pm-merk){position:absolute;top:18px;left:0;right:0;z-index:2;margin:env(safe-area-inset-top) 0 0;font-size:12px;line-height:18px;letter-spacing:.2em;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 10px rgba(0,0,0,.7)}
-  #top#top#top#top#top#top#top#top#top#top .pk-kop{background:linear-gradient(180deg,#24130d,#160b08)}
-  #top#top#top#top#top#top#top#top#top#top .vg-losse-balk .ot-strook{background:linear-gradient(180deg,#24130d,#160b08)}
+  #top#top#top#top#top#top#top#top#top#top .pk-kop{background:linear-gradient(180deg,#1c4b68,#103b59 35%,#09283d)}
+  #top#top#top#top#top#top#top#top#top#top .vg-losse-balk .ot-strook{background:linear-gradient(180deg,#1c4b68,#103b59 35%,#09283d)}
   #top#top#top#top#top#top#top#top#top#top .vg-losse-balk .am-kop{padding-left:0;padding-right:0}
   #top#top#top#top#top#top#top#top#top#top .vg-losse-balk .am-kop .am-merk{font-size:12px;line-height:18px}
+}
+
+/* Mobiel: de kaarten van Bidden, Ontdek en Meer in dezelfde stijl als op Vandaag (vandaag-mobiel.css .vm2-kaart):
+   perkament met papyrus-textuur, smalle goudrand, kleine hoek en dezelfde schaduw. */
+@media (max-width:767.98px){
+  #top#top#top#top#top#top#top#top#top#top :is(.bd-kaart,.vg-ontdek-kaart,.mm-kaart){border:1px solid var(--kaartrand,#b99455);border-radius:5px;background:#f3e5c6 url('/images/vandaag/papyrus-licht.webp') center/cover;box-shadow:inset 0 0 0 2px rgba(255,248,232,.35),0 4px 12px rgba(20,10,4,.45)}
+}
+
+/* Mobiel: kaartvorm "kader" (aftelling Geboorte en Pascha, pijlgebed op Vandaag). Een kader met ingebogen hoeken: een
+   gouden rand met een lichte binnenlijn (SVG als border-image, 9-slice), het perkament binnen dezelfde vorm op ::before (mask), zodat de schaduw (filter: drop-shadow) de vorm volgt.
+   Gecentreerd: titel, cursieve onderregel, sierlijn met kruis en het label als onderstreepte tekst. Geen bloemen of blaadjes. */
+@media (max-width:767.98px){
+  #top#top#top#top#top#top#top#top#top#top .m-kader{
+    display:flex;flex-direction:column;align-items:center;gap:2px;min-height:0;margin:0 0 12px;padding:2px 6px 4px;
+    border:16px solid transparent;border-radius:0;box-shadow:none;text-align:center;text-decoration:none;color:var(--color-ink,#2b1d12);
+    border-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 42 42'%3E%3Cpath d='M10.9 1.5H31.1A11 11 0 0 0 40.5 10.9V31.1A11 11 0 0 0 31.1 40.5H10.9A11 11 0 0 0 1.5 31.1V10.9A11 11 0 0 0 10.9 1.5Z' fill='none' stroke='%23b99455' stroke-width='3'/%3E%3Cpath d='M13.96 5.5H28.04A15 15 0 0 0 36.5 13.96V28.04A15 15 0 0 0 28.04 36.5H13.96A15 15 0 0 0 5.5 28.04V13.96A15 15 0 0 0 13.96 5.5Z' fill='none' stroke='%23d9b56e' stroke-opacity='.9' stroke-width='1'/%3E%3C/svg%3E") 16 / 16px stretch;
+    position:relative;isolation:isolate;background:none;
+    filter:drop-shadow(0 4px 6px rgba(20,10,4,.45));
+  }
+  #top#top#top#top#top#top#top#top#top#top .m-kader::before{
+    content:'';position:absolute;inset:-16px;z-index:-1;background:#f3e5c6 url('/images/vandaag/papyrus-licht.webp') center/cover;
+    -webkit-mask:radial-gradient(circle at 0 0,#0000 9px,#000 9.5px) 0 0/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 9px,#000 9.5px) 100% 0/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 9px,#000 9.5px) 0 100%/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 9px,#000 9.5px) 100% 100%/51% 51% no-repeat;
+    mask:radial-gradient(circle at 0 0,#0000 9px,#000 9.5px) 0 0/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 9px,#000 9.5px) 100% 0/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 9px,#000 9.5px) 0 100%/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 9px,#000 9.5px) 100% 100%/51% 51% no-repeat;
+  }
+  #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-titel{order:1;display:block;margin:0;font-family:var(--font-lees);font-size:clamp(25px,7.2vw,29px);font-weight:500;font-style:normal;line-height:1.2;color:var(--color-ink,#2b1d12)}
+  #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-titel > span{display:block}
+  #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-onder{order:2;font-family:var(--font-lees);font-size:16px;font-style:italic;line-height:1.35;color:var(--gedempt,#5d5040)}
+  #top#top#top#top#top#top#top#top#top#top .m-kader .am-sierlijn{order:3;margin:6px auto 8px}
+  #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-pil{order:4;display:inline-block;margin:0 0 6px;padding:2px 4px;border:0;border-radius:0;background:none;box-shadow:none;font-family:var(--font-lees)!important;font-size:16px;font-weight:500;font-style:normal;letter-spacing:0;text-transform:none;line-height:1.4;color:#5d4630!important;text-decoration:underline;text-decoration-color:#b99455;text-decoration-thickness:1px;text-underline-offset:4px}
+  #top#top#top#top#top#top#top#top#top#top .m-kader:focus-visible{outline:3px solid var(--color-gold-deep,#7d5218);outline-offset:-6px}
 }
