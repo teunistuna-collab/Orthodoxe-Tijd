@@ -21,8 +21,8 @@ export interface Boek {
 /** Omslagen pas aanzetten na toestemming (de definitieve omslagen worden later aangeleverd). */
 export const OMSLAGEN_AAN = false;
 
-/** Tijdelijke afbeelding per categorie (aangeleverd 27-10-2026, public/images/boeken; geen echte omslag): hetzelfde neutrale
- *  boek in een eigen kaftkleur. Een boek krijgt die van zijn eerste categorie met een afbeelding. */
+/** Tijdelijke afbeelding per categorie (aangeleverd 04-11-2026, vrijstaand uitgesneden, public/images/boeken; geen echte omslag):
+ *  hetzelfde neutrale boek in een eigen kaftkleur. Een boek krijgt die van zijn eerste categorie met een afbeelding. */
 const CATEGORIE_BEELD: Record<string, string> = {
   'Gebed en het Jezusgebed': 'gebed_en_het_jezusgebed',
   'Geestelijk leven': 'geestelijk_leven',
