@@ -797,3 +797,15 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
 .vg-feest-betekenis[open] > summary svg { transform: rotate(-90deg); }
 .vg-feest-betekenis .bv { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .vg-feest-betekenis > summary svg { transition: none; } }
+
+/* Ontdek op mobiel: kaarten met een minimale hoogte die meegroeit met de tekst, beelden zachter in het perkament met
+   een warme laag (alle zes gelijk), en het pijltje op een vaste plek midden rechts; de hele kaart blijft de link. */
+@media (max-width: 767.98px) {
+  #top#top#top#top#top#top#top#top .vg-ontdek-kaart { position: relative; min-height: 124px; }
+  #top#top#top#top#top#top#top#top .vg-ontdek-tekst { gap: 3px; padding: 14px 40px 14px 9px; }
+  #top#top#top#top#top#top#top#top .vg-ontdek-tekst .vg-ontdek-nu { margin-top: 4px; }
+  .vg-ontdek-kaart .vg-ontdek-beeld { -webkit-mask-image: linear-gradient(90deg, #000 40%, rgba(0, 0, 0, .55) 70%, transparent); mask-image: linear-gradient(90deg, #000 40%, rgba(0, 0, 0, .55) 70%, transparent); }
+  .vg-ontdek-beeld img { filter: saturate(.82) contrast(.9) sepia(.14); }
+  .vg-ontdek-beeld::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(120, 72, 30, .14), rgba(236, 212, 177, .32)); pointer-events: none; }
+  #top#top#top#top#top#top#top#top .vg-ontdek-kaart .vg-verd-pijl { position: absolute; top: 50%; right: 12px; margin: -10px 0 0; }
+}
