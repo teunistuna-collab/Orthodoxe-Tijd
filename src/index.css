@@ -2363,6 +2363,8 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
     -webkit-mask:radial-gradient(circle at 0 0,#0000 9px,#000 9.5px) 0 0/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 9px,#000 9.5px) 100% 0/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 9px,#000 9.5px) 0 100%/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 9px,#000 9.5px) 100% 100%/51% 51% no-repeat;
     mask:radial-gradient(circle at 0 0,#0000 9px,#000 9.5px) 0 0/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 9px,#000 9.5px) 100% 0/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 9px,#000 9.5px) 0 100%/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 9px,#000 9.5px) 100% 100%/51% 51% no-repeat;
   }
+  /* Het kader zelf (rand en binnenlijn) op een eigen laag boven het perkament (::before), anders dekt het perkament de rand af */
+  #top#top#top#top#top#top#top#top#top#top .m-kader::after{content:"";position:absolute;inset:-16px;z-index:1;border:16px solid transparent;border-image:inherit;pointer-events:none}
   #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-titel{order:1;display:block;margin:0;font-family:var(--font-lees);font-size:clamp(22px,6.2vw,25px);font-weight:500;font-style:normal;line-height:1.18;text-wrap:balance;color:var(--color-ink,#2b1d12)}
   #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-titel > span{display:block}
   #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-onder{order:2;margin-top:2px;font-family:var(--font-lees);font-size:15px;font-style:italic;line-height:1.3;color:var(--gedempt,#5d5040)}

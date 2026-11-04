@@ -133,8 +133,9 @@
 .vm2-duo .vm2-icoon img { max-width: 29px; max-height: 32px; }
 .vm2 .vm2-pijl { align-self: center; }
 
-/* Het actuele gebedsuur: links uitgelijnd, de dienst duidelijk, betekenis en kernvers kleiner en rustiger */
-.vm2-uur .vm2-tekst { align-items: flex-start; text-align: left; }
+/* Het actuele gebedsuur: gecentreerd (links even veel ruimte als de pijl rechts), de dienst duidelijk, betekenis en kernvers
+   kleiner en rustiger */
+.vm2-uur .vm2-tekst { align-items: center; padding-left: 34px; text-align: center; }
 .vm2-uur .vm2-tekst b.vm2-groot { font-size: 23px; line-height: 1.15; }
 .vm2-uur .vm2-kernvers { margin-top: 3px; font-size: 14.5px; line-height: 1.35; color: #5d4630; }
 
@@ -159,3 +160,19 @@
 .vm2-duo .vm2-tekst b { grid-column: 2; grid-row: 2; font-family: var(--font-lees); }
 .vm2-duo .vm2-tekst > span:not(.vm2-label) { grid-column: 2; grid-row: 3; align-self: start; font-family: var(--font-lees); }
 .vm2-duo .vm2-pijl { grid-column: 3; grid-row: 2 / 4; }
+
+/* Vasten en Feesten & heiligen: titel gecentreerd; symbool, tekst en pijl als één blok verticaal gecentreerd onder de titel
+   (geen uitrekkende rij meer, zodat het symbool precies naast de tekst staat) */
+#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart { grid-template-rows: auto auto auto; align-content: center; row-gap: 2px; }
+#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart h2.vm2-label { justify-self: center; margin-bottom: 6px; text-align: center; }
+.vm2-duo .vm2-tekst > span:not(.vm2-label) { align-self: start; }
+/* Zonder onderregel (Vasten): symbool en pijl alleen op de rij van de tekst, zodat alles op één lijn staat */
+.vm2-duo .vm2-kaart:not(:has(.vm2-tekst > span:not(.vm2-label))) :is(.vm2-icoon, .vm2-pijl) { grid-row: 2; }
+.vm2-duo .vm2-kaart:not(:has(.vm2-tekst > span:not(.vm2-label))) { grid-template-rows: auto auto; }
+
+/* Gouden binnenrand in het pijlgebed en het actuele gebedsuur (04-11-2026) */
+#top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-pijlgebed.m-kader { border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 42 42'%3E%3Cpath d='M10.9 1.5H31.1A11 11 0 0 0 40.5 10.9V31.1A11 11 0 0 0 31.1 40.5H10.9A11 11 0 0 0 1.5 31.1V10.9A11 11 0 0 0 10.9 1.5Z' fill='none' stroke='%23b99455' stroke-width='3'/%3E%3Cpath d='M14.94 7H27.06A16.5 16.5 0 0 0 35 14.94V27.06A16.5 16.5 0 0 0 27.06 35H14.94A16.5 16.5 0 0 0 7 27.06V14.94A16.5 16.5 0 0 0 14.94 7Z' fill='none' stroke='%23c49332' stroke-width='1.6'/%3E%3C/svg%3E") 16 / 16px stretch; }
+#top#top#top#top#top#top#top#top#top .vm2-uur::after { content: ""; position: absolute; inset: 5px; border: 1.5px solid #c49332; border-radius: 3px; pointer-events: none; }
+
+/* Pijlgebed: het label bovenaan in dezelfde stijl als de andere kaarten (klein, hoofdletters), geen onderstreepte tekst onderaan */
+#top#top#top#top#top#top#top#top#top#top#top .vm2 .m-kader h2.vm2-kader-label { order: 0; margin: 0 0 4px; font-size: 11px; letter-spacing: .12em; color: #7a6248 !important; }
