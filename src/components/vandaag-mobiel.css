@@ -204,3 +204,11 @@
 /* Actueel gebedsuur beter leesbaar op de telefoon: ondertitel 15 px en het Schriftvers 16 px, allebei donkerder */
 #top#top#top#top#top#top#top#top#top .vm2-uur .vm2-tekst > span:not(.vm2-label) { font-size: 15px; line-height: 1.3; color: #4a3826; }
 #top#top#top#top#top#top#top#top#top .vm2-uur .vm2-kernvers { font-size: 16px; line-height: 1.38; color: #3d2c1c; }
+
+/* Gebedsuur: het kopje compacter gespatieerd en met ademruimte tot de naam van de dienst */
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-uur h2.vm2-label { margin-bottom: 6px; letter-spacing: .06em; text-wrap: balance; }
+
+/* Smalle telefoons (onder 360 px): Vasten en Feesten & heiligen onder elkaar, zodat lange woorden niet midden in afbreken */
+@media (max-width: 359.98px) {
+  .vm2-duo { grid-template-columns: minmax(0, 1fr); }
+}

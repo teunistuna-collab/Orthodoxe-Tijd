@@ -69,22 +69,33 @@ export default function Bidden() {
       </div>
 
       <nav className="bd-kaarten" aria-label="Ingangen om te bidden">
+        {/* Twee duidelijke zones: boven (beeld, het uur van nu, de pijl) opent die dienst; onder de lijn opent het overzicht */}
         <div className="bd-kaart bd-uur">
-          <Beeld src="/images/ontdek/etmaal-kaart.webp" />
-          <div className="bd-tekst">
-            {/* Zoals Etmaal en Vandaag: klein het label, groot het uur van nu; de kaart opent die dienst */}
-            <a className="bd-hoofd" href={`#etmaal/${slugVan(uur)}`}>
+          <a className="bd-hoofd" href={`#etmaal/${slugVan(uur)}`}>
+            <Beeld src="/images/ontdek/etmaal-kaart.webp" />
+            <span className="bd-tekst">
               <span className="bd-label">Het actuele gebedsuur</span>
               <b>{naamVan(uur)}</b>
               <span>Bid met de Kerk</span>
-            </a>
-            <a className="bd-alle" href="#etmaal">
-              Bekijk alle gebedsuren <span aria-hidden="true">›</span>
-            </a>
-          </div>
-          <ChevronRight className="bd-pijl" aria-hidden="true" />
+            </span>
+            <ChevronRight className="bd-pijl" aria-hidden="true" />
+          </a>
+          <a className="bd-alle" href="#etmaal">
+            Bekijk alle gebedsuren <span aria-hidden="true">›</span>
+          </a>
         </div>
-        {KAARTEN.map(({ id, titel, onder, beeld, positie }) => (
+        {KAARTEN.map(({ id, titel, onder, beeld, positie }) =>
+          // Zolang de gebeden nog niet beschikbaar zijn: geen link en geen pijl, "Binnenkort" onder de titel
+          id === 'gebeden' && !GEBEDEN_ZICHTBAAR ? (
+            <div key={id} className="bd-kaart is-binnenkort">
+              <Beeld src={beeld} positie={positie} />
+              <span className="bd-tekst">
+                <b>{titel}</b>
+                <span className="bd-binnenkort">Binnenkort</span>
+                <span>Ochtend- en avondgebeden</span>
+              </span>
+            </div>
+          ) : (
           <a key={id} className="bd-kaart" href={`#${id}`}>
             <Beeld src={beeld} positie={positie} />
             <span className="bd-tekst">
@@ -93,7 +104,8 @@ export default function Bidden() {
             </span>
             <ChevronRight className="bd-pijl" aria-hidden="true" />
           </a>
-        ))}
+          ),
+        )}
       </nav>
     </section>
   );

@@ -45,3 +45,23 @@
 /* Het uur van nu groot, zoals op Etmaal */
 .bd-uur .bd-hoofd b { font-size: clamp(22px, 6.2vw, 25px); }
 .bd-uur .bd-label { line-height: 1.25; }
+
+/* Gebedsuur (04-11-2026): twee zones. Boven één link naar de dienst (beeld, tekst, pijl); onder de dunne lijn een eigen
+   regel naar het overzicht van alle gebedsuren. */
+#top#top#top#top#top#top#top#top#top .bd-uur { flex-direction: column; align-items: stretch; min-height: 0; }
+#top#top#top#top#top#top#top#top#top .bd-uur .bd-hoofd { display: flex; flex-direction: row; align-items: center; gap: 0; min-height: 108px; -webkit-tap-highlight-color: transparent; }
+.bd-uur .bd-hoofd:after { content: none; }
+.bd-uur .bd-hoofd .bd-beeld { flex-basis: 35%; }
+.bd-uur .bd-hoofd .bd-tekst { padding: 10px 0 10px 4px; }
+#top#top#top#top#top#top#top#top#top .bd-uur .bd-alle { width: 100%; margin: 0; padding: 0 14px; justify-content: space-between; -webkit-tap-highlight-color: transparent; }
+#top#top#top#top#top#top#top#top#top .bd-uur .bd-alle > span { margin-right: 4px; font-size: 20px; line-height: 1; color: #7a5a2a; }
+#top#top#top#top#top#top#top#top#top .bd-uur:has(.bd-hoofd:focus-visible) { outline: none; }
+#top#top#top#top#top#top#top#top#top .bd-uur :is(.bd-hoofd, .bd-alle):focus-visible { outline: 3px solid #7d5218; outline-offset: -3px; }
+@media (hover: hover) { #top#top#top#top#top#top#top#top#top .bd-uur:hover { background-color: transparent; } }
+#top#top#top#top#top#top#top#top#top .bd-uur :is(.bd-hoofd, .bd-alle):active { background: rgba(90, 60, 25, .07); }
+
+/* Gebeden zolang die nog niet beschikbaar zijn: geen link, geen pijl, "Binnenkort" subtiel onder de titel */
+.bd-kaart.is-binnenkort .bd-beeld { opacity: .75; }
+#top#top#top#top#top#top#top#top#top .bd-kaart.is-binnenkort .bd-tekst { padding-right: 14px; }
+#top#top#top#top#top#top#top#top#top .bd-binnenkort { font-size: 13px; font-style: italic; letter-spacing: .02em; color: #7d5218; }
+@media (hover: hover) { #top#top#top#top#top#top#top#top#top .bd-kaart.is-binnenkort:hover { background-color: transparent; } }
