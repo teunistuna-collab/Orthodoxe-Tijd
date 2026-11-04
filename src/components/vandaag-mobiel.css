@@ -176,3 +176,31 @@
 
 /* Pijlgebed: het label bovenaan in dezelfde stijl als de andere kaarten (klein, hoofdletters), geen onderstreepte tekst onderaan */
 #top#top#top#top#top#top#top#top#top#top#top .vm2 .m-kader h2.vm2-kader-label { order: 0; margin: 0 0 4px; font-size: 11px; letter-spacing: .12em; color: #7a6248 !important; }
+
+/* Ademruimte (04-11-2026): 12 px tussen de kaarten, 16 px na het pijlgebed en het gebedsuur; in die twee kaarten ook
+   meer ruimte rond de tekst */
+.vm2 { gap: 12px; }
+.vm2-duo { gap: 10px; }
+#top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-pijlgebed.m-kader { margin: 0 0 4px; padding: 8px 12px 6px; }
+#top#top#top#top#top#top#top#top#top .vm2-kaart.vm2-uur { margin-bottom: 4px; padding: 18px 14px 18px 16px; }
+
+/* Overgang tussen het gebedsgedeelte en de liturgische informatie: de sierlijn met kruis en een klein label, los op het
+   perkament (geen kaart, geen grote sectietitel) */
+.vm2-scheiding { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 0 4px; }
+.vm2-scheiding .am-sierlijn { width: min(82%, 300px); margin: 0 auto; }
+#top#top#top#top#top#top#top#top#top .vm2-scheiding p { margin: 0; font-family: var(--font-titel); font-size: 11px; font-weight: 600; letter-spacing: .12em; line-height: 1.3; text-transform: uppercase; color: #7d5218; }
+
+/* Aanraken: de hele kaart reageert, alsof een oude bladzijde wordt aangeraakt: het perkament wordt heel licht donkerder en de
+   rand iets dieper goud. Geen beweging, geen hover-effect; de blauwe tikflits van de browser uit. */
+.vm2 :is(.vm2-kaart, .vm2-pijlgebed) { -webkit-tap-highlight-color: transparent; }
+#top#top#top#top#top#top#top#top#top .vm2 .vm2-kaart { transition: box-shadow .12s ease-out, border-color .12s ease-out; }
+#top#top#top#top#top#top#top#top#top .vm2 .vm2-kaart:active { border-color: rgba(125, 82, 24, .75); box-shadow: inset 0 0 0 2px rgba(255, 248, 232, .3), inset 0 0 0 999px rgba(90, 60, 25, .07), 0 1px 2px rgba(20, 10, 4, .2); }
+#top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-pijlgebed.m-kader::before { transition: filter .12s ease-out; }
+#top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-pijlgebed.m-kader:active::before { filter: brightness(.95) sepia(.08); }
+@media (prefers-reduced-motion: reduce) {
+  #top#top#top#top#top#top#top#top#top .vm2 .vm2-kaart, #top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-pijlgebed.m-kader::before { transition: none; }
+}
+
+/* Actueel gebedsuur beter leesbaar op de telefoon: ondertitel 15 px en het Schriftvers 16 px, allebei donkerder */
+#top#top#top#top#top#top#top#top#top .vm2-uur .vm2-tekst > span:not(.vm2-label) { font-size: 15px; line-height: 1.3; color: #4a3826; }
+#top#top#top#top#top#top#top#top#top .vm2-uur .vm2-kernvers { font-size: 16px; line-height: 1.38; color: #3d2c1c; }

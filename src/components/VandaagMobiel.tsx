@@ -107,6 +107,12 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         <ChevronRight className="vm2-pijl" aria-hidden="true" />
       </Kaart>
 
+      {/* Overgang van het gebedsgedeelte (pijlgebed, gebedsuur) naar de liturgische informatie over de dag */}
+      <div className="vm2-scheiding" role="separator" aria-label="De liturgische dag">
+        <Sierlijn />
+        <p aria-hidden="true">De liturgische dag</p>
+      </div>
+
       <div className="vm2-duo">
         <Kaart className="vm2-kaart" href="#vasten" onClick={vasten.open}>
           <span className="vm2-icoon" aria-hidden="true">

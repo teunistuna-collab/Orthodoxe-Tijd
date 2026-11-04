@@ -40,3 +40,9 @@
 @media (max-width: 767.98px) {
   #top#top#top#top#top#top#top#top .bottom-nav a:focus-visible { outline: 3px solid #e8cf7a !important; outline-offset: -4px; }
 }
+
+/* Rustiger overgang naar de pagina (04-11-2026): niet-actieve iconen gedempter goud; de actieve tab blijft helder. De labels
+   houden hun kleur, zodat ze leesbaar blijven. */
+@media (max-width: 767.98px) {
+  #top#top#top#top .bottom-nav a:not(.is-actief) svg { color: rgba(216, 173, 99, .55); }
+}
