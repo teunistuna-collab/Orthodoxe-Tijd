@@ -108,3 +108,54 @@
 @media (max-width: 767.98px) {
   #vandaag .vg-stilte { margin-top: 0; background: var(--papyrus, #f5e6c8); }
 }
+
+/* ---------- Verfijning 04-11-2026: rustiger kaarten, duidelijkere hiërarchie, kleinere symbolen ---------- */
+/* Lichtere schaduw en een zachtere rand: de kaarten liggen op het perkament in plaats van te zweven */
+#top#top#top#top#top#top#top#top#top .vm2-kaart { gap: 12px; padding: 12px 12px 12px 14px; border-color: rgba(185, 148, 85, .6); box-shadow: inset 0 0 0 2px rgba(255, 248, 232, .3), 0 1px 3px rgba(20, 10, 4, .2); }
+#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart { gap: 8px; padding: 12px 8px 12px 10px; }
+/* Het pijlgebed blijft het bijzondere kader, met een zachtere schaduw */
+#top#top#top#top#top#top#top#top#top#top#top .vm2 .m-kader { filter: drop-shadow(0 2px 3px rgba(20, 10, 4, .28)); }
+
+/* Kleine sectielabels subtieler */
+#top#top#top#top#top#top#top#top#top .vm2 .vm2-kaart h2.vm2-label { font-size: 11px; letter-spacing: .1em; color: #7a6248 !important; }
+#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart h2.vm2-label { letter-spacing: .06em; }
+/* Geen afbreking midden in een woord; titels 19 px en bijregels 14 px als basis (o.a. Het kerkelijk jaar) */
+.vm2 .vm2-tekst b { overflow-wrap: break-word; font-size: 19px; }
+.vm2 .vm2-tekst > span:not(.vm2-label):not(.vm2-lezingen) { font-size: 14px; line-height: 1.3; }
+
+/* Symbolen ± 20 % kleiner */
+.vm2 .vm2-icoon { width: 42px; height: 42px; }
+.vm2 .vm2-icoon img { max-width: 40px; max-height: 37px; }
+.vm2 .vm2-icoon img.vm2-chirho { max-height: 37px !important; }
+.vm2 .vm2-vasten { width: 27px; height: 27px; }
+.vm2 .vm2-geenvasten { width: 24px; height: 24px; }
+.vm2-duo .vm2-icoon { width: 29px; height: 35px; }
+.vm2-duo .vm2-icoon img { max-width: 29px; max-height: 32px; }
+.vm2 .vm2-pijl { align-self: center; }
+
+/* Het actuele gebedsuur: links uitgelijnd, de dienst duidelijk, betekenis en kernvers kleiner en rustiger */
+.vm2-uur .vm2-tekst { align-items: flex-start; text-align: left; }
+.vm2-uur .vm2-tekst b.vm2-groot { font-size: 23px; line-height: 1.15; }
+.vm2-uur .vm2-kernvers { margin-top: 3px; font-size: 14.5px; line-height: 1.35; color: #5d4630; }
+
+/* Vasten en Feesten & heiligen: even hoog, meer ruimte voor de tekst */
+.vm2-duo { align-items: stretch; }
+.vm2-duo .vm2-tekst b { font-size: 16.5px; line-height: 1.22; }
+.vm2-duo .vm2-tekst > span:not(.vm2-label) { font-size: 14px; }
+
+/* Schriftlezingen: elke verwijzing op een eigen regel, de soort klein en cursief ernaast */
+.vm2-lezingen { display: flex; flex-direction: column; gap: 2px; margin-top: 1px; }
+.vm2-lezing { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+.vm2 .vm2-lezing b { font-size: 18px; line-height: 1.25; white-space: nowrap; }
+.vm2-lezing small { font-family: var(--font-lees); font-size: 13.5px; font-style: italic; color: var(--gedempt, #5d5040); }
+
+
+/* Vasten en Feesten & heiligen: het label over de volle breedte boven de rij met symbool, tekst en pijl, zodat het op één
+   regel past; de inhoud (.vm2-tekst) doet via display: contents mee in hetzelfde raster */
+#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto 1fr; column-gap: 8px; row-gap: 3px; align-items: center; }
+.vm2-duo .vm2-tekst { display: contents; }
+#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart h2.vm2-label { grid-column: 1 / -1; grid-row: 1; letter-spacing: .05em; white-space: nowrap; }
+.vm2-duo .vm2-icoon { grid-column: 1; grid-row: 2 / 4; align-self: center; }
+.vm2-duo .vm2-tekst b { grid-column: 2; grid-row: 2; font-family: var(--font-lees); }
+.vm2-duo .vm2-tekst > span:not(.vm2-label) { grid-column: 2; grid-row: 3; align-self: start; font-family: var(--font-lees); }
+.vm2-duo .vm2-pijl { grid-column: 3; grid-row: 2 / 4; }

@@ -97,7 +97,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         <Sierlijn />
       </a>
 
-      <Kaart className="vm2-kaart vm2-midden" href="#etmaal" onClick={uur.open}>
+      <Kaart className="vm2-kaart vm2-uur" href="#etmaal" onClick={uur.open}>
         <span className="vm2-tekst">
           <h2 className="vm2-label">Het actuele gebedsuur</h2>
           <b className="vm2-groot">{uur.titel}</b>
@@ -144,11 +144,16 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         </span>
         <span className="vm2-tekst">
           <h2 className="vm2-label">Schriftlezingen van vandaag</h2>
+          {/* Elke lezing op een eigen regel: de verwijzing groot, de soort (Apostel, Evangelie) klein ernaast */}
           {refs.length ? (
-            <>
-              <b>{refs.join(' · ')}</b>
-              <span>{refs.map((r) => SOORT[lezingSoort(r)]).join(' · ')}</span>
-            </>
+            <span className="vm2-lezingen">
+              {refs.map((r) => (
+                <span key={r} className="vm2-lezing">
+                  <b>{r}</b>
+                  <small>{SOORT[lezingSoort(r)]}</small>
+                </span>
+              ))}
+            </span>
           ) : (
             <span>{lezingen.geladen ? roosterMelding(dag.ymd) : 'Lezingen worden geladen…'}</span>
           )}
