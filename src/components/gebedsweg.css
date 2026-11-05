@@ -27,7 +27,10 @@
 .gw .em-kathisma { margin-top: 24px; }
 .gw-inhoud { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--gw-lijn); text-align: left; }
 .gw-inhoud li { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 12px; border-bottom: 1px solid var(--gw-lijn); font-family: var(--font-lees); font-size: 17px; }
-#top#top#top#top#top#top#top#top#top .gw-inhoud :is(em, a) { font-size: 14px; font-style: italic; color: var(--gw-zacht) !important; }
+#top#top#top#top#top#top#top#top#top .gw-inhoud .gw-inhoud-link { display: flex; flex: 1; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin: 0 -12px; padding: 0 8px 0 12px; font-size: 17px; font-style: normal; color: var(--gw-tekst) !important; text-decoration: none; }
+.gw-inhoud-link .am-pijl { flex: none; width: 18px; height: 18px; color: var(--gw-accent); }
+#top#top#top#top#top#top#top#top#top .gw-inhoud-link:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: -3px; }
+#top#top#top#top#top#top#top#top#top .gw-inhoud :is(em, a:not(.gw-inhoud-link)) { font-size: 14px; font-style: italic; color: var(--gw-zacht) !important; }
 
 /* Bidden: één onderdeel; lange teksten scrollen binnen het vlak, de voet blijft staan */
 .gw-bid { overflow: hidden; }

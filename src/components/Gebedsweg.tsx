@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { naamVan, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
@@ -133,13 +134,22 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
         <ul className="gw-inhoud">
           {delen?.map((o, i) => (
             <li key={i}>
-              <span>{o.titel}</span>
-              {!o.beschikbaar &&
-                (o.soort === 'psalm' && o.pdf ? (
-                  <a href={o.pdf} target="_blank" rel="noreferrer">Als PDF</a>
-                ) : (
-                  <em>Volgt nog</em>
-                ))}
+              {o.beschikbaar ? (
+                // Elk onderdeel met tekst opent die stap van Het hele uur (daarna gaat Verder door het uur)
+                <a className="gw-inhoud-link" href={bidPad(slug, 'heel', tebidden.indexOf(o) + 1)}>
+                  <span>{o.titel}</span>
+                  <ChevronRight className="am-pijl" aria-hidden="true" />
+                </a>
+              ) : (
+                <>
+                  <span>{o.titel}</span>
+                  {o.soort === 'psalm' && o.pdf ? (
+                    <a href={o.pdf} target="_blank" rel="noreferrer">Als PDF</a>
+                  ) : (
+                    <em>Volgt nog</em>
+                  )}
+                </>
+              )}
             </li>
           ))}
         </ul>
