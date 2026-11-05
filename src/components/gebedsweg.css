@@ -51,6 +51,12 @@
 #top#top#top#top#top#top#top#top#top .gw-verder:focus-visible, #top#top#top#top#top#top#top#top#top .gw-keuze:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
 .gw-teller { font-family: var(--font-lees); font-size: 14px; color: var(--gw-zacht); }
 
+/* Kort: dezelfde achtergrond als het pijlgebed op Vandaag (vandaag-mobiel.css, .vm2-bidden), tekst licht en onderaan */
+.gw.is-kort { --gw-tekst: #f6ead2; --gw-zacht: #e0c48a; --gw-accent: #e0b95a; background: linear-gradient(rgba(21, 11, 6, .35), rgba(21, 11, 6, 0) 18%, rgba(21, 11, 6, 0) 42%, rgba(21, 11, 6, .82) 66%, rgba(21, 11, 6, .94)), url('/images/vandaag/pijlgebed-hoek.webp') center top / cover no-repeat, #150b06; }
+.gw.is-kort .gw-vlak { justify-content: flex-end; padding-bottom: 12px; }
+.gw.is-kort .gw-groot { text-shadow: 0 2px 12px rgba(0, 0, 0, .8); }
+.gw.is-kort .gw-context { text-shadow: 0 1px 6px rgba(0, 0, 0, .9); }
+
 /* Afsluiting */
 .gw-einde { justify-content: center; align-items: center; gap: 18px; padding: 32px 26px; }
 .gw-kruis { display: inline-flex; width: 44px; height: 44px; color: var(--gw-accent); }

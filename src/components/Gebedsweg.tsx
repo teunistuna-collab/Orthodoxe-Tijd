@@ -165,7 +165,7 @@ function Stap({ d, weg, stap, i, aantal, nacht }: { d: ServiceMapping; weg: 'kor
   const slug = slugVan(d);
   const laatste = i === aantal - 1;
   return (
-    <Laag className={`gw gw-bid${nacht ? ' is-nacht' : ''}`} label={`${gebedTitel(d)}, ${i + 1} van ${aantal}`}>
+    <Laag className={`gw gw-bid${weg === 'kort' ? ' is-kort' : nacht ? ' is-nacht' : ''}`} label={`${gebedTitel(d)}, ${i + 1} van ${aantal}`}>
       <div className="am-kop">
         <a className="am-terug" href={bidPad(slug)} aria-label="Stoppen en terug naar het begin van het uur">×</a>
         <span className="gw-context">{naamVan(d)}</span>
