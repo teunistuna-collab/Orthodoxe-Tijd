@@ -123,7 +123,7 @@ export function meldingenRond(dag: Date, h: Herinneringen, mode: Mode, tz?: stri
         tijd: kloktijd(d, uur, minuut - h.vooraf, tz),
         titel: h.vooraf ? `Over ${h.vooraf} minuten: ${naamVan(s)}` : `Nu: ${naamVan(s)}`,
         tekst: s.hoofdgedachtenis,
-        url: `#etmaal/${slugVan(s)}`,
+        url: `#etmaal/${slugVan(s)}/bid`,
       });
     }
     if (!h.vasten && !h.feesten) continue;

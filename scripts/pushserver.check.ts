@@ -51,7 +51,7 @@ try {
   await app.tik(tijd);
   await app.tik(tijd + 30_000);
   assert.deepEqual(verstuurd.map((v) => v.inhoud.id), ['uur:Vespers:2026-11-02']);
-  assert.equal(verstuurd[0].inhoud.url, '#etmaal/vespers');
+  assert.equal(verstuurd[0].inhoud.url, '#etmaal/vespers/bid');
   assert.equal(verstuurd[0].adres.endpoint, abonnement.endpoint);
 
   // Bijwerken (opnieuw aanmelden) verstuurt hetzelfde niet nog eens.

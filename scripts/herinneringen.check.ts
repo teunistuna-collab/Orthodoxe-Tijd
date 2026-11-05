@@ -11,12 +11,12 @@ const uur = (d: Date) => `${String(d.getHours()).padStart(2, '0')}:${String(d.ge
 const vespers = meldingenRond(utc(2026, 10, 25), { ...STANDAARD, uren: ['Vespers'], vooraf: 15 }, 'oud').filter((m) => m.id.endsWith('2026-10-25'));
 assert.equal(vespers.length, 1);
 assert.equal(uur(vespers[0].tijd), '17:45');
-assert.equal(vespers[0].url, '#etmaal/vespers');
+assert.equal(vespers[0].url, '#etmaal/vespers/bid');
 // Middernacht 00:00 met 30 minuten vooraf valt op de avond ervoor.
 const nacht = meldingenRond(utc(2026, 3, 29), { ...STANDAARD, uren: ['Middernachtdienst'], vooraf: 30 }, 'oud').find((m) => m.id.endsWith('2026-03-29'))!;
 assert.equal(uur(nacht.tijd), '23:30');
 assert.equal(nacht.tijd.getDate(), 28);
-assert.equal(nacht.url, '#etmaal/middernacht');
+assert.equal(nacht.url, '#etmaal/middernacht/bid');
 
 // Vasten: woensdag 4-11-2026 (gewone vastendag) wel, alleen grote vasten niet; 1-12-2026 (Kerstvasten) wel.
 const wo = meldingenRond(utc(2026, 11, 4), { ...STANDAARD, vasten: true, vastenMoment: 'beide' }, 'oud').filter((m) => m.id.endsWith('2026-11-04'));
