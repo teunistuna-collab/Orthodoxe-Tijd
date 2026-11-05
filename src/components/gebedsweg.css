@@ -1,0 +1,53 @@
+/* De gebedsweg op mobiel (Gebedsweg.tsx): het begin van een gebedsuur, één onderdeel tegelijk bidden en de afsluiting.
+   Licht: perkament, zoals de rest van de app. Donker (.is-nacht): de nachtkleuren van de leesweergave. */
+.gw { --gw-tekst: var(--inkt, #0b1b2a); --gw-zacht: var(--gedempt, #5d5040); --gw-accent: var(--goud-pijl, #7a5a2a); --gw-lijn: rgba(172, 121, 47, .4); background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center / cover; color: var(--gw-tekst); }
+.gw.is-nacht { --gw-tekst: #e9dcc0; --gw-zacht: #b9a98a; --gw-accent: #d9b56e; --gw-lijn: rgba(217, 181, 110, .35); background: #17110b; }
+.gw .am-sierlijn { color: var(--gw-accent); }
+
+/* Begin van het uur */
+.gw-banner { position: relative; flex: none; height: min(76vw, 320px); background: #000; }
+.gw-banner > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gw-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(10, 6, 3, .55), rgba(10, 6, 3, .2) 40%, rgba(10, 6, 3, .75)); }
+.gw-banner-tekst { position: absolute; z-index: 1; inset: auto 0 56px; padding: 0 16px; color: #f5e6c8; text-wrap: balance; }
+#top#top#top#top#top#top#top#top#top .gw-banner-tekst h1 { margin: 0; font-family: var(--font-lees) !important; font-weight: 400 !important; font-size: 32px; line-height: 1.1; letter-spacing: normal; text-transform: none; color: #f5e6c8; text-shadow: 0 2px 10px rgba(0, 0, 0, .8); }
+.gw-banner-tekst h1:focus { outline: none; }
+.gw-banner-tekst p { margin-top: 4px; font-family: var(--font-lees); font-size: 18px; font-style: italic; text-shadow: 0 1px 6px rgba(0, 0, 0, .9); }
+.gw-papier { position: relative; z-index: 2; flex: 1; margin-top: -36px; padding: 0 14px 32px; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; }
+.gw-label { font-family: var(--font-titel); font-size: 11.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: #6a4a24; }
+.gw-kerk { position: relative; top: -22px; margin-bottom: -8px; padding: 14px 16px; border: 1px solid var(--kaartrand, #b99455); border-radius: 6px; background: #f3e5c6 url('/images/vandaag/papyrus-licht.webp') center / cover; box-shadow: 0 6px 16px rgba(40, 20, 8, .35); }
+.gw-kerk b { display: block; margin-top: 4px; font-family: var(--font-lees); font-weight: 400; font-size: 22px; line-height: 1.2; }
+.gw-kerk span { display: block; font-family: var(--font-lees); font-size: 15.5px; color: var(--gw-zacht); }
+.gw-keuzes { display: grid; gap: 10px; margin-top: 4px; }
+#top#top#top#top#top#top#top#top#top .gw-keuze { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 76px; margin: 0; padding: 12px 16px; border: 1px solid var(--kaartrand, #b99455); border-radius: 6px; background: rgba(255, 250, 238, .55); color: var(--gw-tekst) !important; text-decoration: none; }
+#top#top#top#top#top#top#top#top#top .gw-keuze.is-hoofd { background: #ead3a6; box-shadow: inset 0 0 0 3px rgba(255, 250, 238, .6); }
+.gw-keuze.is-uit { opacity: .55; }
+.gw-keuze b { font-family: var(--font-lees); font-weight: 400; font-size: 23px; }
+.gw-keuze span { font-family: var(--font-lees); font-size: 15px; color: var(--gw-zacht); }
+.gw-inhoud-kop { margin: 22px 0 6px; }
+.gw-inhoud { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--gw-lijn); text-align: left; }
+.gw-inhoud li { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 12px; border-bottom: 1px solid var(--gw-lijn); font-family: var(--font-lees); font-size: 17px; }
+#top#top#top#top#top#top#top#top#top .gw-inhoud :is(em, a) { font-size: 14px; font-style: italic; color: var(--gw-zacht) !important; }
+
+/* Bidden: één onderdeel; lange teksten scrollen binnen het vlak, de voet blijft staan */
+.gw-bid { overflow: hidden; }
+#top#top#top#top#top#top#top#top#top .gw-bid .am-kop { grid-template-columns: 44px 1fr 44px; }
+#top#top#top#top#top#top#top#top#top .gw-bid .am-terug { justify-content: center; width: 44px; padding: 0; font-size: 28px; line-height: 1; color: var(--gw-zacht) !important; }
+.gw-context { font-family: var(--font-titel); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gw-accent); }
+.gw-vlak { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: safe center; padding: 8px 26px 24px; overflow-y: auto; overscroll-behavior: contain; }
+#top#top#top#top#top#top#top#top#top .gw-titel { margin: 0; font-family: var(--font-lees) !important; font-weight: 400 !important; font-size: 26px; letter-spacing: normal; text-transform: none; color: var(--gw-accent); }
+.gw-titel:focus { outline: none; }
+.gw-groot { margin: 0; font-family: var(--font-lees); font-size: 24px; line-height: 1.45; text-wrap: balance; }
+.gw-groot > span, .gw-groot .am-regel { display: block; }
+.gw-groot cite { display: block; margin-top: 12px; font-family: var(--font-titel); font-size: 12px; font-style: normal; letter-spacing: .16em; color: var(--gw-accent); }
+.gw-noot { margin-top: 22px; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--gw-zacht); }
+.gw-gebed { white-space: pre-line; text-align: left; font-family: var(--font-lees); font-size: 20px; line-height: 1.55; }
+#top#top#top#top#top#top#top#top#top .gw .pm-verzen { text-align: left; color: var(--gw-tekst); }
+.gw-voet { flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 20px calc(18px + env(safe-area-inset-bottom)); }
+#top#top#top#top#top#top#top#top#top .gw-verder { display: inline-flex; align-items: center; justify-content: center; min-width: 200px; min-height: 52px; padding: 0 28px; border: 1px solid var(--gw-accent); border-radius: 999px; font-family: var(--font-titel); font-size: 14px; letter-spacing: .16em; text-transform: uppercase; color: var(--gw-accent) !important; text-decoration: none; }
+#top#top#top#top#top#top#top#top#top .gw-verder:focus-visible, #top#top#top#top#top#top#top#top#top .gw-keuze:focus-visible { outline: 3px solid var(--focus, #066b95); outline-offset: 2px; }
+.gw-teller { font-family: var(--font-lees); font-size: 14px; color: var(--gw-zacht); }
+
+/* Afsluiting */
+.gw-einde { justify-content: center; align-items: center; gap: 18px; padding: 32px 26px; }
+.gw-kruis { display: inline-flex; width: 44px; height: 44px; color: var(--gw-accent); }
+.gw-kruis svg { width: 100%; height: 100%; }

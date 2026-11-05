@@ -96,8 +96,8 @@ export default function Vandaag() {
       pijlgebed={pijlgebed}
       uur={{
         titel: uurMoment.title,
-        // Direct naar de gebedsruimte van dit uur (ook bij openen in een nieuw tabblad)
-        href: `#etmaal/${slugVan(uurMoment)}/psalmen`,
+        // Direct naar de gebedsweg van dit uur (ook bij openen in een nieuw tabblad)
+        href: `#etmaal/${slugVan(uurMoment)}/bid`,
         onder: uurMoment.hoofdgedachtenis,
         kernvers: uurMoment.kernvers.verses.join(' '),
         // Het gebedsuur hoort bij Bidden: de onderbalk markeert dan Bidden (Etmaal volgt de laatst bezochte groep)

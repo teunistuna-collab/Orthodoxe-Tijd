@@ -225,11 +225,11 @@ export default function App() {
   }, []);
 
   // De heiligenlijst (Heiligenjaar + Lage Landen, lib/heiligen.ts) pas laden als een weergave hem gebruikt.
-  // Vandaag gebruikt hem voor de titel van de dag en de onderregel "H. …" op mobiel.
+  // Vandaag gebruikt hem voor de titel van de dag en de onderregel "H. …" op mobiel; Etmaal voor "De Kerk vandaag" in de gebedsweg.
   const heiligenGevraagd = useRef(false);
   useEffect(() => {
     const popup = dagOpen !== null || heiligenDag !== null || zoekOpen;
-    if (!heiligenGevraagd.current && (popup || pagina === 'vandaag' || pagina === 'heiligen' || pagina === 'kalender' || pagina === 'feesten')) {
+    if (!heiligenGevraagd.current && (popup || pagina === 'vandaag' || pagina === 'etmaal' || pagina === 'heiligen' || pagina === 'kalender' || pagina === 'feesten')) {
       heiligenGevraagd.current = true;
       import('./lib/heiligen')
         .then(setHeiligen)
