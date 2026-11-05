@@ -199,16 +199,17 @@ function BidIngang({ d, pad }: { d: ServiceMapping; pad: string[] }) {
   const { vandaagYmd, mode } = useApp();
   const slug = slugVan(d);
   const kathisma = d.title === 'Metten' ? 'metten' : d.title === 'Vespers' ? 'vespers' : null;
-  const [{ terug, slim }] = useState(() => {
+  const [terug] = useState(() => {
     const v = vorigeAdres();
     if (!v.startsWith(`#etmaal/${slug}/bid/`)) {
       if (v && !v.startsWith('#etmaal')) gebedHerkomst.set(slug, v);
       else gebedHerkomst.delete(slug);
     }
-    const t = gebedHerkomst.get(slug) ?? `#etmaal/${slug}`;
-    // Rechtstreeks gekomen: Terug is een echte stap terug in de geschiedenis
-    return { terug: t, slim: v === t };
+    return gebedHerkomst.get(slug) ?? `#etmaal/${slug}`;
   });
+  // Alleen als je rechtstreeks van `terug` kwam is Terug een echte stap terug in de geschiedenis. Per weergave bepaald:
+  // na het bidden (× of Amen) ligt er een stap van het gebed tussen, dan gaat Terug direct naar `terug`.
+  const slim = vorigeAdres() === terug;
   return (
     <Gebedsweg
       d={d}
