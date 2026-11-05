@@ -649,3 +649,9 @@ button.vt-tegel-binnen { cursor: pointer; }
   #top#top#top#top#top#top#top#top#top#top#top#top#top .bronnen-inhoud a:focus-visible { outline: 3px solid #7d5218 !important; outline-offset: 2px; border-radius: 2px; }
   #top#top#top#top#top#top#top#top#top#top#top#top#top .vg-losse-balk :focus-visible { outline: 3px solid #e0b95a !important; outline-offset: 2px; }
 }
+
+/* Hallmark-audit stap 1, alleen desktop: rasters met afbeeldingen krimpen mee (minmax(0, 1fr) in plaats van 1fr) */
+@media (min-width: 768px) {
+  .ot-redesign .ot-maandnav { grid-template-columns: 44px minmax(0, 1fr) 44px; }
+  .ot-adem .ot-ad-tabs { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}

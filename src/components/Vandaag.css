@@ -809,3 +809,11 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   .vg-ontdek-beeld::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(120, 72, 30, .14), rgba(236, 212, 177, .32)); pointer-events: none; }
   #top#top#top#top#top#top#top#top .vg-ontdek-kaart .vg-verd-pijl { position: absolute; top: 50%; right: 12px; margin: -10px 0 0; }
 }
+
+/* Hallmark-audit stap 1, alleen desktop: rasters met afbeeldingen krimpen mee (minmax(0, 1fr) in plaats van 1fr) */
+@media (min-width: 768px) {
+  .vg-lezingen { grid-template-columns: 36px minmax(0, 1fr); }
+  .vg-duo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .vg-ingang { grid-template-columns: 26px minmax(0, 1fr); }
+  #vandaag .vg-vf .vg-feestdag { grid-template-columns: 26px minmax(0, 1fr); }
+}

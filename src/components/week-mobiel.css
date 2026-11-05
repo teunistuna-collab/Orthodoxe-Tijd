@@ -7,7 +7,6 @@
 .wm-dag b { font-size: 18px; font-weight: 400; line-height: 1.2; }
 .wm-dag > span { font-size: 15px; line-height: 1.3; color: var(--gedempt); }
 #top#top#top#top#top#top#top#top .wm-verdieping a { justify-content: flex-start; gap: 12px; }
-.wm-verdieping .em-kaart-kruis { width: 22px; height: 22px; }
 .wm-verd-titel { flex: 1; }
 
 /* Een dag: banner met titel, daaronder de tekst op perkament (geen beeld onderaan) */
@@ -23,12 +22,12 @@
 #top#top#top#top#top#top#top#top#top#top .wm-tekst h2.am-label { margin: 0 0 6px; font-family: var(--font-titel) !important; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6a4a24 !important; }
 .wm-tekst p { margin: 0 0 10px; font-family: var(--font-lees); font-size: 18px; line-height: 1.5; color: var(--inkt); }
 #top#top#top#top#top#top#top#top .wm-kalender { width: 100%; margin-top: 4px; font: inherit; text-align: left; }
+.wm .em-nu-tekst { align-items: center; padding-left: 26px; text-align: center; } /* gecentreerd op de kaart; 26px weegt de pijl rechts op */
 .wm .em-nu-tekst .am-label { font-size: 11px; letter-spacing: .12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .wm-inleiding { margin: 0 10px 10px; font-family: var(--font-lees); font-size: 17px; line-height: 1.45; color: var(--gedempt); text-align: left; }
 
 /* ---------- Kritiek 30-10-2026: avondweergave, kopbalk, ritme en afwerking ---------- */
-/* Verdieping: het kruisje een vaste breedte, de titel begint links */
-#top#top#top#top#top#top#top#top#top .wm-verdieping a > .em-kaart-kruis { flex: 0 0 22px; width: 22px; }
+/* Verdieping: de titel begint links */
 #top#top#top#top#top#top#top#top#top .wm-verdieping a > .wm-verd-titel { flex: 1 1 auto; }
 
 /* Overzicht: het label op de kaart van vandaag en de onderregels groter; een rustig label op vastendagen */

@@ -76,12 +76,12 @@ const INFO_MOBIEL: Record<InfoKey, typeof VASTEN_POPUPS[InfoKey]> = {
   ...INFO_POPUPS,
   betekenis: { ...INFO_POPUPS.betekenis, paragraphs: INFO_POPUPS.betekenis.paragraphs.filter((p) => !WEKELIJKS.startsWith(p.slice(0, 60))) },
 };
-const VERDIEPING_M: Array<{ href: string; titel: string; onder: string }> = [
-  { href: '#vasten/info/wat', titel: INFO_POPUPS.wat.title, onder: 'Het typikon en de orde van de Kerk door het jaar heen.' },
-  { href: '#vasten/info/hoe', titel: INFO_POPUPS.hoe.title, onder: 'De ladder van het vasten, van vrij tot volledige onthouding.' },
-  { href: '#vasten/wekelijks', titel: 'Het wekelijkse vasten', onder: 'Woensdag en vrijdag' },
-  { href: '#vasten/info/periodes', titel: INFO_POPUPS.periodes.title, onder: 'Vier grote vasten, verweven met feesten en uitzonderingen.' },
-  { href: '#vasten/info/betekenis', titel: INFO_POPUPS.betekenis.title, onder: 'Vasten als gebed, bekering en liefde tot de naaste.' },
+const VERDIEPING_M: Array<{ href: string; titel: string }> = [
+  { href: '#vasten/info/wat', titel: INFO_POPUPS.wat.title },
+  { href: '#vasten/info/hoe', titel: INFO_POPUPS.hoe.title },
+  { href: '#vasten/wekelijks', titel: 'Het wekelijkse vasten' },
+  { href: '#vasten/info/periodes', titel: INFO_POPUPS.periodes.title },
+  { href: '#vasten/info/betekenis', titel: INFO_POPUPS.betekenis.title },
 ];
 
 const PERIODE_INFO: Record<string, { label: string; href: string; linkLabel: string; beweeglijk: boolean }> = {
@@ -354,21 +354,6 @@ export default function Vasten() {
               </>
             )}
 
-            <h2 className="vsm-label"><span>Verdieping</span></h2>
-            <ul className="vsm-kaart vsm-lijst">
-              {VERDIEPING_M.map((v) => (
-                <li key={v.href}>
-                  <a className="vsm-rij" href={v.href}>
-                    <span className="vsm-rij-tekst">
-                      <b>{v.titel}</b>
-                      <span>{v.onder}</span>
-                    </span>
-                    <ChevronRight className="vsm-pijl" aria-hidden="true" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-
             {/* De vier grote vasten: van elke de lopende of eerstvolgende keer */}
             <h2 className="vsm-label"><span>De vier grote vasten</span></h2>
             <ul className="vsm-kaart vsm-lijst">
@@ -380,6 +365,19 @@ export default function Vasten() {
                       <span>{formatDag(p.start)} – {formatDatum(p.eind)}{PERIODE_INFO[p.id]?.beweeglijk ? ' · beweeglijk' : ''}{p.start <= vandaag ? ' · nu' : ''}</span>
                     </span>
                     <ChevronRight className="vsm-pijl" aria-hidden="true" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="vsm-label"><span>Verdieping</span></h2>
+            {/* Zelfde knoppen als Verdieping op Week en Jaar */}
+            <ul className="em-lijst wm-verdieping">
+              {VERDIEPING_M.map((v) => (
+                <li key={v.href}>
+                  <a href={v.href}>
+                    <span className="wm-verd-titel">{v.titel}</span>
+                    <ChevronRight className="am-pijl" aria-hidden="true" />
                   </a>
                 </li>
               ))}

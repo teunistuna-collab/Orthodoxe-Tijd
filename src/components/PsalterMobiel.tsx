@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { BookOpen, Bookmark, ChevronLeft, ChevronRight, Headphones, Search } from 'lucide-react';
 import { useFavorieten, wisselFavoriet } from '../lib/favorieten';
-import { KATHISMATA, PSALMEN, beginMetHoofdletter, kathismaStappen, psalmBereik, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type Psalm, type PsalmBlok, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
+import { KATHISMATA, PSALMEN, beginMetHoofdletter, kathismaStappen, laadPsalmTeksten, psalmBereik, verzenVanStuk, zoekPsalmen, type Kathisma, type KathismaStap, type Psalm, type PsalmBlok, type PsalmTekst, type PsalmTeksten } from '../lib/psalmen';
 import DeelKnop from './DeelKnop';
 import Leesbediening from './Leesbediening';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
@@ -11,6 +11,7 @@ import { useApp } from '../lib/context';
 import Psalterlezing from './Psalterlezing';
 import { SIERKRUIS } from './symbolen';
 import './psalter-mobiel.css';
+import type { ServiceMapping } from '../lib/etmaal';
 
 // Het Psalter op mobiel (< 768 px), volgens de goedgekeurde mock-up (07-psalter), met de bestaande adressen:
 //   #psalmen (en #psalmen/lijst)        de lijst van alle psalmen (filters, thema's, favorieten), met een knop naar:
@@ -380,6 +381,103 @@ export function PsalterGeheel({ k, teksten, laadFout, datum }: { k: Kathisma; te
         })}
         <Sierlijn />
       </article>
+    </Laag>
+  );
+}
+
+/* ---------- Het gebedenboek van een gebedsuur (Etmaal): eerst de inhoud, dan één onderdeel tegelijk ---------- */
+
+/** De onderdelen van een gebedsuur in liturgische volgorde (lib/etmaal.ts); nu zijn dat de psalmen van de dienst. */
+const onderdelenVan = (d: ServiceMapping) => d.psalms.map((p) => PSALMEN[Number(p.title.replace('Psalm ', '')) - 1]);
+const onderdeelPad = (slug: string, p?: Psalm) => `#etmaal/${slug}/psalmen${p ? `/${p.septuagintNumber}` : ''}`;
+
+/** De inhoud van een gebedsuur (#etmaal/<dienst>/psalmen): het kernvers, "Bid de volledige dienst" en per psalm een kaart.
+ *  Eén overzicht voor alle uren; Vandaag en Bidden openen het direct. `extra`: de kathisma's van vandaag (Metten, Vespers). */
+export function UurOverzicht({ d, slug, titel, terug, slim, extra }: { d: ServiceMapping; slug: string; titel: string; terug: string; slim: boolean; extra?: ReactNode }) {
+  const delen = onderdelenVan(d);
+  const eerste = delen.find((p) => p.hasText);
+  return (
+    <Laag className="am-lees pm-lees em-gebed em-inhoud" label={`${titel}: kies een psalm of gebed`}>
+      <Kop terug={terug} licht slim={slim} />
+      <article className="pm-lees-vlak">
+        <header className="pm-lees-kop">
+          <h1 className="pm-nummer pm-nummer-tekst" tabIndex={-1}>{titel}</h1>
+          <p className="pm-opschrift">Kies een psalm of gebed</p>
+          <Sierlijn />
+        </header>
+        <blockquote className="am-lees-citaat em-kernvers">
+          {d.kernvers.verses.map((v) => <span key={v}>{v}</span>)}
+          <cite>{d.kernvers.reference.replace('Psalm Kernvers:', 'Psalm')}</cite>
+        </blockquote>
+        {eerste && (
+          <p className="em-hele-dienst">
+            <a href={onderdeelPad(slug, eerste)}>Bid de volledige dienst</a>
+          </p>
+        )}
+        <ol className="em-onderdelen">
+          {delen.map((p, i) => (
+            <li key={p.id}>
+              {/* Zonder losse tekst opent de bestaande PDF van die psalm */}
+              <a className="em-onderdeel" href={p.hasText ? onderdeelPad(slug, p) : d.psalms[i].pdf} {...(p.hasText ? {} : { target: '_blank', rel: 'noreferrer' })}>
+                <b>{p.title}</b>
+                {!p.hasText && <span>Als PDF</span>}
+                <ChevronRight className="am-pijl" aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ol>
+        {extra}
+        <Sierlijn />
+      </article>
+    </Laag>
+  );
+}
+
+/** Eén onderdeel van een gebedsuur (#etmaal/<dienst>/psalmen/<nr>): alleen die tekst, in de leesweergave van het Psalter,
+ *  met onderaan Vorige en Volgende door de dienst (zo is de hele dienst achter elkaar te bidden). */
+export function UurOnderdeel({ d, slug, titel, nr }: { d: ServiceMapping; slug: string; titel: string; nr: number }) {
+  const delen = onderdelenVan(d).filter((p) => p.hasText);
+  const i = delen.findIndex((p) => p.septuagintNumber === nr);
+  const psalm = delen[i];
+  const [teksten, setTeksten] = useState<PsalmTeksten | null>(null);
+  const [fout, setFout] = useState(false);
+  useEffect(() => {
+    laadPsalmTeksten().then(setTeksten, () => setFout(true));
+  }, []);
+  const overzicht = onderdeelPad(slug);
+  if (!psalm) return null;
+  const tekst = teksten?.[psalm.septuagintNumber];
+  const vorige = delen[i - 1];
+  const volgende = delen[i + 1];
+  return (
+    <Laag className="am-lees pm-lees em-gebed" label={`${titel}: ${psalm.title}`}>
+      {/* Terug gaat altijd naar de inhoud van dit uur; geen bewaren of delen */}
+      <LeesKop terug={overzicht} titel={psalm.title} deelPad={onderdeelPad(slug, psalm).slice(1)} audioSrc={psalm.audioSrc} leeg />
+      <article className="pm-lees-vlak lees-vlak">
+        <header className="pm-lees-kop">
+          <p className="pm-context">{titel}</p>
+          <h1 className="pm-nummer" tabIndex={-1}>
+            {psalm.septuagintNumber}
+          </h1>
+          <span className="sr-only">{psalm.title}</span>
+          <Sierlijn />
+        </header>
+        {tekst ? <Verzen verzen={tekst.verzen} idVoorvoegsel="em-gebed-vers" /> : <p className="pm-melding">{fout ? 'De tekst kon niet worden geladen.' : 'De tekst wordt geladen…'}</p>}
+        {tekst && <Sierlijn />}
+      </article>
+      <nav className="pm-blader" aria-label={`Door ${titel}`}>
+        {vorige ? (
+          <a href={onderdeelPad(slug, vorige)}><ChevronLeft aria-hidden="true" /> Vorige</a>
+        ) : (
+          <a href={overzicht}><ChevronLeft aria-hidden="true" /> Inhoud</a>
+        )}
+        <span className="pm-blader-nr">{i + 1} van {delen.length}</span>
+        {volgende ? (
+          <a href={onderdeelPad(slug, volgende)} className="is-volgende" aria-label={`Volgende: ${volgende.title}`}>Volgende <ChevronRight aria-hidden="true" /></a>
+        ) : (
+          <a href={overzicht} className="is-volgende">Einde <ChevronRight aria-hidden="true" /></a>
+        )}
+      </nav>
     </Laag>
   );
 }

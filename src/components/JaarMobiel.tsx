@@ -106,7 +106,6 @@ function Overzicht({ tijden, nu, komend, inleiding }: { tijden: JaarTijd[]; nu: 
           {VERDIEPING.map(({ key, titel }) => (
             <li key={key}>
               <a href={`#jaar/lees/${key}`}>
-                <span className="em-kaart-kruis">{SIERKRUIS}</span>
                 <span className="wm-verd-titel">{titel}</span>
                 <ChevronRight className="am-pijl" aria-hidden="true" />
               </a>

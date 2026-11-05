@@ -6,7 +6,7 @@ import { usePijlgebed } from '../lib/pijlgebed';
 import { KruisTeken, VastenSymbool } from './ui';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
-import { dienstVanHetUur } from '../lib/etmaal';
+import { dienstVanHetUur, slugVan } from '../lib/etmaal';
 import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
 import { heiligeTitel } from '../lib/heiligenPopup';
 import { vastenGroep } from '../lib/vasten';
@@ -103,6 +103,8 @@ export default function Vandaag() {
       pijlgebed={pijlgebed}
       uur={{
         titel: uurMoment.title,
+        // Direct naar de gebedsruimte van dit uur (ook bij openen in een nieuw tabblad)
+        href: `#etmaal/${slugVan(uurMoment)}/psalmen`,
         onder: uurMoment.hoofdgedachtenis,
         kernvers: uurMoment.kernvers.verses.join(' '),
         // Het gebedsuur hoort bij Bidden: de onderbalk markeert dan Bidden (Etmaal volgt de laatst bezochte groep)

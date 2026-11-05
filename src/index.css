@@ -2372,3 +2372,19 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
   #top#top#top#top#top#top#top#top#top#top .m-kader .m-kader-pil{order:4;display:inline-block;margin:0;padding:2px 4px;border:0;border-radius:0;background:none;box-shadow:none;font-family:var(--font-lees)!important;font-size:16px;font-weight:500;font-style:normal;letter-spacing:0;text-transform:none;line-height:1.4;color:#5d4630!important;text-decoration:underline;text-decoration-color:#b99455;text-decoration-thickness:1px;text-underline-offset:4px}
   #top#top#top#top#top#top#top#top#top#top .m-kader:focus-visible{outline:3px solid var(--color-gold-deep,#7d5218);outline-offset:-6px}
 }
+
+/* Hallmark-audit stap 1 (05-11-2026), ALLEEN desktop (vanaf 768 px); mobiel blijft ongewijzigd.
+   - Focusringen verschijnen direct (geen overgang op box-shadow terwijl een element focus heeft).
+   - Uitgeschakelde knoppen: naast de doorzichtigheid ook cursor: not-allowed.
+   - Zoekveld: een echte focusring (outline) in plaats van alleen een gekleurde rand.
+   - Vensters: breedte binnen het venster met 100% in plaats van 100vw (geen schuifbalkoverloop). */
+@media (min-width: 768px) {
+  #top#top#top#top#top#top :focus-visible { transition: none !important; }
+  #top#top#top#top#top#top button:disabled { cursor: not-allowed; }
+  #top#top#top#top .ot-zoek input:focus-visible { outline: 2px solid var(--color-gold-deep, #7d5218); outline-offset: 2px; }
+  .exact-modal-frame { width: min(1180px, 100%) !important; }
+  #top#top#top .exact-modal-frame:has(.keuze-menu) { width: min(560px, 100%) !important; }
+}
+@media (min-width: 768px) {
+  #top#top#top#top#top .exact-modal-frame.pk { width: min(920px, 100%) !important; }
+}

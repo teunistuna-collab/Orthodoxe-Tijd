@@ -71,7 +71,7 @@ export default function Bidden() {
       <nav className="bd-kaarten" aria-label="Ingangen om te bidden">
         {/* Twee duidelijke zones: boven (beeld, het uur van nu, de pijl) opent die dienst; onder de lijn opent het overzicht */}
         <div className="bd-kaart bd-uur">
-          <a className="bd-hoofd" href={`#etmaal/${slugVan(uur)}`}>
+          <a className="bd-hoofd" href={`#etmaal/${slugVan(uur)}/psalmen`}>
             <Beeld src="/images/ontdek/etmaal-kaart.webp" />
             <span className="bd-tekst">
               <span className="bd-label">Het actuele gebedsuur</span>

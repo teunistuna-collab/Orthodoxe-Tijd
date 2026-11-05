@@ -71,7 +71,7 @@ function PijlgebedBidden({ pijlgebed }: { pijlgebed: string }) {
 export interface VandaagMobielProps {
   dag: DagInfo;
   pijlgebed: string;
-  uur: { titel: string; onder: string; kernvers: string; open: () => void };
+  uur: { titel: string; href: string; onder: string; kernvers: string; open: () => void };
   vasten: { groep: VastenGroep | null; open: () => void };
   feest: { label: string; naam: string; meer: number; open: () => void };
   lezingen: { lijst: HtcLezingRef[] | undefined; geladen: boolean; open: () => void };
@@ -97,7 +97,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         <Sierlijn />
       </a>
 
-      <Kaart className="vm2-kaart vm2-uur" href="#etmaal" onClick={uur.open}>
+      <Kaart className="vm2-kaart vm2-uur" href={uur.href} onClick={uur.open}>
         <span className="vm2-tekst">
           <h2 className="vm2-label">Het actuele gebedsuur</h2>
           <b className="vm2-groot">{uur.titel}</b>

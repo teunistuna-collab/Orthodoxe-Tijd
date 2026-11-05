@@ -115,7 +115,7 @@ export default function Ademcyclus() {
                   <div className="adem-ring ad-ring-1" aria-hidden="true" />
                   <div className="adem-ring adem-ring-2 ad-ring-2" aria-hidden="true" />
                   <div className="ad-ring-3" aria-hidden="true" />
-                  <img loading="lazy" decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
+                  <img decoding="async" src="/images/Christus-afbeelding.webp" alt="Christus" />
                 </div>
                 <p className="ad-gebed-tekst">{pijlgebed}</p>
                 {/* Alleen tijdens de begeleiding: de ademfasen, afwisselend oplichtend (CSS). Niet voorgelezen per fase. */}

@@ -9,14 +9,16 @@ import { vorigeAdres } from '../lib/vorigAdres';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import Psalterlezing from './Psalterlezing';
 import DienstTekst from './DienstTekst';
+import { UurOnderdeel, UurOverzicht } from './PsalterMobiel';
 import { SIERKRUIS } from './symbolen';
 import './etmaal-mobiel.css';
 
 // Etmaal op mobiel (< 768 px), volgens de goedgekeurde mock-up (09-etmaal), vier weergaven via het adres:
 //   #etmaal                    1. overzicht: banner, het actuele gebedsuur, de acht diensten en de verdieping
-//   #etmaal/<dienst>           2. de dienst: sfeerbeeld, "Over dit moment" en "Psalmen uit het Psalter"
+//   #etmaal/<dienst>           2. de dienst: sfeerbeeld, "Psalmen en gebeden van dit uur" (eerst) en "Over dit moment"
 //   #etmaal/<dienst>/over      3. over dit moment (leesweergave)
-//   #etmaal/<dienst>/psalmen   4. de psalmen van de dienst, met een link naar het Psalter
+//   #etmaal/<dienst>/psalmen   4. de inhoud van het uur: kies een psalm of gebed (ook direct vanaf Vandaag en Bidden)
+//   #etmaal/<dienst>/psalmen/<nr>  één psalm van het uur, met Vorige en Volgende door de dienst
 //   #etmaal/lees/<onderwerp>   een verdieping (ETMAAL_INFO)
 // Inhoud alleen uit de site: lib/etmaal.ts (diensten, tijden, hoofdgedachtenis, kernvers, psalmen) en
 // lib/cyclusTeksten.ts (ETMAAL_INFO); bij "Over dit moment" ook de diensttekst uit de PDF, zoals op desktop. Beelden: de aangeleverde kapellen, het
@@ -72,7 +74,6 @@ function Overzicht({ nu }: { nu: ServiceMapping }) {
       </div>
       <div className="em-papier">
         <a className="em-nu" href={`#etmaal/${slugVan(nu)}`}>
-          <span className="em-nu-kruis">{SIERKRUIS}</span>
           <span className="em-nu-tekst">
             <span className="am-label">Het actuele gebedsuur</span>
             <b>{naamVan(nu)}</b>
@@ -129,19 +130,18 @@ function Dienst({ d }: { d: ServiceMapping }) {
         </div>
       </div>
       <div className="em-kaarten">
-        <a className="em-kaart" href={`#etmaal/${slug}/over`}>
+        {/* Eerst bidden: de gebedsruimte van dit uur in een fijne omlijsting (.m-kader), daaronder de achtergrond */}
+        <a className="m-kader em-bid" href={`#etmaal/${slug}/psalmen`}>
+          <b className="m-kader-titel">Psalmen en gebeden van dit uur</b>
+          <span className="m-kader-onder">Bid met de Kerk, met het kernvers en de volledige psalmen van dit moment.</span>
+          <Sierlijn />
+          <span className="m-kader-pil">Begin met bidden</span>
+        </a>
+        <a className="em-kaart em-over" href={`#etmaal/${slug}/over`}>
           <span className="em-kaart-kruis">{SIERKRUIS}</span>
           <span className="em-kaart-tekst">
             <b>Over dit moment</b>
-            <span>Het moment in het etmaal, de hoofdgedachtenis en het kernvers.</span>
-          </span>
-          <ChevronRight className="am-pijl" aria-hidden="true" />
-        </a>
-        <a className="em-kaart" href={`#etmaal/${slug}/psalmen`}>
-          <span className="em-kaart-kruis">{SIERKRUIS}</span>
-          <span className="em-kaart-tekst">
-            <b>Psalmen uit het Psalter</b>
-            <span>Ga rechtstreeks naar de psalmen die op dit moment worden gelezen.</span>
+            <span>De betekenis en achtergrond van dit gebedsuur</span>
           </span>
           <ChevronRight className="am-pijl" aria-hidden="true" />
         </a>
@@ -191,57 +191,57 @@ function Over({ d }: { d: ServiceMapping }) {
   );
 }
 
-// 4. Psalmen uit het Psalter
-function Psalmen({ d }: { d: ServiceMapping }) {
+// 4. Het gebedenboek van dit uur: de inhoud (UurOverzicht) en één onderdeel tegelijk (UurOnderdeel), in PsalterMobiel.tsx.
+// Terug vanuit de inhoud gaat naar waar je vandaan kwam (Vandaag, Bidden, het Psalter) of naar de pagina van het uur;
+// per uur onthouden, zodat het ook klopt nadat je een psalm hebt gelezen.
+const gebedHerkomst = new Map<string, string>();
+function Inhoud({ d }: { d: ServiceMapping }) {
   const { vandaagYmd, mode } = useApp();
+  const slug = slugVan(d);
   const kathisma = d.title === 'Metten' ? 'metten' : d.title === 'Vespers' ? 'vespers' : null;
+  const [{ terug, slim }] = useState(() => {
+    const v = vorigeAdres();
+    if (!v.startsWith(`#etmaal/${slug}/psalmen/`)) {
+      if (v && !v.startsWith('#etmaal')) gebedHerkomst.set(slug, v);
+      else gebedHerkomst.delete(slug);
+    }
+    const t = gebedHerkomst.get(slug) ?? `#etmaal/${slug}`;
+    // Rechtstreeks gekomen: Terug is een echte stap terug in de geschiedenis
+    return { terug: t, slim: v === t };
+  });
   return (
-    <Laag className="em-laag em-psalmen" label={`${naamVan(d)}: psalmen`}>
-      <img className="em-boek" src={`${BEELD}/gebedenboek.webp`} alt="" width={900} height={1200} decoding="async" />
-      <Kop terug={`#etmaal/${slugVan(d)}`} merk slim />
-      <div className="em-psalmen-vlak">
-        <h1 className="em-titel" tabIndex={-1}>{naamVan(d)}</h1>
-        <p className="em-dienst-onder">Psalmen uit het Psalter</p>
-        <Sierlijn />
-        <ul className="em-psalm-lijst">
-          {d.psalms.map((p) => (
-            <li key={p.title}>
-              <a className="em-psalm" href={`#psalmen/${p.title.replace('Psalm ', '')}`}>
-                <span>
-                  <b>{p.title}</b>
-                  <span>Ga naar het Psalter</span>
-                </span>
-                <ChevronRight className="am-pijl" aria-hidden="true" />
-              </a>
-            </li>
-          ))}
-        </ul>
-        {kathisma && (
-          // De psalterlezing (kathisma's) van vandaag, zoals in het dienstvenster op desktop (lib/psalterlezing.ts)
+    <UurOverzicht
+      d={d}
+      slug={slug}
+      titel={naamVan(d)}
+      terug={terug}
+      slim={slim}
+      extra={
+        kathisma && (
           <section className="em-kathisma" aria-labelledby="em-kathisma-kop">
             <h2 id="em-kathisma-kop" className="am-label">Kathisma’s bij dit moment</h2>
             <Psalterlezing datum={vandaagYmd} mode={mode} dienst={kathisma} />
           </section>
-        )}
-      </div>
-    </Laag>
+        )
+      }
+    />
   );
 }
 
 export default function EtmaalMobiel() {
   const onderdeel = useOnderdeel();
   const nu = useNuDienst();
-  // Vandaag en Bidden openen het gebedsuur van nu: op mobiel de pagina van die dienst.
+  // Vandaag opent het gebedsuur van nu: op mobiel direct de inhoud van die dienst (zonder de uitlegpagina).
   useEffect(() => {
     const opDienst = (e: Event) => {
       const d = serviceConfig.find((s) => s.title === (e as CustomEvent<string>).detail);
-      if (d) gaNaar(`etmaal/${slugVan(d)}`);
+      if (d) gaNaar(`etmaal/${slugVan(d)}/psalmen`);
     };
     window.addEventListener(OPEN_DIENST_EVENT, opDienst);
     return () => window.removeEventListener(OPEN_DIENST_EVENT, opDienst);
   }, []);
 
-  const [eerste, tweede] = onderdeel.split('/');
+  const [eerste, tweede, derde] = onderdeel.split('/');
   const dienst = serviceConfig.find((d) => slugVan(d) === eerste);
   const info = eerste === 'lees' && tweede && tweede in ETMAAL_INFO ? (tweede as InfoKey) : null;
   return (
@@ -249,7 +249,8 @@ export default function EtmaalMobiel() {
       <Overzicht nu={nu} />
       {dienst && !tweede && <Dienst d={dienst} />}
       {dienst && tweede === 'over' && <Over d={dienst} />}
-      {dienst && tweede === 'psalmen' && <Psalmen d={dienst} />}
+      {dienst && tweede === 'psalmen' && !derde && <Inhoud d={dienst} />}
+      {dienst && tweede === 'psalmen' && derde && <UurOnderdeel key={derde} d={dienst} slug={slugVan(dienst)} titel={naamVan(dienst)} nr={Number(derde)} />}
       {info && (
         <LeesWeergave slim className="em-laag em-lees" titel={ETMAAL_INFO[info].title} ondertitel={ETMAAL_INFO[info].subtitle} onder={ETMAAL_INLEIDING[info]} terug="#etmaal" deelPad={`etmaal/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
           <PopupTekst inhoud={ETMAAL_INFO[info]} />

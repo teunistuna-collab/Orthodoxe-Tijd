@@ -87,7 +87,6 @@ function Overzicht({ dagen, vandaagKey }: { dagen: Record<WeekDag, WeekTekst>; v
           {VERDIEPING.map(({ key, titel }) => (
             <li key={key}>
               <a href={`#week/lees/${key}`}>
-                <span className="em-kaart-kruis">{SIERKRUIS}</span>
                 <span className="wm-verd-titel">{titel}</span>
                 <ChevronRight className="am-pijl" aria-hidden="true" />
               </a>
