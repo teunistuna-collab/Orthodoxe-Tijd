@@ -24,6 +24,7 @@
 .gw-keuze b { font-family: var(--font-lees); font-weight: 400; font-size: 23px; }
 .gw-keuze span { font-family: var(--font-lees); font-size: 15px; color: var(--gw-zacht); }
 .gw-inhoud-kop { margin: 22px 0 6px; }
+.gw .em-kathisma { margin-top: 24px; }
 .gw-inhoud { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--gw-lijn); text-align: left; }
 .gw-inhoud li { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 12px; border-bottom: 1px solid var(--gw-lijn); font-family: var(--font-lees); font-size: 17px; }
 #top#top#top#top#top#top#top#top#top .gw-inhoud :is(em, a) { font-size: 14px; font-style: italic; color: var(--gw-zacht) !important; }

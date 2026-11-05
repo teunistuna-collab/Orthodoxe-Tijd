@@ -132,27 +132,10 @@ html:not(.lees-nacht) #top#top#top#top#top#top#top#top#top .em-laag .am-kop.is-l
 #top#top#top#top#top#top#top#top#top#top#top :is(#etmaal, #week, #jaar) > .em-banner > .em-banner-tekst > .em-titel { margin-top: auto !important; }
 
 /* De dienst: eerst de gebedskaart in de fijne omlijsting (.m-kader, index.css), daaronder "Over dit moment" kleiner en
-   rustiger. De gebedsruimte (#etmaal/<dienst>/psalmen) gebruikt de leesweergave van het Psalter (psalter-mobiel.css). */
+   rustiger. De gebedsweg (#etmaal/<dienst>/bid) staat in gebedsweg.css. */
 .em-dienst .em-kaarten { gap: 12px; padding: 18px 12px 14px; }
 #top#top#top#top#top#top#top#top#top#top .em-bid { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 12px 8px; text-align: center; text-decoration: none; }
 #top#top#top#top#top#top#top#top .em-kaart.em-over { min-height: 64px; padding: 8px 8px 8px 12px; background: rgba(255, 250, 238, .35); }
 .em-over .em-kaart-kruis { width: 20px; height: 20px; opacity: .8; }
 .em-over .em-kaart-tekst b { font-size: 18px; }
 .em-over .em-kaart-tekst span { font-size: 14.5px; }
-.em-gebed .em-kernvers { margin: 6px 0 22px; }
-.em-gebed .em-kathisma { margin-top: 24px; }
-html.lees-nacht #top#top#top#top#top#top#top#top .em-gebed .em-kernvers { color: #e9dcc0; }
-html.lees-nacht #top#top#top#top#top#top#top#top .em-gebed .em-kernvers cite { color: #d9b56e; }
-/* De inhoud van een gebedsuur, als de inhoudsopgave van een gebedenboek: dunne gouden kaders, rustige ruimte, kleine pijl.
-   "Bid de volledige dienst" als onderstreepte tekst (zoals "Begin met bidden"). */
-.em-inhoud .pm-lees-vlak { padding-bottom: 32px; }
-.em-hele-dienst { margin: -6px 0 16px; text-align: center; }
-#top#top#top#top#top#top#top#top .em-hele-dienst a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; font-family: var(--font-lees); font-size: 17px; color: #5d4630; text-decoration: underline; text-decoration-color: #b99455; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-.em-onderdelen { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-#top#top#top#top#top#top#top#top .em-onderdeel { display: flex; align-items: center; gap: 10px; min-height: 60px; padding: 8px 10px 8px 16px; border: 1px solid rgba(185, 148, 85, .6); border-radius: 4px; background: rgba(255, 250, 238, .5); box-shadow: inset 0 0 0 2px rgba(255, 248, 232, .3); color: var(--inkt) !important; text-align: left; text-decoration: none; -webkit-tap-highlight-color: transparent; }
-.em-onderdeel b { flex: 1; font-family: var(--font-lees); font-size: 20px; font-weight: 500; line-height: 1.2; }
-.em-onderdeel span { font-family: var(--font-lees); font-size: 14px; font-style: italic; color: var(--gedempt); }
-.em-onderdeel .am-pijl { flex: none; width: 18px; height: 18px; color: var(--goud-pijl); }
-.em-onderdeel:active { background: rgba(236, 212, 177, .75); }
-#top#top#top#top#top#top#top#top :is(.em-onderdeel, .em-hele-dienst a):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
-html.lees-nacht #top#top#top#top#top#top#top#top .em-hele-dienst a { color: #e9dcc0; }
