@@ -1,8 +1,7 @@
 import { useEffect, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { BookOpen, ChevronRight, Heart } from 'lucide-react';
 import { ADEM_INLEIDING, ADEM_POPUPS } from '../lib/cyclusTeksten';
-import { GEBEDEN } from '../lib/gebeden';
-import { useEigenPijlgebed } from '../lib/pijlgebed';
+import { bewaarVorm, leesVorm, useVormen, type Vorm } from '../lib/jezusgebed';
 import { BLAD, HANDEN, KRUIS } from './symbolen';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import { vorigeAdres } from '../lib/vorigAdres';
@@ -38,39 +37,6 @@ function SnoerSymbool() {
   );
 }
 
-// De vormen van het Jezusgebed zoals ze in lib/gebeden.ts staan ("(korter:) …", "(kortst:) …").
-const JEZUSGEBED = GEBEDEN.find((g) => g.id === 'jezusgebed')?.tekst ?? '';
-const regelNa = (label: string) => JEZUSGEBED.match(new RegExp(`\\(${label}:\\)\\s*(.+)`))?.[1]?.trim() ?? '';
-const STANDAARD = JEZUSGEBED.split('\n')[0].trim();
-type Vorm = { id: string; titel: string; tekst: string; onder?: string };
-const VASTE_VORMEN: Vorm[] = [
-  { id: 'standaard', titel: 'Standaard', tekst: STANDAARD },
-  { id: 'korter', titel: 'Korter', tekst: regelNa('korter') },
-  { id: 'kortst', titel: 'Kortst', tekst: regelNa('kortst') },
-].filter((v) => v.tekst);
-
-function useVormen(): Vorm[] {
-  const eigen = useEigenPijlgebed().trim();
-  return eigen ? [...VASTE_VORMEN, { id: 'eigen', titel: 'Jouw pijlgebed', tekst: eigen }] : VASTE_VORMEN;
-}
-
-// De laatst gekozen gebedsvorm, op dit apparaat ("Begin met bidden" gaat daarheen)
-const VORM_SLEUTEL = 'adem-vorm';
-const leesVorm = () => {
-  try {
-    return localStorage.getItem(VORM_SLEUTEL) ?? '';
-  } catch {
-    return '';
-  }
-};
-const bewaarVorm = (id: string) => {
-  try {
-    localStorage.setItem(VORM_SLEUTEL, id);
-  } catch {
-    /* geen opslag */
-  }
-};
-
 // Bidden of Ontdek, gelezen na de paginawissel in App (die de groep bijhoudt)
 const useTerugNaarGroep = () => useSyncExternalStore((f) => volgHash(() => queueMicrotask(f)), terugNaarGroep);
 const volgHash = (f: () => void) => {
@@ -81,7 +47,7 @@ const volgHash = (f: () => void) => {
 const useOnderdeel = () => useSyncExternalStore(volgHash, () => decodeURIComponent(window.location.hash).match(/^#adem\/(.+)$/)?.[1] ?? '');
 
 /** Het gebed regel voor regel, afgebroken na elke komma (zoals in de mock-up). */
-function Gebedsregels({ tekst }: { tekst: string }) {
+export function Gebedsregels({ tekst }: { tekst: string }) {
   const regels = tekst.split(/(?<=,)\s+/);
   return <>{regels.map((r, i) => <span key={i} className="am-regel">{r}{i < regels.length - 1 ? ' ' : ''}</span>)}</>;
 }

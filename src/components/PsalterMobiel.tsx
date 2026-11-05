@@ -193,7 +193,7 @@ export function PsalterKathisma({ k, datum }: { k: Kathisma; datum: string | nul
 /** De verzen van een psalm: grote rode beginletter per vers, versnummer rechts, regels in de leeskolom. */
 // Initialen zoals de uitgave: een grote initiaal aan het begin van de psalm (PsalmBlok.begin, lib/psalmen.ts), daarna een
 // rode, vette hoofdletter op regelhoogte bij elk vers dat met een hoofdletter begint.
-function Verzen({ verzen, idVoorvoegsel }: { verzen: PsalmBlok[]; idVoorvoegsel: string }) {
+export function Verzen({ verzen, idVoorvoegsel }: { verzen: PsalmBlok[]; idVoorvoegsel: string }) {
   return (
     <div className="pm-verzen lees-tekst">
       {verzen.map((v, i) =>

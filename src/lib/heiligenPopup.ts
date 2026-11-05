@@ -86,3 +86,10 @@ export function popupContent(h: Resultaat | null, tekst: string[] | null) {
     ...(eigen && h.heiligenjaar ? { sections: [{ heading: 'Uit het Heiligenjaar', paragraphs: tekst ?? laden }] } : {}),
   };
 }
+
+// Een heilige en het feest van de dag zijn dezelfde gedachtenis als een kenmerkend woord van de naam in beide staat
+// (bijvoorbeeld "Demetrius"); dan staat de heilige niet nog eens apart. Algemene woorden tellen niet mee.
+const ALGEMEEN = new Set(['heilige', 'heiligen', 'martelaar', 'grootmartelaar', 'apostel', 'apostelen', 'profeet', 'moeder', 'grote', 'gelijk', 'evangelist', 'synaxis', 'gedachtenis', 'overbrenging', 'relieken', 'eerbiedwaardige']);
+const woorden = (t: string) =>
+  t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/[^a-z]+/).filter((w) => w.length >= 5 && !ALGEMEEN.has(w));
+export const zelfdeGedachtenis = (a: string, b: string) => woorden(a).some((w) => woorden(b).includes(w));

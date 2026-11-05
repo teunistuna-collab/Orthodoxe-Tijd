@@ -4,6 +4,7 @@ import { useSwipe } from '../lib/swipe';
 import { useTerugSluit } from '../lib/terug';
 import { houdFocusBinnen } from '../lib/focus';
 import Leesbediening, { type Deel } from './Leesbediening';
+import { useSchermAan } from '../lib/schermAan';
 import './popup.css';
 
 type ModalProps = {
@@ -36,34 +37,6 @@ type ModalProps = {
   /** Verandert deze waarde, dan springt het leesvlak terug naar boven (andere heilige in hetzelfde venster). */
   inhoudSleutel?: string;
 };
-
-// Houdt het scherm aan zolang er een leesvenster (gebed, dienst, lezing, psalm) open staat.
-function useSchermAan(open: boolean) {
-  useEffect(() => {
-    if (!open || !('wakeLock' in navigator)) return;
-    let actief = true;
-    let slot: WakeLockSentinel | null = null;
-    const vraag = () => {
-      navigator.wakeLock
-        .request('screen')
-        .then((s) => {
-          if (actief) slot = s;
-          else void s.release();
-        })
-        .catch(() => {});
-    };
-    const opZicht = () => {
-      if (document.visibilityState === 'visible') vraag();
-    };
-    vraag();
-    document.addEventListener('visibilitychange', opZicht);
-    return () => {
-      actief = false;
-      document.removeEventListener('visibilitychange', opZicht);
-      void slot?.release().catch(() => {});
-    };
-  }, [open]);
-}
 
 export default function Modal({ open, onClose, title, eyebrow, children, actions, leadingActions, maxWidth = 'max-w-3xl', labelledBy, centerTitle = false, onVorige, onVolgende, lezen = false, leesAudio, deel, kopDatum, kopNav = false, vorigeLabel = 'Vorige', volgendeLabel = 'Volgende', ondertitel, inhoudSleutel }: ModalProps) {
   const veeg = useSwipe(onVorige, onVolgende);

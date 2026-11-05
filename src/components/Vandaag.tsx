@@ -8,7 +8,7 @@ import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../li
 import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
 import { dienstVanHetUur, slugVan } from '../lib/etmaal';
 import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
-import { heiligeTitel } from '../lib/heiligenPopup';
+import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { vastenGroep } from '../lib/vasten';
 import { feestVoorDag } from '../lib/feestdagen';
 import { actieveCyclus } from '../lib/seizoen';
@@ -34,13 +34,6 @@ const WEEKTHEMAS: Record<number, { titel: string; uitleg: string }> = {
 };
 
 const BEELD = '/images/vandaag';
-
-// Een heilige en het feest van de dag zijn dezelfde gedachtenis als een kenmerkend woord van de naam in beide staat
-// (bijvoorbeeld "Demetrius"); dan staat de heilige niet nog eens apart. Algemene woorden tellen niet mee.
-const ALGEMEEN = new Set(['heilige', 'heiligen', 'martelaar', 'grootmartelaar', 'apostel', 'apostelen', 'profeet', 'moeder', 'grote', 'gelijk', 'evangelist', 'synaxis', 'gedachtenis', 'overbrenging', 'relieken', 'eerbiedwaardige']);
-const woorden = (t: string) =>
-  t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/[^a-z]+/).filter((w) => w.length >= 5 && !ALGEMEEN.has(w));
-const zelfdeGedachtenis = (a: string, b: string) => woorden(a).some((w) => woorden(b).includes(w));
 
 // Beelden voor de kop op mobiel (public/images/vandaag), aangeleverd en alleen verkleind.
 const FOTO_KOP = {
