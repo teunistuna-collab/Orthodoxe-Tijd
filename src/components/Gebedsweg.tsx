@@ -207,7 +207,7 @@ function StapInhoud({ d, stap }: { d: ServiceMapping; stap: Onderdeel | KortStap
   );
 }
 
-function Jezusgebed() {
+export function Jezusgebed() {
   const vorm = useGekozenVorm();
   return (
     <>

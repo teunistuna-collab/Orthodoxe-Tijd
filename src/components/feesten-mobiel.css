@@ -68,3 +68,14 @@
 /* Het kruis van de site in een kader zonder icoon */
 #top#top#top#top#top#top#top#top :is(.hm-beeld, .fm-icoon) .hm-kader img.fm-kruis { position: static; width: auto; height: 100%; max-height: 64px; object-fit: contain; filter: drop-shadow(0 1px 1px rgba(60, 35, 15, .25)); }
 #top#top#top#top#top#top#top#top .fm-icoon.is-leeg .hm-kader { flex: none; width: 96px; height: 96px; padding: 14px; box-sizing: border-box; border-radius: 6px; }
+
+/* Bid met het feest: de uitnodiging onder het troparion (opmaak van de keuzes in gebedsweg.css) */
+.fm-bid { margin: 4px 0 18px; }
+/* Lezingen van het feest: rijen zoals de inhoud van een gebedsuur; een tik opent de tekst */
+.fm-lezingen { margin: 0 0 14px; padding: 0; list-style: none; border-top: 1px solid rgba(172, 121, 47, .4); }
+.fm-lezingen li { border-bottom: 1px solid rgba(172, 121, 47, .4); }
+#top#top#top#top#top#top#top#top#top .fm-lezing { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; margin: 0; padding: 6px 8px 6px 12px; border: 0; border-radius: 0; background: none; box-shadow: none; color: var(--inkt) !important; text-align: left; -webkit-tap-highlight-color: transparent; }
+.fm-lezing:active { background: rgba(90, 60, 25, .07); }
+.fm-lezing small { display: block; font-family: var(--font-titel); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #7a6248; }
+.fm-lezing b { display: block; font-family: var(--font-lees); font-size: 18px; font-weight: 500; }
+.fm-lezing svg { flex: none; width: 20px; height: 20px; color: #7d5218; }

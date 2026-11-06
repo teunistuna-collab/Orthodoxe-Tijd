@@ -69,7 +69,10 @@ export function Kop({ terug, licht, merk = licht, rechts, slim }: { terug: strin
     const pagina = (h: string) => h.split('/')[0];
     const vorigAdres = vorigeAdres();
     const nu = huidigAdres();
-    if (vorigAdres && vorigAdres !== nu && (vorigAdres === terug || pagina(vorigAdres) === pagina(nu))) window.history.back();
+    // Kwam je terug uit een dieper scherm van dit scherm (bijv. na het bidden: …/bid/2 → het feest), dan is dat niet waar
+    // je vandaan kwam: een stap terug zou dat scherm weer openen
+    const dieper = !!vorigAdres?.startsWith(`${nu}/`);
+    if (vorigAdres && vorigAdres !== nu && !dieper && (vorigAdres === terug || pagina(vorigAdres) === pagina(nu))) window.history.back();
     else window.location.replace(terug);
   };
   return (

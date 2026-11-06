@@ -2,7 +2,11 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { useApp } from '../lib/context';
 import type { Feest } from '../lib/feesten';
-import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, hoofdletter, kerkDatum, parseYmd, ymd } from '../lib/kalender';
+import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, hoofdletter, julianKey, kerkDatum, parseYmd, ymd } from '../lib/kalender';
+import { stapIndex } from '../lib/gebedsweg';
+import { roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
+import { useSchermAan } from '../lib/schermAan';
+import { Doorsturen, Jezusgebed } from './Gebedsweg';
 import { FEEST_HEILIGENJAAR, GEKOPPELDE_FEESTTEKSTEN } from '../lib/feestHeiligenjaar';
 import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
 import { normaliseer } from '../lib/heiligenPopup';
@@ -311,6 +315,72 @@ function Onbekend() {
   );
 }
 
+// 5. Bid met het feest (#feesten/<id>/bid/<n>): het troparion en het Jezusgebed, schermvullend op een beeld van het feest.
+// Eigen achtergronden (aangeleverd) staan in BIDBEELDEN; zolang die er niet zijn, het icoon van het feest.
+const BIDBEELDEN: Record<string, string> = {};
+const bidBeeld = (id: string) => (BIDBEELDEN[id] ? `/images/feesten/bidden/${BIDBEELDEN[id]}` : icoonVan(id));
+
+function FeestBidden({ f, n }: { f: Feest; n?: string }) {
+  useSchermAan(true);
+  const i = stapIndex(n, 2);
+  const feest = `#feesten/${f.id}`;
+  if (i === null) return <Doorsturen adres={`${feest}/bid/1`} />;
+  const titel = titels(f).titel;
+  const beeld = bidBeeld(f.id);
+  return (
+    <Laag className="gw gw-bid is-kort is-feest" label={`Bid met het feest: ${titel}, ${i + 1} van 2`}>
+      {beeld && <img className="gw-feestbeeld" src={beeld} alt="" decoding="async" />}
+      <div className="am-kop">
+        <a className="am-terug" href={feest} aria-label="Stoppen en terug naar het feest">×</a>
+        <span className="gw-context">{titel}</span>
+        <span />
+      </div>
+      <div className="gw-vlak">
+        {i === 0 ? (
+          <>
+            <h1 className="sr-only" tabIndex={-1}>Troparion</h1>
+            <p className="gw-groot gw-troparion">{f.troparion}</p>
+            <p className="gw-noot">Troparion</p>
+          </>
+        ) : (
+          <Jezusgebed />
+        )}
+      </div>
+      <div className="gw-voet">
+        <a className="gw-verder" href={i === 1 ? feest : `${feest}/bid/2`}>{i === 1 ? 'Amen' : 'Verder'}</a>
+        <span className="gw-teller">{i + 1} van 2</span>
+      </div>
+    </Laag>
+  );
+}
+
+/** De lezingen van de eerstvolgende datum van het feest; een tik opent de tekst (zoals in de kalender). */
+function Lezingen({ datum }: { datum: Date }) {
+  const { rooster, vraagRooster, openLezing } = useApp();
+  const dag = ymd(datum);
+  useEffect(() => vraagRooster(dag), [dag, vraagRooster]);
+  const lezingen = rooster?.[dag] ?? [];
+  if (!lezingen.length) return <p className="fm-tekst fm-leeg">{roosterMelding(dag)}</p>;
+  return (
+    <ul className="fm-lezingen">
+      {lezingen.map((l, i) => {
+        const ref = vertaalRef(l.ref);
+        return (
+          <li key={i}>
+            <button type="button" className="fm-lezing" onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: julianKey(datum), civil: datum })}>
+              <span>
+                <small>{vertaalTag(l.tag, ref)}</small>
+                <b>{ref}</b>
+              </span>
+              <ChevronRight aria-hidden="true" />
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 // 4. Een feest
 function Detail({ item, terug }: { item: FeestItem; terug: string }) {
   const { openDag, mode } = useApp();
@@ -349,11 +419,20 @@ function Detail({ item, terug }: { item: FeestItem; terug: string }) {
               <>
                 <p className="fm-klein">Troparion</p>
                 <blockquote className="fm-troparion">{f.troparion}</blockquote>
+                <div className="gw-keuzes fm-bid">
+                  <a className="gw-keuze is-hoofd" href={`#feesten/${f.id}/bid/1`}>
+                    <b>Bid het troparion</b>
+                    <span className="gw-keuze-onder">Het troparion en het Jezusgebed</span>
+                    <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
+                  </a>
+                </div>
               </>
             )}
             {f.traditie && <p className="fm-tekst"><b>Gebruiken:</b> {f.traditie}</p>}
           </>
         )}
+        <h2 className="hm-label hm-lijnlabel">Lezingen</h2>
+        <Lezingen datum={datum} />
         {f.toelichting && hjId && (
           <>
             <h2 className="hm-label hm-lijnlabel">Uit het Heiligenjaar</h2>
@@ -376,7 +455,10 @@ export default function FeestenMobiel({ alle, groot }: { alle: FeestItem[]; groo
   const [zoek, setZoek] = useState('');
   const [verschuiving, setVerschuiving] = useState(0);
   const lijst = onderdeel === '' || onderdeel === 'zoek' || onderdeel === 'groot';
-  const item = !lijst ? alle.find(({ f }) => f.id === onderdeel) : undefined;
+  // #feesten/<id> of #feesten/<id>/bid/<n> (bidden met het feest, alleen met een troparion)
+  const [id, sub, n] = onderdeel.split('/');
+  const item = !lijst ? alle.find(({ f }) => f.id === id) : undefined;
+  const bidden = item && sub === 'bid' && item.f.troparion;
   // Terug uit een feest gaat naar de lijst waar het feest geopend werd (overzicht, zoekresultaten of de grote feesten).
   const [herkomst, setHerkomst] = useState('');
   if (lijst && herkomst !== onderdeel) setHerkomst(onderdeel);
@@ -387,6 +469,8 @@ export default function FeestenMobiel({ alle, groot }: { alle: FeestItem[]; groo
       {(onderdeel === 'zoek' || (item && herkomst === 'zoek')) && <Zoeken alle={alle} zoek={zoek} setZoek={setZoek} />}
       {(onderdeel === 'groot' || (item && herkomst === 'groot')) && <Groot groot={groot} />}
       {item && <Detail key={item.f.id} item={item} terug={herkomst ? `#feesten/${herkomst}` : '#feesten'} />}
+      {bidden && <FeestBidden key={n} f={item.f} n={n} />}
+      {item && sub && !bidden && <Doorsturen adres={`#feesten/${item.f.id}`} />}
       {!lijst && !item && <Onbekend />}
     </>
   );
