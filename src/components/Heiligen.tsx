@@ -284,7 +284,7 @@ export default function Heiligen() {
                     <a className="hm-kaart hm-ll" href="#heiligen/lage-landen">
                       <span className="hm-beeld" aria-hidden="true"><img src="/images/decor/lage-landen-kaart.webp" alt="" width={414} height={263} loading="lazy" decoding="async" /></span>
                       <span className="hm-tekst">
-                        <b>Onze heiligen</b>
+                        <b>Heiligen der Lage Landen</b>
                         <span>Het geloof in onze streken</span>
                       </span>
                       <ChevronRight className="hm-pijl" aria-hidden="true" />
