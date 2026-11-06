@@ -1,9 +1,9 @@
 // Controle van de gebedsweg (lib/gebedsweg.ts): volgorde, beschikbaarheid, aangeleverde bestanden, adressen.
 // Draaien: npm run check:gebedsweg
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { serviceConfig, slugVan } from '../src/lib/etmaal';
-import { KORT, bidPad, gebedTitel, isAvonduur, leesUurBestand, onderdelenVan, stapIndex } from '../src/lib/gebedsweg';
+import { KORT, bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, leesUurBestand, onderdelenVan, stapIndex } from '../src/lib/gebedsweg';
 
 const uur = (titel: string) => serviceConfig.find((d) => d.title === titel)!;
 const alles = () => true;
@@ -68,5 +68,26 @@ assert.deepEqual(serviceConfig.filter(isAvonduur).map((d) => d.title), ['Vespers
 
 // Elk uur heeft een onderbeeld voor de banner
 for (const d of serviceConfig) assert.ok(existsSync(`public/images/etmaal/onder/${slugVan(d)}.webp`), slugVan(d));
+
+// Polyeleos: een onderdeel met "alleen": "zon-en-feestdag" staat er alleen op zon- en feestdagen
+const metPoly = leesUurBestand({ onderdelen: [{ psalm: 102 }, { psalm: 134, alleen: 'zon-en-feestdag' }, { psalm: 148 }] });
+assert.ok(metPoly);
+assert.deepEqual(onderdelenVan(uur('Metten'), metPoly, alles, true).map((o) => o.titel), ['Psalm 102', 'Psalm 148']);
+assert.deepEqual(onderdelenVan(uur('Metten'), metPoly, alles, true, true).map((o) => o.titel), ['Psalm 102', 'Psalm 134', 'Psalm 148']);
+assert.equal(leesUurBestand({ onderdelen: [{ psalm: 134, alleen: 'zaterdag' }] }), null);
+
+// Zon- of feestdag: zondag, of een feest van rang polyeleos (4) of hoger, of een groot feest
+assert.equal(isZonOfFeestdag({ weekdag: 0, feesten: [] }), true);
+assert.equal(isZonOfFeestdag({ weekdag: 3, feesten: [] }), false);
+assert.equal(isZonOfFeestdag({ weekdag: 3, feesten: [{ rang: 4 }] }), true);
+assert.equal(isZonOfFeestdag({ weekdag: 3, feesten: [{ rang: 3 }] }), false);
+assert.equal(isZonOfFeestdag({ weekdag: 3, feesten: [{ groot: true }] }), true);
+
+// Het aangeleverde metten.json: 134 en 135 na de hexapsalm, alleen op zon- en feestdagen
+const mettenBestand = leesUurBestand(JSON.parse(readFileSync('public/data/uren/metten.json', 'utf8')));
+assert.ok(mettenBestand);
+const metten = (zonOfFeest: boolean) => onderdelenVan(uur('Metten'), mettenBestand, alles, true, zonOfFeest).map((o) => o.titel);
+assert.ok(!metten(false).includes('Psalm 134') && !metten(false).includes('Psalm 135'));
+assert.deepEqual(metten(true).slice(8, 11), ['Psalm 142', 'Psalm 134', 'Psalm 135']);
 
 console.log('gebedsweg: alle controles geslaagd');

@@ -9,6 +9,8 @@
     { "psalm": 87 },
     { "psalm": 102 },
     { "psalm": 142 },
+    { "psalm": 134, "alleen": "zon-en-feestdag" },
+    { "psalm": 135, "alleen": "zon-en-feestdag" },
     { "titel": "Ode 9: Lofzang van Maria en gebed van Zacharias", "tekst": null },
     { "psalm": 148 },
     { "psalm": 149 },

@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { naamVan, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
-import { KORT, bidPad, gebedTitel, isAvonduur, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
+import { KORT, bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { useGekozenVorm } from '../lib/jezusgebed';
 import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
@@ -32,6 +32,8 @@ export function Doorsturen({ adres }: { adres: string }) {
 /** De onderdelen van het uur, of null zolang het aangeleverde bestand (public/data/uren/<slug>.json) nog laadt. */
 function useOnderdelen(d: ServiceMapping): Onderdeel[] | null {
   const slug = slugVan(d);
+  const { vandaag, vandaagYmd, mode } = useApp();
+  const zonOfFeest = useMemo(() => isZonOfFeestdag(dagInfo(vandaag, mode, vandaagYmd)), [vandaag, mode, vandaagYmd]);
   const [bestand, setBestand] = useState<{ slug: string; b: UurBestand | null } | null>(null);
   useEffect(() => {
     let actief = true;
@@ -41,8 +43,8 @@ function useOnderdelen(d: ServiceMapping): Onderdeel[] | null {
     };
   }, [slug]);
   return useMemo(
-    () => (bestand?.slug === slug ? onderdelenVan(d, bestand.b, (nr) => !!PSALMEN[nr - 1]?.hasText, GEBEDEN_ZICHTBAAR) : null),
-    [bestand, slug, d],
+    () => (bestand?.slug === slug ? onderdelenVan(d, bestand.b, (nr) => !!PSALMEN[nr - 1]?.hasText, GEBEDEN_ZICHTBAAR, zonOfFeest) : null),
+    [bestand, slug, d, zonOfFeest],
   );
 }
 

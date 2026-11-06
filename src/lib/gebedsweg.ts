@@ -1,12 +1,14 @@
 import { GEBEDEN } from './gebeden';
 import { naamVan, type ServiceMapping } from './etmaal';
+import type { Feest } from './feesten';
 
 // De gebedsweg (spec: docs/superpowers/specs/2026-11-05-gebedsweg-design.md): de volgorde van een gebedsuur en welke
 // onderdelen nu te bidden zijn. Zonder React of browser (behalve laadUurBestand), zodat scripts/gebedsweg.check.ts het
 // los kan controleren.
 //
 // Standaard: de Inleidende gebeden, dan de psalmen van het uur (lib/etmaal.ts). Staat er een
-// public/data/uren/<slug>.json, dan bepaalt dat bestand de hele volgorde; "tekst": null betekent "volgt nog".
+// public/data/uren/<slug>.json, dan bepaalt dat bestand de hele volgorde; "tekst": null betekent "volgt nog" en
+// "alleen": "zon-en-feestdag" bij een psalm betekent: alleen op zon- en feestdagen (de polyeleos in de Metten).
 
 export type Onderdeel =
   | { soort: 'psalm'; titel: string; nr: number; beschikbaar: boolean; pdf?: string }
@@ -14,7 +16,7 @@ export type Onderdeel =
   | { soort: 'tekst'; titel: string; tekst: string | null; beschikbaar: boolean };
 
 export type KortStap = { soort: 'kernvers' } | { soort: 'jezusgebed' };
-export type BronOnderdeel = { psalm: number } | { gebed: string } | { titel: string; tekst: string | null };
+export type BronOnderdeel = { psalm: number; alleen?: 'zon-en-feestdag' } | { gebed: string } | { titel: string; tekst: string | null };
 export interface UurBestand {
   onderdelen: BronOnderdeel[];
 }
@@ -28,7 +30,7 @@ const psalmNr = (title: string) => Number(title.replace('Psalm ', ''));
 function geldigOnderdeel(o: unknown): o is BronOnderdeel {
   if (!o || typeof o !== 'object') return false;
   const x = o as Record<string, unknown>;
-  if ('psalm' in x) return typeof x.psalm === 'number' && Number.isInteger(x.psalm) && x.psalm >= 1 && x.psalm <= 150;
+  if ('psalm' in x) return typeof x.psalm === 'number' && Number.isInteger(x.psalm) && x.psalm >= 1 && x.psalm <= 150 && (x.alleen === undefined || x.alleen === 'zon-en-feestdag');
   if ('gebed' in x) return typeof x.gebed === 'string';
   return typeof x.titel === 'string' && (typeof x.tekst === 'string' || x.tekst === null);
 }
@@ -39,10 +41,14 @@ export function leesUurBestand(json: unknown): UurBestand | null {
   return Array.isArray(delen) && delen.every(geldigOnderdeel) ? { onderdelen: delen } : null;
 }
 
+/** Zondag, of een feest van rang polyeleos (4) of hoger, of een van de grote feesten. */
+export const isZonOfFeestdag = (dag: { weekdag: number; feesten: Pick<Feest, 'groot' | 'rang'>[] }) =>
+  dag.weekdag === 0 || dag.feesten.some((f) => f.groot || (f.rang ?? 0) >= 4);
+
 /** De onderdelen van een uur in volgorde, elk met "beschikbaar" (nu te bidden). */
-export function onderdelenVan(d: ServiceMapping, aangeleverd: UurBestand | null, psalmMetTekst: (nr: number) => boolean, gebedenZichtbaar: boolean): Onderdeel[] {
+export function onderdelenVan(d: ServiceMapping, aangeleverd: UurBestand | null, psalmMetTekst: (nr: number) => boolean, gebedenZichtbaar: boolean, zonOfFeest = false): Onderdeel[] {
   const bron: BronOnderdeel[] = aangeleverd?.onderdelen ?? [{ gebed: OPENING }, ...d.psalms.map((p) => ({ psalm: psalmNr(p.title) }))];
-  return bron.map((o): Onderdeel => {
+  return bron.filter((o) => zonOfFeest || !('alleen' in o && o.alleen)).map((o): Onderdeel => {
     if ('psalm' in o) {
       const pdf = d.psalms.find((p) => psalmNr(p.title) === o.psalm)?.pdf;
       return { soort: 'psalm', titel: `Psalm ${o.psalm}`, nr: o.psalm, beschikbaar: psalmMetTekst(o.psalm), pdf };
