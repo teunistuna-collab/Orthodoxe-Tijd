@@ -437,6 +437,23 @@ function HerinneringScherm() {
           <Keuzes label="Wanneer bij een feest" keuzes={FEEST_MOMENT} waarde={h.feestMoment} uit={uit} onKies={(id) => void zet({ feestMoment: id })} />
         </>
       )}
+
+      <h2 className="ism-label">Naamdagen</h2>
+      <ul className="ism-lijst">
+        <Schakel
+          titel="Herinner mij aan naamdagen"
+          onder={h.naamdagLijst.length ? `Van onze heiligen (${h.naamdagLijst.length})` : 'Voeg eerst heiligen toe bij Heiligen → Onze heiligen'}
+          aan={h.naamdagen}
+          uit={uit}
+          onWissel={() => void zet({ naamdagen: !h.naamdagen }, !h.naamdagen)}
+        />
+      </ul>
+      {h.naamdagen && !h.feesten && (
+        <>
+          <p className="ism-veldlabel ism-sublabel">Wanneer</p>
+          <Keuzes label="Wanneer bij een naamdag" keuzes={FEEST_MOMENT} waarde={h.feestMoment} uit={uit} onKies={(id) => void zet({ feestMoment: id })} />
+        </>
+      )}
       </>
       )}
 
@@ -456,7 +473,7 @@ function Overzicht() {
   const { stap, kleur } = useLeesvoorkeur();
   const { mode } = useApp();
   const h = useHerinneringen();
-  const actief = [h.uren.length > 0 && 'Gebedsuren', h.vasten && 'Vastendagen', h.feesten && 'Feesten'].filter(Boolean).join(' · ');
+  const actief = [h.uren.length > 0 && 'Gebedsuren', h.vasten && 'Vastendagen', h.feesten && 'Feesten', h.naamdagen && 'Naamdagen'].filter(Boolean).join(' · ');
   const geblokkeerd = ['denied', 'niet-ondersteund'].includes(toestemming());
   return (
     <section id="instellingen" className="am ism">

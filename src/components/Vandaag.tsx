@@ -19,6 +19,8 @@ import VandaagMobiel from './VandaagMobiel';
 import { useMobiel } from '../lib/desktop';
 import { onthoudGroep } from '../lib/navigatie';
 import { aftellingVoor } from '../lib/aftellen';
+import { naamdagenOp } from '../lib/onzeHeiligen';
+import { useOnzeHeiligen } from '../lib/onzeHeiligenOpslag';
 import './Vandaag.css';
 
 const WEEKDAG_SLEUTELS = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
@@ -68,6 +70,12 @@ export default function Vandaag() {
   // Feestdagen (lib/feestdagen.ts): tijdens Pascha en de Geboorte van Christus vervangt het feesticoon het Christusicoon
   // in de kop, met de begroeting en een feestlink eronder. Bij een dagwisseling of andere kalenderkeuze opnieuw bepaald.
   const feest = useMemo(() => feestVoorDag(vandaag, mode), [vandaag, mode]);
+  // Onze heiligen: "Naamdag van Sofia" in de kaart Feesten & heiligen (zonder voor wie: de naam van de heilige)
+  const onze = useOnzeHeiligen();
+  const naamdagen = useMemo(
+    () => naamdagenOp(onze, vandaag, mode).map((n) => (n.voor ? `Naamdag van ${n.voor}` : `Naamdag: ${heiligeTitel(n.heilige)}`)),
+    [onze, vandaag, mode],
+  );
   const geboorteNu = useMemo(() => geboortecyclusVoor(vandaag, mode).huidige, [vandaag, mode]);
   const theofanie = geboorteNu === 'theofanie' || geboorteNu === 'nafeest-theofanie';
   const fotoKop = !feest ? (theofanie ? FOTO_KOP.theofanie : FOTO_KOP.gewoon) : feest.id === 'pascha' ? FOTO_KOP.pascha : FOTO_KOP.kerst;
@@ -107,11 +115,12 @@ export default function Vandaag() {
         },
       }}
       vasten={{ groep, open: () => openPopup({ pagina: 'vasten', sleutel: dag.ymd }) }}
-      feest={
-        hoofdFeest
+      feest={{
+        ...(hoofdFeest
           ? { label: 'Feesten & heiligen', naam: hoofdFeest.naam, meer: 0, open: () => openDag(dag.ymd) }
-          : { label: 'Feesten & heiligen', naam: heiligenRegel, meer: heilige ? aantalHeiligen - 1 : 0, open: () => openDagHeiligen(dag.ymd) }
-      }
+          : { label: 'Feesten & heiligen', naam: heiligenRegel, meer: heilige ? aantalHeiligen - 1 : 0, open: () => openDagHeiligen(dag.ymd) }),
+        naamdagen,
+      }}
       lezingen={{ lijst: lezingen?.length ? lezingen : alleLezingen, geladen: !!rooster, open: () => openDagLezingen(dag.ymd) }}
       ritme={cyclusNu === 'pascha' ? { href: '#pascha', onClick: () => openDagPascha(dag.ymd) } : { href: cyclusNu === 'geboorte' ? '#geboorte' : '#jaar' }}
       aftelling={aftelling}

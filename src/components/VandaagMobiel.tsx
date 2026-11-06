@@ -73,7 +73,7 @@ export interface VandaagMobielProps {
   pijlgebed: string;
   uur: { titel: string; href: string; onder: string; kernvers: string; open: () => void };
   vasten: { groep: VastenGroep | null; open: () => void };
-  feest: { label: string; naam: string; meer: number; open: () => void };
+  feest: { label: string; naam: string; meer: number; open: () => void; naamdagen?: string[] };
   lezingen: { lijst: HtcLezingRef[] | undefined; geladen: boolean; open: () => void };
   ritme: Klik;
   /** De aftelling naar het eerstvolgende grote feest (lib/aftellen.ts) */
@@ -136,6 +136,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
             <img src={`${ICONEN}/03_heiligen_kruis.webp`} alt="" width={69} height={77} decoding="async" />
           </span>
           <span className="vm2-tekst">
+            {feest.naamdagen?.map((t) => <span key={t} className="vm2-naamdag">{t}</span>)}
             <h2 className="vm2-label">{feest.label}</h2>
             <b>{feest.naam}</b>
             {feest.meer > 0 && <span>en nog {feest.meer} {feest.meer === 1 ? 'heilige' : 'heiligen'}</span>}
