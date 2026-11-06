@@ -14,16 +14,27 @@
 .gw-banner-tekst p { margin-top: 4px; font-family: var(--font-lees); font-size: 18px; font-style: italic; text-shadow: 0 1px 6px rgba(0, 0, 0, .9); }
 .gw-papier { position: relative; z-index: 2; flex: 1; margin-top: -36px; padding: 0 14px 32px; border-radius: 16px 16px 0 0; background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; }
 .gw-label { font-family: var(--font-titel); font-size: 11.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: #6a4a24; }
-/* De Kerk vandaag: dezelfde kaartvorm als het pijlgebed op Vandaag (.m-kader in index.css, gouden binnenrand en maten uit
-   vandaag-mobiel.css), half over de onderrand van de banner */
-#top#top#top#top#top#top#top#top#top#top#top .gw-kerk.m-kader { top: -22px; margin: 0 0 -4px; padding: 8px 12px 6px; filter: drop-shadow(0 2px 3px rgba(20, 10, 4, .28)); border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 42 42'%3E%3Cpath d='M10.9 1.5H31.1A11 11 0 0 0 40.5 10.9V31.1A11 11 0 0 0 31.1 40.5H10.9A11 11 0 0 0 1.5 31.1V10.9A11 11 0 0 0 10.9 1.5Z' fill='none' stroke='%23b99455' stroke-width='3'/%3E%3Cpath d='M14.94 7H27.06A16.5 16.5 0 0 0 35 14.94V27.06A16.5 16.5 0 0 0 27.06 35H14.94A16.5 16.5 0 0 0 7 27.06V14.94A16.5 16.5 0 0 0 14.94 7Z' fill='none' stroke='%23c49332' stroke-width='1.6'/%3E%3C/svg%3E") 16 / 16px stretch; }
-#top#top#top#top#top#top#top#top#top#top#top .gw-kerk .gw-label { order: 0; margin: 0 0 4px; font-size: 11px; letter-spacing: .12em; color: #7a6248; }
+/* De Kerk vandaag: de kaartvorm van het pijlgebed (.m-kader, index.css), maar compact en ingetogen (dunne rand, geen
+   sierlijn, kleine onderregels), zodat de keuze om te bidden het middelpunt blijft; half over de onderrand van de banner */
+#top#top#top#top#top#top#top#top#top#top#top .gw-kerk.m-kader { top: -22px; margin: 0 0 -8px; padding: 2px 10px 0; filter: drop-shadow(0 1px 2px rgba(20, 10, 4, .22)); }
+#top#top#top#top#top#top#top#top#top#top#top .gw-kerk .gw-label { order: 0; margin: 0 0 2px; font-size: 10.5px; letter-spacing: .12em; color: #7a6248; }
+#top#top#top#top#top#top#top#top#top#top#top .gw-kerk .m-kader-titel { font-size: 20px; font-weight: 400; }
+#top#top#top#top#top#top#top#top#top#top#top .gw-kerk .m-kader-onder { margin-top: 1px; font-size: 13.5px; line-height: 1.3; }
 .gw-keuzes { display: grid; gap: 10px; margin-top: 4px; }
 #top#top#top#top#top#top#top#top#top .gw-keuze { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 76px; margin: 0; padding: 12px 16px; border: 1px solid var(--kaartrand, #b99455); border-radius: 6px; background: #f6ead0 url('/images/vandaag/papyrus-licht.webp') center / cover; box-shadow: inset 0 0 0 2px rgba(255, 248, 232, .3), 0 1px 3px rgba(20, 10, 4, .2); color: var(--gw-tekst) !important; text-decoration: none; }
 #top#top#top#top#top#top#top#top#top .gw-keuze.is-hoofd { background: linear-gradient(rgba(214, 176, 108, .38), rgba(214, 176, 108, .38)), #ead3a6 url('/images/vandaag/papyrus-licht.webp') center / cover; box-shadow: inset 0 0 0 3px rgba(255, 250, 238, .6), 0 1px 3px rgba(20, 10, 4, .2); }
 .gw-keuze.is-uit { opacity: .55; }
-.gw-keuze b { font-family: var(--font-lees); font-weight: 400; font-size: 23px; }
-.gw-keuze span { font-family: var(--font-lees); font-size: 15px; color: var(--gw-zacht); }
+.gw-keuze b { font-family: var(--font-lees); font-weight: 500; font-size: 23px; color: #2b1d12; }
+.gw-keuze-onder { font-family: var(--font-lees); font-size: 15px; color: #5d4630; }
+/* Uitnodiging om te tikken (kritiek 06-11-2026): een klein pijltje rechts en een zachte reactie bij aanraken, zoals de
+   kaarten op Vandaag; Kort soberder dan Het hele uur */
+#top#top#top#top#top#top#top#top#top .gw-keuze { position: relative; padding-inline: 36px; -webkit-tap-highlight-color: transparent; }
+.gw-keuze-pijl { position: absolute; top: 50%; right: 12px; width: 20px; height: 20px; transform: translateY(-50%); color: #7d5218; }
+#top#top#top#top#top#top#top#top#top a.gw-keuze:active { border-color: rgba(125, 82, 24, .75); box-shadow: inset 0 0 0 999px rgba(90, 60, 25, .08), 0 1px 2px rgba(20, 10, 4, .2); }
+#top#top#top#top#top#top#top#top#top .gw-keuze.is-hoofd { min-height: 84px; }
+#top#top#top#top#top#top#top#top#top .gw-keuze.is-sober { min-height: 60px; border-color: rgba(185, 148, 85, .55); background: rgba(255, 250, 238, .35); box-shadow: none; }
+.gw-keuze.is-sober b { font-size: 19px; }
+.gw-keuze.is-sober .gw-keuze-onder { font-size: 14px; }
 .gw-inhoud-kop { margin: 22px 0 6px; }
 .gw .em-kathisma { margin-top: 24px; }
 .gw-inhoud { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--gw-lijn); text-align: left; }

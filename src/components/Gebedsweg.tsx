@@ -108,30 +108,32 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
         </div>
       </div>
       <div className="gw-papier">
-        {/* Zelfde kaartvorm als het pijlgebed op Vandaag (.m-kader): label, titel, onderregels en de sierlijn in het kader */}
+        {/* Kaartvorm van het pijlgebed op Vandaag (.m-kader), maar compact en ingetogen: wie hier komt, komt om te bidden */}
         <section className="gw-kerk m-kader" aria-label="De Kerk vandaag">
           <p className="gw-label">De Kerk vandaag</p>
           <b className="m-kader-titel">{hoofdletter(dag.weekdagNaam)} {formatDag(mode === 'oud' ? dag.kerk : dag.civil)}</b>
           {gedachtenis && <span className="m-kader-onder">{gedachtenis}</span>}
           <span className="m-kader-onder">{ritme}</span>
-          <Sierlijn />
         </section>
+        {/* Het hele uur is de kern en staat bovenaan; Kort eronder, soberder. Een pijltje rechts nodigt uit om te tikken. */}
         <div className="gw-keuzes">
-          <a className="gw-keuze" href={bidPad(slug, 'kort', 1)}>
-            <b>Kort · 2 min</b>
-            <span>Het kernvers en het Jezusgebed</span>
-          </a>
           {tebidden.length ? (
             <a className="gw-keuze is-hoofd" href={bidPad(slug, 'heel', 1)}>
               <b>Het hele uur</b>
-              <span>{tebidden.map((o) => o.titel).join(' · ')}</span>
+              <span className="gw-keuze-onder">{tebidden.map((o) => o.titel).join(' · ')}</span>
+              <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
             </a>
           ) : (
-            <p className="gw-keuze is-uit" aria-disabled="true">
+            <p className="gw-keuze is-hoofd is-uit" aria-disabled="true">
               <b>Het hele uur</b>
-              <span>{delen ? 'De teksten van dit uur volgen nog' : 'Wordt geladen…'}</span>
+              <span className="gw-keuze-onder">{delen ? 'De teksten van dit uur volgen nog' : 'Wordt geladen…'}</span>
             </p>
           )}
+          <a className="gw-keuze is-sober" href={bidPad(slug, 'kort', 1)}>
+            <b>Kort · 2 min</b>
+            <span className="gw-keuze-onder">Het kernvers en het Jezusgebed</span>
+            <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
+          </a>
         </div>
         <h2 className="gw-label gw-inhoud-kop">Inhoud van dit uur</h2>
         <ul className="gw-inhoud">
