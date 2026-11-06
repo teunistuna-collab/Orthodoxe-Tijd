@@ -106,13 +106,14 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
         </div>
       </div>
       <div className="gw-papier">
-        <section className="gw-kerk" aria-label="De Kerk vandaag">
+        {/* Zelfde kaartvorm als het pijlgebed op Vandaag (.m-kader): label, titel, onderregels en de sierlijn in het kader */}
+        <section className="gw-kerk m-kader" aria-label="De Kerk vandaag">
           <p className="gw-label">De Kerk vandaag</p>
-          <b>{hoofdletter(dag.weekdagNaam)} {formatDag(mode === 'oud' ? dag.kerk : dag.civil)}</b>
-          {gedachtenis && <span>{gedachtenis}</span>}
-          <span>{ritme}</span>
+          <b className="m-kader-titel">{hoofdletter(dag.weekdagNaam)} {formatDag(mode === 'oud' ? dag.kerk : dag.civil)}</b>
+          {gedachtenis && <span className="m-kader-onder">{gedachtenis}</span>}
+          <span className="m-kader-onder">{ritme}</span>
+          <Sierlijn />
         </section>
-        <Sierlijn />
         <div className="gw-keuzes">
           <a className="gw-keuze" href={bidPad(slug, 'kort', 1)}>
             <b>Kort · 2 min</b>
