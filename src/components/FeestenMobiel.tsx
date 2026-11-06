@@ -316,9 +316,10 @@ function Onbekend() {
 }
 
 // 5. Bid met het feest (#feesten/<id>/bid/<n>): het troparion en het Jezusgebed, schermvullend op een beeld van het feest.
-// Eigen achtergronden (aangeleverd) staan in BIDBEELDEN; zolang die er niet zijn, het icoon van het feest.
-const BIDBEELDEN: Record<string, string> = {};
-const bidBeeld = (id: string) => (BIDBEELDEN[id] ? `/images/feesten/bidden/${BIDBEELDEN[id]}` : icoonVan(id));
+// Achtergrond: het icoon van het feest op een analogion met kaarsen (aangeleverd 06-11-2026, public/images/feesten/bidden);
+// zonder eigen beeld het icoon van het feest.
+const BIDBEELDEN = new Set(['pascha', 'geboorte-moeder-gods', 'kruisverheffing', 'opdracht-moeder-gods', 'kerstmis', 'theofanie', 'ontmoeting', 'annunciatie', 'palmzondag', 'hemelvaart', 'pinksteren', 'transfiguratie', 'ontslaping']);
+const bidBeeld = (id: string) => (BIDBEELDEN.has(id) ? `/images/feesten/bidden/${id}.webp` : icoonVan(id));
 
 function FeestBidden({ f, n }: { f: Feest; n?: string }) {
   useSchermAan(true);
