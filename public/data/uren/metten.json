@@ -1,8 +1,17 @@
 {
   "onderdelen": [
     { "gebed": "inleidende-gebeden-pdf" },
+    { "psalm": 19 },
+    { "psalm": 20 },
+    { "psalm": 3 },
+    { "psalm": 37 },
     { "psalm": 62 },
+    { "psalm": 87 },
     { "psalm": 102 },
-    { "titel": "Ode 9: Lofzang van Maria en gebed van Zacharias", "tekst": null }
+    { "psalm": 142 },
+    { "titel": "Ode 9: Lofzang van Maria en gebed van Zacharias", "tekst": null },
+    { "psalm": 148 },
+    { "psalm": 149 },
+    { "psalm": 150 }
   ]
 }
