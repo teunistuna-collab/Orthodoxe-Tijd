@@ -61,6 +61,9 @@ export function schoonVoorkeuren(v: unknown): Herinneringen {
   };
 }
 
+/** Wat de meldingenserver krijgt: de namen van Onze heiligen alleen als Naamdagen aanstaat (spec onze-heiligen). */
+export const voorDeServer = (h: Herinneringen): Herinneringen => (h.naamdagen ? h : { ...h, naamdagLijst: [] });
+
 /* ---------- Tijdzone ---------- */
 
 /** Geldige IANA-tijdzone (bijv. "Europe/Amsterdam")? */

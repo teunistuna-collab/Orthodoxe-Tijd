@@ -2,7 +2,7 @@
 // Draaien: npm run check:herinneringen (TZ=Europe/Amsterdam voor de zomertijdcontrole).
 import assert from 'node:assert/strict';
 
-import { STANDAARD, aanDeBeurt, ietsAan, kloktijd, meldingenRond, schoonVoorkeuren, vandaagIn } from '../src/lib/herinneringPlanning';
+import { STANDAARD, aanDeBeurt, ietsAan, kloktijd, meldingenRond, schoonVoorkeuren, vandaagIn, voorDeServer } from '../src/lib/herinneringPlanning';
 import { orthodoxPascha, utc, ymd } from '../src/lib/kalender';
 
 const uur = (d: Date) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -99,4 +99,7 @@ assert.deepEqual(
 assert.equal(schoonVoorkeuren({ naamdagLijst: Array.from({ length: 50 }, () => ({ heilige: 'S', md: '1-1', voor: '' })) }).naamdagLijst.length, 30);
 assert.equal(schoonVoorkeuren({ naamdagLijst: 'kapot' }).naamdagLijst.length, 0);
 
+// Privacy: de namen gaan alleen naar de meldingenserver als Naamdagen aanstaat
+assert.deepEqual(voorDeServer({ ...naam, naamdagen: false }).naamdagLijst, []);
+assert.deepEqual(voorDeServer(naam).naamdagLijst, naam.naamdagLijst);
 console.log('herinneringen: alle controles geslaagd');

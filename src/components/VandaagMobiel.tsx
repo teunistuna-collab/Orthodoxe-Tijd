@@ -136,7 +136,8 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
             <img src={`${ICONEN}/03_heiligen_kruis.webp`} alt="" width={69} height={77} decoding="async" />
           </span>
           <span className="vm2-tekst">
-            {feest.naamdagen?.map((t) => <span key={t} className="vm2-naamdag">{t}</span>)}
+            {/* Eén blok (één rasterelement in de halve kaart), een regel per naamdag */}
+            {!!feest.naamdagen?.length && <span className="vm2-naamdag">{feest.naamdagen.map((t) => <span key={t}>{t}</span>)}</span>}
             <h2 className="vm2-label">{feest.label}</h2>
             <b>{feest.naam}</b>
             {feest.meer > 0 && <span>en nog {feest.meer} {feest.meer === 1 ? 'heilige' : 'heiligen'}</span>}

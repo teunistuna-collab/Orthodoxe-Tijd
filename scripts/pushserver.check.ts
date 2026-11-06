@@ -49,6 +49,10 @@ try {
   assert.equal(metNaamdagen.naamdagLijst.length, 30);
   assert.equal(metNaamdagen.naamdagLijst[0].heilige.length, 80);
   app.abonnementen.clear();
+  // Naamdagen uit: de server bewaart geen namen
+  assert.equal((await post('/api/push/abonnement', { ...aanmelding, voorkeuren: { ...STANDAARD, uren: ['Vespers'], naamdagen: false, naamdagLijst: naamdagLijst.slice(0, 2) } })).status, 204);
+  assert.deepEqual([...app.abonnementen.values()][0].voorkeuren.naamdagLijst, []);
+  app.abonnementen.clear();
   assert.ok(geldigAdres({ endpoint: 'https://web.push.apple.com/QGx', keys: sleutels }));
   assert.equal(geldigAdres({ endpoint: 'https://push.apple.com.kwaad.example/x', keys: sleutels }), null);
 

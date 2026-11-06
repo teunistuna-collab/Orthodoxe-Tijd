@@ -1,6 +1,6 @@
 import { useEffect, useSyncExternalStore } from 'react';
 import type { Mode } from './kalender';
-import { STANDAARD, aanDeBeurt, ietsAan, meldingenRond, schoonVoorkeuren, vandaagIn, vergeetOud, type Herinneringen, type Melding } from './herinneringPlanning';
+import { STANDAARD, aanDeBeurt, ietsAan, meldingenRond, schoonVoorkeuren, vandaagIn, vergeetOud, voorDeServer, type Herinneringen, type Melding } from './herinneringPlanning';
 
 export { AVOND, OCHTEND, STANDAARD, ietsAan, meldingenRond, type Herinneringen, type Melding, type Vooraf } from './herinneringPlanning';
 
@@ -120,7 +120,7 @@ async function synchroniseer(h: Herinneringen, mode: Mode) {
       const { publicKey } = (await r.json()) as { publicKey: string };
       ab = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: sleutelBytes(publicKey) });
     }
-    const r = await post('/api/push/abonnement', { abonnement: ab.toJSON(), voorkeuren: h, mode, tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
+    const r = await post('/api/push/abonnement', { abonnement: ab.toJSON(), voorkeuren: voorDeServer(h), mode, tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
     zetPush(r.ok ? 'aan' : 'fout');
   } catch {
     zetPush('fout');

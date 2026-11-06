@@ -214,6 +214,6 @@
 }
 
 /* Onze heiligen: op een naamdag een regel bovenaan de kaart Feesten & heiligen */
-#top#top#top#top#top#top#top#top#top .vm2 .vm2-naamdag { display: block; margin-bottom: 2px; font-family: var(--font-lees); font-size: 14px; font-style: italic; line-height: 1.25; color: #7d5218; }
+#top#top#top#top#top#top#top#top#top .vm2 .vm2-naamdag { display: flex; flex-direction: column; align-items: center; margin-bottom: 2px; font-family: var(--font-lees); font-size: 14px; font-style: italic; line-height: 1.25; color: #7d5218; }
 /* In de halve kaart (raster: label, naam, onderregel) een eigen rij onderaan over de volle breedte */
 #top#top#top#top#top#top#top#top#top .vm2-duo .vm2-tekst > .vm2-naamdag { grid-column: 1 / -1; grid-row: 4; justify-self: center; margin: 6px 0 0; text-align: center; }

@@ -14,7 +14,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import webpush from 'web-push';
-import { aanDeBeurt, geldigeZone, ietsAan, schoonVoorkeuren, vergeetOud, type Herinneringen, type Melding } from '../src/lib/herinneringPlanning';
+import { aanDeBeurt, geldigeZone, ietsAan, schoonVoorkeuren, vergeetOud, voorDeServer, type Herinneringen, type Melding } from '../src/lib/herinneringPlanning';
 import type { Mode } from '../src/lib/kalender';
 
 export interface PushAdres {
@@ -190,7 +190,7 @@ export async function maakApp(o: Opties) {
       if (!adres) return stuur(400, { fout: 'abonnement' });
       if (!geldigeZone(body?.tz)) return stuur(400, { fout: 'tijdzone' });
       if (body?.mode !== 'oud' && body?.mode !== 'nieuw') return stuur(400, { fout: 'kalender' });
-      const voorkeuren = schoonVoorkeuren(body.voorkeuren);
+      const voorkeuren = voorDeServer(schoonVoorkeuren(body.voorkeuren));
       if (!ietsAan(voorkeuren)) {
         if (abonnementen.delete(adres.endpoint)) await bewaar();
         return stuur(204);

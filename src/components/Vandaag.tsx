@@ -73,7 +73,7 @@ export default function Vandaag() {
   // Onze heiligen: "Naamdag van Sofia" in de kaart Feesten & heiligen (zonder voor wie: de naam van de heilige)
   const onze = useOnzeHeiligen();
   const naamdagen = useMemo(
-    () => naamdagenOp(onze, vandaag, mode).map((n) => (n.voor ? `Naamdag van ${n.voor}` : `Naamdag: ${heiligeTitel(n.heilige)}`)),
+    () => [...new Set(naamdagenOp(onze, vandaag, mode).map((n) => (n.voor ? `Naamdag van ${n.voor}` : `Naamdag: ${heiligeTitel(n.heilige)}`)))],
     [onze, vandaag, mode],
   );
   const geboorteNu = useMemo(() => geboortecyclusVoor(vandaag, mode).huidige, [vandaag, mode]);
