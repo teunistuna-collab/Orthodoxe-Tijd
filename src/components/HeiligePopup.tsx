@@ -6,6 +6,7 @@ import { civilVanKerkdatum, formatKort, formatMd } from '../lib/kalender';
 import { lageLandenTekst } from '../lib/heiligenIconen';
 import type { Resultaat } from '../lib/heiligenPopup';
 import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
+import { ToevoegenInLeesvenster } from './OnzeHeiligen';
 
 // Leesvenster van één heilige of gedachtenis, als een blad uit het Synaxarion: bovenaan de kerkelijke datum met
 // vorige/volgende dag, de volledige tekst uit het Heiligenjaar (bij een Heilige van de Lage Landen eerst de eigen
@@ -27,7 +28,7 @@ function label(h: Resultaat) {
   return 'Heilige van de dag';
 }
 
-export default function HeiligePopup({ heilige, onClose }: { heilige: Resultaat | null; onClose: () => void }) {
+export default function HeiligePopup({ heilige, onClose, toevoegen }: { heilige: Resultaat | null; onClose: () => void; toevoegen?: boolean }) {
   // Bij de juliaanse kalender beide datums in de kop (zoals in de lijsten), zodat de dag niet "verspringt".
   const { heiligen, mode, vandaag } = useApp();
   const mobiel = useMobiel(); // mobiel: alleen de kerkelijke datum in de kop
@@ -84,6 +85,8 @@ export default function HeiligePopup({ heilige, onClose }: { heilige: Resultaat 
         <div className="exact-popup-prose">
           {alineas.map((p, i) => <p key={`${actief.id}-${i}`}>{p}</p>)}
         </div>
+        {/* Onze heiligen (alleen vanaf de Heiligen-pagina, mobiel) */}
+        {toevoegen && actief.type === 'saint' && <ToevoegenInLeesvenster key={actief.id} heilige={actief} />}
         {eigen && actief.heiligenjaar && (
           <section className="exact-popup-sectie">
             <h3>Uit het Heiligenjaar</h3>

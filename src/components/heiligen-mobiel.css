@@ -97,3 +97,37 @@
 #top#top#top#top#top#top#top#top .hm-kaart.hm-dagkaart { min-height: 104px; }
 .hm-dagkaart .hm-onder { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .hm-kader .hm-kruis { width: 100%; height: auto; max-width: 46px; }
+
+/* Onze heiligen (OnzeHeiligen.tsx): het blok bovenaan, toevoegen en bewerken; rijen, velden en knoppen in de stijl van
+   de rest van Heiligen (perkament, goudbruine lijnen) */
+.oh { margin-bottom: 18px; }
+.oh-lijst { margin: 0 0 8px; padding: 0; list-style: none; border-top: 1px solid rgba(172, 121, 47, .4); }
+.oh-rij { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(172, 121, 47, .4); }
+#top#top#top#top#top#top#top#top#top .oh-open { display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 56px; margin: 0; padding: 8px 4px 8px 12px; border: 0; border-radius: 0; background: none; box-shadow: none; color: var(--inkt) !important; text-align: left; -webkit-tap-highlight-color: transparent; }
+.oh-open:active { background: rgba(90, 60, 25, .07); }
+.oh-open b { font-family: var(--font-lees); font-size: 18px; font-weight: 500; }
+.oh-open span { font-family: var(--font-lees); font-size: 15px; color: #5d4630; }
+#top#top#top#top#top#top#top#top#top .oh-bewerk { flex: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-family: var(--font-lees); font-size: 15px; color: #7d5218 !important; text-decoration: underline; text-underline-offset: 3px; }
+.oh-leeg { margin: 0 4px 10px; font-family: var(--font-lees); font-size: 16px; line-height: 1.45; color: #5d4630; }
+.oh-laag { background: var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; }
+.oh-papier { padding: 8px 14px 36px; text-align: left; }
+#top#top#top#top#top#top#top#top#top .oh-titel { margin: 6px 0 4px; font-family: var(--font-lees) !important; font-size: 28px; font-weight: 400 !important; letter-spacing: normal; text-align: center; text-transform: none; color: var(--inkt); }
+.oh-titel:focus { outline: none; }
+.oh-uitleg { margin: 0 0 12px; font-family: var(--font-lees); font-size: 16px; text-align: center; color: #5d4630; }
+.oh-form { display: grid; gap: 14px; margin-top: 8px; }
+.oh-veld { display: grid; gap: 4px; font-family: var(--font-lees); font-size: 15px; color: #5d4630; }
+.oh-veld input, .oh-datum select { min-height: 48px; padding: 0 12px; border: 1px solid #b99455; border-radius: 6px; background: rgba(255, 250, 238, .8); font-family: var(--font-lees); font-size: 18px; color: #2b1d12; }
+.oh-datum { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin: 0; padding: 0; border: 0; }
+.oh-datum legend { margin-bottom: 4px; font-family: var(--font-lees); font-size: 15px; color: #5d4630; }
+.oh-datum select { width: 100%; }
+.oh-fout { margin: 0; font-family: var(--font-lees); font-size: 15px; color: #8a2a1a; }
+/* Ook in het leesvenster (buiten #top als dat in een eigen laag staat): daarom zonder en met voorvoegsel */
+.oh-knop, #top#top#top#top#top#top#top#top#top .oh-knop { min-height: 52px; padding: 0 20px; border: 1px solid #b99455; border-radius: 6px; background: #ead3a6 url('/images/vandaag/papyrus-licht.webp') center / cover; font-family: var(--font-lees); font-size: 18px; color: #2b1d12; }
+#top#top#top#top#top#top#top#top#top .oh-verwijder { display: block; min-height: 44px; margin: 22px auto 0; padding: 0 12px; border: 0; background: none; font-family: var(--font-lees); font-size: 16px; color: #8a2a1a; text-decoration: underline; text-underline-offset: 3px; }
+#top#top#top#top#top#top#top#top#top :is(.oh, .oh-laag) :is(a, button, input, select):focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+.oh-popup { margin-top: 18px; }
+
+/* Sectiekop gecentreerd, zonder onderregel (Heiligen van de dag, Onze heiligen) */
+.hm-kop.is-midden { justify-content: center; text-align: center; }
+.oh > .oh-leeg { text-align: center; }
+#top#top#top#top#top#top#top#top#top .oh .oh-toevoegen { display: flex; justify-content: center; margin-inline: auto; }

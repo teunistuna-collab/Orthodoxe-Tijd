@@ -11,6 +11,8 @@ import { usePaginaOpen } from '../lib/paginaOpen';
 import NisKop from './NisKop';
 import { useMobiel } from '../lib/desktop';
 import { Kop, Sierlijn } from './MobielLaag';
+import { OnzeHeiligenBlok, OnzeHeiligenLagen } from './OnzeHeiligen';
+import type { OnzeHeilige } from '../lib/onzeHeiligen';
 import './etmaal-mobiel.css';
 import './heiligen-mobiel.css';
 import './Vandaag.css';
@@ -118,6 +120,12 @@ export default function Heiligen() {
   const kerkDag = kerkDatum(dagDatum, mode);
   const dagMd = `${kerkDag.getUTCMonth() + 1}-${kerkDag.getUTCDate()}`;
   const vanDag = useMemo(() => alle.filter((h) => h.md === dagMd), [alle, dagMd]);
+  // Onze heiligen: een heilige uit de lijst opent het leesvenster; zelf ingevuld (of niet meer in de bron): bewerken.
+  const leesOnze = (h: OnzeHeilige) => {
+    const r = h.bron ? alle.find((x) => x.id === h.bron) : undefined;
+    if (r) setGeselecteerde(r);
+    else window.location.hash = `#heiligen/onze/bewerk/${h.id}`;
+  };
   const naarDag = (v: number) => {
     setVerschuiving(v);
     setAlleVanDag(false);
@@ -244,9 +252,9 @@ export default function Heiligen() {
 
             {mobiel && !query ? (
               <>
-                <div className="hm-kop">
+                <OnzeHeiligenBlok onLees={leesOnze} />
+                <div className="hm-kop is-midden">
                   <h2 className="hm-label">Heiligen van de dag</h2>
-                  <span>Volgens de kerkelijke kalender</span>
                 </div>
                 <div className="hm-dagnav">
                   <button type="button" className="hm-stap" aria-label="Vorige dag" onClick={() => naarDag(verschuiving - 1)}><ChevronLeft aria-hidden="true" /></button>
@@ -376,7 +384,8 @@ export default function Heiligen() {
           </>
         )}
       </div>
-      <HeiligePopup heilige={geselecteerde} onClose={() => setGeselecteerde(null)} />
+      {mobiel && <OnzeHeiligenLagen onderdeel={onderdeel} alle={alle} />}
+      <HeiligePopup heilige={geselecteerde} onClose={() => setGeselecteerde(null)} toevoegen={mobiel} />
       {mobiel && <NaarBoven />}
     </section>
   );
