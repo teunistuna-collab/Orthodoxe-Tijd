@@ -39,8 +39,16 @@ try {
   assert.equal((await post('/api/push/abonnement', { ...aanmelding, abonnement: { ...abonnement, endpoint: 'http://fcm.googleapis.com/x' } })).status, 400);
   assert.equal((await post('/api/push/abonnement', { ...aanmelding, tz: 'Mars/Olympus' })).status, 400);
   assert.equal((await post('/api/push/abonnement', { ...aanmelding, mode: 'x' })).status, 400);
-  assert.equal((await post('/api/push/abonnement', { ...aanmelding, opvulling: 'x'.repeat(9000) })).status, 413);
+  assert.equal((await post('/api/push/abonnement', { ...aanmelding, opvulling: 'x'.repeat(17000) })).status, 413);
   assert.equal(app.abonnementen.size, 0);
+  // Naamdagen: 30 heiligen met lange namen met accenten (meer dan 8 KB) worden aangenomen en geschoond.
+  const lang = 'é'.repeat(90);
+  const naamdagLijst = Array.from({ length: 31 }, () => ({ heilige: lang, md: '12-31', voor: lang }));
+  assert.equal((await post('/api/push/abonnement', { ...aanmelding, voorkeuren: { ...STANDAARD, naamdagen: true, naamdagLijst } })).status, 204);
+  const metNaamdagen = [...app.abonnementen.values()][0].voorkeuren;
+  assert.equal(metNaamdagen.naamdagLijst.length, 30);
+  assert.equal(metNaamdagen.naamdagLijst[0].heilige.length, 80);
+  app.abonnementen.clear();
   assert.ok(geldigAdres({ endpoint: 'https://web.push.apple.com/QGx', keys: sleutels }));
   assert.equal(geldigAdres({ endpoint: 'https://push.apple.com.kwaad.example/x', keys: sleutels }), null);
 

@@ -146,7 +146,7 @@ export async function maakApp(o: Opties) {
       const stukken: Buffer[] = [];
       req.on('data', (s: Buffer) => {
         grootte += s.length;
-        if (grootte > 8192) mis(new TeGroot()); // de rest niet bewaren; de verbinding gaat na het antwoord dicht
+        if (grootte > 16384) mis(new TeGroot()); // 30 naamdagen met lange namen passen; de rest niet bewaren, de verbinding gaat na het antwoord dicht
         else stukken.push(s);
       });
       req.on('end', () => {

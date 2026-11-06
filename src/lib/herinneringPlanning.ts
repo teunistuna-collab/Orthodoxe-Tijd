@@ -1,6 +1,7 @@
 import { naamVan, serviceConfig, slugVan } from './etmaal';
 import { DERTIEN } from './feesten';
 import { addDays, dagInfo, formatLang, utc, ymd, type Mode } from './kalender';
+import { MAX_HEILIGEN, naamdagenOp, schoonNaamdag, zonderTitel, type Naamdag } from './onzeHeiligen';
 
 // De planning van de herinneringen, zonder browser of React: gedeeld door de app (lib/herinneringen.ts) en de pushserver
 // (server/pushserver.ts), zodat beide precies hetzelfde berekenen. Alle tijden en datums komen uit de bestaande
@@ -19,9 +20,13 @@ export interface Herinneringen {
   feestKeuze: 'alle' | 'eigen';
   feestIds: string[];
   feestMoment: 'ervoor' | 'dag';
+  /** Naamdagen van Onze heiligen; het moment volgt feestMoment. */
+  naamdagen: boolean;
+  /** Kopie van Onze heiligen (lib/onzeHeiligenOpslag.ts), zodat de planning en de pushserver de naamdagen kennen. */
+  naamdagLijst: Naamdag[];
 }
 
-export const STANDAARD: Herinneringen = { uren: [], vooraf: 0, vasten: false, vastenMoment: 'avond', alleenGroteVasten: false, feesten: false, feestKeuze: 'alle', feestIds: [], feestMoment: 'ervoor' };
+export const STANDAARD: Herinneringen = { uren: [], vooraf: 0, vasten: false, vastenMoment: 'avond', alleenGroteVasten: false, feesten: false, feestKeuze: 'alle', feestIds: [], feestMoment: 'ervoor', naamdagen: false, naamdagLijst: [] };
 
 /** Vaste meldtijden voor vasten en feesten: de avond ervoor om 20.00 uur, de dag zelf om 7.00 uur (lokale tijd). */
 export const AVOND = 20;
@@ -33,7 +38,8 @@ const GROTE_VASTEN = ['Grote Vasten', 'Heilige Week', 'Apostelvasten', 'Dormitio
 const GROTE_FEESTEN = new Set(DERTIEN.map((f) => f.id));
 const UREN = new Set(serviceConfig.map((s) => s.title));
 
-export const ietsAan = (h: Herinneringen) => h.uren.length > 0 || h.vasten || (h.feesten && (h.feestKeuze === 'alle' || h.feestIds.length > 0));
+export const ietsAan = (h: Herinneringen) =>
+  h.uren.length > 0 || h.vasten || (h.feesten && (h.feestKeuze === 'alle' || h.feestIds.length > 0)) || (h.naamdagen && h.naamdagLijst.length > 0);
 
 /** Voorkeuren uit een onbetrouwbare bron (opslag, netwerk): alleen bekende velden en waarden. */
 export function schoonVoorkeuren(v: unknown): Herinneringen {
@@ -50,6 +56,8 @@ export function schoonVoorkeuren(v: unknown): Herinneringen {
     feestKeuze: kies(o.feestKeuze, ['alle', 'eigen'] as const, 'alle'),
     feestIds: lijst(o.feestIds, (s) => GROTE_FEESTEN.has(s)),
     feestMoment: kies(o.feestMoment, ['ervoor', 'dag'] as const, 'ervoor'),
+    naamdagen: o.naamdagen === true,
+    naamdagLijst: (Array.isArray(o.naamdagLijst) ? o.naamdagLijst : []).map(schoonNaamdag).filter((n): n is Naamdag => !!n).slice(0, MAX_HEILIGEN),
   };
 }
 
@@ -125,6 +133,20 @@ export function meldingenRond(dag: Date, h: Herinneringen, mode: Mode, tz?: stri
         tekst: s.hoofdgedachtenis,
         url: `#etmaal/${slugVan(s)}/bid`,
       });
+    }
+    if (h.naamdagen) {
+      const ervoor = h.feestMoment === 'ervoor';
+      for (const n of naamdagenOp(h.naamdagLijst, d, mode)) {
+        const id = `naamdag:${n.md}:${n.heilige}:${n.voor}:${sleutel}`;
+        if (uit.some((m) => m.id === id)) continue;
+        uit.push({
+          id,
+          tijd: ervoor ? kloktijd(addDays(d, -1), AVOND, 0, tz) : kloktijd(d, OCHTEND, 0, tz),
+          titel: `${ervoor ? 'Morgen' : 'Vandaag'}: naamdag${n.voor ? ` van ${n.voor}` : ''}`,
+          tekst: `De heilige ${zonderTitel(n.heilige)}`,
+          url: '#heiligen',
+        });
+      }
     }
     if (!h.vasten && !h.feesten) continue;
     const info = dagInfo(d, mode);

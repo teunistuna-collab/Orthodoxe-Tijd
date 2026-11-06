@@ -2,7 +2,7 @@
 // Draaien: npm run check:herinneringen (TZ=Europe/Amsterdam voor de zomertijdcontrole).
 import assert from 'node:assert/strict';
 
-import { STANDAARD, aanDeBeurt, kloktijd, meldingenRond, schoonVoorkeuren, vandaagIn } from '../src/lib/herinneringPlanning';
+import { STANDAARD, aanDeBeurt, ietsAan, kloktijd, meldingenRond, schoonVoorkeuren, vandaagIn } from '../src/lib/herinneringPlanning';
 import { orthodoxPascha, utc, ymd } from '../src/lib/kalender';
 
 const uur = (d: Date) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -69,5 +69,34 @@ assert.equal(aanDeBeurt(vk, 'oud', { [eerst[0].id]: nu }, nu + 60_000, 'Europe/A
 assert.equal(aanDeBeurt(vk, 'oud', {}, Date.UTC(2026, 10, 2, 17, 11), 'Europe/Amsterdam').length, 0);
 // Voorkeuren van buiten worden geschoond: onbekende uren, feesten en waarden verdwijnen.
 assert.deepEqual(schoonVoorkeuren({ uren: ['Vespers', 'Onzin', 'Vespers'], vooraf: 99, feestIds: ['theofanie', '<script>'], vasten: 'ja' }), { ...STANDAARD, uren: ['Vespers'], feestIds: ['theofanie'] });
+
+// Naamdagen: Sofia (kerkelijk 17-9) op 30-9-2026 bij de oude kalender; het moment volgt de feesten.
+const naam = { ...STANDAARD, naamdagen: true, naamdagLijst: [{ heilige: 'H. Sofia van Rome', md: '9-17', voor: 'Sofia' }] };
+const nd = (dag: Date, extra = {}) => meldingenRond(dag, { ...naam, ...extra }, 'oud').filter((m) => m.id.startsWith('naamdag:') && m.id.endsWith(ymd(dag)));
+const ndAvond = nd(utc(2026, 9, 30));
+assert.equal(ndAvond.length, 1);
+assert.equal(ndAvond[0].titel, 'Morgen: naamdag van Sofia');
+assert.equal(ndAvond[0].tekst, 'De heilige Sofia van Rome');
+assert.equal(ndAvond[0].url, '#heiligen');
+assert.equal(uur(ndAvond[0].tijd), '20:00');
+assert.equal(ndAvond[0].tijd.getDate(), 29);
+const ndDag = nd(utc(2026, 9, 30), { feestMoment: 'dag' });
+assert.equal(ndDag[0].titel, 'Vandaag: naamdag van Sofia');
+assert.equal(uur(ndDag[0].tijd), '07:00');
+assert.equal(nd(utc(2026, 9, 30), { naamdagen: false }).length, 0);
+assert.equal(nd(utc(2026, 9, 17)).length, 0);
+assert.equal(nd(utc(2026, 9, 30), { naamdagLijst: [{ heilige: 'Sofia', md: '9-17', voor: '' }] })[0].titel, 'Morgen: naamdag');
+// Twee keer precies dezelfde heilige voor dezelfde persoon: één melding
+assert.equal(nd(utc(2026, 9, 30), { naamdagLijst: [naam.naamdagLijst[0], naam.naamdagLijst[0]] }).length, 1);
+// Naamdagen tellen alleen mee als er heiligen zijn
+assert.equal(ietsAan({ ...STANDAARD, naamdagen: true }), false);
+assert.equal(ietsAan(naam), true);
+// Schonen: ongeldige naamdagen vallen weg, hooguit 30
+assert.deepEqual(
+  schoonVoorkeuren({ naamdagen: true, naamdagLijst: [{ heilige: 'Sofia', md: '9-17', voor: 'S' }, { heilige: '', md: '1-1' }, { heilige: 'X', md: '2-30' }, 'kapot'] }).naamdagLijst,
+  [{ heilige: 'Sofia', md: '9-17', voor: 'S' }],
+);
+assert.equal(schoonVoorkeuren({ naamdagLijst: Array.from({ length: 50 }, () => ({ heilige: 'S', md: '1-1', voor: '' })) }).naamdagLijst.length, 30);
+assert.equal(schoonVoorkeuren({ naamdagLijst: 'kapot' }).naamdagLijst.length, 0);
 
 console.log('herinneringen: alle controles geslaagd');
