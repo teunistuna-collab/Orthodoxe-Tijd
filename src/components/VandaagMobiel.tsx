@@ -4,8 +4,6 @@ import type { DagInfo } from '../lib/kalender';
 import type { HtcLezingRef } from '../lib/htc';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import type { VastenGroep } from '../lib/vasten';
-import { VastenSymbool } from './ui';
-import { SIERKRUIS } from './symbolen';
 import type { Aftelling } from '../lib/aftellen';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
 import './etmaal-mobiel.css';
@@ -115,14 +113,8 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
       <div className="vm2-duo">
         <Kaart className="vm2-kaart" href="#vasten" onClick={vasten.open}>
           <span className="vm2-icoon" aria-hidden="true">
-            {/* Vis alleen als vis is toegestaan; op een dag zonder vasten een rustig sierkruis (alleen de weergave) */}
-            {vasten.groep === 'vis' ? (
-              <img src={`${ICONEN}/04_vasten_vis.webp`} alt="" width={70} height={32} decoding="async" />
-            ) : vasten.groep ? (
-              <VastenSymbool groep={vasten.groep} className="vm2-vasten" />
-            ) : (
-              <span className="vm2-vasten vm2-geenvasten">{SIERKRUIS}</span>
-            )}
+            {/* Aangeleverde iconen (07-11-2026): wel of geen vasten */}
+            <img src={`${ICONEN}/${vasten.groep ? 'wel-vasten' : 'geen-vasten'}.webp`} alt="" width={160} height={160} decoding="async" />
           </span>
           <span className="vm2-tekst">
             <h2 className="vm2-label">Vasten vandaag</h2>
@@ -132,7 +124,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         </Kaart>
         <Kaart className="vm2-kaart" href="#heiligen" onClick={feest.open}>
           <span className="vm2-icoon" aria-hidden="true">
-            <img src={`${ICONEN}/03_heiligen_kruis.webp`} alt="" width={69} height={77} decoding="async" />
+            <img src={`${ICONEN}/feesten-en-heiligen.webp`} alt="" width={160} height={160} decoding="async" />
           </span>
           <span className="vm2-tekst">
             {/* Eén blok (één rasterelement in de halve kaart), een regel per naamdag */}
@@ -148,7 +140,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
 
       <Kaart className="vm2-kaart" href="#kalender" onClick={lezingen.open}>
         <span className="vm2-icoon" aria-hidden="true">
-          <img src={`${ICONEN}/05_lezingen_boek.webp`} alt="" width={68} height={63} decoding="async" />
+          <img src={`${ICONEN}/schriftlezingen-van-vandaag.webp`} alt="" width={160} height={160} decoding="async" />
         </span>
         <span className="vm2-tekst">
           <h2 className="vm2-label">Schriftlezingen van vandaag</h2>
@@ -172,7 +164,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
       {/* Het kerkelijk jaar: de periode, de toon en de aftelling naar het eerstvolgende grote feest in één kaart */}
       <Kaart className="vm2-kaart" {...ritme}>
         <span className="vm2-icoon" aria-hidden="true">
-          <img className="vm2-chirho" src="/images/Chi-Rho-112.webp" alt="" width={87} height={112} decoding="async" />
+          <img src={`${ICONEN}/het-kerkelijk-jaar.webp`} alt="" width={160} height={160} decoding="async" />
         </span>
         <span className="vm2-tekst">
           <h2 className="vm2-label">Het kerkelijk jaar</h2>
