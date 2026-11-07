@@ -246,3 +246,9 @@
 .vm2-cyclus-voortgang { display: block; margin-top: 2px; font-family: var(--font-lees); font-size: 14.5px; color: #7d5218; }
 /* Gecentreerd zoals het actuele gebedsuur erboven */
 #top#top#top#top#top#top#top#top#top .vm2 .vm2-cyclus .vm2-tekst { align-items: center; text-align: center; }
+
+/* Halve kaarten met de aangeleverde iconen (38 px): iets minder tussenruimte en een iets kleinere naam, zodat een naam
+   als "Markianos, Martyrios" alleen bij een spatie afbreekt (nooit midden in een woord of voor een komma) */
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart { column-gap: 6px; padding-right: 6px; }
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-pijl { width: 16px; height: 16px; }
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-tekst b { font-size: 15.5px; overflow-wrap: normal; word-break: normal; }
