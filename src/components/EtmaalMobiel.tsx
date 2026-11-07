@@ -250,7 +250,8 @@ export default function EtmaalMobiel() {
       <Overzicht nu={nu} />
       {dienst && !tweede && <Dienst d={dienst} />}
       {dienst && tweede === 'over' && <Over d={dienst} />}
-      {dienst && tweede === 'bid' && <BidIngang d={dienst} pad={delen.slice(2)} />}
+      {/* key: een ander uur krijgt een eigen terugadres (anders bleef dat van het eerst geopende uur staan) */}
+      {dienst && tweede === 'bid' && <BidIngang key={slugVan(dienst)} d={dienst} pad={delen.slice(2)} />}
       {dienst && tweede === 'psalmen' && <Doorsturen adres={bidPad(slugVan(dienst))} />}
       {info && (
         <LeesWeergave slim className="em-laag em-lees" titel={ETMAAL_INFO[info].title} ondertitel={ETMAAL_INFO[info].subtitle} onder={ETMAAL_INLEIDING[info]} terug="#etmaal" deelPad={`etmaal/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
