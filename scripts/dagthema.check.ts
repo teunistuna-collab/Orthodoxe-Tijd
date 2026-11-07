@@ -8,14 +8,15 @@ import { bidBeeld, icoonVan } from '../src/lib/bidbeelden';
 // Gedeelde beelden
 assert.equal(bidBeeld('pascha'), '/images/feesten/bidden/pascha.webp');
 assert.equal(bidBeeld('kruisverering'), '/images/feesten/bidden/kruisverheffing.webp'); // zelfde icoon
-assert.equal(bidBeeld('nicolaas'), null);
+assert.equal(bidBeeld('nicolaas'), '/images/feesten/bidden/nicolaas.webp'); // aangeleverd 07-11-2026
+assert.equal(bidBeeld('lazarus'), null);
 assert.equal(icoonVan('nicolaas'), '/images/feesten/nicolaas.webp');
 assert.equal(icoonVan('bestaat-niet'), null);
 
-// Grote Vrijdag 2027 (Pascha 2 mei): icoon van de dag, verstild, Goede Week met voortgang van de Grote Vasten
+// Grote Vrijdag 2027 (Pascha 2 mei): analogion-beeld (aangeleverd 07-11-2026), verstild, Goede Week met voortgang van de Grote Vasten
 const gv = dagThema(utc(2027, 4, 30), 'oud')!;
-assert.equal(gv.kop?.soort, 'icoon');
-assert.equal(gv.kop?.beeld, '/images/feesten/grote-vrijdag.webp');
+assert.equal(gv.kop?.soort, 'analogion');
+assert.equal(gv.kop?.beeld, '/images/feesten/bidden/grote-vrijdag.webp');
 assert.equal(gv.kop?.naam, 'Grote en Heilige Vrijdag');
 assert.ok(gv.kop?.regel && /[.!?]$/.test(gv.kop.regel), String(gv.kop?.regel));
 assert.equal(gv.kop?.groet, undefined);

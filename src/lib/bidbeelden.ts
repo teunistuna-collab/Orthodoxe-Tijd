@@ -29,7 +29,14 @@ export const FEEST_ICONEN: Record<string, string> = {
 };
 export const icoonVan = (id: string) => (FEEST_ICONEN[id] ? `/images/feesten/${FEEST_ICONEN[id]}` : null);
 
-const BIDBEELDEN = new Set(['pascha', 'geboorte-moeder-gods', 'kruisverheffing', 'opdracht-moeder-gods', 'kerstmis', 'theofanie', 'ontmoeting', 'annunciatie', 'palmzondag', 'hemelvaart', 'pinksteren', 'transfiguratie', 'ontslaping']);
+const BIDBEELDEN = new Set([
+  // Pascha en de twaalf grote feesten (06-11-2026)
+  'pascha', 'geboorte-moeder-gods', 'kruisverheffing', 'opdracht-moeder-gods', 'kerstmis', 'theofanie', 'ontmoeting', 'annunciatie', 'palmzondag', 'hemelvaart', 'pinksteren', 'transfiguratie', 'ontslaping',
+  // Paschacyclus (07-11-2026)
+  'orthodoxie', 'palamas', 'akathist', 'grote-donderdag', 'grote-vrijdag', 'grote-zaterdag', 'lichte-vrijdag', 'thomas', 'myrondraagsters', 'lamme', 'mid-pinksteren', 'samaritaanse', 'blindgeborene', 'vaders-nicea',
+  // Geboortecyclus (07-11-2026)
+  'filippus', 'nicolaas', 'synaxis-moeder-gods', 'stefanus', 'kinderen-bethlehem', 'besnijdenis', 'synaxis-johannes',
+]);
 /** Feesten die het analogion-beeld van een ander feest delen (hetzelfde icoon). */
 const ZELFDE_BEELD: Record<string, string> = { kruisverering: 'kruisverheffing' };
 /** Het analogion-beeld van een feest, of null. */
