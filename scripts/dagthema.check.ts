@@ -66,4 +66,14 @@ assert.equal(dagThema(utc(2027, 7, 20), 'oud'), null);
 assert.equal(dagThema(utc(2027, 6, 21), 'oud')?.cyclus ?? null, null);
 assert.equal(dagThema(utc(2027, 1, 28), 'oud')?.cyclus ?? null, null);
 
+// Nafeest van Hemelvaart (11-6-2027, oud): het periode-icoon is niet het eigen icoon van de dag; geen kop met de naam
+// van een andere dag of heilige
+assert.equal(dagThema(utc(2027, 6, 11), 'oud')?.kop ?? null, null);
+assert.equal(dagThema(utc(2027, 6, 18), 'oud')?.kop ?? null, null);
+// Besnijdenis (14-1-2027, oud): de naam van de dag staat niet nog eens achter de periode
+assert.equal(dagThema(utc(2027, 1, 14), 'oud')?.cyclus?.dag, undefined);
+// De regel is één zin, ook als die met een aanhalingsteken eindigt (Annunciatie, 7-4-2027 oud)
+const ann = dagThema(utc(2027, 4, 7), 'oud')?.kop?.regel ?? '';
+assert.ok(ann && !/[.!?][”"’)]?\s/.test(ann), ann);
+
 console.log('dagthema: alle controles geslaagd');

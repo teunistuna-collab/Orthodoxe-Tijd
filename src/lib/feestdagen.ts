@@ -73,7 +73,7 @@ export const geboorteToon = (k: GeboorteKey): Toon => (GEBOORTE_LICHT.has(k) ? '
 
 const naamVan = (f: Feest) => f.kort ?? f.naam.split(' — ')[0];
 /** De eerste zin van een bestaande tekst (voor de korte regel in de kop). */
-const eersteZin = (s?: string) => (s ? (s.match(/^.*?[.!?](?=\s|$)/)?.[0] ?? s) : undefined);
+const eersteZin = (s?: string) => (s ? (s.match(/^.*?[.!?][”"’)]?(?=\s|$)/)?.[0] ?? s) : undefined);
 
 /** Kop, toon en cyclus-kaart van een dag; null op een gewone dag buiten de cycli. */
 export function dagThema(dag: Date, mode: Mode): DagThema | null {
@@ -88,10 +88,11 @@ export function dagThema(dag: Date, mode: Mode): DagThema | null {
   // Kop: eerst een feest met een analogion-beeld, dan het icoon van de dag (Paschacyclus), dan een feest met een icoon
   let kop: DagKop | null = null;
   const metBeeld = feesten.find((f) => bidBeeld(f.id));
-  const dagIcoon = pc.huidige ? PASCHA_DAGICONEN[pc.offset] : undefined;
+  // Alleen het eigen icoon van de dag; een periode-icoon (bijv. het nafeest van Hemelvaart) hoort niet in de kop
+  const dagIcoon = pc.huidige && !PASCHA_DAGICONEN[pc.offset]?.periode ? PASCHA_DAGICONEN[pc.offset] : undefined;
   const metIcoon = feesten.find((f) => icoonVan(f.id));
   if (metBeeld) kop = { soort: 'analogion', beeld: bidBeeld(metBeeld.id)!, naam: naamVan(metBeeld), regel: eersteZin(metBeeld.toelichting), groet };
-  else if (dagIcoon) kop = { soort: 'icoon', beeld: `/images/feesten/${dagIcoon.bestand}`, naam: feesten[0] ? naamVan(feesten[0]) : (zondagVanDeWeek(pc.offset)?.kort ?? dagIcoon.naam), regel: eersteZin(dagIcoon.betekenis), groet };
+  else if (dagIcoon) kop = { soort: 'icoon', beeld: `/images/feesten/${dagIcoon.bestand}`, naam: feesten[0] ? naamVan(feesten[0]) : ((pc.offset % 7 === 0 ? zondagVanDeWeek(pc.offset)?.kort : undefined) ?? dagIcoon.naam), regel: eersteZin(dagIcoon.betekenis), groet };
   else if (metIcoon) kop = { soort: 'icoon', beeld: icoonVan(metIcoon.id)!, naam: naamVan(metIcoon), regel: eersteZin(metIcoon.toelichting), groet };
 
   // Voortgang in een vastenperiode (Grote Vasten, Geboortevasten): "Dag 12 van 48 · nog 37 dagen tot Pascha"
@@ -105,11 +106,11 @@ export function dagThema(dag: Date, mode: Mode): DagThema | null {
   if (pc.huidige) {
     const s = pc.stappen.find((x) => x.key === pc.huidige)!;
     toon = PASCHA_TOON[s.key];
-    cyclus = { soort: 'pascha', periode: s.label, dag: dagNaam !== s.label ? dagNaam : undefined, betekenis: s.short, href: `#pascha/${s.key}`, voortgang };
+    cyclus = { soort: 'pascha', periode: s.label, dag: dagNaam && !dagNaam.startsWith(s.label) ? dagNaam : undefined, betekenis: s.short, href: `#pascha/${s.key}`, voortgang };
   } else if (gc.huidige) {
     const s = gc.stappen.find((x) => x.key === gc.huidige)!;
     toon = geboorteToon(s.key);
-    cyclus = { soort: 'geboorte', periode: s.label, dag: dagNaam !== s.label ? dagNaam : undefined, betekenis: s.short, href: `#geboorte/${s.key}`, voortgang };
+    cyclus = { soort: 'geboorte', periode: s.label, dag: dagNaam && !dagNaam.startsWith(s.label) ? dagNaam : undefined, betekenis: s.short, href: `#geboorte/${s.key}`, voortgang };
   }
   return kop || toon || cyclus ? { kop, toon, cyclus } : null;
 }

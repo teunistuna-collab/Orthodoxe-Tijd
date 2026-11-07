@@ -130,6 +130,9 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top .am-lees-vlak .gm-blader a 
 html.lees-nacht .am-lees-vlak .gm-blader { border-top-color: rgba(224, 183, 101, .25); }
 
 /* Sfeer per periode, zoals de Pascha-pagina (pascha-mobiel.css): ingetogen in de Geboortevasten, licht vanaf de Geboorte */
-.gm.gb-ingetogen .gm-papier, .gm-laag.gb-ingetogen { background-color: #efe0c2; }
-.gm.gb-licht .gm-papier, .gm-laag.gb-licht { background-color: #f8edd4; }
+/* Het perkament is een dekkend beeld: de sfeer zit daarom in de titel van de periode en de sierlijnen */
+.gm.gb-ingetogen .gm-periode, .gm-laag.gb-ingetogen .gm-laag-titel { color: #4a2f5a !important; }
+.gm.gb-ingetogen .am-sierlijn, .gm-laag.gb-ingetogen .am-sierlijn { color: rgba(92, 58, 120, .85); }
+.gm.gb-licht .gm-periode, .gm-laag.gb-licht .gm-laag-titel { color: #8a5a10 !important; }
+.gm.gb-licht .am-sierlijn, .gm-laag.gb-licht .am-sierlijn { color: #b8892a; }
 .gm.gb-licht .gm-aftel, .gm-laag.gb-licht .gm-info { box-shadow: 0 0 0 1px rgba(201, 162, 39, .35), 0 4px 16px rgba(201, 162, 39, .25); }
