@@ -231,3 +231,18 @@
 #top#top#top#top#top#top#top#top#top .vm2 .vm2-icoon img { max-width: 50px; max-height: 50px; }
 #top#top#top#top#top#top#top#top#top .vm2-duo .vm2-icoon { width: 38px; height: 38px; }
 #top#top#top#top#top#top#top#top#top .vm2-duo .vm2-icoon img { max-width: 38px; max-height: 38px; }
+
+/* Dagthema: de sfeer van de periode (alleen kleur en licht; tekstkleuren blijven): ingetogen in de Vasten en de
+   Geboortevasten, verstild in de Goede Week, licht in de Paastijd en de Kersttijd */
+@media (max-width: 767.98px) {
+  #vandaag.is-ingetogen .vg-papier.vm2-papier:before { background-color: #e6d8bf; background-blend-mode: multiply; }
+  #vandaag.is-verstild .vg-papier.vm2-papier:before { background-color: #d4bf98; background-blend-mode: multiply; }
+  #vandaag.is-licht .vg-papier.vm2-papier:before { background-color: #fff3d8; background-blend-mode: multiply; }
+}
+#top#top#top#top#top#top#top#top#top #vandaag.is-verstild .vm2 .vm2-kaart { border-color: rgba(110, 80, 50, .55); }
+#top#top#top#top#top#top#top#top#top #vandaag.is-licht .vm2 .vm2-kaart { box-shadow: 0 0 0 1px rgba(201, 162, 39, .35), 0 2px 10px rgba(201, 162, 39, .18); }
+
+/* Vandaag in de cyclus */
+.vm2-cyclus-voortgang { display: block; margin-top: 2px; font-family: var(--font-lees); font-size: 14.5px; color: #7d5218; }
+/* Gecentreerd zoals het actuele gebedsuur erboven */
+#top#top#top#top#top#top#top#top#top .vm2 .vm2-cyclus .vm2-tekst { align-items: center; text-align: center; }

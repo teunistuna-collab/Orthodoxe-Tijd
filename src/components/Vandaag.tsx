@@ -10,7 +10,7 @@ import { dienstVanHetUur, slugVan } from '../lib/etmaal';
 import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { vastenGroep } from '../lib/vasten';
-import { feestVoorDag } from '../lib/feestdagen';
+import { dagThema, feestVoorDag } from '../lib/feestdagen';
 import { actieveCyclus } from '../lib/seizoen';
 import { geboorteBannerTitel, geboortecyclusVoor } from '../lib/geboortecyclus';
 import Kaarsgloed from './Kaarsgloed';
@@ -70,6 +70,9 @@ export default function Vandaag() {
   // Feestdagen (lib/feestdagen.ts): tijdens Pascha en de Geboorte van Christus vervangt het feesticoon het Christusicoon
   // in de kop, met de begroeting en een feestlink eronder. Bij een dagwisseling of andere kalenderkeuze opnieuw bepaald.
   const feest = useMemo(() => feestVoorDag(vandaag, mode), [vandaag, mode]);
+  // Dagthema (lib/feestdagen.ts): op een belangrijke dag het beeld en de naam in de kop (mobiel), de sfeer van de
+  // periode en "Vandaag in de cyclus"
+  const thema = useMemo(() => dagThema(vandaag, mode), [vandaag, mode]);
   // Onze heiligen: "Naamdag van Sofia" in de kaart Feesten & heiligen (zonder voor wie: de naam van de heilige)
   const onze = useOnzeHeiligen();
   const naamdagen = useMemo(
@@ -78,7 +81,9 @@ export default function Vandaag() {
   );
   const geboorteNu = useMemo(() => geboortecyclusVoor(vandaag, mode).huidige, [vandaag, mode]);
   const theofanie = geboorteNu === 'theofanie' || geboorteNu === 'nafeest-theofanie';
-  const fotoKop = !feest ? (theofanie ? FOTO_KOP.theofanie : FOTO_KOP.gewoon) : feest.id === 'pascha' ? FOTO_KOP.pascha : FOTO_KOP.kerst;
+  const fotoKop = thema?.kop
+    ? { naam: thema.kop.soort === 'analogion' ? 'analogion' : 'dagicoon', srcSet: `${thema.kop.beeld} 900w`, breedte: 900, hoogte: 1125 }
+    : !feest ? (theofanie ? FOTO_KOP.theofanie : FOTO_KOP.gewoon) : feest.id === 'pascha' ? FOTO_KOP.pascha : FOTO_KOP.kerst;
   const feestNaam = feest?.id === 'pascha' ? 'De Verrijzenis van onze Heer' : 'De Geboorte van onze Heer Jezus Christus';
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));
@@ -100,6 +105,7 @@ export default function Vandaag() {
   const alleLezingen = rooster?.[dag.ymd];
   const mobielKaarten = (
     <VandaagMobiel
+      cyclus={thema?.cyclus ?? null}
       dag={dag}
       pijlgebed={pijlgebed}
       uur={{
@@ -142,7 +148,7 @@ export default function Vandaag() {
   };
 
   return (
-    <section id="vandaag" className="vg">
+    <section id="vandaag" className={`vg${mobiel && thema?.toon ? ` is-${thema.toon}` : ''}`}>
       {/* A. Kerkelijke kop: nis met sterren, het Christusmedaillon en de datum (de kop van de pagina). De onderrand volgt de sierboog. */}
       {/* Mobiel: een aangeleverd beeld vult de kop ("Christus Pantocrator in kaarslicht"; in de Paastijd het icoon van de
           Verrijzenis); het medaillon of feesticoon blijft onzichtbaar op zijn plek, zodat de kop even hoog blijft. In de
@@ -169,7 +175,14 @@ export default function Vandaag() {
           <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
         )}
         <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(mobiel && kerkDatumDeel ? dag.kerk : dag.civil)}</time></h1>{/* Mobiel: alleen de kerkelijke datum, geen tweede datum */}
-        {mobiel && fotoKop && <p className="sr-only">{feest ? feest.alt : 'Icoon van Christus Pantocrator in kaarslicht'}</p>}
+        {/* Mobiel, op een belangrijke dag: de naam van de dag en één regel uit de bestaande betekenis over het beeld */}
+        {mobiel && thema?.kop && (
+          <p className="vg-kop-dag">
+            <b>{thema.kop.naam}</b>
+            {thema.kop.regel && <span>{thema.kop.regel}</span>}
+          </p>
+        )}
+        {mobiel && fotoKop && <p className="sr-only">{thema?.kop ? `Icoon: ${thema.kop.naam}` : feest ? feest.alt : 'Icoon van Christus Pantocrator in kaarslicht'}</p>}
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>
 

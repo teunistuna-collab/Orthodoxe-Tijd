@@ -5,6 +5,7 @@ import type { HtcLezingRef } from '../lib/htc';
 import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
 import type { VastenGroep } from '../lib/vasten';
 import type { Aftelling } from '../lib/aftellen';
+import type { CyclusKaart } from '../lib/feestdagen';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
 import './etmaal-mobiel.css';
 import './vandaag-mobiel.css';
@@ -76,11 +77,13 @@ export interface VandaagMobielProps {
   ritme: Klik;
   /** De aftelling naar het eerstvolgende grote feest (lib/aftellen.ts) */
   aftelling: Aftelling;
+  /** "Vandaag in de cyclus" (lib/feestdagen.ts dagThema); buiten de cycli null */
+  cyclus?: CyclusKaart | null;
   /** Tijdens de Pascha- en Geboortecyclus: de betekenis van vandaag (BetekenisVanVandaag), zoals op het web */
   betekenis?: ReactNode;
 }
 
-export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezingen, ritme, aftelling, betekenis }: VandaagMobielProps) {
+export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezingen, ritme, aftelling, betekenis, cyclus }: VandaagMobielProps) {
   const refs = (lezingen.lijst ?? []).slice(0, 2).map((l) => vertaalRef(l.ref));
   const bidden = usePijlgebedOpen();
   const aftelRegel = aftelling.dagen > 0 ? `${aftelling.label}: nog ${aftelling.dagen} ${aftelling.dagen === 1 ? 'dag' : 'dagen'}` : (aftelling.groet?.[0] ?? aftelling.label);
@@ -103,6 +106,19 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         </span>
         <ChevronRight className="vm2-pijl" aria-hidden="true" />
       </Kaart>
+
+      {/* Vandaag in de cyclus: de periode en de dag, de korte betekenis en zo nodig de voortgang; vervangt de aftelling */}
+      {cyclus && (
+        <Kaart className="vm2-kaart vm2-cyclus" href={cyclus.href}>
+          <span className="vm2-tekst">
+            <h2 className="vm2-label">{cyclus.soort === 'pascha' ? 'Paschacyclus' : 'Geboortecyclus'}</h2>
+            <b className="vm2-groot">{cyclus.periode}{cyclus.dag ? ` · ${cyclus.dag}` : ''}</b>
+            <span>{cyclus.betekenis}</span>
+            {cyclus.voortgang && <span className="vm2-cyclus-voortgang">{cyclus.voortgang}</span>}
+          </span>
+          <ChevronRight className="vm2-pijl" aria-hidden="true" />
+        </Kaart>
+      )}
 
       {/* Overgang van het gebedsgedeelte (pijlgebed, gebedsuur) naar de liturgische informatie over de dag */}
       <div className="vm2-scheiding" role="separator" aria-label="De liturgische dag">
@@ -170,7 +186,7 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
           <h2 className="vm2-label">Het kerkelijk jaar</h2>
           <b>{dag.seizoen}</b>
           {dag.toon ? <span>Toon {dag.toon}</span> : null}
-          <span className="vm2-aftel">{aftelRegel}</span>
+          {!cyclus && <span className="vm2-aftel">{aftelRegel}</span>}
         </span>
         <ChevronRight className="vm2-pijl" aria-hidden="true" />
       </Kaart>

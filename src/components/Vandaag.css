@@ -817,3 +817,13 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   .vg-ingang { grid-template-columns: 26px minmax(0, 1fr); }
   #vandaag .vg-vf .vg-feestdag { grid-template-columns: 26px minmax(0, 1fr); }
 }
+
+/* Dagthema (mobiel): het analogion-beeld of het icoon van de dag als kop, met een donkere overloop en de naam en één
+   regel van de dag eroverheen (Vandaag.tsx, .vg-kop-dag) */
+@media (max-width: 767.98px) {
+  #vandaag :is(.vg-kop-analogion, .vg-kop-dagicoon) .vg-kop-achter img { object-position: 50% 22%; }
+  #vandaag :is(.vg-kop-analogion, .vg-kop-dagicoon) .vg-kop-achter::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(10, 6, 3, .45), rgba(10, 6, 3, 0) 22%, rgba(10, 6, 3, 0) 52%, rgba(10, 6, 3, .85)); pointer-events: none; }
+  #vandaag .vg-kop-dag { position: relative; z-index: 2; margin: 6px 16px 0; text-align: center; color: #f5e6c8; text-shadow: 0 1px 6px rgba(0, 0, 0, .9); text-wrap: balance; }
+  #vandaag .vg-kop-dag b { display: block; font-family: var(--font-lees); font-size: 26px; font-weight: 400; line-height: 1.15; }
+  #vandaag .vg-kop-dag span { display: block; margin-top: 4px; font-family: var(--font-lees); font-size: 15.5px; font-style: italic; line-height: 1.35; }
+}
