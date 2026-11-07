@@ -106,3 +106,6 @@
 #top#top#top#top#top#top#top#top#top .vsm-betekenis .vsm-uitklap { min-height: 44px; margin: 0; border-top: 0; font: inherit; color: inherit; text-align: left; }
 .vsm-betekenis > .vsm-titel { margin: 0; }
 .vsm-betekenis #vsm-betekenis-tekst { margin-top: 6px; }
+
+/* De periode onder de regel van de dag gecentreerd, zoals de dag, de regel en de uitleg erboven */
+#top#top#top#top#top#top#top#top#top .vsm-regel .vsm-periode { text-align: center; }
