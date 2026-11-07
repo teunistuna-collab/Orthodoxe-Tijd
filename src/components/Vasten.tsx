@@ -178,6 +178,7 @@ export default function Vasten() {
   // Mobiel (mock-up vasten): de vastenregel van de dag met "Wat mag ik vandaag eten?" als uitklapper (tegels en
   // vorige/volgende dag), de huidige (of volgende) vastenperiode en drie verdiepingsregels. Zelfde gegevens en vensters.
   const [etenOpen, setEtenOpen] = useState(false);
+  const [betekenisOpen, setBetekenisOpen] = useState(false);
   const [verschuiving, setVerschuiving] = useState(0);
   const [gestapt, setGestapt] = useState(false);
   // Een herinnering (Instellingen) of de Vandaag-kaart opent #vasten/<datum>: mobiel toont die dag met het eten open,
@@ -359,10 +360,20 @@ export default function Vasten() {
             </ul>
 
             {/* De geestelijke betekenis van de dag en de pastorale noot (lib/vastenBetekenis.ts, zoals op desktop) */}
+            {/* Uitklapbaar, zoals "Wat mag ik deze dag eten?" */}
             <div className="vsm-kaart vsm-betekenis">
-              <h3 className="vsm-titel">{betekenisM.titel}</h3>
-              <p className="vsm-tekst">{betekenisM.tekst}</p>
-              <p className="vsm-noot">{PASTORALE_NOOT}</p>
+              <h3 className="vsm-titel">
+                <button type="button" className="vsm-uitklap" aria-expanded={betekenisOpen} aria-controls={betekenisOpen ? 'vsm-betekenis-tekst' : undefined} onClick={() => setBetekenisOpen((o) => !o)}>
+                  <span>{betekenisM.titel}</span>
+                  <ChevronDown className={betekenisOpen ? 'is-open' : undefined} aria-hidden="true" />
+                </button>
+              </h3>
+              {betekenisOpen && (
+                <div id="vsm-betekenis-tekst">
+                  <p className="vsm-tekst">{betekenisM.tekst}</p>
+                  <p className="vsm-noot">{PASTORALE_NOOT}</p>
+                </div>
+              )}
             </div>
 
             {periodeNu && (
