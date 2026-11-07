@@ -1,5 +1,5 @@
 import { GEBEDEN } from './gebeden';
-import { naamVan, type ServiceMapping } from './etmaal';
+import { naamVan, serviceConfig, type ServiceMapping } from './etmaal';
 import type { Feest } from './feesten';
 
 // De gebedsweg (spec: docs/superpowers/specs/2026-11-05-gebedsweg-design.md): de volgorde van een gebedsuur en welke
@@ -15,14 +15,25 @@ export type Onderdeel =
   | { soort: 'gebed'; titel: string; id: string; beschikbaar: boolean }
   | { soort: 'tekst'; titel: string; tekst: string | null; beschikbaar: boolean };
 
-export type KortStap = { soort: 'kernvers' } | { soort: 'jezusgebed' };
+export type KortStap = { soort: 'kernvers'; kernvers: ServiceMapping['kernvers'] } | { soort: 'jezusgebed' };
 export type BronOnderdeel = { psalm: number; alleen?: 'zon-en-feestdag' } | { gebed: string } | { titel: string; tekst: string | null };
 export interface UurBestand {
   onderdelen: BronOnderdeel[];
 }
 
-/** Kort (ongeveer twee minuten): het kernvers van het uur en het Jezusgebed. */
-export const KORT: KortStap[] = [{ soort: 'kernvers' }, { soort: 'jezusgebed' }];
+/** Psalmnummer → kernvers, uit alle uren (lib/etmaal.ts): "Psalm Kernvers: 103:24" hoort bij Psalm 103. */
+const KERNVERZEN = new Map(serviceConfig.map((s) => [Number(/\d+/.exec(s.kernvers.reference)?.[0]), s.kernvers]));
+
+/** Kort: een pagina per psalm van het uur waarvan een kernvers bekend is (in de volgorde van het uur), daarna het
+ *  Jezusgebed. Zonder zo'n psalm het eigen kernvers van het uur. */
+export function kortVan(d: ServiceMapping, onderdelen: Onderdeel[]): KortStap[] {
+  const nrs = [...new Set(onderdelen.flatMap((o) => (o.soort === 'psalm' ? [o.nr] : [])))];
+  const verzen = nrs.flatMap((nr): KortStap[] => {
+    const k = KERNVERZEN.get(nr);
+    return k ? [{ soort: 'kernvers', kernvers: k }] : [];
+  });
+  return [...(verzen.length ? verzen : [{ soort: 'kernvers' as const, kernvers: d.kernvers }]), { soort: 'jezusgebed' }];
+}
 
 const OPENING = 'inleidende-gebeden-pdf';
 const psalmNr = (title: string) => Number(title.replace('Psalm ', ''));

@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { naamVan, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
-import { KORT, bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
+import { bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, kortVan, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { useGekozenVorm } from '../lib/jezusgebed';
 import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
@@ -61,21 +61,22 @@ export default function Gebedsweg({ d, pad, terug, slim, extra }: { d: ServiceMa
   const [weg, n] = pad;
   if (weg === 'einde') return <Afsluiting d={d} nacht={nacht} />;
   if (weg === 'kort' || weg === 'heel') {
-    if (weg === 'heel' && !delen) return null; // het uurbestand laadt nog (kort)
-    const stappen: Array<Onderdeel | KortStap> = weg === 'kort' ? KORT : delen!.filter((o) => o.beschikbaar);
+    if (!delen) return null; // het uurbestand laadt nog (kort)
+    const stappen: Array<Onderdeel | KortStap> = weg === 'kort' ? kortVan(d, delen) : delen.filter((o) => o.beschikbaar);
     const i = stapIndex(n, stappen.length);
     if (i === null) return <Doorsturen adres={bidPad(slug)} />;
-    return <Stap key={`${weg}-${i}`} d={d} weg={weg} stap={stappen[i]} i={i} aantal={stappen.length} nacht={nacht} />;
+    // Kort sluit met Amen direct af (terug naar waar je vandaan kwam); het hele uur eindigt met de afsluiting
+    return <Stap key={`${weg}-${i}`} d={d} weg={weg} stap={stappen[i]} i={i} aantal={stappen.length} nacht={nacht} amen={weg === 'kort' ? terug : bidPad(slug, 'einde')} />;
   }
   if (weg) return <Doorsturen adres={bidPad(slug)} />;
   return <UurBegin d={d} delen={delen} terug={terug} slim={slim} extra={extra} />;
 }
 
-function Kernvers({ d }: { d: ServiceMapping }) {
+function Kernvers({ kernvers }: { kernvers: ServiceMapping['kernvers'] }) {
   return (
     <blockquote className="gw-groot">
-      {d.kernvers.verses.map((v) => <span key={v}>{v}</span>)}
-      <cite>{d.kernvers.reference.replace('Psalm Kernvers:', 'Psalm')}</cite>
+      {kernvers.verses.map((v) => <span key={v}>{v}</span>)}
+      <cite>{kernvers.reference.replace('Psalm Kernvers:', 'Psalm')}</cite>
     </blockquote>
   );
 }
@@ -97,6 +98,7 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
       : null;
   const ritme = [dag.toon ? `Toon ${dag.toon}` : null, dag.seizoen, dag.vasten.label.toLowerCase()].filter(Boolean).join(' · ');
   const tebidden = delen?.filter((o) => o.beschikbaar) ?? [];
+  const kort = delen ? kortVan(d, delen).length - 1 : 1; // aantal kernverzen in Kort
   return (
     <Laag className="gw gw-begin" label={gebedTitel(d)}>
       <div className="gw-banner">
@@ -131,7 +133,7 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
           )}
           <a className="gw-keuze is-sober" href={bidPad(slug, 'kort', 1)}>
             <b>Kort · 2 min</b>
-            <span className="gw-keuze-onder">Het kernvers en het Jezusgebed</span>
+            <span className="gw-keuze-onder">{kort > 1 ? `${kort} kernverzen en het Jezusgebed` : 'Het kernvers en het Jezusgebed'}</span>
             <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
           </a>
         </div>
@@ -165,7 +167,7 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
 }
 
 // 2. Bidden: één onderdeel, niets anders
-function Stap({ d, weg, stap, i, aantal, nacht }: { d: ServiceMapping; weg: 'kort' | 'heel'; stap: Onderdeel | KortStap; i: number; aantal: number; nacht: boolean }) {
+function Stap({ d, weg, stap, i, aantal, nacht, amen }: { d: ServiceMapping; weg: 'kort' | 'heel'; stap: Onderdeel | KortStap; i: number; aantal: number; nacht: boolean; amen: string }) {
   useSchermAan(true);
   const slug = slugVan(d);
   const laatste = i === aantal - 1;
@@ -177,22 +179,22 @@ function Stap({ d, weg, stap, i, aantal, nacht }: { d: ServiceMapping; weg: 'kor
         <span />
       </div>
       <div className="gw-vlak">
-        <StapInhoud d={d} stap={stap} />
+        <StapInhoud stap={stap} />
       </div>
       <div className="gw-voet">
-        <a className="gw-verder" href={laatste ? bidPad(slug, 'einde') : bidPad(slug, weg, i + 2)}>{laatste ? 'Amen' : 'Verder'}</a>
+        <a className="gw-verder" href={laatste ? amen : bidPad(slug, weg, i + 2)}>{laatste ? 'Amen' : 'Verder'}</a>
         <span className="gw-teller">{i + 1} van {aantal}</span>
       </div>
     </Laag>
   );
 }
 
-function StapInhoud({ d, stap }: { d: ServiceMapping; stap: Onderdeel | KortStap }) {
+function StapInhoud({ stap }: { stap: Onderdeel | KortStap }) {
   if (stap.soort === 'kernvers')
     return (
       <>
         <h1 className="sr-only" tabIndex={-1}>Kernvers</h1>
-        <Kernvers d={d} />
+        <Kernvers kernvers={stap.kernvers} />
       </>
     );
   if (stap.soort === 'jezusgebed') return <Jezusgebed />;
@@ -241,7 +243,7 @@ function Afsluiting({ d, nacht }: { d: ServiceMapping; nacht: boolean }) {
     <Laag className={`gw gw-einde${nacht ? ' is-nacht' : ''}`} label={`${gebedTitel(d)}: einde`}>
       <h1 className="sr-only" tabIndex={-1}>Einde van {gebedTitel(d).toLowerCase()}</h1>
       <span className="gw-kruis">{SIERKRUIS}</span>
-      <Kernvers d={d} />
+      <Kernvers kernvers={d.kernvers} />
       <a className="gw-verder" href="#vandaag">Terug naar Vandaag</a>
     </Laag>
   );
