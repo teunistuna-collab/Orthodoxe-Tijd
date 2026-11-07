@@ -20,6 +20,7 @@
     "check:gebedsweg": "esbuild scripts/gebedsweg.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/gebedsweg.check.mjs --log-level=warning && node node_modules/.cache/gebedsweg.check.mjs",
     "check:zoeken": "esbuild scripts/zoeken.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/zoeken.check.mjs --log-level=warning && node node_modules/.cache/zoeken.check.mjs",
     "check:onzeheiligen": "esbuild scripts/onzeheiligen.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/onzeheiligen.check.mjs --log-level=warning && node node_modules/.cache/onzeheiligen.check.mjs",
+    "check:dagthema": "esbuild scripts/dagthema.check.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/dagthema.check.mjs --log-level=warning && node node_modules/.cache/dagthema.check.mjs",
     "check:pushserver": "esbuild scripts/pushserver.check.ts --bundle --platform=node --format=esm --packages=external --outfile=node_modules/.cache/pushserver.check.mjs --log-level=warning && node node_modules/.cache/pushserver.check.mjs",
     "push:sleutels": "web-push generate-vapid-keys",
     "push:bouw": "esbuild server/pushserver.ts --bundle --platform=node --format=esm --packages=external --outfile=server/dist/pushserver.mjs --log-level=warning",

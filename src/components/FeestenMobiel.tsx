@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { useApp } from '../lib/context';
+import { bidBeeld, icoonVan } from '../lib/bidbeelden';
 import type { Feest } from '../lib/feesten';
 import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, hoofdletter, julianKey, kerkDatum, parseYmd, ymd } from '../lib/kalender';
 import { stapIndex } from '../lib/gebedsweg';
@@ -24,31 +25,6 @@ import './feesten-mobiel.css';
 
 export type FeestItem = { f: Feest; datum: Date; dagen: number };
 
-/** Het authentieke icoon per feest, waar dat er is; anders een rustig vlak met een kruis (geen vervangende voorstelling). */
-const ICONEN: Record<string, string> = {
-  pascha: 'pascha.webp',
-  kerstmis: 'kerst.jpg',
-  theofanie: 'theofanie.webp',
-  palmzondag: 'palmzondag.webp',
-  hemelvaart: 'hemelvaart.webp',
-  'opdracht-moeder-gods': 'opdracht-moeder-gods.webp',
-  kruisverheffing: 'kruisverering.webp',
-  besnijdenis: 'besnijdenis.webp',
-  'synaxis-johannes': 'synaxis-johannes.webp',
-  nicolaas: 'nicolaas.webp',
-  stefanus: 'stefanus.webp',
-  'kinderen-bethlehem': 'kinderen-bethlehem.webp',
-  'synaxis-moeder-gods': 'synaxis-moeder-gods.webp',
-  filippus: 'filippus.webp',
-  // Aangeleverd op 27-10-2026
-  ontslaping: 'ontslaping.webp',
-  'geboorte-moeder-gods': 'geboorte-moeder-gods.webp',
-  ontmoeting: 'ontmoeting.webp',
-  annunciatie: 'annunciatie.webp',
-  transfiguratie: 'transfiguratie.webp',
-  pinksteren: 'pinksteren.webp',
-};
-const icoonVan = (id: string) => (ICONEN[id] ? `/images/feesten/${ICONEN[id]}` : null);
 
 /** Titel en ondertitel uit de bestaande naam: "Theofanie — Doop van de Heer in de Jordaan", "… (Palmzondag)". */
 function titels(f: Feest): { titel: string; onder?: string } {
@@ -316,10 +292,8 @@ function Onbekend() {
 }
 
 // 5. Bid met het feest (#feesten/<id>/bid/<n>): het troparion en het Jezusgebed, schermvullend op een beeld van het feest.
-// Achtergrond: het icoon van het feest op een analogion met kaarsen (aangeleverd 06-11-2026, public/images/feesten/bidden);
-// zonder eigen beeld het icoon van het feest.
-const BIDBEELDEN = new Set(['pascha', 'geboorte-moeder-gods', 'kruisverheffing', 'opdracht-moeder-gods', 'kerstmis', 'theofanie', 'ontmoeting', 'annunciatie', 'palmzondag', 'hemelvaart', 'pinksteren', 'transfiguratie', 'ontslaping']);
-const bidBeeld = (id: string) => (BIDBEELDEN.has(id) ? `/images/feesten/bidden/${id}.webp` : icoonVan(id));
+// Achtergrond: het analogion-beeld (lib/bidbeelden.ts), zonder eigen beeld het icoon van het feest.
+const bidAchtergrond = (id: string) => bidBeeld(id) ?? icoonVan(id);
 
 function FeestBidden({ f, n }: { f: Feest; n?: string }) {
   useSchermAan(true);
@@ -327,7 +301,7 @@ function FeestBidden({ f, n }: { f: Feest; n?: string }) {
   const feest = `#feesten/${f.id}`;
   if (i === null) return <Doorsturen adres={`${feest}/bid/1`} />;
   const titel = titels(f).titel;
-  const beeld = bidBeeld(f.id);
+  const beeld = bidAchtergrond(f.id);
   return (
     <Laag className="gw gw-bid is-kort is-feest" label={`Bid met het feest: ${titel}, ${i + 1} van 2`}>
       {beeld && <img className="gw-feestbeeld" src={beeld} alt="" decoding="async" />}

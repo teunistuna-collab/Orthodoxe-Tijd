@@ -3,7 +3,12 @@
 // (dagInfo, vastenPeriodes, de Paschaberekening) en wordt in feestVoorDag naar deze context vertaald.
 
 import { dagInfo, daysBetween, orthodoxPascha, type Mode } from './kalender';
-import { vastenPeriodes } from './overzicht';
+import { bidBeeld, icoonVan } from './bidbeelden';
+import type { Feest } from './feesten';
+import { geboortecyclusVoor, type GeboorteKey } from './geboortecyclus';
+import { periodeVoortgang, vastenPeriodes } from './overzicht';
+import { paascyclusVoor, zondagVanDeWeek, type StapKey } from './paascyclus';
+import { PASCHA_DAGICONEN } from './paascyclusTeksten';
 
 export type FeestId = 'pascha' | 'nativity';
 
@@ -47,4 +52,64 @@ export function feestVoorDag(dag: Date, mode: Mode): FeestThema | null {
     afterfeastId: paastijd ? 'pascha' : kersttijd ? 'nativity' : null,
     isAfterfeast: paastijd || kersttijd,
   });
+}
+
+/* ---------- Dagthema (spec: docs/superpowers/specs/2026-11-07-dagthema-design.md) ---------- */
+
+export type Toon = 'ingetogen' | 'verstild' | 'licht';
+/** Kop van Vandaag op een belangrijke dag: het analogion-beeld, anders het icoon van de dag. */
+export interface DagKop { soort: 'analogion' | 'icoon'; beeld: string; naam: string; regel?: string; groet?: { groet: string; antwoord: string } }
+/** "Vandaag in de cyclus" op Vandaag. */
+export interface CyclusKaart { soort: 'pascha' | 'geboorte'; periode: string; dag?: string; betekenis: string; href: string; voortgang?: string }
+export interface DagThema { kop: DagKop | null; toon: Toon | null; cyclus: CyclusKaart | null }
+
+const PASCHA_TOON: Record<StapKey, Toon> = {
+  voorbereiding: 'ingetogen', 'grote-vasten': 'ingetogen', lazarus: 'ingetogen', palmzondag: 'ingetogen', 'goede-week': 'verstild',
+  pascha: 'licht', 'lichte-week': 'licht', paastijd: 'licht', hemelvaart: 'licht', pinksteren: 'licht',
+};
+const GEBOORTE_LICHT = new Set<GeboorteKey>(['geboorte', 'nafeest', 'besnijdenis', 'voorfeest-theofanie', 'vooravond-theofanie', 'theofanie', 'nafeest-theofanie']);
+/** Sfeer van een periode van de Geboortecyclus (ook op de Geboorte-pagina). */
+export const geboorteToon = (k: GeboorteKey): Toon => (GEBOORTE_LICHT.has(k) ? 'licht' : 'ingetogen');
+
+const naamVan = (f: Feest) => f.kort ?? f.naam.split(' — ')[0];
+/** De eerste zin van een bestaande tekst (voor de korte regel in de kop). */
+const eersteZin = (s?: string) => (s ? (s.match(/^.*?[.!?](?=\s|$)/)?.[0] ?? s) : undefined);
+
+/** Kop, toon en cyclus-kaart van een dag; null op een gewone dag buiten de cycli. */
+export function dagThema(dag: Date, mode: Mode): DagThema | null {
+  const info = dagInfo(dag, mode);
+  const pc = paascyclusVoor(dag);
+  const gc = geboortecyclusVoor(dag, mode);
+  const feest = feestVoorDag(dag, mode);
+  const groet = feest ? { groet: feest.groet, antwoord: feest.antwoord } : undefined;
+  // De feesten van de dag, hoogste rang eerst
+  const feesten = [...info.feesten].sort((a, b) => (b.rang ?? 0) - (a.rang ?? 0));
+
+  // Kop: eerst een feest met een analogion-beeld, dan het icoon van de dag (Paschacyclus), dan een feest met een icoon
+  let kop: DagKop | null = null;
+  const metBeeld = feesten.find((f) => bidBeeld(f.id));
+  const dagIcoon = pc.huidige ? PASCHA_DAGICONEN[pc.offset] : undefined;
+  const metIcoon = feesten.find((f) => icoonVan(f.id));
+  if (metBeeld) kop = { soort: 'analogion', beeld: bidBeeld(metBeeld.id)!, naam: naamVan(metBeeld), regel: eersteZin(metBeeld.toelichting), groet };
+  else if (dagIcoon) kop = { soort: 'icoon', beeld: `/images/feesten/${dagIcoon.bestand}`, naam: feesten[0] ? naamVan(feesten[0]) : (zondagVanDeWeek(pc.offset)?.kort ?? dagIcoon.naam), regel: eersteZin(dagIcoon.betekenis), groet };
+  else if (metIcoon) kop = { soort: 'icoon', beeld: icoonVan(metIcoon.id)!, naam: naamVan(metIcoon), regel: eersteZin(metIcoon.toelichting), groet };
+
+  // Voortgang in een vastenperiode (Grote Vasten, Geboortevasten): "Dag 12 van 48 · nog 37 dagen tot Pascha"
+  const vasten = [dag.getUTCFullYear() - 1, dag.getUTCFullYear()].flatMap((j) => vastenPeriodes(j, mode)).find((p) => p.soort === 'vasten' && p.start <= dag && dag <= p.eind);
+  const v = vasten ? periodeVoortgang(vasten, dag) : null;
+  const voortgang = v ? `Dag ${v.dag} van ${v.van}${v.feest ? ` · nog ${v.nog} ${v.nog === 1 ? 'dag' : 'dagen'} tot ${v.feest}` : ''}` : undefined;
+  const dagNaam = feesten[0] ? naamVan(feesten[0]) : undefined;
+
+  let toon: Toon | null = null;
+  let cyclus: CyclusKaart | null = null;
+  if (pc.huidige) {
+    const s = pc.stappen.find((x) => x.key === pc.huidige)!;
+    toon = PASCHA_TOON[s.key];
+    cyclus = { soort: 'pascha', periode: s.label, dag: dagNaam !== s.label ? dagNaam : undefined, betekenis: s.short, href: `#pascha/${s.key}`, voortgang };
+  } else if (gc.huidige) {
+    const s = gc.stappen.find((x) => x.key === gc.huidige)!;
+    toon = geboorteToon(s.key);
+    cyclus = { soort: 'geboorte', periode: s.label, dag: dagNaam !== s.label ? dagNaam : undefined, betekenis: s.short, href: `#geboorte/${s.key}`, voortgang };
+  }
+  return kop || toon || cyclus ? { kop, toon, cyclus } : null;
 }
