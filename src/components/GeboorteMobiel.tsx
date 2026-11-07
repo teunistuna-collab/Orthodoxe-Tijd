@@ -1,4 +1,5 @@
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
+import { geboorteToon } from '../lib/feestdagen';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { bereikLang, daysBetween, formatKerkLang, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
@@ -71,8 +72,19 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
   const { vandaag, mode } = useApp();
   const stap = huidige ? stappen.find((s) => s.key === huidige)! : null;
   const eerste = stappen[0];
+  // In de periode staat "Vandaag in de Geboortecyclus" bovenaan en volgt de aftelling (of de groet) eronder
+  const aftel = (
+    <AftelKaart
+      label={dagenTot > 0 ? 'Op weg naar de Geboorte' : huidige === 'geboorte' ? 'Vandaag is de Geboorte van Christus' : (stap?.label ?? 'De Geboorte van Christus')}
+      dagen={dagenTot}
+      onder="Tot de heilige Geboorte van Christus"
+      voet={stap ? 'Een tijd van verwachting, vasten en gebed.' : undefined}
+      groet={[groet ?? 'Christus wordt geboren, verheerlijkt Hem!']}
+      href={dagenTot > 0 ? '#geboorte/cyclus' : `#geboorte/${huidige ?? 'geboorte'}`}
+    />
+  );
   return (
-    <section id="geboorte" className="am gm">
+    <section id="geboorte" className={`am gm${stap ? ` gb-${geboorteToon(stap.key)}` : ''}`}>
       <Banner naam="geboorte-icoon" feest kerst={huidige === 'geboorte' || huidige === 'nafeest'} theofanie={huidige === 'theofanie' || huidige === 'nafeest-theofanie'}>
         <Kop terug="#cycli" merk />
         <div className="gm-titels">
@@ -85,14 +97,7 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
         {/* De aftelling: het gedeelde onderdeel (CyclusMobiel.tsx), ook op Pascha en Vandaag */}
         {/* Zoals Pascha: vóór het feest de aftelling, op en na het feest de groet met de lopende periode; buiten de cyclus
             geen "vandaag" en geen vastenregel */}
-        <AftelKaart
-          label={dagenTot > 0 ? 'Op weg naar de Geboorte' : huidige === 'geboorte' ? 'Vandaag is de Geboorte van Christus' : (stap?.label ?? 'De Geboorte van Christus')}
-          dagen={dagenTot}
-          onder="Tot de heilige Geboorte van Christus"
-          voet={stap ? 'Een tijd van verwachting, vasten en gebed.' : undefined}
-          groet={[groet ?? 'Christus wordt geboren, verheerlijkt Hem!']}
-          href={dagenTot > 0 ? '#geboorte/cyclus' : `#geboorte/${huidige ?? 'geboorte'}`}
-        />
+        {!stap && aftel}
 
         <div className="gm-kaart gm-vandaag">
           {stap ? (
@@ -115,6 +120,7 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
             </>
           )}
         </div>
+        {stap && aftel}
 
         <a className="gm-kaart gm-cycluslink" href="#geboorte/cyclus">
           <span className="gm-rij-tekst">
@@ -163,7 +169,7 @@ function Periode({ stap, stappen }: { stap: GeboorteStap; stappen: GeboorteStap[
   const i = stappen.findIndex((s) => s.key === stap.key);
   const verwant = [stappen[i - 1], stappen[i + 1]].filter((s): s is GeboorteStap => !!s);
   return (
-    <Laag className={`em-laag gm-laag gm-periodelaag${feest ? ' is-feest' : ''}`} label={stap.label}>
+    <Laag className={`em-laag gm-laag gm-periodelaag gb-${geboorteToon(stap.key)}${feest ? ' is-feest' : ''}`} label={stap.label}>
       <Kop terug="#geboorte/cyclus" merk slim />
       <Banner naam={feest ? 'geboorte-icoon' : 'kaarsen'} feest={feest} theofanie={isTheofanie(stap.key)}>
         <span />

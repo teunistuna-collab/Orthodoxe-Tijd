@@ -87,6 +87,17 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
   const sfeer = stap ? SFEER[stap.key] : '';
   // Na Pascha (t/m Pinksteren) is er niets meer af te tellen: de feestgroet, met de naam van de periode als label.
   const label = cyclus.dagenTotPascha > 0 ? 'Op weg naar Pascha' : cyclus.offset === 0 ? 'Vandaag is het heilige Pascha' : (stap?.label ?? 'Pascha');
+  // In de periode staat "Vandaag in de Paschacyclus" bovenaan en volgt de aftelling (of de groet) eronder
+  const aftel = (
+    <AftelKaart
+      label={label}
+      dagen={cyclus.dagenTotPascha}
+      onder="Tot de heilige Verrijzenis van Christus"
+      voet="Een weg van vasten, gebed en verwachting."
+      groet={GROET}
+      href={cyclus.offset === 0 ? '#pascha/pascha' : '#pascha/cyclus'}
+    />
+  );
   return (
     <section id="pascha" className={`am gm pm2 ${sfeer}`}>
       <Banner beeld={VERRIJZENIS} className="is-hoofd">
@@ -98,14 +109,7 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
         </div>
       </Banner>
       <div className="gm-papier">
-        <AftelKaart
-          label={label}
-          dagen={cyclus.dagenTotPascha}
-          onder="Tot de heilige Verrijzenis van Christus"
-          voet="Een weg van vasten, gebed en verwachting."
-          groet={GROET}
-          href={cyclus.offset === 0 ? '#pascha/pascha' : '#pascha/cyclus'}
-        />
+        {!stap && aftel}
 
         {/* Binnen de cyclus: de periode van vandaag met de kleur en het vasten van vandaag. Daarbuiten (het grootste deel van
             het jaar) eerlijk de eerstvolgende periode, zonder de gegevens van vandaag erbij (die horen niet bij die periode). */}
@@ -130,6 +134,7 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
             </>
           )}
         </div>
+        {stap && aftel}
 
         <ul className="gm-lijst pm2-naar-cyclus">
           <Rij href="#pascha/cyclus" titel="De tien perioden" onder="Van de voorbereidende zondagen tot Pinksteren" />
