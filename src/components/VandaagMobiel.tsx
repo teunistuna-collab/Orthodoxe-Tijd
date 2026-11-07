@@ -139,7 +139,8 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
             {/* Eén blok (één rasterelement in de halve kaart), een regel per naamdag */}
             {!!feest.naamdagen?.length && <span className="vm2-naamdag">{feest.naamdagen.map((t) => <span key={t}>{t}</span>)}</span>}
             <h2 className="vm2-label">{feest.label}</h2>
-            <b>{feest.naam}</b>
+            {/* In de smalle kaart zonder "H." (het label zegt al "heiligen"); anders staat "H." los op een eigen regel */}
+            <b>{feest.naam.replace(/^HH?\. /, '')}</b>
             {feest.meer > 0 && <span>en nog {feest.meer} {feest.meer === 1 ? 'heilige' : 'heiligen'}</span>}
           </span>
           <ChevronRight className="vm2-pijl" aria-hidden="true" />

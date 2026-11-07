@@ -216,4 +216,12 @@
 /* Onze heiligen: op een naamdag een regel bovenaan de kaart Feesten & heiligen */
 #top#top#top#top#top#top#top#top#top .vm2 .vm2-naamdag { display: flex; flex-direction: column; align-items: center; margin-bottom: 2px; font-family: var(--font-lees); font-size: 14px; font-style: italic; line-height: 1.25; color: #7d5218; }
 /* In de halve kaart (raster: label, naam, onderregel) een eigen rij onderaan over de volle breedte */
-#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-tekst > .vm2-naamdag { grid-column: 1 / -1; grid-row: 4; justify-self: center; margin: 6px 0 0; text-align: center; }
+#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-tekst > .vm2-naamdag { grid-column: 1 / -1; grid-row: 5; justify-self: center; margin: 6px 0 0; text-align: center; }
+
+/* Halve kaarten (07-11-2026): het label in beide kaarten bovenaan op dezelfde hoogte; daaronder de inhoud verticaal
+   gecentreerd in de rest van de kaart (rijen: label, ruimte, naam, onderregel, naamdag, ruimte). Ook zonder onderregel. */
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart { grid-template-rows: auto minmax(0, 1fr) auto auto auto minmax(0, 1fr); align-content: stretch; }
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart h2.vm2-label { grid-row: 1; align-self: start; }
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-tekst b { grid-row: 3; }
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-tekst > span:not(.vm2-label):not(.vm2-naamdag) { grid-row: 4; }
+#top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart :is(.vm2-icoon, .vm2-pijl) { grid-row: 3 / 5; align-self: center; }
