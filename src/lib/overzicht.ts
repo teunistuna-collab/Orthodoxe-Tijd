@@ -33,6 +33,21 @@ export interface Periode {
   kleur: string;
 }
 
+/** Het feest waarop een vastenperiode uitloopt (voor "nog 37 dagen tot Pascha"). */
+const EINDFEEST: Record<string, string> = {
+  kaasweek: 'de Grote Vasten',
+  'grote-vasten': 'Pascha',
+  apostelvasten: 'Petrus en Paulus',
+  dormitionvasten: 'de Ontslapenis',
+  kerstvasten: 'de Geboorte van Christus',
+};
+
+/** Waar `dag` in een periode staat: dag X van Y en nog Z dagen tot het feest (op de laatste dag: nog 1). Buiten de periode null. */
+export function periodeVoortgang(p: Pick<Periode, 'id' | 'start' | 'eind' | 'dagen'>, dag: Date): { dag: number; van: number; nog: number; feest?: string } | null {
+  if (dag < p.start || dag > p.eind) return null;
+  return { dag: daysBetween(p.start, dag) + 1, van: p.dagen, nog: daysBetween(dag, p.eind) + 1, feest: EINDFEEST[p.id] };
+}
+
 export function vastenPeriodes(jaar: number, mode: Mode): Periode[] {
   const p = orthodoxPascha(jaar);
   const mk = (id: string, naam: string, soort: Periode['soort'], start: Date, eind: Date, omschrijving: string, regels: string[], kleur: string): Periode => ({

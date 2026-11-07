@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { voedselStatus } from '../src/lib/voedselgroepen';
 import { addDays, dagInfo, utc, ymd } from '../src/lib/kalender';
 import { vastenBetekenis } from '../src/lib/vastenBetekenis';
+import { periodeVoortgang, vastenPeriodes } from '../src/lib/overzicht';
 
 const aan = (n: Parameters<typeof voedselStatus>[0]) => Object.entries(voedselStatus(n)).filter(([, v]) => v).map(([k]) => k).sort().join(',');
 assert.equal(aan('geen'), 'eieren,graan,groenten,olie,peulvruchten,vis,vlees,wijn,zuivel');
@@ -27,7 +28,7 @@ assert.match(bet(2026, 12, 2), /^De Geboortevasten/);
 assert.match(bet(2027, 1, 6), /eerste ster/); // Kerstavond
 assert.match(bet(2027, 1, 18), /Grote Waterwijding/); // vooravond van Theofanie
 assert.match(bet(2027, 7, 1), /^De Apostelvasten/);
-assert.match(bet(2026, 8, 18), /^De Ontslapingsvasten/);
+assert.match(bet(2026, 8, 18), /^De Ontslapenisvasten/);
 assert.match(bet(2026, 9, 11), /onthoofding/); // kerkelijk 29 augustus
 assert.match(bet(2026, 9, 27), /Kruisverheffing/); // kerkelijk 14 september, zondag
 assert.match(bet(2027, 1, 13), /feestperiode/); // Kersttijd, vastenvrij
@@ -37,5 +38,18 @@ assert.equal(ymd(addDays(utc(2026, 12, 31), 1)), '2027-01-01');
 assert.equal(ymd(addDays(utc(2026, 10, 31), 1)), '2026-11-01');
 assert.equal(ymd(addDays(utc(2028, 2, 28), 1)), '2028-02-29');
 assert.equal(dagInfo(addDays(utc(2026, 11, 27), 1), 'oud').vasten.periode, 'Kerstvasten'); // morgen = eerste dag van de Geboortevasten
+
+// Meegaan door de periode: dag X van Y en nog Z dagen tot het feest (Grote Vasten 2027: 15-3 t/m 1-5, Pascha 2-5)
+const gv = vastenPeriodes(2027, 'oud').find((p) => p.id === 'grote-vasten')!;
+assert.deepEqual(periodeVoortgang(gv, utc(2027, 3, 15)), { dag: 1, van: 48, nog: 48, feest: 'Pascha' });
+assert.deepEqual(periodeVoortgang(gv, utc(2027, 3, 26)), { dag: 12, van: 48, nog: 37, feest: 'Pascha' });
+assert.deepEqual(periodeVoortgang(gv, utc(2027, 5, 1)), { dag: 48, van: 48, nog: 1, feest: 'Pascha' });
+assert.equal(periodeVoortgang(gv, utc(2027, 3, 14)), null);
+assert.equal(periodeVoortgang(gv, utc(2027, 5, 2)), null);
+const feest = (id: string) => periodeVoortgang(vastenPeriodes(2027, 'oud').find((p) => p.id === id)!, vastenPeriodes(2027, 'oud').find((p) => p.id === id)!.start)?.feest;
+assert.deepEqual(['kaasweek', 'apostelvasten', 'dormitionvasten', 'kerstvasten'].map(feest), ['de Grote Vasten', 'Petrus en Paulus', 'de Ontslapenis', 'de Geboorte van Christus']);
+// Kerstvasten over de jaargrens: 28-11-2027 t/m 6-1-2028
+const kv = vastenPeriodes(2027, 'oud').find((p) => p.id === 'kerstvasten')!;
+assert.deepEqual(periodeVoortgang(kv, utc(2028, 1, 6)), { dag: 40, van: 40, nog: 1, feest: 'de Geboorte van Christus' });
 
 console.log('vastentafel: alle controles geslaagd');

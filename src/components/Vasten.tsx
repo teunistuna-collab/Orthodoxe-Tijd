@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { addDays, dagInfo, daysBetween, formatDag, formatDatum, formatKort, hoofdletter, parseYmd, ymd } from '../lib/kalender';
-import { vastenPeriodes, type Periode } from '../lib/overzicht';
-import { LADDER, NIVEAUS } from '../lib/vasten';
+import { addDays, dagInfo, daysBetween, formatDag, formatDatum, formatKort, hoofdletter, parseYmd, WEEKDAGEN_KORT, ymd } from '../lib/kalender';
+import { periodeVoortgang, vastenPeriodes, type Periode } from '../lib/overzicht';
+import { LADDER, NIVEAUS, vastenGroep } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
-import { VastenBadge } from './ui';
+import { VastenBadge, VastenSymbool } from './ui';
 import Modal from './Modal';
 import { CycleTransition, GoldDivider, LiturgicalPopup } from './CycleSections';
 import Verdieping from './Verdieping';
@@ -211,6 +211,13 @@ export default function Vasten() {
     const volgende = allePeriodes.filter((p) => p.start > dag).sort((x, y) => x.start.getTime() - y.start.getTime())[0];
     return volgende ? { p: volgende, huidig: false } : null;
   }, [allePeriodes, dagM.civil]);
+  // De week vooruit (mobiel): zeven dagen vanaf de getoonde dag, elk met de vastenregel uit de bestaande berekening
+  const week = useMemo(
+    () => Array.from({ length: 7 }, (_, k) => ({ v: verschuiving + k, d: dagInfo(addDays(vandaag, verschuiving + k), mode, vandaagYmd) })),
+    [vandaag, verschuiving, mode, vandaagYmd],
+  );
+  // Meegaan door de periode: dag X van Y, nog Z dagen tot het feest (alleen binnen een vastenperiode)
+  const voortgang = periodeNu?.huidig ? periodeVoortgang(periodeNu.p, dagM.civil) : null;
   const komendeVier = ['grote-vasten', 'apostelvasten', 'dormitionvasten', 'kerstvasten']
     .map((id) => allePeriodes.filter((p) => p.id === id && p.eind >= vandaag).sort((x, y) => x.start.getTime() - y.start.getTime())[0])
     .filter((p): p is NonNullable<typeof p> => Boolean(p))
@@ -334,6 +341,23 @@ export default function Vasten() {
               )}
             </div>
 
+            {/* De week vooruit: een tik toont die dag in de kaart hierboven */}
+            <h2 className="vsm-label"><span>De week vooruit</span></h2>
+            <ul className="vsm-kaart vsm-week">
+              {week.map(({ v, d }) => {
+                const groep = vastenGroep(d.vasten.niveau);
+                return (
+                  <li key={v}>
+                    <button type="button" className={`vsm-weekdag${v === verschuiving ? ' is-gekozen' : ''}${groep ? '' : ' is-vrij'}`} aria-current={v === verschuiving ? 'date' : undefined} onClick={() => stap(v)}>
+                      <span className="vsm-weekdatum">{WEEKDAGEN_KORT[d.civil.getUTCDay()]} {formatKort(d.civil)}</span>
+                      <span className="vsm-weeksymbool" aria-hidden="true">{groep && <VastenSymbool groep={groep} className="vsm-symbool" />}</span>
+                      <span className="vsm-weeklabel">{d.vasten.label.includes(' — ') ? hoofdletter(d.vasten.label.split(' — ')[1]) : d.vasten.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
             {/* De geestelijke betekenis van de dag en de pastorale noot (lib/vastenBetekenis.ts, zoals op desktop) */}
             <div className="vsm-kaart vsm-betekenis">
               <h3 className="vsm-titel">{betekenisM.titel}</h3>
@@ -348,6 +372,15 @@ export default function Vasten() {
                   <span className="vsm-rij-tekst">
                     <b className="vsm-titel">{PERIODE_INFO[periodeNu.p.id]?.label ?? periodeNu.p.naam}</b>
                     <span className="vsm-datum">{formatDag(periodeNu.p.start)} – {formatDatum(periodeNu.p.eind)}</span>
+                    {voortgang && (
+                      <>
+                        <span className="vsm-voortgang">
+                          Dag {voortgang.dag} van {voortgang.van}
+                          {voortgang.feest && ` · nog ${voortgang.nog} ${voortgang.nog === 1 ? 'dag' : 'dagen'} tot ${voortgang.feest}`}
+                        </span>
+                        <span className="vsm-lijn" aria-hidden="true"><span style={{ width: `${(voortgang.dag / voortgang.van) * 100}%` }} /></span>
+                      </>
+                    )}
                   </span>
                   <ChevronRight className="vsm-pijl" aria-hidden="true" />
                 </a>

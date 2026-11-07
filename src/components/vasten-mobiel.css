@@ -83,3 +83,21 @@
 
 /* Vasten vandaag: datum, antwoord en uitleg gecentreerd */
 #top#top#top#top#top#top#top#top#top#top .vsm-regel :is(.vsm-dag, .vsm-antwoord, .vsm-tekst) { text-align: center; }
+
+/* De week vooruit: zeven rijen (dag, vastensymbool, regel); vrije dagen rustig grijs; de getoonde dag gemarkeerd */
+.vsm-week { padding: 0; list-style: none; overflow: hidden; }
+.vsm-week li + li { border-top: 1px solid rgba(185, 148, 85, .35); }
+#top#top#top#top#top#top#top#top#top .vsm-weekdag { display: grid; grid-template-columns: 74px 22px minmax(0, 1fr); align-items: center; gap: 8px; width: 100%; min-height: 46px; margin: 0; padding: 6px 12px; border: 0; border-radius: 0; background: none; box-shadow: none; font-family: var(--font-lees); color: #2b1d12; text-align: left; -webkit-tap-highlight-color: transparent; }
+.vsm-weekdag:active { background: rgba(90, 60, 25, .07); }
+#top#top#top#top#top#top#top#top#top .vsm-weekdag.is-gekozen { background: rgba(214, 176, 108, .28); }
+.vsm-weekdatum { font-size: 15px; color: #5d4630; }
+.vsm-weeksymbool { display: grid; place-items: center; color: #7a5a2a; }
+.vsm-symbool { width: 18px; height: 18px; }
+.vsm-weeklabel { font-size: 16px; line-height: 1.25; }
+.vsm-weekdag.is-vrij .vsm-weeklabel { color: #7a6a58; }
+#top#top#top#top#top#top#top#top#top .vsm-weekdag:focus-visible { outline: 3px solid #7d5218; outline-offset: -3px; }
+
+/* Meegaan door de periode: dag X van Y, nog Z dagen tot het feest, en een dunne gouden voortgangslijn */
+.vsm-voortgang { display: block; margin-top: 4px; font-family: var(--font-lees); font-size: 15.5px; color: #5d4630; }
+.vsm-lijn { display: block; height: 3px; margin-top: 8px; border-radius: 2px; background: rgba(185, 148, 85, .25); overflow: hidden; }
+.vsm-lijn > span { display: block; height: 100%; border-radius: 2px; background: #b99455; }
