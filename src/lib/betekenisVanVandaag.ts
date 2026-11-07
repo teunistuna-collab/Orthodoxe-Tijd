@@ -26,7 +26,7 @@ import { actieveCyclus, type Cyclus } from './seizoen';
 export interface Tekstdeel {
   titel: string;
   tekst: string;
-  /** Kort label boven de tekst, bijvoorbeeld "Troparion" of "Kerkelijke traditie". */
+  /** Kort label boven de tekst, bijvoorbeeld "Tropaar" of "Kerkelijke traditie". */
   soort?: string;
   bron: string;
   /** Nog niet gecontroleerde concepttekst (zichtbaar gemarkeerd). */
@@ -130,7 +130,7 @@ function betekenisPascha(dag: DagInfo): BetekenisVanVandaag | null {
 
   // Hymne: het troparion van het feest; in de Paastijd (tot de Afsluiting van Pascha) het paastroparion.
   const troparion = feest?.troparion ?? (off >= 0 && off <= 38 ? PASCHA.troparion : undefined);
-  const hymne = deel('Hymne van de dag', troparion, BRON_TROPARION, feest?.troparion ? `Troparion · ${feest.kort ?? feest.naam}` : 'Troparion van Pascha (tot de Afsluiting van Pascha)');
+  const hymne = deel('Hymne van de dag', troparion, BRON_TROPARION, feest?.troparion ? `Tropaar · ${feest.kort ?? feest.naam}` : 'Tropaar van Pascha (tot de Afsluiting van Pascha)');
 
   // Icoon: het aangeleverde icoon van de dag (lib/paascyclusTeksten.ts), anders op Pascha en in de Lichte Week dat van de Verrijzenis.
   const dagIcoon = PASCHA_DAGICONEN[off];
@@ -186,7 +186,7 @@ function betekenisGeboorte(dag: DagInfo, mode: Mode): BetekenisVanVandaag | null
       : feest?.troparion
         ? [feest, '']
         : undefined;
-  const hymne = trop ? deel('Hymne van de dag', trop[0].troparion, BRON_TROPARION, `Troparion · ${trop[0].kort ?? trop[0].naam}${trop[1] ? ` · ${trop[1]}` : ''}`) : undefined;
+  const hymne = trop ? deel('Hymne van de dag', trop[0].troparion, BRON_TROPARION, `Tropaar · ${trop[0].kort ?? trop[0].naam}${trop[1] ? ` · ${trop[1]}` : ''}`) : undefined;
 
   // Icoon: het aangeleverde icoon van de Geboorte; van de vasten t/m de vooravond als icoon van de periode
   const feestIcoon = key === 'geboorte' || key === 'nafeest';

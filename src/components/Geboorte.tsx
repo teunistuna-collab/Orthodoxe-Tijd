@@ -55,7 +55,7 @@ const INFO: Record<GeboorteInfoKey, PopupInhoud> = {
       { heading: 'De vooravond en de Koninklijke Uren', paragraphs: [GEBOORTE_UITLEG.vooravond] },
       { heading: 'De Geboorte van Christus', paragraphs: [GEBOORTE_UITLEG.geboorte, KERSTMIS.toelichting ?? ''].filter(Boolean) },
       { heading: 'Theofanie en de Grote Waterwijding', paragraphs: [GEBOORTE_UITLEG['vooravond-theofanie'], THEOFANIE.toelichting ?? ''].filter(Boolean) },
-      { heading: 'Hymnen', items: [`Troparion van de Geboorte (toon 4): ${KERSTMIS.troparion}`, `Troparion van Theofanie (toon 1): ${THEOFANIE.troparion}`] },
+      { heading: 'Hymnen', items: [`Tropaar van de Geboorte (toon 4): ${KERSTMIS.troparion}`, `Tropaar van Theofanie (toon 1): ${THEOFANIE.troparion}`] },
       { note: 'Diensttijden verschillen per parochie. De troparia: eigen Nederlandse weergave (zie Bronnen); overige teksten: concept.' },
     ],
   },
@@ -175,7 +175,7 @@ export default function Geboorte() {
               <p className="pascha-groet">„Christus is geboren!” <span>„Verheerlijkt Hem!”</span></p>
               <div className="pc-feest-vakken">
                 <div className="pc-vak jr-vak">
-                  <p className="pc-vak-label">Troparion · toon 4</p>
+                  <p className="pc-vak-label">Tropaar · toon 4</p>
                   <p className="pc-tropaar">{KERSTMIS.troparion}</p>
                 </div>
               </div>

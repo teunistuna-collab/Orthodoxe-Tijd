@@ -119,7 +119,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                         {!FEEST_HEILIGENJAAR[f.id] && f.troparion && (
                           <blockquote className="font-display mt-3 border-l-2 border-gold pl-3 text-[17px] leading-relaxed text-ink italic">
                             {f.troparion}
-                            <span className="mt-1 block text-xs font-bold tracking-wider text-gold-deep uppercase not-italic">Troparion</span>
+                            <span className="mt-1 block text-xs font-bold tracking-wider text-gold-deep uppercase not-italic">Tropaar</span>
                           </blockquote>
                         )}
                         {FEEST_HEILIGENJAAR[f.id] && (

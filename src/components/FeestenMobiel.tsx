@@ -339,9 +339,9 @@ function FeestBidden({ f, n }: { f: Feest; n?: string }) {
       <div className="gw-vlak">
         {i === 0 ? (
           <>
-            <h1 className="sr-only" tabIndex={-1}>Troparion</h1>
+            <h1 className="sr-only" tabIndex={-1}>Tropaar</h1>
             <p className="gw-groot gw-troparion">{f.troparion}</p>
-            <p className="gw-noot">Troparion</p>
+            <p className="gw-noot">Tropaar</p>
           </>
         ) : (
           <Jezusgebed />
@@ -418,12 +418,12 @@ function Detail({ item, terug }: { item: FeestItem; terug: string }) {
             <h2 className="hm-label hm-lijnlabel">In de liturgie</h2>
             {f.troparion && (
               <>
-                <p className="fm-klein">Troparion</p>
+                <p className="fm-klein">Tropaar</p>
                 <blockquote className="fm-troparion">{f.troparion}</blockquote>
                 <div className="gw-keuzes fm-bid">
                   <a className="gw-keuze is-hoofd" href={`#feesten/${f.id}/bid/1`}>
-                    <b>Bid het troparion</b>
-                    <span className="gw-keuze-onder">Het troparion en het Jezusgebed</span>
+                    <b>Bid het tropaar</b>
+                    <span className="gw-keuze-onder">Het tropaar en het Jezusgebed</span>
                     <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
                   </a>
                 </div>

@@ -183,7 +183,7 @@ function Periode({ stap, stappen }: { stap: GeboorteStap; stappen: GeboorteStap[
           <>
             <h2 className="gm-sectie">Uit de liturgie</h2>
             <blockquote className="gm-hymne">„{feestdata.troparion}”</blockquote>
-            <p className="gm-concept">Troparion van het feest.</p>
+            <p className="gm-concept">Tropaar van het feest.</p>
           </>
         )}
         {stap.key === 'geboorte' ? (

@@ -217,7 +217,7 @@ function Periode({ stap, cyclus }: { stap: Stap; cyclus: Paascyclus }) {
               <>
                 <h2 className="am-label pm2-sectie">Uit de liturgie</h2>
                 <blockquote className="pm2-hymne">„{PERIODE_POPUPS.pascha.highlight}”</blockquote>
-                <p className="gm-concept">Troparion van Pascha; eigen Nederlandse weergave (zie Bronnen).</p>
+                <p className="gm-concept">Tropaar van Pascha; eigen Nederlandse weergave (zie Bronnen).</p>
               </>
             )}
             <a className="gm-knop gm-knop-breed" href="#pascha/lees/wat">Lees meer over Pascha <ChevronRight aria-hidden="true" /></a>

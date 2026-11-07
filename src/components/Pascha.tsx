@@ -173,7 +173,7 @@ export default function Pascha() {
             <p className="pascha-groet">„Christus is opgestaan!” <span>„Hij is waarlijk opgestaan!”</span></p>
             <div className="pc-feest-vakken">
               <div className="pc-vak jr-vak">
-                <p className="pc-vak-label">Troparion</p>
+                <p className="pc-vak-label">Tropaar</p>
                 <p className="pc-tropaar">{PERIODE_POPUPS.pascha.highlight}</p>
               </div>
             </div>
@@ -323,7 +323,7 @@ function PaschaInhoud({
               </p>
             </div>
             <div className="ot-pc-m-trop">
-              <p className="vg-label ot-pc-tlabel">Troparion</p>
+              <p className="vg-label ot-pc-tlabel">Tropaar</p>
               <blockquote className="ot-pc-troparion">{PERIODE_POPUPS.pascha.highlight}</blockquote>
             </div>
           </div>
@@ -342,7 +342,7 @@ function PaschaInhoud({
             )}
             {troparion && (
               <>
-                <p className="vg-label ot-pc-tlabel">Troparion</p>
+                <p className="vg-label ot-pc-tlabel">Tropaar</p>
                 <blockquote className="ot-pc-troparion">{troparion}</blockquote>
               </>
             )}
@@ -454,7 +454,7 @@ function PaschaInhoud({
                   <p className="ot-pc-groet">
                     Christus is opgestaan!<span>Hij is waarlijk opgestaan!</span>
                   </p>
-                  <p className="vg-label ot-pc-tlabel">Troparion</p>
+                  <p className="vg-label ot-pc-tlabel">Tropaar</p>
                   <blockquote className="ot-pc-troparion">{PERIODE_POPUPS.pascha.highlight}</blockquote>
                 </div>
               </div>
@@ -500,7 +500,7 @@ function PaschaInhoud({
                 )}
                 {troparion && (
                   <>
-                    <p className="vg-label ot-pc-tlabel">Troparion</p>
+                    <p className="vg-label ot-pc-tlabel">Tropaar</p>
                     <blockquote className="ot-pc-troparion">{troparion}</blockquote>
                   </>
                 )}
