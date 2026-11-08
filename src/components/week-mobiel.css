@@ -84,3 +84,11 @@ html.lees-nacht #top#top#top#top#top#top#top#top .jm-datum { color: #e0b765; }
 .wm-vasten { margin-bottom: 10px; }
 .wm-vasten-symbool { color: #7a5a2a; }
 .wm-symbool { width: 22px; height: 22px; }
+
+/* Kathisma's van deze dag uitklapbaar: de kop is de knop (zelfde letter als de andere kopjes), met een pijl die meedraait */
+.wm-uitklap-kop { margin: 0; }
+#top#top#top#top#top#top#top#top#top .wm-uitklap { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; text-align: left; -webkit-tap-highlight-color: transparent; }
+.wm-uitklap svg { flex: none; width: 22px; height: 22px; stroke-width: 1.6; transition: transform .25s ease; }
+.wm-uitklap svg.is-open { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .wm-uitklap svg { transition: none; } }
+#top#top#top#top#top#top#top#top#top .wm-uitklap:focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }

@@ -1,5 +1,5 @@
 import { useState, useSyncExternalStore } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { addDays, bepaalToon, dagInfo, formatDag, ymd } from '../lib/kalender';
 import { WEEK_INFO } from '../lib/cyclusTeksten';
@@ -105,6 +105,7 @@ function Overzicht({ dagen, vandaagKey }: { dagen: Record<WeekDag, WeekTekst>; v
 function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
   const { vandaag, mode, openDag } = useApp();
   const [bediening, setBediening] = useState(false);
+  const [kathismaOpen, setKathismaOpen] = useState(false);
   // De datum van deze dag in de huidige week (zondag tot en met zaterdag), zoals op de webpagina.
   const datum = datumIn(vandaag, dag);
   const i = DAGEN.indexOf(dag);
@@ -157,11 +158,21 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
               <p>{themas(tekst.highlight)}</p>
             </section>
           )}
-          {/* De kathisma's van deze datum bij de Metten en de Vespers (zelfde onderdeel als Etmaal); een tik opent de psalmen */}
-          <section className="em-kathisma wm-kathisma" aria-labelledby="wm-kathisma-kop">
+          {/* De kathisma's van deze datum bij de Metten en de Vespers (zelfde onderdeel als Etmaal), uitklapbaar; een tik op
+              een kathisma opent de psalmen */}
+          <section className="em-kathisma wm-kathisma">
             <Sierlijn />
-            <h2 id="wm-kathisma-kop" className="am-label">Kathisma’s van deze dag</h2>
-            <Psalterlezing datum={ymd(datum)} mode={mode} />
+            <h2 className="am-label wm-uitklap-kop">
+              <button type="button" className="wm-uitklap" aria-expanded={kathismaOpen} aria-controls={kathismaOpen ? 'wm-kathisma-lijst' : undefined} onClick={() => setKathismaOpen((o) => !o)}>
+                <span>Kathisma’s van deze dag</span>
+                <ChevronDown className={kathismaOpen ? 'is-open' : undefined} aria-hidden="true" />
+              </button>
+            </h2>
+            {kathismaOpen && (
+              <div id="wm-kathisma-lijst">
+                <Psalterlezing datum={ymd(datum)} mode={mode} />
+              </div>
+            )}
           </section>
           <section>
             <Sierlijn />
