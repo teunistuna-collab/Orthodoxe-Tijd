@@ -7,6 +7,9 @@ import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import DeelKnop from './DeelKnop';
 import Leesbediening from './Leesbediening';
 import { SIERKRUIS } from './symbolen';
+import Psalterlezing from './Psalterlezing';
+import { VastenSymbool } from './ui';
+import { vastenGroep } from '../lib/vasten';
 import './etmaal-mobiel.css';
 import './week-mobiel.css';
 
@@ -109,6 +112,7 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
   const volgende = DAGEN[(i + 1) % 7];
   const info = dagInfo(datum, mode);
   const toon = bepaalToon(vandaag);
+  const groep = vastenGroep(info.vasten.niveau);
   // De vaste alinea's over de Octoechos (op alle dagen gelijk) staan in de verdieping; hier één regel met de toon.
   const [betekenis] = tekst.paragraphs;
   return (
@@ -153,6 +157,12 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
               <p>{themas(tekst.highlight)}</p>
             </section>
           )}
+          {/* De kathisma's van deze datum bij de Metten en de Vespers (zelfde onderdeel als Etmaal); een tik opent de psalmen */}
+          <section className="em-kathisma wm-kathisma" aria-labelledby="wm-kathisma-kop">
+            <Sierlijn />
+            <h2 id="wm-kathisma-kop" className="am-label">Kathisma’s van deze dag</h2>
+            <Psalterlezing datum={ymd(datum)} mode={mode} />
+          </section>
           <section>
             <Sierlijn />
             <h2 className="am-label">Deze week</h2>
@@ -160,6 +170,17 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
               <p className="wm-toon">
                 Deze week klinkt toon {toon}. <a href="#week/lees/betekenis">Over de tonen van de Octoechos</a>
               </p>
+            )}
+            {/* Op een vastendag de regel van die datum, met een tik naar de Vasten-pagina */}
+            {groep && (
+              <a className="em-kaart wm-vasten" href={`#vasten/${ymd(datum)}`}>
+                <span className="em-kaart-kruis wm-vasten-symbool"><VastenSymbool groep={groep} className="wm-symbool" /></span>
+                <span className="em-kaart-tekst">
+                  <b>{info.vasten.label}</b>
+                  <span>Wat mag ik eten?</span>
+                </span>
+                <ChevronRight className="am-pijl" aria-hidden="true" />
+              </a>
             )}
             <button type="button" className="em-kaart wm-kalender" onClick={() => openDag(ymd(datum))}>
               <span className="em-kaart-kruis">{SIERKRUIS}</span>

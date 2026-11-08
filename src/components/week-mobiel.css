@@ -78,3 +78,9 @@ html.lees-nacht #top#top#top#top#top#top#top#top .jm-feesten li { color: #e9dcc0
 html.lees-nacht #top#top#top#top#top#top#top#top .jm-datum { color: #e0b765; }
 /* "Nu in het kerkelijk jaar" en "Vandaag in de kerkelijke week": donkerder, ook op de donkere korrels van het papyrus */
 #top#top#top#top#top#top#top#top .wm .em-nu-tekst .am-label { color: #5e3f1c; }
+
+/* Dagpagina: de kathisma's van de dag en, op een vastendag, de vastenregel (met een tik naar de Vasten-pagina) */
+.wm-kathisma { margin-top: 0; }
+.wm-vasten { margin-bottom: 10px; }
+.wm-vasten-symbool { color: #7a5a2a; }
+.wm-symbool { width: 22px; height: 22px; }
