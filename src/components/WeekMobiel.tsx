@@ -160,8 +160,8 @@ function Dag({ dag, tekst }: { dag: WeekDag; tekst: WeekTekst }) {
           )}
           {/* De kathisma's van deze datum bij de Metten en de Vespers (zelfde onderdeel als Etmaal), uitklapbaar; een tik op
               een kathisma opent de psalmen */}
+          <Sierlijn />
           <section className="em-kathisma wm-kathisma">
-            <Sierlijn />
             <h2 className="am-label wm-uitklap-kop">
               <button type="button" className="wm-uitklap" aria-expanded={kathismaOpen} aria-controls={kathismaOpen ? 'wm-kathisma-lijst' : undefined} onClick={() => setKathismaOpen((o) => !o)}>
                 <span>Kathisma’s van deze dag</span>

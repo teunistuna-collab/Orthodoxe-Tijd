@@ -92,3 +92,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top .jm-datum { color: #e0b765; }
 .wm-uitklap svg.is-open { transform: rotate(180deg); }
 @media (prefers-reduced-motion: reduce) { .wm-uitklap svg { transition: none; } }
 #top#top#top#top#top#top#top#top#top .wm-uitklap:focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; }
+/* Compact: de sierlijn boven het kader, dicht alleen de kop (kleine binnenruimte) */
+#top#top#top#top#top#top#top#top#top .wm-kathisma { margin-top: 4px; padding: 0 12px; }
+#top#top#top#top#top#top#top#top#top .wm-kathisma .am-label.wm-uitklap-kop { margin: 0; }
+#top#top#top#top#top#top#top#top#top #wm-kathisma-lijst { padding-bottom: 10px; }
