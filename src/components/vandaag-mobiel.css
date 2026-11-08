@@ -255,3 +255,7 @@
 #top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-kaart { column-gap: 6px; padding-right: 6px; }
 #top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-pijl { width: 16px; height: 16px; }
 #top#top#top#top#top#top#top#top#top#top .vm2-duo .vm2-tekst b { font-size: 15.5px; overflow-wrap: normal; word-break: normal; }
+
+/* Feesttijd: het label "Vandaag vieren wij" op het perkament, niet in de doorzichtige strook boven de afgeronde rand
+   (het perkament begint 16 px lager, zie .vm2-papier:before) */
+@media (max-width: 767.98px) { #vandaag .vg-papier.vm2-papier > .vg-feest { padding-top: 26px; } }
