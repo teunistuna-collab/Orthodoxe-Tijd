@@ -2,7 +2,7 @@ import { useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import type { DagInfo } from '../lib/kalender';
 import type { HtcLezingRef } from '../lib/htc';
-import { lezingSoort, roosterMelding, vertaalRef } from '../lib/htc';
+import { roosterMelding, vertaalRef } from '../lib/htc';
 import type { VastenGroep } from '../lib/vasten';
 import type { Aftelling } from '../lib/aftellen';
 import type { CyclusKaart } from '../lib/feestdagen';
@@ -16,7 +16,6 @@ import './vandaag-mobiel.css';
 // onderdeel tekent alleen.
 
 const ICONEN = '/images/vandaag/iconen';
-const SOORT = { apostel: 'Apostel', evangelie: 'Evangelie', oud: 'Oude Testament' } as const;
 
 type Klik = { href?: string; onClick?: () => void };
 
@@ -86,7 +85,7 @@ export interface VandaagMobielProps {
 export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezingen, ritme, aftelling, betekenis, cyclus }: VandaagMobielProps) {
   const refs = (lezingen.lijst ?? []).slice(0, 2).map((l) => vertaalRef(l.ref));
   const bidden = usePijlgebedOpen();
-  const aftelRegel = aftelling.dagen > 0 ? `${aftelling.label}: nog ${aftelling.dagen} ${aftelling.dagen === 1 ? 'dag' : 'dagen'}` : (aftelling.groet?.[0] ?? aftelling.label);
+  const aftelRegel = aftelling.dagen > 0 ? `Nog ${aftelling.dagen} ${aftelling.dagen === 1 ? 'dag' : 'dagen'} tot ${aftelling.cyclus === 'pascha' ? 'Pascha' : 'de Geboorte'}` : (aftelling.groet?.[0] ?? aftelling.label);
   return (
     <div className="vm2">
       {/* Het pijlgebed: het stille middelpunt; een tik opent het om te bidden */}
@@ -126,70 +125,64 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         <p aria-hidden="true">De liturgische dag</p>
       </div>
 
-      <div className="vm2-duo">
-        <Kaart className="vm2-kaart" href="#vasten" onClick={vasten.open}>
-          <span className="vm2-icoon" aria-hidden="true">
-            {/* Aangeleverde iconen (07-11-2026): wel of geen vasten */}
-            <img src={`${ICONEN}/${vasten.groep ? 'wel-vasten' : 'geen-vasten'}.webp`} alt="" width={160} height={160} decoding="async" />
-          </span>
-          <span className="vm2-tekst">
-            <h2 className="vm2-label">Vasten vandaag</h2>
-            <b>{dag.vasten.label}</b>
-          </span>
-          <ChevronRight className="vm2-pijl" aria-hidden="true" />
-        </Kaart>
-        <Kaart className="vm2-kaart" href="#heiligen" onClick={feest.open}>
-          <span className="vm2-icoon" aria-hidden="true">
-            <img src={`${ICONEN}/feesten-en-heiligen.webp`} alt="" width={160} height={160} decoding="async" />
-          </span>
-          <span className="vm2-tekst">
-            {/* Eén blok (één rasterelement in de halve kaart), een regel per naamdag */}
-            {!!feest.naamdagen?.length && <span className="vm2-naamdag">{feest.naamdagen.map((t) => <span key={t}>{t}</span>)}</span>}
-            <h2 className="vm2-label">{feest.label}</h2>
-            {/* In de smalle kaart zonder "H." (het label zegt al "heiligen"); anders staat "H." los op een eigen regel */}
-            <b>{feest.naam.replace(/^HH?\. /, '')}</b>
-            {feest.meer > 0 && <span>en nog {feest.meer} {feest.meer === 1 ? 'heilige' : 'heiligen'}</span>}
-          </span>
-          <ChevronRight className="vm2-pijl" aria-hidden="true" />
-        </Kaart>
-      </div>
-
-      <Kaart className="vm2-kaart" href="#kalender" onClick={lezingen.open}>
-        <span className="vm2-icoon" aria-hidden="true">
-          <img src={`${ICONEN}/schriftlezingen-van-vandaag.webp`} alt="" width={160} height={160} decoding="async" />
-        </span>
-        <span className="vm2-tekst">
-          <h2 className="vm2-label">Schriftlezingen van vandaag</h2>
-          {/* Elke lezing op een eigen regel: de verwijzing groot, de soort (Apostel, Evangelie) klein ernaast */}
-          {refs.length ? (
-            <span className="vm2-lezingen">
-              {refs.map((r) => (
-                <span key={r} className="vm2-lezing">
-                  <b>{r}</b>
-                  <small>{SOORT[lezingSoort(r)]}</small>
-                </span>
-              ))}
+      {/* De liturgische dag als rustige lijst (mock-up 13-11-2026): per regel het icoon, een klein label, de hoofdregel en zo
+          nodig een onderregel, met een pijl; dunne lijnen ertussen in plaats van losse kaarten */}
+      <ul className="vm2-rijen">
+        <li>
+          <Kaart className="vm2-rij" href="#vasten" onClick={vasten.open}>
+            <span className="vm2-icoon" aria-hidden="true">
+              {/* Aangeleverde iconen (07-11-2026): wel of geen vasten */}
+              <img src={`${ICONEN}/${vasten.groep ? 'wel-vasten' : 'geen-vasten'}.webp`} alt="" width={160} height={160} decoding="async" />
             </span>
-          ) : (
-            <span>{lezingen.geladen ? roosterMelding(dag.ymd) : 'Lezingen worden geladen…'}</span>
-          )}
-        </span>
-        <ChevronRight className="vm2-pijl" aria-hidden="true" />
-      </Kaart>
-
-      {/* Het kerkelijk jaar: de periode, de toon en de aftelling naar het eerstvolgende grote feest in één kaart */}
-      <Kaart className="vm2-kaart" {...ritme}>
-        <span className="vm2-icoon" aria-hidden="true">
-          <img src={`${ICONEN}/het-kerkelijk-jaar.webp`} alt="" width={160} height={160} decoding="async" />
-        </span>
-        <span className="vm2-tekst">
-          <h2 className="vm2-label">Het kerkelijk jaar</h2>
-          <b>{dag.seizoen}</b>
-          {dag.toon ? <span>Toon {dag.toon}</span> : null}
-          {!cyclus && <span className="vm2-aftel">{aftelRegel}</span>}
-        </span>
-        <ChevronRight className="vm2-pijl" aria-hidden="true" />
-      </Kaart>
+            <span className="vm2-tekst">
+              <h2 className="vm2-label">Vasten vandaag</h2>
+              <b>{dag.vasten.label.replace(' — ', ' · ')}</b>
+            </span>
+            <ChevronRight className="vm2-pijl" aria-hidden="true" />
+          </Kaart>
+        </li>
+        <li>
+          <Kaart className="vm2-rij" href="#heiligen" onClick={feest.open}>
+            <span className="vm2-icoon" aria-hidden="true">
+              <img src={`${ICONEN}/feesten-en-heiligen.webp`} alt="" width={160} height={160} decoding="async" />
+            </span>
+            <span className="vm2-tekst">
+              <h2 className="vm2-label">{feest.label}</h2>
+              {/* Zonder "H." (het label zegt al "heiligen") en hooguit drie namen; alle namen staan bij de heiligen van de dag */}
+              <b>{feest.naam.replace(/^HH?\. /, '').split(', ').slice(0, 3).join(', ')}</b>
+              {feest.meer > 0 && <span>en nog {feest.meer} {feest.meer === 1 ? 'heilige' : 'heiligen'}</span>}
+              {feest.naamdagen?.map((t) => <span key={t} className="vm2-naamdag">{t}</span>)}
+            </span>
+            <ChevronRight className="vm2-pijl" aria-hidden="true" />
+          </Kaart>
+        </li>
+        <li>
+          <Kaart className="vm2-rij" href="#kalender" onClick={lezingen.open}>
+            <span className="vm2-icoon" aria-hidden="true">
+              <img src={`${ICONEN}/schriftlezingen-van-vandaag.webp`} alt="" width={160} height={160} decoding="async" />
+            </span>
+            <span className="vm2-tekst">
+              <h2 className="vm2-label">Schriftlezingen van vandaag</h2>
+              {refs.length ? refs.map((r) => <b key={r}>{r.replace(/(\d)-(\d)/g, '$1–$2')}</b>) : <span>{lezingen.geladen ? roosterMelding(dag.ymd) : 'Lezingen worden geladen…'}</span>}
+            </span>
+            <ChevronRight className="vm2-pijl" aria-hidden="true" />
+          </Kaart>
+        </li>
+        <li>
+          {/* Het kerkelijk jaar: de periode, met de toon en de aftelling op één regel */}
+          <Kaart className="vm2-rij" {...ritme}>
+            <span className="vm2-icoon" aria-hidden="true">
+              <img src={`${ICONEN}/het-kerkelijk-jaar.webp`} alt="" width={160} height={160} decoding="async" />
+            </span>
+            <span className="vm2-tekst">
+              <h2 className="vm2-label">Het kerkelijk jaar</h2>
+              <b>{dag.seizoen}</b>
+              {(dag.toon || !cyclus) && <span>{[dag.toon ? `Toon ${dag.toon}` : '', cyclus ? '' : aftelRegel].filter(Boolean).join(' · ')}</span>}
+            </span>
+            <ChevronRight className="vm2-pijl" aria-hidden="true" />
+          </Kaart>
+        </li>
+      </ul>
 
       {betekenis && <div className="vm2-betekenis">{betekenis}</div>}
 

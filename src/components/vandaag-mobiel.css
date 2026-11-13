@@ -259,3 +259,17 @@
 /* Feesttijd: het label "Vandaag vieren wij" op het perkament, niet in de doorzichtige strook boven de afgeronde rand
    (het perkament begint 16 px lager, zie .vm2-papier:before) */
 @media (max-width: 767.98px) { #vandaag .vg-papier.vm2-papier > .vg-feest { padding-top: 26px; } }
+
+/* De liturgische dag als lijst (13-11-2026): icoon links, tekst, pijl rechts; dunne lijnen ertussen, geen kaarten */
+.vm2-rijen { margin: 0 0 8px; padding: 0; list-style: none; }
+.vm2-rijen li + li { border-top: 1px solid rgba(185, 148, 85, .45); }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij { display: grid; grid-template-columns: 50px minmax(0, 1fr) 20px; align-items: center; column-gap: 14px; min-height: 64px; margin: 0; padding: 14px 6px 14px 8px; border: 0; border-radius: 0; background: none; box-shadow: none; color: var(--inkt) !important; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij:active { background: rgba(90, 60, 25, .07); }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-icoon { width: 46px; height: 46px; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-icoon img { max-width: 46px; max-height: 46px; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst b { font-family: var(--font-lees); font-size: 19px; font-weight: 500; line-height: 1.25; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst > span { font-family: var(--font-lees); font-size: 15px; line-height: 1.3; color: #4a3826; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst > .vm2-naamdag { font-style: italic; color: #7d5218; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-pijl { width: 20px; height: 20px; color: #4a3220; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij:focus-visible { outline: 3px solid #7d5218; outline-offset: -3px; }
