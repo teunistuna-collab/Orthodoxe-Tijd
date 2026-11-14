@@ -82,3 +82,10 @@
 .gw-feestbeeld { position: absolute; inset: 0 0 auto; z-index: -2; width: 100%; height: 72%; object-fit: cover; object-position: center top; }
 .gw-troparion { font-size: 21px; line-height: 1.5; font-style: italic; }
 #top#top#top#top#top#top#top#top#top .gw.is-feest .am-terug { text-shadow: 0 1px 6px rgba(0, 0, 0, .9); }
+
+/* Eén verticaal scrollgebied (14-11-2026): zolang een laag open is, scrollt de pagina erachter niet mee, en de leestekst
+   geeft zijn scroll niet door aan de laag eromheen. */
+@media (max-width: 767.98px) {
+  html:has(.am-laag) { overflow: hidden; }
+  .gw-vlak { overscroll-behavior: contain; }
+}

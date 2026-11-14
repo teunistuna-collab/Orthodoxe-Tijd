@@ -121,18 +121,18 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
         <div className="gw-keuzes">
           {tebidden.length ? (
             <a className="gw-keuze is-hoofd" href={bidPad(slug, 'heel', 1)}>
-              <b>Het hele uur</b>
+              <b>Bid het hele uur</b>
               <span className="gw-keuze-onder">{tebidden.map((o) => o.titel).join(' · ')}</span>
               <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
             </a>
           ) : (
             <p className="gw-keuze is-hoofd is-uit" aria-disabled="true">
-              <b>Het hele uur</b>
+              <b>Bid het hele uur</b>
               <span className="gw-keuze-onder">{delen ? 'De teksten van dit uur volgen nog' : 'Wordt geladen…'}</span>
             </p>
           )}
           <a className="gw-keuze is-sober" href={bidPad(slug, 'kort', 1)}>
-            <b>Kort · 2 min</b>
+            <b>Bid kort · 2 min</b>
             <span className="gw-keuze-onder">{kort > 1 ? `${kort} kernverzen en het Jezusgebed` : 'Het kernvers en het Jezusgebed'}</span>
             <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
           </a>

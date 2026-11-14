@@ -61,7 +61,10 @@
 #top#top#top#top#top#top#top#top#top .bd-uur :is(.bd-hoofd, .bd-alle):active { background: rgba(90, 60, 25, .07); }
 
 /* Gebeden zolang die nog niet beschikbaar zijn: geen link, geen pijl, "Binnenkort" subtiel onder de titel */
-.bd-kaart.is-binnenkort .bd-beeld { opacity: .75; }
+/* Binnenkort (14-11-2026): rustiger dan de beschikbare onderdelen: geen perkament of schaduw, een dunne stippelrand en een
+   gedempt beeld */
+#top#top#top#top#top#top#top#top#top#top#top .bd-kaart.is-binnenkort { min-height: 66px; border: 1px dashed rgba(125, 82, 24, .45); background: rgba(255, 249, 235, .35); box-shadow: none; }
+.bd-kaart.is-binnenkort .bd-beeld { opacity: .5; filter: grayscale(.4); }
 #top#top#top#top#top#top#top#top#top .bd-kaart.is-binnenkort .bd-tekst { padding-right: 14px; }
 #top#top#top#top#top#top#top#top#top .bd-binnenkort { font-size: 13px; font-style: italic; letter-spacing: .02em; color: #7d5218; }
 @media (hover: hover) { #top#top#top#top#top#top#top#top#top .bd-kaart.is-binnenkort:hover { background-color: transparent; } }

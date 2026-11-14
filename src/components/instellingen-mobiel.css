@@ -99,3 +99,10 @@
 .ism-papier > .ism-klein { margin: 8px 6px 0; }
 /* Keuzes en schakelaars: de uitleg altijd volledig (niet afkappen) */
 .ism-keuzes .ism-tekst span, .ism-regel[role="switch"] .ism-tekst span { display: block; -webkit-line-clamp: unset; }
+
+/* Compactere kop (14-11-2026): kleurweergave, tekstgrootte en kalender komen hoger in beeld */
+.em-banner.ism-banner { height: min(62vw, 230px); }
+.ism-banner .em-banner-tekst { bottom: 18px; }
+.ism-banner .am-sierlijn { margin: 2px auto 2px; }
+.ism-banner .em-titel { font-size: 34px; }
+.ism-banner .am-onder { font-size: 16px; }

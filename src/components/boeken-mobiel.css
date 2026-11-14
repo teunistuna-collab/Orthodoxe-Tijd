@@ -29,6 +29,8 @@
 
 /* Aanbevolen: drie kaarten naast elkaar */
 .bkm-raster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+/* Smalle schermen: twee kolommen, zodat de titels leesbaar blijven (14-11-2026) */
+@media (max-width: 479.98px) { .bkm-raster { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
 #top#top#top#top#top#top#top#top .bkm-kaart { display: flex; flex-direction: column; height: 100%; overflow: hidden; border: 1px solid rgba(185, 148, 85, .6); border-radius: 4px; background: rgba(250, 241, 222, .75); box-shadow: 0 2px 6px rgba(60, 35, 15, .16); color: var(--inkt) !important; text-align: left; text-decoration: none; }
 .bkm-kaart .bkm-omslag { width: 100%; border: 0; border-bottom: 1px solid rgba(185, 148, 85, .5); border-radius: 0; }
 .bkm-kaart-tekst { display: flex; flex: 1; flex-direction: column; gap: 3px; padding: 8px 8px 10px; font-family: var(--font-lees); }

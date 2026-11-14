@@ -65,7 +65,9 @@
 #top#top#top#top#top#top#top#top .am-tempo button[aria-pressed="true"] { border-color: var(--am-goud, #e0b765); color: var(--am-goud, #e0b765); }
 
 /* 3. Leesweergave en 4. gebedsvorm: warm perkament */
-.am-lees { background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; color: var(--inkt); }
+/* Leesteksten (14-11-2026): achter de doorlopende tekst een lichter, gelijkmatig perkamentvlak; de textuur blijft sterker aan
+   de randen */
+.am-lees { background: linear-gradient(90deg, rgba(251, 244, 230, 0), rgba(251, 244, 230, .8) 26px, rgba(251, 244, 230, .8) calc(100% - 26px), rgba(251, 244, 230, 0)), var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; color: var(--inkt); }
 .am-kop.is-licht { border-bottom: 1px solid rgba(172, 121, 47, .25); }
 .am-kop.is-licht .am-merk { font-size: 12px; color: var(--inkt); }
 #top#top#top#top#top#top#top#top .am-kop.is-licht :is(.am-terug, .am-knopje) { color: var(--inkt) !important; }

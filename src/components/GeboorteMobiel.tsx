@@ -2,7 +2,7 @@ import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { geboorteToon } from '../lib/feestdagen';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { bereikLang, daysBetween, formatKerkLang, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
+import { datumMetKerk, bereikLang, daysBetween, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
 import { GROTE_FEESTEN } from '../lib/feesten';
 import { geboorteBannerTitel, geboortecyclusVoor, type GeboorteKey, type GeboorteStap } from '../lib/geboortecyclus';
 import { BRON_CONCEPT, GEBOORTE_DAGICONEN, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_VERDIEPING, GEBOORTE_WEETJES, GEBOORTE_ZONDAGICOON, KERKVADER_PER_PERIODE, KERKVADERS, type GeboorteInfoKey } from '../lib/geboorteInhoud';
@@ -103,7 +103,7 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
           {stap ? (
             <>
               <h2 className="gm-kaart-titel">Vandaag in de Geboortecyclus</h2>
-              <p className="gm-datumregel">{hoofdletter(formatKerkLang(vandaag, mode))}</p>
+              <p className="gm-datumregel">{hoofdletter(datumMetKerk(vandaag, mode))}</p>
               <p className="gm-periode">{stap.label}</p>
               <p className="gm-bereik">{bereikLang(stap.van, stap.tot)}</p>
               <p className="gm-tekst">{stap.short}</p>
@@ -112,9 +112,9 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
             </>
           ) : (
             <>
-              <h2 className="gm-kaart-titel">De Geboortecyclus begint over {daysBetween(vandaag, eerste.van)} dagen</h2>
+              <h2 className="gm-kaart-titel">De Geboortecyclus begint over {daysBetween(vandaag, eerste.van)} {daysBetween(vandaag, eerste.van) === 1 ? 'dag' : 'dagen'}</h2>
               <p className="gm-periode">{eerste.label}</p>
-              <p className="gm-bereik">Begint op {bereikLang(kerkDatum(eerste.van, mode), kerkDatum(eerste.van, mode))} {kerkDatum(eerste.van, mode).getUTCFullYear()}</p>
+              <p className="gm-bereik">Begint op {datumMetKerk(eerste.van, mode, false)}</p>
               <p className="gm-tekst">{eerste.short}</p>
               <a className="gm-knop" href={`#geboorte/${eerste.key}`}>Lees meer over deze periode <ChevronRight aria-hidden="true" /></a>
             </>

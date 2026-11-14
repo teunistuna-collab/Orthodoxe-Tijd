@@ -627,7 +627,8 @@ button.vt-tegel-binnen { cursor: pointer; }
 @media (max-width: 767.98px) { .ot-vasten .vg-papier > .vt { display: none; } }
 /* Bronnen mobiel: één doorlopend perkament achter de kop en de inhoud (geen naad tussen de twee vlakken) */
 @media (max-width: 767.98px) {
-  #top#top#top .exact-content:has(> div > .bronnen-inhoud) { background: var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto !important; }
+  /* Lichter, gelijkmatig perkamentvlak achter de doorlopende tekst, met de textuur sterker aan de randen (14-11-2026) */
+  #top#top#top .exact-content:has(> div > .bronnen-inhoud) { background: linear-gradient(90deg, rgba(251, 244, 230, 0), rgba(251, 244, 230, .8) 26px, rgba(251, 244, 230, .8) calc(100% - 26px), rgba(251, 244, 230, 0)), var(--papyrus) url('/images/vandaag/papyrus-licht.webp') center top / 100% auto !important; }
   .exact-content:has(> div > .bronnen-inhoud) .bronnen-inhoud { background: none; }
 }
 /* Psalmverzen (desktop en de psalmen in Etmaal): inspringen zoals de uitgave, zie psalter-mobiel.css */

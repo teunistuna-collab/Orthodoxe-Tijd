@@ -81,7 +81,7 @@ export default function Bidden() {
             <ChevronRight className="bd-pijl" aria-hidden="true" />
           </a>
           <a className="bd-alle" href="#etmaal">
-            Bekijk alle gebedsuren <span aria-hidden="true">›</span>
+            Alle gebedsuren · Etmaal <span aria-hidden="true">›</span>
           </a>
         </div>
         {KAARTEN.map(({ id, titel, onder, beeld, positie }) =>

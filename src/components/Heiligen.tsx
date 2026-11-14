@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { addDays, civilVanKerkdatum, daysBetween, formatDag, formatKerkLang, formatMd, hoofdletter, kerkDatum, MAANDEN, parseYmd, ymd } from '../lib/kalender';
+import { datumMetKerk, addDays, civilVanKerkdatum, daysBetween, formatDag, formatMd, hoofdletter, kerkDatum, MAANDEN, parseYmd, ymd } from '../lib/kalender';
 import NaarBoven from './NaarBoven';
 import HeiligePopup from './HeiligePopup';
 import { heiligeTitel, tekstVoorIndeling, zoekVorm, type Resultaat } from '../lib/heiligenPopup';
@@ -247,19 +247,18 @@ export default function Heiligen() {
             <label className="vg-hl-zoek">
               <Search aria-hidden="true" />
               <span className="sr-only">Zoek een heilige</span>
-              <input type="search" value={zoek} onChange={(e) => setZoek(e.target.value)} placeholder={mobiel ? 'Zoek op naam van een heilige…' : 'Zoek een heilige'} autoComplete="off" />
+              <input type="search" value={zoek} onChange={(e) => setZoek(e.target.value)} placeholder="Zoek een heilige" autoComplete="off" />
             </label>
 
             {mobiel && !query ? (
               <>
-                <OnzeHeiligenBlok onLees={leesOnze} />
                 <div className="hm-kop is-midden">
                   <h2 className="hm-label">Heiligen van de dag</h2>
                 </div>
                 <div className="hm-dagnav">
                   <button type="button" className="hm-stap" aria-label="Vorige dag" onClick={() => naarDag(verschuiving - 1)}><ChevronLeft aria-hidden="true" /></button>
                   <label className="hm-datum">
-                    <span aria-live="polite">{hoofdletter(formatKerkLang(dagDatum, mode))}</span>
+                    <span aria-live="polite">{hoofdletter(datumMetKerk(dagDatum, mode))}</span>
                     <CalendarDays aria-hidden="true" />
                     <input
                       type="date"
@@ -285,6 +284,8 @@ export default function Heiligen() {
                     Nog {vanDag.length - 5} heiligen van deze dag <ChevronRight aria-hidden="true" />
                   </button>
                 )}
+                {/* Eerst de daglijst direct onder de zoekbalk, dan Onze heiligen (14-11-2026) */}
+                <OnzeHeiligenBlok onLees={leesOnze} />
 
                 <h2 className="hm-label hm-lijnlabel">Heiligen van de Lage Landen</h2>
                 <ul className="hm-lijst">

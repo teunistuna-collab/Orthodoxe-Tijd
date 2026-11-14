@@ -660,7 +660,8 @@ header>nav [class*="text-[#e9dcc0]"]{color:#5b402e!important;opacity:1!important
   #top#top .text-\[11px\]{font-size:12.5px!important}
   #top#top :is(.text-xs,.text-\[12px\]){font-size:13px!important}
   #top#top :is(.timeline-label,.feast-meta,.major-badge,.major-meta,.dienst-kaart-tijd){font-size:13px!important}
-  #top#top :is(time,small,.saints-rule-title span,.vandaag-dayhead span){font-size:12.5px!important}
+  #top#top :is(time,.saints-rule-title span,.vandaag-dayhead span){font-size:12.5px!important}
+  #top#top small{font-size:14px!important} /* kleine toelichtingen leesbaar (14-11-2026) */
   #top#top table th{font-size:12px!important}
 }
 @media(max-width: 1023.98px){

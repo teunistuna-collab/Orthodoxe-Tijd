@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { addDays, dagInfo, daysBetween, formatDag, formatDatum, formatKort, hoofdletter, parseYmd, WEEKDAGEN_KORT, ymd } from '../lib/kalender';
+import { addDays, dagInfo, datumMetKerk, daysBetween, formatDag, formatDatum, formatKort, hoofdletter, parseYmd, WEEKDAGEN_KORT, ymd } from '../lib/kalender';
 import { periodeVoortgang, vastenPeriodes, type Periode } from '../lib/overzicht';
 import { LADDER, NIVEAUS, vastenGroep } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
@@ -294,7 +294,7 @@ export default function Vasten() {
     const toegestaan = voedselStatus(dagM.vasten.niveau);
     const nietsToegestaan = Object.values(toegestaan).every((ok) => !ok);
     const betekenisM = vastenBetekenis(dagM);
-    const dagTitel = `${hoofdletter(dagM.weekdagNaam)} ${formatDatum(dagM.civil)}`;
+    const dagTitel = hoofdletter(datumMetKerk(dagM.civil, mode)); // burgerlijk, met de kerkelijke datum erachter (lib/kalender.ts)
     return (
       <>
         <section id="vasten" className="vg ot-redesign ot-vasten vsm">

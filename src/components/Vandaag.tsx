@@ -5,7 +5,7 @@ import { usePaginaOpen } from '../lib/paginaOpen';
 import { usePijlgebed } from '../lib/pijlgebed';
 import { KruisTeken, VastenSymbool } from './ui';
 import { OPEN_DIENST_EVENT, OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
-import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
+import { kerkRegel, dagInfo, formatDag, hoofdletter } from '../lib/kalender';
 import { dienstVanHetUur, slugVan } from '../lib/etmaal';
 import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
@@ -89,9 +89,8 @@ export default function Vandaag() {
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));
   // Kernvers van de dienst, zoals in de Etmaal-cyclus ("Psalm Kernvers: 50:12" → "Psalm 50:12").
   const kernversRef = uurMoment.kernvers.reference.replace('Psalm Kernvers:', 'Psalm');
-  // Kerkelijke datum in twee delen: mobiel op twee regels (datum, dan de kalender), web op één regel met een punt ertussen.
-  const kerkDatumDeel = mode === 'oud' ? formatDag(dag.kerk) : null;
-  const kalenderNaam = mode === 'oud' ? 'Juliaanse kalender' : 'Nieuwe kalender (gereviseerd juliaans)';
+  // De kerkelijke datum met hetzelfde label als op Kalender (lib/kalender.ts kerkRegel)
+  const kerkDatumTekst = kerkRegel(dag.civil, mode);
   const heiligenRegel = heilige ? heiligeTitel(heilige.naam) : heiligen ? 'Bekijk de heiligen van vandaag' : 'Heiligen worden geladen…';
   const aantalHeiligen = heiligen?.HEILIGEN[dag.kerkKey]?.filter((h) => h.type === 'saint').length ?? 0;
   const feestLabel = hoofdFeest && (hoofdFeest.groot || hoofdFeest.soort === 'pascha' || (hoofdFeest.rang ?? 0) >= 4) ? 'Feest van vandaag' : 'Gedachtenis van vandaag';
@@ -174,7 +173,9 @@ export default function Vandaag() {
         ) : (
           <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
         )}
-        <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(mobiel && kerkDatumDeel ? dag.kerk : dag.civil)}</time></h1>{/* Mobiel: alleen de kerkelijke datum, geen tweede datum */}
+        <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time></h1>
+        {/* Mobiel, bij de oude kalender: de kerkelijke datum klein onder de burgerlijke */}
+        {mobiel && mode === 'oud' && <p className="vg-kop-kerkdatum">Kerkelijk {formatDag(dag.kerk)}</p>}
         {/* Mobiel, op een belangrijke dag: de naam van de dag en één regel uit de bestaande betekenis over het beeld */}
         {mobiel && thema?.kop && (
           <p className="vg-kop-dag">
@@ -274,8 +275,7 @@ export default function Vandaag() {
                 {/* De kerkelijke datum opent de volledige dag, de paschacyclus het venster "Paschacyclus" van vandaag */}
                 <button type="button" className="vg-cyclusregel vg-cyclus-link" onClick={() => openDag(dag.ymd)}>
                   <span>
-                    {kerkDatumDeel ? `Juliaanse datum: ${kerkDatumDeel}` : 'Kerkelijke datum:'}
-                    <span className="vg-cyclus-sub"><span className="vg-cyclus-punt">{kerkDatumDeel ? ' · ' : ' '}</span>{kalenderNaam}</span>
+                    {kerkDatumTekst}
                   </span>
                   <ChevronRight aria-hidden="true" />
                 </button>

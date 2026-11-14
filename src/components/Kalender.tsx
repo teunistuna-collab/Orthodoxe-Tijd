@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import { BookOpen, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { MAANDEN, WEEKDAGEN_KORT, formatDag, hoofdletter, maandRooster, formatLang } from '../lib/kalender';
+import { kerkRegel, MAANDEN, WEEKDAGEN_KORT, formatDag, hoofdletter, maandRooster, formatLang } from '../lib/kalender';
 import { LITURGISCHE_KLEUREN, liturgischeKleur } from '../lib/liturgischeKleur';
 import { useSwipe } from '../lib/swipe';
 import { NIVEAUS, VASTEN_GROEPEN, vastenGroep, type VastenGroep } from '../lib/vasten';
@@ -118,7 +118,7 @@ export default function Kalender() {
     setGeselecteerdeYmd(vandaagYmd);
   };
   const openVasten = () => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail: { pagina: 'vasten', sleutel: geselecteerd.ymd } }));
-  const kerkRegel = mode === 'oud' ? `Juliaanse datum: ${formatDag(geselecteerd.kerk)}` : `Kerkelijk: ${formatDag(geselecteerd.kerk)} (nieuwe kalender)`;
+  const kerkRegelTekst = kerkRegel(geselecteerd.civil, mode);
   const groepGekozen = vastenGroep(geselecteerd.vasten.niveau);
   const mobiel = useMobiel();
 
@@ -215,9 +215,17 @@ export default function Kalender() {
               );
             })}
           </div>
-          <button type="button" className="km-tekstknop km-legenda-knop" aria-expanded={legendaOpen} onClick={() => setLegendaOpen((o) => !o)}>
-            Legenda <ChevronDown className={legendaOpen ? 'is-open' : undefined} aria-hidden="true" />
-          </button>
+          {/* Korte uitleg van de belangrijkste tekens, direct onder het raster; de volledige legenda klapt uit */}
+          <div className="km-sleutel">
+            <ul aria-label="Tekens in de kalender">
+              <li><span className="km-teken" aria-hidden="true">{TEKEN.ander}</span> Feest</li>
+              <li><span className="km-teken is-groot" aria-hidden="true">{TEKEN.groot}</span> Groot feest</li>
+              <li><VastenSymbool groep="olie" className="km-vastenteken" /> Vastendag</li>
+            </ul>
+            <button type="button" className="km-tekstknop km-legenda-knop" aria-expanded={legendaOpen} onClick={() => setLegendaOpen((o) => !o)}>
+              Alle tekens <ChevronDown className={legendaOpen ? 'is-open' : undefined} aria-hidden="true" />
+            </button>
+          </div>
           {legendaOpen && (
             <ul className="km-legenda">
               <li><span className="km-teken" aria-hidden="true">{TEKEN.ander}</span> Feestdag</li>
@@ -240,7 +248,7 @@ export default function Kalender() {
         <div className="km-dag">
           <h2 id="km-dag-datum" className="km-dagtitel" aria-live="polite">{hoofdletter(formatLang(geselecteerd.civil))}</h2>
           <p className="km-seizoen">{periode}</p>
-          <p className="km-kerkdatum">{kerkRegel}</p>
+          <p className="km-kerkdatum">{kerkRegelTekst}</p>
           <ul className="km-regels" aria-labelledby="km-dag-datum">
             <MRegel
               titel="Heiligen en feesten"
@@ -375,7 +383,7 @@ export default function Kalender() {
             {hoofdletter(formatLang(geselecteerd.civil).split(' ')[0])} {formatDag(geselecteerd.civil)}
           </h2>
           <Sierlijn />
-          <p className="ot-kerkdatum">{kerkRegel}</p>
+          <p className="ot-kerkdatum">{kerkRegelTekst}</p>
           <ul className="ot-register" aria-labelledby="kl-dag-datum">
             <Regel titel="Heiligen" symbool={KRUIS} onClick={() => openDagHeiligen(geselecteerd.ymd)}>
               {heiligenVanDag.length

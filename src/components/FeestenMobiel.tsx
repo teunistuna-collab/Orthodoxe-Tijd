@@ -116,7 +116,7 @@ function Zoekveld({ zoek, setZoek, autoFocus }: { zoek: string; setZoek: (z: str
         ref={ref}
         type="search"
         value={zoek}
-        placeholder="Zoek op naam van een feest…"
+        placeholder="Zoek een feest"
         autoComplete="off"
         onChange={(e) => {
           setZoek(e.target.value);

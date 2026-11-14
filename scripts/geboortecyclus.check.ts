@@ -1,7 +1,7 @@
 // Zelftest voor src/lib/geboortecyclus.ts, de kleur en "De betekenis van vandaag" in de Geboortecyclus — npm run check:geboortecyclus
 // Vaste datums als invoer (geen systeemklok).
 import assert from 'node:assert/strict';
-import { civilNaarJuliaans, dagInfo, orthodoxPascha, utc, ymd, type Mode } from '../src/lib/kalender';
+import { civilNaarJuliaans, dagInfo, datumMetKerk, daysBetween, kerkRegel, orthodoxPascha, utc, ymd, type Mode } from '../src/lib/kalender';
 import { geboorteBannerTitel, geboortecyclusActief, geboortecyclusVoor, GEBOORTE_STAPPEN } from '../src/lib/geboortecyclus';
 import { actieveCyclus } from '../src/lib/seizoen';
 import { kleurVanDeDag } from '../src/lib/liturgischeKleur';
@@ -131,5 +131,18 @@ assert.equal(titel('2027-01-28'), null);
 assert.equal(nu('2023-01-01'), 'vaders'); // kerkelijk 19 dec 2022
 assert.equal(titel('2023-01-01'), 'In verwachting van het Licht'); // Zondag van de Vaders vóór het voorfeest
 assert.equal(titel('2026-12-25', 'nieuw'), 'Christus wordt geboren, verheerlijkt Hem!');
+
+// Regressie 14 november 2026: burgerlijke en kerkelijke datum samen, en de aftelling volgt dezelfde datum als "Begint op"
+assert.equal(datumMetKerk(d('2026-11-14'), 'oud'), 'zaterdag 14 november 2026 · kerkelijk 1 november');
+assert.equal(datumMetKerk(d('2026-11-14'), 'nieuw'), 'zaterdag 14 november 2026');
+assert.equal(kerkRegel(d('2026-11-14'), 'oud'), 'Kerkelijke datum: 1 november · juliaanse kalender');
+{
+  const eerste = g('2026-11-14').stappen[0];
+  assert.equal(daysBetween(d('2026-11-14'), eerste.van), 14);
+  assert.equal(datumMetKerk(eerste.van, 'oud', false), '28 november 2026 · kerkelijk 15 november');
+  const nieuw = g('2026-11-14', 'nieuw').stappen[0];
+  assert.equal(datumMetKerk(nieuw.van, 'nieuw', false), '15 november 2026');
+  assert.equal(daysBetween(d('2026-11-14'), nieuw.van), 1);
+}
 
 console.log('geboortecyclus: alle controles geslaagd');

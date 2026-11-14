@@ -94,6 +94,8 @@ export default function VandaagMobiel({ dag, pijlgebed, uur, vasten, feest, lezi
         <h2 className="vm2-label vm2-kader-label">Pijlgebed</h2>
         <b className="m-kader-titel">{pijlgebed}</b>
         <Sierlijn />
+        {/* Zichtbare actie: de hele kaart opent het pijlgebed */}
+        <span className="vm2-kader-actie">Open het pijlgebed <ChevronRight aria-hidden="true" /></span>
       </a>
 
       <Kaart className="vm2-kaart vm2-uur" href={uur.href} onClick={uur.open}>

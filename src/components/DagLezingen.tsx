@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { useMobiel } from '../lib/desktop';
-import { dagInfo, formatKerkLang, formatLang, parseYmd } from '../lib/kalender';
+import { datumMetKerk, dagInfo, parseYmd } from '../lib/kalender';
 import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
 import Modal from './Modal';
 import { vergrendelScroll } from '../lib/scrollLock';
@@ -32,7 +32,7 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
   const lezingen = rooster?.[dag.ymd] ?? [];
 
   return (
-    <Modal open onClose={onClose} eyebrow={mobiel ? formatKerkLang(dag.civil, mode) : formatLang(dag.civil)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
+    <Modal open onClose={onClose} eyebrow={datumMetKerk(dag.civil, mode)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
       {lezingen.length > 0 ? (
         <ul className="grid gap-2">
           {lezingen.map((l, i) => {

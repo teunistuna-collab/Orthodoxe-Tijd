@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BookOpenText, ChevronDown, ExternalLink } from 'lucide-react';
 import type { LezingKeuze } from '../lib/context';
 import { laadLezingen, nbv21Url, vertaalRef, vertaalTag, type HtcLezing } from '../lib/htc';
-import { formatKerkLang, formatLang, kerkDatum } from '../lib/kalender';
+import { datumMetKerk, kerkDatum } from '../lib/kalender';
 import Modal from './Modal';
 import { useApp } from '../lib/context';
 import { useMobiel } from '../lib/desktop';
@@ -46,7 +46,7 @@ export default function LezingModal({ keuze, onClose }: Props) {
   const nbv = keuze ? nbv21Url(keuze.ref) : null;
 
   return (
-    <Modal lezen open={Boolean(keuze)} onClose={onClose} eyebrow={`${keuze ? vertaalTag(keuze.tag, refNl) : ''} · ${keuze ? (mobiel ? formatKerkLang(keuze.civil, mode) : formatLang(keuze.civil)) : ''}`} title={refNl} centerTitle maxWidth="max-w-2xl">
+    <Modal lezen open={Boolean(keuze)} onClose={onClose} eyebrow={`${keuze ? vertaalTag(keuze.tag, refNl) : ''} · ${keuze ? datumMetKerk(keuze.civil, mode) : ''}`} title={refNl} centerTitle maxWidth="max-w-2xl">
             <div>
               {/* NBV21 */}
               <div className="lz-nbv rounded-xl border border-gold/40 bg-gold-pale/60 p-5">

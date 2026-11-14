@@ -18,8 +18,8 @@ import './Vandaag.css';
 // zoom en fx/fy (brandpunt in %) bepalen alleen de uitsnede; het beeld zelf blijft ongewijzigd.
 const CYCLI = [
   // Adem en Etmaal: een aangeleverd kaartbeeld (loopt rechts zelf over in perkament), even breed als de andere kaarten
-  { id: 'adem', titel: 'Adem', onder: 'Het Jezusgebed', zin: 'Het gebed dat met je meegaat.', beeld: '/images/ontdek/adem-kaart.webp', zoom: 1, fx: 0, fy: 50 },
-  { id: 'etmaal', titel: 'Etmaal', onder: 'De uren van de dag', zin: 'De dag geheiligd door gebed.', beeld: '/images/ontdek/etmaal-kaart.webp', zoom: 1, fx: 0, fy: 50 },
+  { id: 'adem', titel: 'Het Jezusgebed', onder: 'Adem', zin: 'Het gebed dat met je meegaat.', beeld: '/images/ontdek/adem-kaart.webp', zoom: 1, fx: 0, fy: 50 },
+  { id: 'etmaal', titel: 'Gebedsuren', onder: 'Etmaal · De uren van de dag', zin: 'De dag geheiligd door gebed.', beeld: '/images/ontdek/etmaal-kaart.webp', zoom: 1, fx: 0, fy: 50 },
   { id: 'week', titel: 'Week', onder: 'De zeven dagen', zin: 'Iedere dag een eigen herinnering.', beeld: '/images/ontdek/week.webp', zoom: 1.45, fx: 50, fy: 42 },
   { id: 'jaar', titel: 'Jaar', onder: 'Het kerkelijk jaar', zin: 'Leven met de feesten en vastentijden.', beeld: '/images/ontdek/jaar.webp', zoom: 1.1, fx: 50, fy: 50 },
   { id: 'pascha', titel: 'Pascha', onder: 'Van het Kruis naar de Verrijzenis', zin: 'De weg naar het feest der feesten.', beeld: '/images/ontdek/pascha.webp', zoom: 1, fx: 50, fy: 22 },

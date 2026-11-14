@@ -264,12 +264,6 @@ export default function Psalmen({ actief }: { actief: boolean }) {
         )}
         <div className={`vg-papier ot-inhoud${lijstMobiel ? ' pm-papier' : ''}`}>
           {!lijstMobiel && <h1 className="sr-only">Psalter</h1>}
-          {/* Mobiel: de inleiding bovenaan (goedgekeurd 30-10-2026); web: onderaan, zoals het was */}
-          {lijstMobiel && (
-            <p className="ot-ps-intro pm-intro">
-              {INTRO} {INTRO_VERVOLG}
-            </p>
-          )}
 
           <div ref={weergaveRef} className="ot-ps-weergave" hidden={lijstMobiel} role="tablist" aria-label="Indeling van de psalmen">
             <button type="button" role="tab" id="ps-tab-psalm" aria-controls="ps-weergave" aria-selected={!perKathisma} tabIndex={perKathisma ? -1 : 0} onClick={() => kiesWeergave(false)} onKeyDown={tabToets}>
@@ -294,6 +288,10 @@ export default function Psalmen({ actief }: { actief: boolean }) {
           {lijstMobiel && !zoekt && (
             <>
               <VerderLezen laatst={laatst} />
+              {/* Mobiel: eerst zoeken en "Begin met lezen", daarna de inleiding (14-11-2026); web: onderaan, zoals het was */}
+              <p className="ot-ps-intro pm-intro">
+                {INTRO} {INTRO_VERVOLG}
+              </p>
               <PsalterVandaag />
               <a className="pm-alle pm-naar-kathismas" href="#psalmen/kathisma">
                 De twintig kathisma’s <ChevronRight aria-hidden="true" />

@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BookOpenText } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { useMobiel } from '../lib/desktop';
-import { addDays, dagInfo, formatDag, formatKerkLang, formatLang, parseYmd, ymd } from '../lib/kalender';
+import { datumMetKerk, addDays, dagInfo, formatDag, formatLang, parseYmd, ymd } from '../lib/kalender';
 import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
 import { NIVEAUS } from '../lib/vasten';
 import { FeestTag, VastenBadge } from './ui';
@@ -38,7 +37,6 @@ function HeiligeKaart({ h, los = false, onOpen }: { h: Heilige; los?: boolean; o
 
 export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Props) {
   const { mode, vandaagYmd, rooster, vraagRooster, heiligen, openLezing } = useApp();
-  const mobiel = useMobiel(); // mobiel: alleen de kerkelijke datum
   const [leesFeest, setLeesFeest] = useState<Resultaat | null>(null);
 
   const dag = useMemo(() => (geselecteerd ? dagInfo(parseYmd(geselecteerd), mode, vandaagYmd) : null), [geselecteerd, mode, vandaagYmd]);
@@ -78,10 +76,10 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
       open
       onClose={onClose}
       kopNav
-      kopDatum={formatDag(mobiel ? dag.kerk : dag.civil)}
+      kopDatum={formatDag(dag.civil)}
       vorigeLabel="Vorige dag"
       volgendeLabel="Volgende dag"
-      eyebrow={mobiel ? formatKerkLang(dag.civil, mode) : `${formatLang(dag.civil)}${mode === 'oud' ? ` · Juliaans ${formatDag(dag.kerk)}` : ''}`}
+      eyebrow={datumMetKerk(dag.civil, mode)}
       title={dag ? dag.feesten[0]?.naam ?? (eerste ? heiligeTitel(eerste.naam) : 'Dag door het jaar') : ''}
       centerTitle
       maxWidth="max-w-4xl"

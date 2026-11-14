@@ -273,3 +273,10 @@
 #top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst > .vm2-naamdag { font-style: italic; color: #7d5218; }
 #top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-pijl { width: 20px; height: 20px; color: #4a3220; }
 #top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij:focus-visible { outline: 3px solid #7d5218; outline-offset: -3px; }
+
+/* Vandaag mobiel: de kerkelijke datum klein onder de burgerlijke (alleen bij de oude kalender; lib/kalender.ts) */
+#top #vandaag .vg-kop .vg-kop-kerkdatum { position: relative; z-index: 2; margin: 2px 0 0; font-family: var(--font-lees); font-size: 15px; font-style: italic; letter-spacing: .02em; color: #f3e3bf; text-shadow: 0 1px 6px rgba(0, 0, 0, .9); }
+
+/* Pijlgebed: een zichtbare actie onder de sierlijn (de hele kaart is de link) */
+#top#top #vandaag .vm2-pijlgebed .vm2-kader-actie { order: 10; display: inline-flex; align-items: center; justify-content: center; gap: 2px; margin-top: 8px; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: #7d5218; }
+#top#top #vandaag .vm2-pijlgebed .vm2-kader-actie svg { width: 16px; height: 16px; }
