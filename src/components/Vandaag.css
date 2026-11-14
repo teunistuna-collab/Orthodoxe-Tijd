@@ -576,14 +576,14 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   .vg-et-uur .vg-et-vers { align-self: center; max-width: 24em; margin: 0 !important; font-size: 21px; line-height: 1.4; }
 }
 
-/* Web (vanaf 768 px): alle koppen behalve die van Vandaag even hoog als die van Jouw voorkeuren (246 px), met het beeld
-   zo geplaatst dat de hangende lamp en de kaarsen in beeld blijven. Mobiel blijft ongewijzigd. */
+/* Web (vanaf 768 px): alle koppen even hoog als die van Kalender (246 px), ook Vandaag, Etmaal, Psalmen, Pascha en
+   Geboorte (14-11-2026), met het beeld zo geplaatst dat de hangende lamp en de kaarsen in beeld blijven. Mobiel blijft ongewijzigd. */
 @media (min-width: 768px) {
   .vg-niskop { padding-top: 40px; padding-bottom: calc(var(--boog) * .75 + 28px); }
-  .vg:not(#vandaag) .vg-kop { height: 246px; min-height: 0; justify-content: center; padding-top: 0; padding-bottom: calc(var(--boog) * .55); }
+  .vg:not(#vandaag) .vg-kop, #vandaag.vg .vg-kop { height: 246px; min-height: 0; justify-content: center; padding-top: 0; padding-bottom: calc(var(--boog) * .55); }
   .vg:not(#vandaag) .vg-kop-achter img:not(.vg-et-banner) { object-position: 50% 42%; }
-  /* Etmaal: op web de eigen brede banner (2,5 : 1), helemaal in beeld: de kop volgt de verhouding van het beeld. */
-  #etmaal.vg-etmaal .vg-kop { height: 40cqw; }
+  /* Vandaag: het medaillon kleiner, zodat medaillon en datum in de kop van 246 px passen */
+  #vandaag .vg-kop .vg-christus { width: 136px; margin-top: 0; }
   /* Etmaal: tijdlijn links, het gekozen gebedsuur ernaast; de gekozen dienst als korte pil (tot de naam en de pijl) */
   .vg-et-twee { display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 72px; align-items: start; max-width: none !important; margin: 14px 0 0 !important; text-align: left; }
   .vg-et-twee > .vg-et-links { grid-column: 1; grid-row: 1; margin-top: 0; }
@@ -664,8 +664,6 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   /* Vandaag: links het gebed (pijlgebed + gebedsuur), rechts de daginformatie (lezingen, heiligen, vasten, cycli) */
   #vandaag .vg-papier > .vg-kolommen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 72px; align-items: start; max-width: 1120px; }
 
-  /* Etmaal: de brede banner (40cqw) wordt op grote schermen te hoog; begrensd, met maan en kerk in beeld */
-  #etmaal.vg-etmaal .vg-kop { height: min(40cqw, 440px); }
   /* Etmaal, Week, Jaar: tijdlijn en gekozen onderdeel als één gecentreerd, evenwichtig blok */
   .vg-et-twee { justify-content: center; }
   #etmaal .vg-et-twee { grid-template-columns: max-content minmax(0, 560px); column-gap: 88px; }

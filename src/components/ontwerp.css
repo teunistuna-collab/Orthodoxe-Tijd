@@ -209,7 +209,7 @@
   .ot-psalmen .ot-ps-icoon { position: relative; display: block; width: auto; height: clamp(170px, 50cqw, 230px); margin: 2px auto 0; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .45)); }
 }
 @media (min-width: 768px) { .ot-psalmen .ot-ps-icoon { display: none; } }
-@media (min-width: 768px) { #psalmen.ot-redesign.vg .vg-kop { height: 33.333cqw; } #psalmen.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 50%; } } /* web: het hele icoon van David (beeld 3 : 1) */
+@media (min-width: 768px) { #psalmen.ot-redesign.vg .vg-kop-achter img.ot-banner { object-position: 50% 18%; } } /* web: het hoofd van David in beeld */
 /* "salter" op de voetlijn van de P: het tekstblok zakt tot de onderkant van de letter */
 .ot-redesign .ot-zoekveld { display: flex; align-items: center; gap: 10px; min-height: 48px; margin: 16px 0 12px; padding: 0 14px; border: 1px solid rgba(167, 118, 52, .55); border-radius: 8px; background: rgba(255, 250, 238, .6); }
 .ot-redesign .ot-zoekveld svg { flex: none; width: 20px; height: 20px; color: var(--ot-inkt); }
@@ -512,8 +512,8 @@ html.lees-nacht #top#top#top#top#top#top#top#top .ot-lezer .ot-lezer-knoppen > b
 /* Web: de tekstgroep in de nis ingetogen en optisch gecentreerd (aanduiding, titel, sierlijn, ondertitel), voor Pascha
    en Geboortecyclus gelijk; mobiel blijft zoals hij was. */
 @media (min-width: 768px) {
-  :is(#pascha, #geboorte).ot-redesign .vg-kop.vg-niskop { padding-top: clamp(44px, 5.4cqw, 78px); padding-bottom: calc(var(--boog) * .75 + clamp(16px, 2cqw, 28px)); }
-  :is(#pascha, #geboorte) .vg-niskop .vg-nis-label { margin-bottom: 16px !important; font-size: 14px; }
+  :is(#pascha, #geboorte).ot-redesign .vg-kop.vg-niskop { height: 246px; padding-top: 0; padding-bottom: 28px; } /* web: even hoog als Kalender */
+  :is(#pascha, #geboorte) .vg-niskop .vg-nis-label { margin-bottom: 6px !important; font-size: 14px; }
   :is(#pascha, #geboorte) .vg-niskop .vg-titel { max-width: min(80%, 760px); font-size: clamp(36px, 3.1cqw, 42px); line-height: 1.15; }
   :is(#pascha, #geboorte) .vg-niskop .vg-verd-sierlijn { margin: 20px auto 0; }
   :is(#pascha, #geboorte) .vg-niskop .vg-nis-onder { max-width: min(76%, 620px); margin-top: 18px !important; font-size: 18px; line-height: 1.5; }
