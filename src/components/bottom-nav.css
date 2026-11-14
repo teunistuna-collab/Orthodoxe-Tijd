@@ -10,17 +10,22 @@
     border: 0;
     border-top: 1px solid rgba(216, 173, 99, .35);
     border-radius: 0;
-    /* rustig vlak (14-11-2026): effen diep blauw met een zachte verloop, zonder vlekken of korrel achter de labels */
-    background: linear-gradient(180deg, var(--nav-licht), var(--nav-blauw) 40%, var(--nav-donker));
+    /* verweerde verf: zachte lichte en donkere vlekken, een korrel (feTurbulence) en een donkerder onderrand */
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .9 0 0 0 0 .7 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23k)'/%3E%3C/svg%3E"),
+      radial-gradient(60% 120% at 18% 20%, rgba(28, 75, 104, .75), transparent 70%),
+      radial-gradient(50% 120% at 78% 70%, rgba(28, 75, 104, .55), transparent 70%),
+      radial-gradient(40% 90% at 52% 100%, rgba(9, 40, 61, .8), transparent 70%),
+      linear-gradient(180deg, var(--nav-licht), var(--nav-blauw) 35%, var(--nav-donker));
     box-shadow: inset 0 1px 0 rgba(255, 236, 200, .06), 0 -4px 14px rgba(5, 18, 28, .35);
   }
   #top#top .bottom-nav:before { content: none; }
   .bottom-nav ul { position: relative; z-index: 1; grid-template-columns: repeat(5, minmax(0, 1fr)) !important; padding: 0; }
   /* fijne verticale scheidingen tussen de tabbladen */
   .bottom-nav li + li { box-shadow: inset 1px 0 0 rgba(216, 173, 99, .18); }
-  #top#top#top#top .bottom-nav a { min-height: 60px !important; padding: 6px 0 7px; color: #ece0c6; } /* labels licht perkament, leesbaar (contrast > 9 : 1) */
+  #top#top#top#top .bottom-nav a { min-height: 60px !important; padding: 7px 0 8px; color: rgba(216, 173, 99, .82); }
   .bottom-nav svg { width: 24px; height: 24px; color: rgba(216, 173, 99, .82); stroke-width: 1.4; }
-  .bottom-nav span { font-family: var(--font-lees); font-size: 15px; font-weight: 500; line-height: 1.15; letter-spacing: 0; white-space: nowrap; }
+  .bottom-nav span { font-family: var(--font-lees); font-size: 13px; font-weight: 500; letter-spacing: .01em; }
   /* actief: helder goud, iets prominenter, met een dunne gouden lijn onder het label */
   #top#top#top#top .bottom-nav .is-actief, .bottom-nav .is-actief svg { color: #f0c977; }
   .bottom-nav .is-actief svg { stroke-width: 1.8; filter: drop-shadow(0 0 4px rgba(240, 201, 119, .35)); }
