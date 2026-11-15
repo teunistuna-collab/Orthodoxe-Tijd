@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { naamVan, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
-import { bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, kortVan, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
+import { AANBIDDING, bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, kortVan, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { useGekozenVorm } from '../lib/jezusgebed';
 import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
@@ -98,7 +98,7 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
       : null;
   const ritme = [dag.toon ? `Toon ${dag.toon}` : null, dag.seizoen, dag.vasten.label.toLowerCase()].filter(Boolean).join(' · ');
   const tebidden = delen?.filter((o) => o.beschikbaar) ?? [];
-  const kort = delen ? kortVan(d, delen).length - 1 : 1; // aantal kernverzen in Kort
+  const kort = delen ? kortVan(d, delen).filter((s) => s.soort === 'kernvers').length : 1; // aantal kernverzen in Kort
   return (
     <Laag className="gw gw-begin" label={gebedTitel(d)}>
       <div className="gw-banner">
@@ -198,6 +198,13 @@ function StapInhoud({ stap }: { stap: Onderdeel | KortStap }) {
       </>
     );
   if (stap.soort === 'jezusgebed') return <Jezusgebed />;
+  if (stap.soort === 'aanbidding')
+    return (
+      <>
+        <h1 className="sr-only" tabIndex={-1}>Aanbidding</h1>
+        {AANBIDDING.map((alinea) => <p key={alinea} className="gw-gebed">{alinea}</p>)}
+      </>
+    );
   if (stap.soort === 'psalm') return <PsalmStap nr={stap.nr} titel={stap.titel} />;
   const tekst = stap.soort === 'gebed' ? GEBEDEN.find((g) => g.id === stap.id)?.tekst : stap.tekst;
   return (

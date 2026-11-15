@@ -57,6 +57,7 @@
 .gw-groot cite { display: block; margin-top: 12px; font-family: var(--font-titel); font-size: 12px; font-style: normal; letter-spacing: .16em; color: var(--gw-accent); }
 .gw-noot { margin-top: 22px; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: var(--gw-zacht); }
 .gw-gebed { white-space: pre-line; text-align: left; font-family: var(--font-lees); font-size: 20px; line-height: 1.55; }
+.gw-gebed + .gw-gebed { margin-top: .9em; } /* twee alinea's, zoals de aanbidding in Kort */
 #top#top#top#top#top#top#top#top#top .gw .pm-verzen { text-align: left; color: var(--gw-tekst); }
 .gw-voet { flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 20px calc(18px + env(safe-area-inset-bottom)); }
 #top#top#top#top#top#top#top#top#top .gw-verder { display: inline-flex; align-items: center; justify-content: center; min-width: 200px; min-height: 52px; padding: 0 28px; border: 1px solid var(--gw-accent); border-radius: 999px; font-family: var(--font-titel); font-size: 14px; letter-spacing: .16em; text-transform: uppercase; color: var(--gw-accent) !important; text-decoration: none; }

@@ -49,13 +49,13 @@ assert.equal(onderdelenVan(uur('Completen'), null, () => false, false).some((o) 
 // daarna het Jezusgebed
 const refs = (stappen: ReturnType<typeof kortVan>) => stappen.map((s) => (s.soort === 'kernvers' ? s.kernvers.reference.replace('Psalm Kernvers: ', '') : s.soort));
 const uurMet = (titel: string, file: string) => onderdelenVan(uur(titel), leesUurBestand(JSON.parse(readFileSync(`public/data/uren/${file}.json`, 'utf8'))), alles, true);
-assert.deepEqual(refs(kortVan(uur('Derde Uur'), uurMet('Derde Uur', 'derde-uur'))), ['24:4', '50:12', 'jezusgebed']);
-assert.deepEqual(refs(kortVan(uur('Middernachtdienst'), uurMet('Middernachtdienst', 'middernacht'))), ['50:12', '118:12', 'jezusgebed']);
-assert.deepEqual(refs(kortVan(uur('Vespers'), uurMet('Vespers', 'vespers'))), ['103:24', 'jezusgebed']);
+assert.deepEqual(refs(kortVan(uur('Derde Uur'), uurMet('Derde Uur', 'derde-uur'))), ['aanbidding', '24:4', '50:12', 'jezusgebed']);
+assert.deepEqual(refs(kortVan(uur('Middernachtdienst'), uurMet('Middernachtdienst', 'middernacht'))), ['aanbidding', '50:12', '118:12', 'jezusgebed']);
+assert.deepEqual(refs(kortVan(uur('Vespers'), uurMet('Vespers', 'vespers'))), ['aanbidding', '103:24', 'jezusgebed']);
 // Zonder aangeleverd bestand: de psalmen van het uur zelf
-assert.deepEqual(refs(kortVan(uur('Vespers'), onderdelenVan(uur('Vespers'), null, alles, true))), ['103:24', 'jezusgebed']);
+assert.deepEqual(refs(kortVan(uur('Vespers'), onderdelenVan(uur('Vespers'), null, alles, true))), ['aanbidding', '103:24', 'jezusgebed']);
 // Geen psalm met een bekend kernvers: het eigen kernvers van het uur
-assert.deepEqual(refs(kortVan(uur('Vespers'), [])), ['103:24', 'jezusgebed']);
+assert.deepEqual(refs(kortVan(uur('Vespers'), [])), ['aanbidding', '103:24', 'jezusgebed']);
 
 // Stapnummers (1-gebaseerd in het adres, 0-gebaseerd terug)
 assert.equal(stapIndex('1', 2), 0);
