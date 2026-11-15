@@ -202,7 +202,7 @@ function StapInhoud({ stap }: { stap: Onderdeel | KortStap }) {
     return (
       <>
         <h1 className="sr-only" tabIndex={-1}>Aanbidding</h1>
-        {AANBIDDING.map((alinea) => <p key={alinea} className="gw-gebed">{alinea}</p>)}
+        {AANBIDDING.map((alinea) => <p key={alinea} className="gw-gebed gw-aanbidding">{alinea}</p>)}
       </>
     );
   if (stap.soort === 'psalm') return <PsalmStap nr={stap.nr} titel={stap.titel} />;
