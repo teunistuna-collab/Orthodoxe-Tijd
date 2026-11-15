@@ -125,7 +125,7 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
                 value={invoer}
                 onChange={(e) => setInvoer(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && eerste) kies(eerste);
+                  if (e.key === 'Enter' && !e.nativeEvent.isComposing && eerste) kies(eerste); // niet tijdens samengestelde invoer (IME)
                 }}
                 placeholder="Zoek een gebed, psalm, feest, heilige of datum"
                 aria-label="Zoeken"
