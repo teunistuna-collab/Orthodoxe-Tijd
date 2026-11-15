@@ -9,7 +9,7 @@
 .km-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 78% 40%; }
 .km-banner:before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(10, 5, 2, .55), rgba(10, 5, 2, .1) 45%, rgba(10, 5, 2, .45)), linear-gradient(90deg, rgba(10, 5, 2, .35), transparent 55%); }
 .km-banner .am-merk { position: absolute; top: 14px; left: 0; right: 0; z-index: 2; text-align: center; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); }
-#top#top#top#top#top#top#top#top#top#top .km-titel { position: absolute; left: 18%; top: 46%; z-index: 2; margin: 0; font-family: var(--font-lees) !important; font-size: 32px; font-weight: 400; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--am-ivoor) !important; text-shadow: 0 2px 10px rgba(0, 0, 0, .7); }
+#top#top#top#top#top#top#top#top#top#top .km-titel { position: absolute; left: 0; right: 0; top: 46%; text-align: center; z-index: 2; margin: 0; font-family: var(--font-lees) !important; font-size: 32px; font-weight: 400; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--am-ivoor) !important; text-shadow: 0 2px 10px rgba(0, 0, 0, .7); }
 
 /* Perkamentkaarten (maand en dag) */
 .km-maand, .km-dag { position: relative; z-index: 3; margin: 0 4px; border: 1px solid rgba(185, 148, 85, .7); background: #f3e4c6 url('/images/vandaag/papyrus-licht.webp') center top / 100% auto; box-shadow: inset 0 0 0 2px rgba(255, 248, 232, .35), 0 2px 6px rgba(10, 5, 2, .35); color: #2b1a0e; }
