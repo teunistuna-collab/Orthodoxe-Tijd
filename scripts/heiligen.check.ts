@@ -53,6 +53,11 @@ assert.deepEqual(categorieenVan('De heilige martelares Columba'), ['martelaren',
 assert.equal(heiligeTitel('Serafim van Sarov'), 'H. Serafim van Sarov');
 assert.equal(heiligeTitel('Profeet Malachias'), 'Profeet Malachias');
 
+// Lage Landen gekoppeld aan dezelfde persoon op dezelfde dag in het Heiligenjaar (met de hand nagelezen, 16-11-2026)
+for (const [naam, id] of [['Walburgis', 'hj-0225-8'], ['Gertrudis van Nijvel', 'hj-0317-8'], ['Bonifatius', 'hj-0605-12'], ['Adelbert van Egmond', 'hj-0625-10'], ['Eerbiedwaardige Oda van Amay', 'hj-1023-10']] as const) {
+  assert.equal(LAGE_LANDEN.find((h) => h.naam === naam)?.heiligenjaar, id, naam);
+}
+
 // Oda van Sint-Oedenrode: 28 november (kerkelijk), zoals in het Heiligenjaar (heiligen1128.htm); gekoppeld aan die vermelding
 {
   const oda = LAGE_LANDEN.find((h) => h.naam === 'Oda van Sint-Oedenrode');
