@@ -2389,3 +2389,7 @@ html.lees-nacht #top#top#top#top .pk-datum{color:#e7a08f}
 @media (min-width: 768px) {
   #top#top#top#top#top .exact-modal-frame.pk { width: min(920px, 100%) !important; }
 }
+
+/* Perkament schuift overal mee met de inhoud (16-11-2026): de achtergrondlaag van de app staat niet meer vast maar loopt
+   over de hele pagina (in banen onder elkaar), zodat de vlekken in de textuur niet als vuil op het scherm blijven staan. */
+#top#top#top::before{position:absolute;background-size:100% auto;background-repeat:repeat-y}

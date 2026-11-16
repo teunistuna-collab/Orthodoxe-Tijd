@@ -135,3 +135,7 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .am-lees-titel { co
   .am-bid-tekst.adem-ritme.is-actief .adem-in { animation: adem-in var(--adem-duur, 10s) steps(1, end) infinite !important; }
   .am-bid-tekst.adem-ritme.is-actief .adem-uit { animation: adem-uit var(--adem-duur, 10s) steps(1, end) infinite !important; }
 }
+
+/* Alle lagen (leesvensters, gebedsuur, perioden, feesten): de achtergrond schuift mee met de inhoud. De laag scrollt zelf;
+   zonder "local" bleef de textuur staan en leken de vlekken vuil op het scherm (16-11-2026). */
+html body .am-laag.am-laag { background-attachment: local; }
