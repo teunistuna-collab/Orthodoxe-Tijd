@@ -31,7 +31,7 @@ export const LAGE_LANDEN_TEKSTEN: Record<string, string[]> = {
   ],
   "oda": [
     "Dit is een lastige, want er wordt niet gespecificeerd welke Oda op het icoon staat.",
-    "De Oda van 27 november werd blind geboren, maar werd hiervan genezen bij het graf van de heilige Lambertus. Uit dankbaarheid wilde ze haar leven aan God wijden, maar haar vader had andere plannen. Ze ontvluchtte hem en vestigde zich uiteindelijk na een pelgrimage naar Rome in Brabant. Om precies te zijn het plaatsje Rhode. Deze plaats wordt sinds haar dood Sint-Oedenrode genoemd. Na een godvruchtig leven ontsliep ze in 726, slechts 36 zomers jong.",
+    "De Oda van 28 november werd blind geboren, maar werd hiervan genezen bij het graf van de heilige Lambertus. Uit dankbaarheid wilde ze haar leven aan God wijden, maar haar vader had andere plannen. Ze ontvluchtte hem en vestigde zich uiteindelijk na een pelgrimage naar Rome in Brabant. Om precies te zijn het plaatsje Rhode. Deze plaats wordt sinds haar dood Sint-Oedenrode genoemd. Na een godvruchtig leven ontsliep ze in 726, slechts 36 zomers jong.",
     "De Oda van 23 oktober was getrouwd met hertog Bozo. Na zijn dood besloot ze een hospitaal te bouwen naast haar paleis, en al haar geld en tijd aan de armen te besteden. Dagelijks zocht ze de zieken op, overtuigd dat ze Christus Zelf diende. Zij ontslapen in 723.",
     "Zoals met meer heiligen is het lastig voor te stellen dat het twee verschillende mensen waren, hoewel hun leven en afkomst compleet anders zijn beschreven. Wellicht is het zoals in onze tijd, dat je ineens tientallen Sanne’s en Julia’s hebt."
   ],

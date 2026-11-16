@@ -21,6 +21,6 @@ export const LAGE_LANDEN: LageLandenHeilige[] = [
   {md:"10-23",naam:"Eerbiedwaardige Oda van Amay",titel:"Eerbiedwaardige Oda van Amay",kort:"",nl:true},
   {md:"11-7",naam:"Willibrord van Utrecht",titel:"Aartsbisschop van Utrecht, apostel der Friezen (†739)",kort:"Uit Northumbrië gezonden verlichter van de Lage Landen; begraven in Echternach.",nl:true,heiligenjaar:"hj-1107-3"},
   {md:"11-12",naam:"Lebuinus van Deventer",titel:"Priester, missionaris (†ca. 775)",kort:"Predikte onder de Saksen aan de IJssel; stichter van de kerk van Deventer.",nl:true},
-  {md:"11-27",naam:"Oda van Sint-Oedenrode",titel:"Maagd en kluizenares",kort:"",nl:true},
+  {md:"11-28",naam:"Oda van Sint-Oedenrode",titel:"Maagd en kluizenares",kort:"",nl:true,heiligenjaar:"hj-1128-7"}, // 28 november volgens het Heiligenjaar (heiligen1128.htm)
   {md:"11-29",naam:"Radboud van Utrecht",titel:"Bisschop (†917)",kort:"Bisschop van Utrecht in ballingschap te Deventer; geleerde en dichter.",nl:true,heiligenjaar:"hj-1129-8"},
 ];

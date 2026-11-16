@@ -53,5 +53,12 @@ assert.deepEqual(categorieenVan('De heilige martelares Columba'), ['martelaren',
 assert.equal(heiligeTitel('Serafim van Sarov'), 'H. Serafim van Sarov');
 assert.equal(heiligeTitel('Profeet Malachias'), 'Profeet Malachias');
 
+// Oda van Sint-Oedenrode: 28 november (kerkelijk), zoals in het Heiligenjaar (heiligen1128.htm); gekoppeld aan die vermelding
+{
+  const oda = LAGE_LANDEN.find((h) => h.naam === 'Oda van Sint-Oedenrode');
+  assert.equal(oda?.md, '11-28');
+  assert.equal(oda?.heiligenjaar, 'hj-1128-7');
+}
+
 const tel = (t: string) => ALLE_HEILIGEN.filter((h) => h.type === t).length;
 console.log(`heiligen: alle controles geslaagd (${ALLE_HEILIGEN.length} vermeldingen: ${tel('saint')} heiligen, ${tel('feast')} feesten, ${tel('other')} overig; ${LAGE_LANDEN.length} Lage Landen)`);
