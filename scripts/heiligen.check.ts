@@ -58,6 +58,13 @@ for (const [naam, id] of [['Walburgis', 'hj-0225-8'], ['Gertrudis van Nijvel', '
   assert.equal(LAGE_LANDEN.find((h) => h.naam === naam)?.heiligenjaar, id, naam);
 }
 
+// Lebuinus: 16 november, zoals in het Heiligenjaar (heiligen1116.htm), en daaraan gekoppeld
+{
+  const lebuinus = LAGE_LANDEN.find((h) => h.naam === 'Lebuinus van Deventer');
+  assert.equal(lebuinus?.md, '11-16');
+  assert.equal(lebuinus?.heiligenjaar, 'hj-1116-6');
+}
+
 // Oda van Sint-Oedenrode: 28 november (kerkelijk), zoals in het Heiligenjaar (heiligen1128.htm); gekoppeld aan die vermelding
 {
   const oda = LAGE_LANDEN.find((h) => h.naam === 'Oda van Sint-Oedenrode');

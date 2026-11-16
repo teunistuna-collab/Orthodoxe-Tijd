@@ -269,7 +269,7 @@ export const OVERIGE_VASTE: Feest[] = [
   { id: 'bonifatius', naam: 'H. Bonifatius, martelaar te Dokkum', soort: 'gedachtenis', md: '6-5', rang: 3, toelichting: 'Apostel van de Friezen en Germanen, in 754 bij Dokkum gedood.' },
   { id: 'servatius', naam: 'H. Servatius van Maastricht', soort: 'gedachtenis', md: '5-13', rang: 2, toelichting: 'Bisschop van Tongeren en Maastricht (†384), tijdgenoot van Athanasius.' },
   { id: 'adalbert', naam: 'H. Adalbert van Egmond', soort: 'gedachtenis', md: '6-25', rang: 2, toelichting: 'Diaken en missionaris in Kennemerland (†740); bij zijn graf ontstond de abdij van Egmond.' },
-  { id: 'lebuinus', naam: 'H. Lebuinus van Deventer', soort: 'gedachtenis', md: '11-12', rang: 2 },
+  { id: 'lebuinus', naam: 'H. Lebuinus van Deventer', soort: 'gedachtenis', md: '11-16', rang: 2 }, // zoals in het Heiligenjaar
   { id: 'radboud', naam: 'H. Radboud van Utrecht', soort: 'gedachtenis', md: '11-29', rang: 2 },
   { id: 'odulfus', naam: 'H. Odulfus van Utrecht', soort: 'gedachtenis', md: '6-12', rang: 2 },
   { id: 'jeroen', naam: 'H. Jeroen van Noordwijk, martelaar', soort: 'gedachtenis', md: '8-17', rang: 2 },
