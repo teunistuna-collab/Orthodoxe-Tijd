@@ -43,4 +43,11 @@ assert.ok(kruis.soort === 'feest' && kruis.feest.id === 'kruisverheffing', `Krui
 const volgorde = zoek('kruis', index, vandaag, 'oud').map((g) => g.titel);
 if (GEBEDEN_ZICHTBAAR) assert.ok(volgorde.indexOf('Feesten') < volgorde.indexOf('Gebeden'), `groepvolgorde: ${volgorde.join(', ')}`);
 
+// Datums: juliaans eerst kerkelijk, dan burgerlijk, en voor heilige en feest gelijk; gregoriaans één datum
+const onder = (q: string, groep: string, mode: 'oud' | 'nieuw') => zoek(q, index, vandaag, mode).find((g) => g.titel === groep)?.items[0]?.onder ?? '';
+assert.equal(onder('willibrord', 'Feesten', 'oud'), 'Vast · Kerkelijk 7 november · vrijdag 20 november 2026');
+assert.ok(onder('willibrord', 'Heiligen', 'oud').startsWith('Kerkelijk 7 november · vrijdag 20 november 2026'), onder('willibrord', 'Heiligen', 'oud'));
+assert.equal(onder('willibrord', 'Feesten', 'nieuw'), 'Vast · zaterdag 7 november 2026');
+assert.ok(onder('willibrord', 'Heiligen', 'nieuw').startsWith('zaterdag 7 november 2026'), onder('willibrord', 'Heiligen', 'nieuw'));
+
 console.log('zoeken: alle controles geslaagd');

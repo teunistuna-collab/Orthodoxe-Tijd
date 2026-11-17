@@ -280,3 +280,19 @@
 /* Pijlgebed: een zichtbare actie onder de sierlijn (de hele kaart is de link) */
 #top#top #vandaag .vm2-pijlgebed .vm2-kader-actie { order: 10; display: inline-flex; align-items: center; justify-content: center; gap: 2px; margin-top: 8px; font-family: var(--font-lees); font-size: 16px; font-style: italic; color: #7d5218; }
 #top#top #vandaag .vm2-pijlgebed .vm2-kader-actie svg { width: 16px; height: 16px; }
+
+/* Compacter gebedsgedeelte (17-11-2026): minder verticale witruimte rond het pijlgebed en het actuele gebedsuur, zodat op
+   een gangbaar mobiel scherm (bijv. 390 × 664, Safari met balken) ook de naam van het uur boven de onderbalk staat. Het
+   sierkader, de tekstgrootte en de hele kaart als tikgebied blijven gelijk. */
+#top#top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-pijlgebed.m-kader { margin: 0; padding: 4px 12px 2px; }
+#top#top#top#top#top#top#top#top#top#top#top#top .vm2 .m-kader h2.vm2-kader-label { margin-bottom: 2px; }
+#top#top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-pijlgebed .am-sierlijn { margin: 2px auto 0; }
+#top#top#top#top #vandaag .vm2-pijlgebed .vm2-kader-actie { margin-top: 2px; min-height: 28px; }
+#top#top#top#top#top#top#top#top#top#top .vm2-kaart.vm2-uur { padding-top: 12px; padding-bottom: 14px; }
+#top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-uur h2.vm2-label { margin-bottom: 4px; }
+
+/* De liturgische dag: icoon, tekst en pijl op vaste verticale lijnen; lange namen en verwijzingen breken netjes af */
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-icoon { justify-self: center; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-pijl { justify-self: end; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst { min-width: 0; }
+#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst :is(b, span) { max-width: 100%; overflow-wrap: break-word; hyphens: auto; }

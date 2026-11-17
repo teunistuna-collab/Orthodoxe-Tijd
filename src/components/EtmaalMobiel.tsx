@@ -5,7 +5,7 @@ import { ETMAAL_INFO, ETMAAL_INLEIDING } from '../lib/cyclusTeksten';
 import { dienstVanHetUur, naamVan, serviceConfig, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { OPEN_DIENST_EVENT } from '../lib/events';
 import { gaNaar, terugNaarGroep } from '../lib/navigatie';
-import { vorigeAdres } from '../lib/vorigAdres';
+import { herkomstVan, vorigeAdres } from '../lib/vorigAdres';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
 import Psalterlezing from './Psalterlezing';
 import DienstTekst from './DienstTekst';
@@ -116,11 +116,12 @@ function Overzicht({ nu }: { nu: ServiceMapping }) {
 // 2. De dienst
 function Dienst({ d }: { d: ServiceMapping }) {
   const slug = slugVan(d);
-  // Kwam je vanaf Bidden of Vandaag (de kaart van het actuele uur), dan gaat Terug daarheen terug
-  const [herkomst] = useState(() => (/^#(bidden|vandaag)$/.test(vorigeAdres()) ? vorigeAdres() : null));
+  // Kwam je van buiten Etmaal (Vandaag, Bidden, Ontdek, zoeken), dan gaat Terug daarheen terug; ook nadat je vanuit
+  // deze dienst hebt gebeden of "Over dit moment" las. Vanuit het overzicht (of rechtstreeks geopend): naar Etmaal.
+  const [herkomst] = useState(() => herkomstVan(`#etmaal/${slug}`, '#etmaal'));
   return (
     <Laag className="em-laag em-dienst" label={naamVan(d)}>
-      <Kop terug={herkomst ?? '#etmaal'} merk slim />
+      <Kop terug={herkomst} merk slim />
       <div className="em-dienst-beeld">
         <img src={beeldVan(d).src} alt="" width={beeldVan(d).b} height={beeldVan(d).h} decoding="async" />
         <div className="em-dienst-tekst">
@@ -228,6 +229,27 @@ function BidIngang({ d, pad }: { d: ServiceMapping; pad: string[] }) {
   );
 }
 
+// Een verdieping (bijv. "Over de gebedsuren" vanuit Ontdek): Terug gaat naar die ingang, anders naar Etmaal.
+function EtmaalLees({ info }: { info: InfoKey }) {
+  const [terug] = useState(() => herkomstVan(`#etmaal/lees/${info}`, '#etmaal'));
+  return (
+    <LeesWeergave slim className="em-laag em-lees" titel={ETMAAL_INFO[info].title} ondertitel={ETMAAL_INFO[info].subtitle} onder={ETMAAL_INLEIDING[info]} terug={terug} deelPad={`etmaal/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
+      <PopupTekst inhoud={ETMAAL_INFO[info]} />
+      {/* Van buiten Etmaal (Ontdek): verder naar de uren zelf en de andere verdiepingen */}
+      {terug !== '#etmaal' && (
+        <ul className="em-lijst em-verder">
+          <li>
+            <a href="#etmaal">
+              <span>Alle gebedsuren en verdieping</span>
+              <ChevronRight className="am-pijl" aria-hidden="true" />
+            </a>
+          </li>
+        </ul>
+      )}
+    </LeesWeergave>
+  );
+}
+
 export default function EtmaalMobiel() {
   const onderdeel = useOnderdeel();
   const nu = useNuDienst();
@@ -253,11 +275,7 @@ export default function EtmaalMobiel() {
       {/* key: een ander uur krijgt een eigen terugadres (anders bleef dat van het eerst geopende uur staan) */}
       {dienst && tweede === 'bid' && <BidIngang key={slugVan(dienst)} d={dienst} pad={delen.slice(2)} />}
       {dienst && tweede === 'psalmen' && <Doorsturen adres={bidPad(slugVan(dienst))} />}
-      {info && (
-        <LeesWeergave slim className="em-laag em-lees" titel={ETMAAL_INFO[info].title} ondertitel={ETMAAL_INFO[info].subtitle} onder={ETMAAL_INLEIDING[info]} terug="#etmaal" deelPad={`etmaal/lees/${info}`} boven={<span className="em-ornament">{SIERKRUIS}</span>}>
-          <PopupTekst inhoud={ETMAAL_INFO[info]} />
-        </LeesWeergave>
-      )}
+      {info && <EtmaalLees key={info} info={info} />}
     </>
   );
 }

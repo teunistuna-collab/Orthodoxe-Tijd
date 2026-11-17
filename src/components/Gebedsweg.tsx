@@ -59,7 +59,7 @@ export default function Gebedsweg({ d, pad, terug, slim, extra }: { d: ServiceMa
   const nacht = useNacht(d);
   const slug = slugVan(d);
   const [weg, n] = pad;
-  if (weg === 'einde') return <Afsluiting d={d} nacht={nacht} />;
+  if (weg === 'einde') return <Afsluiting d={d} nacht={nacht} terug={terug} />;
   if (weg === 'kort' || weg === 'heel') {
     if (!delen) return null; // het uurbestand laadt nog (kort)
     const stappen: Array<Onderdeel | KortStap> = weg === 'kort' ? kortVan(d, delen) : delen.filter((o) => o.beschikbaar);
@@ -243,15 +243,19 @@ function PsalmStap({ nr, titel }: { nr: number; titel: string }) {
   );
 }
 
+// Waar "Terug" na het bidden heen gaat, in woorden: de ingang waarvandaan het uur werd geopend.
+const INGANG: Record<string, string> = { '#vandaag': 'Vandaag', '#bidden': 'Bidden', '#cycli': 'Ontdek', '#etmaal': 'Etmaal' };
+const terugTekst = (terug: string) => (INGANG[terug] ? `Terug naar ${INGANG[terug]}` : terug.startsWith('#etmaal/') ? 'Terug naar het gebedsuur' : 'Terug');
+
 // 3. De afsluiting
-function Afsluiting({ d, nacht }: { d: ServiceMapping; nacht: boolean }) {
+function Afsluiting({ d, nacht, terug }: { d: ServiceMapping; nacht: boolean; terug: string }) {
   useSchermAan(true);
   return (
     <Laag className={`gw gw-einde${nacht ? ' is-nacht' : ''}`} label={`${gebedTitel(d)}: einde`}>
       <h1 className="sr-only" tabIndex={-1}>Einde van {gebedTitel(d).toLowerCase()}</h1>
       <span className="gw-kruis">{SIERKRUIS}</span>
       <Kernvers kernvers={d.kernvers} />
-      <a className="gw-verder" href="#vandaag">Terug naar Vandaag</a>
+      <a className="gw-verder" href={terug}>{terugTekst(terug)}</a>
     </Laag>
   );
 }

@@ -241,6 +241,64 @@ export function lezingSoort(refNl: string): LezingSoort {
   return 'apostel';
 }
 
+const SOORT_LABEL: Record<LezingSoort, string> = { evangelie: 'Evangelie', apostel: 'Apostellezing', oud: 'Lezing uit het Oude Testament' };
+
+// Tags die een dienst of moment van de dag noemen (Metten, Uren, Vespers, de zondag vóór het feest …), geen heilige.
+const DIENST_TAG = /^(Matins|Vespers|Liturgy|Royal Hours|Cross Procession|Blessing of Waters|Bridegroom|At the|After the|Sunday|Saturday|Gospel$|Epistle$|\d+(st|nd|rd|th) (Hour|Matins))/;
+// Algemene gedachtenissen zonder eigen naam: met lidwoord, zodat de kop leest als "Lezingen voor de Moeder Gods".
+const GEDACHTENIS: Record<string, string> = {
+  Theotokos: 'de Moeder Gods', Forerunner: 'de Voorloper', Apostle: 'de apostel', Apostles: 'de apostelen', Saint: 'de heilige',
+  Saints: 'de heiligen', Martyr: 'de martelaar', Martyrs: 'de martelaren', Venerable: 'de eerbiedwaardige',
+  Venerables: 'de eerbiedwaardigen', Fathers: 'de heilige vaders', Hierarchs: 'de Drie Hiërarchen', Hieromartyr: 'de priestermartelaar',
+  'Great-martyr': 'de grootmartelaar', Unmercenaries: 'de onbaatzuchtigen', Prophet: 'de profeet', 'Hieromartyr and Prophet': 'de priestermartelaar en profeet',
+  'Equal-to-the-Apostles': 'de apostelgelijke', 'Equals-to-the-Apostles': 'de apostelgelijke', 'Equals-to-the Apostles': 'de apostelgelijke',
+  Angel: 'de engel', Angels: 'de engelen', Departed: 'de overledenen', Ancestors: 'de voorvaderen', 'Passion-bearers': 'de lijdensdragers',
+  'Royal Martyrs': 'de keizerlijke martelaren', Protomartyr: 'de eerste martelaar', Cross: 'het Kruis', Meeting: 'de Ontmoeting des Heren',
+  Circumcision: 'de Besnijdenis des Heren', Robe: 'het Gewaad van de Moeder Gods', Image: 'het icoon niet door mensenhanden gemaakt',
+  'The Universal Exaltation': 'de Kruisverheffing',
+};
+
+export interface LezingInGroep extends HtcLezingRef {
+  refNl: string;
+  /** Het type lezing, bijv. "Apostellezing", "Evangelie" of "Evangelie van de Metten" */
+  type: string;
+}
+export interface LezingGroep {
+  titel: string;
+  lezingen: LezingInGroep[];
+}
+
+/** De lezingen van een dag in groepen: eerst "Lezingen van de dag", dan per heilige of gedachtenis "Lezingen voor …".
+ *  Varianten van dezelfde tag ("St. Spyridon", "St.Spyridon", "Epistle, Theotokos") vallen in één groep met één naam;
+ *  een groep zonder lezingen komt er niet. */
+export function groepeerLezingen(lijst: HtcLezingRef[]): LezingGroep[] {
+  const groepen = new Map<string, LezingGroep>();
+  for (const l of lijst) {
+    const tag = l.tag.replace(/^\(|\)$/g, '').replace(/�/g, '-').replace(/\b(Sts?)\.(?=\S)/g, '$1. ').replace(/\s+/g, ' ').trim();
+    const refNl = vertaalRef(l.ref);
+    const soort = SOORT_LABEL[lezingSoort(refNl)];
+    // "Epistle, Theotokos" / "Vespers, Theotokos": het deel na de komma is de gedachtenis
+    const m = /^(Epistle|Gospel|Vespers), (.+)$/.exec(tag);
+    const wie = m && !/Reading|Gospel|Epistle/.test(m[2]) ? m[2] : tag;
+    let sleutel: string, titel: string, type: string;
+    if (!wie || DIENST_TAG.test(wie)) {
+      sleutel = '';
+      titel = 'Lezingen van de dag';
+      const dienst = tag ? vertaalTag(tag, refNl) : '';
+      type = !dienst ? soort : /Evangelie|lezing|Apostel/i.test(dienst) ? dienst : `${dienst} · ${soort}`;
+    } else {
+      sleutel = wie;
+      titel = `Lezingen voor ${GEDACHTENIS[wie] ?? vertaalTag(wie, refNl)}`;
+      type = m?.[1] === 'Vespers' ? `Vespers · ${soort}` : soort;
+    }
+    const g = groepen.get(sleutel) ?? { titel, lezingen: [] };
+    g.lezingen.push({ ...l, refNl, type });
+    groepen.set(sleutel, g);
+  }
+  // De lezingen van de dag altijd eerst
+  return [...groepen.entries()].sort(([a], [b]) => (a === '' ? -1 : b === '' ? 1 : 0)).map(([, g]) => g);
+}
+
 const ORD = (n: string) => `${n}e`;
 
 export function vertaalTag(tag: string, refNl: string): string {
@@ -253,6 +311,7 @@ export function vertaalTag(tag: string, refNl: string): string {
     .replace(/^(\d+)(st|nd|rd|th) Matins Gospel$/, (_, n) => `${ORD(n)} Mettenevangelie`)
     .replace(/^Matins Gospel$/, 'Evangelie van de Metten')
     .replace(/^(\d+)(st|nd|rd|th) Hour$/, (_, n) => `${ORD(n)} Uur`)
+    .replace(/^Royal Hours\W+(\d+)(st|nd|rd|th) Hour$/, (_, n) => `Koninklijke Uren, ${ORD(n)} Uur`)
     .replace(/^Vespers, (\d+)(st|nd|rd|th) Reading$/, (_, n) => `Vespers, ${ORD(n)} lezing`)
     .replace(/^Gospel$/, 'Evangelie')
     .replace(/^Epistle$/, 'Apostellezing')

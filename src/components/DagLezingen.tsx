@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { useMobiel } from '../lib/desktop';
-import { datumMetKerk, dagInfo, parseYmd } from '../lib/kalender';
-import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
+import { datumMetKerk, dagInfo, parseYmd, type DagInfo } from '../lib/kalender';
+import { groepeerLezingen, roosterMelding, type HtcLezingRef } from '../lib/htc';
 import Modal from './Modal';
 import { vergrendelScroll } from '../lib/scrollLock';
 
@@ -12,11 +11,44 @@ interface Props {
   onClose: () => void;
 }
 
+/** De Schriftlezingen van een dag, gegroepeerd: "Lezingen van de dag" en per heilige "Lezingen voor …" (lib/htc.ts
+ *  groepeerLezingen). Gedeeld door het leesvenster (Vandaag, Kalender) en het dagvenster, zodat beide hetzelfde tonen.
+ *  Een tik op een lezing opent de tekst in de lezingen-pop-up. */
+export function LezingenGroepen({ lezingen, dag, Kop = 'h3' }: { lezingen: HtcLezingRef[]; dag: DagInfo; Kop?: 'h3' | 'h4' }) {
+  const { openLezing } = useApp();
+  const groepen = useMemo(() => groepeerLezingen(lezingen), [lezingen]);
+  if (!groepen.length) return <p className="text-sm text-ink-mute">{roosterMelding(dag.ymd)}</p>;
+  return (
+    <div className="dl-groepen">
+      {groepen.map((g) => (
+        <section key={g.titel} className="dl-groep">
+          <Kop className="dl-groep-kop">{g.titel}</Kop>
+          <ul className="grid gap-2">
+            {g.lezingen.map((l, i) => (
+              <li key={i}>
+                <button
+                  type="button"
+                  onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: dag.civil })}
+                  className="dl-rij flex w-full items-center justify-between gap-3 rounded-lg border border-parchment-3 bg-white/70 px-4 py-3 text-left transition hover:border-gold hover:bg-gold-pale"
+                >
+                  <span className="dl-tekst">
+                    <span className="dl-type">{l.type}</span>
+                    <span className="dl-ref font-display text-xl font-semibold">{l.refNl}</span>
+                  </span>
+                  <ChevronRight className="dl-pijl" aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 // Pop-up met uitsluitend de Schriftlezingen van één dag (geen heiligen, vasten of feesten).
-// Een tik op een lezing opent de lezing zelf in de bestaande lezingen-pop-up.
 export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
-  const { mode, vandaagYmd, rooster, vraagRooster, openLezing } = useApp();
-  const mobiel = useMobiel(); // mobiel: alleen de kerkelijke datum
+  const { mode, vandaagYmd, rooster, vraagRooster } = useApp();
   useEffect(() => {
     if (gekozen) vraagRooster(gekozen);
   }, [gekozen, vraagRooster]);
@@ -29,41 +61,9 @@ export default function DagLezingen({ ymd: gekozen, onClose }: Props) {
   }, [gekozen]);
 
   if (!dag) return null;
-  const lezingen = rooster?.[dag.ymd] ?? [];
-
   return (
     <Modal open onClose={onClose} eyebrow={datumMetKerk(dag.civil, mode)} title="Schriftlezingen" centerTitle maxWidth="max-w-xl">
-      {lezingen.length > 0 ? (
-        <ul className="grid gap-2">
-          {lezingen.map((l, i) => {
-            const refNl = vertaalRef(l.ref);
-            const soort = lezingSoort(refNl);
-            return (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: dag.civil })}
-                  className="dl-rij flex w-full items-center justify-between gap-3 rounded-lg border border-parchment-3 bg-white/70 px-4 py-3 text-left transition hover:border-gold hover:bg-gold-pale"
-                >
-                  <span>
-                    <span className="block text-[11px] font-bold tracking-wider text-gold-deep uppercase">{vertaalTag(l.tag, refNl)}</span>
-                    <span className="font-display text-xl font-semibold">{refNl}</span>
-                  </span>
-                  <span className={`dl-soort shrink-0 rounded-sm px-1.5 py-0.5 text-[11px] font-bold uppercase ${soort === 'evangelie' ? 'bg-wine text-gold-light' : soort === 'oud' ? 'bg-parchment-3 text-ink' : 'bg-gold-pale text-gold-deep'}`}>
-                    {soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'OT' : 'Apostel'}
-                  </span>
-                  {/* Mobiel: een pijl, zoals bij alle andere rijen die iets openen */}
-                  {mobiel && <ChevronRight className="dl-pijl" aria-hidden="true" />}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p className="text-sm text-ink-mute">
-          {roosterMelding(dag.ymd)}
-        </p>
-      )}
+      <LezingenGroepen lezingen={rooster?.[dag.ymd] ?? []} dag={dag} />
     </Modal>
   );
 }

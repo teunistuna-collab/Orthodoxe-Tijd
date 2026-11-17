@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Search, X } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { formatLang } from '../lib/kalender';
 import type { Resultaat } from '../lib/heiligenPopup';
 import HeiligePopup from './HeiligePopup';
 import { FEEST_HEILIGENJAAR } from '../lib/feestHeiligenjaar';
 import { laadVermelding } from '../lib/heiligenjaarTekst';
-import { bouwIndex, zoek, type ZoekTreffer } from '../lib/zoeken';
+import { bouwIndex, datumRegel, zoek, type ZoekTreffer } from '../lib/zoeken';
 import { vergrendelScroll } from '../lib/scrollLock';
 import './popup.css';
 import { useTerugSluit } from '../lib/terug';
@@ -87,11 +86,11 @@ export default function Zoeken({ open, onOpen, onClose }: { open: boolean; onOpe
       const hjId = FEEST_HEILIGENJAAR[f.id];
       // Feesten met een tekst uit het Heiligenjaar tonen alleen die tekst.
       if (hjId) {
-        setPopup({ lezen: false, content: { title: f.naam, subtitle: formatLang(t.datum), paragraphs: ['De tekst wordt geladen…'] } });
-        laadVermelding(hjId).then((v) => setPopup((p) => (p?.content.title === f.naam ? { lezen: false, content: { title: f.naam, subtitle: formatLang(t.datum), paragraphs: v?.text ?? [] } } : p))).catch(() => {});
+        setPopup({ lezen: false, content: { title: f.naam, subtitle: datumRegel(t.datum, mode), paragraphs: ['De tekst wordt geladen…'] } });
+        laadVermelding(hjId).then((v) => setPopup((p) => (p?.content.title === f.naam ? { lezen: false, content: { title: f.naam, subtitle: datumRegel(t.datum, mode), paragraphs: v?.text ?? [] } } : p))).catch(() => {});
         return;
       }
-      setPopup({ lezen: false, content: { title: f.naam, subtitle: formatLang(t.datum), highlight: f.troparion, paragraphs: [f.toelichting, ...(f.traditie ? [`Gebruiken: ${f.traditie}`] : [])].filter((p): p is string => Boolean(p)) } });
+      setPopup({ lezen: false, content: { title: f.naam, subtitle: datumRegel(t.datum, mode), highlight: f.troparion, paragraphs: [f.toelichting, ...(f.traditie ? [`Gebruiken: ${f.traditie}`] : [])].filter((p): p is string => Boolean(p)) } });
     } else setHeilige(t.heilige);
   };
 

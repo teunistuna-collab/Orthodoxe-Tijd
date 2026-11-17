@@ -46,3 +46,13 @@
 @media (max-width: 767.98px) {
   #top#top#top#top .bottom-nav a:not(.is-actief) svg { color: rgba(216, 173, 99, .55); }
 }
+
+/* Leesbaarder (17-11-2026): de labels van de niet-actieve tabs in zacht ivoor op het nachtblauw (contrast ± 9:1); de actieve
+   tab houdt het heldere goud en de gouden lijn. Bij "meer contrast" in het systeem volledig ivoor. */
+@media (max-width: 767.98px) {
+  #top#top#top#top .bottom-nav a:not(.is-actief) span { color: rgba(244, 233, 211, .9); }
+}
+@media (max-width: 767.98px) and (prefers-contrast: more) {
+  #top#top#top#top .bottom-nav a:not(.is-actief) span { color: #f6ecd8; }
+  #top#top#top#top .bottom-nav a:not(.is-actief) svg { color: rgba(216, 173, 99, .9); }
+}

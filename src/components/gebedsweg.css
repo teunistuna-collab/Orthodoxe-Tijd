@@ -91,3 +91,8 @@
   html:has(.am-laag) { overflow: hidden; }
   .gw-vlak { overscroll-behavior: contain; }
 }
+
+/* Leesvensters (17-11-2026): achter de gebedstekst een rustiger, lichter perkamentvlak met de rijkere textuur aan de randen
+   (zoals de leesweergave van Adem en Etmaal); tekst in donker inktbruin. De nachtweergave houdt haar eigen kleuren. */
+.gw:not(.is-nacht) { --gw-tekst: #2b1d12; }
+.gw-bid:not(.is-nacht) { background: linear-gradient(90deg, rgba(251, 244, 230, 0), rgba(251, 244, 230, .8) 26px, rgba(251, 244, 230, .8) calc(100% - 26px), rgba(251, 244, 230, 0)), var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center / cover; }

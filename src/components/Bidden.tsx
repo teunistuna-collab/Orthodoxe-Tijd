@@ -14,7 +14,7 @@ import './bidden.css';
 // kaarslichtlaag erover). Psalter gebruikt het goedgekeurde manuscriptbeeld van de Psalter-pagina; Gebeden het
 // evangelieboek; het gebedsuur en het Jezusgebed dezelfde kaartbeelden als Etmaal en Adem onder Ontdek.
 
-type Kaart = { id: string; titel: string; onder: string; beeld: string; positie?: string };
+type Kaart = { id: string; titel: string; onder: string; beeld: string; positie?: string; href?: string };
 
 const GEBEDEN: Kaart = {
   id: 'gebeden',
@@ -24,7 +24,8 @@ const GEBEDEN: Kaart = {
 };
 const ANDERE: Kaart[] = [
   { id: 'psalmen', titel: 'Psalter', onder: 'De Psalmen lezen en bidden', beeld: '/images/psalmen/manuscript-800.webp', positie: '62% 50%' },
-  { id: 'adem', titel: 'Het Jezusgebed', onder: 'Adem · Gebed van het hart', beeld: '/images/ontdek/adem-kaart.webp' },
+  // Bidden opent het gebed zelf; de uitleg over het Jezusgebed staat onder Ontdek
+  { id: 'adem', titel: 'Bid het Jezusgebed', onder: 'Begin direct, in je eigen tempo', beeld: '/images/ontdek/adem-kaart.webp', href: '#adem/bidden' },
 ];
 // Zolang de gebeden nog niet zichtbaar zijn, staat Gebeden onderaan (de werkende ingangen eerst)
 const KAARTEN: Kaart[] = GEBEDEN_ZICHTBAAR ? [GEBEDEN, ...ANDERE] : [...ANDERE, GEBEDEN];
@@ -74,17 +75,17 @@ export default function Bidden() {
           <a className="bd-hoofd" href={`#etmaal/${slugVan(uur)}/bid`}>
             <Beeld src="/images/ontdek/etmaal-kaart.webp" />
             <span className="bd-tekst">
-              <span className="bd-label">Het actuele gebedsuur</span>
+              <span className="bd-label">Bid het actuele gebedsuur</span>
               <b>{naamVan(uur)}</b>
-              <span>Bid met de Kerk</span>
+              <span>Begin direct met bidden</span>
             </span>
             <ChevronRight className="bd-pijl" aria-hidden="true" />
           </a>
           <a className="bd-alle" href="#etmaal">
-            Alle gebedsuren · Etmaal <span aria-hidden="true">›</span>
+            Kies een ander gebedsuur <span aria-hidden="true">›</span>
           </a>
         </div>
-        {KAARTEN.map(({ id, titel, onder, beeld, positie }) =>
+        {KAARTEN.map(({ id, titel, onder, beeld, positie, href }) =>
           // Zolang de gebeden nog niet beschikbaar zijn: geen link en geen pijl, "Binnenkort" onder de titel
           id === 'gebeden' && !GEBEDEN_ZICHTBAAR ? (
             <div key={id} className="bd-kaart is-binnenkort">
@@ -96,7 +97,7 @@ export default function Bidden() {
               </span>
             </div>
           ) : (
-          <a key={id} className="bd-kaart" href={`#${id}`}>
+          <a key={id} className="bd-kaart" href={href ?? `#${id}`}>
             <Beeld src={beeld} positie={positie} />
             <span className="bd-tekst">
               <b>{titel}</b>

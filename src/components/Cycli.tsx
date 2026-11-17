@@ -4,7 +4,6 @@ import { Sierlijn } from './MobielLaag';
 import { usePaginaOpen } from '../lib/paginaOpen';
 import { useApp } from '../lib/context';
 import { WEEKDAGEN, daysBetween } from '../lib/kalender';
-import { dienstVanHetUur, naamVan } from '../lib/etmaal';
 import { PERIODS, huidigeTijd } from '../lib/jaartijd';
 import { paascyclusVoor } from '../lib/paascyclus';
 import { geboortecyclusVoor } from '../lib/geboortecyclus';
@@ -18,8 +17,9 @@ import './Vandaag.css';
 // zoom en fx/fy (brandpunt in %) bepalen alleen de uitsnede; het beeld zelf blijft ongewijzigd.
 const CYCLI = [
   // Adem en Etmaal: een aangeleverd kaartbeeld (loopt rechts zelf over in perkament), even breed als de andere kaarten
-  { id: 'adem', titel: 'Het Jezusgebed', onder: 'Adem', zin: 'Het gebed dat met je meegaat.', beeld: '/images/ontdek/adem-kaart.webp', zoom: 1, fx: 0, fy: 50 },
-  { id: 'etmaal', titel: 'Gebedsuren', onder: 'Etmaal · De uren van de dag', zin: 'De dag geheiligd door gebed.', beeld: '/images/ontdek/etmaal-kaart.webp', zoom: 1, fx: 0, fy: 50 },
+  // Ontdek leidt naar uitleg en verdieping; bidden zelf gaat via Bidden (het actuele gebedsuur, Bid het Jezusgebed)
+  { id: 'adem', href: '#adem/lees/wat', titel: 'Over het Jezusgebed', onder: 'Adem · Betekenis en achtergrond', zin: 'Het gebed dat met je meegaat.', beeld: '/images/ontdek/adem-kaart.webp', zoom: 1, fx: 0, fy: 50 },
+  { id: 'etmaal', href: '#etmaal/lees/wat', titel: 'Over de gebedsuren', onder: 'Etmaal · Betekenis van de uren', zin: 'De dag geheiligd door gebed.', beeld: '/images/ontdek/etmaal-kaart.webp', zoom: 1, fx: 0, fy: 50 },
   { id: 'week', titel: 'Week', onder: 'De zeven dagen', zin: 'Iedere dag een eigen herinnering.', beeld: '/images/ontdek/week.webp', zoom: 1.45, fx: 50, fy: 42 },
   { id: 'jaar', titel: 'Jaar', onder: 'Het kerkelijk jaar', zin: 'Leven met de feesten en vastentijden.', beeld: '/images/ontdek/jaar.webp', zoom: 1.1, fx: 50, fy: 50 },
   { id: 'pascha', titel: 'Pascha', onder: 'Van het Kruis naar de Verrijzenis', zin: 'De weg naar het feest der feesten.', beeld: '/images/ontdek/pascha.webp', zoom: 1, fx: 50, fy: 22 },
@@ -37,7 +37,6 @@ export default function Cycli() {
   const geboorte = geboortecyclusVoor(vandaag, mode);
   const geboorteStap = geboorte.huidige ? geboorte.stappen.find((s) => s.key === geboorte.huidige) : null;
   const nu: Record<string, string> = {
-    etmaal: `Nu: ${naamVan(dienstVanHetUur(new Date()))}`,
     week: `Vandaag: ${WEEKDAGEN[vandaag.getUTCDay()]}`,
     jaar: `Nu: ${PERIODS.find((p) => p.key === huidigeTijd(vandaag, mode))?.label ?? ''}`,
     pascha: paschaStap ? `Nu: ${paschaStap.label}` : `Nog ${aantal(pascha.dagenTotPascha)} tot Pascha`,
@@ -58,9 +57,9 @@ export default function Cycli() {
       <div className="vg-papier vg-ontdek">
         <nav aria-label="De zes ritmes">
           <ul className="vg-ontdek-lijst">
-            {CYCLI.map(({ id, titel, onder, zin, beeld, zoom, fx, fy }, i) => (
+            {CYCLI.map(({ id, href, titel, onder, zin, beeld, zoom, fx, fy }, i) => (
               <li key={id}>
-                <a className="vg-ontdek-kaart" href={`#${id}`}>
+                <a className="vg-ontdek-kaart" href={href ?? `#${id}`}>
                   <span className="vg-ontdek-beeld" style={{ '--zoom': zoom, '--fx': `${fx}%`, '--fy': `${fy}%` } as CSSProperties}>
                     <img src={beeld} alt="" loading={open && i < 4 ? undefined : 'lazy'} decoding="async" />
                   </span>

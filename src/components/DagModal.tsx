@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { BookOpenText } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { datumMetKerk, addDays, dagInfo, formatDag, formatLang, parseYmd, ymd } from '../lib/kalender';
-import { lezingSoort, roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
+import { LezingenGroepen } from './DagLezingen';
 import { NIVEAUS } from '../lib/vasten';
 import { FeestTag, VastenBadge } from './ui';
 import Modal from './Modal';
@@ -36,7 +36,7 @@ function HeiligeKaart({ h, los = false, onOpen }: { h: Heilige; los?: boolean; o
 }
 
 export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Props) {
-  const { mode, vandaagYmd, rooster, vraagRooster, heiligen, openLezing } = useApp();
+  const { mode, vandaagYmd, rooster, vraagRooster, heiligen } = useApp();
   const [leesFeest, setLeesFeest] = useState<Resultaat | null>(null);
 
   const dag = useMemo(() => (geselecteerd ? dagInfo(parseYmd(geselecteerd), mode, vandaagYmd) : null), [geselecteerd, mode, vandaagYmd]);
@@ -163,36 +163,7 @@ export default function DagModal({ ymd: geselecteerd, onClose, onNavigate }: Pro
                 <h3 className="ot-label dag-kop">
                   <BookOpenText className="h-3.5 w-3.5" /> Schriftlezingen
                 </h3>
-                {lezingen.length > 0 ? (
-                  <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                    {lezingen.map((l, i) => {
-                      const refNl = vertaalRef(l.ref);
-                      const soort = lezingSoort(refNl);
-                      return (
-                        <li key={i}>
-                          <button
-                            type="button"
-                            onClick={() => openLezing({ ref: l.ref, tag: l.tag, julianKey: dag.julianKey, civil: dag.civil })}
-                            className="dag-lezing flex w-full items-center justify-between gap-3 text-left"
-                          >
-                            <span>
-                              <span className="block text-[10px] font-bold tracking-wider text-gold-deep uppercase">{vertaalTag(l.tag, refNl)}</span>
-                              <span className="font-display text-lg font-semibold">{refNl}</span>
-                            </span>
-                            <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-bold uppercase ${soort === 'evangelie' ? 'bg-wine text-gold-light' : soort === 'oud' ? 'bg-parchment-3 text-ink' : 'bg-gold-pale text-gold-deep'}`}>
-                              {soort === 'evangelie' ? 'Evangelie' : soort === 'oud' ? 'OT' : 'Apostel'}
-                            </span>
-                            <span className="pijl" aria-hidden="true">›</span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <p className="mt-2 text-sm text-ink-mute">
-                    {roosterMelding(dag.ymd)}
-                  </p>
-                )}
+                <div className="mt-3"><LezingenGroepen lezingen={lezingen} dag={dag} Kop="h4" /></div>
               </div>
             </div>
     </Modal>

@@ -4,7 +4,7 @@ import { ADEM_INLEIDING, ADEM_POPUPS } from '../lib/cyclusTeksten';
 import { bewaarVorm, leesVorm, useVormen, type Vorm } from '../lib/jezusgebed';
 import { BLAD, HANDEN, KRUIS } from './symbolen';
 import { Kop, Laag, LeesWeergave, PopupTekst, Sierlijn } from './MobielLaag';
-import { vorigeAdres } from '../lib/vorigAdres';
+import { herkomstVan, vorigeAdres } from '../lib/vorigAdres';
 import { terugNaarGroep } from '../lib/navigatie';
 
 // Adem op mobiel (< 768 px), volgens de goedgekeurde mock-up (mobile/docs/mockups/goedgekeurd/08-adem.png), vier weergaven:
@@ -105,6 +105,8 @@ const TEMPI = [
 ] as const;
 
 function Bidden({ vorm, metAdem }: { vorm: Vorm; metAdem: boolean }) {
+  // Vanuit Bidden ("Bid het Jezusgebed") gaat Terug naar Bidden, ook nadat je een andere gebedsvorm koos
+  const [terug] = useState(() => herkomstVan('#adem/bidden', '#adem', (v) => /^#adem\/(bidden|vormen)/.test(v)));
   const [actief, setActief] = useState(false);
   const [hulp, setHulp] = useState(metAdem);
   useEffect(() => bewaarVorm(vorm.id), [vorm.id]);
@@ -127,7 +129,7 @@ function Bidden({ vorm, metAdem }: { vorm: Vorm; metAdem: boolean }) {
     <Laag className="am-bid" label="Het Jezusgebed">
       <img className="am-bid-beeld" src={`${BEELD}-800.webp`} srcSet={SRCSET} sizes="100vw" alt="" width={941} height={1672} decoding="async" />
       <Kop
-        terug="#adem"
+        terug={terug}
         slim
         rechts={
           <a className="am-knopje am-vormknop" href={`#adem/vormen/${vorm.id}`} aria-label={`Gebedsvorm: ${vorm.titel}. Kies een andere vorm`}>
@@ -174,16 +176,29 @@ function Bidden({ vorm, metAdem }: { vorm: Vorm; metAdem: boolean }) {
 function Lezen({ onderwerp }: { onderwerp: Onderwerp }) {
   const inhoud = ADEM_POPUPS[onderwerp];
   const info = ONDERWERPEN.find((o) => o.key === onderwerp)!;
+  // Vanuit Ontdek ("Over het Jezusgebed") gaat Terug naar Ontdek
+  const [terug] = useState(() => herkomstVan(`#adem/lees/${onderwerp}`, '#adem'));
   return (
     <LeesWeergave
       titel={inhoud.title}
       onder={ADEM_INLEIDING[onderwerp]}
-      terug="#adem"
+      terug={terug}
       slim
       deelPad={`adem/lees/${onderwerp}`}
       boven={<span className="am-tegel am-tegel-groot">{info.symbool}</span>}
     >
       <PopupTekst inhoud={inhoud} />
+      {/* Van buiten Adem (Ontdek): verder naar de andere verdiepingen en het gebed zelf */}
+      {terug !== '#adem' && (
+        <a className="am-rij am-meer" href="#adem">
+          <span className="am-tegel"><BookOpen strokeWidth={1.3} aria-hidden="true" /></span>
+          <span className="am-rij-tekst">
+            <b>Meer over het Jezusgebed</b>
+            <span>Het gebed, het gebedskoord en het gebed van het hart.</span>
+          </span>
+          <ChevronRight className="am-pijl" aria-hidden="true" />
+        </a>
+      )}
     </LeesWeergave>
   );
 }

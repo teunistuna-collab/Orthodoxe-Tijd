@@ -1,7 +1,7 @@
 import { GEBEDEN, GEBEDEN_ZICHTBAAR, type Gebed } from './gebeden';
 import { BEWEEGLIJKE_FEESTEN, DERTIEN, OVERIGE_VASTE, type Feest } from './feesten';
 import type { HeiligeMetDatum } from './heiligen';
-import { addDays, formatLang, formatMd, MAANDEN, MAANDEN_KORT, orthodoxPascha, utc, ymd, type Mode } from './kalender';
+import { addDays, civilVanKerkdatum, formatDag, formatLang, kerkDatum, MAANDEN, MAANDEN_KORT, orthodoxPascha, utc, ymd, type Mode } from './kalender';
 import { volgendeFeestDatum } from './overzicht';
 import { normaliseer, type Resultaat } from './heiligenPopup';
 import { PSALMEN, zoekPsalmen } from './psalmen';
@@ -122,6 +122,19 @@ export function leesDatum(invoer: string, vandaag: Date): { label: string; datum
   return { label: formatLang(datum), datum };
 }
 
+/** De datum van een feest of heilige in de zoekresultaten. Juliaans: eerst de kerkelijke datum, dan de burgerlijke dag
+ *  ("Kerkelijk 7 november · vrijdag 20 november 2026"); gregoriaans vallen ze samen en staat er één datum. */
+export function datumRegel(civil: Date, mode: Mode): string {
+  return mode === 'oud' ? `Kerkelijk ${formatDag(kerkDatum(civil, mode))} · ${formatLang(civil)}` : formatLang(civil);
+}
+
+/** De eerstvolgende burgerlijke dag (vanaf vandaag) van een vaste kerkelijke datum ("11-07"). */
+export function volgendeKerkdatum(md: string, vandaag: Date, mode: Mode): Date {
+  const j = vandaag.getUTCFullYear();
+  const d = civilVanKerkdatum(md, j, mode);
+  return d.getTime() >= vandaag.getTime() ? d : civilVanKerkdatum(md, j + 1, mode);
+}
+
 export function zoek(invoer: string, index: ZoekIndex, vandaag: Date, mode: Mode): ZoekGroep[] {
   const q = normaliseer(invoer.trim()).replace(/\s+/g, ' ');
   if (q.length < 2) return [];
@@ -154,12 +167,12 @@ export function zoek(invoer: string, index: ZoekIndex, vandaag: Date, mode: Mode
       top: feesten.top,
       items: feesten.items.map((f) => {
         const d = volgendeFeestDatum(f, vandaag, mode);
-        return { soort: 'feest', titel: f.naam, onder: `${f.offset !== undefined ? 'Beweeglijk' : 'Vast'} · ${formatLang(d)}`, feest: f, datum: d };
+        return { soort: 'feest', titel: f.naam, onder: `${f.offset !== undefined ? 'Beweeglijk' : 'Vast'} · ${datumRegel(d, mode)}`, feest: f, datum: d };
       }),
     });
 
   const heiligen = beste(q, index.heiligen, 8, (h) => h.naam, (h) => (h.bron === 'nl' ? 10 : 0) + (h.type === 'saint' ? 1 : 0));
-  if (heiligen.items.length) groepen.push({ titel: 'Heiligen', top: heiligen.top, items: heiligen.items.map((h) => ({ soort: 'heilige', titel: h.naam, onder: `${formatMd(h.md)}${h.titel ? ` · ${h.titel}` : ''}`, heilige: h })) });
+  if (heiligen.items.length) groepen.push({ titel: 'Heiligen', top: heiligen.top, items: heiligen.items.map((h) => ({ soort: 'heilige', titel: h.naam, onder: `${datumRegel(volgendeKerkdatum(h.md, vandaag, mode), mode)}${h.titel ? ` · ${h.titel}` : ''}`, heilige: h })) });
 
   // Sterkste groep eerst; bij gelijke sterkte de vaste volgorde (datum, pagina's, gebeden, feesten, heiligen).
   return groepen.sort((a, b) => a.top - b.top).map(({ titel, items }) => ({ titel, items }));

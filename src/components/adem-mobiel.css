@@ -139,3 +139,6 @@ html.lees-nacht #top#top#top#top#top#top#top#top#top#top#top .am-lees-titel { co
 /* Alle lagen (leesvensters, gebedsuur, perioden, feesten): de achtergrond schuift mee met de inhoud. De laag scrollt zelf;
    zonder "local" bleef de textuur staan en leken de vlekken vuil op het scherm (16-11-2026). */
 html body .am-laag.am-laag { background-attachment: local; }
+
+/* Leestekst in donker inktbruin (17-11-2026); de nachtweergave zet haar eigen lichte tekstkleur */
+html:not(.lees-nacht) .am-lees { --inkt: #2b1d12; }
