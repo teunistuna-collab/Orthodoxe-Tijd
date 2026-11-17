@@ -4,7 +4,7 @@
 
 import { dagInfo, daysBetween, orthodoxPascha, type Mode } from './kalender';
 import { bidBeeld, icoonVan } from './bidbeelden';
-import type { Feest } from './feesten';
+import { DERTIEN, type Feest } from './feesten';
 import { geboortecyclusVoor, type GeboorteKey } from './geboortecyclus';
 import { periodeVoortgang, vastenPeriodes } from './overzicht';
 import { paascyclusVoor, zondagVanDeWeek, type StapKey } from './paascyclus';
@@ -58,7 +58,11 @@ export function feestVoorDag(dag: Date, mode: Mode): FeestThema | null {
 
 export type Toon = 'ingetogen' | 'verstild' | 'licht';
 /** Kop van Vandaag op een belangrijke dag: het analogion-beeld, anders het icoon van de dag. */
-export interface DagKop { soort: 'analogion' | 'icoon'; beeld: string; naam: string; regel?: string; groet?: { groet: string; antwoord: string } }
+export interface DagKop {
+  soort: 'analogion' | 'icoon'; beeld: string; naam: string; regel?: string; groet?: { groet: string; antwoord: string };
+  /** Het zuivere icoon (voor het kleine icoon in de kop), het tropaar en de korte betekenis van de dag */
+  icoon: string; troparion?: string; tekst?: string;
+}
 /** "Vandaag in de cyclus" op Vandaag. */
 export interface CyclusKaart { soort: 'pascha' | 'geboorte'; periode: string; dag?: string; betekenis: string; href: string; voortgang?: string }
 export interface DagThema { kop: DagKop | null; toon: Toon | null; cyclus: CyclusKaart | null }
@@ -91,9 +95,9 @@ export function dagThema(dag: Date, mode: Mode): DagThema | null {
   // Alleen het eigen icoon van de dag; een periode-icoon (bijv. het nafeest van Hemelvaart) hoort niet in de kop
   const dagIcoon = pc.huidige && !PASCHA_DAGICONEN[pc.offset]?.periode ? PASCHA_DAGICONEN[pc.offset] : undefined;
   const metIcoon = feesten.find((f) => icoonVan(f.id));
-  if (metBeeld) kop = { soort: 'analogion', beeld: bidBeeld(metBeeld.id)!, naam: naamVan(metBeeld), regel: eersteZin(metBeeld.toelichting), groet };
-  else if (dagIcoon) kop = { soort: 'icoon', beeld: `/images/feesten/${dagIcoon.bestand}`, naam: feesten[0] ? naamVan(feesten[0]) : ((pc.offset % 7 === 0 ? zondagVanDeWeek(pc.offset)?.kort : undefined) ?? dagIcoon.naam), regel: eersteZin(dagIcoon.betekenis), groet };
-  else if (metIcoon) kop = { soort: 'icoon', beeld: icoonVan(metIcoon.id)!, naam: naamVan(metIcoon), regel: eersteZin(metIcoon.toelichting), groet };
+  if (metBeeld) kop = { soort: 'analogion', beeld: bidBeeld(metBeeld.id)!, naam: naamVan(metBeeld), regel: eersteZin(metBeeld.toelichting), groet, icoon: icoonVan(metBeeld.id) ?? (dagIcoon ? `/images/feesten/${dagIcoon.bestand}` : bidBeeld(metBeeld.id)!), troparion: metBeeld.troparion, tekst: metBeeld.toelichting };
+  else if (dagIcoon) kop = { soort: 'icoon', beeld: `/images/feesten/${dagIcoon.bestand}`, naam: feesten[0] ? naamVan(feesten[0]) : ((pc.offset % 7 === 0 ? zondagVanDeWeek(pc.offset)?.kort : undefined) ?? dagIcoon.naam), regel: eersteZin(dagIcoon.betekenis), groet, icoon: `/images/feesten/${dagIcoon.bestand}`, troparion: feesten[0]?.troparion, tekst: dagIcoon.betekenis };
+  else if (metIcoon) kop = { soort: 'icoon', beeld: icoonVan(metIcoon.id)!, naam: naamVan(metIcoon), regel: eersteZin(metIcoon.toelichting), groet, icoon: icoonVan(metIcoon.id)!, troparion: metIcoon.troparion, tekst: metIcoon.toelichting };
 
   // Voortgang in een vastenperiode (Grote Vasten, Geboortevasten): "Dag 12 van 48 · nog 37 dagen tot Pascha"
   const vasten = [dag.getUTCFullYear() - 1, dag.getUTCFullYear()].flatMap((j) => vastenPeriodes(j, mode)).find((p) => p.soort === 'vasten' && p.start <= dag && dag <= p.eind);
@@ -113,4 +117,17 @@ export function dagThema(dag: Date, mode: Mode): DagThema | null {
     cyclus = { soort: 'geboorte', periode: s.label, dag: dagNaam && !dagNaam.startsWith(s.label) ? dagNaam : undefined, betekenis: s.short, href: `#geboorte/${s.key}`, voortgang };
   }
   return kop || toon || cyclus ? { kop, toon, cyclus } : null;
+}
+
+/** Het kleine, klikbare feesticoon in de kop van Vandaag (de kop zelf blijft het Christusicoon): op een belangrijke dag
+ *  het icoon van de dag (zelfde keuze als dagThema), anders in de Paastijd of Kersttijd het icoon van dat feest; met het
+ *  tropaar als dat er is, en anders de korte betekenis. Null op een gewone dag. */
+export interface FeestIcoon { beeld: string; naam: string; troparion?: string; tekst?: string }
+export function feestIcoonVanDag(dag: Date, mode: Mode): FeestIcoon | null {
+  const k = dagThema(dag, mode)?.kop;
+  if (k) return { beeld: k.icoon, naam: k.naam, troparion: k.troparion, tekst: k.tekst };
+  const tijd = feestVoorDag(dag, mode);
+  if (!tijd) return null;
+  const f = DERTIEN.find((x) => x.id === (tijd.id === 'pascha' ? 'pascha' : 'kerstmis'));
+  return { beeld: tijd.beeld, naam: f ? naamVan(f) : tijd.alt, troparion: f?.troparion, tekst: f?.toelichting };
 }

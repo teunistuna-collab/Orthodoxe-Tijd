@@ -824,3 +824,18 @@ button.vg-cy-kaart { width: 100%; font: inherit; color: inherit; text-align: lef
   /* Hooguit twee regels, zodat de kop niet hoger wordt */
   #vandaag .vg-kop-dag span { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; margin-top: 4px; font-family: var(--font-lees); font-size: 15.5px; font-style: italic; line-height: 1.35; }
 }
+
+/* Het feest van vandaag als klein icoon op het perkament (17-11-2026): onder de begroeting in de feesttijd, anders bovenaan
+   het perkament. De kop blijft het Christusicoon. Een tik opent het tropaar (Vandaag.tsx, LiturgicalPopup). */
+#top#top#top#top #vandaag .vg-feest-icoon {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 72px; min-height: 44px; margin: 8px auto 4px; padding: 4px 6px 2px;
+  border: 0; background: none; cursor: pointer; color: #6e4a20; font: inherit; -webkit-tap-highlight-color: transparent;
+}
+#vandaag .vg-feest-icoon img {
+  display: block; width: 52px; height: 66px; object-fit: cover; border: 1.5px solid #c49332; border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(255, 248, 232, .6), 0 3px 8px rgba(40, 20, 6, .35);
+}
+#vandaag .vg-feest-icoon span { font-family: var(--font-lees); font-size: 14px; font-style: italic; line-height: 1.2; text-decoration: underline; text-decoration-color: #b99455; text-underline-offset: 3px; }
+#top#top#top#top #vandaag .vg-feest-icoon:focus-visible { outline: 3px solid #7d5218; outline-offset: 2px; border-radius: 4px; }
+#vandaag .vg-feest-icoon:active img { filter: brightness(.92); }
+#vandaag .vg-feest-icoon-los { display: flex; justify-content: center; margin: 0 0 6px; }

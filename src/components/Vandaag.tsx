@@ -10,9 +10,10 @@ import { dienstVanHetUur, slugVan } from '../lib/etmaal';
 import { isPaascyclus, lezingSoort, roosterMelding, vertaalRef, type HtcLezingRef } from '../lib/htc';
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { vastenGroep } from '../lib/vasten';
-import { dagThema, feestVoorDag } from '../lib/feestdagen';
+import { dagThema, feestIcoonVanDag, feestVoorDag } from '../lib/feestdagen';
+import { LiturgicalPopup } from './CycleSections';
 import { actieveCyclus } from '../lib/seizoen';
-import { geboorteBannerTitel, geboortecyclusVoor } from '../lib/geboortecyclus';
+import { geboorteBannerTitel } from '../lib/geboortecyclus';
 import Kaarsgloed from './Kaarsgloed';
 import BetekenisVanVandaag from './BetekenisVanVandaag';
 import VandaagMobiel from './VandaagMobiel';
@@ -37,15 +38,9 @@ const WEEKTHEMAS: Record<number, { titel: string; uitleg: string }> = {
 
 const BEELD = '/images/vandaag';
 
-// Beelden voor de kop op mobiel (public/images/vandaag), aangeleverd en alleen verkleind.
-const FOTO_KOP = {
-  gewoon: { naam: 'kaarslicht', srcSet: '/images/vandaag/christus-kaarslicht-800.webp 800w, /images/vandaag/christus-kaarslicht-1086.webp 1086w', breedte: 1086, hoogte: 1003 },
-  pascha: { naam: 'pascha', srcSet: '/images/vandaag/pascha-verrijzenis-800.webp 800w, /images/vandaag/pascha-verrijzenis-1600.webp 1600w', breedte: 2000, hoogte: 1526 },
-  // De Geboorte van Christus en de Kersttijd (lib/feestdagen.ts): het geboorte-icoon in kaarslicht (aangeleverd 26-10-2026)
-  // Theofanie en het nafeest (lib/geboortecyclus.ts): het icoon van de Doop van Christus (aangeleverd 26-10-2026)
-  theofanie: { naam: 'theofanie', srcSet: '/images/vandaag/theofanie-800.webp 800w, /images/vandaag/theofanie-1536.webp 1536w', breedte: 1536, hoogte: 1024 },
-  kerst: { naam: 'kerst', srcSet: '/images/vandaag/kerst-geboorte-800.webp 800w, /images/vandaag/kerst-geboorte-1086.webp 1086w', breedte: 1086, hoogte: 1448 },
-};
+// De kop op mobiel: altijd "Christus Pantocrator in kaarslicht" (public/images/vandaag, aangeleverd en alleen verkleind).
+// Op feestdagen en in de feesttijd komt het feesticoon klein en klikbaar in de kop (FeestIcoonKnop), niet als banner.
+const FOTO_KOP = { naam: 'kaarslicht', srcSet: '/images/vandaag/christus-kaarslicht-800.webp 800w, /images/vandaag/christus-kaarslicht-1086.webp 1086w', breedte: 1086, hoogte: 1003 };
 
 export default function Vandaag() {
   const open = usePaginaOpen('vandaag');
@@ -79,11 +74,16 @@ export default function Vandaag() {
     () => [...new Set(naamdagenOp(onze, vandaag, mode).map((n) => (n.voor ? `Naamdag van ${n.voor}` : `Naamdag: ${heiligeTitel(n.heilige)}`)))],
     [onze, vandaag, mode],
   );
-  const geboorteNu = useMemo(() => geboortecyclusVoor(vandaag, mode).huidige, [vandaag, mode]);
-  const theofanie = geboorteNu === 'theofanie' || geboorteNu === 'nafeest-theofanie';
-  const fotoKop = thema?.kop
-    ? { naam: thema.kop.soort === 'analogion' ? 'analogion' : 'dagicoon', srcSet: `${thema.kop.beeld} 900w`, breedte: 900, hoogte: 1125 }
-    : !feest ? (theofanie ? FOTO_KOP.theofanie : FOTO_KOP.gewoon) : feest.id === 'pascha' ? FOTO_KOP.pascha : FOTO_KOP.kerst;
+  const fotoKop = FOTO_KOP;
+  // Het feest van vandaag als klein icoon in de kop; een tik opent het tropaar (of de korte betekenis)
+  const feestIcoon = useMemo(() => feestIcoonVanDag(vandaag, mode), [vandaag, mode]);
+  const [tropaarOpen, setTropaarOpen] = useState(false);
+  const feestIcoonKnop = feestIcoon && (
+    <button type="button" className="vg-feest-icoon" onClick={() => setTropaarOpen(true)} aria-haspopup="dialog" aria-label={`${feestIcoon.naam}: ${feestIcoon.troparion ? 'lees het tropaar' : 'over deze dag'}`}>
+      <img src={feestIcoon.beeld} alt="" width={52} height={66} decoding="async" />
+      <span aria-hidden="true">{feestIcoon.troparion ? 'Tropaar' : 'Over de dag'}</span>
+    </button>
+  );
   const feestNaam = feest?.id === 'pascha' ? 'De Verrijzenis van onze Heer' : 'De Geboorte van onze Heer Jezus Christus';
   const openPopup = (detail: OpenPopupDetail) => window.dispatchEvent(new CustomEvent<OpenPopupDetail>(OPEN_POPUP_EVENT, { detail }));
   const openDienst = () => window.dispatchEvent(new CustomEvent(OPEN_DIENST_EVENT, { detail: uurMoment.title }));
@@ -168,27 +168,18 @@ export default function Vandaag() {
           <button type="button" onClick={openZoeken} className="vg-zoek" aria-label="Zoeken"><Search aria-hidden="true" /></button>
         </div>
         {/* Feesticoon op de plek en in de maat van het Christusicoon: helemaal zichtbaar (contain), zonder filter */}
-        {feest ? (
-          <img className="vg-christus vg-feesticoon" src={feest.beeld} alt={feest.alt} width={feest.breedte} height={feest.hoogte} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
-        ) : (
-          <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
-        )}
+        <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
         <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time></h1>
         {/* Mobiel, bij de oude kalender: de kerkelijke datum klein onder de burgerlijke */}
         {mobiel && mode === 'oud' && <p className="vg-kop-kerkdatum">Kerkelijk {formatDag(dag.kerk)}</p>}
-        {/* Mobiel, op een belangrijke dag: de naam van de dag en één regel uit de bestaande betekenis over het beeld */}
-        {mobiel && thema?.kop && (
-          <p className="vg-kop-dag">
-            <b>{thema.kop.naam}</b>
-            {thema.kop.regel && <span>{thema.kop.regel}</span>}
-          </p>
-        )}
-        {mobiel && fotoKop && <p className="sr-only">{thema?.kop ? `Icoon: ${thema.kop.naam}` : feest ? feest.alt : 'Icoon van Christus Pantocrator in kaarslicht'}</p>}
+        {mobiel && <p className="sr-only">Icoon van Christus Pantocrator in kaarslicht</p>}
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>
 
       <div className={`vg-papier${mobiel ? ' vm2-papier' : ''}`}>
         {/* Feesttijd: de begroeting en de link naar het feest, in de stijl van de andere rijen op Vandaag */}
+        {/* Feestdag buiten de feesttijd (bijv. Kruisverheffing): het feesticoon klein bovenaan het perkament */}
+        {!feest && feestIcoonKnop && <div className="vg-feest-icoon-los">{feestIcoonKnop}</div>}
         {feest && (
           <section className="vg-feest" aria-labelledby="vg-feest-kop">
             <h2 id="vg-feest-kop" className="vg-label">{feest.fase === 'dag' ? 'Vandaag vieren wij' : 'In deze feesttijd vieren wij'}</h2>
@@ -196,6 +187,8 @@ export default function Vandaag() {
               {feest.groet}
               <span>{feest.antwoord}</span>
             </p>
+            {/* Het feesticoon klein onder de begroeting; een tik opent het tropaar */}
+            {feestIcoonKnop}
             <div className="vg-lezingen vg-feest-rij">
               {feest.id === 'pascha' ? <span className="vg-boek vg-feest-symbool" aria-hidden="true"><KruisTeken /></span> : <Star className="vg-boek" aria-hidden="true" />}
               <div>
@@ -388,6 +381,21 @@ export default function Vandaag() {
         <p className="vg-stilte-tekst">Een moment van stilte.<img src={`${BEELD}/sierlijn.svg`} alt="" aria-hidden="true" width={480} height={40} /></p>
       </div>
       )}
+      {/* Het feest van vandaag: icoon, tropaar (uitgelicht) en de korte betekenis, in het bestaande liturgische venster */}
+      <LiturgicalPopup
+        lezen
+        open={tropaarOpen && !!feestIcoon}
+        onClose={() => setTropaarOpen(false)}
+        content={
+          feestIcoon && {
+            eyebrow: hoofdletter(formatDag(dag.civil)),
+            title: feestIcoon.naam,
+            subtitle: feestIcoon.troparion ? 'Tropaar' : undefined,
+            highlight: feestIcoon.troparion,
+            paragraphs: feestIcoon.tekst ? [feestIcoon.tekst] : [],
+          }
+        }
+      />
     </section>
   );
 }

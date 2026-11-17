@@ -2,7 +2,7 @@
 // kalenders. Draaien: npm run check:dagthema
 import assert from 'node:assert/strict';
 import { utc } from '../src/lib/kalender';
-import { dagThema } from '../src/lib/feestdagen';
+import { dagThema, feestIcoonVanDag } from '../src/lib/feestdagen';
 import { bidBeeld, icoonVan } from '../src/lib/bidbeelden';
 
 // Gedeelde beelden
@@ -75,5 +75,18 @@ assert.equal(dagThema(utc(2027, 1, 14), 'oud')?.cyclus?.dag, undefined);
 // De regel is één zin, ook als die met een aanhalingsteken eindigt (Annunciatie, 7-4-2027 oud)
 const ann = dagThema(utc(2027, 4, 7), 'oud')?.kop?.regel ?? '';
 assert.ok(ann && !/[.!?][”"’)]?\s/.test(ann), ann);
+
+// Klein feesticoon in de kop van Vandaag (de kop zelf blijft altijd Christus): beeld, naam, tropaar of korte betekenis
+const kruis = feestIcoonVanDag(utc(2027, 9, 27), 'oud')!; // Kruisverheffing (kerkelijk 14 september)
+assert.equal(kruis.beeld, icoonVan('kruisverheffing'));
+assert.ok(kruis.troparion && kruis.troparion.length > 40, 'tropaar van de Kruisverheffing');
+const thomas = feestIcoonVanDag(utc(2027, 5, 9), 'oud')!; // Thomaszondag 2027: icoon van de dag, geen tropaar
+assert.ok(thomas.beeld.startsWith('/images/feesten/') && !thomas.beeld.includes('/bidden/'), `zuiver icoon, geen analogion: ${thomas.beeld}`);
+assert.equal(thomas.troparion, undefined);
+assert.ok(thomas.tekst && thomas.tekst.length > 20, 'korte betekenis zonder tropaar');
+const lichteWeek = feestIcoonVanDag(utc(2027, 5, 4), 'oud')!; // dinsdag in de Lichte Week: het feest van Pascha
+assert.equal(lichteWeek.beeld, '/images/feesten/pascha.webp');
+assert.ok(lichteWeek.troparion?.includes('opgestaan'), lichteWeek.troparion);
+assert.equal(feestIcoonVanDag(utc(2027, 7, 20), 'oud'), null); // gewone dag
 
 console.log('dagthema: alle controles geslaagd');
