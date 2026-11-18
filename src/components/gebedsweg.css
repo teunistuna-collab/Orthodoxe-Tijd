@@ -93,6 +93,17 @@
 }
 
 /* Leesvensters (17-11-2026): achter de gebedstekst een rustiger, lichter perkamentvlak met de rijkere textuur aan de randen
-   (zoals de leesweergave van Adem en Etmaal); tekst in donker inktbruin. De nachtweergave houdt haar eigen kleuren. */
-.gw:not(.is-nacht) { --gw-tekst: #2b1d12; }
-.gw-bid:not(.is-nacht) { background: linear-gradient(90deg, rgba(251, 244, 230, 0), rgba(251, 244, 230, .8) 26px, rgba(251, 244, 230, .8) calc(100% - 26px), rgba(251, 244, 230, 0)), var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center / cover; }
+   (zoals de leesweergave van Adem en Etmaal); tekst in donker inktbruin. De nachtweergave en Bid kort (beeld van het
+   pijlgebed, lichte tekst) houden hun eigen kleuren. */
+.gw:not(.is-nacht, .is-kort) { --gw-tekst: #2b1d12; }
+.gw-bid:not(.is-nacht, .is-kort) { background: linear-gradient(90deg, rgba(251, 244, 230, 0), rgba(251, 244, 230, .8) 26px, rgba(251, 244, 230, .8) calc(100% - 26px), rgba(251, 244, 230, 0)), var(--papyrus, #f5e6c8) url('/images/vandaag/papyrus-licht.webp') center / cover; }
+
+/* Rode initialen (18-11-2026): de vetgedrukte hoofdletter aan het begin van elk vers en de grote beginletter in rood, zoals
+   in het Psalter (psalter-mobiel.css, --pm-rood); in de nachtweergave een lichter rood. */
+.gw { --pm-rood: #8f2a20; }
+.gw.is-nacht { --pm-rood: #d0685a; }
+
+/* Donker of licht scherm rechtsboven in het gebed (18-11-2026), als tegenhanger van × links */
+#top#top#top#top#top#top#top#top#top .gw-bid .gw-nachtknop { display: inline-flex; align-items: center; justify-content: center; justify-self: end; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--gw-zacht); cursor: pointer; }
+.gw-bid .gw-nachtknop svg { width: 21px; height: 21px; stroke-width: 1.6; }
+#top#top#top#top#top#top#top#top#top .gw-bid .gw-nachtknop:focus-visible { outline: 3px solid var(--gw-accent); outline-offset: -3px; }

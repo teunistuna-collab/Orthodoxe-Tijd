@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Moon, Sun } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { naamVan, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
@@ -7,7 +7,7 @@ import { AANBIDDING, bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, kortVan, l
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { useGekozenVorm } from '../lib/jezusgebed';
 import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
-import { useLeesvoorkeur } from '../lib/leesvoorkeur';
+import { useLeesvoorkeur, zetKleur } from '../lib/leesvoorkeur';
 import { PSALMEN, laadPsalmTeksten, type PsalmTeksten } from '../lib/psalmen';
 import { useSchermAan } from '../lib/schermAan';
 import { Gebedsregels } from './AdemMobiel';
@@ -176,7 +176,15 @@ function Stap({ d, weg, stap, i, aantal, nacht, amen }: { d: ServiceMapping; weg
       <div className="am-kop">
         <a className="am-terug" href={bidPad(slug)} aria-label="Stoppen en terug naar het begin van het uur">×</a>
         <span className="gw-context">{naamVan(d)}</span>
-        <span />
+        {/* Rechtsboven: donker of licht scherm (de leesvoorkeur, ook voor de afsluiting en andere leesteksten); Bid kort
+            heeft altijd het donkere beeld van het pijlgebed */}
+        {weg === 'kort' ? (
+          <span />
+        ) : (
+          <button type="button" className="gw-nachtknop" onClick={() => zetKleur(nacht ? 'licht' : 'donker')} aria-pressed={nacht} aria-label={nacht ? 'Licht scherm' : 'Donker scherm'} title={nacht ? 'Licht scherm' : 'Donker scherm'}>
+            {nacht ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
+          </button>
+        )}
       </div>
       <div className="gw-vlak">
         <StapInhoud stap={stap} />
