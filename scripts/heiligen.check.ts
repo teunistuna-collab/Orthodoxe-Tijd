@@ -28,8 +28,11 @@ for (const [feestId, hjId] of Object.entries(FEEST_HEILIGENJAAR)) {
   const f = feesten.find((x) => x.id === feestId);
   assert.ok(f?.md, `feest ${feestId} onbekend of zonder vaste datum`);
   const v = maand(hjId).days[f.md]?.commemorations.find((c) => c.id === hjId);
-  assert.ok(v && v.type === 'feast', `${hjId} is geen feest op ${f.md}`);
+  // Een feest, of bij de Lage Landen de heilige zelf (dezelfde vermelding als op de pagina Heiligen)
+  const ll = LAGE_LANDEN.find((h) => h.heiligenjaar === hjId);
+  assert.ok(v && (v.type === 'feast' || (ll && ll.md === f.md)), `${hjId} is geen feest of gekoppelde heilige op ${f.md}`);
 }
+assert.equal(FEEST_HEILIGENJAAR.willibrord, LAGE_LANDEN.find((h) => h.naam === 'Willibrord van Utrecht')?.heiligenjaar);
 
 // Handmatig nagekeken dagen (zie source/heiligenjaar/IMPORTRAPPORT.md).
 assert.equal(HEILIGEN['10-4'][0].naam, 'Hiërotheos');

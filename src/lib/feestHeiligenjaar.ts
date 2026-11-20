@@ -23,7 +23,15 @@ export const FEEST_HEILIGENJAAR: Record<string, string> = {
   'anna-ontvangenis': 'hj-1209-1', // 12-9 Ontvangenis van de Moeder Gods
   kerstmis: 'hj-1225-1', // 12-25 Geboorte in het Vlees
   'synaxis-moeder-gods': 'hj-1226-1', // 12-26 Synaxis van de Moeder Gods
+  // Heiligen van de Lage Landen met een eigen feest (lib/feesten.ts): de levensbeschrijving uit het Heiligenjaar, dezelfde
+  // tekst als op de pagina Heiligen (lib/lageLanden.ts, veld heiligenjaar)
+  servatius: 'hj-0513-10', // 5-13 Servatius van Maastricht
+  bonifatius: 'hj-0605-12', // 6-5 Bonifatius
+  jeroen: 'hj-0817-8', // 8-17 Jeroen van Noordwijk
+  willibrord: 'hj-1107-3', // 11-7 Willibrord van Utrecht
+  lebuinus: 'hj-1116-6', // 11-16 Lebuinus van Deventer
+  radboud: 'hj-1129-8', // 11-29 Radboud van Utrecht
 };
 
-/** Heiligenjaar-vermeldingen die bij een bestaand feest horen (niet als tweede feest tonen). */
+/** Heiligenjaar-vermeldingen die bij een bestaand feest horen (niet als tweede feest tonen; heiligen blijven gewoon bij de heiligen). */
 export const GEKOPPELDE_FEESTTEKSTEN = new Set(Object.values(FEEST_HEILIGENJAAR));
