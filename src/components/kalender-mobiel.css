@@ -145,3 +145,14 @@
 .dl-type { display: block; font-size: 12px; font-weight: 700; letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; color: #7a5420; }
 .dl-ref { display: block; overflow-wrap: anywhere; color: #3b2314; }
 .dl-pijl { flex: none; width: 18px; height: 18px; color: var(--color-gold-deep); stroke-width: 1.8; }
+
+/* Beter herkenbaar (19-11-2026): grotere tekens onder de dagnummers en de gekozen dag met een gouden ring om het donkere vlak */
+.km-tekens { height: 12px; gap: 3px; }
+.km-teken { font-size: 12px; }
+.km-teken.is-groot { font-size: 13px; }
+.km-teken svg { width: 12px; height: 12px; }
+.km-legenda .km-teken { width: 14px; font-size: 13px; }
+.km-cel.is-gekozen::before { width: 38px; height: 38px; background: #6b3d17; box-shadow: 0 0 0 2px #f6ead2, 0 0 0 3.5px #c49332, 0 2px 6px rgba(60, 30, 10, .4); }
+.km-cel.is-gekozen.is-vandaag::before { box-shadow: 0 0 0 2px #f6ead2, 0 0 0 3.5px #c49332, 0 2px 6px rgba(60, 30, 10, .4); }
+.km-cel.is-gekozen .km-nr { font-weight: 700; }
+.km-kerkdatum { font-size: 15px; color: #6a4a24; }

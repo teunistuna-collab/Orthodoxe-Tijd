@@ -1,7 +1,7 @@
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { datumMetKerk, daysBetween, formatDag, formatKort, hoofdletter } from '../lib/kalender';
+import { datumMetKerk, daysBetween, formatDag, formatKort, formatLang, hoofdletter, kerkRegel } from '../lib/kalender';
 import { paascyclusVoor, type Paascyclus, type StapKey } from '../lib/paascyclus';
 import { PAASCYCLUS } from '../lib/feesten';
 import { PASCHA_DAGICONEN, PERIODE_POPUPS, STAP_INHOUD } from '../lib/paascyclusTeksten';
@@ -117,7 +117,8 @@ function Hoofd({ cyclus }: { cyclus: Paascyclus }) {
           {stap ? (
             <>
               <h2 className="gm-kaart-titel">Vandaag in de Paschacyclus</h2>
-              <p className="gm-datumregel">{hoofdletter(datumMetKerk(vandaag, mode))}</p>
+              <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
+              <p className="kerk-regel">{kerkRegel(vandaag, mode)}</p>
               <p className="gm-periode">{stap.label}</p>
               <p className="gm-bereik">{bereik(stap)}</p>
               <p className="gm-tekst">{stap.short}</p>

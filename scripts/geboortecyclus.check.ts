@@ -135,7 +135,8 @@ assert.equal(titel('2026-12-25', 'nieuw'), 'Christus wordt geboren, verheerlijkt
 // Regressie 14 november 2026: burgerlijke en kerkelijke datum samen, en de aftelling volgt dezelfde datum als "Begint op"
 assert.equal(datumMetKerk(d('2026-11-14'), 'oud'), 'zaterdag 14 november 2026 · kerkelijk 1 november');
 assert.equal(datumMetKerk(d('2026-11-14'), 'nieuw'), 'zaterdag 14 november 2026');
-assert.equal(kerkRegel(d('2026-11-14'), 'oud'), 'Kerkelijke datum: 1 november · juliaanse kalender');
+assert.equal(kerkRegel(d('2026-11-14'), 'oud'), 'Juliaans · kerkelijk 1 november');
+assert.equal(kerkRegel(d('2026-11-14'), 'nieuw'), 'Gregoriaans');
 {
   const eerste = g('2026-11-14').stappen[0];
   assert.equal(daysBetween(d('2026-11-14'), eerste.van), 14);

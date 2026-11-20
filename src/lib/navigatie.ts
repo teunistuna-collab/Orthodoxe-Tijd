@@ -9,7 +9,7 @@ export function gaNaar(pagina: string) {
 // Adem en Etmaal horen bij Bidden én Ontdek; ze blijven bij de groep waarvandaan je kwam (standaard Ontdek).
 export type Groep = 'bidden' | 'ontdek';
 export const BIDDEN_PAGINAS = ['bidden', 'gebeden', 'psalmen'];
-export const ONTDEK_PAGINAS = ['cycli', 'week', 'jaar', 'pascha', 'geboorte'];
+export const ONTDEK_PAGINAS = ['cycli', 'week', 'jaar', 'pascha', 'geboorte', 'feesten', 'heiligen', 'vasten'];
 export const GEDEELD = ['adem', 'etmaal'];
 let laatste: Groep = 'ontdek';
 /** Door App.tsx aangeroepen bij elke paginawissel. Alleen de overzichten waarvandaan je Adem of Etmaal opent (Bidden,

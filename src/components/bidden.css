@@ -68,3 +68,11 @@
 #top#top#top#top#top#top#top#top#top .bd-kaart.is-binnenkort .bd-tekst { padding-right: 14px; }
 #top#top#top#top#top#top#top#top#top .bd-binnenkort { font-size: 13px; font-style: italic; letter-spacing: .02em; color: #7d5218; }
 @media (hover: hover) { #top#top#top#top#top#top#top#top#top .bd-kaart.is-binnenkort:hover { background-color: transparent; } }
+
+/* De hoofdactie van Bidden (19-11-2026): het gebedsuur van nu in een gouden omlijsting met een duidelijke knop "Begin met
+   bidden"; de andere ingangen blijven rustige kaarten eronder */
+#top#top#top#top#top#top#top#top#top#top .bd-uur { border: 2px solid #c49332; box-shadow: 0 0 0 1px rgba(255, 248, 232, .5) inset, 0 4px 14px rgba(40, 20, 6, .3); }
+#top#top#top#top#top#top#top#top#top#top .bd-uur .bd-hoofd .bd-tekst > span:not(.bd-label):not(.bd-start) { font-size: 16px; color: #4a3826; }
+.bd-start { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; min-height: 40px; margin-top: 8px; padding: 0 16px; border-radius: 999px; background: linear-gradient(180deg, #1c4b68, #103b59 60%, #09283d); font-family: var(--font-lees); font-size: 17px; font-weight: 500; color: #f6ead2; box-shadow: inset 0 0 0 1px rgba(216, 173, 99, .55); }
+.bd-start svg { width: 18px; height: 18px; color: #f0c977; }
+#top#top#top#top#top#top#top#top#top#top .bd-uur .bd-label { font-size: 13px; letter-spacing: .06em; }

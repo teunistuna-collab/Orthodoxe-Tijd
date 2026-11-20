@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { datumMetKerk, addDays, civilVanKerkdatum, daysBetween, formatDag, formatMd, hoofdletter, kerkDatum, MAANDEN, parseYmd, ymd } from '../lib/kalender';
+import { addDays, formatLang, kerkRegel, civilVanKerkdatum, daysBetween, formatDag, formatMd, hoofdletter, kerkDatum, MAANDEN, parseYmd, ymd } from '../lib/kalender';
 import NaarBoven from './NaarBoven';
 import HeiligePopup from './HeiligePopup';
 import { heiligeTitel, tekstVoorIndeling, zoekVorm, type Resultaat } from '../lib/heiligenPopup';
@@ -136,17 +136,18 @@ export default function Heiligen() {
     const icoon = heiligeIcoon(h);
     const onder = onderregel(h);
     return (
+      // Rustige regel (19-11-2026): het eigen icoon klein als dat er is, anders een lege kolom (geen kruisvak); de naam en een
+      // korte onderscheidende omschrijving. De datum staat al boven de lijst.
       <li key={h.id}>
-        <button type="button" className="hm-kaart hm-dagkaart" onClick={() => setGeselecteerde(h)}>
-          <span className="hm-beeld" aria-hidden="true">
-            {icoon ? <img src={icoon.src} alt="" loading="lazy" decoding="async" /> : <span className="hm-kader"><img className="hm-kruis" src="/images/ui/kruis.webp" alt="" width={218} height={256} decoding="async" /></span>}
+        <button type="button" className="ov-rij ov-heilige" onClick={() => setGeselecteerde(h)}>
+          <span className={`ov-beeld${icoon ? '' : ' is-leeg'}`} aria-hidden="true">
+            {icoon && <img src={icoon.src} alt="" loading="lazy" decoding="async" />}
           </span>
-          <span className="hm-tekst">
+          <span className="ov-tekst">
             <b>{heiligeTitel(h.naam)}</b>
-            {onder && <span className="hm-onder">{onder}</span>}
-            <small>Herdenking: {formatMd(h.md)}</small>
+            {onder && <span>{onder}</span>}
           </span>
-          <ChevronRight className="hm-pijl" aria-hidden="true" />
+          <ChevronRight className="ov-pijl" aria-hidden="true" />
         </button>
       </li>
     );
@@ -206,7 +207,7 @@ export default function Heiligen() {
         // Mobiel: het icoon van het Eerste Concilie van Nicea in kaarslicht (aangeleverd 26-10-2026, alleen verkleind), titel als tekst
         <div className="em-banner hm-banner">
           <img src="/images/ontwerp/heiligen-nicea-800.webp" srcSet="/images/ontwerp/heiligen-nicea-800.webp 800w, /images/ontwerp/heiligen-nicea-1086.webp 1086w" sizes="100vw" alt="" width={1086} height={1448} loading={open ? 'eager' : 'lazy'} decoding="async" />
-          <Kop terug="#meer" merk />
+          <Kop terug="#cycli" merk />
           <div className="em-banner-tekst">
             <h1 className="em-titel">Heiligen</h1>
             <Sierlijn />
@@ -238,7 +239,7 @@ export default function Heiligen() {
             </a>
             <h2 className="vg-hl-kop">{titel}</h2>
             <p className="vg-hl-uitleg">
-              {gevonden.length} heiligen{mode === 'oud' ? ' · Jul = juliaanse (oude) kalender, Greg = gregoriaanse (nieuwe) kalender' : ''}
+              {gevonden.length} heiligen{mode === 'oud' ? ' · Jul = juliaanse kalender, Greg = gregoriaanse kalender' : ''}
             </p>
             {lijst}
           </>
@@ -258,7 +259,7 @@ export default function Heiligen() {
                 <div className="hm-dagnav">
                   <button type="button" className="hm-stap" aria-label="Vorige dag" onClick={() => naarDag(verschuiving - 1)}><ChevronLeft aria-hidden="true" /></button>
                   <label className="hm-datum">
-                    <span aria-live="polite">{hoofdletter(datumMetKerk(dagDatum, mode))}</span>
+                    <span aria-live="polite">{hoofdletter(formatLang(dagDatum))}</span>
                     <CalendarDays aria-hidden="true" />
                     <input
                       type="date"
@@ -269,6 +270,7 @@ export default function Heiligen() {
                   </label>
                   <button type="button" className="hm-stap" aria-label="Volgende dag" onClick={() => naarDag(verschuiving + 1)}><ChevronRight aria-hidden="true" /></button>
                 </div>
+                <p className="kerk-regel">{kerkRegel(dagDatum, mode)}</p>
                 {verschuiving !== 0 && (
                   <button type="button" className="hm-vandaag" onClick={() => naarDag(0)}>Terug naar vandaag</button>
                 )}
@@ -277,7 +279,7 @@ export default function Heiligen() {
                 ) : vanDag.length === 0 ? (
                   <p className="vg-hl-leeg">Geen heiligen opgenomen voor deze dag.</p>
                 ) : (
-                  <ul className="hm-lijst">{(alleVanDag ? vanDag : vanDag.slice(0, 5)).map(heiligeKaart)}</ul>
+                  <ul className="ov-lijst">{(alleVanDag ? vanDag : vanDag.slice(0, 5)).map(heiligeKaart)}</ul>
                 )}
                 {vanDag.length > 5 && !alleVanDag && (
                   <button type="button" className="hm-meer" onClick={() => setAlleVanDag(true)}>
@@ -288,15 +290,14 @@ export default function Heiligen() {
                 <OnzeHeiligenBlok onLees={leesOnze} />
 
                 <h2 className="hm-label hm-lijnlabel">Heiligen van de Lage Landen</h2>
-                <ul className="hm-lijst">
+                <ul className="ov-lijst">
                   <li>
-                    <a className="hm-kaart hm-ll" href="#heiligen/lage-landen">
-                      <span className="hm-beeld" aria-hidden="true"><img src="/images/decor/lage-landen-kaart.webp" alt="" width={414} height={263} loading="lazy" decoding="async" /></span>
-                      <span className="hm-tekst">
+                    <a className="ov-rij is-zonder-beeld" href="#heiligen/lage-landen">
+                      <span className="ov-tekst">
                         <b>Heiligen der Lage Landen</b>
-                        <span>Het geloof in onze streken</span>
+                        <span>De heiligen uit onze streken, met hun gedenkdag</span>
                       </span>
-                      <ChevronRight className="hm-pijl" aria-hidden="true" />
+                      <ChevronRight className="ov-pijl" aria-hidden="true" />
                     </a>
                   </li>
                 </ul>

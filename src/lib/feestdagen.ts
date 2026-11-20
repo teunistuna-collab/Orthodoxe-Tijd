@@ -131,3 +131,9 @@ export function feestIcoonVanDag(dag: Date, mode: Mode): FeestIcoon | null {
   const f = DERTIEN.find((x) => x.id === (tijd.id === 'pascha' ? 'pascha' : 'kerstmis'));
   return { beeld: tijd.beeld, naam: f ? naamVan(f) : tijd.alt, troparion: f?.troparion, tekst: f?.toelichting };
 }
+
+/** Het feest voor de banner van de pagina Feesten: van de feesten van vandaag (volgens de gekozen kalender) het hoogste
+ *  in rang met een eigen icoon (dezelfde banner als op de detailpagina van dat feest); null = de standaardbanner. */
+export function bannerFeest(dag: Date, mode: Mode): Feest | null {
+  return [...dagInfo(dag, mode).feesten].sort((a, b) => (b.rang ?? 0) - (a.rang ?? 0)).find((f) => icoonVan(f.id)) ?? null;
+}

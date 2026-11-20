@@ -79,3 +79,21 @@
 .fm-lezing small { display: block; font-family: var(--font-titel); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #7a6248; }
 .fm-lezing b { display: block; font-family: var(--font-lees); font-size: 18px; font-weight: 500; }
 .fm-lezing svg { flex: none; width: 20px; height: 20px; color: #7d5218; }
+
+/* Banner op de dag van een feest (FeestenMobiel Banner): het icoon van het feest met dezelfde uitsnede als de detailpagina */
+.fm-banner.is-feest img { object-position: 50% 22%; }
+
+/* Feestregels op de hoofdpagina (FeestenMobiel DatumRij, referentie 19-11-2026): vaste datumkolom links (dag boven de
+   afgekorte maand), naam en aanvullende informatie rechts, een pijl; fijne gouden lijnen tussen de regels. */
+.fm-rijen { margin: 4px 0 6px; padding: 0; list-style: none; border-top: 1px solid rgba(185, 148, 85, .6); }
+.fm-rijen li { border-bottom: 1px solid rgba(185, 148, 85, .6); }
+#top#top#top#top#top#top#top#top .fm-rij { display: grid; grid-template-columns: 58px minmax(0, 1fr) 20px; align-items: center; column-gap: 12px; min-height: 64px; padding: 12px 4px 12px 0; color: var(--inkt, #2b1d12) !important; text-decoration: none; text-align: left; -webkit-tap-highlight-color: transparent; }
+.fm-rij:active { background: rgba(90, 60, 25, .07); }
+#top#top#top#top#top#top#top#top .fm-rij:focus-visible { outline: 3px solid #7d5218; outline-offset: -3px; }
+.fm-rij-datum { display: flex; flex-direction: column; align-items: center; line-height: 1; color: #3b2314; }
+.fm-rij-datum b { font-family: var(--font-lees); font-size: 27px; font-weight: 500; font-variant-numeric: lining-nums; }
+.fm-rij-datum small { margin-top: 4px; font-family: var(--font-titel); font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #4a3220; }
+.fm-rij-tekst { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.fm-rij-tekst b { font-family: var(--font-lees); font-size: 20px; font-weight: 500; line-height: 1.22; overflow-wrap: break-word; hyphens: auto; color: #2b1d12; }
+.fm-rij-tekst > span:not(.sr-only) { font-family: var(--font-lees); font-size: 15.5px; font-style: italic; line-height: 1.3; color: #5d4630; }
+.fm-rij-pijl { justify-self: end; width: 18px; height: 18px; color: #4a3220; }

@@ -3,13 +3,14 @@ import { CalendarDays, ChevronLeft, ChevronRight, Search, X } from 'lucide-react
 import { useApp } from '../lib/context';
 import { bidBeeld, icoonVan } from '../lib/bidbeelden';
 import type { Feest } from '../lib/feesten';
-import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, hoofdletter, julianKey, kerkDatum, parseYmd, ymd } from '../lib/kalender';
+import { addDays, dagInfo, daysBetween, formatDag, formatLang, formatKerkLang, hoofdletter, julianKey, kerkDatum, kerkRegel, MAANDEN_KORT, parseYmd, ymd } from '../lib/kalender';
 import { stapIndex } from '../lib/gebedsweg';
 import { roosterMelding, vertaalRef, vertaalTag } from '../lib/htc';
 import { useSchermAan } from '../lib/schermAan';
 import { Doorsturen, Jezusgebed } from './Gebedsweg';
 import { FEEST_HEILIGENJAAR, GEKOPPELDE_FEESTTEKSTEN } from '../lib/feestHeiligenjaar';
 import { useHeiligenjaarTekst } from '../lib/heiligenjaarTekst';
+import { bannerFeest } from '../lib/feestdagen';
 import { normaliseer } from '../lib/heiligenPopup';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
 import './etmaal-mobiel.css';
@@ -72,6 +73,27 @@ function Beeld({ id, direct }: { id: string; direct?: boolean }) {
   );
 }
 
+/** Een feestregel op de hoofdpagina Feesten (referentie 19-11-2026): links een vaste datumkolom (dag boven de afgekorte
+ *  maand, de burgerlijke datum), rechts de naam met de aanvullende informatie kleiner eronder; de hele regel opent het feest. */
+function DatumRij({ f, datum, onder }: { f: Feest; datum: Date; onder: string }) {
+  return (
+    <li>
+      <a className="fm-rij" href={`#feesten/${f.id}`}>
+        <span className="fm-rij-datum" aria-hidden="true">
+          <b>{String(datum.getUTCDate()).padStart(2, '0')}</b>
+          <small>{MAANDEN_KORT[datum.getUTCMonth()]}</small>
+        </span>
+        <span className="fm-rij-tekst">
+          <span className="sr-only">{hoofdletter(formatLang(datum))}: </span>
+          <b>{titels(f).titel}</b>
+          <span>{onder}</span>
+        </span>
+        <ChevronRight className="fm-rij-pijl" aria-hidden="true" />
+      </a>
+    </li>
+  );
+}
+
 function Kaart({ f, onder, klein, direct }: { f: Feest; onder: string; klein?: string; direct?: boolean }) {
   const t = titels(f);
   return (
@@ -89,11 +111,20 @@ function Kaart({ f, onder, klein, direct }: { f: Feest; onder: string; klein?: s
   );
 }
 
+/** De banner van de pagina Feesten: op de dag van een feest met een eigen icoon hetzelfde beeld als op de detailpagina van
+ *  dat feest (lib/feestdagen.ts bannerFeest, volgens de gekozen kalender); anders, en vanaf de dag erna weer, het Laatste
+ *  Avondmaal. */
 function Banner() {
+  const { vandaag, mode } = useApp();
+  const feest = bannerFeest(vandaag, mode);
   return (
-    <div className="em-banner fm-banner">
-      <img src="/images/feesten/laatste-avondmaal-banner.webp" alt="" width={500} height={231} decoding="async" />
-      <Kop terug="#meer" merk slim />
+    <div className={`em-banner fm-banner${feest ? ' is-feest' : ''}`}>
+      {feest ? (
+        <img src={icoonVan(feest.id)!} alt={`Icoon: ${titels(feest).titel}`} decoding="async" />
+      ) : (
+        <img src="/images/feesten/laatste-avondmaal-banner.webp" alt="" width={500} height={231} decoding="async" />
+      )}
+      <Kop terug="#cycli" merk slim />
       <div className="em-banner-tekst">
         <h1 className="em-titel">Feesten</h1>
         <Sierlijn />
@@ -153,7 +184,6 @@ function Overzicht({ alle, groot, zoek, setZoek, verschuiving, setVerschuiving }
   // Komende feesten (geen kleine gedachtenissen) en, op een dag zonder feest, het eerstvolgende
   const komend = alle.filter(({ f, dagen }) => dagen > 0 && f.soort !== 'gedachtenis').sort((a, b) => a.dagen - b.dagen).slice(0, 5);
   const volgend = vanDag.length ? null : [...alle].filter(({ datum }) => datum > dag).sort((a, b) => a.datum.getTime() - b.datum.getTime())[0];
-  const jaar = vandaag.getUTCFullYear();
   return (
     <section id="feesten" className="am hm fm">
       <Banner />
@@ -172,15 +202,16 @@ function Overzicht({ alle, groot, zoek, setZoek, verschuiving, setVerschuiving }
           </label>
           <button type="button" className="hm-stap" aria-label="Volgende dag" onClick={() => setVerschuiving(verschuiving + 1)}><ChevronRight aria-hidden="true" /></button>
         </div>
+        <p className="kerk-regel">{kerkRegel(dag, mode)}</p>
         {/* Een schermlezer hoort de dag en hoeveel feesten er zijn */}
         <p className="sr-only" aria-live="polite">{verschuiving === 0 ? '' : `${hoofdletter(formatLang(dag))}: ${vanDag.length === 0 ? 'geen feest' : vanDag.length === 1 ? '1 feest' : `${vanDag.length} feesten`}`}</p>
         {verschuiving !== 0 && <button type="button" className="hm-vandaag" onClick={() => setVerschuiving(0)}>Terug naar vandaag</button>}
         {vanDag.length ? (
-          <ul className="hm-lijst">{vanDag.map((f) => <Kaart key={f.id} f={f} onder={soortTekst(f)} direct />)}</ul>
+          <ul className="fm-rijen">{vanDag.map((f) => <DatumRij key={f.id} f={f} datum={dag} onder={soortTekst(f)} />)}</ul>
         ) : (
           <>
             <p className="vg-hl-leeg">Voor deze dag staat geen feest in de kalender.</p>
-            {volgend && <ul className="hm-lijst"><Kaart f={volgend.f} onder={`Eerstvolgend feest · ${metJaar(volgend.datum, jaar)}`} direct /></ul>}
+            {volgend && <ul className="fm-rijen"><DatumRij f={volgend.f} datum={volgend.datum} onder="Eerstvolgend feest" /></ul>}
           </>
         )}
 
@@ -188,13 +219,13 @@ function Overzicht({ alle, groot, zoek, setZoek, verschuiving, setVerschuiving }
           <h2 className="hm-label">De grote feesten</h2>
           <a href="#feesten/groot">Alle grote feesten <ChevronRight aria-hidden="true" /></a>
         </div>
-        <ul className="hm-lijst">{voorproef.map(({ f, datum }) => <Kaart key={f.id} f={f} onder={titels(f).onder ?? soortTekst(f)} klein={metJaar(datum, jaar)} direct />)}</ul>
+        <ul className="fm-rijen">{voorproef.map(({ f, datum }) => <DatumRij key={f.id} f={f} datum={datum} onder={soortTekst(f)} />)}</ul>
 
         <div className="hm-kop fm-kop">
           <h2 className="hm-label">Komende feesten</h2>
           <a href="#kalender">Bekijk de kalender <ChevronRight aria-hidden="true" /></a>
         </div>
-        <ul className="hm-lijst">{komend.map(({ f, datum }) => <Kaart key={f.id} f={f} onder={soortTekst(f)} klein={metJaar(datum, jaar)} />)}</ul>
+        <ul className="fm-rijen">{komend.map(({ f, datum }) => <DatumRij key={f.id} f={f} datum={datum} onder={soortTekst(f)} />)}</ul>
       </div>
     </section>
   );

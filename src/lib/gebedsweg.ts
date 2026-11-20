@@ -113,3 +113,12 @@ export const gebedTitel = (d: ServiceMapping) => `Het gebed van ${d.title.endsWi
 const AVONDUREN = ['Vespers', 'Completen', 'Middernachtdienst', 'Metten'];
 /** Avond- en nachturen: bij de leesweergave "systeem" bidt de gebedsweg dan in de nachtkleuren. */
 export const isAvonduur = (d: ServiceMapping) => AVONDUREN.includes(d.title);
+
+/** De tekst van de hoofdknop aan het begin van een uur (19-11-2026): alleen "Bid het hele uur" als alle onderdelen er zijn;
+ *  anders wat de knop werkelijk opent ("Bid de beschikbare psalm(en)" of "Bid de beschikbare delen"). */
+export function heelUurLabel(delen: Onderdeel[]): string {
+  const beschikbaar = delen.filter((o) => o.beschikbaar);
+  if (beschikbaar.length === delen.length) return 'Bid het hele uur';
+  if (beschikbaar.every((o) => o.soort === 'psalm')) return beschikbaar.length === 1 ? 'Bid de beschikbare psalm' : 'Bid de beschikbare psalmen';
+  return 'Bid de beschikbare delen';
+}

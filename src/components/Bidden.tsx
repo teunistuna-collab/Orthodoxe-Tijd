@@ -6,32 +6,27 @@ import { GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
 import { Sierlijn } from './MobielLaag';
 import './bidden.css';
 
-// Bidden (#bidden): het overzicht achter Bidden in de onderbalk, alleen op mobiel (App.tsx), volgens mock-up 03_bidden:
-// een sfeerbanner en vier kaarten (het actuele gebedsuur, Gebeden, Psalter, Het Jezusgebed). Alle kaarten openen de
-// bestaande pagina's; Etmaal is bereikbaar via het actuele gebedsuur en "Bekijk alle gebedsuren".
+// Bidden (#bidden): het overzicht achter Bidden in de onderbalk: de sfeerbanner, het gebedsuur van nu (één klikbare regel
+// naar het gebed van dit uur, met "Kies een ander gebedsuur" eronder) en de andere gebedsvormen als rustige regels met een
+// ronde uitsnede (Jezusgebed, Psalter; Gebeden zodra die beschikbaar zijn).
 // Beelden: aangeleverd op 25-10-2026 (public/images/bidden), alleen uitgesneden en verkleind. In de banner is het
 // paneel met de Christusvoorstelling bedekt met het originele Sinaï-icoon (uitgesneden en geschaald, met een warme
 // kaarslichtlaag erover). Psalter gebruikt het goedgekeurde manuscriptbeeld van de Psalter-pagina; Gebeden het
 // evangelieboek; het gebedsuur en het Jezusgebed dezelfde kaartbeelden als Etmaal en Adem onder Ontdek.
 
-type Kaart = { id: string; titel: string; onder: string; beeld: string; positie?: string; href?: string };
-
-const GEBEDEN: Kaart = {
-  id: 'gebeden',
-  titel: 'Gebeden',
-  onder: GEBEDEN_ZICHTBAAR ? 'Een verzameling gebeden voor verschillende momenten' : 'Binnenkort: ochtend- en avondgebeden',
-  beeld: '/images/bidden/gebeden-kaart.webp',
-};
-const ANDERE: Kaart[] = [
-  { id: 'psalmen', titel: 'Psalter', onder: 'De Psalmen lezen en bidden', beeld: '/images/psalmen/manuscript-800.webp', positie: '62% 50%' },
-  // Bidden opent het gebed zelf; de uitleg over het Jezusgebed staat onder Ontdek
-  { id: 'adem', titel: 'Bid het Jezusgebed', onder: 'Begin direct, in je eigen tempo', beeld: '/images/ontdek/adem-kaart.webp', href: '#adem/bidden' },
+// Regels onder het gebedsuur van nu (20-11-2026, referentie): ronde uitsnede van het bestaande kaartbeeld, naam, korte
+// regel en een chevron; de hele regel opent het gebed.
+type Regel = { href: string; titel: string; onder: string; beeld: string; positie?: string };
+const REGELS: Regel[] = [
+  { href: '#psalmen', titel: 'Psalter', onder: 'Lees en bid de psalmen', beeld: '/images/psalmen/manuscript-800.webp', positie: '62% 50%' },
+  // Bidden opent het gebed zelf; de uitleg over het Jezusgebed staat onder Ontdek (Adem)
+  { href: '#adem/bidden', titel: 'Jezusgebed', onder: 'Bid in je eigen tempo', beeld: '/images/ontdek/adem-kaart.webp', positie: '18% 50%' },
+  // Gebeden pas zodra die beschikbaar zijn
+  ...(GEBEDEN_ZICHTBAAR ? [{ href: '#gebeden', titel: 'Gebeden', onder: 'Gebeden voor verschillende momenten', beeld: '/images/bidden/gebeden-kaart.webp' }] : []),
 ];
-// Zolang de gebeden nog niet zichtbaar zijn, staat Gebeden onderaan (de werkende ingangen eerst)
-const KAARTEN: Kaart[] = GEBEDEN_ZICHTBAAR ? [GEBEDEN, ...ANDERE] : [...ANDERE, GEBEDEN];
 
-const Beeld = ({ src, positie }: { src: string; positie?: string }) => (
-  <span className="bd-beeld" aria-hidden="true">
+const Rond = ({ src, positie }: { src: string; positie?: string }) => (
+  <span className="ov-beeld is-rond" aria-hidden="true">
     <img src={src} alt="" decoding="async" style={positie ? { objectPosition: positie } : undefined} />
   </span>
 );
@@ -69,44 +64,36 @@ export default function Bidden() {
         </div>
       </div>
 
-      <nav className="bd-kaarten" aria-label="Ingangen om te bidden">
-        {/* Twee duidelijke zones: boven (beeld, het uur van nu, de pijl) opent die dienst; onder de lijn opent het overzicht */}
-        <div className="bd-kaart bd-uur">
-          <a className="bd-hoofd" href={`#etmaal/${slugVan(uur)}/bid`}>
-            <Beeld src="/images/ontdek/etmaal-kaart.webp" />
-            <span className="bd-tekst">
-              <span className="bd-label">Bid het actuele gebedsuur</span>
+      <nav className="bd-kaarten is-lijst" aria-label="Ingangen om te bidden">
+        {/* Het gebedsuur van nu: beeld, naam en korte uitleg zijn samen één link naar het gebed van dit uur */}
+        <section className="bd-nu" aria-label="Het gebedsuur van nu">
+          <a className="ov-rij is-rond bd-nu-rij" href={`#etmaal/${slugVan(uur)}/bid`}>
+            <Rond src="/images/ontdek/etmaal-kaart.webp" positie="12% 50%" />
+            <span className="ov-tekst">
+              <span className="bd-label">Het gebedsuur van nu</span>
               <b>{naamVan(uur)}</b>
-              <span>Begin direct met bidden</span>
+              <span>{uur.hoofdgedachtenis}</span>
             </span>
-            <ChevronRight className="bd-pijl" aria-hidden="true" />
+            <ChevronRight className="ov-pijl" aria-hidden="true" />
           </a>
-          <a className="bd-alle" href="#etmaal">
-            Kies een ander gebedsuur <span aria-hidden="true">›</span>
+          <a className="bd-ander" href="#etmaal">
+            Kies een ander gebedsuur <ChevronRight aria-hidden="true" />
           </a>
-        </div>
-        {KAARTEN.map(({ id, titel, onder, beeld, positie, href }) =>
-          // Zolang de gebeden nog niet beschikbaar zijn: geen link en geen pijl, "Binnenkort" onder de titel
-          id === 'gebeden' && !GEBEDEN_ZICHTBAAR ? (
-            <div key={id} className="bd-kaart is-binnenkort">
-              <Beeld src={beeld} positie={positie} />
-              <span className="bd-tekst">
-                <b>{titel}</b>
-                <span className="bd-binnenkort">Binnenkort</span>
-                <span>Ochtend- en avondgebeden</span>
-              </span>
-            </div>
-          ) : (
-          <a key={id} className="bd-kaart" href={href ?? `#${id}`}>
-            <Beeld src={beeld} positie={positie} />
-            <span className="bd-tekst">
-              <b>{titel}</b>
-              <span>{onder}</span>
-            </span>
-            <ChevronRight className="bd-pijl" aria-hidden="true" />
-          </a>
-          ),
-        )}
+        </section>
+        <ul className="ov-lijst bd-vormen">
+          {REGELS.map(({ href, titel, onder, beeld, positie }) => (
+            <li key={href}>
+              <a className="ov-rij is-rond" href={href}>
+                <Rond src={beeld} positie={positie} />
+                <span className="ov-tekst">
+                  <b>{titel}</b>
+                  <span>{onder}</span>
+                </span>
+                <ChevronRight className="ov-pijl" aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
       </nav>
     </section>
   );

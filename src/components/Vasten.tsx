@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { OPEN_POPUP_EVENT, type OpenPopupDetail } from '../lib/events';
 import { ChevronDown, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { addDays, dagInfo, datumMetKerk, daysBetween, formatDag, formatDatum, formatKort, hoofdletter, parseYmd, WEEKDAGEN_KORT, ymd } from '../lib/kalender';
+import { addDays, dagInfo, daysBetween, formatDag, formatDatum, formatKort, formatLang, hoofdletter, kerkRegel, parseYmd, WEEKDAGEN_KORT, ymd } from '../lib/kalender';
 import { periodeVoortgang, vastenPeriodes, type Periode } from '../lib/overzicht';
 import { LADDER, NIVEAUS, vastenGroep } from '../lib/vasten';
 import { VASTEN_POPUPS } from '../lib/cyclusTeksten';
@@ -294,14 +294,15 @@ export default function Vasten() {
     const toegestaan = voedselStatus(dagM.vasten.niveau);
     const nietsToegestaan = Object.values(toegestaan).every((ok) => !ok);
     const betekenisM = vastenBetekenis(dagM);
-    const dagTitel = hoofdletter(datumMetKerk(dagM.civil, mode)); // burgerlijk, met de kerkelijke datum erachter (lib/kalender.ts)
+    // De gewone datum als hoofddatum; de kalender en de kerkelijke datum klein eronder (lib/kalender.ts kerkRegel)
+    const dagTitel = hoofdletter(formatLang(dagM.civil));
     return (
       <>
         <section id="vasten" className="vg ot-redesign ot-vasten vsm">
           {/* Banner zoals op de andere mobiele pagina's: Terug en het merk bovenin, de titel onderaan */}
           <div className="em-banner vsm-banner">
             <img src="/images/ontwerp/vasten-banner-800.webp" srcSet="/images/ontwerp/vasten-banner-800.webp 800w, /images/ontwerp/vasten-banner-1536.webp 1536w" sizes="100vw" alt="" width={1536} height={1024} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
-            <Kop terug="#meer" merk slim />
+            <Kop terug="#cycli" merk slim />
             <div className="em-banner-tekst">
               <h1 className="em-titel">Vasten</h1>
               <MobielSierlijn />
@@ -313,6 +314,7 @@ export default function Vasten() {
             <div className="vsm-kaart vsm-regel">
               {/* Eerst de dag, dan het antwoord (groot), dan de uitleg */}
               <p className="vsm-dag">{dagTitel}</p>
+              <p className="kerk-regel">{kerkRegel(dagM.civil, mode)}</p>
               <h3 className="vsm-antwoord">{dagM.vasten.label}</h3>
               {dagM.vasten.detail !== `${dagM.vasten.label}.` && <p className="vsm-tekst">{dagM.vasten.detail}</p>}
               {dagM.vasten.periode && <p className="vsm-periode">{dagM.vasten.periode}</p>}

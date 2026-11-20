@@ -8,8 +8,8 @@ import { houdFocusBinnen } from '../lib/focus';
 import './welkom.css';
 
 const KALENDERS: { id: Mode; label: string }[] = [
-  { id: 'oud', label: 'Oud · juliaans' },
-  { id: 'nieuw', label: 'Nieuw · gregoriaans' },
+  { id: 'oud', label: 'Juliaans' },
+  { id: 'nieuw', label: 'Gregoriaans' },
 ];
 
 // Welkomstvenster bij het eerste bezoek: de kalender (Oud/Nieuw, direct toegepast zoals in Instellingen), met "Verder naar

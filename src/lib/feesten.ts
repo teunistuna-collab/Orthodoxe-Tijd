@@ -89,7 +89,7 @@ export const GROTE_FEESTEN: Feest[] = [
     groot: true,
     rang: 6,
     toelichting:
-      'God wordt mens in de grot van Bethlehem. Voorafgegaan door veertig dagen Kerstvasten (Filippusvasten) en de strenge vooravond. Op de nieuwe kalender op 25 december; op de oude kalender valt de kerkelijke 25 december op 7 januari.',
+      'God wordt mens in de grot van Bethlehem. Voorafgegaan door veertig dagen Kerstvasten (Filippusvasten) en de strenge vooravond. Op de gregoriaanse kalender op 25 december; op de juliaanse kalender valt de kerkelijke 25 december op 7 januari.',
     traditie:
       'Kerstliederen (kolyadki, kalanda), kutia of sochivo (tarwe met honing) op kerstavond, de ster-optocht van kinderen; twaalf vastenvrije dagen tot Theofanie.',
     troparion:
@@ -134,7 +134,7 @@ export const GROTE_FEESTEN: Feest[] = [
     rang: 6,
     toelichting:
       'De aartsengel Gabriël verkondigt Maria dat zij de Moeder Gods zal worden, en zij antwoordt: „Zie de dienstmaagd des Heren.” Het feest valt vrijwel altijd in de Grote Vasten — daarom zijn vis, wijn en olie toegestaan.',
-    traditie: 'Negen maanden vóór Kerstmis; op de oude kalender de burgerlijke 7 april. In Griekenland ook nationale feestdag.',
+    traditie: 'Negen maanden vóór Kerstmis; op de juliaanse kalender de burgerlijke 7 april. In Griekenland ook nationale feestdag.',
     troparion:
       'Heden is het begin van onze redding en de openbaring van het mysterie van eeuwigheid: de Zoon van God wordt Zoon van de Maagd, en Gabriël verkondigt de genade. Laten wij daarom met hem tot de Moeder Gods roepen: Verheug u, begenadigde, de Heer is met u.',
   },

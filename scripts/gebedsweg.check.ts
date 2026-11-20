@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { serviceConfig, slugVan } from '../src/lib/etmaal';
-import { bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, kortVan, leesUurBestand, onderdelenVan, stapIndex } from '../src/lib/gebedsweg';
+import { bidPad, gebedTitel, heelUurLabel, isAvonduur, isZonOfFeestdag, kortVan, leesUurBestand, onderdelenVan, stapIndex } from '../src/lib/gebedsweg';
 
 const uur = (titel: string) => serviceConfig.find((d) => d.title === titel)!;
 const alles = () => true;
@@ -98,5 +98,15 @@ assert.ok(mettenBestand);
 const metten = (zonOfFeest: boolean) => onderdelenVan(uur('Metten'), mettenBestand, alles, true, zonOfFeest).map((o) => o.titel);
 assert.ok(!metten(false).includes('Psalm 134') && !metten(false).includes('Psalm 135'));
 assert.deepEqual(metten(true).slice(8, 11), ['Psalm 142', 'Psalm 134', 'Psalm 135']);
+
+// De hoofdknop beschrijft wat er werkelijk te bidden is
+{
+  const ps = (nr: number, beschikbaar: boolean) => ({ soort: 'psalm' as const, titel: `Psalm ${nr}`, nr, beschikbaar });
+  const gb = (beschikbaar: boolean) => ({ soort: 'gebed' as const, titel: 'Inleidende gebeden', id: 'x', beschikbaar });
+  assert.equal(heelUurLabel([ps(1, true), ps(2, true)]), 'Bid het hele uur');
+  assert.equal(heelUurLabel([gb(false), ps(83, false), ps(84, true), ps(85, false)]), 'Bid de beschikbare psalm');
+  assert.equal(heelUurLabel([gb(false), ps(83, true), ps(84, true)]), 'Bid de beschikbare psalmen');
+  assert.equal(heelUurLabel([gb(true), ps(83, true), ps(84, false)]), 'Bid de beschikbare delen');
+}
 
 console.log('gebedsweg: alle controles geslaagd');

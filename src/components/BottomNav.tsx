@@ -14,7 +14,8 @@ const ITEMS = [
   { id: 'cycli', label: 'Ontdek', Icon: Compass },
   { id: 'meer', label: 'Meer', Icon: Menu },
 ];
-const MEER = ['meer', 'vasten', 'heiligen', 'feesten', 'instellingen', 'bronnen', 'boeken'];
+// Meer: Boeken, instellingen en informatie; Feesten, Heiligen en Vasten horen bij Ontdek (lib/navigatie.ts)
+const MEER = ['meer', 'boeken', 'instellingen', 'bronnen'];
 
 // Op mobiel staat er één pagina tegelijk in beeld; de actieve knop volgt die pagina.
 export default function BottomNav({ pagina: actief }: { pagina: string }) {

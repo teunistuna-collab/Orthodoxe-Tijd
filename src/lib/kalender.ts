@@ -116,9 +116,10 @@ export function formatKerkLang(civil: Date, mode: Mode): string {
 }
 /** Naam van de kalendertraditie, zoals in Instellingen. */
 export const KALENDER_NAAM: Record<Mode, string> = { oud: 'juliaanse kalender', nieuw: 'gregoriaanse kalender' };
-/** De kerkelijke datum als losse regel, overal met hetzelfde label: "Kerkelijke datum: 1 november · juliaanse kalender". */
+/** De actieve kalender en de kerkelijke datum als ondergeschikte regel onder de gewone datum, overal hetzelfde (19-11-2026):
+ *  "Juliaans · kerkelijk 1 november"; bij de gregoriaanse kalender vallen de datums samen: "Gregoriaans". */
 export function kerkRegel(civil: Date, mode: Mode): string {
-  return `Kerkelijke datum: ${formatDag(kerkDatum(civil, mode))} · ${KALENDER_NAAM[mode]}`;
+  return mode === 'oud' ? `Juliaans · kerkelijk ${formatDag(kerkDatum(civil, mode))}` : 'Gregoriaans';
 }
 /** Burgerlijke datum, met bij de oude kalender de kerkelijke erachter: "zaterdag 14 november 2026 · kerkelijk 1 november".
  *  Bij de nieuwe kalender vallen beide samen. `weekdag: false` laat de weekdag weg. */

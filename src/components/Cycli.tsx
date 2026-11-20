@@ -1,47 +1,42 @@
-import type { CSSProperties } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Sierlijn } from './MobielLaag';
 import { usePaginaOpen } from '../lib/paginaOpen';
-import { useApp } from '../lib/context';
-import { WEEKDAGEN, daysBetween } from '../lib/kalender';
-import { PERIODS, huidigeTijd } from '../lib/jaartijd';
-import { paascyclusVoor } from '../lib/paascyclus';
-import { geboortecyclusVoor } from '../lib/geboortecyclus';
 import './Vandaag.css';
 
-// Ontdek (#cycli): het overzicht achter Ontdek in de onderbalk, alleen op mobiel (App.tsx), volgens de goedgekeurde
-// mock-up (mobile/docs/mockups/goedgekeurd/04-ontdek.png): titel en ondertitel in de banner, daaronder zes brede kaarten
-// met links een beeld en rechts titel, ondertitel en een korte zin. Beelden alleen uit aangeleverde originelen
-// (public/images/ontdek, alleen verkleind). Banner en de kaarten van Adem en Etmaal: aangeleverd op 25-10-2026.
+// Ontdek (#cycli): onder de banner drie groepen (20-11-2026): Gebed en dagelijks leven, Het kerkelijk jaar, Feesten en
+// heiligen. Per onderwerp de naam met een korte vaste informatieregel; aftellingen en wat er nu speelt staan op de
+// pagina's zelf. Elke regel heeft een ronde uitsnede van het bestaande beeld. Adem en Gebedsuren openen de
+// hoofdpagina's Adem en Etmaal.
 
-// zoom en fx/fy (brandpunt in %) bepalen alleen de uitsnede; het beeld zelf blijft ongewijzigd.
-const CYCLI = [
-  // Adem en Etmaal: een aangeleverd kaartbeeld (loopt rechts zelf over in perkament), even breed als de andere kaarten
-  // Ontdek leidt naar uitleg en verdieping; bidden zelf gaat via Bidden (het actuele gebedsuur, Bid het Jezusgebed)
-  { id: 'adem', href: '#adem/lees/wat', titel: 'Over het Jezusgebed', onder: 'Adem · Betekenis en achtergrond', zin: 'Het gebed dat met je meegaat.', beeld: '/images/ontdek/adem-kaart.webp', zoom: 1, fx: 0, fy: 50 },
-  { id: 'etmaal', href: '#etmaal/lees/wat', titel: 'Over de gebedsuren', onder: 'Etmaal · Betekenis van de uren', zin: 'De dag geheiligd door gebed.', beeld: '/images/ontdek/etmaal-kaart.webp', zoom: 1, fx: 0, fy: 50 },
-  { id: 'week', titel: 'Week', onder: 'De zeven dagen', zin: 'Iedere dag een eigen herinnering.', beeld: '/images/ontdek/week.webp', zoom: 1.45, fx: 50, fy: 42 },
-  { id: 'jaar', titel: 'Jaar', onder: 'Het kerkelijk jaar', zin: 'Leven met de feesten en vastentijden.', beeld: '/images/ontdek/jaar.webp', zoom: 1.1, fx: 50, fy: 50 },
-  { id: 'pascha', titel: 'Pascha', onder: 'Van het Kruis naar de Verrijzenis', zin: 'De weg naar het feest der feesten.', beeld: '/images/ontdek/pascha.webp', zoom: 1, fx: 50, fy: 22 },
-  { id: 'geboorte', titel: 'Geboorte', onder: 'Het Licht komt in de wereld', zin: 'De weg naar de Geboorte van Christus.', beeld: '/images/ontdek/geboorte.webp', zoom: 1.05, fx: 50, fy: 58 },
+const GROEPEN: { titel: string; regels: { href: string; titel: string; onder: string; beeld: string; positie?: string }[] }[] = [
+  {
+    titel: 'Gebed en dagelijks leven',
+    regels: [
+      { href: '#adem', titel: 'Adem', onder: 'Het Jezusgebed en de adem', beeld: '/images/ontdek/adem-kaart.webp', positie: '18% 50%' },
+      { href: '#etmaal', titel: 'Gebedsuren', onder: 'De acht diensten van dag en nacht', beeld: '/images/ontdek/etmaal-kaart.webp', positie: '12% 50%' },
+      { href: '#week', titel: 'De week', onder: 'Elke dag een eigen gedachtenis', beeld: '/images/ontdek/week.webp', positie: '50% 42%' },
+    ],
+  },
+  {
+    titel: 'Het kerkelijk jaar',
+    regels: [
+      { href: '#jaar', titel: 'Kerkelijk jaar', onder: 'De perioden, feesten en vastentijden', beeld: '/images/ontdek/jaar.webp' },
+      { href: '#pascha', titel: 'Pascha', onder: 'Van de Grote Vasten tot Pinksteren', beeld: '/images/ontdek/pascha.webp', positie: '50% 22%' },
+      { href: '#geboorte', titel: 'Geboorte', onder: 'Van de Geboortevasten tot Theofanie', beeld: '/images/ontdek/geboorte.webp', positie: '50% 58%' },
+    ],
+  },
+  {
+    titel: 'Feesten en heiligen',
+    regels: [
+      { href: '#feesten', titel: 'Feesten', onder: 'De feesten van het kerkelijk jaar', beeld: '/images/feesten/laatste-avondmaal-banner.webp', positie: '50% 30%' },
+      { href: '#heiligen', titel: 'Heiligen', onder: 'De heiligen van elke dag en hun levens', beeld: '/images/meer/heiligen-wijnstok.webp', positie: '50% 28%' },
+      { href: '#vasten', titel: 'Vasten', onder: 'Vastenregel en vastenperioden', beeld: '/images/ontwerp/vasten-banner-800.webp', positie: '50% 60%' },
+    ],
+  },
 ];
-
-const aantal = (n: number) => (n === 1 ? '1 dag' : `${n} dagen`);
 
 export default function Cycli() {
   const open = usePaginaOpen('cycli');
-  const { vandaag, mode } = useApp();
-  // Waar je nu bent in elk ritme, uit de bestaande berekeningen (Adem houdt zijn vaste zin)
-  const pascha = paascyclusVoor(vandaag);
-  const paschaStap = pascha.huidige ? pascha.stappen.find((s) => s.key === pascha.huidige) : null;
-  const geboorte = geboortecyclusVoor(vandaag, mode);
-  const geboorteStap = geboorte.huidige ? geboorte.stappen.find((s) => s.key === geboorte.huidige) : null;
-  const nu: Record<string, string> = {
-    week: `Vandaag: ${WEEKDAGEN[vandaag.getUTCDay()]}`,
-    jaar: `Nu: ${PERIODS.find((p) => p.key === huidigeTijd(vandaag, mode))?.label ?? ''}`,
-    pascha: paschaStap ? `Nu: ${paschaStap.label}` : `Nog ${aantal(pascha.dagenTotPascha)} tot Pascha`,
-    geboorte: geboorteStap ? `Nu: ${geboorteStap.label}` : `De vasten begint over ${aantal(daysBetween(vandaag, geboorte.stappen[0].van))}`,
-  };
   return (
     <section id="cycli" className="vg vg-cycli">
       {/* Banner zoals Etmaal: het aangeleverde beeld van de kapel met het wierookvat, titel en sierlijn als tekst */}
@@ -51,30 +46,32 @@ export default function Cycli() {
         <div className="em-banner-tekst">
           <h1 className="em-titel">Ontdek</h1>
           <Sierlijn />
-          <p className="am-onder">De ritmes van het orthodoxe leven</p>
+          <p className="am-onder">De kalender en de ritmes van de Kerk</p>
         </div>
       </div>
-      <div className="vg-papier vg-ontdek">
-        <nav aria-label="De zes ritmes">
-          <ul className="vg-ontdek-lijst">
-            {CYCLI.map(({ id, href, titel, onder, zin, beeld, zoom, fx, fy }, i) => (
-              <li key={id}>
-                <a className="vg-ontdek-kaart" href={href ?? `#${id}`}>
-                  <span className="vg-ontdek-beeld" style={{ '--zoom': zoom, '--fx': `${fx}%`, '--fy': `${fy}%` } as CSSProperties}>
-                    <img src={beeld} alt="" loading={open && i < 4 ? undefined : 'lazy'} decoding="async" />
-                  </span>
-                  <span className="vg-ontdek-tekst">
-                    <b>{titel}</b>
-                    <span>{onder}</span>
-                    <span className="vg-ontdek-nu">{nu[id] ?? zin}</span>
-                  </span>
-                  <ChevronRight className="vg-verd-pijl" aria-hidden="true" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
+      <nav className="vg-papier vg-ontdek" aria-label="Ontdek">
+        {GROEPEN.map((g, i) => (
+          <section key={g.titel} className="ov-groep" aria-labelledby={`ov-groep-${i}`}>
+            <h2 className="ov-label" id={`ov-groep-${i}`}>{g.titel}</h2>
+            <ul className="ov-lijst">
+              {g.regels.map(({ href, titel, onder, beeld, positie }) => (
+                <li key={href}>
+                  <a className="ov-rij is-rond" href={href}>
+                    <span className="ov-beeld is-rond" aria-hidden="true">
+                      <img src={beeld} alt="" loading="lazy" decoding="async" style={positie ? { objectPosition: positie } : undefined} />
+                    </span>
+                    <span className="ov-tekst">
+                      <b>{titel}</b>
+                      <span>{onder}</span>
+                    </span>
+                    <ChevronRight className="ov-pijl" aria-hidden="true" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </nav>
     </section>
   );
 }

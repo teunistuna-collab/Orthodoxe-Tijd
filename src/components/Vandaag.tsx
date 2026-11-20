@@ -171,7 +171,7 @@ export default function Vandaag() {
         <img className="vg-christus" src="/images/Christus-afbeelding.webp" alt="Christus" width={640} height={633} fetchPriority={open ? 'high' : 'auto'} decoding="async" />
         <h1 className="vg-datum"><span className="sr-only">Vandaag, </span><time dateTime={dag.ymd}>{dag.weekdagNaam}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{formatDag(dag.civil)}</time></h1>
         {/* Mobiel, bij de oude kalender: de kerkelijke datum klein onder de burgerlijke */}
-        {mobiel && mode === 'oud' && <p className="vg-kop-kerkdatum">Kerkelijk {formatDag(dag.kerk)}</p>}
+        {mobiel && <p className="vg-kop-kerkdatum">{kerkDatumTekst}</p>}
         {mobiel && <p className="sr-only">Icoon van Christus Pantocrator in kaarslicht</p>}
         <img className="vg-sierboog" src={`${BEELD}/sierboog.svg`} alt="" aria-hidden="true" width={1000} height={140} />
       </div>

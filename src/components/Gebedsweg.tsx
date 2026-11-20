@@ -3,11 +3,11 @@ import { ChevronRight, Moon, Sun } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { naamVan, slugVan, type ServiceMapping } from '../lib/etmaal';
 import { GEBEDEN, GEBEDEN_ZICHTBAAR } from '../lib/gebeden';
-import { AANBIDDING, bidPad, gebedTitel, isAvonduur, isZonOfFeestdag, kortVan, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
+import { AANBIDDING, bidPad, gebedTitel, heelUurLabel, isAvonduur, isZonOfFeestdag, kortVan, laadUurBestand, onderdelenVan, stapIndex, type KortStap, type Onderdeel, type UurBestand } from '../lib/gebedsweg';
 import { heiligeTitel, zelfdeGedachtenis } from '../lib/heiligenPopup';
 import { useGekozenVorm } from '../lib/jezusgebed';
 import { dagInfo, formatDag, hoofdletter } from '../lib/kalender';
-import { useLeesvoorkeur, zetKleur } from '../lib/leesvoorkeur';
+import { useLeesvoorkeur, vergroot, verklein, zetKleur } from '../lib/leesvoorkeur';
 import { PSALMEN, laadPsalmTeksten, type PsalmTeksten } from '../lib/psalmen';
 import { useSchermAan } from '../lib/schermAan';
 import { Gebedsregels } from './AdemMobiel';
@@ -121,7 +121,8 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
         <div className="gw-keuzes">
           {tebidden.length ? (
             <a className="gw-keuze is-hoofd" href={bidPad(slug, 'heel', 1)}>
-              <b>Bid het hele uur</b>
+              {/* Zegt wat de knop werkelijk opent: het hele uur, of alleen de onderdelen die er al zijn */}
+              <b>{heelUurLabel(delen ?? [])}</b>
               <span className="gw-keuze-onder">{tebidden.map((o) => o.titel).join(' · ')}</span>
               <ChevronRight className="gw-keuze-pijl" aria-hidden="true" />
             </a>
@@ -169,6 +170,7 @@ function UurBegin({ d, delen, terug, slim, extra }: { d: ServiceMapping; delen: 
 // 2. Bidden: één onderdeel, niets anders
 function Stap({ d, weg, stap, i, aantal, nacht, amen }: { d: ServiceMapping; weg: 'kort' | 'heel'; stap: Onderdeel | KortStap; i: number; aantal: number; nacht: boolean; amen: string }) {
   useSchermAan(true);
+  const lees = useLeesvoorkeur();
   const slug = slugVan(d);
   const laatste = i === aantal - 1;
   return (
@@ -176,15 +178,17 @@ function Stap({ d, weg, stap, i, aantal, nacht, amen }: { d: ServiceMapping; weg
       <div className="am-kop">
         <a className="am-terug" href={bidPad(slug)} aria-label="Stoppen en terug naar het begin van het uur">×</a>
         <span className="gw-context">{naamVan(d)}</span>
-        {/* Rechtsboven: donker of licht scherm (de leesvoorkeur, ook voor de afsluiting en andere leesteksten); Bid kort
-            heeft altijd het donkere beeld van het pijlgebed */}
-        {weg === 'kort' ? (
-          <span />
-        ) : (
-          <button type="button" className="gw-nachtknop" onClick={() => zetKleur(nacht ? 'licht' : 'donker')} aria-pressed={nacht} aria-label={nacht ? 'Licht scherm' : 'Donker scherm'} title={nacht ? 'Licht scherm' : 'Donker scherm'}>
-            {nacht ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
-          </button>
-        )}
+        {/* Rechtsboven: tekstgrootte en donker of licht scherm (de leesvoorkeur, ook voor de afsluiting en andere
+            leesteksten); Bid kort heeft altijd het donkere beeld van het pijlgebed, dus daar alleen de tekstgrootte */}
+        <div className="gw-bediening" role="group" aria-label="Leesweergave">
+          <button type="button" className="gw-nachtknop gw-aa" onClick={verklein} disabled={lees.min} aria-label="Tekst verkleinen" title="Tekst verkleinen">A<sup>−</sup></button>
+          <button type="button" className="gw-nachtknop gw-aa" onClick={vergroot} disabled={lees.max} aria-label="Tekst vergroten" title="Tekst vergroten">A<sup>+</sup></button>
+          {weg !== 'kort' && (
+            <button type="button" className="gw-nachtknop" onClick={() => zetKleur(nacht ? 'licht' : 'donker')} aria-pressed={nacht} aria-label={nacht ? 'Licht scherm' : 'Donker scherm'} title={nacht ? 'Licht scherm' : 'Donker scherm'}>
+              {nacht ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
+            </button>
+          )}
+        </div>
       </div>
       <div className="gw-vlak">
         <StapInhoud stap={stap} />

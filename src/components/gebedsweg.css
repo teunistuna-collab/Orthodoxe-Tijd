@@ -107,3 +107,11 @@
 #top#top#top#top#top#top#top#top#top .gw-bid .gw-nachtknop { display: inline-flex; align-items: center; justify-content: center; justify-self: end; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--gw-zacht); cursor: pointer; }
 .gw-bid .gw-nachtknop svg { width: 21px; height: 21px; stroke-width: 1.6; }
 #top#top#top#top#top#top#top#top#top .gw-bid .gw-nachtknop:focus-visible { outline: 3px solid var(--gw-accent); outline-offset: -3px; }
+
+/* Tekstgrootte in het gebed (19-11-2026): A− en A+ naast de donker-knop; de gebedstekst volgt de leesvoorkeur (--lees-schaal) */
+#top#top#top#top#top#top#top#top#top .gw-bid .am-kop { grid-template-columns: 44px minmax(0, 1fr) auto; }
+.gw-bediening { display: flex; align-items: center; justify-self: end; }
+#top#top#top#top#top#top#top#top#top .gw-bid .gw-aa { width: 40px; font-family: var(--font-lees); font-size: 19px; line-height: 1; }
+.gw-aa sup { font-size: 12px; }
+#top#top#top#top#top#top#top#top#top .gw-bid .gw-aa:disabled { opacity: .35; cursor: default; }
+.gw-bid .gw-vlak { zoom: var(--lees-schaal, 1); }

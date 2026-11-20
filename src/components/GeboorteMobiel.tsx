@@ -2,7 +2,7 @@ import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { geboorteToon } from '../lib/feestdagen';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
-import { datumMetKerk, bereikLang, daysBetween, hoofdletter, kerkDatum, type Mode } from '../lib/kalender';
+import { datumMetKerk, bereikLang, daysBetween, formatLang, hoofdletter, kerkDatum, kerkRegel, type Mode } from '../lib/kalender';
 import { GROTE_FEESTEN } from '../lib/feesten';
 import { geboorteBannerTitel, geboortecyclusVoor, type GeboorteKey, type GeboorteStap } from '../lib/geboortecyclus';
 import { BRON_CONCEPT, GEBOORTE_DAGICONEN, GEBOORTE_GEBRUIKEN, GEBOORTE_UITLEG, GEBOORTE_VERDIEPING, GEBOORTE_WEETJES, GEBOORTE_ZONDAGICOON, KERKVADER_PER_PERIODE, KERKVADERS, type GeboorteInfoKey } from '../lib/geboorteInhoud';
@@ -103,7 +103,8 @@ function Hoofd({ stappen, huidige, dagenTot, groet }: { stappen: GeboorteStap[];
           {stap ? (
             <>
               <h2 className="gm-kaart-titel">Vandaag in de Geboortecyclus</h2>
-              <p className="gm-datumregel">{hoofdletter(datumMetKerk(vandaag, mode))}</p>
+              <p className="gm-datumregel">{hoofdletter(formatLang(vandaag))}</p>
+              <p className="kerk-regel">{kerkRegel(vandaag, mode)}</p>
               <p className="gm-periode">{stap.label}</p>
               <p className="gm-bereik">{bereikLang(stap.van, stap.tot)}</p>
               <p className="gm-tekst">{stap.short}</p>

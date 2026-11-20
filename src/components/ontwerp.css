@@ -656,3 +656,106 @@ button.vt-tegel-binnen { cursor: pointer; }
   .ot-redesign .ot-maandnav { grid-template-columns: 44px minmax(0, 1fr) 44px; }
   .ot-adem .ot-ad-tabs { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
+
+/* ==========================================================================================================================
+   Rustiger en leesbaarder ontwerp (19-11-2026). Eén samenhangende laag over de mobiele overzichtspagina's:
+   lagere banners, een compacte kop voor Meer, dezelfde overzichtsregels (Ontdek, Meer, Heiligen), rustiger perkament
+   achter tekst, leesbaardere labels en één vaste regel voor de kalender en de kerkelijke datum (lib/kalender.ts kerkRegel).
+   ========================================================================================================================== */
+@media (max-width: 767.98px) {
+  /* 1. Lagere banners: dezelfde beelden, minder hoog, zodat de eerste inhoud direct zichtbaar is (Etmaal en Vandaag niet) */
+  #top#top .em-banner:is(.hm-banner, .fm-banner, .vsm-banner, .vg-ontdek-banner) { height: min(56vw, 232px); }
+  #top#top .bd-banner { height: min(60vw, 246px); }
+  #top#top#top#top#top#top#top#top#top#top#top#top :is(.hm-banner, .fm-banner, .vsm-banner, .vg-ontdek-banner) .em-titel { font-size: 36px; }
+  #top#top#top#top#top#top#top#top#top#top#top#top .bd-titel { font-size: 38px; }
+  #top#top :is(.hm-banner, .fm-banner, .vsm-banner, .vg-ontdek-banner) .em-banner-tekst { bottom: 26px; }
+  #top#top .bd-banner-tekst { bottom: 24px; }
+  #top#top :is(.hm-banner, .fm-banner, .vsm-banner, .vg-ontdek-banner, .bd-banner) .am-onder,
+  #top#top .bd-banner-onder { font-size: 16px; }
+  /* Het merk staat in Ontdek en Bidden los boven de titel; in een lagere banner iets hoger */
+  #top#top :is(.vg-ontdek-banner .vg-ontdek-merk, .bd-banner .am-merk) { top: calc(16px + env(safe-area-inset-top)); }
+
+  /* Meer: een compacte paginakop op het donkere vlak van de banners, zonder beeld */
+  .mm-kop { padding: calc(18px + env(safe-area-inset-top)) 20px 30px; background: radial-gradient(ellipse 80% 90% at 50% 0, rgba(224, 185, 90, .14), transparent 70%), #1b0d09; color: #f6ead2; text-align: center; }
+  #top#top#top#top#top#top#top#top#top#top#top#top .mm-kop .mm-merk { position: static; margin: 0 0 10px; font-size: 12px; }
+  #top#top#top#top#top#top#top#top#top#top#top .mm-kop .em-titel { margin: 0; font-size: 34px; color: #f6ead2 !important; }
+  .mm-kop .am-sierlijn { width: min(170px, 50%); margin: 6px auto 4px; }
+  .mm-kop .am-onder { margin: 0; font-size: 16px; color: rgba(246, 234, 210, .9); }
+
+  /* 2. Overzichtsregels (Ontdek, Meer, Heiligen): een kleine uitsnede links (of geen), titel en wat je er vindt, een pijl;
+        fijne gouden lijnen, overal dezelfde marges, regelhoogte en een tikgebied van minstens 64 px */
+  #top#top#top#top#top#top#top#top#top#top .ov-label { display: flex; align-items: center; gap: 10px; margin: 22px 4px 6px; font-family: var(--font-titel) !important; font-size: 14px; font-weight: 600; letter-spacing: .06em; line-height: 1.3; text-transform: uppercase; color: #6e4a20 !important; text-align: left; }
+  #top#top#top#top#top#top#top#top#top#top section:first-child > .ov-label { margin-top: 6px; }
+  .ov-label::after { content: ""; flex: 1 1 24px; height: 1px; background: linear-gradient(90deg, rgba(176, 126, 37, .55), transparent); }
+  .ov-lijst { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(185, 148, 85, .6); text-align: left; }
+  .ov-lijst > li { border-bottom: 1px solid rgba(185, 148, 85, .6); }
+  #top#top#top#top#top#top#top#top#top .ov-rij { display: grid; grid-template-columns: 56px minmax(0, 1fr) 20px; align-items: center; column-gap: 14px; width: 100%; min-height: 72px; margin: 0; padding: 10px 4px 10px 0; border: 0; border-radius: 0; background: none; box-shadow: none; font: inherit; color: #2b1d12 !important; text-align: left; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  #top#top#top#top#top#top#top#top#top .ov-rij.is-zonder-beeld { grid-template-columns: minmax(0, 1fr) 20px; min-height: 64px; padding-left: 6px; }
+  .ov-rij:active { background: rgba(90, 60, 25, .07) !important; }
+  #top#top#top#top#top#top#top#top#top .ov-rij:focus-visible { outline: 3px solid #7d5218; outline-offset: -3px; }
+  .ov-beeld { width: 56px; height: 56px; overflow: hidden; border: 1px solid rgba(185, 148, 85, .7); border-radius: 4px; background: #2a1a10; }
+  /* Heilige zonder eigen icoon: geen leeg vak, de naam krijgt de volle breedte */
+  #top#top#top#top#top#top#top#top#top .ov-rij:has(> .ov-beeld.is-leeg) { grid-template-columns: minmax(0, 1fr) 20px; padding-left: 6px; }
+  .ov-beeld.is-leeg { display: none; }
+  .ov-beeld img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ov-heilige .ov-beeld img { object-position: 50% 20%; }
+  .ov-tekst { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .ov-tekst b { font-family: var(--font-lees); font-size: 21px; font-weight: 500; line-height: 1.2; overflow-wrap: break-word; hyphens: auto; color: #2b1d12; }
+  .ov-tekst > span { font-family: var(--font-lees); font-size: 16px; line-height: 1.3; color: #4a3826; overflow-wrap: break-word; }
+  .ov-tekst > .ov-nu { font-size: 15px; color: #7d5218; }
+  .ov-pijl { justify-self: end; width: 20px; height: 20px; color: #4a3220; }
+  .vg-papier.vg-ontdek { padding: 10px 12px 24px; text-align: left; }
+
+  /* Feestregels (feesten-mobiel.css) in dezelfde maat: aanvullende tekst rechtop en iets groter, cursief alleen voor citaten */
+  .fm-rij-tekst > span:not(.sr-only) { font-size: 16px; font-style: normal; color: #4a3826; }
+  .fm-rij-tekst b { font-size: 21px; }
+  #top#top#top#top#top#top#top#top .fm-rij { min-height: 72px; column-gap: 14px; }
+
+  /* 3. Rustiger perkament achter de tekst van de overzichtspagina's; aan de randen blijft de textuur zichtbaar */
+  #top#top :is(.hm .hm-papier, .vsm .vsm-papier, .mm-papier, .vg-papier.vg-ontdek, .bd-kaarten) {
+    background-image: linear-gradient(90deg, rgba(251, 244, 230, 0), rgba(251, 244, 230, .55) 24px, rgba(251, 244, 230, .55) calc(100% - 24px), rgba(251, 244, 230, 0)), url('/images/vandaag/papyrus-licht.webp');
+    background-size: 100% 100%, 100% auto;
+    background-position: center, center top;
+    background-repeat: no-repeat, repeat-y;
+  }
+
+  /* 4. Labels: kleine hoofdletters met minder letterafstand en minstens 13–14 px; praktische tekst groter en donkerder */
+  #top#top#top#top#top#top#top#top#top#top#top :is(.hm-label, .vsm-label, .mm-label) { font-size: 14px; letter-spacing: .06em; }
+  #top#top#top#top#top#top#top#top#top#top#top .vm2 h2.vm2-label { font-size: 13px; letter-spacing: .06em; }
+  #top#top#top#top#top#top#top#top#top#top#top .vm2 .vm2-kaart h2.vm2-label { font-size: 13px; letter-spacing: .06em; }
+  #top#top#top#top#top#top#top#top#top#top#top .vm2 .m-kader h2.vm2-kader-label { font-size: 13px; letter-spacing: .08em; }
+  #top#top#top#top#top#top#top#top .vm2 .vm2-rij .vm2-tekst > span { font-size: 16px; }
+  .hm-tekst span, .hm-tekst small { font-size: 16px; color: #4a3826; }
+  .vsm-tekst { color: #4a3826; }
+  .vsm-periode { font-size: 16px; }
+  .vg-hl-leeg { font-size: 16px; color: #4a3826; }
+
+  /* 6. De kalender en de kerkelijke datum: steeds dezelfde ondergeschikte regel onder de gewone datum */
+  .kerk-regel { margin: 4px 0 0; font-family: var(--font-lees); font-size: 15px; line-height: 1.3; color: #6a4a24; text-align: center; }
+  .hm-dagnav + .kerk-regel { margin: 6px 0 4px; }
+}
+
+/* Ontdek als eenvoudige tekstregels (20-11-2026): drie groepen met een bescheiden kop, alleen de namen, ruime tikgebieden */
+@media (max-width: 767.98px) {
+  .vg-ontdek .ov-groep + .ov-groep { margin-top: 18px; }
+  #top#top#top#top#top#top#top#top#top .ov-rij.is-tekst { min-height: 58px; padding: 12px 6px 12px 6px; }
+  .ov-rij.is-tekst .ov-tekst b { font-size: 21px; }
+  /* De laatste regel blijft boven de vaste onderbalk */
+  .vg-papier.vg-ontdek { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+}
+
+/* Ronde uitsneden naast de onderwerpen (20-11-2026, Bidden en Ontdek): overal 60 px met een dunne, gedempte gouden rand */
+@media (max-width: 767.98px) {
+  #top#top#top#top#top#top#top#top#top .ov-rij.is-rond { grid-template-columns: 60px minmax(0, 1fr) 20px; column-gap: 16px; padding-left: 4px; }
+  .ov-beeld.is-rond { width: 60px; height: 60px; border: 1px solid rgba(176, 126, 37, .7); border-radius: 50%; box-shadow: 0 1px 3px rgba(40, 20, 6, .25); }
+
+  /* Bidden: het gebedsuur van nu bovenaan, daaronder "Kies een ander gebedsuur" en de andere gebedsvormen */
+  #top#top .bd-kaarten.is-lijst { display: block; padding: 14px 12px calc(32px + env(safe-area-inset-bottom)); }
+  .bd-nu { margin-bottom: 18px; border-bottom: 1px solid rgba(185, 148, 85, .6); }
+  #top#top#top#top#top#top#top#top#top .bd-nu-rij { min-height: 84px; }
+  #top#top#top#top#top#top#top#top#top#top .bd-nu-rij .bd-label { font-family: var(--font-titel); font-size: 13px; font-weight: 600; letter-spacing: .06em; line-height: 1.3; text-transform: uppercase; color: #6e4a20; }
+  .bd-nu-rij .ov-tekst b { font-size: 24px; }
+  #top#top#top#top#top#top#top#top .bd-ander { display: flex; align-items: center; justify-content: flex-end; gap: 2px; min-height: 44px; margin: 0 0 4px; padding: 0 4px; font-family: var(--font-lees); font-size: 16px; color: #6e4a20 !important; text-decoration: underline; text-decoration-color: rgba(176, 126, 37, .6); text-underline-offset: 3px; }
+  .bd-ander svg { width: 16px; height: 16px; }
+  #top#top#top#top#top#top#top#top .bd-ander:focus-visible { outline: 3px solid #7d5218; outline-offset: -3px; }
+}

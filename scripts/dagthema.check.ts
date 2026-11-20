@@ -2,7 +2,7 @@
 // kalenders. Draaien: npm run check:dagthema
 import assert from 'node:assert/strict';
 import { utc } from '../src/lib/kalender';
-import { dagThema, feestIcoonVanDag } from '../src/lib/feestdagen';
+import { bannerFeest, dagThema, feestIcoonVanDag } from '../src/lib/feestdagen';
 import { bidBeeld, icoonVan } from '../src/lib/bidbeelden';
 
 // Gedeelde beelden
@@ -88,5 +88,12 @@ const lichteWeek = feestIcoonVanDag(utc(2027, 5, 4), 'oud')!; // dinsdag in de L
 assert.equal(lichteWeek.beeld, '/images/feesten/pascha.webp');
 assert.ok(lichteWeek.troparion?.includes('opgestaan'), lichteWeek.troparion);
 assert.equal(feestIcoonVanDag(utc(2027, 7, 20), 'oud'), null); // gewone dag
+
+// Banner van de pagina Feesten: het feest van vandaag met een eigen icoon, anders de standaardbanner (null)
+assert.equal(bannerFeest(utc(2026, 12, 4), 'oud')?.id, 'opdracht-moeder-gods'); // Intrede, kerkelijk 21 november
+assert.equal(bannerFeest(utc(2026, 11, 21), 'nieuw')?.id, 'opdracht-moeder-gods'); // gregoriaans op 21 november
+assert.equal(bannerFeest(utc(2026, 12, 5), 'oud'), null); // de dag erna: weer de standaardbanner
+assert.equal(bannerFeest(utc(2026, 11, 19), 'oud'), null); // gewone dag
+assert.equal(bannerFeest(utc(2026, 11, 20), 'oud'), null); // Willibrord: feest zonder eigen icoon
 
 console.log('dagthema: alle controles geslaagd');
