@@ -97,7 +97,23 @@ const mettenBestand = leesUurBestand(JSON.parse(readFileSync('public/data/uren/m
 assert.ok(mettenBestand);
 const metten = (zonOfFeest: boolean) => onderdelenVan(uur('Metten'), mettenBestand, alles, true, zonOfFeest).map((o) => o.titel);
 assert.ok(!metten(false).includes('Psalm 134') && !metten(false).includes('Psalm 135'));
-assert.deepEqual(metten(true).slice(8, 11), ['Psalm 142', 'Psalm 134', 'Psalm 135']);
+assert.deepEqual(metten(true).slice(8, 11), ['Hexapsalm: Psalm 142', 'Psalm 134', 'Psalm 135']);
+// De Hexapsalm: de zes psalmen met de eigen tekst, altijd beschikbaar, en de hoofdknop telt ze als psalmen
+assert.deepEqual(metten(false).filter((t) => t.startsWith('Hexapsalm')), [3, 37, 62, 87, 102, 142].map((n) => `Hexapsalm: Psalm ${n}`));
+assert.equal(leesUurBestand({ onderdelen: [{ hexapsalm: 50 }] }), null);
+{
+  const hexa = JSON.parse(readFileSync('public/data/hexapsalm.json', 'utf8')) as { psalmen: { nr: number; voor?: { regels: { tekst?: string; rubriek?: string; na?: string }[] }[]; strofen: { regels: { tekst?: string; rubriek?: string; na?: string }[] }[] }[] };
+  assert.deepEqual(hexa.psalmen.map((p) => p.nr), [3, 37, 62, 87, 102, 142]);
+  // Begint niet met "Kom laat ons aanbidden", maar met "Eer aan God in den hoge" (driemaal)
+  const opening = hexa.psalmen[0].voor?.[0].regels;
+  assert.ok(opening?.[0].tekst?.startsWith('Eer aan God in den hoge') && opening[1].na === '(3x)');
+  const alles = JSON.stringify(hexa);
+  assert.ok(!alles.includes('Kom laat ons aanbidden'));
+  // Aanwijzingen staan apart, niet in de te lezen tekst
+  const teksten = hexa.psalmen.flatMap((p) => [...(p.voor ?? []), ...p.strofen].flatMap((s) => s.regels.map((r) => r.tekst ?? '')));
+  assert.ok(teksten.every((t) => !/\(\dx\)|en nogmaals|Nu en/.test(t)), 'aanwijzing in de tekst');
+  assert.ok(hexa.psalmen.every((p) => p.strofen.some((s) => s.regels[0].rubriek === 'en nogmaals:')), 'elke psalm met "en nogmaals"');
+}
 
 // De hoofdknop beschrijft wat er werkelijk te bidden is
 {

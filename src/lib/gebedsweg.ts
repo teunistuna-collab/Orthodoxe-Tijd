@@ -2,6 +2,9 @@ import { GEBEDEN } from './gebeden';
 import { naamVan, serviceConfig, type ServiceMapping } from './etmaal';
 import type { Feest } from './feesten';
 
+/** De psalmen van de Hexapsalm in de Metten (de tekst zelf: lib/hexapsalm.ts). */
+export const HEXAPSALM_NRS = [3, 37, 62, 87, 102, 142];
+
 // De gebedsweg (spec: docs/superpowers/specs/2026-11-05-gebedsweg-design.md): de volgorde van een gebedsuur en welke
 // onderdelen nu te bidden zijn. Zonder React of browser (behalve laadUurBestand), zodat scripts/gebedsweg.check.ts het
 // los kan controleren.
@@ -13,7 +16,9 @@ import type { Feest } from './feesten';
 export type Onderdeel =
   | { soort: 'psalm'; titel: string; nr: number; beschikbaar: boolean; pdf?: string }
   | { soort: 'gebed'; titel: string; id: string; beschikbaar: boolean }
-  | { soort: 'tekst'; titel: string; tekst: string | null; beschikbaar: boolean };
+  | { soort: 'tekst'; titel: string; tekst: string | null; beschikbaar: boolean }
+  /** Een psalm van de Hexapsalm in de Metten, met de eigen aangeleverde tekst en aanwijzingen (lib/hexapsalm.ts) */
+  | { soort: 'hexapsalm'; titel: string; nr: number; beschikbaar: boolean };
 
 export type KortStap = { soort: 'aanbidding' } | { soort: 'kernvers'; kernvers: ServiceMapping['kernvers'] } | { soort: 'jezusgebed' };
 
@@ -22,7 +27,7 @@ export const AANBIDDING = [
   'Kom laat ons aanbidden en neer knielen voor onze Koning God,',
   'kom laat ons aanbidden en neerknielen voor Christus zelf, onze Koning en God.',
 ];
-export type BronOnderdeel = { psalm: number; alleen?: 'zon-en-feestdag' } | { gebed: string } | { titel: string; tekst: string | null };
+export type BronOnderdeel = { psalm: number; alleen?: 'zon-en-feestdag' } | { hexapsalm: number } | { gebed: string } | { titel: string; tekst: string | null };
 export interface UurBestand {
   onderdelen: BronOnderdeel[];
 }
@@ -33,7 +38,7 @@ const KERNVERZEN = new Map(serviceConfig.map((s) => [Number(/\d+/.exec(s.kernver
 /** Kort: eerst de aanbidding, dan een pagina per psalm van het uur waarvan een kernvers bekend is (in de volgorde van het uur), daarna het
  *  Jezusgebed. Zonder zo'n psalm het eigen kernvers van het uur. */
 export function kortVan(d: ServiceMapping, onderdelen: Onderdeel[]): KortStap[] {
-  const nrs = [...new Set(onderdelen.flatMap((o) => (o.soort === 'psalm' ? [o.nr] : [])))];
+  const nrs = [...new Set(onderdelen.flatMap((o) => (o.soort === 'psalm' || o.soort === 'hexapsalm' ? [o.nr] : [])))];
   const verzen = nrs.flatMap((nr): KortStap[] => {
     const k = KERNVERZEN.get(nr);
     return k ? [{ soort: 'kernvers', kernvers: k }] : [];
@@ -48,6 +53,7 @@ function geldigOnderdeel(o: unknown): o is BronOnderdeel {
   if (!o || typeof o !== 'object') return false;
   const x = o as Record<string, unknown>;
   if ('psalm' in x) return typeof x.psalm === 'number' && Number.isInteger(x.psalm) && x.psalm >= 1 && x.psalm <= 150 && (x.alleen === undefined || x.alleen === 'zon-en-feestdag');
+  if ('hexapsalm' in x) return typeof x.hexapsalm === 'number' && HEXAPSALM_NRS.includes(x.hexapsalm);
   if ('gebed' in x) return typeof x.gebed === 'string';
   return typeof x.titel === 'string' && (typeof x.tekst === 'string' || x.tekst === null);
 }
@@ -70,6 +76,7 @@ export function onderdelenVan(d: ServiceMapping, aangeleverd: UurBestand | null,
       const pdf = d.psalms.find((p) => psalmNr(p.title) === o.psalm)?.pdf;
       return { soort: 'psalm', titel: `Psalm ${o.psalm}`, nr: o.psalm, beschikbaar: psalmMetTekst(o.psalm), pdf };
     }
+    if ('hexapsalm' in o) return { soort: 'hexapsalm', titel: `Hexapsalm: Psalm ${o.hexapsalm}`, nr: o.hexapsalm, beschikbaar: true };
     if ('gebed' in o) {
       const g = GEBEDEN.find((x) => x.id === o.gebed);
       return { soort: 'gebed', titel: g?.titel ?? o.gebed, id: o.gebed, beschikbaar: gebedenZichtbaar && !!g };
@@ -119,6 +126,6 @@ export const isAvonduur = (d: ServiceMapping) => AVONDUREN.includes(d.title);
 export function heelUurLabel(delen: Onderdeel[]): string {
   const beschikbaar = delen.filter((o) => o.beschikbaar);
   if (beschikbaar.length === delen.length) return 'Bid het hele uur';
-  if (beschikbaar.every((o) => o.soort === 'psalm')) return beschikbaar.length === 1 ? 'Bid de beschikbare psalm' : 'Bid de beschikbare psalmen';
+  if (beschikbaar.every((o) => o.soort === 'psalm' || o.soort === 'hexapsalm')) return beschikbaar.length === 1 ? 'Bid de beschikbare psalm' : 'Bid de beschikbare psalmen';
   return 'Bid de beschikbare delen';
 }

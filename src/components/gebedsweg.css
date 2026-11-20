@@ -115,3 +115,13 @@
 .gw-aa sup { font-size: 12px; }
 #top#top#top#top#top#top#top#top#top .gw-bid .gw-aa:disabled { opacity: .35; cursor: default; }
 .gw-bid .gw-vlak { zoom: var(--lees-schaal, 1); }
+
+/* Hexapsalm (20-11-2026): de regels zoals aangeleverd (inspringing per regel, geen hangende inspringing van het Psalter);
+   liturgische aanwijzingen kleiner en in rood (--pm-rood), zodat niemand ze hardop leest; een witregel na de opening */
+.gw-hexa-label { margin: 0 0 2px; text-align: center; }
+.gw-hexa .pm-vers p span { padding-left: 1.1em; text-indent: -1.1em; }
+.gw-hexa .pm-vers p span.is-in { padding-left: 2.4em; }
+.gw-hexa .pm-vers p span .gw-rubriek, .gw-hexa .pm-vers p .gw-rubriek { display: inline; padding: 0; text-indent: 0; }
+.gw-rubriek { font-size: .8em; font-style: normal; letter-spacing: .01em; color: var(--pm-rood, #8f2a20); }
+.gw-hexa + .gw-hexa { margin-top: .4em; padding-top: 1em; border-top: 1px solid var(--gw-lijn); }
+.gw.is-nacht .gw-hexa-label { color: var(--gw-zacht); }

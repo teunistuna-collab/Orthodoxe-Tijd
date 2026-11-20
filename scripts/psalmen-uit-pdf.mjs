@@ -56,14 +56,34 @@ for (const bestand of readdirSync(MAP).filter((f) => /^Psalm \d+\.pdf$/.test(f))
     return n ? { n: Number(n[1]), regels: [n[2], ...b.slice(1)] } : { regels: b };
   });
 
+  // Een versnummer midden in het eerste (opschrift)blok, zoals "… Een psalm van David. 2 Toen Nathan …" (Psalm 50):
+  // vanaf dat nummer een eigen vers, zoals in de uitgave.
+  const midden = verzen[0] && !verzen[0].n ? /^(.*?\.) (\d+) (.*)$/.exec(verzen[0].regels[0]) : null;
+  if (midden) verzen.splice(0, 1, { regels: [midden[1]] }, { n: Number(midden[2]), regels: [midden[3], ...verzen[0].regels.slice(1)] });
+
   // Controle: geen regel kwijt, en de versnummers lopen op.
   const aantal = verzen.reduce((s, v) => s + (v.kop ? 1 : v.regels.length), 0);
-  if (aantal !== regels.length) throw new Error(`${bestand}: ${regels.length} regels in, ${aantal} uit`);
+  if (aantal - (midden ? 1 : 0) !== regels.length) throw new Error(`${bestand}: ${regels.length} regels in, ${aantal} uit`);
   const nummers = verzen.filter((v) => v.n).map((v) => v.n);
   nummers.forEach((n, i) => { if (i && n <= nummers[i - 1]) throw new Error(`${bestand}: vers ${n} na ${nummers[i - 1]}`); });
 
   uit[lxx] = { lxx, ...(m[2] ? { mt: Number(m[2]) } : {}), bron: `${MAP.replace('public', '')}/${bestand}`, verzen };
   console.log(`Psalm ${lxx}${m[2] ? ` (${m[2]})` : ''}: ${verzen.length} blokken, verzen ${nummers[0]}–${nummers.at(-1)}, ${aantal} regels`);
+}
+
+// Psalmen uit de Hexapsalm (public/data/hexapsalm.json, aangeleverd door de parochie 20-11-2026) waarvan geen PDF is:
+// alleen de tekst, zonder de liturgische aanwijzingen ("(3x)", "Eer … Nu en …") en zonder de herhaling ("en nogmaals")
+// en de opening van de Hexapsalm. Geen versnummers (die staan niet in de bron); elke strofe is een blok.
+const MT = { 3: 3, 37: 38, 87: 88, 142: 143 };
+const hexa = JSON.parse(readFileSync('public/data/hexapsalm.json', 'utf8'));
+for (const p of hexa.psalmen) {
+  if (uit[p.nr]) continue;
+  const verzen = p.strofen
+    .filter((s) => s.regels[0]?.rubriek !== 'en nogmaals:')
+    .map((s) => ({ regels: s.regels.filter((r) => r.tekst && !/^Alleluja|^Heer, ontferm U/.test(r.tekst)).map((r) => r.tekst) }))
+    .filter((v) => v.regels.length);
+  uit[p.nr] = { lxx: p.nr, ...(MT[p.nr] ? { mt: MT[p.nr] } : {}), bron: '/data/hexapsalm.json', verzen };
+  console.log(`Psalm ${p.nr}: ${verzen.length} blokken uit de Hexapsalm`);
 }
 
 const gesorteerd = Object.fromEntries(Object.keys(uit).map(Number).sort((a, b) => a - b).map((n) => [n, uit[n]]));

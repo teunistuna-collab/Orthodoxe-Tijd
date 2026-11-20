@@ -13,6 +13,7 @@ import { useSchermAan } from '../lib/schermAan';
 import { Gebedsregels } from './AdemMobiel';
 import { Kop, Laag, Sierlijn } from './MobielLaag';
 import { Verzen } from './PsalterMobiel';
+import { useHexaPsalm, type HexaStrofe } from '../lib/hexapsalm';
 import { SIERKRUIS } from './symbolen';
 import './gebedsweg.css';
 
@@ -218,6 +219,7 @@ function StapInhoud({ stap }: { stap: Onderdeel | KortStap }) {
       </>
     );
   if (stap.soort === 'psalm') return <PsalmStap nr={stap.nr} titel={stap.titel} />;
+  if (stap.soort === 'hexapsalm') return <HexapsalmStap nr={stap.nr} />;
   const tekst = stap.soort === 'gebed' ? GEBEDEN.find((g) => g.id === stap.id)?.tekst : stap.tekst;
   return (
     <>
@@ -235,6 +237,51 @@ export function Jezusgebed() {
       <h1 className="sr-only" tabIndex={-1}>Het Jezusgebed</h1>
       <p className="gw-groot"><Gebedsregels tekst={vorm.tekst} /></p>
       <p className="gw-noot">Bid het in stilte</p>
+    </>
+  );
+}
+
+/** Strofen van de Hexapsalm: de tekst in de gewone psalmopmaak, liturgische aanwijzingen ("(3x)", "en nogmaals:",
+ *  "Eer … Nu en …") kleiner en in rood, zodat ze niet hardop worden gelezen. */
+function HexaStrofen({ strofen }: { strofen: HexaStrofe[] }) {
+  return (
+    <div className="pm-verzen lees-tekst gw-hexa">
+      {strofen.map((s, i) => (
+        // De rode beginletter alleen bij een strofe die met tekst begint, niet bij een aanwijzing
+        <div key={i} className={`pm-vers${s.regels[0]?.rubriek ? '' : ' met-initiaal'}`}>
+          <p>
+            {s.regels.map((r, j) => (
+              <span key={j} className={r.inspring ? 'is-in' : undefined}>
+                {r.rubriek && <span className="gw-rubriek">{r.rubriek}</span>}
+                {r.rubriek && r.tekst && ' '}
+                {r.tekst}
+                {r.na && <span className="gw-rubriek"> {r.na}</span>}
+              </span>
+            ))}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function HexapsalmStap({ nr }: { nr: number }) {
+  const psalm = useHexaPsalm(nr);
+  return (
+    <>
+      <p className="gw-label gw-hexa-label">Hexapsalm</p>
+      <h1 className="gw-titel" tabIndex={-1}>Psalm {nr}</h1>
+      <Sierlijn />
+      {psalm === null ? (
+        <p className="gw-noot">De tekst wordt geladen…</p>
+      ) : psalm === 'fout' ? (
+        <p className="gw-noot">De tekst kon niet worden geladen.</p>
+      ) : (
+        <>
+          {psalm.voor && <HexaStrofen strofen={psalm.voor} />}
+          <HexaStrofen strofen={psalm.strofen} />
+        </>
+      )}
     </>
   );
 }

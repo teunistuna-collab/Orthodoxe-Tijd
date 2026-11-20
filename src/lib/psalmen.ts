@@ -40,16 +40,21 @@ export interface Psalm {
  */
 const SPOTIFY = 'https://open.spotify.com/episode/';
 export const PSALM_BRONNEN: Record<number, { tekst?: true; mt?: number; audio?: string; spotify?: string }> = {
+  // Psalm 3, 37, 87 en 142: de tekst uit de Hexapsalm (parochie, 20-11-2026), zonder aanwijzingen (scripts/psalmen-uit-pdf.mjs)
+  3: { tekst: true, mt: 3 },
   24: { tekst: true, mt: 25, spotify: SPOTIFY + '0NKuEgEoj22Zh19LJezfgo' },
+  37: { tekst: true, mt: 38 },
   50: { tekst: true, mt: 51, spotify: SPOTIFY + '4KurhPj7vA2GyMIz2fz077' },
   62: { tekst: true, mt: 63, spotify: SPOTIFY + '5tq6vbtT4hJEyVW4z3Nu4D' },
   84: { tekst: true, mt: 85, spotify: SPOTIFY + '4DShQW0DArd2zNMJ18gypx' },
+  87: { tekst: true, mt: 88 },
   89: { tekst: true, mt: 90, spotify: SPOTIFY + '4FgFvTxwWpFrED5Mh6Liud' },
   90: { tekst: true, mt: 91, spotify: SPOTIFY + '5YMsHG3SUGN8Y7FrCDvdxo' },
   102: { tekst: true, mt: 103 },
   103: { tekst: true, mt: 104, spotify: SPOTIFY + '14xz55Rz248tCs0V2kK6zY' },
   118: { tekst: true, spotify: SPOTIFY + '3XVIwDOok000qHWsBRik2W' },
   140: { tekst: true, mt: 141 },
+  142: { tekst: true, mt: 143 },
 };
 
 /**
@@ -207,10 +212,11 @@ export type PsalmTeksten = Record<string, PsalmTekst>;
 
 /** Opschriften worden niet hardop gelezen en blijven weg (zoals de uitgave ze in het rood zet): per psalm het aantal
  *  regels aan het begin van het eerste blok (en eventueel verzen die geheel tot het opschrift horen). Met de hand
- *  nagekeken voor de aangeleverde psalmen; een nieuwe psalm hier toevoegen. Psalm 50:2 en "Alleluja." (Psalm 118)
- *  blijven staan. Tekst en nummering blijven verder gelijk. */
+ *  nagekeken voor de aangeleverde psalmen; een nieuwe psalm hier toevoegen. Psalm 50:2 ("Toen Nathan de profeet …") hoort
+ *  ook bij het opschrift en blijft weg (parochie, 20-11-2026); "Alleluja." (Psalm 118) blijft staan. Tekst en nummering
+ *  blijven verder gelijk. */
 const OPSCHRIFT: Record<string, { regels: number; verzen?: number[] }> = {
-  24: { regels: 1 }, 50: { regels: 1 }, 62: { regels: 1 }, 84: { regels: 1 }, 89: { regels: 1 },
+  24: { regels: 1 }, 50: { regels: 1, verzen: [2] }, 62: { regels: 1 }, 84: { regels: 1 }, 89: { regels: 1 },
   90: { regels: 1 }, 102: { regels: 1 }, 103: { regels: 1 }, 140: { regels: 1 },
 };
 function zonderOpschrift(nr: string, t: PsalmTekst): PsalmTekst {

@@ -1,0 +1,1126 @@
+{
+ "titel": "Hexapsalm",
+ "bron": "Hexapsalm.docx, aangeleverd 20-11-2026 (parochie); opschriften weggelaten, aanwijzingen apart gemarkeerd",
+ "psalmen": [
+  {
+   "nr": 3,
+   "strofen": [
+    {
+     "regels": [
+      {
+       "tekst": "Heer, hoe talrijk zijn mijn belagers geworden;"
+      },
+      {
+       "tekst": "velen komen in opstand tegen mij.",
+       "inspring": true
+      },
+      {
+       "tekst": "Velen zeggen over mijn ziel:"
+      },
+      {
+       "tekst": "‘Er is geen redding voor hem bij zijn God.’",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Maar U, Heer, bent mijn beschermer en mijn eer,"
+      },
+      {
+       "tekst": "U bent het die mijn hoofd verheft.",
+       "inspring": true
+      },
+      {
+       "tekst": "Met mijn stem riep ik tot de Heer"
+      },
+      {
+       "tekst": "en Hij verhoorde mij vanaf zijn heilige berg.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Ik legde mij neer, viel in slaap,"
+      },
+      {
+       "tekst": "en ik ontwaakte, want de Heer zal me bijstaan.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik zal niet bang zijn voor de tienduizenden"
+      },
+      {
+       "tekst": "die mij rondom belagen.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Sta op, Heer,"
+      },
+      {
+       "tekst": "red me, mijn God,",
+       "inspring": true
+      },
+      {
+       "tekst": "want U hebt iedereen verslagen die mij zonder reden bestreed;"
+      },
+      {
+       "tekst": "de tanden van de zondaars hebt U gebroken.",
+       "inspring": true
+      },
+      {
+       "tekst": "De redding komt van de Heer",
+       "inspring": true
+      },
+      {
+       "tekst": "en uw zegen rust op uw volk.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "en nogmaals:",
+       "tekst": "Ik legde mij neer, viel in slaap,"
+      },
+      {
+       "tekst": "en ik ontwaakte, want de Heer zal me bijstaan.",
+       "inspring": true
+      }
+     ]
+    }
+   ],
+   "voor": [
+    {
+     "regels": [
+      {
+       "tekst": "Eer aan God in den hoge, en vrede op aarde;"
+      },
+      {
+       "na": "(3x)",
+       "tekst": "in de mensen een welbehagen."
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Heer, open mijn lippen,"
+      },
+      {
+       "na": "(2x)",
+       "tekst": "en mijn mond zal Uw lof verkondigen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nr": 37,
+   "strofen": [
+    {
+     "regels": [
+      {
+       "tekst": "Heer, bestraf mij niet in uw toorn,"
+      },
+      {
+       "tekst": "wijs mij niet terecht in uw woede.",
+       "inspring": true
+      },
+      {
+       "tekst": "Want uw pijlen zijn in mij gedrongen,"
+      },
+      {
+       "tekst": "zwaar rust uw hand op mij.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Er is geen gezondheid meer in mijn vlees"
+      },
+      {
+       "tekst": "bij de aanblik van uw toorn,",
+       "inspring": true
+      },
+      {
+       "tekst": "geen vrede voor mijn botten"
+      },
+      {
+       "tekst": "bij de aanblik van mijn zonden.",
+       "inspring": true
+      },
+      {
+       "tekst": "Want mijn overtredingen zijn me boven het hoofd gegroeid,"
+      },
+      {
+       "tekst": "als een zware last drukken ze op mij.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Mijn wonden stinken en zweren"
+      },
+      {
+       "tekst": "door mijn dwaasheid.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik ben ellendig en volkomen terneergeslagen,"
+      },
+      {
+       "tekst": "de hele dag loop ik met een sombere blik rond.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Want mijn lendenen zijn ontstoken"
+      },
+      {
+       "tekst": "en mijn vlees kent geen gezondheid.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik ben vreselijk mishandeld en vernederd"
+      },
+      {
+       "tekst": "en schreeuw het uit door het kreunen van mijn hart.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Heer, heel mijn verlangen ligt voor U,"
+      },
+      {
+       "tekst": "mijn weeklacht is voor U niet verborgen.",
+       "inspring": true
+      },
+      {
+       "tekst": "Mijn hart is volkomen van slag, mijn kracht heeft me verlaten"
+      },
+      {
+       "tekst": "en het licht in mijn ogen, ook dat is niet meer bij mij.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Mijn vrienden en naasten naderden maar keerden zich tegen mij,"
+      },
+      {
+       "tekst": "mijn familie bleef op afstand.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zij die mij naar het leven staan, gebruikten geweld,"
+      },
+      {
+       "tekst": "wie mij ongeluk toewensen, spraken lege woorden",
+       "inspring": true
+      },
+      {
+       "tekst": "en zonnen de hele dag op bedrog.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Maar ik, als een dove, hoorde niets;"
+      },
+      {
+       "tekst": "als een stomme was ik, die zijn mond niet opendeed.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik was geworden als een mens die niet hoort"
+      },
+      {
+       "tekst": "en die in zijn mond geen tegenwerpingen vindt.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Want op U, Heer, hoop ik,"
+      },
+      {
+       "tekst": "U zult naar mij luisteren, Heer, mijn God.",
+       "inspring": true
+      },
+      {
+       "tekst": "Want ik zei: ‘Laat mijn vijanden nooit leedvermaak over mij hebben.’"
+      },
+      {
+       "tekst": "Maar toen mijn voeten wankelden, hoonden ze mij.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Zie, ik ben bereid om zweepslagen te verdragen"
+      },
+      {
+       "tekst": "en mijn leed staat me steeds voor ogen.",
+       "inspring": true
+      },
+      {
+       "tekst": "Want ik beken mijn ongerechtigheid"
+      },
+      {
+       "tekst": "en tob me af over mijn zonden.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Mijn vijanden echter leven en zijn krachtiger geworden dan ik;"
+      },
+      {
+       "tekst": "ze hebben zich vermenigvuldigd, zij die mij ten onrechte haten.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zij die goed met kwaad vergelden, belasteren mij,"
+      },
+      {
+       "tekst": "omdat ik het goede najaag.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Verlaat mij niet, Heer,"
+      },
+      {
+       "tekst": "mijn God, wijk niet van mij",
+       "inspring": true
+      },
+      {
+       "tekst": "Kom mij te hulp,"
+      },
+      {
+       "tekst": "Heer, U bent mijn redding.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "en nogmaals:",
+       "tekst": "Verlaat mij niet, Heer,"
+      },
+      {
+       "tekst": "mijn God, wijk niet van mij",
+       "inspring": true
+      },
+      {
+       "tekst": "Kom mij te hulp,",
+       "inspring": true
+      },
+      {
+       "tekst": "Heer, U bent mijn redding.",
+       "inspring": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nr": 62,
+   "strofen": [
+    {
+     "regels": [
+      {
+       "tekst": "God, mijn God, vroeg in de ochtend zoek ik U,"
+      },
+      {
+       "tekst": "mijn ziel dorst naar U.",
+       "inspring": true
+      },
+      {
+       "tekst": "Hoe vaak verlangt mijn vlees naar U"
+      },
+      {
+       "tekst": "in dit barre land zonder weg en water",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Zo verscheen ik voor U in het heiligdom"
+      },
+      {
+       "tekst": "om uw macht en glorie te zien",
+       "inspring": true
+      },
+      {
+       "tekst": "Want uw barmhartigheid is beter dan het leven."
+      },
+      {
+       "tekst": "Mijn lippen willen U prijzen.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Zo zal ik U zegenen mijn leven lang"
+      },
+      {
+       "tekst": "en in uw naam mijn handen opheffen.",
+       "inspring": true
+      },
+      {
+       "tekst": "Laat mijn ziel verzadigd worden met vet en overvloed;"
+      },
+      {
+       "tekst": "met vreugde op mijn lippen zal mijn mond U loven.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Op mijn bed denk ik aan U,"
+      },
+      {
+       "tekst": "in de ochtendschemering peins ik over U.",
+       "inspring": true
+      },
+      {
+       "tekst": "Want U bent mijn helper geworden:"
+      },
+      {
+       "tekst": "ik juich in de beschutting van uw vleugels.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik ben aan U gehecht, met heel mijn ziel,"
+      },
+      {
+       "tekst": "uw rechterhand houdt mij vast.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Maar zij die tevergeefs zoeken naar mijn ziel,"
+      },
+      {
+       "tekst": "komen terecht in de diepste krochten van de aarde.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zij worden overgegeven aan het geweld van het zwaard"
+      },
+      {
+       "tekst": "en vallen ten prooi aan de vossen.",
+       "inspring": true
+      },
+      {
+       "tekst": "De koning echter verheugt zich in God;"
+      },
+      {
+       "tekst": "eenieder die bij Hem zweert, wordt geroemd,",
+       "inspring": true
+      },
+      {
+       "tekst": "want wie onrecht verkondigen, wordt de mond gesnoerd.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "en nogmaals:",
+       "tekst": "In de ochtendschemering peins ik over U,"
+      },
+      {
+       "tekst": "want U bent mijn helper geworden:",
+       "inspring": true
+      },
+      {
+       "tekst": "ik juich in de beschutting van uw vleugels.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik ben aan U gehecht, met heel mijn ziel,",
+       "inspring": true
+      },
+      {
+       "tekst": "uw rechterhand houdt mij vast.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "Eer … Nu en …"
+      },
+      {
+       "na": "(3x)",
+       "tekst": "Alleluja, alleluja, alleluja. Eer aan U, o God."
+      },
+      {
+       "tekst": "Heer, ontferm U.",
+       "na": "(3x)"
+      },
+      {
+       "rubriek": "Eer … Nu en …"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nr": 87,
+   "strofen": [
+    {
+     "regels": [
+      {
+       "tekst": "Heer, God, mijn redder,"
+      },
+      {
+       "tekst": "dag en nacht roep ik tot U",
+       "inspring": true
+      },
+      {
+       "tekst": "Laat mijn gebed tot U komen,"
+      },
+      {
+       "tekst": "neig uw oor naar mijn smeekgebed.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Mijn ziel is vervuld van ellende"
+      },
+      {
+       "tekst": "en mijn leven is het dodenrijk nabij.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik word gerekend tot hen die in het graf afdalen;"
+      },
+      {
+       "tekst": "ik ben geworden tot een mens voor wie geen hulp is,",
+       "inspring": true
+      },
+      {
+       "tekst": "losgelaten onder de doden,",
+       "inspring": true
+      },
+      {
+       "tekst": "als dodelijk gewonden"
+      },
+      {
+       "tekst": "ingeslapen in het graf,",
+       "inspring": true
+      },
+      {
+       "tekst": "aan wie U niet meer denkt,"
+      },
+      {
+       "tekst": "verstoten uit uw hand.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Zij stopten mij in de diepste put,"
+      },
+      {
+       "tekst": "in de duisternis en de schaduw van de dood.",
+       "inspring": true
+      },
+      {
+       "tekst": "Uw toorn rust zwaar op mij,"
+      },
+      {
+       "tekst": "al uw golven slaan over mij heen.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "U vervreemdt mijn vrienden van mij;"
+      },
+      {
+       "tekst": "ze zien me als een gruwel",
+       "inspring": true
+      },
+      {
+       "tekst": "en hebben mij opgegeven en ik zie geen uitweg meer.",
+       "inspring": true
+      },
+      {
+       "tekst": "Mijn ogen zijn flets geworden door armoede;"
+      },
+      {
+       "tekst": "Heer, ik roep tot U, de hele dag,",
+       "inspring": true
+      },
+      {
+       "tekst": "naar U strek ik mijn handen uit.",
+       "inspring": true
+      },
+      {
+       "tekst": "Verricht U wonderen voor de doden?"
+      },
+      {
+       "tekst": "Of zullen artsen hen opwekken om U te belijden?",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Zal iemand vanuit het graf uw barmhartigheid verkondigen,"
+      },
+      {
+       "tekst": "of vanuit het verderf uw waarheid?",
+       "inspring": true
+      },
+      {
+       "tekst": "Zouden uw wonderen in de duisternis gekend worden,"
+      },
+      {
+       "tekst": "of uw rechtvaardigheid in een vergeten land?",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Ik roep tot U, Heer,"
+      },
+      {
+       "tekst": "in de ochtend rijst mijn gebed voor U op.",
+       "inspring": true
+      },
+      {
+       "tekst": "Waartoe, Heer, verstoot U mijn ziel"
+      },
+      {
+       "tekst": "en wendt U uw aangezicht van mij af?",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Arm ben ik, afgemat sinds mijn jeugd,"
+      },
+      {
+       "tekst": "eerst was ik verheven, daarna vernederd en vertwijfeld.",
+       "inspring": true
+      },
+      {
+       "tekst": "Uw toorn daalt op mij neer,"
+      },
+      {
+       "tekst": "en uw verschrikkingen ontzetten mij.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zij omringen mij als water, de hele dag,"
+      },
+      {
+       "tekst": "ze sluiten me volkomen in",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Vriend en naaste hebt U van mij vervreemd,"
+      },
+      {
+       "tekst": "mijn vertrouwden wegens mijn ellende.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "en nogmaals:",
+       "tekst": "Heer, God, mijn redder,"
+      },
+      {
+       "tekst": "dag en nacht roep ik tot U",
+       "inspring": true
+      },
+      {
+       "tekst": "Laat mijn gebed tot U komen,",
+       "inspring": true
+      },
+      {
+       "tekst": "neig uw oor naar mijn smeekgebed.",
+       "inspring": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nr": 102,
+   "strofen": [
+    {
+     "regels": [
+      {
+       "tekst": "Zegen de Heer, mijn ziel"
+      },
+      {
+       "tekst": "en al wat in mij is, zegen zijn heilige naam.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zegen de Heer, mijn ziel"
+      },
+      {
+       "tekst": "en vergeet al zijn weldaden niet.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Hij vergeeft al je wandaden,"
+      },
+      {
+       "tekst": "geneest al je ziekten,",
+       "inspring": true
+      },
+      {
+       "tekst": "verlost je leven uit het verderf,"
+      },
+      {
+       "tekst": "kroont je met ontferming en barmhartigheid",
+       "inspring": true
+      },
+      {
+       "tekst": "en vervult je verlangen met het goede."
+      },
+      {
+       "tekst": "Zo zal je jeugd vernieuwd worden als die van een adelaar.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "De Heer verricht barmhartige daden"
+      },
+      {
+       "tekst": "en verschaft recht aan wie onrecht is aangedaan",
+       "inspring": true
+      },
+      {
+       "tekst": "Hij maakte Mozes zijn wegen bekend,"
+      },
+      {
+       "tekst": "de kinderen van Israël zijn wil",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Barmhartig en genadig is de Heer,"
+      },
+      {
+       "tekst": "geduldig en vol ontferming.",
+       "inspring": true
+      },
+      {
+       "tekst": "Niet eindeloos duurt zijn woede,"
+      },
+      {
+       "tekst": "niet voor eeuwig is zijn wrok.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Niet naar onze zonden behandelt Hij ons"
+      },
+      {
+       "tekst": "en onze wandaden rekent Hij ons niet aan.",
+       "inspring": true
+      },
+      {
+       "tekst": "Want zo hoog als de hemel verheven is boven de aarde,"
+      },
+      {
+       "tekst": "zo krachtig maakt de Heer zijn ontferming voor wie Hem vrezen.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Zo ver als het oosten ligt van het westen,"
+      },
+      {
+       "tekst": "zo ver verwijdert Hij onze wandaden van ons.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zoals een vader medelijden heeft met zijn kinderen,"
+      },
+      {
+       "tekst": "zo toont de Heer medelijden met wie Hem vrezen.",
+       "inspring": true
+      },
+      {
+       "tekst": "Want Hij weet waarvan wij zijn gemaakt,"
+      },
+      {
+       "tekst": "Hij houdt in gedachten dat we stof zijn.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "De mens: zijn dagen zijn als gras;"
+      },
+      {
+       "tekst": "hij bloeit als een bloem in het veld.",
+       "inspring": true
+      },
+      {
+       "tekst": "De wind gaat eroverheen en hij verdwijnt;"
+      },
+      {
+       "tekst": "de plek waar hij stond, kent hem niet meer.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Maar de barmhartigheid van de Heer"
+      },
+      {
+       "tekst": "strekt zich uit van eeuwigheid tot eeuwigheid",
+       "inspring": true
+      },
+      {
+       "tekst": "over wie Hem vrezen"
+      },
+      {
+       "tekst": "en zijn gerechtigheid over de kinderen van de kinderen,",
+       "inspring": true
+      },
+      {
+       "tekst": "over hen die zijn verbond bewaren,"
+      },
+      {
+       "tekst": "die naar zijn geboden leven.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "De Heer heeft in de hemel zijn troon gereedgemaakt:"
+      },
+      {
+       "tekst": "als koning heerst Hij over alles.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zegen de Heer, al zijn engelen,"
+      },
+      {
+       "tekst": "jullie, krachtige machten die zijn woord uitvoeren",
+       "inspring": true
+      },
+      {
+       "tekst": "en gehoor geven aan de woorden die Hij spreekt.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Zegen de Heer, al zijn machten,"
+      },
+      {
+       "tekst": "jullie, zijn dienaren die zijn wil doen",
+       "inspring": true
+      },
+      {
+       "tekst": "Zegen de Heer, al zijn werken,"
+      },
+      {
+       "tekst": "op iedere plaats van zijn heerschappij.",
+       "inspring": true
+      },
+      {
+       "tekst": "Zegen de Heer, mijn ziel.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "en nogmaals:",
+       "tekst": "Op iedere plaats van zijn heerschappij:"
+      },
+      {
+       "tekst": "zegen, mijn ziel, de Heer.",
+       "inspring": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nr": 142,
+   "strofen": [
+    {
+     "regels": [
+      {
+       "tekst": "Heer, hoor mijn gebed,"
+      },
+      {
+       "tekst": "luister naar mijn smeekbede in uw trouw,",
+       "inspring": true
+      },
+      {
+       "tekst": "verhoor mij in uw rechtvaardigheid.",
+       "inspring": true
+      },
+      {
+       "tekst": "Daag uw dienaar niet voor het gerecht,"
+      },
+      {
+       "tekst": "want voor U wordt niemand die leeft rechtvaardig bevonden",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Want de vijand vervolgt mijn ziel,"
+      },
+      {
+       "tekst": "vernedert mijn leven tot op de grond",
+       "inspring": true
+      },
+      {
+       "tekst": "en laat mij wonen in de duisternis,"
+      },
+      {
+       "tekst": "bij hen die al lang dood zijn.",
+       "inspring": true
+      },
+      {
+       "tekst": "Mijn geest heeft de moed verloren"
+      },
+      {
+       "tekst": "en ik ben tot diep in mijn hart geschokt.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Ik herinner me de dagen van weleer,"
+      },
+      {
+       "tekst": "en overdenk al uw werken,",
+       "inspring": true
+      },
+      {
+       "tekst": "ja, het werk van uw handen overdenk ik.",
+       "inspring": true
+      },
+      {
+       "tekst": "Ik strek mijn handen naar U uit;"
+      },
+      {
+       "tekst": "als land zonder water, zo smacht mijn ziel naar U.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Luister naar mij, Heer, haast U,"
+      },
+      {
+       "tekst": "mijn geest bezwijkt.",
+       "inspring": true
+      },
+      {
+       "tekst": "Wend uw aangezicht niet van mij af,"
+      },
+      {
+       "tekst": "want anders word ik als wie afdaalt in het graf.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Laat mij in de morgen uw barmhartigheid horen,"
+      },
+      {
+       "tekst": "want op U vertrouw ik.",
+       "inspring": true
+      },
+      {
+       "tekst": "Maak mij, Heer, de weg bekend die ik moet gaan,"
+      },
+      {
+       "tekst": "want tot U hef ik mijn ziel op.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Bevrijd me van mijn vijanden, Heer,"
+      },
+      {
+       "tekst": "want bij U zoek ik mijn toevlucht.",
+       "inspring": true
+      },
+      {
+       "tekst": "Leer mij uw wil te doen, want U bent mijn God."
+      },
+      {
+       "tekst": "Uw goede geest zal mij leiden over geëffende grond.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "tekst": "Omwille van uw naam, Heer, zult U mij doen leven"
+      },
+      {
+       "tekst": "en door uw rechtvaardigheid mijn ziel uit de verdrukking voeren.",
+       "inspring": true
+      },
+      {
+       "tekst": "In uw barmhartigheid zult U mijn vijanden vernietigen"
+      },
+      {
+       "tekst": "en allen die mijn ziel kwellen te gronde richten,",
+       "inspring": true
+      },
+      {
+       "tekst": "want ik ben uw dienaar.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "en nogmaals:",
+       "tekst": "Verhoor mij in uw rechtvaardigheid,"
+      },
+      {
+       "na": "(2x)",
+       "tekst": "daag uw dienaar niet voor het gerecht.",
+       "inspring": true
+      },
+      {
+       "tekst": "Uw goede geest zal mij leiden over geëffende grond.",
+       "inspring": true
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "rubriek": "Eer … Nu en …"
+      }
+     ]
+    },
+    {
+     "regels": [
+      {
+       "na": "(3x)",
+       "tekst": "Alleluja, alleluja, alleluja. Eer aan U, o God."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
